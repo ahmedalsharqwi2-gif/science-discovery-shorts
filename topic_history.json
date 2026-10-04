@@ -738,12 +738,13 @@
       "title": "لماذا يبطئ الضوء عندما يقترب من كوكب ضخم؟",
       "hook": "الضوضاء في مسار الكوكب ت حدث تفاعل ا مع الجسيمات في الغلاف الجوي، ما يرفع درجة حرارة السطح ويؤثر على المناخ. تنتقل هذه الضوضاء عن حركية طاقة تتحول إلى حرارة عند اصطدامها بالهواء، مما يرفع",
       "region": "",
-      "status": "reserved",
+      "status": "published",
       "source": "science-pipeline",
       "reservation_id": "ce5c2c1c7c7347b489357d3d8a7c832f",
       "reserved_at": "2026-10-04T15:46:16Z",
       "run_id": "37213857573",
-      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts",
+      "published_at": "2026-10-04T15:46:22Z"
     }
   ]
 }
