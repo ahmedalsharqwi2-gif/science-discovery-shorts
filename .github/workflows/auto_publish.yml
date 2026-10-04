@@ -63,7 +63,10 @@ jobs:
           cairo_now = now.astimezone(ZoneInfo("Africa/Cairo"))
           expression = os.environ.get("SCHEDULE_EXPR", "")
           if os.environ.get("PUBLISH_NOW", "false").lower() == "true":
-              target = datetime.now(timezone.utc) + timedelta(minutes=2)
+              # The full render, Whisper alignment, and B-roll gates can take
+              # 30–60 minutes. Keep the catch-up slot safely in the future so
+              # Buffer accepts it when the pipeline reaches publication.
+              target = datetime.now(timezone.utc) + timedelta(minutes=90)
               due_at = target.isoformat(timespec="seconds").replace("+00:00", "Z")
               print(f"Immediate catch-up publication slot: {due_at} UTC")
               with open(os.environ["GITHUB_ENV"], "a", encoding="utf-8") as env_file:
