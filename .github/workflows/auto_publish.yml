@@ -1,10 +1,11 @@
 name: Auto publish videos (Cairo 12-18)
 on:
   schedule:
-    # Preparation starts before the final Cairo publication slots. The job
-    # computes 12:00/18:00 Africa/Cairo below, including DST transitions.
-    - cron: '0 8 * * *'
-    - cron: '0 14 * * *'
+    # GitHub cron is UTC; these triggers are 12:00 and 18:00 Africa/Cairo
+    # for the current Cairo UTC+3 schedule. The final due time is calculated
+    # below in Africa/Cairo before Buffer is called.
+    - cron: '0 9 * * *'
+    - cron: '0 15 * * *'
   workflow_dispatch:
     inputs:
       voice_profile:
@@ -14,6 +15,11 @@ on:
         type: string
       dry_run:
         description: 'Build and validate without publishing externally'
+        required: false
+        default: false
+        type: boolean
+      publish_now:
+        description: 'Publish immediately to compensate for a missed slot'
         required: false
         default: false
         type: boolean
@@ -46,6 +52,7 @@ jobs:
       - name: Set fixed publication slot
         env:
           SCHEDULE_EXPR: ${{ github.event.schedule }}
+          PUBLISH_NOW: ${{ inputs.publish_now || false }}
         run: |
           python - <<'PY'
           import os
@@ -55,7 +62,14 @@ jobs:
           now = datetime.now(timezone.utc)
           cairo_now = now.astimezone(ZoneInfo("Africa/Cairo"))
           expression = os.environ.get("SCHEDULE_EXPR", "")
-          target_hour = {"0 8 * * *": 12, "0 14 * * *": 18}.get(expression)
+          if os.environ.get("PUBLISH_NOW", "false").lower() == "true":
+              target = datetime.now(timezone.utc) + timedelta(minutes=2)
+              due_at = target.isoformat(timespec="seconds").replace("+00:00", "Z")
+              print(f"Immediate catch-up publication slot: {due_at} UTC")
+              with open(os.environ["GITHUB_ENV"], "a", encoding="utf-8") as env_file:
+                  env_file.write(f"PUBLISH_DUE_AT={due_at}\n")
+              raise SystemExit(0)
+          target_hour = {"0 9 * * *": 12, "0 15 * * *": 18}.get(expression)
           if target_hour is None:
               slots = [cairo_now.replace(hour=12, minute=0, second=0, microsecond=0),
                        cairo_now.replace(hour=18, minute=0, second=0, microsecond=0)]
