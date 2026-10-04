@@ -725,12 +725,13 @@
       "title": "كيف يختفي ضوء الشفق القطبي فجأة؟",
       "hook": "يعد ظهور الشفق القطبي المفاجئ ظاهرة نادرة تحدثها شحنات كهرومغناطيسية عالية من الشمس تتفاعل مع المجال المغناطيسي الأرضي. عند اصطدام الغازات الشمسية، مثل البروتونات والإلكترونات، بطبقات الغلاف الجوي، تحدث تفاعلات كيميائية تشعل الضوء في ارتفاعات",
       "region": "",
-      "status": "reserved",
+      "status": "published",
       "source": "science-pipeline",
       "reservation_id": "dfa85041b299479eaeb3b6c92423eb1f",
       "reserved_at": "2026-10-04T10:11:39Z",
       "run_id": "37194135908",
-      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts",
+      "published_at": "2026-10-04T10:11:44Z"
     }
   ]
 }
