@@ -9,6 +9,7 @@ import os
 import sys
 import json
 import logging
+import re
 import subprocess
 from pathlib import Path
 
@@ -36,6 +37,21 @@ EDGE_FALLBACK_VOICE = os.getenv(
     "EDGE_TTS_VOICE",
     os.getenv("EDGE_TTS_FALLBACK_VOICE", "ar-SA-HamedNeural"),
 )
+
+
+def normalize_edge_tts_text(text: str) -> str:
+    """Flatten model formatting that makes Edge TTS pause between fragments.
+
+    The narration remains unchanged for captions and fact-checking; only the
+    spoken payload is normalized. Markdown bullets, line breaks, and repeated
+    punctuation are common causes of unnatural stop-start Arabic delivery.
+    """
+    value = str(text or "")
+    value = re.sub(r"[`*_#]+", "", value)
+    value = re.sub(r"\s+", " ", value).strip()
+    value = re.sub(r"([،؛:؟!])\s*[،؛:؟!]+", r"\1", value)
+    value = re.sub(r"\.{2,}", "…", value)
+    return value
 
 
 def normalize_edge_pitch(value: object) -> str:
@@ -155,7 +171,8 @@ class VoiceGenerator:
         import edge_tts
         import asyncio
         
-        log.info(f"Generating speech with Edge TTS (voice: {voice})")
+        spoken_text = normalize_edge_tts_text(text)
+        log.info(f"Generating speech with Edge TTS (voice: {voice}, words: {len(spoken_text.split())})")
         safe_pitch = normalize_edge_pitch(
             pitch if pitch is not None else os.getenv("EDGE_TTS_PITCH", "+0Hz")
         )
@@ -164,7 +181,7 @@ class VoiceGenerator:
         async def _generate():
             try:
                 communicate = edge_tts.Communicate(
-                    text=text,
+                    text=spoken_text,
                     voice=voice,
                     rate=rate,
                     pitch=safe_pitch,
@@ -179,7 +196,10 @@ class VoiceGenerator:
             result = asyncio.run(_generate())
             if result:
                 # Check quality
-                score, audio_issues = self.quality_checker.check_audio_quality(output_path, text)
+                score, audio_issues = self.quality_checker.check_audio_quality(output_path, spoken_text)
+                minimum_score = float(os.getenv("MIN_TTS_AUDIO_SCORE", "0.78"))
+                if score < minimum_score:
+                    return False, f"TTS quality score {score:.2f} is below required {minimum_score:.2f}: {audio_issues}"
                 if audio_issues:
                     return True, f"Generated with warnings: {audio_issues[0]}"
                 return True, "Successfully generated"

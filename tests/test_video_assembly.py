@@ -4,6 +4,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from scripts.assemble_video import _caption_text, write_ass_subtitles
+from scripts.generate_voice import normalize_edge_tts_text
 
 
 class VideoAssemblyTests(unittest.TestCase):
@@ -14,7 +15,7 @@ class VideoAssemblyTests(unittest.TestCase):
         self.assertNotIn("\u200e", caption)
         self.assertEqual(caption, "هذا نص\\Nعربي سليم")
 
-    def test_subtitles_use_four_words_per_block_and_two_lines(self):
+    def test_subtitles_use_stable_six_word_blocks_and_two_lines(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "captions.ass"
             write_ass_subtitles(
@@ -26,8 +27,12 @@ class VideoAssemblyTests(unittest.TestCase):
             self.assertEqual(text.count("Dialogue:"), 2)
             self.assertIn(r"\N", text)
             self.assertIn("واحد اثنان", text)
-            self.assertIn("ثلاثة أربعة", text)
+            self.assertIn("واحد اثنان ثلاثة", text)
             self.assertIn("Noto Sans Arabic", text)
+
+    def test_edge_tts_text_removes_formatting_and_repeated_pauses(self):
+        text = normalize_edge_tts_text("  هذا\n**نص**، ،؛؛  مهم...  ")
+        self.assertEqual(text, "هذا نص، مهم…")
 
     def test_captions_are_top_centered_below_mobile_notch_safe_area(self):
         with tempfile.TemporaryDirectory() as directory:

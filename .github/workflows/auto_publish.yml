@@ -301,8 +301,9 @@ jobs:
 
           # --- TTS ---
           TTS_ENGINE: "edge"
-          EDGE_TTS_VOICES: "ar-EG-ShakirNeural"
-          EDGE_TTS_VOICE: "ar-EG-ShakirNeural"
+          # Hamed has clearer connected Arabic phonemes for scientific terms.
+          EDGE_TTS_VOICES: "ar-SA-HamedNeural"
+          EDGE_TTS_VOICE: "ar-SA-HamedNeural"
           SILMA_REFERENCE_PROFILE: ${{ inputs.voice_profile || 'auto' }}
           SILMA_VOICE_PROFILES_FILE: 'assets/voices/voice_profiles.json'
           # قراءة طبيعية أبطأ؛ لا نسرّع الصوت ولا نضغط الكلمات.
@@ -312,9 +313,11 @@ jobs:
           SILMA_GUARD_ENABLED: 'true'
           WHISPER_MODEL: 'base'
           ASR_MIN_MATCH_RATIO: '0.82'
+          MIN_TTS_AUDIO_SCORE: '0.78'
           SILMA_FALLBACK_TO_EDGE: 'true'
-          EDGE_TTS_RATE: "-15%"
-          EDGE_TTS_PITCH: "-2Hz"
+          # Avoid the slow, syllable-separated delivery seen with -15%.
+          EDGE_TTS_RATE: "-3%"
+          EDGE_TTS_PITCH: "+0Hz"
           MUSIC_VOLUME: '0.07'
           DRY_RUN: ${{ inputs.dry_run && 'true' || 'false' }}
 

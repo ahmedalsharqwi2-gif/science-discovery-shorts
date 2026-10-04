@@ -13,7 +13,9 @@ from scripts.pexels_video import build_pexels_track
 VIDEO_WIDTH = 1080
 VIDEO_HEIGHT = 1920
 FPS = 30
-WORDS_PER_CAPTION_CHUNK = 4
+# Six words keeps captions readable without flashing a new fragment every few
+# syllables; the timing still follows the actual spoken audio.
+WORDS_PER_CAPTION_CHUNK = 6
 FONT_SIZE = 58
 # 9:16 render; keep captions below phone camera notches and platform chrome.
 CAPTION_TOP_SAFE_MARGIN = 260
@@ -78,7 +80,14 @@ def align_words_with_whisper(audio_path: Path, script_words: list[str]) -> list[
     """Return monotonically increasing timestamps from the final audio."""
     from faster_whisper import WhisperModel
     model = WhisperModel(os.getenv("WHISPER_MODEL", "base"), device="cpu", compute_type="int8")
-    result = model.transcribe(str(audio_path), language="ar", word_timestamps=True, vad_filter=False)
+    result = model.transcribe(
+        str(audio_path),
+        language="ar",
+        word_timestamps=True,
+        vad_filter=True,
+        vad_parameters={"min_silence_duration_ms": 350},
+        condition_on_previous_text=False,
+    )
     segments = result[0] if isinstance(result, (tuple, list)) else result
     heard: list[tuple[str, float, float]] = []
     for segment in segments:
@@ -97,7 +106,10 @@ def align_words_with_whisper(audio_path: Path, script_words: list[str]) -> list[
             si, ai = block.a + offset, block.b + offset
             timings[si] = {"text": script_words[si], "offset": heard[ai][1], "duration": max(heard[ai][2] - heard[ai][1], 0.06)}
     known = [i for i, item in enumerate(timings) if item is not None]
-    if len(known) < max(1, int(len(script_words) * 0.50)):
+    # A low match rate produces synthetic timings between unrelated words and
+    # is perceived as stuttering captions. Use uniform timing instead unless
+    # Whisper recognizes at least three quarters of the narration.
+    if len(known) < max(1, int(len(script_words) * 0.75)):
         raise RuntimeError(f"Whisper alignment too weak: {len(known)}/{len(script_words)} words")
     for i, item in enumerate(timings):
         if item is not None:
