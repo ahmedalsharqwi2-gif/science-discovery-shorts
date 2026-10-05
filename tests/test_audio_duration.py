@@ -30,3 +30,11 @@ class AudioDurationTests(unittest.TestCase):
             with self.assertRaises(ValueError):
                 fit_narration(path, 7, 9, 8)
             self.assertEqual(path.read_bytes(), original)
+
+    def test_longer_feasible_target_avoids_unnecessary_rejection(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "voice.wav"
+            self.make_audio(path, 10.699)
+            actual = fit_narration(path, 6, 8.9, 8.5)
+            self.assertTrue(6 <= actual <= 8.9)
+            self.assertAlmostEqual(actual, 10.699 / 1.25, delta=0.1)
