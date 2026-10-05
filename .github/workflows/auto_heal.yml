@@ -33,7 +33,7 @@ jobs:
           echo "--- failure signatures ---"
           grep -E 'HTTP (402|408|429|500|502|503|504)|quota|rate limit|timeout|Timeout|RuntimeError:|ValueError:|quality gate failed|Process completed' "$LOG_FILE" | tail -n 60 || true
 
-          if grep -Eq 'Run python(3)? scripts/(publish_buffer|publish_youtube_direct)\.py' "$LOG_FILE"; then
+          if grep -Eq '\[Step 7\] Publishing content|Buffer.*(created|published)|Run python(3)? scripts/(publish_buffer|publish_youtube_direct)\.py' "$LOG_FILE"; then
             PUBLISH_STARTED=true
           else
             PUBLISH_STARTED=false
@@ -45,7 +45,7 @@ jobs:
             DIAGNOSIS="Non-transient failure; manual code/configuration review is required."
           fi
 
-          if grep -Eqi 'HTTP (401|402|403|429)|quota|credits|billing|النص خارج النطاق|quality gate failed|Fact Check failed|verification.*failed' "$LOG_FILE"; then
+          if grep -Eqi 'HTTP (401|402|403|429)|quota|credits|billing|النص خارج النطاق|quality gate failed|Fact Check failed|verification.*failed|Audio duration outside|Audio duration cannot fit|Audio quality not acceptable' "$LOG_FILE"; then
             RETRYABLE=false
           elif grep -Eqi 'HTTP (408|500|502|503|504)|timed out|timeout|temporarily unavailable' "$LOG_FILE"; then
             RETRYABLE=true

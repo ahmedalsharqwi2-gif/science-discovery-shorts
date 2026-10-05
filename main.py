@@ -27,6 +27,7 @@ from scripts import (
     ContentPublisher,
 )
 from scripts.assemble_video import assemble_video, probe_duration
+from scripts.audio_duration import fit_narration
 from scripts.publish_content import build_social_description
 from scripts.broll_quality_pipeline import evaluate as evaluate_broll
 from scripts.topic_history import TopicHistory
@@ -121,6 +122,8 @@ class AutoPublishPipeline:
 
             # Step 5: Audio quality check
             log.info("\n[Step 5] Checking audio quality...")
+            fit_narration(Path(output_path), MIN_AUDIO_SECONDS, MAX_AUDIO_SECONDS,
+                          float(os.getenv("TARGET_AUDIO_SECONDS", "85")))
             audio_report = self.quality_checker.check_audio(output_path, checked_text)
             log.info(f"✓ Audio quality check complete (score: {audio_report.overall_score:.2f}/1.0)")
 
