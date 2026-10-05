@@ -9,6 +9,8 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 import requests
+from scripts.media_audio import normalized_audio_args
+from scripts.clip_review import review_clip
 
 PEXELS_SEARCH_URL = "https://api.pexels.com/videos/search"
 CLIP_SECONDS = 6.0
@@ -49,7 +51,8 @@ def visual_queries(topic: str) -> list[str]:
 
 def visual_query(topic: str) -> str:
     """Backward-compatible primary query used by callers and tests."""
-    return visual_queries(topic)[0]
+    queries = visual_queries(topic)
+    return queries[0] if queries else ""
 
 
 def search_portrait_videos(api_key: str, query: str, per_page: int = 80) -> list[str]:
@@ -117,13 +120,14 @@ def _download(url: str, destination: Path) -> None:
         raise last_error
 
 
-def _normalize_clip(source: Path, destination: Path, duration: float) -> None:
+def _normalize_clip(source: Path, destination: Path, duration: float, audio_decision: str = "VOICE ONLY") -> None:
+    extra, mapping = normalized_audio_args(source, audio_decision.startswith("ORIGINAL AUDIO"))
     subprocess.run(
         [
             "ffmpeg", "-y", "-v", "error", "-stream_loop", "-1", "-i", str(source),
-            "-t", f"{duration:.3f}",
+            *extra, "-t", f"{duration:.3f}",
             "-vf", "scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,setsar=1",
-            "-an", "-r", "30", "-c:v", "libx264", "-preset", "veryfast", "-crf", "24",
+            "-map", "0:v:0", *mapping, "-r", "30", "-c:v", "libx264", "-preset", "veryfast", "-crf", "24",
             str(destination),
         ],
         check=True,
@@ -172,9 +176,10 @@ def build_pexels_track(api_key: str, topic: str, duration: float, output_path: P
             clip = workdir / f"clip_{index}.mp4"
             try:
                 _download(url, raw)
-                _normalize_clip(raw, clip, CLIP_SECONDS)
+                review = review_clip(raw, topic, topic)
+                _normalize_clip(raw, clip, CLIP_SECONDS, review["audio_decision"])
                 normalized.append(clip)
-            except (OSError, requests.RequestException, subprocess.CalledProcessError) as exc:
+            except (OSError, requests.RequestException, subprocess.CalledProcessError, ValueError) as exc:
                 print(f"⚠️ تخطي مقطع Pexels غير صالح ({exc}).")
 
         if not normalized:
@@ -197,7 +202,8 @@ def build_pexels_track(api_key: str, topic: str, duration: float, output_path: P
         subprocess.run(
             [
                 "ffmpeg", "-y", "-v", "error", "-f", "concat", "-safe", "0",
-                "-i", str(concat_list), "-t", f"{duration:.3f}", "-an",
+                "-i", str(concat_list), "-t", f"{duration:.3f}",
+                "-c:a", "aac", "-ar", "48000", "-ac", "2",
                 "-c:v", "libx264", "-preset", "veryfast", "-crf", "24", "-pix_fmt", "yuv420p",
                 str(output_path),
             ],

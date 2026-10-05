@@ -1,16 +1,14 @@
-# -*- coding: utf-8 -*-
-"""
-scripts/__init__.py - تهيئة حزمة scripts
-"""
+"""Public pipeline classes, imported only when requested."""
+from importlib import import_module
 
-from .generate_content import ContentGenerator
-from .generate_voice import VoiceGenerator
-from .quality_check import QualityCheckPipeline
-from .publish_content import ContentPublisher
+_EXPORTS = {"ContentGenerator": "generate_content", "VoiceGenerator": "generate_voice",
+            "QualityCheckPipeline": "quality_check", "ContentPublisher": "publish_content"}
+__all__ = list(_EXPORTS)
 
-__all__ = [
-    'ContentGenerator',
-    'VoiceGenerator',
-    'QualityCheckPipeline',
-    'ContentPublisher',
-]
+
+def __getattr__(name):
+    if name not in _EXPORTS:
+        raise AttributeError(name)
+    value = getattr(import_module(f".{_EXPORTS[name]}", __name__), name)
+    globals()[name] = value
+    return value
