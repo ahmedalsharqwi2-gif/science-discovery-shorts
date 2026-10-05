@@ -11,6 +11,7 @@ from urllib.parse import urlparse
 import requests
 from scripts.media_audio import normalized_audio_args
 from scripts.clip_review import review_clip
+from scripts.commons_media import image_fallback
 
 PEXELS_SEARCH_URL = "https://api.pexels.com/videos/search"
 CLIP_SECONDS = 6.0
@@ -146,21 +147,23 @@ def build_pexels_track(api_key: str, topic: str, duration: float, output_path: P
     clip is safer than failing a complete production or publishing a random
     background.
     """
-    if not api_key:
-        return False
     workdir = output_path.parent / "pexels_clips"
     workdir.mkdir(parents=True, exist_ok=True)
     required = max(MIN_CLIPS, math.ceil(duration / CLIP_SECONDS))
     try:
-        queries = visual_queries(topic)
+        queries = visual_queries(topic) if api_key else []
         if not queries:
             print(f"⚠️ لا توجد فئة بصرية مرتبطة بالموضوع {topic!r}؛ لن نستخدم مقاطع عامة.")
-            return False
+            queries = []
 
         urls: list[str] = []
         seen: set[str] = set()
         for query in queries:
-            for url in search_portrait_videos(api_key, query):
+            try:
+                candidates = search_portrait_videos(api_key, query)
+            except requests.RequestException:
+                candidates = []
+            for url in candidates:
                 if url not in seen:
                     seen.add(url)
                     urls.append(url)
@@ -174,7 +177,7 @@ def build_pexels_track(api_key: str, topic: str, duration: float, output_path: P
         normalized: list[Path] = []
         # Do not let one broken download consume a required slot. Download each
         # candidate once, then repeat only validated relevant clips if needed.
-        for index, url in enumerate(urls):
+        for index, url in enumerate(urls[:6]):
             suffix = Path(urlparse(url).path).suffix or ".mp4"
             raw = workdir / f"raw_{index}{suffix}"
             clip = workdir / f"clip_{index}.mp4"
@@ -185,6 +188,13 @@ def build_pexels_track(api_key: str, topic: str, duration: float, output_path: P
                 normalized.append(clip)
             except (OSError, requests.RequestException, subprocess.CalledProcessError, ValueError) as exc:
                 print(f"⚠️ تخطي مقطع Pexels غير صالح ({exc}).")
+
+        if len(normalized) < min(required, 4):
+            for item in image_fallback(topic, topic, workdir, review_clip,
+                                       width=1080, height=1920, limit=4-len(normalized)):
+                clip = workdir / (item["id"] + "_normalized.mp4")
+                _normalize_clip(Path(item["file"]), clip, CLIP_SECONDS, "VOICE ONLY")
+                normalized.append(clip)
 
         if not normalized:
             print("⚠️ لم يتم تجهيز أي مقطع Pexels صالح.")
