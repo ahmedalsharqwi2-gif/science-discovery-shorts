@@ -10,15 +10,15 @@ def fit_narration(path: Path, minimum: float, maximum: float, target: float) -> 
     if minimum <= duration <= maximum:
         return duration
     target = min(maximum - 1, max(minimum + 1, target))
-    # A preferred target may require too much acceleration even when a
-    # slightly longer result still fits the publishing window naturally.
-    feasible_min = max(minimum + 0.1, duration / 1.25)
-    feasible_max = min(maximum - 0.1, duration / 0.85)
-    if feasible_min <= feasible_max:
-        target = min(feasible_max, max(feasible_min, target))
     tempo = duration / target
+    if tempo > 1.25 and duration / (maximum - 0.25) <= 1.25:
+        target = maximum - 0.25
+        tempo = duration / target
+    elif tempo < 0.85 and duration / (minimum + 0.25) >= 0.85:
+        target = minimum + 0.25
+        tempo = duration / target
     # Fail closed for material changes to speaking pace.
-    if not 0.85 - 1e-9 <= tempo <= 1.25 + 1e-9:
+    if not 0.85 <= tempo <= 1.25:
         raise ValueError(f"Audio duration cannot fit naturally: {duration:.2f}s (tempo {tempo:.2f})")
     fitted = path.with_name(path.stem + ".fitted" + path.suffix)
     subprocess.run(["ffmpeg", "-y", "-i", str(path), "-filter:a", f"atempo={tempo:.8f}",
