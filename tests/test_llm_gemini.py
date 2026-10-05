@@ -6,6 +6,22 @@ import llm_gemini
 
 
 class GeminiTokenBudgetTests(unittest.TestCase):
+    def test_truncated_response_is_retried_with_larger_budget(self):
+        replies = [SimpleNamespace(status_code=200, text="", json=lambda: {
+            "candidates": [{"content": {"parts": [{"text": '{"partial":'}]},
+                            "finishReason": "MAX_TOKENS"}]}),
+            SimpleNamespace(status_code=200, text="", json=lambda: {
+            "candidates": [{"content": {"parts": [{"text": '{"complete":true}'}]},
+                            "finishReason": "STOP"}]})]
+        with patch.object(llm_gemini, "GEMINI_API_KEY", "test"), \
+             patch.object(llm_gemini, "GEMINI_MODELS", ["test-model"]), \
+             patch.object(llm_gemini, "GEMINI_MIN_OUTPUT_TOKENS", 0), \
+             patch.object(llm_gemini.requests, "post", side_effect=replies) as post:
+            result = llm_gemini.gemini_chat([], max_tokens=2048, retries=2)
+        self.assertEqual(result, '{"complete":true}')
+        self.assertEqual([c.kwargs['json']['generationConfig']['maxOutputTokens']
+                          for c in post.call_args_list], [2048, 4096])
+
     def test_pooled_chat_falls_back_to_openai_compatible_provider(self):
         calls = []
 

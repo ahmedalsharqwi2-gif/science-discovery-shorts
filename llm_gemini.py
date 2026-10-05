@@ -147,9 +147,10 @@ def gemini_chat(
     for model in GEMINI_MODELS:
         url = f"{GEMINI_BASE_URL}/models/{model}:generateContent"
         use_thinking = bool(GEMINI_THINKING_LEVEL) and GEMINI_MIN_OUTPUT_TOKENS > 0
+        model_tokens = max_tokens
 
         for attempt in range(1, attempts + 1):
-            requested_tokens = max_tokens
+            requested_tokens = model_tokens
             if GEMINI_MIN_OUTPUT_TOKENS > 0:
                 requested_tokens = max(requested_tokens, GEMINI_MIN_OUTPUT_TOKENS)
             generation_config: dict[str, Any] = {
@@ -230,6 +231,16 @@ def gemini_chat(
             except (RuntimeError, ValueError) as exc:
                 last_error = f"{model}: {exc}"
                 log.warning("Gemini %s bad response: %s", model, exc)
+                break
+
+            if finish == "MAX_TOKENS":
+                last_error = f"{model}: output truncated (MAX_TOKENS)"
+                if attempt < attempts and requested_tokens < 8192:
+                    model_tokens = min(8192, requested_tokens * 2)
+                    log.warning("Gemini %s exhausted output budget; retrying with %d tokens",
+                                model, model_tokens)
+                    continue
+                log.warning("Gemini %s exhausted output budget; trying next model", model)
                 break
 
             if text.strip():
@@ -427,7 +438,8 @@ def pooled_llm_chat(messages, max_tokens=None, temperature=0.6, timeout=120) -> 
         providers.append(Provider(
             "gemini",
             lambda **_: gemini_chat(messages, max_tokens=max_tokens,
-                                    temperature=temperature, timeout=timeout, retries=1),
+                                    temperature=temperature, timeout=timeout,
+                                    retries=min(GEMINI_RETRIES, 2)),
             max_attempts=1,
             rate_limit_per_second=float(os.getenv("GEMINI_RATE_LIMIT", "0.2")),
             burst=float(os.getenv("GEMINI_RATE_BURST", "1")),
