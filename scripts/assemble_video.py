@@ -21,9 +21,6 @@ FONT_SIZE = 58
 # 9:16 render; keep captions below phone camera notches and platform chrome.
 CAPTION_TOP_SAFE_MARGIN = 260
 log = logging.getLogger(__name__)
-SFX_DIR = Path(__file__).resolve().parent.parent / "assets" / "sfx"
-SCIENCE_AMBIENCE_GAIN = 0.055
-SCIENCE_EVENT_GAIN = 0.18
 ARABIC_DIACRITICS = re.compile(r"[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06ED\u08D3-\u08FF]")
 BIDI_CONTROLS = re.compile(r"[\u061C\u200E\u200F\u202A-\u202E\u2066-\u2069]")
 PUNCTUATION = str.maketrans(".,،؛:!?؟…-—_()[]{}\"«»/\\", " " * 23)
