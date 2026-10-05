@@ -4,6 +4,11 @@ from scripts.pexels_video import CLIP_SECONDS, MIN_CLIPS, visual_queries
 
 
 class PexelsVideoTests(unittest.TestCase):
+    def test_botany_topic_has_related_queries_before_general_science(self):
+        queries = visual_queries("لماذا تمشي النباتات نحو النور؟ علم النبات وسلوك الخلايا الحساسة للضوء")
+        self.assertEqual(len(queries), 3)
+        self.assertTrue(all(any(word in q for word in ("plant", "seed", "leaves")) for q in queries))
+
     def test_space_topic_uses_only_related_queries(self):
         queries = visual_queries("رحلة إلى الفضاء والنجوم")
         self.assertGreaterEqual(len(queries), 3)

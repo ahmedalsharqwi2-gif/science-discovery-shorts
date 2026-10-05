@@ -22,6 +22,10 @@ def visual_queries(topic: str) -> list[str]:
     """Return only topic-family queries; never fall back to generic stock footage."""
     text = (topic or "").lower()
     mapping = (
+        (("نبات", "نباتات", "شجر", "شجرة", "جذور", "بذور", "بناء ضوئي", "تمثيل ضوئي"), [
+            "plant growing sunlight timelapse", "seed germination roots growth",
+            "green leaves sunlight photosynthesis",
+        ]),
         (("فضاء", "فلك", "نجوم", "كواكب", "كون", "ثقب أسود", "مجرة", "زمن"), [
             "space stars galaxy", "astronomy telescope", "nebula planets night sky",
         ]),
