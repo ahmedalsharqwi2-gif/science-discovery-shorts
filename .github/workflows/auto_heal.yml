@@ -45,7 +45,7 @@ jobs:
             DIAGNOSIS="Non-transient failure; manual code/configuration review is required."
           fi
 
-          if grep -Eqi 'HTTP (401|402|403|429)|quota|credits|billing|النص خارج النطاق|quality gate failed|Fact Check failed|verification.*failed|Audio duration outside|Audio duration cannot fit|Audio quality not acceptable' "$LOG_FILE"; then
+          if grep -Eqi 'HTTP (401|402|403|429)|quota|credits|billing|النص خارج النطاق|quality gate failed|Fact Check failed|verification.*failed|Audio duration outside|Audio duration cannot fit|Audio quality not acceptable|لم تتوفر مقاطع Pexels|لا توجد فئة بصرية|CLIP REVIEW REQUIRED' "$LOG_FILE"; then
             RETRYABLE=false
           elif grep -Eqi 'HTTP (408|500|502|503|504)|timed out|timeout|temporarily unavailable' "$LOG_FILE"; then
             RETRYABLE=true
