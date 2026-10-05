@@ -267,9 +267,9 @@ jobs:
           MAX_AUDIO_SECONDS: '89'
           TARGET_AUDIO_SECONDS: '85'
           # main.py reads MIN_WORDS/MAX_WORDS; the final MP3 duration remains
-          # the authoritative gate around this safer 140–150 word window.
-          MIN_WORDS: '140'
-          MAX_WORDS: '150'
+          # the authoritative gate around this 160–190 word window.
+          MIN_WORDS: '160'
+          MAX_WORDS: '190'
           # BUFFER_CHANNEL_IDS is stored positionally as TikTok, YouTube,
           # Facebook in this repository's secret.
           PUBLISH_CHANNELS: 'tiktok,youtube,facebook'
@@ -318,7 +318,7 @@ jobs:
           MIN_TTS_AUDIO_SCORE: '0.78'
           SILMA_FALLBACK_TO_EDGE: 'true'
           # Avoid the slow, syllable-separated delivery seen with -15%.
-          EDGE_TTS_RATE: "-3%"
+          EDGE_TTS_RATE: "-10%"
           EDGE_TTS_PITCH: "+0Hz"
           MUSIC_VOLUME: '0.07'
           DRY_RUN: ${{ inputs.dry_run && 'true' || 'false' }}

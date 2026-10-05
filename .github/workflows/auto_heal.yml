@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   diagnose-and-recover:
-    if: ${{ github.event.workflow_run.conclusion == 'failure' || github.event.workflow_run.conclusion == 'cancelled' }}
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
     runs-on: ubuntu-latest
     env:
       TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
@@ -45,7 +45,14 @@ jobs:
             DIAGNOSIS="Non-transient failure; manual code/configuration review is required."
           fi
 
-          if [ "$RUN_ATTEMPT" = "1" ] && [ "$PUBLISH_STARTED" = "false" ]; then
+          if grep -Eqi 'HTTP (401|402|403|429)|quota|credits|billing|النص خارج النطاق|quality gate failed|Fact Check failed|verification.*failed' "$LOG_FILE"; then
+            RETRYABLE=false
+          elif grep -Eqi 'HTTP (408|500|502|503|504)|timed out|timeout|temporarily unavailable' "$LOG_FILE"; then
+            RETRYABLE=true
+          else
+            RETRYABLE=false
+          fi
+          if [ "$RUN_ATTEMPT" = "1" ] && [ "$PUBLISH_STARTED" = "false" ] && [ "$RETRYABLE" = "true" ]; then
             echo "Recovery: rerunning failed jobs once (no publish step started)."
             gh run rerun "$RUN_ID" -R "$REPOSITORY" --failed
             exit 0
