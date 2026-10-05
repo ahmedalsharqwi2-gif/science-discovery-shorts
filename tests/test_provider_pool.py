@@ -15,6 +15,17 @@ from provider_pool import (
 
 
 class ProviderPoolTests(unittest.TestCase):
+    def test_long_retry_after_switches_provider_without_sleeping(self):
+        def limited(**_kwargs):
+            raise ProviderRateLimitError("HTTP 429", retry_after=3600)
+        pool = ProviderPool([
+            Provider("limited", limited, max_attempts=2, rate_limit_per_second=0),
+            Provider("backup", lambda **_: "ok", max_attempts=1, rate_limit_per_second=0),
+        ], backoff_max=30)
+        with patch("provider_pool.time.sleep") as sleep:
+            self.assertEqual(pool.call(), "ok")
+        sleep.assert_not_called()
+
     def test_token_bucket_allows_burst_then_waits_for_refill(self):
         bucket = TokenBucket(rate=1, capacity=1)
         with patch("provider_pool.time.monotonic", side_effect=[0, 0, 1]), \

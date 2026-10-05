@@ -215,9 +215,13 @@ class ProviderPool(Generic[T]):
                     if not retryable or attempt >= provider.max_attempts:
                         break
                     retry_after = _retry_after_seconds(exc)
+                    if retry_after is not None and retry_after > self.backoff_max:
+                        log.warning("provider=%s retry-after=%.1fs exceeds wait budget; failing over",
+                                    provider.name, retry_after)
+                        break
                     exponential = min(self.backoff_base * (2 ** (attempt - 1)), self.backoff_max)
                     delay = max(retry_after or 0.0, exponential)
-                    delay += random.uniform(0.0, delay * self.random_jitter)
+                    delay = min(self.backoff_max, delay + random.uniform(0.0, delay * self.random_jitter))
                     time.sleep(delay)
 
         raise ProviderPoolError("all providers exhausted: " + " | ".join(errors[-12:]))

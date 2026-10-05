@@ -36,7 +36,7 @@ GEMINI_BASE_URL = os.getenv(
 ).rstrip("/")
 GEMINI_MODELS = [
     model.strip()
-    for model in os.getenv("GEMINI_MODEL", "").split(",")
+    for model in os.getenv("GEMINI_MODELS", os.getenv("GEMINI_MODEL", "")).split(",")
     if model.strip()
 ]
 # Empty disables thinkingConfig. Use a model-appropriate value when enabled.
@@ -59,6 +59,7 @@ FALLBACK_ENDPOINT = os.getenv(
     "LLM_FALLBACK_ENDPOINT", "https://api.groq.com/openai/v1/chat/completions"
 )
 FALLBACK_MODEL = os.getenv("LLM_FALLBACK_MODEL", "").strip()
+FALLBACK_MODELS = [model.strip() for model in os.getenv("LLM_FALLBACK_MODELS", "").split(",") if model.strip()]
 FALLBACK_RETRIES = max(1, int(os.getenv("LLM_FALLBACK_RETRIES", "2")))
 FALLBACK_REASONING_EFFORT = os.getenv("LLM_FALLBACK_REASONING_EFFORT", "low").strip()
 MIN_OUTPUT_TOKENS = 64
@@ -357,7 +358,7 @@ def _openrouter_chat_once(messages, max_tokens, temperature, timeout) -> str:
     return content
 
 
-def _fallback_chat_once(messages, max_tokens, temperature, timeout) -> str:
+def _fallback_chat_once(messages, max_tokens, temperature, timeout, model=None) -> str:
     """Call a third-party OpenAI-compatible endpoint without exposing secrets."""
     if not FALLBACK_API_KEY:
         raise RuntimeError("LLM_FALLBACK_API_KEY/GROQ_API_KEY is not set")
@@ -368,7 +369,7 @@ def _fallback_chat_once(messages, max_tokens, temperature, timeout) -> str:
             "Content-Type": "application/json",
         },
         json={
-            "model": FALLBACK_MODEL,
+            "model": model or FALLBACK_MODEL,
             "messages": messages,
             "max_tokens": max_tokens,
             "temperature": temperature,
@@ -390,7 +391,7 @@ def _fallback_chat_once(messages, max_tokens, temperature, timeout) -> str:
     )
     if not content.strip():
         raise RuntimeError("Fallback LLM returned empty content")
-    log.info("Fallback LLM: using model %s", FALLBACK_MODEL)
+    log.info("Fallback LLM: using model %s", model or FALLBACK_MODEL)
     return content
 
 
@@ -431,10 +432,10 @@ def pooled_llm_chat(messages, max_tokens=None, temperature=0.6, timeout=120) -> 
             rate_limit_per_second=float(os.getenv("GEMINI_RATE_LIMIT", "0.2")),
             burst=float(os.getenv("GEMINI_RATE_BURST", "1")),
         ))
-    if FALLBACK_API_KEY and FALLBACK_MODEL:
+    for fallback_model in (FALLBACK_MODELS or ([FALLBACK_MODEL] if FALLBACK_MODEL else [])) if FALLBACK_API_KEY else []:
         providers.append(Provider(
-            "fallback",
-            lambda **_: _fallback_chat_once(messages, max_tokens, temperature, timeout),
+            "fallback:" + fallback_model,
+            lambda model=fallback_model, **_: _fallback_chat_once(messages, max_tokens, temperature, timeout, model=model),
             max_attempts=FALLBACK_RETRIES,
             rate_limit_per_second=float(os.getenv("FALLBACK_RATE_LIMIT", "0.5")),
             burst=float(os.getenv("FALLBACK_RATE_BURST", "1")),

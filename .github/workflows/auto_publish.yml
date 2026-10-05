@@ -221,9 +221,10 @@ jobs:
           # A 160–168 Arabic-word narration is required in practice: the
           # configured Edge voice produced 43.85s for 138 words in dry-run,
           # below the 55s publication gate. GPT-OSS returned 155 words at
-          # 320 tokens, so give the validated Groq fallback enough headroom
+          # 320 tokens, so give the validated providers enough headroom
           # to stay inside the verified 55–90 second audio window.
-          LLM_MAX_COMPLETION_TOKENS: '448'
+          LLM_MAX_COMPLETION_TOKENS: '2048'
+          PYTHONUNBUFFERED: '1'
           LLM_TIMEOUT: '45'
 
           # --- LLM provider: OpenRouter (optional fallback only) ---
@@ -238,7 +239,6 @@ jobs:
           # --- Third provider: any OpenAI-compatible endpoint (Groq by default) ---
           LLM_FALLBACK_API_KEY: ${{ secrets.LLM_FALLBACK_API_KEY || secrets.GROQ_API_KEY }}
           LLM_FALLBACK_ENDPOINT: ${{ vars.LLM_FALLBACK_ENDPOINT || 'https://api.groq.com/openai/v1/chat/completions' }}
-          LLM_FALLBACK_MODEL: ${{ vars.LLM_FALLBACK_MODEL || vars.GROQ_MODEL || 'openai/gpt-oss-20b' }}
           # Resolve this per-run from the provider's /models endpoint above.
           LLM_FALLBACK_REASONING_EFFORT: 'low'
           LLM_FALLBACK_RETRIES: '2'

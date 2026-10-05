@@ -34,8 +34,12 @@ def configured_list(*names: str) -> list[str]:
     return list(dict.fromkeys(values))
 
 
-def request_json(url: str, headers: dict[str, str] | None = None) -> tuple[int, dict]:
-    request = urllib.request.Request(url, headers=headers or {"Accept": "application/json"})
+def request_json(url: str, headers: dict[str, str] | None = None, payload: dict | None = None) -> tuple[int, dict]:
+    data = json.dumps(payload).encode() if payload is not None else None
+    request_headers = dict(headers or {"Accept": "application/json"})
+    if data is not None:
+        request_headers["Content-Type"] = "application/json"
+    request = urllib.request.Request(url, headers=request_headers, data=data)
     try:
         with urllib.request.urlopen(request, timeout=20) as response:
             return response.status, json.load(response)
@@ -111,7 +115,16 @@ def discover_gemini(policy: dict) -> tuple[str, list[str]]:
         )
         methods = detail.get("supportedGenerationMethods", []) if isinstance(detail, dict) else []
         if detail_status == 200 and "generateContent" in methods:
-            verified.append(candidate)
+            probe_status, _ = request_json(
+                f"https://generativelanguage.googleapis.com/v1beta/models/{urllib.parse.quote(candidate, safe='')}:generateContent",
+                {"x-goog-api-key": key},
+                {"contents": [{"parts": [{"text": "Reply OK."}]}],
+                 "generationConfig": {"maxOutputTokens": 16}},
+            )
+            if probe_status == 200:
+                verified.append(candidate)
+            else:
+                log(f"Gemini model {candidate} failed generation probe (HTTP {probe_status}); skipping", warning=True)
         else:
             log(f"Gemini model {candidate} failed detail validation (HTTP {detail_status}); skipping", warning=True)
     if not verified:
@@ -132,6 +145,19 @@ def discover_openai_provider(name: str, endpoint: str, key: str, preferred: list
         available = [item for item in available if not any(token in item.lower() for token in ("embedding", "whisper", "tts"))]
     if status == 400:
         raise SystemExit(f"MODEL_PREFLIGHT_ERROR: {name} returned HTTP 400 for /models")
+    if status == 403 and configured:
+        verified = []
+        for candidate in configured[:6]:
+            probe_status, _ = request_json(endpoint,
+                {"Authorization": "Bearer " + key},
+                {"model": candidate, "messages": [{"role": "user", "content": "Reply OK."}],
+                 "max_tokens": 64},
+            )
+            if probe_status == 200:
+                verified.append(candidate)
+        if verified:
+            log(f"{name} catalog forbidden; completion probe confirmed {verified[0]}")
+            return verified[0], verified[1:]
     if status != 200 or not available:
         log(f"{name} catalog unusable (HTTP {status}, {len(available)} models); skipping provider", warning=True)
         return "", []
@@ -163,7 +189,7 @@ def main() -> int:
         "Fallback LLM", fallback_endpoint,
         os.getenv("LLM_FALLBACK_API_KEY", os.getenv("GROQ_API_KEY", "")).strip(),
         policy["providers"]["fallback"].get("preferred_models", []),
-        ("LLM_FALLBACK_MODEL", "GROQ_MODEL", "GROQ_MODELS"), DEFAULT_FALLBACK,
+        ("LLM_FALLBACK_MODELS", "LLM_FALLBACK_MODEL", "GROQ_MODELS", "GROQ_MODEL"), DEFAULT_FALLBACK,
     )
     openrouter, openrouter_fallbacks = discover_openai_provider(
         "OpenRouter", "https://openrouter.ai/api/v1/chat/completions",
