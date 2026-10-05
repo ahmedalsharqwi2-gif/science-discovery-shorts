@@ -5,6 +5,11 @@ import json
 import os
 from pathlib import Path
 
+try:
+    from scripts.media_audio import media_executable
+except ModuleNotFoundError:
+    from media_audio import media_executable
+
 ROOT = Path(__file__).resolve().parents[1]
 CHECKS = ("subject", "location", "activity", "symbols")
 
@@ -14,44 +19,68 @@ def clip_digest(path: Path) -> str:
         return hashlib.file_digest(stream, "sha256").hexdigest()
 
 
-def review_clip(path: Path, keyword: str, topic: str, *, historical: bool = False) -> dict:
-    digest = clip_digest(path)
-    manifest = Path(os.environ.get("CLIP_REVIEW_MANIFEST", str(ROOT / "state/clip_reviews.json")))
-    request = {"sha256": digest, "file": str(path.resolve()), "keyword": keyword, "topic": topic}
-    requests_path = ROOT / "state/clip_review_requests.json"
-    requests_path.parent.mkdir(parents=True, exist_ok=True)
-    pending = json.loads(requests_path.read_text()) if requests_path.exists() else {}
-    pending[digest] = request
-    requests_path.write_text(json.dumps(pending, ensure_ascii=False, indent=2), encoding="utf-8")
-    entries = json.loads(manifest.read_text(encoding="utf-8")) if manifest.exists() else {}
-    record = entries.get(digest) if isinstance(entries, dict) else None
-    if not isinstance(record, dict) or record.get("topic") != topic or record.get("keyword") != keyword:
-        try:
-            record = analyze_clip(path, keyword, topic, historical)
-        except Exception as exc:
-            raise ValueError(f"Actual clip inspection failed ({type(exc).__name__}); no approval granted") from exc
-        if record is not None:
-            entries = entries if isinstance(entries, dict) else {}
-            entries[digest] = record
-            manifest.parent.mkdir(parents=True, exist_ok=True)
-            manifest.write_text(json.dumps(entries, ensure_ascii=False, indent=2), encoding="utf-8")
+def _write_json(path: Path, data: dict) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+def _read_dict(path: Path) -> dict:
+    data = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
+    if not isinstance(data, dict):
+        raise ValueError(f"Clip review state must be a JSON object: {path}")
+    return data
+
+
+def _obtain_review(manifest: Path, digest: str, path: Path, keyword: str, topic: str, historical: bool) -> dict:
+    entries = _read_dict(manifest)
+    record = entries.get(digest)
+    if isinstance(record, dict) and record.get("topic") == topic and record.get("keyword") == keyword:
+        return record
+    try:
+        record = analyze_clip(path, keyword, topic, historical)
+    except Exception as exc:
+        raise ValueError(f"Actual clip inspection failed ({type(exc).__name__}); no approval granted") from exc
     if not isinstance(record, dict):
-        raise ValueError(f"CLIP REVIEW REQUIRED: {digest}; inspect {requests_path}")
-    if (record.get("status") != "PASS" or record.get("keyword") != keyword
-            or record.get("topic") != topic or not str(record.get("reviewer") or "").strip()
-            or not str(record.get("reason") or "").strip()):
-        raise ValueError(f"CLIP REVIEW FAILED: {digest}: approval is missing or belongs to another scene")
-    checks = CHECKS + (("period", "clothing", "weapons", "technology", "architecture") if historical else ())
-    if not isinstance(record.get("checks"), dict) or any(record["checks"].get(key) is not True for key in checks):
-        raise ValueError(f"CLIP REVIEW FAILED: {digest}: scene checks incomplete")
+        raise ValueError(f"CLIP REVIEW REQUIRED: {digest}; inspect {ROOT / 'state/clip_review_requests.json'}")
+    entries[digest] = record
+    _write_json(manifest, entries)
+    return record
+
+
+def _validate_scene(record: dict, keyword: str, topic: str, historical: bool) -> None:
+    required = {"status": "PASS", "keyword": keyword, "topic": topic}
+    if any(record.get(key) != value for key, value in required.items()):
+        raise ValueError("CLIP REVIEW FAILED: approval is missing or belongs to another scene")
+    if not all(str(record.get(key) or "").strip() for key in ("reviewer", "reason")):
+        raise ValueError("CLIP REVIEW FAILED: reviewer and observed evidence are required")
+    names = CHECKS + (("period", "clothing", "weapons", "technology", "architecture") if historical else ())
+    checks = record.get("checks")
+    if not isinstance(checks, dict) or any(checks.get(key) is not True for key in names):
+        raise ValueError("CLIP REVIEW FAILED: scene checks incomplete")
+
+
+def _validate_audio(record: dict) -> str:
     decision = str(record.get("audio_decision", "VOICE ONLY")).strip().upper()
-    if decision not in {"VOICE ONLY", "MUTE", "ORIGINAL AUDIO + VOICE DUCKING", "ORIGINAL AUDIO + VOICE"}:
+    allowed = {"VOICE ONLY", "MUTE", "ORIGINAL AUDIO + VOICE DUCKING", "ORIGINAL AUDIO + VOICE"}
+    if decision not in allowed:
         raise ValueError("Unsupported narrated-video audio decision")
     if decision.startswith("ORIGINAL AUDIO") and record.get("audio_match") != "PASS":
         raise ValueError("Original audio requires actual scene/audio match review")
     if decision == "MUTE" and not str(record.get("audio_mute_reason") or "").strip():
         raise ValueError("Muted audio requires a reason")
-    return {**record, "sha256": digest, "audio_decision": decision}
+    return decision
+
+
+def review_clip(path: Path, keyword: str, topic: str, *, historical: bool = False) -> dict:
+    digest = clip_digest(path)
+    manifest = Path(os.environ.get("CLIP_REVIEW_MANIFEST", str(ROOT / "state/clip_reviews.json")))
+    requests_path = ROOT / "state/clip_review_requests.json"
+    pending = _read_dict(requests_path)
+    pending[digest] = {"sha256": digest, "file": str(path.resolve()), "keyword": keyword, "topic": topic}
+    _write_json(requests_path, pending)
+    record = _obtain_review(manifest, digest, path, keyword, topic, historical)
+    _validate_scene(record, keyword, topic, historical)
+    return {**record, "sha256": digest, "audio_decision": _validate_audio(record)}
 
 
 def analyze_clip(path: Path, keyword: str, topic: str, historical: bool) -> dict | None:
@@ -75,7 +104,7 @@ def analyze_clip(path: Path, keyword: str, topic: str, historical: bool) -> dict
     episode_path = ROOT / "state/current_episode.json"
     episode = json.loads(episode_path.read_text()) if episode_path.exists() else {}
     context = {key: episode.get(key) for key in ("title", "narration", "historical_verification_report") if episode.get(key)}
-    probe = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "json", str(path)], capture_output=True, text=True, check=True)
+    probe = subprocess.run([media_executable("ffprobe"), "-v", "error", "-show_entries", "format=duration", "-of", "json", str(path)], capture_output=True, text=True, check=True)
     duration = float(json.loads(probe.stdout)["format"]["duration"])
     if not 0 < duration <= 60:
         raise ValueError("Automatic clip review supports complete clips up to 60 seconds; use an explicit review otherwise")
@@ -94,7 +123,7 @@ def analyze_clip(path: Path, keyword: str, topic: str, historical: bool) -> dict
     )
     with tempfile.TemporaryDirectory() as temp:
         preview = Path(temp) / "review.mp4"
-        subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(path), "-vf", "scale=480:-2", "-r", "4",
+        subprocess.run([media_executable("ffmpeg"), "-y", "-v", "error", "-i", str(path), "-vf", "scale=480:-2", "-r", "4",
                         "-c:v", "libx264", "-crf", "30", "-c:a", "aac", "-ac", "1", "-b:a", "48k", str(preview)], check=True)
         response = requests.post(f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent",
             headers={"x-goog-api-key": key}, json={"contents": [{"role": "user", "parts": [

@@ -1,12 +1,20 @@
 """Normalize clip audio layouts and duck scene audio beneath narration."""
 from __future__ import annotations
 import json
+import shutil
 import subprocess
 from pathlib import Path
 
 
+def media_executable(name: str) -> str:
+    executable = shutil.which(name)
+    if executable is None:
+        raise FileNotFoundError(f"Required media tool is missing: {name}")
+    return str(Path(executable).resolve())
+
+
 def has_audio(path: Path) -> bool:
-    result = subprocess.run(["ffprobe", "-v", "error", "-select_streams", "a:0",
+    result = subprocess.run([media_executable("ffprobe"), "-v", "error", "-select_streams", "a:0",
                              "-show_entries", "stream=index", "-of", "json", str(path)],
                             capture_output=True, text=True, check=True)
     return bool(json.loads(result.stdout or "{}").get("streams"))
