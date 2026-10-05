@@ -374,3 +374,15 @@ jobs:
 
       - name: Verify Arabic narration guard
         run: python -m unittest tests.test_arabic_guard -v
+
+      - name: Preserve clip review candidates
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: clip-review-candidates
+          path: |
+            state/clip_review_requests.json
+            state/clip_reviews.json
+            output/pexels_clips/raw_*
+          if-no-files-found: ignore
+          retention-days: 3

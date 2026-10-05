@@ -1,0 +1,27 @@
+name: Repository validation
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install test dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          python -m pip install requests numpy google-genai edge-tts google-auth google-api-python-client pyyaml
+      - name: Validate workflows and Python syntax
+        run: |
+          python -c "import yaml; from pathlib import Path; [yaml.safe_load(p.read_text()) for p in Path('.github/workflows').glob('*.yml')]"
+          python -m compileall -q scripts tests
+      - name: Run regression and real FFmpeg integration tests
+        run: python -m unittest discover -s tests
