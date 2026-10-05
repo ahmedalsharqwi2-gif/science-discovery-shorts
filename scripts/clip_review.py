@@ -60,7 +60,7 @@ def _validate_scene(record: dict, keyword: str, topic: str, historical: bool) ->
 
 
 def _validate_audio(record: dict) -> str:
-    decision = str(record.get("audio_decision", "VOICE ONLY")).strip().upper()
+    decision = str(record.get("audio_decision") or "").strip().upper()
     allowed = {"VOICE ONLY", "MUTE", "ORIGINAL AUDIO + VOICE DUCKING", "ORIGINAL AUDIO + VOICE"}
     if decision not in allowed:
         raise ValueError("Unsupported narrated-video audio decision")

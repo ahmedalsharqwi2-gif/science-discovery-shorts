@@ -25,7 +25,7 @@ class ClipReviewTests(unittest.TestCase):
             clip.write_bytes(b"reviewed")
             manifest = root / "reviews.json"
             record = {"status": "PASS", "keyword": "castle", "topic": "story", "reviewer": "editor",
-                      "reason": "actual scene inspected", "checks": dict.fromkeys(("subject", "location", "activity", "symbols"), True)}
+                      "reason": "actual scene inspected", "audio_decision": "VOICE ONLY", "checks": dict.fromkeys(("subject", "location", "activity", "symbols"), True)}
             manifest.write_text(json.dumps({clip_digest(clip): record}))
             with patch("scripts.clip_review.analyze_clip", return_value=None), patch("scripts.clip_review.ROOT", root), patch.dict("os.environ", {"CLIP_REVIEW_MANIFEST": str(manifest)}):
                 self.assertEqual(review_clip(clip, "castle", "story")["audio_decision"], "VOICE ONLY")
@@ -44,3 +44,10 @@ class ClipReviewTests(unittest.TestCase):
         extra, mapping = normalized_audio_args(Path("muted.mp4"), False)
         self.assertIn("anullsrc=r=48000:cl=stereo", extra)
         self.assertEqual(mapping[mapping.index("-map") + 1], "1:a:0")
+
+
+class ExplicitAudioDecisionTests(unittest.TestCase):
+    def test_missing_audio_decision_is_rejected(self):
+        from scripts.clip_review import _validate_audio
+        with self.assertRaises(ValueError):
+            _validate_audio({"status": "PASS"})
