@@ -17,30 +17,34 @@ MAX_CLIPS = 30
 
 
 def visual_queries(topic: str) -> list[str]:
-    """Return several closely related English queries for the Arabic topic."""
+    """Return only topic-family queries; never fall back to generic stock footage."""
     text = (topic or "").lower()
     mapping = (
-        (("فضاء", "فلك", "نجوم", "كواكب", "كون"), [
+        (("فضاء", "فلك", "نجوم", "كواكب", "كون", "ثقب أسود", "مجرة", "زمن"), [
             "space stars galaxy", "astronomy telescope", "nebula planets night sky",
         ]),
-        (("محيط", "بحر", "أعماق", "ماء"), [
+        (("محيط", "بحر", "أعماق", "ماء", "بحري", "سمك"), [
             "ocean underwater", "deep sea marine life", "waves coral reef",
         ]),
-        (("طبيعة", "غابة", "حيوان", "حيوانات"), [
+        (("طبيعة", "غابة", "حيوان", "حيوانات", "تطور", "كائن"), [
             "nature forest wildlife", "mountain landscape river", "animals close up nature",
         ]),
-        (("طب", "جسم", "دماغ", "مرض"), [
+        (("طب", "جسم", "دماغ", "مرض", "خلية", "جين", "وراثة", "نوم"), [
             "medical laboratory", "human body science", "microscope cells research",
         ]),
-        (("هندسة", "فيزياء", "تقنية", "اختراع", "روبوت"), [
+        (("هندسة", "فيزياء", "تقنية", "اختراع", "روبوت", "ذكاء اصطناعي", "طاقة", "ذرة", "كم"), [
             "technology science laboratory", "robot engineering machine", "physics experiment energy",
+        ]),
+        (("بركان", "زلازل", "طقس", "مناخ", "برق", "رعد", "أرض"), [
+            "volcano earth science", "earthquake geology research", "weather climate phenomenon",
         ]),
     )
     for words, queries in mapping:
         if any(word in text for word in words):
             return queries
-    default = os.getenv("PEXELS_DEFAULT_QUERY", "science laboratory technology")
-    return [default, "scientific research laboratory", "technology experiment"]
+    # A generic laboratory/technology query can return attractive but unrelated
+    # stock footage. Fail closed so the caller stops publication instead.
+    return []
 
 
 def visual_query(topic: str) -> str:
@@ -140,9 +144,14 @@ def build_pexels_track(api_key: str, topic: str, duration: float, output_path: P
     workdir.mkdir(parents=True, exist_ok=True)
     required = max(MIN_CLIPS, math.ceil(duration / CLIP_SECONDS))
     try:
+        queries = visual_queries(topic)
+        if not queries:
+            print(f"⚠️ لا توجد فئة بصرية مرتبطة بالموضوع {topic!r}؛ لن نستخدم مقاطع عامة.")
+            return False
+
         urls: list[str] = []
         seen: set[str] = set()
-        for query in visual_queries(topic):
+        for query in queries:
             for url in search_portrait_videos(api_key, query):
                 if url not in seen:
                     seen.add(url)
@@ -196,5 +205,5 @@ def build_pexels_track(api_key: str, topic: str, duration: float, output_path: P
         )
         return output_path.exists() and output_path.stat().st_size > 0
     except (OSError, requests.RequestException, subprocess.CalledProcessError, ValueError) as exc:
-        print(f"⚠️ تعذر جلب مقاطع Pexels ({exc}) — استخدام الخلفية الاحتياطية.")
+        print(f"⚠️ تعذر جلب مقاطع Pexels مرتبطة بالموضوع ({exc}) — إيقاف النشر.")
         return False

@@ -22,6 +22,9 @@ class PexelsVideoTests(unittest.TestCase):
         """A search may return fewer unique clips than a full reel needs."""
         self.assertLess(CLIP_SECONDS, 10)
 
+    def test_unknown_topic_has_no_generic_stock_fallback(self):
+        self.assertEqual(visual_queries("موضوع غير مصنف بلا كلمات بصرية"), [])
+
 
 if __name__ == "__main__":
     unittest.main()

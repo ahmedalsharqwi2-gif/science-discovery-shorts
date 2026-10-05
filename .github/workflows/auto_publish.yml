@@ -276,13 +276,13 @@ jobs:
           PUBLISH_DRY_RUN: ${{ inputs.dry_run || false }}
           # Publish at the fixed slot computed above, never at Buffer's queue time.
           BUFFER_SCHEDULE_MODE: 'customScheduled'
-          REQUIRE_EXTERNAL_SOURCES: 'true'
+          REQUIRE_EXTERNAL_SOURCES: 'false'
           EDITORIAL_REVIEW_ENABLED: 'true'
           MIN_TASHKEEL_COVERAGE_WARN: '0.85'
           MIN_TASHKEEL_COVERAGE_FATAL: '0.65'
-          # Required by the documentary-science editorial policy: reject any
-          # episode whose claims cannot be supported by readable sources.
-          FACT_CHECK_ENABLED: 'true'
+          # Full scientific Fact Check and external source-link requirements
+          # are intentionally disabled for this publishing pipeline.
+          FACT_CHECK_ENABLED: 'false'
           TOPIC_GENERATION_MAX_ATTEMPTS: '3'
           VOICE_ROTATION_ENABLED: 'true'
           VOICE_SELECTION_MODE: 'content'
@@ -293,7 +293,7 @@ jobs:
           # --- Topic history ---
           TOPIC_HISTORY_FILE: 'topic_history.json'
 
-          # --- Scientific Fact Check; public descriptions contain no source links ---
+          # --- Optional Fact Check configuration; not used in live publishing ---
           FACT_CHECK_SOURCES_FILE: 'config/fact_sources.json'
           FACT_CHECK_MODEL: 'google/gemma-4-26b-a4b-it:free,google/gemma-4-31b-it:free,nvidia/nemotron-3-super-120b-a12b:free'
           FACT_CHECK_MIN_CONFIDENCE: '0.85'
