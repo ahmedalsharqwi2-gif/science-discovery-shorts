@@ -73,6 +73,10 @@ def _validate_audio(record: dict) -> str:
 
 def review_clip(path: Path, keyword: str, topic: str, *, historical: bool = False) -> dict:
     digest = clip_digest(path)
+    if os.getenv("CLIP_REVIEW_ENABLED", "true").lower() != "true":
+        return {"status": "SKIPPED", "reason": "Clip review disabled by configuration",
+                "keyword": keyword, "topic": topic, "sha256": digest,
+                "audio_decision": "VOICE ONLY"}
     manifest = Path(os.environ.get("CLIP_REVIEW_MANIFEST", str(ROOT / "state/clip_reviews.json")))
     requests_path = ROOT / "state/clip_review_requests.json"
     pending = _read_dict(requests_path)
