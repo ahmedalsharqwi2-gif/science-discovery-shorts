@@ -777,12 +777,13 @@
       "title": "لماذا تمشي أشجار الغابات؟ — هل تعلم أن هناك أشجاراً قادرة على الانتقال من مكانها لمسافات قصيرة بحثاً عن الضوء؟,",
       "hook": "هل تعلم أن هناك أشجاراً قادرة على الانتقال من مكانها لمسافات قصيرة بحثاً عن الضوء؟ تكشف رصدات علماء الأحياء عن حقيقة مثبتة تتمثل في قدرة نوع يسمى شجر الماشية على الزحف البطيء. تتضمن الخلفية البيئية",
       "region": "",
-      "status": "reserved",
+      "status": "published",
       "source": "science-pipeline",
       "reservation_id": "45ea1be4bb114b61be0bd578a670b911",
       "reserved_at": "2026-10-06T15:56:20Z",
       "run_id": "37490757174",
-      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts",
+      "published_at": "2026-10-06T15:56:26Z"
     }
   ]
 }
