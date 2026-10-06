@@ -23,6 +23,10 @@ def visual_queries(topic: str) -> list[str]:
     """Return only topic-family queries; never fall back to generic stock footage."""
     text = (topic or "").lower()
     mapping = (
+        (("معدة", "المعده", "معدتك", "هضم", "هضمي", "عصارات", "أمعاء", "امعاء", "digest", "stomach", "intestin"), [
+            "stomach anatomy digestion", "digestive system medical animation",
+            "human stomach medical",
+        ]),
         (("نبات", "نباتات", "أشجار", "اشجار", "غابات", "شجر", "شجرة", "جذور", "بذور", "بناء ضوئي", "تمثيل ضوئي"), [
             "plant growing sunlight timelapse", "seed germination roots growth",
             "green leaves sunlight photosynthesis",
@@ -190,7 +194,7 @@ def build_pexels_track(api_key: str, topic: str, duration: float, output_path: P
                 print(f"⚠️ تخطي مقطع Pexels غير صالح ({exc}).")
 
         if len(normalized) < min(required, 4):
-            for item in image_fallback(topic, topic, workdir, review_clip,
+            for item in image_fallback(queries[0] if queries else topic, topic, workdir, review_clip,
                                        width=1080, height=1920, limit=4-len(normalized)):
                 clip = workdir / (item["id"] + "_normalized.mp4")
                 _normalize_clip(Path(item["file"]), clip, CLIP_SECONDS, "VOICE ONLY")
