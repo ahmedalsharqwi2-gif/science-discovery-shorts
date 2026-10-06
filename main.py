@@ -31,7 +31,6 @@ from scripts.audio_duration import fit_narration
 from scripts.publish_content import build_social_description
 from scripts.broll_quality_pipeline import evaluate as evaluate_broll
 from scripts.topic_history import TopicHistory
-from fact_check import fact_check_topic
 
 MIN_AUDIO_SECONDS = float(os.getenv("MIN_AUDIO_SECONDS", "60"))
 MAX_AUDIO_SECONDS = float(os.getenv("MAX_AUDIO_SECONDS", "90"))
@@ -92,6 +91,7 @@ class AutoPublishPipeline:
             # runs, while never exposing source URLs in public descriptions.
             source_urls = []
             if os.getenv("FACT_CHECK_ENABLED", "false").lower() == "true":
+                from fact_check import fact_check_topic
                 log.info("\n[Step 3.5] Fact-checking scientific claims...")
                 fact_report = fact_check_topic(
                     {
