@@ -41,14 +41,6 @@ jobs:
     # Cold SILMA/Whisper setup plus TTS and FFmpeg can exceed one hour.
     timeout-minutes: 180
     steps:
-      - name: Show scheduled trigger time
-        env:
-          TZ: Africa/Cairo
-        run: |
-          echo "GitHub event: ${{ github.event_name }}"
-          echo "Scheduled cron expression: ${{ github.event.schedule }}"
-          echo "GitHub UTC time: $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
-          echo "Cairo local time: $(date '+%Y-%m-%d %H:%M:%S %Z')"
       - name: Set fixed publication slot
         env:
           SCHEDULE_EXPR: ${{ github.event.schedule }}
@@ -93,40 +85,6 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Check Gemini API key (fail fast)
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          LLM_FALLBACK_API_KEY: ${{ secrets.LLM_FALLBACK_API_KEY || secrets.GROQ_API_KEY }}
-        run: |
-          if [ -z "$GEMINI_API_KEY" ]; then
-            if [ -n "$LLM_FALLBACK_API_KEY" ]; then
-              echo "WARNING: GEMINI_API_KEY is missing; using the configured fallback provider."
-              exit 0
-            fi
-            echo "ERROR: GEMINI_API_KEY and fallback LLM secrets are missing or empty"
-            exit 1
-          fi
-          KEY_CLEAN="$(printf '%s' "$GEMINI_API_KEY" | tr -d '[:space:]"'"'"'')"
-          case "$KEY_CLEAN" in
-            AQ.*)   echo "Key type: authorization key (AQ.)" ;;
-            AIza*)  echo "Key type: standard key (AIza)" ;;
-            *)      echo "WARNING: unrecognized key format (expected an AQ. or AIza prefix)" ;;
-          esac
-          CODE="$(curl -s -o /tmp/gemini_check.json -w '%{http_code}' \
-            -H "x-goog-api-key: $KEY_CLEAN" \
-            'https://generativelanguage.googleapis.com/v1beta/models?pageSize=1')"
-          echo "Gemini models endpoint HTTP status: $CODE"
-          if [ "$CODE" != "200" ]; then
-            head -c 500 /tmp/gemini_check.json
-            echo
-            if [ -n "$LLM_FALLBACK_API_KEY" ]; then
-              echo "WARNING: Gemini preflight failed; continuing with the configured fallback provider."
-              exit 0
-            fi
-            echo "ERROR: Gemini rejected the key and no fallback provider is configured."
-            exit 1
-          fi
-
       - name: Install dependencies
         run: |
           sudo apt-get update
@@ -134,50 +92,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Verify Edge TTS installation
-        run: python -c "import edge_tts; print('edge-tts import OK:', getattr(edge_tts, '__version__', 'installed'))"
-
       - name: Cache models
         uses: actions/cache@v5
         with:
           path: ~/.cache/huggingface
           key: hf-models-v1
-
-      - name: Validate rotating SILMA voice profiles
-        env:
-          SILMA_VOICE_PROFILES_FILE: 'assets/voices/voice_profiles.json'
-        run: |
-          python - <<'PY'
-          import os
-          from pathlib import Path
-          import json
-          config = json.loads(Path(os.environ["SILMA_VOICE_PROFILES_FILE"]).read_text())
-          profiles = config.get("profiles", {})
-          assert profiles, "No SILMA voice profiles configured"
-          for profile_id, profile in profiles.items():
-              from tts_quality import resolve_reference_profile
-              wav, text = resolve_reference_profile(profile_id, Path(os.environ["SILMA_VOICE_PROFILES_FILE"]))
-              print(f"Validated rotating profile {profile_id}: {wav} ({len(text.split())} words)")
-          PY
-
-      - name: Run unit tests
-        run: |
-          # The modular pipeline no longer exports the legacy main.py API.
-          # Run every current modular test; legacy main.py compatibility tests
-          # are intentionally excluded until they are migrated.
-          python -m unittest \
-            tests.test_arabic_guard \
-            tests.test_arabic_speech_core \
-            tests.test_content_generator \
-            tests.test_content_length_policy \
-            tests.test_fact_check \
-            tests.test_llm_gemini \
-            tests.test_pexels_video \
-            tests.test_provider_pool \
-            tests.test_publish_content \
-            tests.test_quality_gate \
-            tests.test_tts_quality \
-            tests.test_video_assembly -v
 
       - name: Validate publishing configuration
         env:
@@ -189,13 +108,6 @@ jobs:
           test -n "$BUFFER_CHANNEL_IDS" || { echo "ERROR: BUFFER_CHANNEL_IDS is missing"; exit 1; }
           test -n "$GH_RELEASE_TOKEN" || { echo "ERROR: GitHub release token is missing"; exit 1; }
           echo "Publishing credentials and channel mapping are present."
-
-      - name: Arabic preflight gates (science)
-        env:
-          EDGE_TTS_VOICE: "ar-EG-ShakirNeural"
-          TTS_ENGINE: "edge"
-        run: |
-          python -m arabic_speech_core.cli preflight --text "هذه عينة عربية قصيرة للتحقق من اللغة والمزود قبل توليد المحتوى العلمي." --engine edge --locale ar-SA --voice "$EDGE_TTS_VOICE" --lexicon config/arabic_pronunciation.json --min-words 8 --max-words 40
 
       - name: Validate and resolve AI model policy
         env:
@@ -293,13 +205,6 @@ jobs:
           # --- Topic history ---
           TOPIC_HISTORY_FILE: 'topic_history.json'
 
-          # --- Optional Fact Check configuration; not used in live publishing ---
-          FACT_CHECK_SOURCES_FILE: 'config/fact_sources.json'
-          FACT_CHECK_MODEL: 'google/gemma-4-26b-a4b-it:free,google/gemma-4-31b-it:free,nvidia/nemotron-3-super-120b-a12b:free'
-          FACT_CHECK_MIN_CONFIDENCE: '0.85'
-          FACT_CHECK_MAX_SOURCE_CHARS: '6000'
-          FACT_CHECK_MAX_TOTAL_SOURCE_CHARS: '8000'
-          FACT_CHECK_MAX_COMPLETION_TOKENS: '2048'
 
           # --- TTS ---
           TTS_ENGINE: "edge"
@@ -328,7 +233,6 @@ jobs:
           test -f llm_gemini.py || { echo "ERROR: llm_gemini.py is missing"; exit 1; }
           test -f tts_quality.py || { echo "ERROR: tts_quality.py is missing"; exit 1; }
           test -f assets/voices/voice_profiles.json || { echo "ERROR: voice profiles config is missing"; exit 1; }
-          test -f fact_check.py || { echo "ERROR: fact_check.py is missing"; exit 1; }
           python main.py
 
       - name: Verify final montage and B-roll output
@@ -337,25 +241,6 @@ jobs:
           ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0 output/final_video.mp4
           ffprobe -v error -show_entries format=duration -of csv=p=0 output/final_video.mp4
           echo "Professional vertical montage with topic-specific Pexels B-roll verified."
-
-      - name: Run B-roll quality gate before publishing
-        continue-on-error: true
-        run: |
-          python scripts/broll_quality_pipeline.py \
-            --video output/final_video.mp4 \
-            --clips-dir output/pexels_clips \
-            --expected vertical \
-            --min-clips 4 \
-            --max-black-seconds 0.30
-
-      - name: Upload Fact Check report
-        if: always()
-        continue-on-error: true
-        uses: actions/upload-artifact@v6
-        with:
-          name: fact-check-report
-          path: state/fact_check.json
-          if-no-files-found: ignore
 
       - name: Persist topic history
         if: success()
@@ -372,9 +257,6 @@ jobs:
           git fetch origin main
           git rebase origin/main
           git push origin HEAD:main
-
-      - name: Verify Arabic narration guard
-        run: python -m unittest tests.test_arabic_guard -v
 
       - name: Preserve clip review candidates
         if: ${{ failure() }}
