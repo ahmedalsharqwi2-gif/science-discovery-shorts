@@ -751,12 +751,13 @@
       "title": "لماذا لا تلتهم المعدة نفسها؟ — كيف تحمي المعدة البشرية نفسها من عصارتها الهاضمة القوية القادرة على إذابة المعادن؟,",
       "hook": "تنتج المعدة حمض الهيدروكلوريك بقوة كافية لإذابة المعادن، فلماذا لا تلتهم المعدة نفسها؟ تحتوي جدران المعدة على آلية دفاع دقيقة تعتمد على التوازن الحيوي والكيميائي الدقيق. تفرز خلايا المعدة طبقة سميكة ولزجة من المخاط الواقي",
       "region": "",
-      "status": "reserved",
+      "status": "published",
       "source": "science-pipeline",
       "reservation_id": "0d133db01a4c4055841d31ecf848575a",
       "reserved_at": "2026-10-06T05:10:55Z",
       "run_id": "37416690209",
-      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts",
+      "published_at": "2026-10-06T05:11:01Z"
     }
   ]
 }
