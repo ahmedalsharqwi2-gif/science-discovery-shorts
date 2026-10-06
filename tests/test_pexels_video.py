@@ -1,6 +1,8 @@
 import unittest
+import types
+from unittest.mock import Mock, patch
 
-from scripts.pexels_video import CLIP_SECONDS, MIN_CLIPS, visual_queries
+from scripts.pexels_video import CLIP_SECONDS, MIN_CLIPS, visual_queries, resolve_visual_queries
 
 
 class PexelsVideoTests(unittest.TestCase):
@@ -26,6 +28,29 @@ class PexelsVideoTests(unittest.TestCase):
     def test_clip_reuse_policy_is_documented(self):
         """A search may return fewer unique clips than a full reel needs."""
         self.assertLess(CLIP_SECONDS, 10)
+
+    def test_taste_topic_resolves_with_or_without_diacritics(self):
+        for topic in ("لماذا لا تلتصق نكهة الطعام بلسانك طوال اليوم؟",
+                      "لِمَاذَا لَا تَلْتَصِقُ نَكْهَةُ الطَّعَامِ بِلِسَانِكَ؟"):
+            queries = resolve_visual_queries(topic)
+            self.assertEqual(len(queries), 3)
+            self.assertIn("tongue", queries[0])
+
+    def test_unfamiliar_topic_uses_bounded_specific_query_plan(self):
+        provider = types.ModuleType("llm_gemini")
+        provider.pooled_llm_chat = Mock(return_value=
+            '["magnet attracting iron", "iron filings magnet", "magnetic field experiment"]')
+        with patch.dict("sys.modules", {"llm_gemini": provider}):
+            queries = resolve_visual_queries("لماذا يجذب المغناطيس الحديد؟")
+        self.assertEqual(len(queries), 3)
+        self.assertTrue(all("magnet" in query for query in queries))
+        provider.pooled_llm_chat.assert_called_once()
+
+    def test_malformed_query_plan_does_not_select_generic_footage(self):
+        provider = types.ModuleType("llm_gemini")
+        provider.pooled_llm_chat = Mock(return_value="not JSON")
+        with patch.dict("sys.modules", {"llm_gemini": provider}):
+            self.assertEqual(resolve_visual_queries("موضوع جديد"), [])
 
     def test_unknown_topic_has_no_generic_stock_fallback(self):
         self.assertEqual(visual_queries("موضوع غير مصنف بلا كلمات بصرية"), [])
