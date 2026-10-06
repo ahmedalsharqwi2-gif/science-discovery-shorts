@@ -161,7 +161,7 @@ def normalize_narration_response(response: str) -> str:
     # Models occasionally emit bidi/control marks or decorative Unicode that
     # is harmless visually but makes the strict Arabic quality gate fail.
     text = re.sub(r"[\u200b-\u200f\u202a-\u202e\ufeff]", "", text)
-    text = re.sub(r"[^\u0621-\u064A\u0671-\u06FF\s.!؟؛،0-9()\[\]«»:\"'\-A-Za-z]", " ", text)
+    text = re.sub(r"[^\u0621-\u06FF\s.!؟؛،0-9()\[\]«»:\"'\-A-Za-z]", " ", text)
     text = re.sub(r"[*_`]", "", text)
     return text.strip().strip('"«»')
 
