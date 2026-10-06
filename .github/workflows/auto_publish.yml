@@ -31,6 +31,7 @@ permissions:
   contents: write
 
 env:
+  CLIP_REVIEW_ENABLED: 'false'
   QUALITY_GATES_BLOCKING: 'false'
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
   PYTHONPATH: ${{ github.workspace }}
