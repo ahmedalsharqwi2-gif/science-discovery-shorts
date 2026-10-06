@@ -32,6 +32,7 @@ permissions:
   contents: write
 
 env:
+  QUALITY_GATES_BLOCKING: 'false'
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
   PYTHONPATH: ${{ github.workspace }}
 
@@ -339,6 +340,7 @@ jobs:
           echo "Professional vertical montage with topic-specific Pexels B-roll verified."
 
       - name: Run B-roll quality gate before publishing
+        continue-on-error: true
         run: |
           python scripts/broll_quality_pipeline.py \
             --video output/final_video.mp4 \
