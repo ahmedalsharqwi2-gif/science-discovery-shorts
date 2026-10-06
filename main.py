@@ -163,9 +163,11 @@ class AutoPublishPipeline:
                 max_black_seconds=0.30,
             )
             if not broll_report["passed"]:
-                log.error("B-roll/montage quality gate failed: %s", broll_report["errors"])
-                return False
-            log.info("✓ B-roll/montage quality gate passed (%d source clips)", broll_report["broll"]["clip_count"])
+                log.warning("B-roll/montage quality warnings: %s", broll_report["errors"])
+                if os.getenv("QUALITY_GATES_BLOCKING", "true").lower() == "true":
+                    return False
+            else:
+                log.info("✓ B-roll/montage quality gate passed (%d source clips)", broll_report["broll"]["clip_count"])
 
             # Step 7: Publish
             log.info("\n[Step 7] Publishing content...")
