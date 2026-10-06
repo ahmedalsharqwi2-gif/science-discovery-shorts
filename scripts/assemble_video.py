@@ -7,6 +7,7 @@ import os
 import re
 import subprocess
 from pathlib import Path
+from scripts.media_audio import add_topic_soundtrack
 
 from scripts.pexels_video import build_pexels_track
 from scripts.media_audio import ducking_filters
@@ -177,7 +178,7 @@ def _filter_path(path: Path) -> str:
     return str(path.resolve()).replace("\\", "/").replace(":", r"\:").replace("'", r"\'")
 
 
-def _mix_science_audio(voice_path: Path, duration: float, output_path: Path, source_video: Path | None = None) -> Path:
+def _mix_science_audio(voice_path: Path, duration: float, output_path: Path, source_video: Path | None = None, topic: str = "") -> Path:
     """Keep narration clear and mix only scene-reviewed embedded sound."""
     inputs = ["-i", str(voice_path)]
     if source_video is not None:
@@ -188,6 +189,7 @@ def _mix_science_audio(voice_path: Path, duration: float, output_path: Path, sou
         filters = ["[0:a]aresample=48000,alimiter=limit=0.95:level=disabled[a]"]
     subprocess.run(["ffmpeg", "-y", *inputs, "-filter_complex", ";".join(filters), "-map", "[a]",
                     "-t", f"{duration:.3f}", "-c:a", "libmp3lame", "-b:a", "192k", str(output_path)], check=True)
+    add_topic_soundtrack(output_path, voice_path, duration, "science", topic)
     return output_path
 
 
@@ -204,7 +206,7 @@ def assemble_video(audio_path: Path, narration: str, output_path: Path, topic: s
         ass_path.unlink(missing_ok=True)
         raise RuntimeError("لم تتوفر مقاطع Pexels كافية ومرتبطة بالموضوع؛ أوقفنا النشر.")
     try:
-        _mix_science_audio(audio_path, duration, mixed_audio, pexels_track)
+        _mix_science_audio(audio_path, duration, mixed_audio, pexels_track, topic=topic)
         subprocess.run(["ffmpeg", "-y", "-i", str(pexels_track), "-i", str(mixed_audio), "-filter_complex", f"[0:v]subtitles='{subtitles}':fontsdir='/usr/share/fonts/truetype/dejavu'[v]", "-map", "[v]", "-map", "1:a:0", "-t", f"{duration:.3f}", "-c:v", "libx264", "-preset", "veryfast", "-crf", "23", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "160k", "-shortest", "-movflags", "+faststart", str(output_path)], check=True)
     finally:
         ass_path.unlink(missing_ok=True)
