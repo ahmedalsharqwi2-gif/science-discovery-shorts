@@ -131,11 +131,7 @@ jobs:
           GEMINI_THINKING_LEVEL: 'low'
           GEMINI_MIN_OUTPUT_TOKENS: '0'
           GEMINI_RETRIES: '3'
-          # A 160–168 Arabic-word narration is required in practice: the
-          # configured Edge voice produced 43.85s for 138 words in dry-run,
-          # below the 55s publication gate. GPT-OSS returned 155 words at
-          # 320 tokens, so give the validated providers enough headroom
-          # to stay inside the verified 55–90 second audio window.
+          # Compact narration for 45–59 second reels at the natural Edge rate.
           LLM_MAX_COMPLETION_TOKENS: '2048'
           PYTHONUNBUFFERED: '1'
           LLM_TIMEOUT: '45'
@@ -173,16 +169,16 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
 
           # --- Duration and word-count window ---
-          # Reels must stay below 90 seconds. Keep a one-second safety margin
+          # Reels target 45–59 seconds. Keep a one-second safety margin
           # so encoding/container rounding cannot push a published video over
           # the platform limit.
-          MIN_AUDIO_SECONDS: '55'
-          MAX_AUDIO_SECONDS: '89'
-          TARGET_AUDIO_SECONDS: '85'
+          MIN_AUDIO_SECONDS: '45'
+          MAX_AUDIO_SECONDS: '59'
+          TARGET_AUDIO_SECONDS: '55'
           # main.py reads MIN_WORDS/MAX_WORDS; the final MP3 duration remains
-          # the authoritative gate around this 160–190 word window.
-          MIN_WORDS: '160'
-          MAX_WORDS: '190'
+          # the authoritative gate around this 110–135 word window.
+          MIN_WORDS: '110'
+          MAX_WORDS: '135'
           # BUFFER_CHANNEL_IDS is stored positionally as TikTok, YouTube,
           # Facebook in this repository's secret.
           PUBLISH_CHANNELS: 'tiktok,youtube,facebook'
