@@ -805,11 +805,23 @@
       "region": "",
       "status": "published",
       "source": "science-pipeline",
-      "reservation_id": "c55e36d56b3c41c2bcd7c3f98fbf8601",
       "reserved_at": "2026-10-07T12:16:18Z",
+      "published_at": "2026-10-07T12:16:25Z",
       "run_id": "37619033677",
-      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts",
-      "published_at": "2026-10-07T12:16:25Z"
+      "reservation_id": "c55e36d56b3c41c2bcd7c3f98fbf8601",
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
+    },
+    {
+      "id": "7a03d0642464cc0b5d4b",
+      "title": "لماذا لا تلتصق القطط بالماء رغم حاجتها إليه؟,",
+      "hook": "تُظهر الملاحظات السلوكية أن غالبية القِطط المنزلية تُبدي نفوراً شديداً وفوريّاً من الماء السائل رغم شربها له بانتظام. لماذا تتهرّب القِطط من البلل تماماً بينما تحتاج أجسادها للماء؟ تُشير الخلفية التطورية إلى أن أسلاف القِطط",
+      "region": "",
+      "status": "reserved",
+      "source": "science-pipeline",
+      "reservation_id": "d4a66f94c7ad476c947fab80123e2bea",
+      "reserved_at": "2026-10-07T18:49:11Z",
+      "run_id": "37668347888",
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
     }
   ]
 }
