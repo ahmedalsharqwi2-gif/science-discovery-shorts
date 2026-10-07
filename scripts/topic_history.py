@@ -101,67 +101,28 @@ def _topic_fields(value: Any, *, kind: str) -> list[str]:
             seen.add(normalized)
     return result
 
-def find_duplicate(candidate: Any, entries: list[dict[str, Any]]) -> dict[str, Any] | None:
-    proposed_titles = _topic_fields(candidate, kind="title")
-    proposed_hooks = _topic_fields(candidate, kind="hook")
-    for entry in entries:
-        previous_titles = _topic_fields(entry, kind="title")
-        previous_hooks = _topic_fields(entry, kind="hook")
-        if any(_is_similar(new, old, field="title") for new in proposed_titles for old in previous_titles):
-            return entry
-        if proposed_hooks and previous_hooks and any(
-            _is_similar(new, old, field="hook") for new in proposed_hooks for old in previous_hooks
-        ):
-            return entry
-    return None
+def event_identity(value: Any) -> str:
+    """Use a canonical incident name, avoiding generic location-only matches."""
+    if not isinstance(value, dict):
+        return ""
+    stored = clean_text(value.get("event_identity"), 300)
+    if stored:
+        return stored
+    for key, name in (("verification_report", "case_name"), ("historical_verification_report", "event_name")):
+        report = value.get(key)
+        if isinstance(report, dict) and clean_text(report.get(name)):
+            return clean_text(report[name], 220)
+    return ""
 
-
-def _is_similar(left: Any, right: Any, *, field: str = "title") -> bool:
-    """Detect the same subject without blocking on generic narration wording.
-
-    Titles are the identity signal. Hooks are checked only against hooks and
-    require a stronger match because they often contain reusable boilerplate.
-    """
-    a, b = normalize_text(left), normalize_text(right)
-    if not a or not b:
-        return False
-    if a == b:
-        return True
-    words_a, words_b = a.split(), b.split()
-    ta, tb = set(words_a), set(words_b)
-    overlap = len(ta & tb)
-    min_words = min(len(ta), len(tb))
-    if min_words < (3 if field == "title" else 4):
-        return False
-    ratio = SequenceMatcher(None, a, b, autojunk=False).ratio()
-    if field == "title":
-        # Reworded titles for the same incident remain blocked, but a shared
-        # generic phrase or one broad topic word is not enough.
-        return ratio >= 0.90 or (overlap >= 3 and overlap / min_words >= 0.80)
-    # Hooks are supplementary evidence only; require near identity.
-    return ratio >= 0.94 or (overlap >= 4 and overlap / min_words >= 0.85)
-
-def _topic_fields(value: Any, *, kind: str) -> list[str]:
-    if isinstance(value, str):
-        fields = [clean_text(value)]
-    elif isinstance(value, dict):
-        keys = ("title", "topic", "subject") if kind == "title" else ("hook", "hook_text", "summary", "premise")
-        fields = [clean_text(value.get(key)) for key in keys]
-    else:
-        fields = []
-    result: list[str] = []
-    seen: set[str] = set()
-    for field in fields:
-        normalized = normalize_text(field)
-        if normalized and normalized not in seen:
-            result.append(field)
-            seen.add(normalized)
-    return result
 
 def find_duplicate(candidate: Any, entries: list[dict[str, Any]]) -> dict[str, Any] | None:
     proposed_titles = _topic_fields(candidate, kind="title")
     proposed_hooks = _topic_fields(candidate, kind="hook")
+    proposed_identity = event_identity(candidate)
     for entry in entries:
+        previous_identity = event_identity(entry)
+        if proposed_identity and previous_identity and _is_similar(proposed_identity, previous_identity):
+            return entry
         previous_titles = _topic_fields(entry, kind="title")
         previous_hooks = _topic_fields(entry, kind="hook")
         if any(_is_similar(new, old, field="title") for new in proposed_titles for old in previous_titles):
@@ -224,6 +185,9 @@ def _coerce_entry(item: Any, source: str = "legacy") -> dict[str, Any] | None:
         "status": clean_text(item.get("status") or "historical", 40),
         "source": clean_text(item.get("source") or source, 80),
     }
+    identity = event_identity(item)
+    if identity:
+        entry["event_identity"] = identity
     for key in ("reserved_at", "published_at", "run_id", "story_type", "reservation_id", "repository"):
         value = item.get(key)
         if value:
@@ -389,3 +353,4 @@ def main(argv: list[str] | None = None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+

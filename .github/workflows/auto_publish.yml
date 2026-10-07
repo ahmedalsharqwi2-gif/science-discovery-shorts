@@ -158,6 +158,7 @@ jobs:
 
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
           PEXELS_REQUIRED: 'true'
+          ENGINEERING_PILOT_ENABLED: 'true'
           TOPIC_BANK_REQUIRED: 'false'
           TOPIC_SELECTION_MODE: 'dynamic'
           TOPIC_ROTATION_SEED: ${{ github.run_id }}
@@ -266,3 +267,4 @@ jobs:
             output/pexels_clips/raw_*
           if-no-files-found: ignore
           retention-days: 3
+

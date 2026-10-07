@@ -65,6 +65,18 @@ TOPIC_BANK_FILE = Path(os.getenv("TOPIC_BANK_FILE", "TOPIC_BANK.md"))
 TOPIC_PERFORMANCE_FILE = Path(os.getenv("TOPIC_PERFORMANCE_FILE", "topic_performance.json"))
 
 
+
+# Six engineering reels alternate with six nature reels; durable history resumes the pilot.
+ENGINEERING_PILOT_TOPICS = ('لماذا تستخدم صناعة الطائرات الحربية التيتانيوم والمواد المركبة؟', 'كيف ترى بعض الأسماك في ظلام الأعماق؟', 'كيف يصنع المحرك النفاث قوة الدفع؟', 'لماذا يقف النحام على ساق واحدة؟', 'كيف تطفو حاملة طائرات رغم وزنها الهائل؟', 'كيف تتواصل النملات من دون كلام؟', 'لماذا يبدأ بناء السفن العملاقة في وحدات منفصلة؟', 'كيف تحمي الشعاب المرجانية السواحل؟', 'كيف تتحكم خزانات الغواصة في الطفو والغوص؟', 'كيف يلتصق الوزغ بالجدران؟', 'كيف يقاوم هيكل الغواصة ضغط الماء؟', 'لماذا تصنع بعض الكائنات ضوءها الخاص؟')
+
+
+def select_engineering_pilot(history: list[dict]) -> str | None:
+    for title in ENGINEERING_PILOT_TOPICS:
+        if not find_duplicate({"title": title}, history):
+            return title
+    return None
+
+
 def topic_performance_context(history: list[dict]) -> str:
     """Use optional view/retention signals; otherwise use channel identity."""
     candidates = []
@@ -199,6 +211,11 @@ class ContentGenerator:
         categories = "\n".join(f"- {item}" for item in TOPIC_CATEGORIES)
         requested_category = category if category and category not in {"عام", "general"} else "اختر الفئة الأنسب تلقائياً"
         existing = TopicHistory(self.topic_history_path).entries
+        if os.getenv("ENGINEERING_PILOT_ENABLED", "false").lower() == "true" and category in {"", "عام", "general"}:
+            pilot_topic = select_engineering_pilot(existing)
+            if pilot_topic:
+                log.info("Selected engineering/nature pilot topic: %s", pilot_topic)
+                return pilot_topic
         if os.getenv("TOPIC_BANK_REQUIRED", "false").lower() == "true":
             bank_topic = select_topic_from_bank(load_topic_bank(), existing)
             if not bank_topic:
@@ -281,12 +298,12 @@ class ContentGenerator:
 - استخدم لغة واضحة وسهلة النطق
 - تجنب الكلمات الأجنبية والأرقام
 - اجعل التشكيل (الحركات) على معظم الكلمات
-        - ابدأ بسؤال أو حقيقة موثقة في أول جملة، من دون تحية أو مقدمة عامة، واجعل أول 10–20 ثانية قوية
+        - ابدأ بسؤال أو حقيقة موثقة في أول جملة، من دون تحية أو مقدمة عامة، واجعل أول ثلاث إلى خمس كلمات تثير الفضول خلال أول ثانيتين، بلا تهويل
         - فرّق بوضوح بين الحقيقة المثبتة، والنظرية المدعومة، والفرضية، والخلاف العلمي، والاحتمال
 - لا تقدم أسطورة أو مؤامرة أو ادعاءً طبيًا أو خبرًا حديثًا كحقيقة بلا مصدر
 - عند ذكر رقم أو تاريخ أو سرعة أو نسبة أو جرعة أو عمر، يجب أن يكون قابلًا للإسناد
 - في الطب: معلومات عامة فقط، بلا تشخيص أو علاج شخصي أو جرعات
-        - اتبع بنية: Hook، طرح السؤال، الخلفية، الشرح خطوة بخطوة، الأدلة أو الملاحظات المتاحة، ما يعرفه العلماء، ما يزال مجهولًا، التفسيرات، النتيجة، ومعلومة أخيرة واضحة
+        - قدم سؤالًا واحدًا محددًا، ثم تفسيره بمثال بصري واحد، ثم إجابة مكتملة أو حدود ما نعرفه. صمم النص لريل من خمس وأربعين إلى تسع وخمسين ثانية، ولا تحاول ضغط مقال طويل أو إنهاء الريل بوعد معلومة مؤجلة
         - اجعل كل جملة تحمل معلومة واحدة قابلة للعرض بصرياً، واربطها ذهنيًا بمشهد محدد؛ القاعدة الإلزامية Voiceover → Visual → Subtitle
         - لا تستخدم فيديو فضاء عامًا فوق معلومات مختلفة؛ غيّر اللقطة مع تغير الفكرة، واجعل الشمس للشمس والدماغ للدماغ وDNA للجينات والمحيط للمحيط
         - إذا كان المشهد محاكاة أو تصورًا فنيًا أو Artist's Impression أو Illustration فلا تقدمه كصورة حقيقية، واذكر طبيعته عند الحاجة
@@ -393,3 +410,4 @@ if __name__ == "__main__":
     
     narration = generator.generate_narration(topic)
     print(f"\nNarration: {narration}")
+
