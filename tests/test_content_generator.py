@@ -3,6 +3,7 @@ from unittest.mock import patch
 
 from scripts.generate_content import (
     CHANNEL_BRIEF,
+    EDITORIAL_SAFETY_BOUNDARY,
     TOPIC_CATEGORIES,
     ContentGenerator,
     normalize_narration_response,
@@ -43,6 +44,20 @@ class ContentGeneratorTopicPolicyTests(unittest.TestCase):
         self.assertIn("أعماق المحيطات", prompt)
         self.assertIn("الذكاء الاصطناعي", prompt)
         self.assertIn("قابلة للتحقق", prompt)
+
+    def test_aerospace_and_naval_tracks_are_safe_and_prompted(self):
+        with patch(
+            "scripts.generate_content.llm_chat",
+            return_value="كيف تتحمل الغواصة ضغط الأعماق؟",
+        ) as llm:
+            ContentGenerator().generate_topic("الهندسة البحرية")
+
+        prompt = llm.call_args.args[0][0]["content"]
+        self.assertIn("الطائرات الحربية", prompt)
+        self.assertIn("السفن", prompt)
+        self.assertIn("الغواصات", prompt)
+        self.assertIn(EDITORIAL_SAFETY_BOUNDARY, prompt)
+        self.assertIn("لا تمجّد العنف", prompt)
 
 
 if __name__ == "__main__":
