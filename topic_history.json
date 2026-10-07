@@ -790,12 +790,13 @@
       "title": "كيف تنجو التارديغرادا من الفراغ القاتل؟ — ما هي الآلية البيولوجية التي تجعل أصغر كائن حي يقاوم الإشعاع الفضائي والضغط الهائل؟,",
       "hook": "هل تعلم أن أصغر كائن حي على الأرض، المعروف بالتاردغرادا أو دب الماء، يستطيع العيش في الفراغ القاتل للفضاء؟ كيف ينجو هذا الكائن المجهري من ضغط يهسر الحديد وإشعاع يدمر الخلايا؟ أثبتت المشاهدات المكروسوبية أن",
       "region": "",
-      "status": "reserved",
+      "status": "published",
       "source": "science-pipeline",
       "reservation_id": "b143e57480f145468ef70e60a613cec6",
       "reserved_at": "2026-10-07T06:25:13Z",
       "run_id": "37580805684",
-      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts",
+      "published_at": "2026-10-07T06:25:19Z"
     }
   ]
 }
