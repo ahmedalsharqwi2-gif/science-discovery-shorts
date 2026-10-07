@@ -5,6 +5,20 @@ from pathlib import Path
 from scripts.assemble_video import probe_duration
 
 
+def target_words_for_duration(
+    current_words: int,
+    duration: float,
+    maximum: float,
+    minimum_words: int = 45,
+    safety_ratio: float = 0.90,
+) -> int:
+    """Estimate a shorter script size with margin for TTS timing variation."""
+    if current_words < 1 or duration <= 0 or maximum <= 0:
+        raise ValueError("Word count, duration, and maximum duration must be positive")
+    target = int(current_words * max(1.0, maximum - 0.5) / duration * safety_ratio)
+    return max(minimum_words, min(current_words - 1, target))
+
+
 def fit_narration(path: Path, minimum: float, maximum: float, target: float) -> float:
     duration = probe_duration(path)
     if minimum <= duration <= maximum:

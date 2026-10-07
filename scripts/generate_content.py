@@ -402,6 +402,38 @@ class ContentGenerator:
             log.error(f"Failed to generate narration: {e}")
             raise
 
+    def shorten_narration(self, topic: str, narration: str, target_words: int) -> str:
+        """Rewrite an overlong script to a measured word target, without truncating audio."""
+        configured_minimum = max(20, int(os.getenv("MIN_SHORTENED_NARRATION_WORDS", "45")))
+        minimum_words = min(target_words, max(configured_minimum, int(target_words * 0.80)))
+        prompt = f"""اختصر نص السرد التالي إلى نحو {target_words} كلمة كحد أقصى، مع إبقائه بين {minimum_words} و{target_words} كلمة.
+الموضوع: {topic}
+حافظ على السؤال/الافتتاحية، والفكرة العلمية المركزية، والشرح الضروري، والخاتمة المكتملة. احذف التفاصيل الثانوية والتكرار فقط؛ لا تضف حقائق جديدة ولا تغيّر درجة اليقين العلمي. اكتب جملًا عربية طبيعية كاملة تنتهي بعلامة ترقيم. أخرج نص السرد وحده بلا عنوان أو ملاحظات.
+
+النص الأصلي:
+{narration}"""
+        for attempt in range(3):
+            response = llm_chat(
+                [{"role": "user", "content": prompt}],
+                max_tokens=int(os.getenv("LLM_MAX_COMPLETION_TOKENS", "512")),
+            )
+            shortened = normalize_narration_response(response)
+            shortened, _ = self.grammar_fixer.fix_text(shortened)
+            count = len(shortened.split())
+            complete = bool(re.search(r"[.!؟؛:]$", shortened.strip()))
+            if minimum_words <= count <= target_words and complete:
+                log.info("Shortened narration from %d to %d words for measured audio duration", len(narration.split()), count)
+                return shortened
+            if attempt < 2:
+                prompt = (
+                    f"أعد كتابة النص التالي كاملًا في {minimum_words}-{target_words} كلمة بالضبط تقريبًا. "
+                    "حافظ على الفكرة العلمية الأساسية، ولا تضف حقائق، وأنهِ جملة مكتملة بعلامة ترقيم. "
+                    "أخرج السرد فقط.\n\nالنص:\n" + shortened
+                )
+            raise ValueError(
+                f"تعذر اختصار السرد إلى {minimum_words}-{target_words} كلمة وجمل مكتملة "
+                "بعد ثلاث محاولات؛ أوقف النشر بدل قطع النص أو تسريع الصوت بإفراط."
+            )
 
 if __name__ == "__main__":
     generator = ContentGenerator()
@@ -410,4 +442,3 @@ if __name__ == "__main__":
     
     narration = generator.generate_narration(topic)
     print(f"\nNarration: {narration}")
-

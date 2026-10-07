@@ -27,7 +27,7 @@ from scripts import (
     ContentPublisher,
 )
 from scripts.assemble_video import assemble_video, probe_duration
-from scripts.audio_duration import fit_narration
+from scripts.audio_duration import fit_narration, target_words_for_duration
 from scripts.publish_content import build_social_description
 from scripts.broll_quality_pipeline import evaluate as evaluate_broll
 from scripts.topic_history import TopicHistory
@@ -120,10 +120,64 @@ class AutoPublishPipeline:
 
             log.info(f"✓ Voice generated: {output_path}")
 
-            # Step 5: Audio quality check
-            log.info("\n[Step 5] Checking audio quality...")
-            fit_narration(Path(output_path), MIN_AUDIO_SECONDS, MAX_AUDIO_SECONDS,
-                          float(os.getenv("TARGET_AUDIO_SECONDS", "55")))
+            # Step 5: Fit narration naturally. If the required tempo change
+            # would exceed the safe limit, shorten the script and regenerate TTS.
+            log.info("\n[Step 5] Fitting narration to the reel duration...")
+            max_shorten_attempts = max(0, int(os.getenv("MAX_NARRATION_SHORTEN_ATTEMPTS", "2")))
+            minimum_short_script_words = max(20, int(os.getenv("MIN_SHORTENED_NARRATION_WORDS", "45")))
+            fitted = False
+            for shorten_attempt in range(max_shorten_attempts + 1):
+                actual_duration = probe_duration(Path(output_path))
+                tempo_needed = actual_duration / max(1.0, MAX_AUDIO_SECONDS - 0.25)
+                if actual_duration > MAX_AUDIO_SECONDS and tempo_needed > 1.25:
+                    if shorten_attempt >= max_shorten_attempts:
+                        raise ValueError(
+                            f"Narration remains too long after {max_shorten_attempts} shortening attempts: "
+                            f"{actual_duration:.2f}s (safe max {MAX_AUDIO_SECONDS:.2f}s)"
+                        )
+                    target_words = target_words_for_duration(
+                        len(checked_text.split()), actual_duration, MAX_AUDIO_SECONDS,
+                        minimum_words=minimum_short_script_words,
+                    )
+                    log.warning(
+                        "Narration is %.2fs; shortening from %d words toward %d before regenerating TTS (%d/%d)",
+                        actual_duration, len(checked_text.split()), target_words,
+                        shorten_attempt + 1, max_shorten_attempts,
+                    )
+                    checked_text = self.content_generator.shorten_narration(topic, checked_text, target_words)
+                    checked_text, text_report = self.quality_checker.check_text(checked_text)
+                    log.info("Shortened narration quality score: %.2f/1.0", text_report.overall_score)
+                    if not text_report.is_acceptable:
+                        log.error("Shortened narration failed the text quality gate")
+                        return False
+                    if os.getenv("FACT_CHECK_ENABLED", "false").lower() == "true":
+                        from fact_check import fact_check_topic
+                        fact_report = fact_check_topic(
+                            {"title": topic, "narration_script": checked_text},
+                            output_path=Path("state/fact_check.json"),
+                        )
+                        if fact_report.get("status") != "PASS":
+                            log.error("Shortened narration failed scientific fact-check: %s", fact_report.get("errors"))
+                            return False
+                    output_path, success = self.voice_generator.generate(
+                        checked_text, output_path=Path("output/narration.mp3")
+                    )
+                    if not success:
+                        log.error("Voice regeneration failed after narration shortening")
+                        return False
+                    continue
+
+                fit_narration(
+                    Path(output_path), MIN_AUDIO_SECONDS, MAX_AUDIO_SECONDS,
+                    float(os.getenv("TARGET_AUDIO_SECONDS", "55")),
+                )
+                fitted = True
+                break
+
+            if not fitted:
+                raise ValueError("Narration could not be fitted inside the video duration window")
+
+            log.info("\n[Step 5.5] Checking audio quality...")
             audio_report = self.quality_checker.check_audio(output_path, checked_text)
             log.info(f"✓ Audio quality check complete (score: {audio_report.overall_score:.2f}/1.0)")
 

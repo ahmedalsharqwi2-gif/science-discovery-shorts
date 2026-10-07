@@ -6,6 +6,21 @@ from scripts.generate_content import ContentGenerator, trim_to_complete_sentence
 
 
 class ContentLengthPolicyTests(unittest.TestCase):
+    @patch("scripts.generate_content.llm_chat")
+    def test_shorten_narration_uses_target_and_returns_complete_script(self, llm_chat):
+        sentence = "هذه جملة علمية قصيرة تشرح الفكرة الأساسية وتحافظ على المعنى دون إضافة معلومات جديدة."
+        narration = f"{sentence} {sentence}"
+        llm_chat.return_value = narration
+        generator = ContentGenerator(min_words=105, max_words=150)
+        generator.grammar_fixer.fix_text = lambda text: (text, [])
+
+        with patch.dict("os.environ", {"MIN_SHORTENED_NARRATION_WORDS": "20"}):
+            result = generator.shorten_narration("موضوع علمي", "نص طويل يحتاج إلى الاختصار", 30)
+
+        self.assertEqual(result, narration)
+        self.assertIn("30 كلمة كحد أقصى", llm_chat.call_args.args[0][0]["content"])
+        self.assertTrue(result.endswith("."))
+
     def test_trim_refuses_to_cut_inside_a_sentence(self):
         text = "كلمة " * 110 + "نهاية كاملة. " + "باقي النص " * 50
         clipped = trim_to_complete_sentence(text, 115, 105)

@@ -4,11 +4,17 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from scripts.audio_duration import fit_narration
+from scripts.audio_duration import fit_narration, target_words_for_duration
 
 
 @unittest.skipUnless(shutil.which("ffmpeg") and shutil.which("ffprobe"), "ffmpeg required")
 class AudioDurationTests(unittest.TestCase):
+    def test_overlong_science_narration_gets_conservative_word_target(self):
+        target = target_words_for_duration(128, 97.25, 59, minimum_words=45)
+        self.assertLess(target, 128)
+        self.assertGreaterEqual(target, 45)
+        self.assertLessEqual(target, 75)
+
     def make_audio(self, path, duration):
         subprocess.run(["ffmpeg", "-y", "-f", "lavfi", "-i",
                         f"sine=frequency=440:duration={duration}", str(path)],

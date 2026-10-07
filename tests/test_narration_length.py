@@ -1,5 +1,6 @@
 import os
 import unittest
+from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
 
@@ -45,6 +46,27 @@ class CurrentNarrationPolicyTests(unittest.TestCase):
                 pipeline.quality_checker.check_audio = lambda _path, _text: report
                 pipeline.voice_generator.generate = lambda _text, output_path: (output_path, True)
                 self.assertFalse(pipeline.run(topic="موضوع اختباري"))
+
+    def test_pipeline_shortens_and_regenerates_when_audio_is_too_long(self):
+        pipeline = main.AutoPublishPipeline()
+        original = " ".join(["كلمة"] * 128)
+        shortened = "هذه جملة علمية موجزة ومكتملة تشرح الفكرة الأساسية بوضوح."
+        report = SimpleNamespace(is_acceptable=True, overall_score=1.0, issues=[], warnings=[])
+        pipeline.content_generator.generate_narration = lambda _topic: original
+        pipeline.content_generator.shorten_narration = lambda _topic, _text, _target: shortened
+        pipeline.quality_checker.check_text = lambda text: (text, report)
+        pipeline.quality_checker.check_audio = lambda _path, _text: report
+        pipeline.voice_generator.generate = lambda _text, output_path: (output_path, True)
+
+        with (
+            patch.dict(os.environ, {"PUBLISH_DRY_RUN": "true"}),
+            patch.object(main, "probe_duration", side_effect=[97.25, 55.0, 55.0]),
+            patch.object(main, "fit_narration", return_value=55.0),
+            patch.object(main, "assemble_video", return_value=Path("output/final_video.mp4")),
+            patch.object(main, "evaluate_broll", return_value={"passed": True, "broll": {"clip_count": 4}}),
+            patch.object(main.TopicHistory, "check_unique"),
+        ):
+            self.assertTrue(pipeline.run(topic="موضوع اختباري"))
 
 
 if __name__ == "__main__":
