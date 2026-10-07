@@ -32,8 +32,8 @@ from scripts.publish_content import build_social_description
 from scripts.broll_quality_pipeline import evaluate as evaluate_broll
 from scripts.topic_history import TopicHistory
 
-MIN_AUDIO_SECONDS = float(os.getenv("MIN_AUDIO_SECONDS", "60"))
-MAX_AUDIO_SECONDS = float(os.getenv("MAX_AUDIO_SECONDS", "90"))
+MIN_AUDIO_SECONDS = float(os.getenv("MIN_AUDIO_SECONDS", "45"))
+MAX_AUDIO_SECONDS = float(os.getenv("MAX_AUDIO_SECONDS", "59"))
 
 
 class AutoPublishPipeline:
@@ -41,8 +41,8 @@ class AutoPublishPipeline:
 
     def __init__(self):
         self.content_generator = ContentGenerator(
-            min_words=int(os.getenv("MIN_WORDS", "115")),
-            max_words=int(os.getenv("MAX_WORDS", "150")),
+            min_words=int(os.getenv("MIN_WORDS", "110")),
+            max_words=int(os.getenv("MAX_WORDS", "135")),
         )
         self.voice_generator = VoiceGenerator(
             output_dir=Path(os.getenv("OUTPUT_DIR", "./output"))
@@ -123,7 +123,7 @@ class AutoPublishPipeline:
             # Step 5: Audio quality check
             log.info("\n[Step 5] Checking audio quality...")
             fit_narration(Path(output_path), MIN_AUDIO_SECONDS, MAX_AUDIO_SECONDS,
-                          float(os.getenv("TARGET_AUDIO_SECONDS", "85")))
+                          float(os.getenv("TARGET_AUDIO_SECONDS", "55")))
             audio_report = self.quality_checker.check_audio(output_path, checked_text)
             log.info(f"✓ Audio quality check complete (score: {audio_report.overall_score:.2f}/1.0)")
 
