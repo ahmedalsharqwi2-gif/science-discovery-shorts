@@ -135,11 +135,12 @@ def search_portrait_videos(api_key: str, query: str, per_page: int = 80) -> list
             and item.get("width", 0) >= 540
             and item.get("height", 0) >= 540
         ]
-        # Prefer portrait, then choose the highest usable resolution.
+        # Prefer portrait and the closest Full HD rendition. Downloading 4K
+        # only to crop/encode at 1080p adds hundreds of MB with no output gain.
         candidates.sort(
             key=lambda item: (
                 item.get("height", 0) >= item.get("width", 0),
-                item.get("width", 0) * item.get("height", 0),
+                -abs(item.get("width", 0) * item.get("height", 0) - 1080 * 1920),
             ),
             reverse=True,
         )
