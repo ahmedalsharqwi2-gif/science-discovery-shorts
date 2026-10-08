@@ -181,6 +181,8 @@ def normalize_narration_response(response: str) -> str:
                 text = match.group(1).replace('\\"', '"').replace('\\n', '\n')
         else:
             text = re.sub(r'^\s*(?:نص السرد|النص|NARRATION|narration)\s*:\s*', '', text, flags=re.IGNORECASE)
+    # Decode escaped Unicode left by malformed or double-encoded wrappers.
+    text = re.sub(r"\\u([0-9A-Fa-f]{4})", lambda match: chr(int(match.group(1), 16)), text)
     text = text.replace("\\n", "\n").replace("\\t", " ").replace('\\"', '"')
     # Models occasionally emit bidi/control marks or decorative Unicode that
     # is harmless visually but makes the strict Arabic quality gate fail.

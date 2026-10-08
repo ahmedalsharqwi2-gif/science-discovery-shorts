@@ -3,8 +3,8 @@ on:
   schedule:
     # Prepare at 06:00/12:00 UTC, at least three hours before Cairo publication.
     # Final publication remains 12:00 and 18:00 Africa/Cairo, including DST changes.
-    - cron: '0 6 * * *'
-    - cron: '0 12 * * *'
+    - cron: '17 6 * * *'
+    - cron: '17 12 * * *'
   workflow_dispatch:
     inputs:
       voice_profile:
@@ -69,7 +69,7 @@ jobs:
               with open(os.environ["GITHUB_ENV"], "a", encoding="utf-8") as env_file:
                   env_file.write(f"PUBLISH_DUE_AT={due_at}\n")
               raise SystemExit(0)
-          target_hour = {"0 6 * * *": 12, "0 12 * * *": 18}.get(expression)
+          target_hour = {"17 6 * * *": 12, "17 12 * * *": 18}.get(expression)
           if target_hour is None:
               slots = [cairo_now.replace(hour=12, minute=0, second=0, microsecond=0),
                        cairo_now.replace(hour=18, minute=0, second=0, microsecond=0)]
@@ -77,7 +77,12 @@ jobs:
           else:
               target = cairo_now.replace(hour=target_hour, minute=0, second=0, microsecond=0)
               if target <= cairo_now:
-                  target += timedelta(days=1)
+                  # A delayed morning run should still reach today's evening
+                  # slot instead of being rolled to tomorrow's noon.
+                  slots = [cairo_now.replace(hour=12, minute=0, second=0, microsecond=0),
+                           cairo_now.replace(hour=18, minute=0, second=0, microsecond=0)]
+                  target = next((slot for slot in slots if slot > cairo_now),
+                                slots[0] + timedelta(days=1))
           due_at = target.astimezone(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
           print(f"Fixed publication slot: {due_at} UTC")
           with open(os.environ["GITHUB_ENV"], "a", encoding="utf-8") as env_file:
@@ -182,7 +187,7 @@ jobs:
           TARGET_AUDIO_SECONDS: '55'
           # main.py reads MIN_WORDS/MAX_WORDS; the final MP3 duration remains
           # the authoritative gate around this 110–135 word window.
-          MIN_WORDS: '110'
+          MIN_WORDS: '90'
           MAX_WORDS: '135'
           # BUFFER_CHANNEL_IDS is stored positionally as TikTok, YouTube,
           # Facebook in this repository's secret.

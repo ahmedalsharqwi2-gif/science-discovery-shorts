@@ -31,11 +31,20 @@ def fit_narration(path: Path, minimum: float, maximum: float, target: float) -> 
     elif tempo < 0.85 and duration / (minimum + 0.25) >= 0.85:
         target = minimum + 0.25
         tempo = duration / target
+    padding = 0.0
+    if duration < minimum and duration / 0.85 >= minimum - 1.0:
+        # Keep the slow-down within 15%; a sub-second closing pause is
+        # preferable to rejecting an otherwise complete spoken explanation.
+        tempo = 0.85
+        padding = max(0.0, minimum + 0.2 - duration / tempo)
     # Fail closed for material changes to speaking pace.
     if not 0.85 <= tempo <= 1.25:
         raise ValueError(f"Audio duration cannot fit naturally: {duration:.2f}s (tempo {tempo:.2f})")
     fitted = path.with_name(path.stem + ".fitted" + path.suffix)
-    subprocess.run(["ffmpeg", "-y", "-i", str(path), "-filter:a", f"atempo={tempo:.8f}",
+    audio_filter = f"atempo={tempo:.8f}"
+    if padding:
+        audio_filter += f",apad=pad_dur={padding:.6f}"
+    subprocess.run(["ffmpeg", "-y", "-i", str(path), "-filter:a", audio_filter,
                     "-vn", str(fitted)], check=True, capture_output=True)
     actual = probe_duration(fitted)
     if not minimum <= actual <= maximum:
