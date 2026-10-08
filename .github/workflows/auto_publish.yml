@@ -251,6 +251,7 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add topic_history.json state/voice_rotation.json
+          if [ -f state/science_visual_history.json ]; then git add state/science_visual_history.json; fi
           if git diff --cached --quiet; then
             echo "No topic-history changes to persist."
             exit 0
