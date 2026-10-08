@@ -1,4 +1,4 @@
-"""Select a different repository soundtrack per run and mix it under narration."""
+"""Cycle stored repository music by production run number, with narration ducking."""
 from __future__ import annotations
 import os
 import subprocess
@@ -20,7 +20,7 @@ def select_track(root: Path, channel: str) -> Path:
         return candidate
     raw = os.getenv("MUSIC_ROTATION_INDEX", os.getenv("GITHUB_RUN_ID", "0"))
     try:
-        index = int(raw) % len(tracks)
+        index = (int(raw) - (1 if "MUSIC_ROTATION_INDEX" in os.environ else 0)) % len(tracks)
     except ValueError:
         index = 0
     return tracks[index]
@@ -36,5 +36,5 @@ def mix_background_music(mixed_audio: Path, narration: Path, duration: float, ro
     filters = ("[0:a]aresample=48000[existing];[1:a]aresample=48000[voice];" f"[2:a]aresample=48000,volume={volume:.4f},afade=t=in:d=1.5,afade=t=out:st={fade_start:.3f}:d=2[music];" "[music][voice]sidechaincompress=threshold=0.02:ratio=6:attack=20:release=450:makeup=1[quiet];" "[existing][quiet]amix=inputs=2:duration=first:dropout_transition=0:normalize=0,alimiter=limit=0.95:level=disabled[a]")
     subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", str(mixed_audio), "-i", str(narration), "-stream_loop", "-1", "-i", str(track), "-filter_complex", filters, "-map", "[a]", "-t", f"{duration:.3f}", "-c:a", "libmp3lame", "-b:a", "192k", str(replacement)], check=True, timeout=120)
     replacement.replace(mixed_audio)
-    print(f"Background music: {channel}/{track.name} volume={volume:.3f} rotation={os.getenv('GITHUB_RUN_ID', 'local')}")
+    print(f"Background music: {channel}/{track.name} volume={volume:.3f} rotation={os.getenv('MUSIC_ROTATION_INDEX', os.getenv('GITHUB_RUN_ID', 'local'))}")
     return mixed_audio

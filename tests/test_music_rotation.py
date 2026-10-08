@@ -37,6 +37,21 @@ class MusicRotationTests(unittest.TestCase):
             self.assertEqual(second.parent, music)
             self.assertNotEqual(first.parent, sfx)
 
+    def test_consecutive_episode_numbers_cycle_all_tracks_and_override_run_id(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            music = root / "assets" / "music"
+            music.mkdir(parents=True)
+            for name in ("01-first.mp3", "02-second.mp3", "03-third.mp3"):
+                (music / name).write_bytes(b"music placeholder")
+            chosen = []
+            for number in range(1, 7):
+                with patch.dict(os.environ, {"MUSIC_ROTATION_INDEX": str(number), "GITHUB_RUN_ID": "900"}, clear=True):
+                    chosen.append(select_track(root, CHANNEL).name)
+            self.assertEqual(chosen[:3], ["01-first.mp3", "02-second.mp3", "03-third.mp3"])
+            self.assertEqual(chosen[:3], chosen[3:])
+            self.assertTrue(all(left != right for left, right in zip(chosen, chosen[1:])))
+
     def test_rotated_music_mix_muxes_to_video_with_matching_duration(self):
         duration = 2.4
         with tempfile.TemporaryDirectory() as temp:
