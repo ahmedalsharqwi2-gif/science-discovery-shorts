@@ -388,14 +388,33 @@ class ContentGenerator:
             if not report.is_acceptable:
                 log.warning("Content quality below acceptable threshold, attempting revision...")
                 revision_prompt = f"الرجاء إصلاح الأخطاء التالية في النص مع الحفاظ على طوله بين {self.min_words} و{self.max_words} كلمة:\n{chr(10).join(report.issues)}\n\nالنص الأصلي:\n{fixed_narration}"
-                response = llm_chat(
-                    [{"role": "user", "content": revision_prompt}],
-                    max_tokens=int(os.getenv("LLM_MAX_COMPLETION_TOKENS", "512")),
-                )
-                fixed_narration = normalize_narration_response(response)
-                revised_words = len(fixed_narration.split())
-                if not self.min_words <= revised_words <= self.max_words:
-                    raise ValueError(f"النص بعد المراجعة خارج النطاق: {revised_words} كلمة")
+                for revision in range(3):
+                    response = llm_chat(
+                        [{"role": "user", "content": revision_prompt}],
+                        max_tokens=int(os.getenv("LLM_MAX_COMPLETION_TOKENS", "512")),
+                    )
+                    candidate = normalize_narration_response(response)
+                    candidate, _ = self.grammar_fixer.fix_text(candidate)
+                    revised_words = len(candidate.split())
+                    if revised_words > self.max_words:
+                        clipped = trim_to_complete_sentence(candidate, self.max_words, self.min_words)
+                        if clipped:
+                            candidate = clipped
+                            revised_words = len(candidate.split())
+                    revised_report = self.quality_checker.generate_report(candidate)
+                    if self.min_words <= revised_words <= self.max_words and revised_report.is_acceptable:
+                        fixed_narration = candidate
+                        break
+                    log.warning("Revision %d needs rewrite: %d words; issues=%s",
+                                revision + 1, revised_words, revised_report.issues)
+                    revision_prompt = (
+                        f"أعد السرد كاملًا بين {self.min_words} و{self.max_words} كلمة، "
+                        "بجمل عربية مكتملة وخاتمة واضحة، دون إضافة حقائق أو قطع الكلمات. "
+                        f"النص السابق {revised_words} كلمة. أخطاء المراجعة: "
+                        + "; ".join(revised_report.issues) + "\n\n" + candidate
+                    )
+                else:
+                    raise ValueError("تعذر تصحيح جودة وطول النص بعد ثلاث مراجعات مكتملة")
             return fixed_narration
             
         except Exception as e:
@@ -430,10 +449,10 @@ class ContentGenerator:
                     "حافظ على الفكرة العلمية الأساسية، ولا تضف حقائق، وأنهِ جملة مكتملة بعلامة ترقيم. "
                     "أخرج السرد فقط.\n\nالنص:\n" + shortened
                 )
-            raise ValueError(
-                f"تعذر اختصار السرد إلى {minimum_words}-{target_words} كلمة وجمل مكتملة "
-                "بعد ثلاث محاولات؛ أوقف النشر بدل قطع النص أو تسريع الصوت بإفراط."
-            )
+        raise ValueError(
+            f"تعذر اختصار السرد إلى {minimum_words}-{target_words} كلمة وجمل مكتملة "
+            "بعد ثلاث محاولات؛ أوقف النشر بدل قطع النص أو تسريع الصوت بإفراط."
+        )
 
 if __name__ == "__main__":
     generator = ContentGenerator()
@@ -442,3 +461,4 @@ if __name__ == "__main__":
     
     narration = generator.generate_narration(topic)
     print(f"\nNarration: {narration}")
+

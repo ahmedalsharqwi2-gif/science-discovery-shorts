@@ -13,6 +13,7 @@ import logging
 import subprocess
 import json
 import os
+import unicodedata
 from pathlib import Path
 from dataclasses import dataclass
 from typing import List, Optional, Dict, Tuple
@@ -54,8 +55,13 @@ class ArabicTTSQualityChecker:
         score = 1.0
 
         # Check 1: Arabic letter density
-        arabic_letters = sum(1 for c in text if '\u0621' <= c <= '\u064A')
-        total_letters = sum(1 for c in text if c.isalpha())
+        # Include alef-wasla and extended Arabic letters; exclude diacritics
+        # and tatweel from both sides instead of treating them as foreign text.
+        letters = [c for c in unicodedata.normalize("NFKC", text)
+                   if c.isalpha() and c != '\u0640']
+        arabic_letters = sum(1 for c in letters
+                             if unicodedata.name(c, "").startswith("ARABIC "))
+        total_letters = len(letters)
         if total_letters > 0:
             arabic_ratio = arabic_letters / total_letters
             if arabic_ratio < 0.85:
@@ -243,3 +249,4 @@ class ArabicTTSQualityChecker:
             'warnings': report.warnings,
             'recommendations': report.recommendations
         }, ensure_ascii=False, indent=2)
+
