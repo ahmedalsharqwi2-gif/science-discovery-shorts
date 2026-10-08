@@ -842,12 +842,13 @@
       "title": "كيف ترى بعض الأسماك في ظلام الأعماق؟",
       "hook": "هل تساءلت كيف ترى بعض الأسماك في ظلام الأعماق؟ تمتلك هذه الكائنات عيونًا فائقة التطوّر تضاعف الإضاءة الضعيفة بمساعدة خلايا عصوية مكثفة وبروتينات بصرية خاصة تعزز الحساسية للضوء المحدود كالبريق الحيوي. ويبقى الخلاف العلمي قائمًا",
       "region": "",
-      "status": "reserved",
+      "status": "published",
       "source": "science-pipeline",
       "reservation_id": "e0af5ffc937349ee9ba40d4d22734639",
       "reserved_at": "2026-10-08T16:14:34Z",
       "run_id": "37806131203",
-      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts",
+      "published_at": "2026-10-08T16:14:44Z"
     }
   ]
 }
