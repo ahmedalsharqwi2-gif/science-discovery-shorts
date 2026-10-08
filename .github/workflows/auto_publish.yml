@@ -90,6 +90,9 @@ jobs:
           PY
 
       - uses: actions/checkout@v6
+        with:
+          # Queued manual runs must see topics reserved by the preceding run.
+          ref: main
 
       - uses: actions/setup-python@v6
         with:
