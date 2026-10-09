@@ -20,3 +20,5 @@ venv/
 .vscode/
 .idea/
 .DS_Store
+
+.cinematic_cache/

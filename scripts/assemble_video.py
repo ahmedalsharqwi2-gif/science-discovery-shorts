@@ -194,6 +194,14 @@ def _mix_science_audio(voice_path: Path, duration: float, output_path: Path, sou
 
 
 def assemble_video(audio_path: Path, narration: str, output_path: Path, topic: str = "") -> Path:
+    from scripts.cinematic_production import enabled, build
+    if enabled():
+        duration = probe_duration(audio_path)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        ass_path = output_path.with_suffix(".cinematic.ass")
+        write_ass_subtitles(narration, duration, ass_path, audio_path=audio_path)
+        build(audio_path, narration, output_path, {"title": topic, "narration": narration}, ass_path)
+        return output_path
     duration = probe_duration(audio_path)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     ass_path = output_path.with_suffix(".ass")
