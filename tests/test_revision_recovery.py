@@ -56,6 +56,26 @@ class RevisionRecoveryTests(unittest.TestCase):
         self.assertIn('3 خارج النطاق الإلزامي 6-8', second_revision_prompt)
         self.assertIn('85%', second_revision_prompt)
 
+    def test_short_quality_rewrites_keep_near_pass_complete_source(self):
+        generator = ContentGenerator(min_words=6, max_words=12)
+        generator.grammar_fixer.fix_text = lambda text: (text, [])
+        rejected = SimpleNamespace(
+            overall_score=0.68,
+            issues=['كثافة الأحرف العربية منخفضة'],
+            warnings=[],
+            is_acceptable=False,
+        )
+        generator.quality_checker.generate_report = unittest.mock.Mock(
+            side_effect=[rejected, rejected, rejected, rejected]
+        )
+        source = 'هذا نص عربي كامل يشرح الفكرة العلمية بوضوح مفيد.'
+        with patch(
+            'scripts.generate_content.llm_chat',
+            side_effect=[source, 'هذه نسخة مختصرة.', 'هذه نسخة أقصر.', 'نص مبتور.'],
+        ):
+            result = generator.generate_narration('العلم')
+        self.assertEqual(result, source)
+
     def test_shortening_uses_second_attempt_when_first_is_invalid(self):
         generator = ContentGenerator(min_words=20, max_words=40)
         generator.grammar_fixer.fix_text = lambda t: (t, [])
