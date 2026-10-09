@@ -309,7 +309,7 @@ class ContentGenerator:
         - اجعل كل جملة تحمل معلومة واحدة قابلة للعرض بصرياً، واربطها ذهنيًا بمشهد محدد؛ القاعدة الإلزامية Voiceover → Visual → Subtitle
         - لا تستخدم فيديو فضاء عامًا فوق معلومات مختلفة؛ غيّر اللقطة مع تغير الفكرة، واجعل الشمس للشمس والدماغ للدماغ وDNA للجينات والمحيط للمحيط
         - إذا كان المشهد محاكاة أو تصورًا فنيًا أو Artist's Impression أو Illustration فلا تقدمه كصورة حقيقية، واذكر طبيعته عند الحاجة
-        - اتبع إيقاع mystery-documentary المرجعي: خطاف أولًا، ثم دليل/شرح، ثم نقطة تحول أو مفارقة، ثم احتمالان أو ثلاثة بصياغة علمية غير جازمة، ثم سؤال ختامي وCTA. اجعل التغيير البصري كل 3-8 ثوانٍ.
+        - اتبع إيقاع mystery-documentary المرجعي: خطاف أولًا، ثم دليل/شرح، ثم نقطة تحول أو مفارقة، ثم احتمالان أو ثلاثة بصياغة علمية غير جازمة، ثم خاتمة مكتملة. اجعل التغيير البصري كل 3-8 ثوانٍ.
         - صمّم العبارات البصرية لتناسب: cinematic science mystery documentary, vertical 9:16, volumetric light, deep shadows, restrained camera motion، مع تمييز الكلمات المحورية في الكابشن بالأحمر وبقاء النص الأساسي أبيض.
         - لا تضع روابط أو قائمة مصادر أو قسم مصادر داخل النص المنطوق أو الوصف؛ قدّم الشرح مباشرة وبأسلوب وثائقي واضح
         - في الطب: معلومات عامة فقط، بلا تشخيص أو علاج شخصي أو جرعات. في الفضاء: ميّز بين صورة تلسكوب حقيقية، وصورة معالجة، ومحاكاة، ورسم فني
@@ -498,7 +498,7 @@ if __name__ == "__main__":
 # Reference-inspired production profile (133344.mp4):
 # Keep the existing fact and safety gates. Use a mystery-documentary arc:
 # strong hook, evidence, turning point, competing hypotheses, and an open
-# question/CTA. Visual queries should be chronological and specific, with
+# complete ending. Visual queries should be chronological and specific, with
 # this compatible style suffix: cinematic science mystery documentary,
 # vertical 9:16, volumetric light, deep shadows, restrained camera motion.
 # Unsupported claims remain prohibited; visualizations must be labeled.

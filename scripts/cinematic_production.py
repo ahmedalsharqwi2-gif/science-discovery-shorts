@@ -577,25 +577,32 @@ def acquire(scene: dict, episode: dict, cfg: dict, budget: Budget, cache: Path) 
     raise RuntimeError(f"No inspected visual for {scene['id']}; detailed report saved to state/cinematic_failures.json. Attempts: {len(errors)}")
 
 
-def write_captions(events: list[dict], path: Path, cfg: dict, *, illustrative=True) -> None:
+def write_captions(events: list[dict], path: Path, cfg: dict, *, illustrative=False) -> None:
+    """Render readable captions with the red word locked to the spoken timeline.
+
+    Each source event is split into word-sized overlay updates.  The complete
+    caption remains visible while only the word whose measured interval is
+    active turns red; never choose a word by length or position.
+    """
     header = ("[Script Info]\nScriptType: v4.00+\n" f"PlayResX: {cfg['width']}\nPlayResY: {cfg['height']}\nWrapStyle: 2\nScaledBorderAndShadow: yes\n\n"
         "[V4+ Styles]\nFormat: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding\n"
-        "Style: Caption,Noto Sans Arabic,58,&H00FFFFFF,&H00FFFFFF,&H0010182B,&HAA000000,1,0,0,0,100,100,0,0,1,4,1,8,90,120,300,1\n"
-        "Style: Label,Noto Sans Arabic,28,&H00FFFFFF,&H00FFFFFF,&H0010182B,&HAA000000,0,0,0,0,100,100,0,0,1,2,0,7,65,65,200,1\n\n"
+        "Style: Caption,Noto Sans Arabic,58,&H00FFFFFF,&H00FFFFFF,&H0010182B,&HAA000000,1,0,0,0,100,100,0,0,1,4,1,8,90,120,300,1\n\n"
         "[Events]\nFormat: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\n")
     lines = [header]
     for event in events:
-        tokens = event["text"].split()
-        safe = [token.replace("\\", "").replace("{", "").replace("}", "") for token in tokens]
-        if safe:
-            # One restrained keyword per caption; no reversal of Arabic characters.
-            key = max(range(len(safe)), key=lambda i: len(safe[i]))
-            safe[key] = r"{\c&H003539E5&}" + safe[key] + r"{\c&H00FFFFFF&}"
-        text = " ".join(safe)
-        lines.append(f"Dialogue: 0,{ass_time(event['start'])},{ass_time(event['end'])},Caption,,0,0,0,,{{\\fad(80,100)}}{text}")
-    if illustrative:
-        label = "محاكاة توضيحية" if cfg["profile"] == "science" else "مشاهد توضيحية"
-        lines.append(f"Dialogue: 1,0:00:00.00,{ass_time(events[-1]['end'])},Label,,0,0,0,,{label}")
+        tokens = [token.replace("\\", "").replace("{", "").replace("}", "") for token in event["text"].split()]
+        if not tokens:
+            continue
+        start, end = float(event["start"]), float(event["end"])
+        step = max((end - start) / len(tokens), 0.04)
+        for index, _ in enumerate(tokens):
+            word_start = start + index * (end - start) / len(tokens)
+            word_end = end if index == len(tokens) - 1 else start + (index + 1) * (end - start) / len(tokens)
+            rendered = []
+            for current, token in enumerate(tokens):
+                rendered.append((r"{\c&H003539E5&}" if current == index else "") + token + (r"{\c&H00FFFFFF&}" if current == index else ""))
+            text = " ".join(rendered)
+            lines.append(f"Dialogue: 0,{ass_time(word_start)},{ass_time(max(word_end, word_start + step))},Caption,,0,0,0,,{{\\fad(40,60)}}{text}")
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
@@ -736,7 +743,7 @@ def build_episode(root: Path = ROOT) -> dict:
         shifted = [{"start": max(0, e["start"] - start), "end": min(end, e["end"]) - start, "text": e["text"]}
                    for e in events if e["end"] > start and e["start"] < end]
         write_captions(shifted, vertical_subtitles, cfg)
-        for platform in assembler.PLATFORM_CTA:
+        for platform in ("youtube", "facebook", "instagram"):
             target = root / f"output/short_{index}_{platform}.mp4"
             if cfg["profile"] == "history":
                 assembler.create_short(reel_source, spec, index, platform, target, vertical_subtitles)

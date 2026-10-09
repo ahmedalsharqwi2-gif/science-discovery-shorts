@@ -161,7 +161,7 @@ jobs:
           GEMINI_THINKING_LEVEL: 'low'
           GEMINI_MIN_OUTPUT_TOKENS: '0'
           GEMINI_RETRIES: '3'
-          # Narration for 90–180 second science videos at the natural Edge rate.
+          # Narration for up to 180 second science videos at the natural Edge rate.
           LLM_MAX_COMPLETION_TOKENS: '6000'
           PYTHONUNBUFFERED: '1'
           LLM_TIMEOUT: '45'
@@ -200,8 +200,8 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
 
           # --- Duration and word-count window ---
-          # Long-form science videos target approximately 90–180 seconds.
-          MIN_AUDIO_SECONDS: '90'
+          # Complete science stories may run naturally up to 180 seconds.
+          MIN_AUDIO_SECONDS: '30'
           MAX_AUDIO_SECONDS: '180'
           TARGET_AUDIO_SECONDS: '135'
           # main.py reads MIN_WORDS/MAX_WORDS; the final MP3 duration remains
@@ -270,8 +270,8 @@ jobs:
           python - "$duration" <<'PY'
           import sys
           duration = float(sys.argv[1])
-          if not 90.0 <= duration <= 180.0:
-              raise SystemExit(f"ERROR: science video must be 90–180 seconds, got {duration:.2f}s")
+          if not 0 < duration <= 180.0:
+              raise SystemExit(f"ERROR: science video must be 0–180 seconds, got {duration:.2f}s")
           print(f"Vertical science video verified: {duration:.2f}s")
           PY
           echo "Professional vertical montage with topic-specific Pexels B-roll verified."

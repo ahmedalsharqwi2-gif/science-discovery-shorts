@@ -145,7 +145,8 @@ class CinematicTests(unittest.TestCase):
         self.assertIn(',8,90,120,300,1',content)
         self.assertIn('حضارة',content)
         self.assertIn(r'\c&H003539E5&',content)
-        self.assertIn('محاكاة توضيحية' if self.cfg['profile']=='science' else 'مشاهد توضيحية',content)
+        self.assertNotIn('محاكاة توضيحية', content)
+        self.assertNotIn('مشاهد توضيحية', content)
 
     def test_duration_relative_motion_reaches_end_not_fixed_1500_frames(self):
         short=cp.motion_filter('pan_right',3,360,640)
