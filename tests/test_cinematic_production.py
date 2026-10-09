@@ -35,7 +35,7 @@ class CinematicTests(unittest.TestCase):
         (self.root/'config').mkdir()
         self.cfg = cp.settings()
         self.cfg.update(width=360, height=640, fps=30, scene_seconds=3,
-                        episode_budget_usd=.20, daily_budget_usd=.25)
+                        episode_budget_usd=.20, daily_budget_usd=.25, free_request_interval_seconds=0)
         (self.root/'config/cinematic_production.json').write_text(json.dumps(self.cfg))
         (self.root/'config/cinematic_sfx.json').write_text('{}')
         self.addCleanup(self.temp.cleanup)
@@ -74,6 +74,19 @@ class CinematicTests(unittest.TestCase):
         self.assertTrue(self.budget('two').reserve('image', .08))
         self.assertFalse(self.budget('two').reserve('image_retry', .08))
         self.assertEqual(self.budget().row['estimated_usd'], .24)
+
+    def test_transient_free_quota_retries_are_bounded_and_reserved(self):
+        throttled=Reply()
+        throttled.ok=False
+        throttled.status_code=429
+        good=Reply({'candidates':[{'content':{'parts':[{'text':'{"passed":true}'}]}}]})
+        budget=self.budget()
+        with patch.dict(os.environ,{'GEMINI_API_KEY':'fixture-free-key'}), patch.object(cp.requests,'post',side_effect=[throttled,good]) as post, patch.object(cp.time,'sleep'):
+            result=cp.gemini_json([{'text':'Review'}],'free-model',budget,.02,'visual_review')
+        self.assertTrue(result['passed'])
+        self.assertEqual(post.call_count,2)
+        self.assertEqual(budget.episode['free_calls'],2)
+        self.assertEqual(budget.episode['estimated_usd'],0)
 
     def test_weighted_captions_preserve_arabic_and_no_timeline_drift(self):
         text='هذه مدينة قديمة وفيها طريق حجري ثم نصل إلى نهاية القصة'

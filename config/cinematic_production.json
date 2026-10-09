@@ -20,5 +20,6 @@
   "video_model": "veo-3.1-fast-generate-preview",
   "free_only": true,
   "max_free_calls": 80,
-  "max_daily_free_calls": 240
+  "max_daily_free_calls": 240,
+  "free_request_interval_seconds": 12
 }
