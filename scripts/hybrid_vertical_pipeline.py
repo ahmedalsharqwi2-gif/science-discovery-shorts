@@ -150,7 +150,8 @@ _WHISPER_MODEL = None
 def normalize_match_word(word: str) -> str:
     """Internal-only Arabic normalization; never use this value for display."""
     value = unicodedata.normalize("NFKC", word).translate(_BIDI_CONTROLS).replace("ـ", "")
-    value = _DIACRITICS.sub("", value).translate(str.maketrans({"أ":"ا", "إ":"ا", "آ":"ا", "ٱ":"ا", "ى":"ي"}))
+    alef_map = {ord("أ"): ord("ا"), ord("إ"): ord("ا"), ord("آ"): ord("ا"), ord("ٱ"): ord("ا"), ord("ى"): ord("ي")}
+    value = _DIACRITICS.sub("", value).translate(alef_map)
     return _PUNCT.sub("", value).lower()
 
 def _text_words(text: str) -> list[str]:
@@ -169,7 +170,7 @@ def _whisper_word_spans(audio: Path, text: str, duration: float) -> tuple[list[d
             str(audio), language="ar", word_timestamps=True, vad_filter=True,
             condition_on_previous_text=False,
         )
-        recognized = []
+        recognized: list[dict[str, Any]] = []
         for segment in segments:
             for word in (segment.words or []):
                 if word.start is not None and word.end is not None:
@@ -199,8 +200,9 @@ def _caption_chunks(word_spans: list[dict[str, Any]], max_words: int = 7,
     """Group word spans into readable captions, preserving each original display token."""
     if max_words < 1:
         raise ValueError("max_words must be positive")
-    chunks, current = [], []
-    def flush():
+    chunks: list[dict[str, Any]] = []
+    current: list[dict[str, Any]] = []
+    def flush() -> None:
         nonlocal current
         if not current:
             return
