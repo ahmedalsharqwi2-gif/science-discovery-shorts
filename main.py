@@ -32,8 +32,8 @@ from scripts.publish_content import build_social_description
 from scripts.broll_quality_pipeline import evaluate as evaluate_broll
 from scripts.topic_history import TopicHistory
 
-MIN_AUDIO_SECONDS = float(os.getenv("MIN_AUDIO_SECONDS", "45"))
-MAX_AUDIO_SECONDS = float(os.getenv("MAX_AUDIO_SECONDS", "59"))
+MIN_AUDIO_SECONDS = float(os.getenv("MIN_AUDIO_SECONDS", "90"))
+MAX_AUDIO_SECONDS = float(os.getenv("MAX_AUDIO_SECONDS", "180"))
 
 
 class AutoPublishPipeline:
@@ -41,8 +41,8 @@ class AutoPublishPipeline:
 
     def __init__(self):
         self.content_generator = ContentGenerator(
-            min_words=int(os.getenv("MIN_WORDS", "110")),
-            max_words=int(os.getenv("MAX_WORDS", "135")),
+            min_words=int(os.getenv("MIN_WORDS", "200")),
+            max_words=int(os.getenv("MAX_WORDS", "400")),
         )
         self.voice_generator = VoiceGenerator(
             output_dir=Path(os.getenv("OUTPUT_DIR", "./output"))
@@ -169,7 +169,7 @@ class AutoPublishPipeline:
 
                 fit_narration(
                     Path(output_path), MIN_AUDIO_SECONDS, MAX_AUDIO_SECONDS,
-                    float(os.getenv("TARGET_AUDIO_SECONDS", "55")),
+                    float(os.getenv("TARGET_AUDIO_SECONDS", "135")),
                 )
                 fitted = True
                 break

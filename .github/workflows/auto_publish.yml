@@ -24,7 +24,8 @@ on:
         type: boolean
 
 concurrency:
-  group: auto-publish-voice-rotation
+  # يتشارك القفل مع renew-topic-bank.yml لمنع تعارض topic_history.json.
+  group: science-topic-history-main
   cancel-in-progress: false
 
 permissions:
@@ -160,8 +161,8 @@ jobs:
           GEMINI_THINKING_LEVEL: 'low'
           GEMINI_MIN_OUTPUT_TOKENS: '0'
           GEMINI_RETRIES: '3'
-          # Compact narration for 45–59 second reels at the natural Edge rate.
-          LLM_MAX_COMPLETION_TOKENS: '2048'
+          # Narration for 90–180 second science videos at the natural Edge rate.
+          LLM_MAX_COMPLETION_TOKENS: '6000'
           PYTHONUNBUFFERED: '1'
           LLM_TIMEOUT: '45'
 
@@ -199,16 +200,14 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
 
           # --- Duration and word-count window ---
-          # Reels target 45–59 seconds. Keep a one-second safety margin
-          # so encoding/container rounding cannot push a published video over
-          # the platform limit.
-          MIN_AUDIO_SECONDS: '45'
-          MAX_AUDIO_SECONDS: '59'
-          TARGET_AUDIO_SECONDS: '55'
+          # Long-form science videos target approximately 90–180 seconds.
+          MIN_AUDIO_SECONDS: '90'
+          MAX_AUDIO_SECONDS: '180'
+          TARGET_AUDIO_SECONDS: '135'
           # main.py reads MIN_WORDS/MAX_WORDS; the final MP3 duration remains
-          # the authoritative gate around this 110–135 word window.
-          MIN_WORDS: '90'
-          MAX_WORDS: '135'
+          # the authoritative gate around this approximately 200–400 word window.
+          MIN_WORDS: '200'
+          MAX_WORDS: '400'
           # BUFFER_CHANNEL_IDS is stored positionally as TikTok, YouTube,
           # Facebook in this repository's secret.
           PUBLISH_CHANNELS: 'tiktok,youtube,facebook'
@@ -265,8 +264,16 @@ jobs:
       - name: Verify final montage and B-roll output
         run: |
           test -s output/final_video.mp4 || { echo "ERROR: final video missing or empty"; exit 1; }
-          ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0 output/final_video.mp4
-          ffprobe -v error -show_entries format=duration -of csv=p=0 output/final_video.mp4
+          dimensions=$(ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0 output/final_video.mp4)
+          test "$dimensions" = "1080,1920" || { echo "ERROR: final video must be portrait 1080x1920, got $dimensions"; exit 1; }
+          duration=$(ffprobe -v error -show_entries format=duration -of csv=p=0 output/final_video.mp4)
+          python - "$duration" <<'PY'
+          import sys
+          duration = float(sys.argv[1])
+          if not 90.0 <= duration <= 180.0:
+              raise SystemExit(f"ERROR: science video must be 90–180 seconds, got {duration:.2f}s")
+          print(f"Vertical science video verified: {duration:.2f}s")
+          PY
           echo "Professional vertical montage with topic-specific Pexels B-roll verified."
 
       - name: Persist topic history

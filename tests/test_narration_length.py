@@ -12,8 +12,8 @@ class CurrentNarrationPolicyTests(unittest.TestCase):
     def test_default_word_limits_leave_headroom_for_edge_tts(self):
         with patch.dict(os.environ, {}, clear=True):
             pipeline = main.AutoPublishPipeline()
-        self.assertEqual(pipeline.content_generator.min_words, 110)
-        self.assertEqual(pipeline.content_generator.max_words, 135)
+        self.assertEqual(pipeline.content_generator.min_words, 200)
+        self.assertEqual(pipeline.content_generator.max_words, 400)
 
     def test_publish_window_has_valid_order(self):
         self.assertGreater(main.MIN_AUDIO_SECONDS, 0)
@@ -60,8 +60,8 @@ class CurrentNarrationPolicyTests(unittest.TestCase):
 
         with (
             patch.dict(os.environ, {"PUBLISH_DRY_RUN": "true"}),
-            patch.object(main, "probe_duration", side_effect=[97.25, 55.0, 55.0]),
-            patch.object(main, "fit_narration", return_value=55.0),
+            patch.object(main, "probe_duration", side_effect=[197.25, 135.0, 135.0]),
+            patch.object(main, "fit_narration", return_value=135.0),
             patch.object(main, "assemble_video", return_value=Path("output/final_video.mp4")),
             patch.object(main, "evaluate_broll", return_value={"passed": True, "broll": {"clip_count": 4}}),
             patch.object(main.TopicHistory, "check_unique"),

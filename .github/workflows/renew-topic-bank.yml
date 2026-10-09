@@ -15,7 +15,9 @@ permissions:
   contents: write
 
 concurrency:
-  group: topic-bank-renewal
+  # يتشارك هذا القفل مع auto_publish.yml لأن النشر يقرأ سجل المواضيع أثناء
+  # توليد الحلقة ثم يحفظه في الفرع الرئيسي.
+  group: science-topic-history-main
   cancel-in-progress: false
 
 jobs:
