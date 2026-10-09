@@ -106,7 +106,7 @@ jobs:
 
       - name: Restore inspected cinematic scenes
         if: ${{ env.CINEMATIC_ENABLED == 'true' }}
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v5
         with:
           path: .cinematic_cache
           key: cinematic-v1-${{ github.repository_id }}-${{ github.run_id }}-${{ github.run_attempt }}
@@ -295,7 +295,7 @@ jobs:
 
       - name: Preserve clip review candidates
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: clip-review-candidates
           path: |
@@ -307,7 +307,7 @@ jobs:
 
       - name: Save inspected cinematic scenes even after a failed run
         if: ${{ always() && env.CINEMATIC_ENABLED == 'true' }}
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v5
         with:
           path: .cinematic_cache
           key: cinematic-v1-${{ github.repository_id }}-${{ github.run_id }}-${{ github.run_attempt }}
@@ -326,7 +326,7 @@ jobs:
 
       - name: Preserve cinematic storyboard and quality evidence
         if: ${{ always() && env.CINEMATIC_ENABLED == 'true' }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: cinematic-evidence-${{ github.run_id }}-${{ github.run_attempt }}
           path: |
