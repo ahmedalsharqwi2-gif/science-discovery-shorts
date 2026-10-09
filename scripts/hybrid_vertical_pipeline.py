@@ -32,6 +32,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
+import unicodedata
 from pathlib import Path
 from typing import Any
 
@@ -116,17 +117,132 @@ def write_ass(events: list[dict[str, Any]], output: Path) -> None:
         f"PlayResY: {HEIGHT}", "WrapStyle: 2", "ScaledBorderAndShadow: yes", "",
         "[V4+ Styles]",
         "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding",
-        f"Style: Caption,{FONT_NAME},58,&H00FFFFFF,&H00FFFFFF,&H0010182B,&HAA000000,1,0,0,0,100,100,0,0,1,3,1,8,70,70,260,1",
-        "",
-        "[Events]",
+        f"Style: Caption,{FONT_NAME},58,&H00F4F1EA,&H00F4F1EA,&H0010182B,&HAA000000,1,0,0,0,100,100,0,0,1,4,2,8,70,70,300,1",
+        "", "[Events]",
         "Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text",
     ]
     for event in events:
-        lines.append(
-            f"Dialogue: 0,{ass_time(event['start'])},{ass_time(event['end'])},Caption,,0,0,0,,{caption_text(event['text'])}"
-        )
+        # Strip bidi controls from display only; libass handles Arabic shaping and RTL.
+        text = re.sub(r"[\u061c\u200e\u200f\u202a-\u202e\u2066-\u2069]", "", event["text"])
+        tokens = text.split()
+        highlight_keys = {normalize_match_word(word) for word in event.get("highlight_words", [])[:2]}
+        styled = []
+        for token in tokens:
+            safe = ass_escape(token)
+            if normalize_match_word(token) in highlight_keys:
+                safe = r"{\c&H000000FF&}" + safe + r"{\c}"
+            styled.append(safe)
+        if len(styled) > 7:
+            midpoint = (len(styled) + 1) // 2
+            rendered = " ".join(styled[:midpoint]) + r"\N" + " ".join(styled[midpoint:])
+        else:
+            rendered = " ".join(styled)
+        lines.append(f"Dialogue: 0,{ass_time(event['start'])},{ass_time(event['end'])},Caption,,0,0,0,,{{\\fad(120,150)}}{rendered}")
     output.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
+
+
+_BIDI_CONTROLS = dict.fromkeys(map(ord, "\u061c\u200e\u200f\u202a\u202b\u202c\u202d\u202e\u2066\u2067\u2068\u2069"), None)
+_DIACRITICS = re.compile(r"[\u064b-\u065f\u0670\u06d6-\u06ed]")
+_PUNCT = re.compile(r"[^\w\u0621-\u064a\u0660-\u0669\u06f0-\u06f9]+", re.UNICODE)
+_WHISPER_MODEL = None
+
+def normalize_match_word(word: str) -> str:
+    """Internal-only Arabic normalization; never use this value for display."""
+    value = unicodedata.normalize("NFKC", word).translate(_BIDI_CONTROLS).replace("ـ", "")
+    alef_map = {ord("أ"): ord("ا"), ord("إ"): ord("ا"), ord("آ"): ord("ا"), ord("ٱ"): ord("ا"), ord("ى"): ord("ي")}
+    value = _DIACRITICS.sub("", value).translate(alef_map)
+    return _PUNCT.sub("", value).lower()
+
+def _text_words(text: str) -> list[str]:
+    return [w for w in re.sub(r"[\u061c\u200e\u200f\u202a-\u202e\u2066-\u2069]", "", text).split() if normalize_match_word(w)]
+
+def _whisper_word_spans(audio: Path, text: str, duration: float) -> tuple[list[dict[str, Any]], str]:
+    """Return spoken words with Whisper times, falling back without stopping the render."""
+    global _WHISPER_MODEL
+    display_words = _text_words(text)
+    try:
+        from faster_whisper import WhisperModel
+        if _WHISPER_MODEL is None:
+            model_name = os.getenv("CAPTION_WHISPER_MODEL", "small")
+            _WHISPER_MODEL = WhisperModel(model_name, device="cpu", compute_type="int8")
+        segments, _ = _WHISPER_MODEL.transcribe(
+            str(audio), language="ar", word_timestamps=True, vad_filter=True,
+            condition_on_previous_text=False,
+        )
+        recognized: list[dict[str, Any]] = []
+        for segment in segments:
+            for word in (segment.words or []):
+                if word.start is not None and word.end is not None:
+                    recognized.append({"key": normalize_match_word(word.word),
+                                       "start": max(0.0, float(word.start)),
+                                       "end": min(duration, float(word.end))})
+        expected = [normalize_match_word(w) for w in display_words]
+        # Only transfer times when normalized sequence matches completely. This avoids
+        # silently dropping or substituting text when ASR mishears a word.
+        if recognized and [w["key"] for w in recognized] == expected:
+            return ([{"text": word, "start": rec["start"], "end": max(rec["start"] + 0.01, rec["end"])}
+                     for word, rec in zip(display_words, recognized)], "whisper")
+    except Exception as exc:
+        print(f"WARNING: Whisper word alignment unavailable; using estimated timing: {exc}", file=sys.stderr)
+    # Stable character-weighted fallback; avoids the inaccurate constant words/second rule.
+    weights = [max(1, len(normalize_match_word(w))) for w in display_words]
+    total = sum(weights) or 1
+    spans, offset = [], 0.0
+    for word, weight in zip(display_words, weights):
+        end = offset + duration * weight / total
+        spans.append({"text": word, "start": offset, "end": end})
+        offset = end
+    return spans, "estimated_fallback"
+
+def _caption_chunks(word_spans: list[dict[str, Any]], max_words: int = 7,
+                    max_chars: int = 38) -> list[dict[str, Any]]:
+    """Group word spans into readable captions, preserving each original display token."""
+    if max_words < 1:
+        raise ValueError("max_words must be positive")
+    chunks: list[dict[str, Any]] = []
+    current: list[dict[str, Any]] = []
+    def flush() -> None:
+        nonlocal current
+        if not current:
+            return
+        start, end = current[0]["start"], current[-1]["end"]
+        # Keep a readable minimum duration where possible without overlapping the next event.
+        if end - start < 0.45:
+            end = start + 0.45
+        text = " ".join(item["text"] for item in current)
+        chunks.append({"start": start, "end": end, "text": text})
+        current = []
+    for item in word_spans:
+        proposed = current + [item]
+        joined = " ".join(part["text"] for part in proposed)
+        punctuation_break = bool(current and re.search(r"[.!?؟،؛:]$", current[-1]["text"]))
+        if current and (len(proposed) > max_words or len(joined) > max_chars or punctuation_break):
+            flush()
+        current.append(item)
+    flush()
+    # Do not leave a one-word tail if it can be combined under both visual bounds.
+    if len(chunks) > 1 and len(chunks[-1]["text"].split()) == 1:
+        a, b = chunks[-2], chunks[-1]
+        merged = a["text"] + " " + b["text"]
+        if len(merged) <= max_chars and len(merged.split()) <= max_words:
+            chunks[-2:] = [{"start": a["start"], "end": b["end"], "text": merged}]
+    return chunks
+
+def validate_caption_events(events: list[dict[str, Any]], duration: float) -> None:
+    previous_start = -1.0
+    for event in events:
+        if not event.get("text", "").strip():
+            raise ValueError("Caption event has empty text")
+        if event["start"] < 0 or event["end"] <= event["start"]:
+            raise ValueError("Caption event has invalid timing")
+        if event["start"] < previous_start:
+            raise ValueError("Caption events are not ordered")
+        if event["end"] > duration + 0.5:
+            raise ValueError("Caption event extends beyond audio/video duration")
+        if len(event["text"]) > 76:
+            raise ValueError("Caption line exceeds the 38-character-per-line bound")
+        previous_start = event["start"]
 
 def make_local_ambient_music(output: Path, duration: float) -> None:
     graph = (
@@ -263,12 +379,21 @@ def build_storyboard(storyboard_path: Path, output: Path, music_override: Path |
             render_scene_visual(image, visual_path, scene_duration, str(raw.get("motion", "zoom_in")))
             voice_paths.append(voice_path)
             visual_paths.append(visual_path)
-            caption_events.append({"start": cursor, "end": cursor + voice_duration + 0.15, "text": text})
+            word_spans, alignment_method = _whisper_word_spans(voice_path, text, voice_duration)
+            repo_profile = {"arabic-horror-stories": "horror", "documented-history-stories": "history"}.get(Path(__file__).resolve().parent.parent.name, "science")
+            profile = str(raw.get("content_type") or config.get("content_type") or repo_profile).lower()
+            max_words = 5 if profile in {"horror", "رعب"} else 6 if profile in {"history", "التاريخ"} else 7
+            for caption in _caption_chunks(word_spans, max_words=max_words):
+                caption_events.append({"start": cursor + caption["start"],
+                                       "end": min(cursor + voice_duration, cursor + caption["end"]),
+                                       "text": caption["text"],
+                                       "highlight_words": list(raw.get("highlight_words", []))[:2]})
             metadata_scenes.append({
                 "index": index, "id": raw.get("id", f"scene_{index:03d}"),
                 "image": str(image), "motion": raw.get("motion", "zoom_in"),
                 "voice_duration": round(voice_duration, 3),
                 "scene_duration": round(scene_duration, 3),
+                "caption_alignment": alignment_method,
             })
             cursor += scene_duration
 
@@ -287,6 +412,7 @@ def build_storyboard(storyboard_path: Path, output: Path, music_override: Path |
         mixed_audio = work / "mixed.m4a"
         mix_full_audio(concatenated_voice, music_path, mixed_audio, total_duration, music_gain)
         ass_path = work / "captions.ass"
+        validate_caption_events(caption_events, total_duration)
         write_ass(caption_events, ass_path)
         ass_filter = str(ass_path).replace("\\", "/").replace(":", r"\:")
         run(["ffmpeg", "-y", "-i", str(concatenated_video), "-i", str(mixed_audio),
