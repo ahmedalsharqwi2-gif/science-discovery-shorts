@@ -33,6 +33,45 @@ PROFILES = {
     "science": "Accurate cinematic science documentary, realistic materials and scale, clean blue light. Physical processes and geometry must match narration. Do not fabricate measurements or discoveries. Microscopic or space scenes are labelled illustrative simulations, not captured scientific evidence.",
 }
 
+# Offline vocabulary used only when the paid/free cinematic director is
+# unavailable and an episode did not provide English visual keywords.
+SCIENCE_ARABIC_VISUAL_TERMS = (
+    ("طائر النحام", "flamingo"), ("النحام", "flamingo"), ("نحام", "flamingo"),
+    ("فلامنجو", "flamingo"), ("فلامنغو", "flamingo"), ("ساق واحدة", "standing on one leg"),
+    ("مياه ضحلة", "shallow water"), ("ماء ضحل", "shallow water"), ("تدفق الدم", "blood flow"),
+    ("الأوعية الدموية", "blood vessels"), ("الدورة الدموية", "blood circulation"),
+    ("القلب", "heart"), ("الدم", "blood"), ("العضلات", "muscles"), ("الحرارة", "temperature"),
+    ("ثقب أسود", "black hole"), ("المجرات", "galaxy"), ("مجرة", "galaxy"),
+    ("كوكب المريخ", "planet mars"), ("المريخ", "planet mars"), ("القمر", "moon"),
+    ("الشمس", "sun"), ("النجوم", "stars"), ("البركان", "volcano"), ("البراكين", "volcano"),
+    ("زلزال", "earthquake"), ("المحيط", "ocean"), ("البحر", "sea"), ("الحوت", "whale"),
+    ("القرش", "shark"), ("الأخطبوط", "octopus"), ("النحل", "honeybee"),
+    ("الفراشة", "butterfly"), ("الخلية", "cell microscopy"), ("البكتيريا", "bacteria microscopy"),
+    ("الفيروس", "virus microscopy"), ("الحمض النووي", "DNA molecule"), ("الجاذبية", "gravity physics"),
+)
+
+
+def fallback_visual_query(episode: dict, scene: dict) -> str:
+    """Create a non-empty, scene-related search query without an LLM call."""
+    keywords = episode.get("visual_keywords") or []
+    if isinstance(keywords, str):
+        keywords = [keywords]
+    for keyword in keywords:
+        if str(keyword).strip():
+            return str(keyword).strip()[:100]
+    source = " ".join(str(value) for value in (episode.get("title", ""), scene.get("text", ""))).lower()
+    translated = []
+    for arabic, english in sorted(SCIENCE_ARABIC_VISUAL_TERMS, key=lambda pair: len(pair[0]), reverse=True):
+        if arabic in source and english not in translated:
+            translated.append(english)
+    if translated:
+        return " ".join(translated)[:100]
+    cleaned = re.sub(r"\b(?:voiceover|narrative|visual|scene|shot)\b", " ", source, flags=re.I)
+    words = re.findall(r"[a-z0-9]+|[\u0600-\u06ff]+", cleaned, flags=re.I)
+    stopwords = {"لماذا", "كيف", "هل", "ماذا", "عندما", "التي", "الذي", "في", "من", "على", "إلى", "عن", "مع", "هذا", "هذه", "هو", "هي", "ثم"}
+    terms = [word for word in words if word not in stopwords]
+    return " ".join(terms[:10]) or "science documentary subject"
+
 
 def enabled() -> bool:
     return os.getenv("CINEMATIC_ENABLED", "true").lower() == "true"
@@ -212,7 +251,7 @@ def plan_scenes(events: list[dict], duration: float, episode: dict, cfg: dict) -
     for i, scene in enumerate(scenes):
         scene.update({"id": f"scene_{i + 1:03d}", "motion": MOTIONS[i % len(MOTIONS)],
                       "shot": ("establishing wide", "material close-up", "environment medium")[i % 3],
-                      "query": str((episode.get("visual_keywords") or [""])[i % max(1, len(episode.get("visual_keywords") or []))]), "kind": "ai_video" if i % 10 == 9 else "stock" if i % 10 in (3, 7) else "image"})
+                      "query": fallback_visual_query(episode, scene), "kind": "ai_video" if i % 10 == 9 else "stock" if i % 10 in (3, 7) else "image"})
         if cfg.get("free_only", True) and scene["kind"] == "ai_video":
             scene["kind"] = "image"
         scene["prompt"] = (PROFILES[cfg["profile"]] + " Vertical 9:16, realistic cinematic lighting, same visual identity, "
@@ -274,11 +313,13 @@ def direct_scenes(scenes: list[dict], episode: dict, cfg: dict, budget: Budget) 
                 raise ValueError("Director scene identity mismatch")
         for scene, item in zip(scenes, result):
             scene["prompt"] += ". Director composition: " + str(item["description"])[:1000]
-            scene["query"] = str(item.get("query", ""))[:100]
+            director_query = str(item.get("query", "")).strip()
+            if director_query:
+                scene["query"] = director_query[:100]
             scene["motion"] = item.get("motion") if item.get("motion") in MOTIONS else scene["motion"]
             scene["sfx"] = item.get("sfx", "none")
-    except (requests.RequestException, RuntimeError, ValueError, KeyError, IndexError, TypeError):
-        print("Cinematic director unavailable; using narration-bound local scene plan")
+    except (requests.RequestException, RuntimeError, ValueError, KeyError, IndexError, TypeError) as exc:
+        print(f"Cinematic director unavailable ({type(exc).__name__}: {str(exc)[:180]}); using narration-bound local scene plan")
     return scenes
 
 
@@ -475,7 +516,9 @@ def acquire(scene: dict, episode: dict, cfg: dict, budget: Budget, cache: Path) 
     # Stock slots try at most two actual sources; every candidate still gets reviewed.
     options = candidates(scene, cfg) if cfg.get("free_only", True) or scene["kind"] == "stock" else iter(())
     models = [] if cfg.get("free_only", True) else list(dict.fromkeys([cfg["image_model"], cfg["image_fallback_model"]]))
+    candidate_count = 0
     for attempt in itertools.chain(options, ({"model": model, "image": True, "source": "generated_image", "license": "AI illustration"} for model in models if model)):
+        candidate_count += 1
         source = cache / f"{digest}.{'png' if attempt['image'] else 'source.mp4'}"
         try:
             if attempt.get("model"):
@@ -522,7 +565,16 @@ def acquire(scene: dict, episode: dict, cfg: dict, budget: Budget, cache: Path) 
                 return visual, record
             except (requests.RequestException, RuntimeError, ValueError, OSError, subprocess.SubprocessError):
                 visual.unlink(missing_ok=True)
-    raise RuntimeError(f"No inspected visual for {scene['id']}; no unrelated substitution. Supply another scene-matched free asset or inspected cache; paid generation remains locked. Attempts: {errors}")
+    if candidate_count == 0:
+        errors.append({"source": "search", "query": str(scene.get("query", "")), "error_type": "NoCandidates",
+                       "error": "Pexels and Wikimedia Commons returned no candidates" if os.getenv("PEXELS_API_KEY") else "PEXELS_API_KEY is unavailable and Wikimedia Commons returned no candidates"})
+    report = {"scene_id": scene["id"], "primary_query": str(scene.get("query", "")),
+              "profile": cfg.get("profile"), "pexels_key_configured": bool(os.getenv("PEXELS_API_KEY")),
+              "free_only": cfg.get("free_only", True), "attempts": errors}
+    failure_report = cache.parent / "state/cinematic_failures.json"
+    atomic_json(failure_report, report)
+    print(f"Cinematic failure report written: {failure_report}")
+    raise RuntimeError(f"No inspected visual for {scene['id']}; detailed report saved to state/cinematic_failures.json. Attempts: {len(errors)}")
 
 
 def write_captions(events: list[dict], path: Path, cfg: dict, *, illustrative=True) -> None:

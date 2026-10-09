@@ -333,6 +333,7 @@ jobs:
             state/cinematic_storyboard.json
             state/cinematic_scene_manifest.json
             state/cinematic_quality_report.json
+            state/cinematic_failures.json
             state/cinematic_budget.json
           if-no-files-found: ignore
           retention-days: 14

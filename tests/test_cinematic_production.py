@@ -101,6 +101,38 @@ class CinematicTests(unittest.TestCase):
         self.assertTrue(all(s['kind']!='ai_video' for s in scenes))
         self.assertTrue(all('ancient stone city'==s['query'] for s in scenes))
 
+    def test_local_science_plan_generates_search_query_when_director_is_unavailable(self):
+        text='هل سألت نفسك لماذا يقف طائر النحام على ساق واحدة في مياه ضحلة'
+        episode={'title':'لماذا يقف النحام على ساق واحدة؟'}
+        scenes=cp.plan_scenes([{'start':0,'end':4,'text':text}],4,episode,self.cfg)
+        query=scenes[0]['query']
+        self.assertIn('flamingo',query)
+        self.assertIn('standing on one leg',query)
+        self.assertIn('shallow water',query)
+        with patch.object(cp,'gemini_json',side_effect=RuntimeError('quota')):
+            cp.direct_scenes(scenes,episode,self.cfg,self.budget())
+        self.assertEqual(scenes[0]['query'],query)
+
+    def test_blank_director_query_does_not_erase_local_search_query(self):
+        episode={'title':'لماذا يقف النحام على ساق واحدة؟'}
+        scenes=cp.plan_scenes([{'start':0,'end':4,'text':'طائر النحام في ماء ضحل'}],4,episode,self.cfg)
+        query=scenes[0]['query']
+        director=[{'id':scenes[0]['id'],'description':'Flamingo in shallow water','query':'','motion':'zoom_in','sfx':'none'}]
+        with patch.object(cp,'gemini_json',return_value=director):
+            cp.direct_scenes(scenes,episode,self.cfg,self.budget())
+        self.assertEqual(scenes[0]['query'],query)
+
+    def test_empty_asset_search_saves_a_specific_no_candidates_report(self):
+        scene=cp.plan_scenes([{'start':0,'end':4,'text':'طائر النحام في ماء ضحل'}],4,{'title':'النحام'},self.cfg)[0]
+        with patch.dict(os.environ,{'PEXELS_API_KEY':'fixture-key'}),patch.object(cp,'candidates',return_value=iter([])):
+            with self.assertRaisesRegex(RuntimeError,'detailed report saved'):
+                cp.acquire(scene,{'title':'النحام','narration':scene['text']},self.cfg,self.budget(),self.root/'.cinematic_cache')
+        report=json.loads((self.root/'state/cinematic_failures.json').read_text())
+        self.assertEqual(report['scene_id'],'scene_001')
+        self.assertEqual(report['primary_query'],scene['query'])
+        self.assertTrue(report['pexels_key_configured'])
+        self.assertEqual(report['attempts'][0]['error_type'],'NoCandidates')
+
     def test_no_approval_without_real_review_response(self):
         with patch.object(cp,'run',return_value=''), patch.object(cp.Path,'read_bytes',return_value=b'video'), patch.object(cp,'gemini_json',return_value={'passed':False,'reason':'wrong period'}):
             with self.assertRaises(ValueError):
