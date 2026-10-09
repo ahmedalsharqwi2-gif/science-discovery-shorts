@@ -5,7 +5,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from scripts.publish_content import ContentPublisher, build_social_description
+from scripts.publish_content import ContentPublisher, build_social_description, post_text_for_service
 
 
 class PublisherTests(unittest.TestCase):
@@ -15,6 +15,11 @@ class PublisherTests(unittest.TestCase):
         self.assertIn("شرح علمي مختصر", text)
         self.assertIn("#علوم", text)
         self.assertIn("#فضاء", text)
+
+    def test_tiktok_description_is_truncated_to_platform_limit(self):
+        text = post_text_for_service("عنوان علمي", "كلمة " * 3000, "tiktok")
+        self.assertLessEqual(len(text), 2200)
+        self.assertTrue(text.endswith("#علوم #اكتشافات"))
 
     def test_social_description_never_publishes_source_urls(self):
         text = build_social_description(
@@ -67,6 +72,21 @@ class PublisherTests(unittest.TestCase):
         self.assertIn("madeForKids", sent_query)
 
     @patch("scripts.publish_content.requests.post")
+    def test_facebook_long_video_uses_standard_video_post_metadata(self, post):
+        post.return_value.status_code = 200
+        post.return_value.json.return_value = {
+            "data": {"createPost": {"post": {"id": "post-fb", "dueAt": "queued"}}}
+        }
+        publisher = ContentPublisher()
+        publisher.buffer_api_key = "buffer-test"
+        publisher._create_buffer_post(
+            "fb-1", "title\n\ntext", "https://public/video.mp4", None,
+            "facebook", "title", "post",
+        )
+        sent_query = post.call_args.kwargs["json"]["query"]
+        self.assertIn("metadata: {facebook: {type: post}}", sent_query)
+
+    @patch("scripts.publish_content.requests.post")
     @patch("scripts.publish_content.ContentPublisher._release_asset_url", return_value="https://public/video.mp4")
     def test_partial_channel_failure_returns_false(self, _asset, post):
         post.return_value.status_code = 200
@@ -88,6 +108,56 @@ class PublisherTests(unittest.TestCase):
                 clear=False,
             ):
                 self.assertFalse(publisher.publish_to_buffer(video, "title", "description", []))
+
+    @patch("scripts.publish_content.probe_video_duration", return_value=165.0)
+    @patch("scripts.publish_content.ContentPublisher._release_asset_url", return_value="https://public/video.mp4")
+    def test_long_vertical_master_uses_facebook_video_post_without_cutting_story(self, _asset, _duration):
+        publisher = ContentPublisher()
+        publisher.buffer_api_key = "buffer-test"
+        with tempfile.TemporaryDirectory() as directory:
+            video = Path(directory) / "video.mp4"
+            video.write_bytes(b"video")
+            calls = []
+
+            def create(channel, text, url, due_at, service, title, facebook_type):
+                calls.append((service, text, facebook_type))
+                return {"id": f"{service}-post"}
+
+            with patch.object(publisher, "_create_buffer_post", side_effect=create), patch.dict(
+                os.environ,
+                {
+                    "PUBLISH_CHANNELS": "tiktok,youtube,facebook",
+                    "BUFFER_CHANNEL_IDS": json.dumps({"tiktok": "tt-1", "youtube": "yt-1", "facebook": "fb-1"}),
+                },
+                clear=False,
+            ):
+                self.assertTrue(publisher.publish_to_buffer(video, "title", "description", []))
+            self.assertEqual([service for service, _, _ in calls], ["tiktok", "youtube", "facebook"])
+            self.assertEqual(calls[-1][2], "post")
+
+    @patch("scripts.publish_content.probe_video_duration", return_value=165.0)
+    @patch("scripts.publish_content.ContentPublisher._release_asset_url", return_value="https://public/video.mp4")
+    def test_buffer_legacy_facebook_reel_limit_does_not_fail_confirmed_other_channels(self, _asset, _duration):
+        publisher = ContentPublisher()
+        publisher.buffer_api_key = "buffer-test"
+        with tempfile.TemporaryDirectory() as directory:
+            video = Path(directory) / "video.mp4"
+            video.write_bytes(b"video")
+
+            def create(channel, text, url, due_at, service, title, facebook_type):
+                if service == "facebook":
+                    raise RuntimeError("Invalid post: Video must be no longer than 1m 30s for Facebook Reels.")
+                return {"id": f"{service}-post"}
+
+            with patch.object(publisher, "_create_buffer_post", side_effect=create), patch.dict(
+                os.environ,
+                {
+                    "PUBLISH_CHANNELS": "tiktok,youtube,facebook",
+                    "BUFFER_CHANNEL_IDS": json.dumps({"tiktok": "tt-1", "youtube": "yt-1", "facebook": "fb-1"}),
+                },
+                clear=False,
+            ):
+                self.assertTrue(publisher.publish_to_buffer(video, "title", "description", []))
 
 
 if __name__ == "__main__":

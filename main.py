@@ -251,10 +251,10 @@ class AutoPublishPipeline:
             )
 
             if not publish_success:
-                log.error("Publishing was not confirmed for every configured channel")
+                log.error("Publishing was not confirmed for every compatible configured channel")
                 return False
             topic_history.mark_published(topic_candidate, commit=True)
-            log.info("✓ Content published successfully to every configured channel")
+            log.info("✓ Content published successfully to all compatible configured channels; incompatible channels are logged as skipped")
 
             log.info("\n" + "="*60)
             log.info("Pipeline completed successfully!")

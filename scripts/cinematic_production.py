@@ -26,6 +26,7 @@ import requests
 
 ROOT = Path(__file__).resolve().parents[1]
 API = "https://generativelanguage.googleapis.com/v1beta"
+MAX_VIDEO_DURATION_SECONDS = 180.0
 MOTIONS = ("zoom_in", "pan_right", "zoom_out", "pan_left")
 PROFILES = {
     "history": "Historical cinematic reconstruction, earth and forest tones, mist and volumetric sunrise. Strictly match the narrated era, place, architecture, clothing and technology. No modern vehicles, electrical devices, modern weapons or incompatible religious symbols. No women, prophets or companions. If an era is unspecified, use a neutral landscape or material detail instead of inventing a dated event. Illustrations are not historical evidence.",
@@ -117,6 +118,8 @@ def settings(root: Path = ROOT) -> dict:
         raise ValueError("Cinematic output must have a positive 9:16 resolution")
     if not 0 < cfg["scene_seconds"] <= 10 or cfg["fps"] != 30:
         raise ValueError("Invalid cinematic pacing or frame rate")
+    if not 0 < cfg.get("max_duration_seconds", 0) <= MAX_VIDEO_DURATION_SECONDS:
+        raise ValueError("Cinematic videos must not exceed 180 seconds")
     return cfg
 
 

@@ -4,7 +4,7 @@
   "height": 1920,
   "fps": 30,
   "scene_seconds": 6,
-  "max_duration_seconds": 600,
+  "max_duration_seconds": 180,
   "paid_enabled": false,
   "video_enabled": false,
   "episode_budget_usd": 0,

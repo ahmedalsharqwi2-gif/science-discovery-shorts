@@ -43,6 +43,15 @@ class CinematicTests(unittest.TestCase):
     def budget(self, episode='one'):
         return cp.Budget(self.root/'state/budget.json', self.cfg, episode)
 
+    def test_science_config_uses_three_minute_ceiling(self):
+        self.assertEqual(cp.settings()['max_duration_seconds'], 180)
+
+    def test_settings_reject_duration_above_three_minutes(self):
+        cfg = dict(self.cfg, max_duration_seconds=180.01)
+        (self.root/'config/cinematic_production.json').write_text(json.dumps(cfg))
+        with self.assertRaisesRegex(ValueError, '180 seconds'):
+            cp.settings(self.root)
+
     def test_free_lock_blocks_paid_even_if_paid_flags_accidentally_enabled(self):
         self.cfg.update(paid_enabled=True, video_enabled=True)
         budget = self.budget()

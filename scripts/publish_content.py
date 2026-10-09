@@ -10,6 +10,7 @@ from __future__ import annotations
 import json
 import logging
 import os
+import subprocess
 from datetime import datetime
 from pathlib import Path
 from typing import Optional
@@ -22,6 +23,8 @@ GITHUB_API = "https://api.github.com"
 # The repository secret stores positional channel IDs as TikTok, YouTube,
 # Facebook; keep this order identical anywhere the workflow omits an override.
 DEFAULT_SERVICES = ("tiktok", "youtube", "facebook")
+TIKTOK_TEXT_LIMIT = 2200
+BUFFER_FACEBOOK_REEL_LIMIT_SECONDS = 90.0
 
 
 def _graphql_input(value: object) -> str:
@@ -50,6 +53,26 @@ def build_social_description(topic: str, narration: str, source_urls: list[str] 
     if any(word in lowered for word in ("فضاء", "كون", "كوكب", "نجمة", "ثقب")):
         tags.insert(1, "#فضاء")
     return f"{topic}\n\n{body}\n\n{' '.join(dict.fromkeys(tags))}"
+
+
+def post_text_for_service(title: str, description: str, service: str) -> str:
+    """Prepare channel-safe text without changing the complete video asset."""
+    title = " ".join(str(title or "").split()).strip() or "اكتشاف علمي جديد"
+    text = f"{title}\n\n{str(description or '').strip()}".strip()
+    if service != "tiktok" or len(text) <= TIKTOK_TEXT_LIMIT:
+        return text
+    suffix = "\n\n#علوم #اكتشافات"
+    prefix = text[: TIKTOK_TEXT_LIMIT - len(suffix)]
+    prefix = prefix.rsplit(" ", 1)[0].rstrip() if len(prefix) < len(text) else prefix
+    return prefix.rstrip() + suffix
+
+
+def probe_video_duration(video_path: Path) -> float:
+    result = subprocess.run(
+        ["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "default=noprint_wrappers=1:nokey=1", str(video_path)],
+        capture_output=True, text=True, check=True,
+    )
+    return float(result.stdout.strip())
 
 
 class ContentPublisher:
@@ -156,6 +179,7 @@ class ContentPublisher:
         due_at: Optional[str],
         service: str = "tiktok",
         title: str = "اكتشاف علمي جديد",
+        facebook_type: str = "reel",
     ) -> dict:
         text_json = json.dumps(text, ensure_ascii=False)
         channel_json = json.dumps(channel_id)
@@ -166,7 +190,7 @@ class ContentPublisher:
         elif service == "instagram":
             metadata = {"instagram": {"type": "reel", "shouldShareToFeed": True}}
         elif service == "facebook":
-            metadata = {"facebook": {"type": "reel"}}
+            metadata = {"facebook": {"type": facebook_type}}
         if service == "youtube":
             metadata_clause = (
                 "metadata: {youtube: {title: "
@@ -176,7 +200,7 @@ class ContentPublisher:
         elif service == "instagram":
             metadata_clause = "metadata: {instagram: {type: reel, shouldShareToFeed: true}}"
         elif service == "facebook":
-            metadata_clause = "metadata: {facebook: {type: reel}}"
+            metadata_clause = f"metadata: {{facebook: {{type: {facebook_type}}}}}"
         else:
             metadata_clause = ""
         if self.schedule_mode == "customScheduled":
@@ -237,26 +261,52 @@ class ContentPublisher:
 
         media_url = self._release_asset_url(video_path)
         due_at = os.getenv("PUBLISH_DUE_AT", "").strip() or (schedule_time.isoformat() if schedule_time else None)
-        post_text = f"{title}\n\n{description}".strip()
         failures: dict[str, str] = {}
+        skipped: dict[str, str] = {}
         successes: dict[str, dict] = {}
         for service in services:
             channel_id = configured.get(service)
             if not channel_id:
                 failures[service] = "لا يوجد channel ID مضبوط"
                 continue
+            video_duration = None
+            facebook_type = "reel"
             try:
-                post = self._create_buffer_post(channel_id, post_text, media_url, due_at, service, title)
+                if service == "facebook":
+                    video_duration = probe_video_duration(video_path)
+                    if video_duration > BUFFER_FACEBOOK_REEL_LIMIT_SECONDS:
+                        # Meta now accepts longer Reels. Buffer's deployed Reel
+                        # validator can still reject at 90s, so try its standard
+                        # video-post type first rather than shortening the story.
+                        facebook_type = "post"
+                        log.info("Trying Facebook standard video-post type for %.1fs vertical video", video_duration)
+                post_text = post_text_for_service(title, description, service)
+                post = self._create_buffer_post(
+                    channel_id, post_text, media_url, due_at, service, title, facebook_type
+                )
                 successes[service] = post
                 log.info("✓ Buffer confirmed %s post=%s dueAt=%s", service, post.get("id"), post.get("dueAt"))
             except Exception as exc:  # keep independent channel results visible
+                message = str(exc).casefold()
+                if service == "facebook" and video_duration and video_duration > BUFFER_FACEBOOK_REEL_LIMIT_SECONDS and (
+                    "no longer than 1m 30s" in message or "90 seconds" in message
+                ):
+                    skipped[service] = (
+                        f"Buffer rejected the full {video_duration:.1f}s video even as a standard post: {exc}; "
+                        "the complete master was preserved and not cut into an excerpt"
+                    )
+                    log.warning("↷ Buffer skipped %s after its duration rejection: %s", service, skipped[service])
+                    continue
                 failures[service] = str(exc)
                 log.error("✗ Buffer failed for %s: %s", service, exc)
 
         log.info("Buffer result: %d/%d channels confirmed", len(successes), len(services))
+        if skipped:
+            log.warning("Skipped incompatible channels: %s", json.dumps(skipped, ensure_ascii=False))
         if failures:
             log.error("Unpublished channels: %s", json.dumps(failures, ensure_ascii=False))
-        return len(successes) == len(services)
+        eligible_channels = len(services) - len(skipped)
+        return eligible_channels > 0 and len(successes) == eligible_channels
 
     def save_metadata(self, metadata_path: Path, title: str, description: str, tags: list[str], video_path: Path) -> bool:
         try:
