@@ -206,7 +206,7 @@ jobs:
           TARGET_AUDIO_SECONDS: '135'
           # main.py reads MIN_WORDS/MAX_WORDS; the final MP3 duration remains
           # the authoritative gate around this approximately 200–400 word window.
-          MIN_WORDS: '200'
+          MIN_WORDS: '180'
           MAX_WORDS: '400'
           # BUFFER_CHANNEL_IDS is stored positionally as TikTok, YouTube,
           # Facebook in this repository's secret.

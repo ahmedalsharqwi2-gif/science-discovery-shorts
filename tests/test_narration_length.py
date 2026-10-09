@@ -12,7 +12,7 @@ class CurrentNarrationPolicyTests(unittest.TestCase):
     def test_default_word_limits_leave_headroom_for_edge_tts(self):
         with patch.dict(os.environ, {}, clear=True):
             pipeline = main.AutoPublishPipeline()
-        self.assertEqual(pipeline.content_generator.min_words, 200)
+        self.assertEqual(pipeline.content_generator.min_words, 180)
         self.assertEqual(pipeline.content_generator.max_words, 400)
 
     def test_publish_window_has_valid_order(self):
