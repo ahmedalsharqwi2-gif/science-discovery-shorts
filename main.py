@@ -209,7 +209,7 @@ class AutoPublishPipeline:
             # Validate the rendered B-roll track before any external publish.
             broll_report = evaluate_broll(
                 video_path,
-                manifest=None,
+                manifest=Path("state/cinematic_scene_manifest.json") if os.getenv("CINEMATIC_ENABLED", "false").lower() == "true" else None,
                 clips_dir=Path("output/pexels_clips"),
                 report_path=Path("state/montage_quality.json"),
                 expected="vertical",
