@@ -1,0 +1,20 @@
+{
+  "profile": "mystery_documentary_vertical",
+  "reference": "133344.mp4",
+  "aspect_ratio": "9:16",
+  "fps": 30,
+  "palette": {
+    "primary": "#FFFFFF",
+    "accent": "#E53935",
+    "shadow": "#10182B",
+    "earth": "#6B4A32",
+    "forest": "#17382B",
+    "night": "#101827",
+    "sunset": "#C96E32"
+  },
+  "captions": {"words_per_chunk": 6, "font": "Noto Sans Arabic", "alignment": "top_safe_for_vertical", "highlight_keywords": true},
+  "pacing": {"visual_change_seconds_min": 3, "visual_change_seconds_max": 8, "hook_seconds": 10, "reel_seconds": 59},
+  "structure": ["hook", "evidence", "turning_point", "hypothesis_1", "hypothesis_2", "hypothesis_3", "modern_investigation", "philosophical_close", "question_cta"],
+  "audio": {"voice_language": "ar", "voice_style": "deep_documentary", "words_per_minute": 130, "music_profile": "ambient_mystery_rising_then_quiet", "duck_music_under_voice": true},
+  "visual_prompt_suffix": "cinematic science mystery documentary, vertical 9:16, realistic scientific visualization, volumetric light, deep shadows, restrained camera motion, no unsupported claims"
+}

@@ -464,3 +464,12 @@ if __name__ == "__main__":
     narration = generator.generate_narration(topic)
     print(f"\nNarration: {narration}")
 
+
+
+# Reference-inspired production profile (133344.mp4):
+# Keep the existing fact and safety gates. Use a mystery-documentary arc:
+# strong hook, evidence, turning point, competing hypotheses, and an open
+# question/CTA. Visual queries should be chronological and specific, with
+# this compatible style suffix: cinematic science mystery documentary,
+# vertical 9:16, volumetric light, deep shadows, restrained camera motion.
+# Unsupported claims remain prohibited; visualizations must be labeled.
