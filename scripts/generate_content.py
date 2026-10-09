@@ -391,8 +391,37 @@ class ContentGenerator:
                 log.warning(f"Quality issues found: {report.issues}")
             if not report.is_acceptable:
                 log.warning("Content quality below acceptable threshold, attempting revision...")
-                revision_prompt = f"الرجاء إصلاح الأخطاء التالية في النص مع الحفاظ على طوله بين {self.min_words} و{self.max_words} كلمة:\n{chr(10).join(report.issues)}\n\nالنص الأصلي:\n{fixed_narration}"
+                # Keep the first complete-length draft as the source of truth.
+                # Chaining rejected rewrites caused a progressive shortening
+                # failure when a model's first quality repair was too brief.
+                revision_source = fixed_narration
+
+                def quality_findings(quality_report, word_count: int) -> list[str]:
+                    findings = []
+                    if word_count < self.min_words or word_count > self.max_words:
+                        findings.append(
+                            f"عدد الكلمات {word_count} خارج النطاق الإلزامي {self.min_words}-{self.max_words}"
+                        )
+                    findings.extend(getattr(quality_report, "issues", []) or [])
+                    findings.extend(getattr(quality_report, "warnings", []) or [])
+                    minimum_score = getattr(self.quality_checker, "min_acceptable_score", 0.7)
+                    score = float(getattr(quality_report, "overall_score", 0.0))
+                    if not getattr(quality_report, "is_acceptable", False):
+                        findings.append(
+                            f"تقييم الجودة {score:.2f} أقل من الحد المطلوب {minimum_score:.2f}"
+                        )
+                    return findings or ["تقرير الجودة رفض المسودة؛ حسّن سلامة العربية ووضوح الجمل دون تلخيص"]
+
+                findings = quality_findings(report, len(revision_source.split()))
                 for revision in range(3):
+                    revision_prompt = (
+                        f"أعد كتابة السرد كاملًا انطلاقًا من النص الأساس، لا تختصره. يجب أن يكون بين "
+                        f"{self.min_words} و{self.max_words} كلمة، وبالعربية الفصحى؛ استبدل أي كلمات أو أحرف لاتينية "
+                        "بصياغة عربية مناسبة، واجعل نسبة الأحرف العربية 85% على الأقل. لا تضف حقائق جديدة، "
+                        "واحتفظ بجميع النقاط العلمية الصحيحة وبجمل مكتملة. أخرج السرد وحده بلا عنوان.\n"
+                        "أسباب رفض المحاولة السابقة:\n- " + "\n- ".join(findings)
+                        + "\n\nالنص الأساس الكامل:\n" + revision_source
+                    )
                     response = llm_chat(
                         [{"role": "user", "content": revision_prompt}],
                         max_tokens=int(os.getenv("LLM_MAX_COMPLETION_TOKENS", "512")),
@@ -409,16 +438,14 @@ class ContentGenerator:
                     if self.min_words <= revised_words <= self.max_words and revised_report.is_acceptable:
                         fixed_narration = candidate
                         break
+                    findings = quality_findings(revised_report, revised_words)
                     log.warning("Revision %d needs rewrite: %d words; issues=%s",
-                                revision + 1, revised_words, revised_report.issues)
-                    revision_prompt = (
-                        f"أعد السرد كاملًا بين {self.min_words} و{self.max_words} كلمة، "
-                        "بجمل عربية مكتملة وخاتمة واضحة، دون إضافة حقائق أو قطع الكلمات. "
-                        f"النص السابق {revised_words} كلمة. أخطاء المراجعة: "
-                        + "; ".join(revised_report.issues) + "\n\n" + candidate
-                    )
+                                revision + 1, revised_words, findings)
                 else:
-                    raise ValueError("تعذر تصحيح جودة وطول النص بعد ثلاث مراجعات مكتملة")
+                    raise ValueError(
+                        "تعذر تصحيح جودة وطول النص بعد ثلاث مراجعات مكتملة؛ "
+                        + "; ".join(findings)
+                    )
             return fixed_narration
             
         except Exception as e:

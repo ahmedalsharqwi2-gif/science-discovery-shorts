@@ -37,6 +37,25 @@ class RevisionRecoveryTests(unittest.TestCase):
         self.assertEqual(result, 'هذه جملة عربية كاملة مفيدة.')
         self.assertEqual(llm.call_count, 3)
 
+    def test_quality_revisions_restart_from_full_source_and_report_word_count_failure(self):
+        generator = ContentGenerator(min_words=6, max_words=8)
+        generator.grammar_fixer.fix_text = lambda text: (text, [])
+        rejected = SimpleNamespace(overall_score=0.63, issues=['كثافة الأحرف العربية منخفضة: 46%'], warnings=[], is_acceptable=False)
+        accepted = SimpleNamespace(overall_score=1.0, issues=[], warnings=[], is_acceptable=True)
+        generator.quality_checker.generate_report = unittest.mock.Mock(side_effect=[rejected, rejected, rejected, accepted])
+        source = 'هذا نص عربي مليء بالمعلومات المهمة.'
+        short_one = 'هذه نسخة مختصرة.'
+        short_two = 'هذه نسخة أقصر.'
+        with patch('scripts.generate_content.llm_chat', side_effect=[source, short_one, short_two, source]) as llm:
+            result = generator.generate_narration('العلم')
+        self.assertEqual(result, source)
+        self.assertEqual(llm.call_count, 4)
+        second_revision_prompt = llm.call_args_list[2].args[0][0]['content']
+        self.assertIn(source, second_revision_prompt)
+        self.assertNotIn(short_one, second_revision_prompt)
+        self.assertIn('3 خارج النطاق الإلزامي 6-8', second_revision_prompt)
+        self.assertIn('85%', second_revision_prompt)
+
     def test_shortening_uses_second_attempt_when_first_is_invalid(self):
         generator = ContentGenerator(min_words=20, max_words=40)
         generator.grammar_fixer.fix_text = lambda t: (t, [])
