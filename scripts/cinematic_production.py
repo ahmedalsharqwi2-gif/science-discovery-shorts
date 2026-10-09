@@ -723,32 +723,9 @@ def build_episode(root: Path = ROOT) -> dict:
     audio = resolve(episode.get("final_audio") or "downloaded_clips/narration.mp3")
     subtitles = resolve(episode["subtitles"]) if episode.get("subtitles") else None
     report = build(audio, episode.get("narration", ""), root / "output/final_video_full.mp4", episode, subtitles, root=root)
-    # Keep existing publishing filenames. All complete and teaser assets are vertical.
-    from scripts import assemble_video as assembler
-    (root / "downloaded_clips").mkdir(parents=True, exist_ok=True)
-    clean = root / "output/cinematic_clean.mp4"
-    cfg = settings(root)
-    events, _ = captions(episode["narration"], report["quality"]["duration"], subtitles)
-    vertical_subtitles = root / "output/cinematic_work/reel_captions.ass"
-    write_captions(events, vertical_subtitles, cfg)
-    specs = [assembler.finish_reel_at_caption_boundary(spec, subtitles) for spec in assembler.load_short_specs(episode, report["quality"]["duration"])]
-    # The clean source gets the SAME mixed soundtrack as the complete episode.
-    mixed = root / "output/cinematic_work/mixed.m4a"
-    reel_source = root / "output/reel_source_clean.mp4"
-    run(["ffmpeg", "-y", "-v", "error", "-i", str(clean), "-i", str(mixed), "-map", "0:v:0", "-map", "1:a:0", "-c:v", "copy", "-c:a", "aac", "-t", str(report["quality"]["duration"]), str(reel_source)])
+    # Full-story-only policy: the complete vertical output is the sole media asset.
     for old in (root / "output").glob("short_*.mp4"):
-        old.unlink()
-    for index, spec in enumerate(specs, 1):
-        start, end = float(spec["start_seconds"]), float(spec["end_seconds"])
-        shifted = [{"start": max(0, e["start"] - start), "end": min(end, e["end"]) - start, "text": e["text"]}
-                   for e in events if e["end"] > start and e["start"] < end]
-        write_captions(shifted, vertical_subtitles, cfg)
-        for platform in ("youtube", "facebook", "instagram"):
-            target = root / f"output/short_{index}_{platform}.mp4"
-            if cfg["profile"] == "history":
-                assembler.create_short(reel_source, spec, index, platform, target, vertical_subtitles)
-            else:
-                assembler.create_short(reel_source, spec, index, platform, target, "Noto Sans Arabic", 58, subtitles=vertical_subtitles)
+        old.unlink(missing_ok=True)
     # Existing workflow checks read this manifest, but it is not fed to the legacy stock assembler.
     atomic_json(root / "state/fetched_clips.json", [{"file": r["file"], "keyword": r["text"], "visual_review": r["review"], "source": r["source"]} for r in json.loads((root / "state/cinematic_scene_manifest.json").read_text())])
     return report

@@ -14,6 +14,7 @@ from scripts.media_audio import ducking_filters
 
 VIDEO_WIDTH = 1080
 VIDEO_HEIGHT = 1920
+MAX_FULL_VIDEO_SECONDS = 180.0
 FPS = 30
 # Six words keeps captions readable without flashing a new fragment every few
 # syllables; the timing still follows the actual spoken audio.
