@@ -1,0 +1,11 @@
+{
+  "music": "../assets/music/science_cosmic_wonder.mp3",
+  "voice": "ar-SA-HamedNeural",
+  "rate": "-2%",
+  "pitch": "-1Hz",
+  "music_gain": 0.20,
+  "scenes": [
+    {"id": "hook", "image": "../assets/scene_001.jpg", "text": "ضع هنا السؤال العلمي أو الحقيقة الأولى.", "motion": "zoom_in"},
+    {"id": "explanation", "image": "../assets/scene_002.jpg", "text": "ضع هنا التفسير العلمي.", "motion": "pan_left"}
+  ]
+}
