@@ -855,12 +855,13 @@
       "title": "كيف يصنع المحرك النفاث قوة الدفع؟",
       "hook": "[ \"narrative\": \"تطير الكتلة الفولاذية الضخمة للطائرة بفضل المحرك النفاث الذي يعتمد على قانون نيوتن الثالث لكل فعل رد فعل مساوٍ له في المقدار ومعاكس له في الاتجاه. تبدأ العملية بسحب كمية هائلة من الهواء",
       "region": "",
-      "status": "reserved",
+      "status": "published",
       "source": "science-pipeline",
       "reservation_id": "c39f1bbcf4d446aea894312b37a33a10",
       "reserved_at": "2026-10-09T13:27:08Z",
       "run_id": "37936230205",
-      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts",
+      "published_at": "2026-10-09T13:27:16Z"
     }
   ]
 }
