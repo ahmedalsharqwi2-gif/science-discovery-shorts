@@ -193,6 +193,11 @@ def ass_time(seconds: float) -> str:
     return f"{h}:{m:02d}:{s:02d}.{c:02d}"
 
 
+def rtl_ass_text(text: str) -> str:
+    """Set the ASS paragraph base direction to RTL without reversing words."""
+    return "\u202b" + text + "\u202c"
+
+
 def captions(narration: str, duration: float, source: Path | None) -> tuple[list[dict], str]:
     spans = []
     if source and source.exists():
@@ -792,7 +797,7 @@ def write_captions(events: list[dict], path: Path, cfg: dict, *, illustrative=Fa
             start_time, end_time = float(event["start"]), float(event["end"])
             lines.append(
                 f"Dialogue: 0,{ass_time(start_time)},{ass_time(max(end_time, start_time + 0.04))},Caption,,0,0,0,,"
-                f"{event['ass_text']}"
+                f"{rtl_ass_text(event['ass_text'])}"
             )
             continue
         tokens = [re.sub(r'''[.,،؛:!?؟…/\\\-—_()\[\]{}"«»]''', "", re.sub(r"[\u061c\u200e\u200f\u202a-\u202e\u2066-\u2069\u064b-\u065f\u0670\u06d6-\u06ed]", "", token)) for token in event["text"].split()]
@@ -805,10 +810,8 @@ def write_captions(events: list[dict], path: Path, cfg: dict, *, illustrative=Fa
             chunk = tokens[chunk_start:chunk_start + 4]
             chunk_begin = start_time + total * chunk_start / len(tokens)
             chunk_end = end_time if chunk_start + len(chunk) >= len(tokens) else start_time + total * (chunk_start + len(chunk)) / len(tokens)
-            # Keep source order. libass applies Arabic bidi/shaping; reversing
-            # tokens here renders the sentence right-to-left twice. Change only
-            # the active color at each word boundary and never fade/restart the
-            # line, so the visual state tracks speech without flashing.
+            # Inline ASS color tags split libass bidi runs. Keep logical source
+            # order and use the RTL paragraph wrapper; never fade/restart line.
             for active in range(len(chunk)):
                 word_start = chunk_begin + (chunk_end - chunk_begin) * active / len(chunk)
                 word_end = chunk_end if active == len(chunk) - 1 else chunk_begin + (chunk_end - chunk_begin) * (active + 1) / len(chunk)
@@ -817,7 +820,7 @@ def write_captions(events: list[dict], path: Path, cfg: dict, *, illustrative=Fa
                     for index, token in enumerate(chunk)
                 ]
                 text = " ".join(rendered)
-                lines.append(f"Dialogue: 0,{ass_time(word_start)},{ass_time(max(word_end, word_start + 0.04))},Caption,,0,0,0,,{text}")
+                lines.append(f"Dialogue: 0,{ass_time(word_start)},{ass_time(max(word_end, word_start + 0.04))},Caption,,0,0,0,,{rtl_ass_text(text)}")
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 def mix_audio(voice: Path, clean_video: Path, output: Path, duration: float, cfg: dict, scenes: list[dict], root: Path) -> None:

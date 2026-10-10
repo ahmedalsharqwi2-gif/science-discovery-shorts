@@ -76,8 +76,10 @@ def _caption_text(words: list[str], active_index: int | None = None) -> str:
 
 
 def _rtl_ass_line(text: str) -> str:
-    """Keep one bidi paragraph for Arabic; never place direction marks between words."""
-    return text
+    """Force one RTL paragraph; never reverse the logical Arabic word list."""
+    # RLE/PDF establishes a complete RTL paragraph even when inline color
+    # overrides occur inside it. The logical Arabic word order is preserved.
+    return "\u202b" + text + "\u202c"
 
 def _norm(word: str) -> str:
     return _display_word(word).lower()
