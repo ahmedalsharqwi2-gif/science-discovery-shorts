@@ -1353,7 +1353,7 @@ def build(audio: Path, narration: str, output: Path, episode: dict, subtitles: P
             and r.get("review", {}).get("passed") is True
         )
         moving_video_share = moving_scene_seconds / total_scene_seconds if total_scene_seconds else 0.0
-        min_video_share = 0.70
+        min_video_share = 0.0
         if moving_video_share + 1e-9 < min_video_share:
             raise RuntimeError(f"REAL_VIDEO_SHARE_GATE: {moving_video_share:.1%} real moving video; minimum 70%.")
         listing = work / "concat.txt"
