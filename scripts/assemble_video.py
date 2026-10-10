@@ -16,8 +16,8 @@ VIDEO_WIDTH = 1080
 VIDEO_HEIGHT = 1920
 MAX_FULL_VIDEO_SECONDS = 180.0
 FPS = 30
-# Six words keeps captions readable without flashing a new fragment every few
-# syllables; the timing still follows the actual spoken audio.
+# Four words keeps captions readable while each word can be highlighted against
+# its own spoken timestamp without changing the visible line.
 WORDS_PER_CAPTION_CHUNK = 4
 FONT_SIZE = 58
 # 9:16 render; keep captions below phone camera notches and platform chrome.
@@ -90,7 +90,7 @@ def _script_words(text: str) -> list[str]:
 def align_words_with_whisper(audio_path: Path, script_words: list[str]) -> list[dict]:
     """Return monotonically increasing timestamps from the final audio."""
     from faster_whisper import WhisperModel
-    model = WhisperModel(os.getenv("WHISPER_MODEL", "base"), device="cpu", compute_type="int8")
+    model = WhisperModel(os.getenv("WHISPER_MODEL", "small"), device="cpu", compute_type="int8")
     result = model.transcribe(
         str(audio_path),
         language="ar",
@@ -163,18 +163,24 @@ def write_ass_subtitles(text: str, duration: float, ass_path: Path, audio_path: 
         try:
             events = align_words_with_whisper(audio_path, words)
         except Exception as exc:
-            log.warning(
-                "Whisper alignment unavailable (%s); using uniform subtitle timing",
-                exc,
-            )
-            per_word = duration / len(words)
-            events = [
-                {"text": word, "offset": index * per_word, "duration": per_word}
-                for index, word in enumerate(words)
-            ]
+            log.warning("Whisper alignment unavailable (%s); using weighted subtitle timing", exc)
+            weights = [max(1, len(_norm(word))) for word in words]
+            total_weight = sum(weights) or 1
+            cursor = 0.0
+            events = []
+            for word, weight in zip(words, weights):
+                word_duration = duration * weight / total_weight
+                events.append({"text": word, "offset": cursor, "duration": word_duration})
+                cursor += word_duration
     else:
-        per_word = duration / len(words)
-        events = [{"text": w, "offset": i * per_word, "duration": per_word} for i, w in enumerate(words)]
+        weights = [max(1, len(_norm(word))) for word in words]
+        total_weight = sum(weights) or 1
+        cursor = 0.0
+        events = []
+        for word, weight in zip(words, weights):
+            word_duration = duration * weight / total_weight
+            events.append({"text": word, "offset": cursor, "duration": word_duration})
+            cursor += word_duration
     lines = [_ass_header()]
     for index in range(0, len(events), WORDS_PER_CAPTION_CHUNK):
         group = events[index:index + WORDS_PER_CAPTION_CHUNK]
@@ -183,13 +189,18 @@ def write_ass_subtitles(text: str, duration: float, ass_path: Path, audio_path: 
         if end <= start:
             end = min(duration, start + 0.25)
         words = [e["text"] for e in group]
-        # Render one stable event for the whole chunk. Re-emitting the same
-        # chunk once per highlighted word makes libass flash the caption and
-        # can make the spoken track appear unnaturally fast.
-        lines.append(
-            f"Dialogue: 0,{_ass_time(start)},{_ass_time(max(end, start + 0.12))},Caption,,0,0,0,,"
-            f"{_rtl_ass_line(_caption_text(words, 0))}"
-        )
+        # Keep the complete four-word line stable, but replace only the
+        # highlighted color at each real word boundary. There is no fade and
+        # no gap, so the line cannot flash or appear to advance too quickly.
+        for active_index, event in enumerate(group):
+            word_start = max(start, float(event["offset"]))
+            word_end = min(end, float(event["offset"]) + float(event["duration"]))
+            if word_end <= word_start:
+                word_end = min(end, word_start + 0.04)
+            lines.append(
+                f"Dialogue: 0,{_ass_time(word_start)},{_ass_time(max(word_end, word_start + 0.04))},Caption,,0,0,0,,"
+                f"{_rtl_ass_line(_caption_text(words, active_index))}"
+            )
     ass_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 

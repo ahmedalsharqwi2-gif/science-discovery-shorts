@@ -202,11 +202,12 @@ def captions(narration: str, duration: float, source: Path | None) -> tuple[list
             fields = line.split(",", 9)
             if len(fields) != 10:
                 continue
-            text = re.sub(r"\{[^}]*\}", "", fields[9]).replace(r"\N", " ")
+            ass_text = fields[9].replace(r"\N", " ")
+            text = re.sub(r"\{[^}]*\}", "", ass_text)
             text = re.sub(r"[\u061c\u200e\u200f\u202a-\u202e\u2066-\u2069]", "", text).strip()
             start, end = timestamp(fields[1]), min(duration, timestamp(fields[2]))
             if text and 0 <= start < end:
-                spans.append({"start": start, "end": end, "text": text})
+                spans.append({"start": start, "end": end, "text": text, "ass_text": ass_text})
     method = "existing_audio_timeline" if spans else "character_weighted_estimate"
     if not spans:
         words = narration.split()
@@ -216,6 +217,12 @@ def captions(narration: str, duration: float, source: Path | None) -> tuple[list
             end = cursor + duration * weight / total
             spans.append({"start": cursor, "end": end, "text": word})
             cursor = end
+    # The source ASS is produced from final-audio word timestamps. Keep each
+    # event and its color tags intact; regrouping here would discard which word
+    # was actually spoken and force the renderer to guess again.
+    if spans and all("ass_text" in span for span in spans):
+        return spans, method
+
     chunks = []
     # Subdivide large existing events rather than displaying whole paragraphs.
     for span in spans:
@@ -781,6 +788,13 @@ def write_captions(events: list[dict], path: Path, cfg: dict, *, illustrative=Fa
         "[Events]\nFormat: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\n")
     lines = [header]
     for event in events:
+        if event.get("ass_text"):
+            start_time, end_time = float(event["start"]), float(event["end"])
+            lines.append(
+                f"Dialogue: 0,{ass_time(start_time)},{ass_time(max(end_time, start_time + 0.04))},Caption,,0,0,0,,"
+                f"{event['ass_text']}"
+            )
+            continue
         tokens = [re.sub(r'''[.,،؛:!?؟…/\\\-—_()\[\]{}"«»]''', "", re.sub(r"[\u061c\u200e\u200f\u202a-\u202e\u2066-\u2069\u064b-\u065f\u0670\u06d6-\u06ed]", "", token)) for token in event["text"].split()]
         tokens = [token for token in tokens if token]
         if not tokens:
@@ -791,21 +805,19 @@ def write_captions(events: list[dict], path: Path, cfg: dict, *, illustrative=Fa
             chunk = tokens[chunk_start:chunk_start + 4]
             chunk_begin = start_time + total * chunk_start / len(tokens)
             chunk_end = end_time if chunk_start + len(chunk) >= len(tokens) else start_time + total * (chunk_start + len(chunk)) / len(tokens)
-            # Keep the chunk on screen for its full spoken interval. One
-            # Dialogue event per active word duplicates the same caption and
-            # causes rapid flashing when the cinematic track is burned in.
             # Keep source order. libass applies Arabic bidi/shaping; reversing
-            # tokens here renders the sentence right-to-left twice.
-            display_chunk = chunk
-            display_active = 0
-            rendered = []
-            for index, token in enumerate(display_chunk):
-                if index == display_active:
-                    rendered.append(r"{\c&H000000FF&}" + token + r"{\c&H00FFFFFF&}")
-                else:
-                    rendered.append(token)
-            text = " ".join(rendered)
-            lines.append(f"Dialogue: 0,{ass_time(chunk_begin)},{ass_time(max(chunk_end, chunk_begin + 0.12))},Caption,,0,0,0,,{{\\fad(40,60)}}{text}")
+            # tokens here renders the sentence right-to-left twice. Change only
+            # the active color at each word boundary and never fade/restart the
+            # line, so the visual state tracks speech without flashing.
+            for active in range(len(chunk)):
+                word_start = chunk_begin + (chunk_end - chunk_begin) * active / len(chunk)
+                word_end = chunk_end if active == len(chunk) - 1 else chunk_begin + (chunk_end - chunk_begin) * (active + 1) / len(chunk)
+                rendered = [
+                    r"{\c&H000000FF&}" + token + r"{\c&H00FFFFFF&}" if index == active else token
+                    for index, token in enumerate(chunk)
+                ]
+                text = " ".join(rendered)
+                lines.append(f"Dialogue: 0,{ass_time(word_start)},{ass_time(max(word_end, word_start + 0.04))},Caption,,0,0,0,,{text}")
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 def mix_audio(voice: Path, clean_video: Path, output: Path, duration: float, cfg: dict, scenes: list[dict], root: Path) -> None:

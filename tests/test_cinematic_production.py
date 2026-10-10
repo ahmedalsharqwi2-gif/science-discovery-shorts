@@ -110,6 +110,24 @@ class CinematicTests(unittest.TestCase):
         self.assertTrue(all(s['kind']!='ai_video' for s in scenes))
         self.assertTrue(all('ancient stone city'==s['query'] for s in scenes))
 
+    def test_existing_word_timeline_preserves_active_color_and_interval(self):
+        source = self.root / 'word_timeline.ass'
+        source.write_text(
+            '[Events]\n'
+            'Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\n'
+            r'Dialogue: 0,0:00:00.00,0:00:01.25,Caption,,0,0,0,,هذا {\c&H000000FF&}نص{\c&H00FFFFFF&} عربي سليم' + '\n',
+            encoding='utf-8',
+        )
+        events, method = cp.captions('هذا نص عربي سليم', 2.0, source)
+        self.assertEqual(method, 'existing_audio_timeline')
+        self.assertEqual(len(events), 1)
+        self.assertEqual(events[0]['start'], 0.0)
+        self.assertEqual(events[0]['end'], 1.25)
+        self.assertIn(r'{\c&H000000FF&}نص', events[0]['ass_text'])
+        output = self.root / 'rendered.ass'
+        cp.write_captions(events, output, self.cfg)
+        self.assertIn(r'{\c&H000000FF&}نص', output.read_text(encoding='utf-8'))
+
     def test_local_science_plan_generates_search_query_when_director_is_unavailable(self):
         text='هل سألت نفسك لماذا يقف طائر النحام على ساق واحدة في مياه ضحلة'
         episode={'title':'لماذا يقف النحام على ساق واحدة؟'}

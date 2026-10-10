@@ -20,7 +20,7 @@ class VideoAssemblyTests(unittest.TestCase):
         self.assertTrue(caption.startswith(r"{\c&H000000FF&}الدم"))
         self.assertIn("الدم داخل الأوعية بسرعة", caption.replace(r"{\c&H000000FF&}", "").replace(r"{\c&H00FFFFFF&}", ""))
 
-    def test_subtitles_use_four_word_one_line_active_blocks(self):
+    def test_subtitles_keep_four_word_line_and_highlight_each_word(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "captions.ass"
             write_ass_subtitles(
@@ -29,7 +29,7 @@ class VideoAssemblyTests(unittest.TestCase):
                 path,
             )
             text = path.read_text(encoding="utf-8")
-            self.assertEqual(text.count("Dialogue:"), 2)
+            self.assertEqual(text.count("Dialogue:"), 7)
             self.assertNotIn(r"\N", text)
             self.assertIn("واحد", text)
             self.assertIn("اثنان", text)
@@ -37,6 +37,7 @@ class VideoAssemblyTests(unittest.TestCase):
             self.assertIn("أربعة", text)
             self.assertIn(r"{\c&H000000FF&}", text)
             self.assertIn("Noto Naskh Arabic", text)
+            self.assertGreaterEqual(text.count(r"{\c&H000000FF&}"), 7)
 
     def test_edge_tts_text_removes_formatting_and_repeated_pauses(self):
         text = normalize_edge_tts_text("  هذا\n**نص**، ،؛؛  مهم...  ")
@@ -50,7 +51,7 @@ class VideoAssemblyTests(unittest.TestCase):
         self.assertIn(",8,70,70,260,1", text)
 
     @patch("scripts.assemble_video.align_words_with_whisper", side_effect=RuntimeError("Whisper alignment too weak: 77/157 words"))
-    def test_weak_whisper_alignment_falls_back_to_uniform_timing(self, align):
+    def test_weak_whisper_alignment_falls_back_to_weighted_timing(self, align):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "captions.ass"
             write_ass_subtitles(
@@ -61,7 +62,7 @@ class VideoAssemblyTests(unittest.TestCase):
             )
             text = path.read_text(encoding="utf-8")
         align.assert_called_once()
-        self.assertEqual(text.count("Dialogue:"), 2)
+        self.assertEqual(text.count("Dialogue:"), 8)
         self.assertNotIn(r"\N", text)
         self.assertIn("خمسة", text)
         self.assertIn("ستة", text)
