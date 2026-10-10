@@ -1026,9 +1026,7 @@ def _write_scene_specific_science_card(scene: dict, target: Path, cfg: dict, epi
     Uses only local Pillow and the scene's actual visual query. No network, API
     quota, fabricated photograph, or unrelated stock clip is required.
     """
-    if cfg.get("profile") != "science":
-        return False
-    from PIL import Image, ImageDraw, ImageFont
+    # Do not use generic explanatory cards in publishable science episodes.\n    # Real inspected footage and topic-specific scientific illustrations remain required.\n    return False\n    from PIL import Image, ImageDraw, ImageFont
     width, height = int(cfg["width"]), int(cfg["height"])
     if width < 64 or height < 64:
         return False
