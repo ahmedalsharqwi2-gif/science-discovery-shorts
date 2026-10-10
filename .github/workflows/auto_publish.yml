@@ -269,6 +269,15 @@ jobs:
           PY
           echo "Professional vertical montage with topic-specific Pexels B-roll verified."
 
+      - name: Preserve dry-run video for user review
+        if: ${{ inputs.dry_run }}
+        uses: actions/upload-artifact@v6
+        with:
+          name: science-video-review-${{ github.run_id }}
+          path: output/final_video.mp4
+          if-no-files-found: error
+          retention-days: 3
+
       - name: Persist topic history
         if: success()
         run: |
