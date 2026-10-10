@@ -137,6 +137,18 @@
         }
       },
       "free_calls": 240
+    },
+    "2026-10-11": {
+      "estimated_usd": 0,
+      "episodes": {
+        "895dac60578a405d6652e80e": {
+          "estimated_usd": 0,
+          "calls": 0,
+          "reservations": [],
+          "free_calls": 45
+        }
+      },
+      "free_calls": 45
     }
   }
 }
