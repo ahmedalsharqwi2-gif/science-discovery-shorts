@@ -1020,13 +1020,78 @@ def _write_coral_reef_illustration(scene: dict, target: Path, cfg: dict, episode
     return True
 
 
+def _write_scene_specific_science_card(scene: dict, target: Path, cfg: dict, episode: dict) -> bool:
+    """Last-resort, honest visual: scene-specific explanatory card, not fake footage.
+
+    Uses only local Pillow and the scene's actual visual query. No network, API
+    quota, fabricated photograph, or unrelated stock clip is required.
+    """
+    if cfg.get("profile") != "science":
+        return False
+    from PIL import Image, ImageDraw, ImageFont
+    width, height = int(cfg["width"]), int(cfg["height"])
+    if width < 64 or height < 64:
+        return False
+    query = fallback_visual_query(episode, scene).strip()
+    # Keep the card specific to the actual narrated scene; never claim that a
+    # diagram is real footage or invent scientific facts/measurements.
+    terms = re.findall(r"[A-Za-z0-9][A-Za-z0-9 /,.:()%-]*", query)
+    subject = " ".join(terms).strip()[:130]
+    if not subject:
+        subject = "SCIENTIFIC EXPLANATION"
+    image = Image.new("RGB", (width, height), (6, 19, 35))
+    draw = ImageDraw.Draw(image)
+    for y in range(height):
+        shade = int(16 + 25 * y / max(1, height - 1))
+        draw.line((0, y, width, y), fill=(5, shade, shade + 18))
+    margin = max(24, width // 12)
+    draw.rounded_rectangle((margin, int(height * .22), width - margin,
+                            int(height * .78)), radius=max(12, width // 40),
+                           fill=(12, 37, 57), outline=(59, 165, 196),
+                           width=max(2, width // 260))
+    try:
+        font_path = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
+        heading_font = ImageFont.truetype(font_path, max(22, width // 29))
+        subject_font = ImageFont.truetype(font_path, max(26, width // 21))
+        footer_font = ImageFont.truetype(font_path, max(16, width // 42))
+    except OSError:
+        heading_font = subject_font = footer_font = ImageFont.load_default()
+    draw.text((margin * 1.45, height * .28), "SCIENCE | VISUAL EXPLANATION",
+              font=heading_font, fill=(103, 213, 231))
+    # Wrap by rendered pixel width rather than character count.
+    max_text_width = width - int(margin * 2.9)
+    words = subject.split()
+    lines, current = [], ""
+    for word in words:
+        trial = (current + " " + word).strip()
+        if current and draw.textbbox((0, 0), trial, font=subject_font)[2] > max_text_width:
+            lines.append(current)
+            current = word
+        else:
+            current = trial
+    if current:
+        lines.append(current)
+    line_height = max(36, width // 15)
+    y = height * .41
+    for line in lines[:5]:
+        draw.text((margin * 1.45, y), line, font=subject_font, fill=(242, 248, 253))
+        y += line_height
+    draw.text((margin * 1.45, height * .71), "ILLUSTRATIVE CARD - NOT RECORDED FOOTAGE",
+              font=footer_font, fill=(156, 192, 206))
+    target.parent.mkdir(parents=True, exist_ok=True)
+    image.save(target, format="PNG", optimize=True)
+    return True
+
+
 def _write_quota_fallback(scene: dict, target: Path, cfg: dict, episode: dict) -> bool:
     """Use only a topic-specific offline template; never bless generic art."""
     if _write_coral_reef_illustration(scene, target, cfg, episode):
         return True
     if _write_submarine_science_illustration(scene, target, cfg, episode):
         return True
-    return _write_buoyancy_diagram(scene, target, cfg, episode)
+    if _write_buoyancy_diagram(scene, target, cfg, episode):
+        return True
+    return _write_scene_specific_science_card(scene, target, cfg, episode)
 
 
 def _quota_fallback_record(scene: dict, episode: dict, cfg: dict, budget: Budget, cache: Path) -> tuple[Path, dict]:
@@ -1050,8 +1115,10 @@ def _quota_fallback_record(scene: dict, episode: dict, cfg: dict, budget: Budget
         source_name, reviewer = "local_coral_reef_illustration", "local-coral-reef-template"
     elif _is_submarine_subject(episode, scene):
         source_name, reviewer = "local_submarine_science_illustration", "local-submarine-science-template"
-    else:
+    elif _is_buoyancy_subject(episode, scene):
         source_name, reviewer = "local_science_diagram_buoyancy", "local-buoyancy-template"
+    else:
+        source_name, reviewer = "local_scene_specific_explanatory_card", "local-scene-text-card"
     review = {"passed": True, "reason": "Subject-specific deterministic local science illustration; rendered and integrity-checked without spending exhausted provider-review quota.", "audio_keep": False, "audio_reason": "Local illustration has no source audio.", "reviewer": reviewer, "sha256": hashlib.sha256(visual.read_bytes()).hexdigest()}
     record = {"scene_id": scene["id"], "source": source_name, "license": "original deterministic vector illustration", "source_url": "", "media_type": "local_illustration", "review": review, "cached": False, "audio_decision": "VOICE ONLY", "illustrative": True, "quota_fallback": True}
     return visual, record
