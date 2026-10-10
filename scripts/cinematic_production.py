@@ -627,13 +627,15 @@ def write_captions(events: list[dict], path: Path, cfg: dict, *, illustrative=Fa
             for active_index in range(len(chunk)):
                 word_start = chunk_begin + (chunk_end - chunk_begin) * active_index / len(chunk)
                 word_end = chunk_end if active_index == len(chunk) - 1 else chunk_begin + (chunk_end - chunk_begin) * (active_index + 1) / len(chunk)
+                display_chunk = list(reversed(chunk))
+                display_active = len(chunk) - 1 - active_index
                 rendered = []
-                for index, token in enumerate(chunk):
-                    if index == active_index:
+                for index, token in enumerate(display_chunk):
+                    if index == display_active:
                         rendered.append(r"{\c&H000000FF&}" + token + r"{\c&H00FFFFFF&}")
                     else:
                         rendered.append(token)
-                text = " ".join(rendered)
+                text = "\u200f" + " ".join(rendered) + "\u200f"
                 lines.append(f"Dialogue: 0,{ass_time(word_start)},{ass_time(max(word_end, word_start + 0.04))},Caption,,0,0,0,,{{\\fad(40,60)}}{text}")
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 

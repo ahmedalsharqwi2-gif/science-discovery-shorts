@@ -15,6 +15,11 @@ class VideoAssemblyTests(unittest.TestCase):
         self.assertNotIn("\u200e", caption)
         self.assertEqual(caption, "هذا نص عربي سليم")
 
+    def test_active_arabic_caption_reverses_display_tokens_for_libass_rtl(self):
+        caption = _caption_text("الدم داخل الأوعية بسرعة".split(), active_index=0)
+        self.assertTrue(caption.startswith("بسرعة الأوعية داخل "))
+        self.assertIn(r"{\c&H000000FF&}الدم", caption)
+
     def test_subtitles_use_four_word_one_line_active_blocks(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "captions.ass"

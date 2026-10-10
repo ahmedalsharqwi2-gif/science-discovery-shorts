@@ -64,6 +64,9 @@ def _caption_words(words: list[str]) -> list[str]:
 
 def _caption_text(words: list[str], active_index: int | None = None) -> str:
     clean = _caption_words(words)
+    if active_index is not None:
+        active_index = len(clean) - 1 - active_index
+        clean = list(reversed(clean))
     rendered = []
     for index, word in enumerate(clean):
         if active_index is not None and index == active_index:
@@ -71,6 +74,11 @@ def _caption_text(words: list[str], active_index: int | None = None) -> str:
         else:
             rendered.append(word)
     return " ".join(rendered)
+
+
+def _rtl_ass_line(text: str) -> str:
+    """Keep one bidi paragraph for Arabic; never place direction marks between words."""
+    return "\u200f" + text + "\u200f"
 
 def _norm(word: str) -> str:
     return _display_word(word).lower()
@@ -181,7 +189,7 @@ def write_ass_subtitles(text: str, duration: float, ass_path: Path, audio_path: 
             word_end = min(duration, group[active_index]["offset"] + group[active_index]["duration"])
             lines.append(
                 f"Dialogue: 0,{_ass_time(word_start)},{_ass_time(max(word_end, word_start + 0.12))},Caption,,0,0,0,,"
-                f"{_caption_text(words, active_index)}"
+                f"{_rtl_ass_line(_caption_text(words, active_index))}"
             )
     ass_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
