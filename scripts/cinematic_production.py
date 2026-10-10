@@ -376,7 +376,9 @@ def render_visual(source: Path, output: Path, seconds: float, scene: dict, cfg: 
 
 def generate_image(prompt: str, target: Path, cfg: dict, budget: Budget, model: str) -> None:
     key = os.getenv("GEMINI_API_KEY", "")
-    if cfg.get("free_only", True):
+    free_image_fallback = os.getenv("CINEMATIC_IMAGE_FALLBACK_ENABLED", "false").lower() == "true"
+    configured_free_models = {str(cfg.get("image_model", "")), str(cfg.get("image_fallback_model", ""))}
+    if cfg.get("free_only", True) and not (free_image_fallback and model in configured_free_models):
         raise RuntimeError("Paid image generation is locked in free-only mode")
     if not key or not budget.reserve("image:" + model, cfg["image_call_estimate_usd"]):
         raise RuntimeError("Image generation unavailable or budget exhausted")
