@@ -237,6 +237,8 @@ jobs:
           # Hamed has clearer connected Arabic phonemes for scientific terms.
           EDGE_TTS_VOICES: "ar-SA-HamedNeural"
           EDGE_TTS_VOICE: "ar-SA-HamedNeural"
+          EDGE_TTS_VOICES: "ar-SA-HamedNeural,ar-SA-ZariyahNeural,ar-SA-AmmarNeural"
+          EDGE_TTS_MAX_ATTEMPTS: '3'
           SILMA_REFERENCE_PROFILE: ${{ inputs.voice_profile || 'auto' }}
           SILMA_VOICE_PROFILES_FILE: 'assets/voices/voice_profiles.json'
           # قراءة طبيعية أبطأ؛ لا نسرّع الصوت ولا نضغط الكلمات.
@@ -244,7 +246,7 @@ jobs:
           SILMA_MAX_ATTEMPTS: '2'
           SILMA_MIN_SCORE: '0.6'
           SILMA_GUARD_ENABLED: 'true'
-          WHISPER_MODEL: 'base'
+          WHISPER_MODEL: 'small'
           ASR_MIN_MATCH_RATIO: '0.82'
           MIN_TTS_AUDIO_SCORE: '0.78'
           SILMA_FALLBACK_TO_EDGE: 'true'

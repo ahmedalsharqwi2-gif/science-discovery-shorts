@@ -178,35 +178,53 @@ class VoiceGenerator:
         )
         log.info("Edge TTS pitch normalized to %s", safe_pitch)
         
-        async def _generate():
+        async def _generate(target: Path, selected_voice: str, selected_rate: str):
             try:
                 communicate = edge_tts.Communicate(
                     text=spoken_text,
-                    voice=voice,
-                    rate=rate,
+                    voice=selected_voice,
+                    rate=selected_rate,
                     pitch=safe_pitch,
                 )
-                await communicate.save(str(output_path))
+                await communicate.save(str(target))
                 return True
             except Exception as e:
-                log.error(f"Edge TTS generation failed: {e}")
+                log.error("Edge TTS generation failed for %s: %s", selected_voice, e)
                 return False
-        
+
+        # A single Edge voice can produce an intelligible file that Whisper
+        # recognizes poorly. Try a bounded, deterministic set of Arabic
+        # voices/rates and keep the best candidate; never lower the ASR gate.
+        configured = [item.strip() for item in os.getenv("EDGE_TTS_VOICES", "").split(",") if item.strip()]
+        candidates = list(dict.fromkeys([voice, *configured, "ar-SA-HamedNeural", "ar-SA-ZariyahNeural"]))
+        max_attempts = max(1, int(os.getenv("EDGE_TTS_MAX_ATTEMPTS", "3")))
+        candidates = candidates[:max_attempts]
+        rates = [rate, os.getenv("EDGE_TTS_RETRY_RATE", "-8%")]
+        minimum_score = float(os.getenv("MIN_TTS_AUDIO_SCORE", "0.78"))
+        best: tuple[float, Path, list[str], str] | None = None
         try:
-            result = asyncio.run(_generate())
-            if result:
-                # Check quality
-                score, audio_issues = self.quality_checker.check_audio_quality(output_path, spoken_text)
-                minimum_score = float(os.getenv("MIN_TTS_AUDIO_SCORE", "0.78"))
-                if score < minimum_score:
-                    return False, f"TTS quality score {score:.2f} is below required {minimum_score:.2f}: {audio_issues}"
-                if audio_issues:
-                    return True, f"Generated with warnings: {audio_issues[0]}"
-                return True, "Successfully generated"
-            else:
-                return False, "Edge TTS generation failed"
+            for index, selected_voice in enumerate(candidates):
+                selected_rate = rates[min(index, len(rates) - 1)]
+                candidate_path = output_path.with_name(f"{output_path.stem}.edge_try{index}{output_path.suffix}")
+                candidate_path.unlink(missing_ok=True)
+                if not asyncio.run(_generate(candidate_path, selected_voice, selected_rate)):
+                    continue
+                score, audio_issues = self.quality_checker.check_audio_quality(candidate_path, spoken_text)
+                log.info("Edge TTS candidate %s (%s, %s): score=%.2f issues=%s", index + 1, selected_voice, selected_rate, score, audio_issues)
+                if best is None or score > best[0]:
+                    best = (score, candidate_path, audio_issues, selected_voice)
+                if score >= minimum_score and not audio_issues:
+                    candidate_path.replace(output_path)
+                    return True, f"Generated with Edge TTS ({selected_voice}, {selected_rate})"
+            if best is not None:
+                best[1].replace(output_path)
+                return False, f"All Edge TTS candidates failed ASR; best={best[0]:.2f} ({best[3]}): {best[2]}"
+            return False, "Edge TTS generation failed for all candidates"
         except Exception as e:
             return False, str(e)
+        finally:
+            for candidate in output_path.parent.glob(f"{output_path.stem}.edge_try*{output_path.suffix}"):
+                candidate.unlink(missing_ok=True)
 
     def generate(
         self,

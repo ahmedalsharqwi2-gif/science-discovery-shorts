@@ -16,6 +16,7 @@ import os
 import unicodedata
 from pathlib import Path
 from dataclasses import dataclass
+from arabic_speech_core.normalize import prepare_text
 from typing import List, Optional, Dict, Tuple
 
 log = logging.getLogger("pipeline")
@@ -24,9 +25,15 @@ ASR_MIN_MATCH_RATIO = float(os.getenv("ASR_MIN_MATCH_RATIO", "0.82"))
 
 
 def _arabic_words(text: str) -> list[str]:
-    text = re.sub(r"[\u0610-\u061A\u064B-\u065F\u0670]", "", text or "")
-    text = re.sub(r"[^\w\u0600-\u06FF]+", " ", text, flags=re.UNICODE)
-    return [word.lower() for word in text.split() if word]
+    """Return comparable Arabic tokens, not raw orthographic spellings.
+
+    Whisper and Edge may differ on hamza/alef forms, alef-maqsura, tatweel,
+    and diacritics. Comparing raw tokens turns a readable recording into a
+    false ASR failure, especially on long Arabic narrations.
+    """
+    normalized = prepare_text(text or "").align_text
+    normalized = re.sub(r"[^\w\u0600-\u06FF]+", " ", normalized, flags=re.UNICODE)
+    return [word.casefold() for word in normalized.split() if word]
 
 
 @dataclass

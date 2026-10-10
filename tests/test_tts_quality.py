@@ -88,6 +88,11 @@ class NarrationTextQualityTests(unittest.TestCase):
         cleaned = enforce_text_quality("هذه جملة عربية سليمة بدون تشكيل")
         self.assertIn("بدون", cleaned)
 
+    def test_asr_word_normalization_handles_common_arabic_variants(self):
+        from arabic_tts_quality_checker import _arabic_words
+        self.assertEqual(_arabic_words("أَنْمَلَةٌ، مُدَّةٌ"), ["انملة", "مدة"])
+        self.assertEqual(_arabic_words("انملة مدة"), ["انملة", "مدة"])
+
     def test_special_character_report_does_not_crash(self):
         checker = ArabicTTSQualityChecker()
         score, issues, warnings = checker.check_text_quality("نص عربي @ $ % &")
