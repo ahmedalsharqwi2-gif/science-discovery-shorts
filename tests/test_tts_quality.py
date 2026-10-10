@@ -62,6 +62,28 @@ class NarrationTextQualityTests(unittest.TestCase):
         self.assertEqual(normalize_edge_pitch("7"), "+7Hz")
         self.assertEqual(normalize_edge_pitch("invalid"), "+0Hz")
 
+    @patch("arabic_tts_quality_checker.subprocess.run")
+    def test_low_asr_match_is_a_publish_blocker(self, run):
+        fake_result = type("Result", (), {"stdout": "10.0"})()
+        run.return_value = fake_result
+        fake_segment = type("Segment", (), {"text": "كلمة واحدة"})()
+        fake_model = type("FakeModel", (), {"__init__": lambda self, *args, **kwargs: None, "transcribe": lambda self, *args, **kwargs: ([fake_segment], None)})
+        fake_whisper = type("FakeWhisper", (), {"WhisperModel": fake_model})
+        fake_wavfile = type("FakeWavfile", (), {"read": staticmethod(lambda *args: (16000, [0] * 160000))})
+        fake_scipy_io = type("FakeScipyIo", (), {"wavfile": fake_wavfile})
+        fake_scipy = type("FakeScipy", (), {"io": fake_scipy_io})
+        with patch.dict("sys.modules", {
+            "faster_whisper": fake_whisper,
+            "scipy": fake_scipy,
+            "scipy.io": fake_scipy_io,
+            "scipy.io.wavfile": fake_wavfile,
+        }), patch.object(Path, "exists", return_value=True):
+            score, issues = ArabicTTSQualityChecker().check_audio_quality(
+                Path("sample.mp3"), " ".join(["كلمة"] * 10)
+            )
+        self.assertLess(score, 1.0)
+        self.assertTrue(any("تطابق النطق العربي منخفض" in issue for issue in issues))
+
     def test_missing_tashkeel_is_warning_not_fatal(self):
         cleaned = enforce_text_quality("هذه جملة عربية سليمة بدون تشكيل")
         self.assertIn("بدون", cleaned)

@@ -7,6 +7,16 @@ from scripts.publish_content import build_social_description
 
 
 class CurrentContentOutputTests(unittest.TestCase):
+    def test_narration_normalization_drops_visual_and_subtitle_metadata(self):
+        raw = '["voiceover": "هذه الجملة المنطوقة.", "visual": "لقطة مختبر", "subtitle": "تعليمات"]'
+        self.assertEqual(normalize_narration_response(raw), "هذه الجملة المنطوقة.")
+
+    def test_narration_normalization_rejects_visual_only_payload(self):
+        self.assertEqual(
+            normalize_narration_response('{"visual": "لقطة مختبر", "subtitle": "نص"}'),
+            "",
+        )
+
     def test_narration_normalization_extracts_json_payload(self):
         raw = json.dumps({"narration": "هذه حقيقة علمية موثقة."}, ensure_ascii=False)
         self.assertEqual(normalize_narration_response(raw), "هذه حقيقة علمية موثقة.")

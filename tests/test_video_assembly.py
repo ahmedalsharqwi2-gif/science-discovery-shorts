@@ -29,7 +29,7 @@ class VideoAssemblyTests(unittest.TestCase):
                 path,
             )
             text = path.read_text(encoding="utf-8")
-            self.assertEqual(text.count("Dialogue:"), 7)
+            self.assertEqual(text.count("Dialogue:"), 2)
             self.assertNotIn(r"\N", text)
             self.assertIn("واحد", text)
             self.assertIn("اثنان", text)
@@ -61,7 +61,7 @@ class VideoAssemblyTests(unittest.TestCase):
             )
             text = path.read_text(encoding="utf-8")
         align.assert_called_once()
-        self.assertEqual(text.count("Dialogue:"), 8)
+        self.assertEqual(text.count("Dialogue:"), 2)
         self.assertNotIn(r"\N", text)
         self.assertIn("خمسة", text)
         self.assertIn("ستة", text)

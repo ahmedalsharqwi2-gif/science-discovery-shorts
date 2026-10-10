@@ -729,19 +729,19 @@ def write_captions(events: list[dict], path: Path, cfg: dict, *, illustrative=Fa
             chunk = tokens[chunk_start:chunk_start + 4]
             chunk_begin = start_time + total * chunk_start / len(tokens)
             chunk_end = end_time if chunk_start + len(chunk) >= len(tokens) else start_time + total * (chunk_start + len(chunk)) / len(tokens)
-            for active_index in range(len(chunk)):
-                word_start = chunk_begin + (chunk_end - chunk_begin) * active_index / len(chunk)
-                word_end = chunk_end if active_index == len(chunk) - 1 else chunk_begin + (chunk_end - chunk_begin) * (active_index + 1) / len(chunk)
-                display_chunk = list(reversed(chunk))
-                display_active = len(chunk) - 1 - active_index
-                rendered = []
-                for index, token in enumerate(display_chunk):
-                    if index == display_active:
-                        rendered.append(r"{\c&H000000FF&}" + token + r"{\c&H00FFFFFF&}")
-                    else:
-                        rendered.append(token)
-                text = " ".join(rendered)
-                lines.append(f"Dialogue: 0,{ass_time(word_start)},{ass_time(max(word_end, word_start + 0.04))},Caption,,0,0,0,,{{\\fad(40,60)}}{text}")
+            # Keep the chunk on screen for its full spoken interval. One
+            # Dialogue event per active word duplicates the same caption and
+            # causes rapid flashing when the cinematic track is burned in.
+            display_chunk = list(reversed(chunk))
+            display_active = len(chunk) - 1
+            rendered = []
+            for index, token in enumerate(display_chunk):
+                if index == display_active:
+                    rendered.append(r"{\c&H000000FF&}" + token + r"{\c&H00FFFFFF&}")
+                else:
+                    rendered.append(token)
+            text = " ".join(rendered)
+            lines.append(f"Dialogue: 0,{ass_time(chunk_begin)},{ass_time(max(chunk_end, chunk_begin + 0.12))},Caption,,0,0,0,,{{\\fad(40,60)}}{text}")
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 def mix_audio(voice: Path, clean_video: Path, output: Path, duration: float, cfg: dict, scenes: list[dict], root: Path) -> None:

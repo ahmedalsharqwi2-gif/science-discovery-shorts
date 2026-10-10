@@ -160,6 +160,28 @@ def trim_to_complete_sentence(text: str, max_words: int, min_words: int) -> str 
     return None
 
 
+def _extract_spoken_field(text: str) -> str | None:
+    """Extract only the spoken field from leaked production metadata.
+
+    Some model responses echo a storyboard object such as
+    ``voiceover: ... visual: ... subtitle: ...``. Passing that object to TTS
+    makes labels and visual instructions appear in the narration/captions.
+    """
+    fields = r"(?:narration|voiceover|script|text)"
+    next_fields = r"(?:visual|subtitle|caption|scene)"
+    match = re.search(
+        rf"[\"']?{fields}[\"']?\s*:\s*[\"']?(.*?)(?=\s*[\"']?{next_fields}[\"']?\s*:|$)",
+        text,
+        flags=re.IGNORECASE | re.DOTALL,
+    )
+    if match:
+        value = match.group(1).strip().strip('\"\' ,]}')
+        return value or None
+    if re.search(rf"[\"']?{next_fields}[\"']?\s*:", text, flags=re.IGNORECASE):
+        return None
+    return text
+
+
 def normalize_narration_response(response: str) -> str:
     """Extract narration text and remove transport wrappers from model output."""
     text = re.sub(r"```(?:json|markdown|text)?", "", response or "", flags=re.IGNORECASE)
@@ -183,6 +205,10 @@ def normalize_narration_response(response: str) -> str:
             text = re.sub(r'^\s*(?:نص السرد|النص|NARRATION|narration)\s*:\s*', '', text, flags=re.IGNORECASE)
     # Decode escaped Unicode left by malformed or double-encoded wrappers.
     text = re.sub(r"\\u([0-9A-Fa-f]{4})", lambda match: chr(int(match.group(1), 16)), text)
+    extracted = _extract_spoken_field(text)
+    if extracted is None:
+        return ""
+    text = extracted
     text = text.replace("\\n", "\n").replace("\\t", " ").replace('\\"', '"')
     # Models occasionally emit bidi/control marks or decorative Unicode that
     # is harmless visually but makes the strict Arabic quality gate fail.
@@ -306,7 +332,7 @@ class ContentGenerator:
 - عند ذكر رقم أو تاريخ أو سرعة أو نسبة أو جرعة أو عمر، يجب أن يكون قابلًا للإسناد
 - في الطب: معلومات عامة فقط، بلا تشخيص أو علاج شخصي أو جرعات
         - قدم سؤالًا واحدًا محددًا، ثم تفسيره بأمثلة بصرية مرتبطة، ثم إجابة مكتملة أو حدود ما نعرفه. صمم النص لفيديو عمودي من تسعين إلى مئة وثمانين ثانية، ولا تضغط مقالًا طويلًا أو تنهِ الفيديو بوعد معلومة مؤجلة
-        - اجعل كل جملة تحمل معلومة واحدة قابلة للعرض بصرياً، واربطها ذهنيًا بمشهد محدد؛ القاعدة الإلزامية Voiceover → Visual → Subtitle
+        - اجعل كل جملة تحمل معلومة واحدة قابلة للعرض بصرياً، واربطها ذهنيًا بمشهد محدد. أخرج السرد المنطوق فقط دون أسماء حقول أو تعليمات إنتاج.
         - لا تستخدم فيديو فضاء عامًا فوق معلومات مختلفة؛ غيّر اللقطة مع تغير الفكرة، واجعل الشمس للشمس والدماغ للدماغ وDNA للجينات والمحيط للمحيط
         - إذا كان المشهد محاكاة أو تصورًا فنيًا أو Artist's Impression أو Illustration فلا تقدمه كصورة حقيقية، واذكر طبيعته عند الحاجة
         - اتبع إيقاع mystery-documentary المرجعي: خطاف أولًا، ثم دليل/شرح، ثم نقطة تحول أو مفارقة، ثم احتمالان أو ثلاثة بصياغة علمية غير جازمة، ثم خاتمة مكتملة. اجعل التغيير البصري كل 3-8 ثوانٍ.

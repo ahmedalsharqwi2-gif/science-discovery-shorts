@@ -184,13 +184,13 @@ def write_ass_subtitles(text: str, duration: float, ass_path: Path, audio_path: 
         if end <= start:
             end = min(duration, start + 0.25)
         words = [e["text"] for e in group]
-        for active_index in range(len(words)):
-            word_start = max(0.0, group[active_index]["offset"])
-            word_end = min(duration, group[active_index]["offset"] + group[active_index]["duration"])
-            lines.append(
-                f"Dialogue: 0,{_ass_time(word_start)},{_ass_time(max(word_end, word_start + 0.12))},Caption,,0,0,0,,"
-                f"{_rtl_ass_line(_caption_text(words, active_index))}"
-            )
+        # Render one stable event for the whole chunk. Re-emitting the same
+        # chunk once per highlighted word makes libass flash the caption and
+        # can make the spoken track appear unnaturally fast.
+        lines.append(
+            f"Dialogue: 0,{_ass_time(start)},{_ass_time(max(end, start + 0.12))},Caption,,0,0,0,,"
+            f"{_rtl_ass_line(_caption_text(words, 0))}"
+        )
     ass_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 

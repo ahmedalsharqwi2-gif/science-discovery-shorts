@@ -183,13 +183,14 @@ class ArabicTTSQualityChecker:
                 ratio = matched / len(expected)
                 log.info("Arabic ASR match: %d/%d (%.1f%%)", matched, len(expected), ratio * 100)
                 if ratio < ASR_MIN_MATCH_RATIO:
-                    # Whisper can under-recognize Arabic, especially with
-                    # SILMA/Edge voices and long scripts. Keep the diagnostic
-                    # visible, but do not block a valid non-empty audio file.
-                    warnings.append(
+                    # A low match means the audio can no longer be trusted to
+                    # carry the narration/caption text. This is a publish
+                    # blocker, not a cosmetic warning: otherwise a 57% match
+                    # could pass and produce misleading subtitles.
+                    issues.append(
                         f"تطابق النطق العربي منخفض: {ratio:.1%}، المطلوب {ASR_MIN_MATCH_RATIO:.1%}"
                     )
-                    score *= 0.85
+                    score *= 0.5
 
         except Exception as e:
             log.error(f"Error checking audio duration: {e}")
