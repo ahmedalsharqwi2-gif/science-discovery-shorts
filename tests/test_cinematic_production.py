@@ -153,7 +153,7 @@ class CinematicTests(unittest.TestCase):
         content=path.read_text()
         self.assertIn(',8,90,120,300,1',content)
         self.assertIn('حضارة',content)
-        self.assertIn(r'\c&H003539E5&',content)
+        self.assertIn(r'\c&H000000FF&',content)
         self.assertNotIn('محاكاة توضيحية', content)
         self.assertNotIn('مشاهد توضيحية', content)
 

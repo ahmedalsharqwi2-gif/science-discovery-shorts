@@ -581,33 +581,35 @@ def acquire(scene: dict, episode: dict, cfg: dict, budget: Budget, cache: Path) 
 
 
 def write_captions(events: list[dict], path: Path, cfg: dict, *, illustrative=False) -> None:
-    """Render readable captions with the red word locked to the spoken timeline.
-
-    Each source event is split into word-sized overlay updates.  The complete
-    caption remains visible while only the word whose measured interval is
-    active turns red; never choose a word by length or position.
-    """
+    """Write clean RTL captions: one line, at most four words, active word red."""
     header = ("[Script Info]\nScriptType: v4.00+\n" f"PlayResX: {cfg['width']}\nPlayResY: {cfg['height']}\nWrapStyle: 2\nScaledBorderAndShadow: yes\n\n"
         "[V4+ Styles]\nFormat: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding\n"
         "Style: Caption,Noto Sans Arabic,58,&H00FFFFFF,&H00FFFFFF,&H0010182B,&HAA000000,1,0,0,0,100,100,0,0,1,4,1,8,90,120,300,1\n\n"
         "[Events]\nFormat: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\n")
     lines = [header]
     for event in events:
-        tokens = [token.replace("\\", "").replace("{", "").replace("}", "") for token in event["text"].split()]
+        tokens = [re.sub(r"[\u061c\u200e\u200f\u202a-\u202e\u2066-\u2069]", "", token).replace("\\", "").replace("{", "").replace("}", "") for token in event["text"].split()]
+        tokens = [token for token in tokens if token]
         if not tokens:
             continue
-        start, end = float(event["start"]), float(event["end"])
-        step = max((end - start) / len(tokens), 0.04)
-        for index, _ in enumerate(tokens):
-            word_start = start + index * (end - start) / len(tokens)
-            word_end = end if index == len(tokens) - 1 else start + (index + 1) * (end - start) / len(tokens)
-            rendered = []
-            for current, token in enumerate(tokens):
-                rendered.append((r"{\c&H003539E5&}" if current == index else "") + token + (r"{\c&H00FFFFFF&}" if current == index else ""))
-            text = " ".join(rendered)
-            lines.append(f"Dialogue: 0,{ass_time(word_start)},{ass_time(max(word_end, word_start + step))},Caption,,0,0,0,,{{\\fad(40,60)}}{text}")
+        start_time, end_time = float(event["start"]), float(event["end"])
+        total = max(end_time - start_time, 0.04)
+        for chunk_start in range(0, len(tokens), 4):
+            chunk = tokens[chunk_start:chunk_start + 4]
+            chunk_begin = start_time + total * chunk_start / len(tokens)
+            chunk_end = end_time if chunk_start + len(chunk) >= len(tokens) else start_time + total * (chunk_start + len(chunk)) / len(tokens)
+            for active_index in range(len(chunk)):
+                word_start = chunk_begin + (chunk_end - chunk_begin) * active_index / len(chunk)
+                word_end = chunk_end if active_index == len(chunk) - 1 else chunk_begin + (chunk_end - chunk_begin) * (active_index + 1) / len(chunk)
+                rendered = []
+                for index, token in enumerate(chunk):
+                    if index == active_index:
+                        rendered.append(r"{\c&H000000FF&}" + token + r"{\c&H00FFFFFF&}")
+                    else:
+                        rendered.append(token)
+                text = " ".join(rendered)
+                lines.append(f"Dialogue: 0,{ass_time(word_start)},{ass_time(max(word_end, word_start + 0.04))},Caption,,0,0,0,,{{\\fad(40,60)}}{text}")
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
-
 
 def mix_audio(voice: Path, clean_video: Path, output: Path, duration: float, cfg: dict, scenes: list[dict], root: Path) -> None:
     from scripts.media_audio import add_topic_soundtrack, ducking_filters
