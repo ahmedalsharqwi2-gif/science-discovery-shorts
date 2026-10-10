@@ -716,18 +716,18 @@ def candidates(scene: dict, cfg: dict):
         seen.add(identity)
         return True
 
-    if key and scene.get("kind") == "stock":
+    if key:
         # Match the other repositories: footage is reserved for designated stock slots.
         # Landscape clips remain eligible because they are safely center-cropped to 9:16.
         for query in queries:
             try:
                 response = requests.get("https://api.pexels.com/videos/search", headers={"Authorization": key},
-                    params={"query": query, "size": "large", "per_page": 5}, timeout=(10, 20))
+                    params={"query": query, "size": "large", "per_page": 12}, timeout=(10, 20))
                 response.raise_for_status()
                 payload = response.json()
                 if not isinstance(payload, dict):
                     raise ValueError("Pexels returned a non-object video response")
-                for video in payload.get("videos", [])[:3]:
+                for video in payload.get("videos", [])[:8]:
                     files = [f for f in video.get("video_files", [])
                              if f.get("link") and f.get("width", 0) >= 540 and f.get("height", 0) >= 540]
                     if not files:
