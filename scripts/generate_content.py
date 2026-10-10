@@ -67,7 +67,7 @@ TOPIC_PERFORMANCE_FILE = Path(os.getenv("TOPIC_PERFORMANCE_FILE", "topic_perform
 
 
 # Six engineering reels alternate with six nature reels; durable history resumes the pilot.
-ENGINEERING_PILOT_TOPICS = ('لماذا تستخدم صناعة الطائرات الحربية التيتانيوم والمواد المركبة؟', 'كيف ترى بعض الأسماك في ظلام الأعماق؟', 'كيف يصنع المحرك النفاث قوة الدفع؟', 'لماذا يقف النحام على ساق واحدة؟', 'كيف تطفو حاملة طائرات رغم وزنها الهائل؟', 'كيف تتواصل النملات من دون كلام؟', 'لماذا يبدأ بناء السفن العملاقة في وحدات منفصلة؟', 'كيف تحمي الشعاب المرجانية السواحل؟', 'كيف تتحكم خزانات الغواصة في الطفو والغوص؟', 'كيف يلتصق الوزغ بالجدران؟', 'كيف يقاوم هيكل الغواصة ضغط الماء؟', 'لماذا تصنع بعض الكائنات ضوءها الخاص؟')
+ENGINEERING_PILOT_TOPICS = ('لماذا تستخدم صناعة الطائرات الحربية التيتانيوم والمواد المركبة؟', 'كيف ترى بعض الأسماك في ظلام الأعماق؟', 'كيف يصنع المحرك النفاث قوة الدفع؟', 'لماذا يقف النحام على ساق واحدة؟', 'كيف تطفو حاملة طائرات رغم وزنها الهائل؟', 'كيف يتواصل النمل من دون كلام؟', 'لماذا يبدأ بناء السفن العملاقة في وحدات منفصلة؟', 'كيف تحمي الشعاب المرجانية السواحل؟', 'كيف تتحكم خزانات الغواصة في الطفو والغوص؟', 'كيف يلتصق الوزغ بالجدران؟', 'كيف يقاوم هيكل الغواصة ضغط الماء؟', 'لماذا تصنع بعض الكائنات ضوءها الخاص؟')
 
 
 def select_engineering_pilot(history: list[dict]) -> str | None:
@@ -215,6 +215,12 @@ def normalize_narration_response(response: str) -> str:
     text = re.sub(r"[\u200b-\u200f\u202a-\u202e\ufeff]", "", text)
     text = re.sub(r"[^\u0621-\u06FF\s.!؟؛،0-9()\[\]«»:\"'\-A-Za-z]", " ", text)
     text = re.sub(r"[*_`]", "", text)
+    # Never let production-field labels leak into the spoken track. The
+    # narration contract is Arabic speech only; these are transport metadata.
+    text = re.sub(r"\b(?:story|voiceover|visual|subtitle|caption|scene|shot|script|narration)\b", " ", text, flags=re.IGNORECASE)
+    # Use the Arabic collective noun for ants in generic science narration.
+    text = re.sub(r"(?<!\w)(?:النملات|نملات)(?!\w)", "النمل", text)
+    text = re.sub(r"[ \t]+", " ", text).strip()
     return text.strip().strip('"«»')
 
 

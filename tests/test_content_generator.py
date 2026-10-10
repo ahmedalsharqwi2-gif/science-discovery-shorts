@@ -59,6 +59,14 @@ class ContentGeneratorTopicPolicyTests(unittest.TestCase):
         self.assertIn(EDITORIAL_SAFETY_BOUNDARY, prompt)
         self.assertIn("لا تمجّد العنف", prompt)
 
+    def test_narration_removes_production_labels_and_normalizes_ant_collective(self):
+        from scripts.generate_content import normalize_narration_response
+        result = normalize_narration_response("STORY: كيف تتواصل النملات؟ Voiceover: النملات تستخدم إشارات.")
+        self.assertNotIn("STORY", result.upper())
+        self.assertNotIn("VOICEOVER", result.upper())
+        self.assertIn("النمل", result)
+        self.assertNotIn("النملات", result)
+
 
 if __name__ == "__main__":
     unittest.main()

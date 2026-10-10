@@ -732,8 +732,10 @@ def write_captions(events: list[dict], path: Path, cfg: dict, *, illustrative=Fa
             # Keep the chunk on screen for its full spoken interval. One
             # Dialogue event per active word duplicates the same caption and
             # causes rapid flashing when the cinematic track is burned in.
-            display_chunk = list(reversed(chunk))
-            display_active = len(chunk) - 1
+            # Keep source order. libass applies Arabic bidi/shaping; reversing
+            # tokens here renders the sentence right-to-left twice.
+            display_chunk = chunk
+            display_active = 0
             rendered = []
             for index, token in enumerate(display_chunk):
                 if index == display_active:

@@ -64,9 +64,8 @@ def _caption_words(words: list[str]) -> list[str]:
 
 def _caption_text(words: list[str], active_index: int | None = None) -> str:
     clean = _caption_words(words)
-    if active_index is not None:
-        active_index = len(clean) - 1 - active_index
-        clean = list(reversed(clean))
+    if active_index is not None and clean:
+        active_index = min(max(active_index, 0), len(clean) - 1)
     rendered = []
     for index, word in enumerate(clean):
         if active_index is not None and index == active_index:

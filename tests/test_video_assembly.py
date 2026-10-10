@@ -15,10 +15,10 @@ class VideoAssemblyTests(unittest.TestCase):
         self.assertNotIn("\u200e", caption)
         self.assertEqual(caption, "هذا نص عربي سليم")
 
-    def test_active_arabic_caption_reverses_display_tokens_for_libass_rtl(self):
+    def test_active_arabic_caption_preserves_logical_source_order(self):
         caption = _caption_text("الدم داخل الأوعية بسرعة".split(), active_index=0)
-        self.assertTrue(caption.startswith("بسرعة الأوعية داخل "))
-        self.assertIn(r"{\c&H000000FF&}الدم", caption)
+        self.assertTrue(caption.startswith(r"{\c&H000000FF&}الدم"))
+        self.assertIn("الدم داخل الأوعية بسرعة", caption.replace(r"{\c&H000000FF&}", "").replace(r"{\c&H00FFFFFF&}", ""))
 
     def test_subtitles_use_four_word_one_line_active_blocks(self):
         with tempfile.TemporaryDirectory() as directory:
