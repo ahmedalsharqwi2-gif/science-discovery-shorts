@@ -124,17 +124,17 @@ def write_ass(events: list[dict[str, Any]], output: Path) -> None:
         text = re.sub(r"[\u064b-\u065f\u0670\u06d6-\u06ed]", "", text)
         text = re.sub(r'''[.,،؛:!?؟…/\\\-—_()\[\]{}"«»]+''', " ", text)
         tokens = text.split()
-        highlight_keys = {normalize_match_word(word) for word in event.get("highlight_words", [])[:2]}
-        styled = []
-        for token in tokens:
-            safe = ass_escape(token)
-            if normalize_match_word(token) in highlight_keys:
-                safe = r"{\c&H000000FF&}" + safe + r"{\c}"
-            styled.append(safe)
-        if len(tokens) > 4:
-            raise ValueError("Caption event exceeds the four-word one-line limit")
-        rendered = " ".join(styled)
-        lines.append(f"Dialogue: 0,{ass_time(event['start'])},{ass_time(event['end'])},Caption,,0,0,0,,{{\\fad(120,150)}}{rendered}")
+        start, end = float(event["start"]), float(event["end"])
+        for offset in range(0, len(tokens), 4):
+            chunk = tokens[offset:offset + 4]
+            chunk_start = start + (end - start) * offset / len(tokens)
+            chunk_end = end if offset + len(chunk) >= len(tokens) else start + (end - start) * (offset + len(chunk)) / len(tokens)
+            for active in range(len(chunk)):
+                word_start = chunk_start + (chunk_end - chunk_start) * active / len(chunk)
+                word_end = chunk_end if active == len(chunk) - 1 else chunk_start + (chunk_end - chunk_start) * (active + 1) / len(chunk)
+                rendered = [r"{\c&H000000FF&}" + ass_escape(token) + r"{\c}" if index == active else ass_escape(token) for index, token in enumerate(chunk)]
+                text = " ".join(rendered)
+                lines.append(f"Dialogue: 0,{ass_time(word_start)},{ass_time(max(word_end, word_start + 0.04))},Caption,,0,0,0,,{{\\fad(120,150)}}{text}")
     output.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
