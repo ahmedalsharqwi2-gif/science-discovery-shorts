@@ -893,12 +893,13 @@
       "title": "كيف تتواصل النملات من دون كلام؟",
       "hook": "story\": \"هَلْ سَأَلْتَ نَفْسَكَ يَوْمًا كَيْفَ تَتَوَاصَلُ النَّمْلَاتُ دُونَ صَوْتٍ أَوْ كَلَامٍ فِي عَطَمَةِ الأَرْضِ؟ تَتَحَرَّكُ الحَشَرَاتُ فِي الطَّبِيعَةِ بِالتَّنَاسُقِ التَّامِّ وَكَأَنَّهَا عَقْلٌ وَاحِدٌ يَتَقَسَّمُ عَلَى آلَافِ الأَجْسَامِ. تُثْبِتُ الأَدِلَّةُ البَيُولُوجِيَّةُ أَنَّ هَذَا التَّوَاصُلَ يَعْتَمِدُ",
       "region": "",
-      "status": "reserved",
+      "status": "published",
       "source": "science-pipeline",
       "reservation_id": "8fc91574aa264ebfa864a802d0b6c0ad",
       "reserved_at": "2026-10-10T03:12:23Z",
       "run_id": "38018476965",
-      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts",
+      "published_at": "2026-10-10T03:12:31Z"
     }
   ]
 }
