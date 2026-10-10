@@ -628,7 +628,12 @@ def acquire(scene: dict, episode: dict, cfg: dict, budget: Budget, cache: Path) 
     errors = []
     # Stock slots try at most two actual sources; every candidate still gets reviewed.
     options = candidates(scene, cfg) if cfg.get("free_only", True) or scene["kind"] == "stock" else iter(())
-    models = [] if cfg.get("free_only", True) else list(dict.fromkeys([cfg["image_model"], cfg["image_fallback_model"]]))
+    # Free-only means no paid video. Production may explicitly enable the
+    # configured free image fallback after stock candidates are rejected;
+    # keep it opt-in so a bare asset-search failure remains diagnosable.
+    image_fallback_enabled = os.getenv("CINEMATIC_IMAGE_FALLBACK_ENABLED", "false").lower() == "true"
+    models = (list(dict.fromkeys([cfg["image_model"], cfg["image_fallback_model"]]))
+              if image_fallback_enabled else [])
     candidate_count = 0
     for attempt in itertools.chain(options, ({"model": model, "image": True, "source": "generated_image", "license": "AI illustration"} for model in models if model)):
         candidate_count += 1
