@@ -921,11 +921,23 @@
       "region": "",
       "status": "published",
       "source": "science-pipeline",
-      "reservation_id": "01de6e47713a4a3ba5b26f9e8999f7be",
       "reserved_at": "2026-10-10T05:18:29Z",
+      "published_at": "2026-10-10T05:18:35Z",
       "run_id": "38026676183",
-      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts",
-      "published_at": "2026-10-10T05:18:35Z"
+      "reservation_id": "01de6e47713a4a3ba5b26f9e8999f7be",
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
+    },
+    {
+      "id": "3f73da12166f826eeea2",
+      "title": "كيف تتحكم خزانات الغواصة في الطفو والغوص؟",
+      "hook": "كيف تنزلق أُعْضُوَةُ الحديد الضخمة في عمق المحيط الثقيل ثم تعود لتطفو فوق السطح بكل هدوء؟ تعتمد الغواصات على حقيقة فيزيائية مثبتة تتمثل في تغيير الوزن الإجمالي للهيكل بين الكتلة والحجم وفقاً لمبدأ أرخميدس لقوى",
+      "region": "",
+      "status": "reserved",
+      "source": "science-pipeline",
+      "reservation_id": "a9b4916004d249e19b6a7019101214bc",
+      "reserved_at": "2026-10-10T06:38:47Z",
+      "run_id": "38031149505",
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
     }
   ]
 }
