@@ -908,11 +908,23 @@
       "region": "",
       "status": "published",
       "source": "science-pipeline",
-      "reservation_id": "dff96bf35c054eefa01635feb71cd8a4",
       "reserved_at": "2026-10-10T04:07:17Z",
+      "published_at": "2026-10-10T04:07:23Z",
       "run_id": "38022392663",
-      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts",
-      "published_at": "2026-10-10T04:07:23Z"
+      "reservation_id": "dff96bf35c054eefa01635feb71cd8a4",
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
+    },
+    {
+      "id": "dbb218905da5dc998db6",
+      "title": "كيف تحمي الشعاب المرجانية السواحل؟",
+      "hook": "هَلْ تَعْلَمُ أَنَّ هَذِهِ الحَاجِزَةَ الصَّخْرِيَّةَ المَتَمَثِّلَةَ فِي الشِّعَابِ المَرْجَانِيَّةِ تَحْمِي الشَّوَاطِئَ بِفَعَالِيَّةٍ مُدْهِشَةٍ؟ هَذِهِ حَقِيقَةٌ عِلْمِيَّةٌ مُثْبَتَةٌ بَالقِيَاسَاتِ المَيْدَانِيَّةِ الدَّقِيقَةِ وَصُورِ الأَقْمَارِ الصِّنَاعِيَّةِ الحَدِيثَةِ. كَيْفَ تُوَاجِهُ هَذِهِ الكَائِنَاتُ الحَيَّةُ هَجَمَاتِ الأَمْوَاجِ العَاتِيَةِ كُلَّ يَوْمٍ",
+      "region": "",
+      "status": "reserved",
+      "source": "science-pipeline",
+      "reservation_id": "01de6e47713a4a3ba5b26f9e8999f7be",
+      "reserved_at": "2026-10-10T05:18:29Z",
+      "run_id": "38026676183",
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
     }
   ]
 }
