@@ -373,7 +373,7 @@ class ContentGenerator:
                     )
                 response = llm_chat(
                     [{"role": "user", "content": request}],
-                    max_tokens=int(os.getenv("LLM_MAX_COMPLETION_TOKENS", "512")),
+                    max_tokens=max(2048, int(os.getenv("LLM_MAX_COMPLETION_TOKENS", "2048"))),
                 )
                 narration = normalize_narration_response(response)
 
