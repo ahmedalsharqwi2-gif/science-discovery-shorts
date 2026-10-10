@@ -235,7 +235,6 @@ jobs:
           # --- TTS ---
           TTS_ENGINE: "edge"
           # Hamed has clearer connected Arabic phonemes for scientific terms.
-          EDGE_TTS_VOICES: "ar-SA-HamedNeural"
           EDGE_TTS_VOICE: "ar-SA-HamedNeural"
           EDGE_TTS_VOICES: "ar-SA-HamedNeural,ar-SA-ZariyahNeural,ar-SA-AmmarNeural"
           EDGE_TTS_MAX_ATTEMPTS: '3'
