@@ -18,7 +18,7 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y ffmpeg
-          python -m pip install requests numpy google-genai edge-tts google-auth google-api-python-client pyyaml
+          python -m pip install requests numpy google-genai edge-tts google-auth google-api-python-client pyyaml pillow
       - name: Validate workflows and Python syntax
         run: |
           python -c "import yaml; from pathlib import Path; [yaml.safe_load(p.read_text()) for p in Path('.github/workflows').glob('*.yml')]"

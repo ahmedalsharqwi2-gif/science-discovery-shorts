@@ -142,6 +142,52 @@ class CinematicTests(unittest.TestCase):
         self.assertTrue(report['pexels_key_configured'])
         self.assertEqual(report['attempts'][0]['error_type'],'NoCandidates')
 
+    def test_buoyancy_scene_gets_a_local_vector_illustration_after_search_exhaustion(self):
+        scene={'id':'scene_010','start':0,'end':3,'motion':'zoom_in',
+               'query':'upward buoyant force physics diagram',
+               'text':'يدفع الماء الجسم بقوة الطفو إلى الأعلى'}
+        image=self.root/'buoyancy.png'
+        self.assertTrue(cp._write_buoyancy_diagram(scene,image,self.cfg))
+        from PIL import Image
+        with Image.open(image) as rendered:
+            self.assertEqual(rendered.size,(self.cfg['width'],self.cfg['height']))
+            self.assertGreater(len(rendered.convert('RGB').getcolors(maxcolors=1000000) or []),10)
+        with (
+            patch.object(cp,'candidates',return_value=iter([])),
+            patch.object(cp,'render_visual',side_effect=lambda source,out,*a,**k: out.write_bytes(b'reviewable-video')),
+            patch.object(cp,'review_visual',return_value={'passed':True,'reason':'literal buoyancy vector diagram','audio_keep':False,'sha256':'fixture'}),
+            patch.object(cp,'apply_audio_review',side_effect=lambda video,review: review),
+        ):
+            video,record=cp.acquire(scene,{'title':'كيف تطفو السفينة؟'},self.cfg,self.budget(),self.root/'.cinematic_cache')
+        self.assertTrue(video.exists())
+        self.assertEqual(record['source'],'local_science_diagram_buoyancy')
+        self.assertTrue(record['review']['passed'])
+
+    def test_buoyancy_diagram_is_not_used_for_unrelated_or_non_science_scenes(self):
+        scene={'query':'flower field','text':'flower field'}
+        self.assertFalse(cp._write_buoyancy_diagram(scene,self.root/'no.png',self.cfg))
+        self.assertFalse(cp._write_buoyancy_diagram(
+            {'query':'buoyant force','text':'buoyant force'},self.root/'history.png',dict(self.cfg,profile='history')))
+
+    def test_failed_scene_report_preserves_source_and_reviewer_reason(self):
+        scene={'id':'scene_001','start':0,'end':3,'motion':'zoom_in','kind':'image',
+               'query':'flamingo in shallow water','text':'طائر النحام في الماء'}
+        candidate={'url':'https://images.pexels.com/fixture.png','image':True,
+                   'source':'fixture_photo','license':'fixture'}
+        cache=self.root/'.cinematic_cache'
+        cache.mkdir()
+        with (
+            patch.object(cp,'candidates',return_value=iter([candidate])),
+            patch.object(cp,'download',side_effect=lambda url,path: path.write_bytes(b'image')),
+            patch.object(cp,'render_visual',side_effect=lambda source,out,*a,**k: out.write_bytes(b'video')),
+            patch.object(cp,'review_visual',side_effect=ValueError('Actual visual inspection rejected scene: unrelated image')),
+        ):
+            with self.assertRaisesRegex(RuntimeError,'No inspected visual'):
+                cp.acquire(scene,{'title':'النحام'},self.cfg,self.budget(),cache)
+        report=json.loads((self.root/'state/cinematic_failures.json').read_text())
+        self.assertEqual(report['attempts'][0]['source'],'fixture_photo')
+        self.assertIn('unrelated image',report['attempts'][0]['error'])
+
     def test_no_approval_without_real_review_response(self):
         with patch.object(cp,'run',return_value=''), patch.object(cp.Path,'read_bytes',return_value=b'video'), patch.object(cp,'gemini_json',return_value={'passed':False,'reason':'wrong period'}):
             with self.assertRaises(ValueError):

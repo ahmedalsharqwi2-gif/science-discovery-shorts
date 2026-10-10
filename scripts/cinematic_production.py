@@ -394,7 +394,8 @@ def review_visual(video: Path, scene: dict, episode: dict, cfg: dict, budget: Bu
     finally:
         preview.unlink(missing_ok=True)
     if not isinstance(result, dict) or result.get("passed") is not True or not str(result.get("reason", "")).strip():
-        raise ValueError("Actual visual inspection rejected scene")
+        reason = str(result.get("reason", "") if isinstance(result, dict) else "invalid review response").strip()
+        raise ValueError("Actual visual inspection rejected scene: " + (reason[:240] or "no reviewer reason"))
     keep = result.get("audio_keep") is True and bool(str(result.get("audio_reason", "")).strip())
     return {**result, "sha256": hashlib.sha256(video.read_bytes()).hexdigest(), "reviewer": cfg["review_model"], "audio_keep": keep}
 
@@ -529,7 +530,56 @@ def candidates(scene: dict, cfg: dict):
             for item in search_images(broad_query, limit=2):
                 yield {**item, "image": True, "source": "wikimedia_commons_broad"}
         except (requests.RequestException, ValueError, ImportError):
-            print("Broad public-domain science search unavailable")
+            print("Broad public-domain image search unavailable")
+
+
+def _write_buoyancy_diagram(scene: dict, target: Path, cfg: dict) -> bool:
+    """Draw a simple, non-text scientific diagram when stock search misses buoyancy."""
+    if cfg.get("profile") != "science":
+        return False
+    searchable = " ".join(str(scene.get(key, "")) for key in ("query", "text", "prompt")).lower()
+    if not any(term in searchable for term in ("buoyan", "قوة الطفو", "الطفو")):
+        return False
+    from PIL import Image, ImageDraw
+
+    width, height = int(cfg["width"]), int(cfg["height"])
+    image = Image.new("RGB", (width, height), (8, 19, 36))
+    draw = ImageDraw.Draw(image)
+    water_y = int(height * 0.52)
+    # Restrained blue depth gradient.
+    for y in range(water_y, height):
+        t = (y - water_y) / max(1, height - water_y)
+        color = (int(12 + 3*t), int(73 - 22*t), int(112 - 27*t))
+        draw.line((0, y, width, y), fill=color)
+    # Surface waves behind a simplified ship hull.
+    wave = [(x, water_y + int(7 * math.sin(x / max(1, width) * math.tau * 3)))
+            for x in range(0, width + 1, max(1, width // 90))]
+    draw.line(wave, fill=(84, 195, 222), width=max(2, width // 240))
+    hull = [
+        (int(width*.23), int(height*.41)), (int(width*.77), int(height*.41)),
+        (int(width*.72), int(height*.56)), (int(width*.63), int(height*.63)),
+        (int(width*.37), int(height*.63)), (int(width*.28), int(height*.56)),
+    ]
+    draw.polygon(hull, fill=(166, 184, 197), outline=(232, 241, 247))
+    draw.line(hull + [hull[0]], fill=(232, 241, 247), width=max(3, width // 180), joint="curve")
+    # Upward force arrows beneath the immersed hull; no labels or invented values.
+    shaft_width = max(5, width // 110)
+    for x_ratio in (.39, .50, .61):
+        x = int(width*x_ratio)
+        top = int(height*.66)
+        bottom = int(height*.82)
+        head = max(18, width // 22)
+        draw.line((x, bottom, x, top + head), fill=(255, 194, 72), width=shaft_width)
+        draw.polygon([(x, top), (x-head//2, top+head), (x+head//2, top+head)], fill=(255, 194, 72))
+    # Light underwater flow lines, kept clear of the vector arrows.
+    for row, phase in ((.72, .0), (.88, 1.2), (.94, 2.1)):
+        y0 = int(height*row)
+        pts = [(x, y0 + int(5*math.sin(x/max(1,width)*math.tau*2+phase)))
+               for x in range(0, width+1, max(1,width//90))]
+        draw.line(pts, fill=(65, 139, 169), width=max(1, width//360))
+    target.parent.mkdir(parents=True, exist_ok=True)
+    image.save(target, format="PNG", optimize=True)
+    return True
 
 
 def acquire(scene: dict, episode: dict, cfg: dict, budget: Budget, cache: Path) -> tuple[Path, dict]:
@@ -578,7 +628,9 @@ def acquire(scene: dict, episode: dict, cfg: dict, budget: Budget, cache: Path) 
             return visual, record
         except (requests.RequestException, RuntimeError, ValueError, OSError, subprocess.SubprocessError, KeyError, IndexError) as exc:
             visual.unlink(missing_ok=True)
-            errors.append(type(exc).__name__)
+            errors.append({"source": attempt.get("source", "unknown"),
+                           "source_url": attempt.get("source_url", ""),
+                           "error_type": type(exc).__name__, "error": str(exc)[:300]})
     if not cfg.get("free_only", True) and scene["kind"] != "stock":
         # Same scene only. No unrelated fallback, and no reuse from another narration.
         fallback = dict(scene, kind="stock")
@@ -594,6 +646,25 @@ def acquire(scene: dict, episode: dict, cfg: dict, budget: Budget, cache: Path) 
                 return visual, record
             except (requests.RequestException, RuntimeError, ValueError, OSError, subprocess.SubprocessError):
                 visual.unlink(missing_ok=True)
+    # Buoyancy is an abstract force-vector scene: stock footage often cannot
+    # show the direction of the force. Draw a literal diagram and send it
+    # through the same actual-video review gate; never silently approve it.
+    diagram = cache / f"{digest}.buoyancy.png"
+    if _write_buoyancy_diagram(scene, diagram, cfg):
+        try:
+            render_visual(diagram, visual, seconds, scene, cfg, True)
+            review = apply_audio_review(visual, review_visual(visual, scene, episode, cfg, budget))
+            record = {"scene_id": scene["id"], "source": "local_science_diagram_buoyancy",
+                      "license": "original generated vector illustration", "source_url": "",
+                      "review": review, "cached": False,
+                      "audio_decision": "VOICE ONLY", "illustrative": True}
+            atomic_json(meta, record)
+            return visual, record
+        except (requests.RequestException, RuntimeError, ValueError, OSError,
+                subprocess.SubprocessError, KeyError, IndexError) as exc:
+            visual.unlink(missing_ok=True)
+            errors.append({"source": "local_science_diagram_buoyancy", "source_url": "",
+                           "error_type": type(exc).__name__, "error": str(exc)[:300]})
     if candidate_count == 0:
         errors.append({"source": "search", "query": str(scene.get("query", "")), "error_type": "NoCandidates",
                        "error": "Pexels and Wikimedia Commons returned no candidates" if os.getenv("PEXELS_API_KEY") else "PEXELS_API_KEY is unavailable and Wikimedia Commons returned no candidates"})
