@@ -37,6 +37,9 @@ PROFILES = {
 # Offline vocabulary used only when the paid/free cinematic director is
 # unavailable and an episode did not provide English visual keywords.
 SCIENCE_ARABIC_VISUAL_TERMS = (
+    ("حاملة الطائرات", "aircraft carrier"), ("حاملة طائرات", "aircraft carrier"),
+    ("السفينة", "ship"), ("سفينة", "ship"), ("السفن", "ships"),
+    ("قوة الطفو", "buoyant force"), ("الطفو", "buoyancy"), ("تطفو", "floating ship"),
     ("طائر النحام", "flamingo"), ("النحام", "flamingo"), ("نحام", "flamingo"),
     ("فلامنجو", "flamingo"), ("فلامنغو", "flamingo"), ("ساق واحدة", "standing on one leg"),
     ("مياه ضحلة", "shallow water"), ("ماء ضحل", "shallow water"), ("تدفق الدم", "blood flow"),
@@ -72,6 +75,22 @@ def fallback_visual_query(episode: dict, scene: dict) -> str:
     stopwords = {"لماذا", "كيف", "هل", "ماذا", "عندما", "التي", "الذي", "في", "من", "على", "إلى", "عن", "مع", "هذا", "هذه", "هو", "هي", "ثم"}
     terms = [word for word in words if word not in stopwords]
     return " ".join(terms[:10]) or "science documentary subject"
+
+
+def _anchor_science_query(query: str, episode: dict, scene: dict) -> str:
+    """Keep director searches tied to the narrated science subject, not a drifted metaphor."""
+    anchor = fallback_visual_query(episode, scene).strip()
+    query = query.strip()
+    if not anchor or anchor == "science documentary subject":
+        return query[:100]
+    q, a = query.lower(), anchor.lower()
+    if "aircraft carrier" in a:
+        subject_tokens = ("aircraft carrier", "carrier", "ship", "vessel", "warship", "naval")
+        if any(token in q for token in ("city", "cityscape", "skyline", "urban", "building", "iceberg")):
+            return anchor[:100]
+        if not any(token in q for token in subject_tokens):
+            return f"{anchor} {query}"[:100]
+    return query[:100]
 
 
 def enabled() -> bool:
@@ -318,7 +337,8 @@ def direct_scenes(scenes: list[dict], episode: dict, cfg: dict, budget: Budget) 
             scene["prompt"] += ". Director composition: " + str(item["description"])[:1000]
             director_query = str(item.get("query", "")).strip()
             if director_query:
-                scene["query"] = director_query[:100]
+                scene["query"] = (_anchor_science_query(director_query, episode, scene)
+                                   if cfg.get("profile") == "science" else director_query[:100])
             scene["motion"] = item.get("motion") if item.get("motion") in MOTIONS else scene["motion"]
             scene["sfx"] = item.get("sfx", "none")
     except (requests.RequestException, RuntimeError, ValueError, KeyError, IndexError, TypeError) as exc:
@@ -533,12 +553,18 @@ def candidates(scene: dict, cfg: dict):
             print("Broad public-domain image search unavailable")
 
 
-def _write_buoyancy_diagram(scene: dict, target: Path, cfg: dict) -> bool:
+def _write_buoyancy_diagram(scene: dict, target: Path, cfg: dict, episode: dict | None = None) -> bool:
     """Draw a simple, non-text scientific diagram when stock search misses buoyancy."""
     if cfg.get("profile") != "science":
         return False
-    searchable = " ".join(str(scene.get(key, "")) for key in ("query", "text", "prompt")).lower()
-    if not any(term in searchable for term in ("buoyan", "قوة الطفو", "الطفو")):
+    episode = episode or {}
+    searchable = " ".join(str(value) for value in (
+        *(scene.get(key, "") for key in ("query", "text", "prompt")),
+        episode.get("title", ""), episode.get("narration", ""),
+    )).lower()
+    if not any(term in searchable for term in (
+        "buoyan", "floating", "float", "aircraft carrier", "قوة الطفو", "الطفو", "تطفو", "يطفو", "حاملة طائرات",
+    )):
         return False
     from PIL import Image, ImageDraw
 
@@ -562,6 +588,14 @@ def _write_buoyancy_diagram(scene: dict, target: Path, cfg: dict) -> bool:
     ]
     draw.polygon(hull, fill=(166, 184, 197), outline=(232, 241, 247))
     draw.line(hull + [hull[0]], fill=(232, 241, 247), width=max(3, width // 180), joint="curve")
+    # A low flight deck and island make the vessel recognizable as a carrier.
+    deck = [(int(width*.21), int(height*.395)), (int(width*.79), int(height*.395)),
+            (int(width*.77), int(height*.412)), (int(width*.23), int(height*.412))]
+    draw.polygon(deck, fill=(202, 212, 219), outline=(242, 246, 248))
+    draw.rectangle((int(width*.64), int(height*.31), int(width*.70), int(height*.395)),
+                   fill=(143, 163, 176), outline=(232, 241, 247), width=max(2, width//300))
+    draw.rectangle((int(width*.655), int(height*.285), int(width*.685), int(height*.31)),
+                   fill=(183, 197, 205), outline=(232, 241, 247), width=max(2, width//360))
     # Upward force arrows beneath the immersed hull; no labels or invented values.
     shaft_width = max(5, width // 110)
     for x_ratio in (.39, .50, .61):
@@ -650,7 +684,7 @@ def acquire(scene: dict, episode: dict, cfg: dict, budget: Budget, cache: Path) 
     # show the direction of the force. Draw a literal diagram and send it
     # through the same actual-video review gate; never silently approve it.
     diagram = cache / f"{digest}.buoyancy.png"
-    if _write_buoyancy_diagram(scene, diagram, cfg):
+    if _write_buoyancy_diagram(scene, diagram, cfg, episode):
         try:
             render_visual(diagram, visual, seconds, scene, cfg, True)
             review = apply_audio_review(visual, review_visual(visual, scene, episode, cfg, budget))

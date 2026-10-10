@@ -131,6 +131,16 @@ class CinematicTests(unittest.TestCase):
             cp.direct_scenes(scenes,episode,self.cfg,self.budget())
         self.assertEqual(scenes[0]['query'],query)
 
+    def test_science_director_query_cannot_drift_from_carrier_to_city(self):
+        episode={'title':'كيف تطفو حاملة طائرات رغم وزنها الهائل؟'}
+        scene=cp.plan_scenes([{'start':0,'end':4,'text':'تطفو حاملة طائرات فوق الماء'}],4,episode,self.cfg)
+        director=[{'id':scene[0]['id'],'description':'A carrier floating at sea',
+                   'query':'massive iron city floating on water','motion':'zoom_in','sfx':'water'}]
+        with patch.object(cp,'gemini_json',return_value=director):
+            cp.direct_scenes(scene,episode,self.cfg,self.budget())
+        self.assertIn('aircraft carrier',scene[0]['query'])
+        self.assertNotIn('city',scene[0]['query'])
+
     def test_empty_asset_search_saves_a_specific_no_candidates_report(self):
         scene=cp.plan_scenes([{'start':0,'end':4,'text':'طائر النحام في ماء ضحل'}],4,{'title':'النحام'},self.cfg)[0]
         with patch.dict(os.environ,{'PEXELS_API_KEY':'fixture-key'}),patch.object(cp,'candidates',return_value=iter([])):
@@ -168,6 +178,9 @@ class CinematicTests(unittest.TestCase):
         self.assertFalse(cp._write_buoyancy_diagram(scene,self.root/'no.png',self.cfg))
         self.assertFalse(cp._write_buoyancy_diagram(
             {'query':'buoyant force','text':'buoyant force'},self.root/'history.png',dict(self.cfg,profile='history')))
+        self.assertTrue(cp._write_buoyancy_diagram(
+            {'query':'massive iron city floating on water','text':'مدينة عائمة'},
+            self.root/'carrier.png',self.cfg,{'title':'كيف تطفو حاملة طائرات؟'}))
 
     def test_failed_scene_report_preserves_source_and_reviewer_reason(self):
         scene={'id':'scene_001','start':0,'end':3,'motion':'zoom_in','kind':'image',
