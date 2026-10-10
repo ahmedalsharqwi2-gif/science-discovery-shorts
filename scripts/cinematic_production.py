@@ -203,7 +203,7 @@ def captions(narration: str, duration: float, source: Path | None) -> tuple[list
         words = span["text"].split()
         groups, current = [], []
         for word in words:
-            if current and (len(current) >= 6 or len(" ".join(current + [word])) > 38):
+            if current and (len(current) >= 4 or len(" ".join(current + [word])) > 38):
                 groups.append(current)
                 current = []
             current.append(word)
@@ -219,7 +219,7 @@ def captions(narration: str, duration: float, source: Path | None) -> tuple[list
     if method == "character_weighted_estimate":
         merged = []
         for chunk in chunks:
-            if merged and len(merged[-1]["text"].split()) < 6 and len(merged[-1]["text"] + " " + chunk["text"]) <= 38:
+            if merged and len(merged[-1]["text"].split()) < 4 and len(merged[-1]["text"] + " " + chunk["text"]) <= 38:
                 merged[-1]["text"] += " " + chunk["text"]
                 merged[-1]["end"] = chunk["end"]
             else:
@@ -475,6 +475,7 @@ def candidates(scene: dict, cfg: dict):
     if not query:
         return
     key = os.getenv("PEXELS_API_KEY", "")
+    yielded = False
     if scene["kind"] == "stock" and key:
         try:
             response = requests.get("https://api.pexels.com/videos/search", headers={"Authorization": key},
@@ -484,6 +485,7 @@ def candidates(scene: dict, cfg: dict):
                 files = [f for f in video.get("video_files", []) if f.get("link") and f.get("height", 0) >= 720]
                 if files:
                     best = min(files, key=lambda f: abs(f.get("width", 0) * f.get("height", 0) - 1080 * 1920))
+                    yielded = True
                     yield {"url": best["link"], "image": False, "source": "pexels", "license": "Pexels", "source_url": video.get("url", "")}
         except (requests.RequestException, ValueError, KeyError):
             print("Bounded stock search unavailable; trying scene image")
@@ -495,15 +497,39 @@ def candidates(scene: dict, cfg: dict):
             for photo in response.json().get("photos", [])[:2]:
                 url = photo.get("src", {}).get("large2x") or photo.get("src", {}).get("large")
                 if url:
+                    yielded = True
                     yield {"url": url, "image": True, "source": "pexels_photo", "license": "Pexels", "source_url": photo.get("url", ""), "artist": photo.get("photographer", "")}
         except (requests.RequestException, ValueError, KeyError):
             print("Free photo search unavailable; trying public-domain images")
     try:
         from scripts.commons_media import search_images
         for item in search_images(query, limit=2):
+            yielded = True
             yield {**item, "image": True, "source": "wikimedia_commons"}
     except (requests.RequestException, ValueError, ImportError):
         print("Public-domain image fallback unavailable")
+    # Provider searches can legally return an empty result for a narrow query.
+    # Retry once with a related, broad science query before failing the episode;
+    # the normal visual-review gate still decides whether a candidate is usable.
+    if not yielded and cfg.get("profile") == "science":
+        broad_query = "science nature documentary"
+        if broad_query != query and key:
+            try:
+                response = requests.get("https://api.pexels.com/v1/search", headers={"Authorization": key},
+                    params={"query": broad_query, "orientation": "portrait", "per_page": 5}, timeout=(10, 20))
+                response.raise_for_status()
+                for photo in response.json().get("photos", [])[:2]:
+                    url = photo.get("src", {}).get("large2x") or photo.get("src", {}).get("large")
+                    if url:
+                        yield {"url": url, "image": True, "source": "pexels_photo_broad", "license": "Pexels", "source_url": photo.get("url", ""), "artist": photo.get("photographer", "")}
+            except (requests.RequestException, ValueError, KeyError):
+                print("Broad science stock search unavailable")
+        try:
+            from scripts.commons_media import search_images
+            for item in search_images(broad_query, limit=2):
+                yield {**item, "image": True, "source": "wikimedia_commons_broad"}
+        except (requests.RequestException, ValueError, ImportError):
+            print("Broad public-domain science search unavailable")
 
 
 def acquire(scene: dict, episode: dict, cfg: dict, budget: Budget, cache: Path) -> tuple[Path, dict]:
@@ -588,7 +614,7 @@ def write_captions(events: list[dict], path: Path, cfg: dict, *, illustrative=Fa
         "[Events]\nFormat: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\n")
     lines = [header]
     for event in events:
-        tokens = [re.sub(r"[\u061c\u200e\u200f\u202a-\u202e\u2066-\u2069]", "", token).replace("\\", "").replace("{", "").replace("}", "") for token in event["text"].split()]
+        tokens = [re.sub(r'''[.,،؛:!?؟…/\\\-—_()\[\]{}"«»]''', "", re.sub(r"[\u061c\u200e\u200f\u202a-\u202e\u2066-\u2069\u064b-\u065f\u0670\u06d6-\u06ed]", "", token)) for token in event["text"].split()]
         tokens = [token for token in tokens if token]
         if not tokens:
             continue

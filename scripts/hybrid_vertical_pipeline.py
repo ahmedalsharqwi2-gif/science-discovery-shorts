@@ -103,7 +103,7 @@ def ass_escape(text: str) -> str:
     return text.replace("\\", r"\\").replace("{", r"\{").replace("}", r"\}")
 
 
-def caption_text(text: str, max_words: int = 7) -> str:
+def caption_text(text: str, max_words: int = 4) -> str:
     words = ass_escape(text).split()
     return " ".join(words[:max_words])
 
@@ -121,6 +121,8 @@ def write_ass(events: list[dict[str, Any]], output: Path) -> None:
     for event in events:
         # Strip bidi controls from display only; libass handles Arabic shaping and RTL.
         text = re.sub(r"[\u061c\u200e\u200f\u202a-\u202e\u2066-\u2069]", "", event["text"])
+        text = re.sub(r"[\u064b-\u065f\u0670\u06d6-\u06ed]", "", text)
+        text = re.sub(r'''[.,،؛:!?؟…/\\\-—_()\[\]{}"«»]+''', " ", text)
         tokens = text.split()
         highlight_keys = {normalize_match_word(word) for word in event.get("highlight_words", [])[:2]}
         styled = []
@@ -129,7 +131,9 @@ def write_ass(events: list[dict[str, Any]], output: Path) -> None:
             if normalize_match_word(token) in highlight_keys:
                 safe = r"{\c&H000000FF&}" + safe + r"{\c}"
             styled.append(safe)
-        rendered = " ".join(styled[:4])
+        if len(tokens) > 4:
+            raise ValueError("Caption event exceeds the four-word one-line limit")
+        rendered = " ".join(styled)
         lines.append(f"Dialogue: 0,{ass_time(event['start'])},{ass_time(event['end'])},Caption,,0,0,0,,{{\\fad(120,150)}}{rendered}")
     output.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
@@ -188,7 +192,7 @@ def _whisper_word_spans(audio: Path, text: str, duration: float) -> tuple[list[d
         offset = end
     return spans, "estimated_fallback"
 
-def _caption_chunks(word_spans: list[dict[str, Any]], max_words: int = 7,
+def _caption_chunks(word_spans: list[dict[str, Any]], max_words: int = 4,
                     max_chars: int = 38) -> list[dict[str, Any]]:
     """Group word spans into readable captions, preserving each original display token."""
     if max_words < 1:
@@ -233,6 +237,8 @@ def validate_caption_events(events: list[dict[str, Any]], duration: float) -> No
             raise ValueError("Caption events are not ordered")
         if event["end"] > duration + 0.5:
             raise ValueError("Caption event extends beyond audio/video duration")
+        if len(event["text"].split()) > 4:
+            raise ValueError("Caption event exceeds the four-word one-line limit")
         if len(event["text"]) > 76:
             raise ValueError("Caption line exceeds the 38-character-per-line bound")
         previous_start = event["start"]

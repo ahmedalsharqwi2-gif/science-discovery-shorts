@@ -103,7 +103,7 @@ class CinematicTests(unittest.TestCase):
         self.assertEqual(method,'character_weighted_estimate')
         self.assertEqual(' '.join(e['text'] for e in events),text)
         self.assertAlmostEqual(events[-1]['end'],9.1)
-        self.assertTrue(all(len(e['text'].split())<=6 for e in events))
+        self.assertTrue(all(len(e['text'].split())<=4 for e in events))
         scenes=cp.plan_scenes(events,9.1,{'title':'مدينة','visual_keywords':['ancient stone city']},self.cfg)
         self.assertEqual(scenes[0]['start'],0)
         self.assertAlmostEqual(scenes[-1]['end'],9.1)

@@ -32,9 +32,9 @@ class HybridCaptionTimingTests(unittest.TestCase):
             {"text": word, "start": index * 0.3, "end": (index + 1) * 0.3}
             for index, word in enumerate(words)
         ]
-        chunks = pipeline._caption_chunks(spans, max_words=5, max_chars=38)
+        chunks = pipeline._caption_chunks(spans, max_words=4, max_chars=38)
         self.assertEqual(" ".join(chunk["text"] for chunk in chunks), " ".join(words))
-        self.assertTrue(all(len(chunk["text"].split()) <= 5 for chunk in chunks))
+        self.assertTrue(all(len(chunk["text"].split()) <= 4 for chunk in chunks))
         self.assertTrue(all(len(chunk["text"]) <= 38 for chunk in chunks))
 
     def test_missing_whisper_uses_character_weighted_fallback(self):
@@ -53,6 +53,8 @@ class HybridCaptionTimingTests(unittest.TestCase):
             pipeline.validate_caption_events([{"text": " ", "start": 0, "end": 1}], 2)
         with self.assertRaises(ValueError):
             pipeline.validate_caption_events([{"text": "نص", "start": 1, "end": 0.5}], 2)
+        with self.assertRaisesRegex(ValueError, "four-word"):
+            pipeline.validate_caption_events([{"text": "واحد اثنان ثلاثة أربعة خمسة", "start": 0, "end": 1}], 2)
 
     def test_ass_output_keeps_arabic_and_adds_short_fade(self):
         with tempfile.TemporaryDirectory() as folder:
@@ -61,7 +63,7 @@ class HybridCaptionTimingTests(unittest.TestCase):
             content = target.read_text(encoding="utf-8")
         self.assertIn("أين ", content)
         self.assertIn(r"\fad(120,150)", content)
-        self.assertIn(r"{\c&H000000FF&}اختفت؟{\c}", content)
+        self.assertIn(r"{\c&H000000FF&}اختفت{\c}", content)
         self.assertIn("Noto Sans Arabic", content)
 
 
