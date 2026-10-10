@@ -215,6 +215,8 @@ class AutoPublishPipeline:
                 expected="vertical",
                 min_clips=4,
                 max_black_seconds=0.30,
+                min_external_sources=int(os.getenv("MIN_EXTERNAL_SCENE_SOURCES", "6")) if os.getenv("CINEMATIC_ENABLED", "false").lower() == "true" else 0,
+                min_external_share=float(os.getenv("MIN_EXTERNAL_SCENE_SHARE", "0.65")) if os.getenv("CINEMATIC_ENABLED", "false").lower() == "true" else 0.0,
             )
             if not broll_report["passed"]:
                 log.warning("B-roll/montage quality warnings: %s", broll_report["errors"])

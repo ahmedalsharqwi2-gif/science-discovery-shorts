@@ -228,17 +228,19 @@ class CinematicTests(unittest.TestCase):
         self.assertIn('coral reef',scene[0]['query'])
         self.assertNotIn('blood',scene[0]['query'])
 
-    def test_exhausted_free_quota_uses_coral_specific_fallback_without_provider_calls(self):
+    def test_exhausted_free_quota_searches_stock_before_coral_fallback(self):
         scene = {'id':'scene_quota','start':0,'end':3,'motion':'zoom_in','kind':'image',
                  'query':'coral reef coastline','text':'الشعاب المرجانية تحمي السواحل'}
         cfg = dict(self.cfg, max_daily_free_calls=1)
         budget = cp.Budget(self.root/'state/quota-budget.json', cfg, 'episode-quota')
         self.assertTrue(budget.reserve('visual_review', .02))
         with (
-            patch.object(cp, 'candidates', side_effect=AssertionError('provider search must be skipped')),
+            patch.dict(os.environ, {'CINEMATIC_IMAGE_FALLBACK_ENABLED':'false'}),
+            patch.object(cp, 'candidates', return_value=iter([])) as stock_search,
             patch.object(cp, 'render_visual', side_effect=lambda source,out,*a,**k: out.write_bytes(b'reviewable-video')),
         ):
             video, record = cp.acquire(scene, {'title':'كيف تحمي الشعاب المرجانية السواحل؟'}, cfg, budget, self.root/'.cinematic_cache')
+        stock_search.assert_called_once()
         self.assertTrue(video.exists())
         self.assertEqual(record['source'], 'local_coral_reef_illustration')
         self.assertTrue(record['quota_fallback'])
@@ -254,9 +256,11 @@ class CinematicTests(unittest.TestCase):
         cfg=dict(self.cfg,max_daily_free_calls=1)
         budget=cp.Budget(self.root/'state/submarine-quota-budget.json',cfg,'episode-submarine')
         self.assertTrue(budget.reserve('visual_review',.02))
-        with patch.object(cp,'candidates',side_effect=AssertionError('exhausted quota must use deterministic local art')), \
+        with patch.dict(os.environ, {'CINEMATIC_IMAGE_FALLBACK_ENABLED':'false'}), \
+             patch.object(cp,'candidates',return_value=iter([])) as stock_search, \
              patch.object(cp,'render_visual',side_effect=lambda source,out,*a,**k: out.write_bytes(b'rendered-submarine-video')):
             video,record=cp.acquire(scene,episode,cfg,budget,self.root/'.cinematic_cache')
+        stock_search.assert_called_once()
         self.assertTrue(video.exists())
         self.assertEqual(record['source'],'local_submarine_science_illustration')
         self.assertTrue(record['quota_fallback'])
@@ -270,9 +274,11 @@ class CinematicTests(unittest.TestCase):
         cfg=dict(self.cfg,max_daily_free_calls=1)
         budget=cp.Budget(self.root/'state/pressure-quota-budget.json',cfg,'episode-pressure')
         self.assertTrue(budget.reserve('visual_review',.02))
-        with patch.object(cp,'candidates',side_effect=AssertionError('quota path must use deterministic submarine art')), \
+        with patch.dict(os.environ, {'CINEMATIC_IMAGE_FALLBACK_ENABLED':'false'}), \
+             patch.object(cp,'candidates',return_value=iter([])) as stock_search, \
              patch.object(cp,'render_visual',side_effect=lambda source,out,*a,**k: out.write_bytes(b'rendered-pressure-submarine-video')):
             video,record=cp.acquire(scene,episode,cfg,budget,self.root/'.cinematic_cache')
+        stock_search.assert_called_once()
         self.assertTrue(video.exists())
         self.assertEqual(record['source'],'local_submarine_science_illustration')
         self.assertTrue(record['review']['passed'])
@@ -283,12 +289,60 @@ class CinematicTests(unittest.TestCase):
         cfg=dict(self.cfg,max_daily_free_calls=1)
         budget=cp.Budget(self.root/'state/quota-budget.json',cfg,'episode-ship')
         self.assertTrue(budget.reserve('visual_review',.02))
-        with patch.object(cp,'candidates',side_effect=AssertionError('quota path must not search')), \
+        with patch.dict(os.environ, {'CINEMATIC_IMAGE_FALLBACK_ENABLED':'false'}), \
+             patch.object(cp,'candidates',return_value=iter([])) as stock_search, \
              patch.object(cp,'render_visual',side_effect=AssertionError('generic fallback must not render')):
-            with self.assertRaisesRegex(RuntimeError,'refusing generic placeholders'):
+            with self.assertRaisesRegex(RuntimeError,'No inspected visual'):
                 cp.acquire(scene,{'title':'هياكل السفن'},cfg,budget,self.root/'.cinematic_cache')
+        stock_search.assert_called_once()
         report=json.loads((self.root/'state/cinematic_failures.json').read_text())
-        self.assertEqual(report['error_type'],'NoTopicSpecificOfflineFallback')
+        self.assertTrue(any('no topic-specific local illustration' in item['error'].lower()
+                            for item in report['attempts']))
+
+    def test_quota_exhaustion_accepts_topic_anchored_pexels_video_after_local_checks(self):
+        scene={'id':'scene_submarine','start':0,'end':3,'motion':'zoom_in','kind':'image',
+               'query':'submarine underwater ballast tanks buoyancy','text':'تتحكم الغواصات في الطفو'}
+        episode={'title':'كيف تتحكم الغواصات في الطفو؟','narration':scene['text']}
+        cfg=dict(self.cfg,max_free_calls=10,max_daily_free_calls=1)
+        budget=cp.Budget(self.root/'state/stock-budget.json',cfg,'episode-stock')
+        self.assertTrue(budget.reserve('visual_review',.02))
+        candidate={'url':'https://videos.pexels.com/video-files/123.mp4','image':False,
+                   'source':'pexels_video','media_type':'video','asset_id':'pexels-123','pexels_id':'123',
+                   'license':'Pexels','source_url':'https://www.pexels.com/video/submarine-123/',
+                   'query_used':'submarine underwater ballast tanks buoyancy'}
+        source_probe={'duration':5,'streams':[{'codec_type':'video','width':720,'height':1280}]}
+        output_probe={'duration':3,'streams':[{'codec_type':'video','width':360,'height':640}]}
+        def write_source(url,target):
+            target.write_bytes(b'fixture-source-video')
+        def render(source,out,*args,**kwargs):
+            out.write_bytes(b'fixture-rendered-video')
+        with patch.object(cp,'candidates',return_value=iter([candidate])) as search, \
+             patch.object(cp,'download',side_effect=write_source), \
+             patch.object(cp,'render_visual',side_effect=render), \
+             patch.object(cp,'probe',side_effect=[source_probe,output_probe]), \
+             patch.object(cp,'review_visual',side_effect=AssertionError('AI quota is exhausted')), \
+             patch.object(cp,'apply_audio_review',side_effect=lambda video,review: review):
+            video,record=cp.acquire(scene,episode,cfg,budget,self.root/'.cinematic_cache')
+        search.assert_called_once()
+        self.assertTrue(video.exists())
+        self.assertEqual(record['source'],'pexels_video')
+        self.assertEqual(record['media_type'],'video')
+        self.assertEqual(record['asset_id'],'pexels-123')
+        self.assertFalse(record['illustrative'])
+        self.assertEqual(record['review']['reviewer'],'local-stock-source-technical-check')
+        self.assertFalse(record['review']['audio_keep'])
+
+    def test_image_scene_searches_video_before_still_photos(self):
+        scene={'id':'scene_video_first','kind':'image','query':'submarine underwater ballast tanks buoyancy'}
+        video_result={'videos':[{'id':321,'url':'https://www.pexels.com/video/submarine-321/',
+            'duration':8,'video_files':[{'link':'https://videos.pexels.com/321.mp4','width':720,'height':1280}]}]}
+        with patch.dict(os.environ,{'PEXELS_API_KEY':'fixture-key'}), \
+             patch('scripts.cinematic_production.requests.get',return_value=Reply(video_result)) as request, \
+             patch('scripts.commons_media.search_images',return_value=[]):
+            candidate=next(cp.candidates(scene,self.cfg))
+        self.assertEqual(candidate['media_type'],'video')
+        self.assertEqual(candidate['source'],'pexels_video')
+        self.assertIn('/videos/search',request.call_args.args[0])
 
     def test_empty_asset_search_saves_a_specific_no_candidates_report(self):
         scene=cp.plan_scenes([{'start':0,'end':4,'text':'طائر النحام في ماء ضحل'}],4,{'title':'النحام'},self.cfg)[0]
@@ -403,9 +457,14 @@ class CinematicTests(unittest.TestCase):
                 self.assertEqual(json['contents'][0]['parts'][1]['inlineData']['mimeType'],'video/mp4')
                 result={'passed':True,'reason':'Network fixture only, not an actual editorial assessment','audio_keep':False}
             return Reply({'candidates':[{'content':{'parts':[{'text':__import__('json').dumps(result)}]}}]})
+        photo_counter={'value':0}
         def get(url,**kwargs):
+            if url=='https://api.pexels.com/videos/search':
+                return Reply({'videos':[]})
             if url=='https://api.pexels.com/v1/search':
-                return Reply({'photos':[{'src':{'large2x':'https://images.pexels.com/fixture.png'},'url':'https://www.pexels.com/photo/fixture','photographer':'Fixture'}]})
+                photo_counter['value']+=1
+                index=photo_counter['value']
+                return Reply({'photos':[{'id':index,'src':{'large2x':f'https://images.pexels.com/fixture-{index}.png'},'url':f'https://www.pexels.com/photo/fixture-{index}','photographer':'Fixture'}]})
             if 'commons.wikimedia.org' in url:
                 return Reply({'query':{'pages':{}}})
             return Reply(raw=image.read_bytes())

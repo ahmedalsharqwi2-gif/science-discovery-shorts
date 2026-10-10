@@ -554,6 +554,77 @@ def apply_audio_review(video: Path, review: dict) -> dict:
     return {**review, "sha256": hashlib.sha256(video.read_bytes()).hexdigest(), "audio_keep": False}
 
 
+def _free_review_quota_exhausted(budget: Budget) -> bool:
+    if not budget.cfg.get("free_only", True):
+        return False
+    return (
+        budget.episode.get("free_calls", 0) >= budget.cfg.get("max_free_calls", 0)
+        or budget.row.get("free_calls", 0) >= budget.cfg.get("max_daily_free_calls", 0)
+    )
+
+
+def _review_quota_error(exc: Exception) -> bool:
+    message = str(exc).lower()
+    return any(term in message for term in ("quota", "429", "resource_exhausted", "budget exhausted", "rate limit"))
+
+
+def _offline_stock_review(source_path: Path, video: Path, scene: dict, candidate: dict, cfg: dict) -> dict:
+    """Validate licensed stock bytes locally when the optional vision quota is spent."""
+    source = str(candidate.get("source", ""))
+    media_type = str(candidate.get("media_type", ""))
+    source_url = str(candidate.get("source_url", ""))
+    asset_url = str(candidate.get("url", ""))
+    source_host = urlparse(source_url).hostname or ""
+    asset_host = urlparse(asset_url).hostname or ""
+    license_name = str(candidate.get("license", "")).strip().lower()
+    if source.startswith("pexels"):
+        if license_name != "pexels" or not source_host.endswith("pexels.com"):
+            raise ValueError("Stock candidate is missing a verifiable Pexels source/license")
+    elif source.startswith("wikimedia_commons"):
+        if license_name not in {"public domain", "cc0"} or source_host not in {"commons.wikimedia.org", "upload.wikimedia.org"}:
+            raise ValueError("Commons candidate is not an approved public-domain/CC0 asset")
+    else:
+        raise ValueError("Quota-safe review is restricted to approved free stock providers")
+    if not asset_url.startswith("https://") or not source_host or not asset_host:
+        raise ValueError("Stock candidate URLs must be HTTPS and identify a source page")
+    query_used = str(candidate.get("query_used", scene.get("query", ""))).lower()
+    scene_query = str(scene.get("query", "")).lower()
+    if "submarine" in scene_query and not any(term in query_used for term in ("submarine", "submersible", "underwater vehicle")):
+        raise ValueError("Stock search query is not anchored to the narrated submarine topic")
+    if ("coral" in scene_query or "reef" in scene_query) and not any(term in query_used for term in ("coral", "reef")):
+        raise ValueError("Stock search query is not anchored to the narrated coral-reef topic")
+
+    if media_type == "video":
+        source_probe = probe(source_path)
+        stream = next((item for item in source_probe.get("streams", []) if item.get("codec_type") == "video"), {})
+        if int(stream.get("width", 0)) < 540 or int(stream.get("height", 0)) < 540 or source_probe.get("duration", 0) < 1.5:
+            raise ValueError("Stock footage failed source resolution/duration checks")
+    elif media_type == "photo":
+        from PIL import Image
+        with Image.open(source_path) as image:
+            if min(image.size) < 640:
+                raise ValueError("Stock photo resolution is too low for a vertical crop")
+            image.verify()
+    else:
+        raise ValueError("Stock media type must be video or photo")
+
+    rendered = probe(video)
+    output = next((item for item in rendered.get("streams", []) if item.get("codec_type") == "video"), {})
+    expected_seconds = max(1.0, float(scene["end"]) - float(scene["start"]))
+    if (int(output.get("width", 0)) != int(cfg["width"])
+            or int(output.get("height", 0)) != int(cfg["height"])
+            or rendered.get("duration", 0) < expected_seconds * 0.8):
+        raise ValueError("Rendered stock scene failed dimensions/duration checks")
+    return {
+        "passed": True,
+        "reason": "Licensed, topic-anchored free stock media passed local source, codec, resolution, and rendered-scene checks; no paid generation used.",
+        "audio_keep": False,
+        "audio_reason": "Source audio muted because model audio review quota was unavailable.",
+        "reviewer": "local-stock-source-technical-check",
+        "sha256": hashlib.sha256(video.read_bytes()).hexdigest(),
+    }
+
+
 def download(url: str, target: Path, *, headers=None, max_bytes=60 * 1024 * 1024, google_only=False) -> None:
     host = urlparse(url).hostname or ""
     if not url.startswith("https://") or (google_only and host != "generativelanguage.googleapis.com"):
@@ -615,66 +686,96 @@ def generate_video(image: Path, target: Path, scene: dict, cfg: dict, budget: Bu
     download(url, target, headers={"x-goog-api-key": key}, google_only=True)
 
 
-def candidates(scene: dict, cfg: dict):
-    query = scene.get("query", "")
+def _stock_search_queries(scene: dict) -> list[str]:
+    """Expand only within the narrated subject family; never use generic stock."""
+    query = str(scene.get("query", "")).strip()
     if not query:
+        return []
+    lowered = query.lower()
+    related = []
+    if any(term in lowered for term in ("submarine", "submersible")):
+        related = ["submarine underwater"]
+    elif any(term in lowered for term in ("coral", "reef")):
+        related = ["coral reef underwater"]
+    return list(dict.fromkeys(value[:100] for value in [query, *related] if value))[:2]
+
+
+def candidates(scene: dict, cfg: dict):
+    """Try free stock footage for every scene, then Pexels/Commons stills."""
+    queries = _stock_search_queries(scene)
+    if not queries:
         return
     key = os.getenv("PEXELS_API_KEY", "")
-    yielded = False
-    if scene["kind"] == "stock" and key:
-        try:
-            response = requests.get("https://api.pexels.com/videos/search", headers={"Authorization": key},
-                params={"query": query, "orientation": "portrait", "per_page": 5}, timeout=(10, 20))
-            response.raise_for_status()
-            for video in response.json().get("videos", [])[:2]:
-                files = [f for f in video.get("video_files", []) if f.get("link") and f.get("height", 0) >= 720]
-                if files:
-                    best = min(files, key=lambda f: abs(f.get("width", 0) * f.get("height", 0) - 1080 * 1920))
-                    yielded = True
-                    yield {"url": best["link"], "image": False, "source": "pexels", "license": "Pexels", "source_url": video.get("url", "")}
-        except (requests.RequestException, ValueError, KeyError):
-            print("Bounded stock search unavailable; trying scene image")
+    used = set(cfg.get("_used_media_ids", set()))
+    seen: set[str] = set()
+
+    def unseen(item: dict) -> bool:
+        identity = str(item.get("asset_id") or item.get("source_url") or item.get("url") or "")
+        if not identity or identity in used or identity in seen:
+            return False
+        seen.add(identity)
+        return True
+
     if key:
-        try:
-            response = requests.get("https://api.pexels.com/v1/search", headers={"Authorization": key},
-                params={"query": query, "orientation": "portrait", "per_page": 5}, timeout=(10, 20))
-            response.raise_for_status()
-            for photo in response.json().get("photos", [])[:2]:
-                url = photo.get("src", {}).get("large2x") or photo.get("src", {}).get("large")
-                if url:
-                    yielded = True
-                    yield {"url": url, "image": True, "source": "pexels_photo", "license": "Pexels", "source_url": photo.get("url", ""), "artist": photo.get("photographer", "")}
-        except (requests.RequestException, ValueError, KeyError):
-            print("Free photo search unavailable; trying public-domain images")
-    try:
-        from scripts.commons_media import search_images
-        for item in search_images(query, limit=2):
-            yielded = True
-            yield {**item, "image": True, "source": "wikimedia_commons"}
-    except (requests.RequestException, ValueError, ImportError):
-        print("Public-domain image fallback unavailable")
-    # Provider searches can legally return an empty result for a narrow query.
-    # Retry once with a related, broad science query before failing the episode;
-    # the normal visual-review gate still decides whether a candidate is usable.
-    if not yielded and cfg.get("profile") == "science":
-        broad_query = "science nature documentary"
-        if broad_query != query and key:
+        # Footage is searched for every scene (not just the old 20% "stock" slots).
+        # Landscape clips remain eligible because they are safely center-cropped to 9:16.
+        for query in queries:
+            try:
+                response = requests.get("https://api.pexels.com/videos/search", headers={"Authorization": key},
+                    params={"query": query, "size": "large", "per_page": 5}, timeout=(10, 20))
+                response.raise_for_status()
+                payload = response.json()
+                if not isinstance(payload, dict):
+                    raise ValueError("Pexels returned a non-object video response")
+                for video in payload.get("videos", [])[:3]:
+                    files = [f for f in video.get("video_files", [])
+                             if f.get("link") and f.get("width", 0) >= 540 and f.get("height", 0) >= 540]
+                    if not files:
+                        continue
+                    best = min(files, key=lambda f: abs(f.get("width", 0) * f.get("height", 0) - 1080 * 1920))
+                    item = {"url": best["link"], "image": False, "source": "pexels_video",
+                            "media_type": "video", "asset_id": str(video.get("id") or best["link"]),
+                            "pexels_id": str(video.get("id") or ""), "license": "Pexels",
+                            "source_url": video.get("url", ""), "query_used": query,
+                            "duration": video.get("duration"), "width": best.get("width"), "height": best.get("height")}
+                    if unseen(item):
+                        yield item
+            except (requests.RequestException, ValueError, KeyError, TypeError):
+                print(f"Pexels footage search unavailable for topic query: {query[:60]}")
+
+        # Only reached when footage is absent/rejected: turn topic photos into
+        # moving clips with the existing zoom/pan renderer.
+        for query in queries:
             try:
                 response = requests.get("https://api.pexels.com/v1/search", headers={"Authorization": key},
-                    params={"query": broad_query, "orientation": "portrait", "per_page": 5}, timeout=(10, 20))
+                    params={"query": query, "size": "large", "per_page": 5}, timeout=(10, 20))
                 response.raise_for_status()
-                for photo in response.json().get("photos", [])[:2]:
+                payload = response.json()
+                if not isinstance(payload, dict):
+                    raise ValueError("Pexels returned a non-object photo response")
+                for photo in payload.get("photos", [])[:3]:
                     url = photo.get("src", {}).get("large2x") or photo.get("src", {}).get("large")
-                    if url:
-                        yield {"url": url, "image": True, "source": "pexels_photo_broad", "license": "Pexels", "source_url": photo.get("url", ""), "artist": photo.get("photographer", "")}
-            except (requests.RequestException, ValueError, KeyError):
-                print("Broad science stock search unavailable")
-        try:
-            from scripts.commons_media import search_images
-            for item in search_images(broad_query, limit=2):
-                yield {**item, "image": True, "source": "wikimedia_commons_broad"}
-        except (requests.RequestException, ValueError, ImportError):
-            print("Broad public-domain image search unavailable")
+                    if not url:
+                        continue
+                    item = {"url": url, "image": True, "source": "pexels_photo", "media_type": "photo",
+                            "asset_id": str(photo.get("id") or url), "pexels_id": str(photo.get("id") or ""),
+                            "license": "Pexels", "source_url": photo.get("url", ""),
+                            "artist": photo.get("photographer", ""), "alt": photo.get("alt", ""), "query_used": query}
+                    if unseen(item):
+                        yield item
+            except (requests.RequestException, ValueError, KeyError, TypeError):
+                print(f"Pexels photo search unavailable for topic query: {query[:60]}")
+
+    try:
+        from scripts.commons_media import search_images
+        for query in queries:
+            for item in search_images(query, limit=2):
+                candidate = {**item, "image": True, "media_type": "photo",
+                             "asset_id": str(item.get("id", "")), "query_used": query}
+                if unseen(candidate):
+                    yield candidate
+    except (requests.RequestException, ValueError, ImportError):
+        print("Public-domain image fallback unavailable")
 
 
 def _write_submarine_science_illustration(scene: dict, target: Path, cfg: dict, episode: dict) -> bool:
@@ -951,28 +1052,29 @@ def _quota_fallback_record(scene: dict, episode: dict, cfg: dict, budget: Budget
     else:
         source_name, reviewer = "local_science_diagram_buoyancy", "local-buoyancy-template"
     review = {"passed": True, "reason": "Subject-specific deterministic local science illustration; rendered and integrity-checked without spending exhausted provider-review quota.", "audio_keep": False, "audio_reason": "Local illustration has no source audio.", "reviewer": reviewer, "sha256": hashlib.sha256(visual.read_bytes()).hexdigest()}
-    record = {"scene_id": scene["id"], "source": source_name, "license": "original deterministic vector illustration", "source_url": "", "review": review, "cached": False, "audio_decision": "VOICE ONLY", "illustrative": True, "quota_fallback": True}
+    record = {"scene_id": scene["id"], "source": source_name, "license": "original deterministic vector illustration", "source_url": "", "media_type": "local_illustration", "review": review, "cached": False, "audio_decision": "VOICE ONLY", "illustrative": True, "quota_fallback": True}
     return visual, record
 
 
 def acquire(scene: dict, episode: dict, cfg: dict, budget: Budget, cache: Path) -> tuple[Path, dict]:
     seconds = scene["end"] - scene["start"]
+    cache.mkdir(parents=True, exist_ok=True)
     identity = json.dumps({"scene": scene, "context": episode, "profile": cfg["profile"], "dimensions": [cfg["width"], cfg["height"], cfg["fps"]], "models": [cfg["image_model"], cfg["image_fallback_model"], cfg["review_model"]]}, ensure_ascii=False, sort_keys=True)
     digest = hashlib.sha256(identity.encode()).hexdigest()[:24]
     visual, meta = cache / f"{digest}.mp4", cache / f"{digest}.json"
     if visual.exists() and meta.exists():
         record = json.loads(meta.read_text())
         if record.get("review", {}).get("sha256") == hashlib.sha256(visual.read_bytes()).hexdigest():
-            return visual, {**record, "cached": True}
+            # A previous quota fallback must not hide newly searchable stock.
+            if not str(record.get("source", "")).startswith("local_") and not record.get("quota_fallback"):
+                asset_id = record.get("asset_id") or record.get("pexels_id") or record.get("source_url")
+                if asset_id:
+                    cfg.setdefault("_used_media_ids", set()).add(str(asset_id))
+                return visual, {**record, "cached": True}
     errors = []
-    # Once the daily free visual quota is exhausted, do not spend time on
-    # doomed stock/review/image attempts. Use the deterministic local path.
-    if (cfg.get("free_only", True)
-            and budget.row.get("free_calls", 0) >= cfg.get("max_daily_free_calls", 0)):
-        visual, record = _quota_fallback_record(scene, episode, cfg, budget, cache)
-        atomic_json(meta, record)
-        return visual, record
-    # Stock slots try at most two actual sources; every candidate still gets reviewed.
+    quota_exhausted = _free_review_quota_exhausted(budget)
+    if quota_exhausted:
+        print("AI visual-review quota exhausted; continuing free Pexels/Commons search with local source checks.")
     options = candidates(scene, cfg) if cfg.get("free_only", True) or scene["kind"] == "stock" else iter(())
     # Free-only means no paid video. Production may explicitly enable the
     # configured free image fallback after stock candidates are rejected;
@@ -990,10 +1092,25 @@ def acquire(scene: dict, episode: dict, cfg: dict, budget: Budget, cache: Path) 
             else:
                 download(attempt["url"], source)
             render_visual(source, visual, seconds, scene, cfg, attempt["image"], keep_audio=not attempt["image"])
-            review = apply_audio_review(visual, review_visual(visual, scene, episode, cfg, budget))
+            if not attempt.get("model") and _free_review_quota_exhausted(budget):
+                inspected = _offline_stock_review(source, visual, scene, attempt, cfg)
+                review = apply_audio_review(visual, inspected)
+            else:
+                try:
+                    inspected = review_visual(visual, scene, episode, cfg, budget)
+                except RuntimeError as exc:
+                    if attempt.get("model") or not _review_quota_error(exc):
+                        raise
+                    inspected = _offline_stock_review(source, visual, scene, attempt, cfg)
+                review = apply_audio_review(visual, inspected)
             record = {"scene_id": scene["id"], "source": attempt["source"], "license": attempt["license"],
-                      "source_url": attempt.get("source_url", ""), "review": review, "cached": False,
-                      "audio_decision": "ORIGINAL AUDIO + VOICE DUCKING" if review.get("audio_keep") else "VOICE ONLY", "illustrative": True}
+                      "source_url": attempt.get("source_url", ""), "asset_id": attempt.get("asset_id"),
+                      "pexels_id": attempt.get("pexels_id"), "media_type": attempt.get("media_type", "video" if not attempt["image"] else "photo"),
+                      "query_used": attempt.get("query_used", ""), "artist": attempt.get("artist", ""),
+                      "review": review, "cached": False,
+                      "audio_decision": "ORIGINAL AUDIO + VOICE DUCKING" if review.get("audio_keep") else "VOICE ONLY",
+                      "illustrative": bool(attempt.get("model")),
+                      "animated_image": bool(attempt["image"] and attempt.get("media_type") == "photo")}
             if scene["kind"] == "ai_video" and attempt["image"] and cfg["video_enabled"]:
                 ai_video = cache / f"{digest}.veo.mp4"
                 try:
@@ -1009,6 +1126,8 @@ def acquire(scene: dict, episode: dict, cfg: dict, budget: Budget, cache: Path) 
                     record["audio_decision"] = "VOICE ONLY"
                     record["review"]["audio_keep"] = False
                     record["video_fallback"] = "local_image_motion"
+            if attempt.get("asset_id") or attempt.get("pexels_id"):
+                cfg.setdefault("_used_media_ids", set()).add(str(attempt.get("asset_id") or attempt.get("pexels_id")))
             atomic_json(meta, record)
             return visual, record
         except (requests.RequestException, RuntimeError, ValueError, OSError, subprocess.SubprocessError, KeyError, IndexError) as exc:
@@ -1035,7 +1154,7 @@ def acquire(scene: dict, episode: dict, cfg: dict, budget: Budget, cache: Path) 
     # show the direction of the force. Draw a literal diagram and send it
     # through the same actual-video review gate; never silently approve it.
     diagram = cache / f"{digest}.buoyancy.png"
-    if _write_buoyancy_diagram(scene, diagram, cfg, episode):
+    if not quota_exhausted and _write_buoyancy_diagram(scene, diagram, cfg, episode):
         try:
             render_visual(diagram, visual, seconds, scene, cfg, True)
             review = apply_audio_review(visual, review_visual(visual, scene, episode, cfg, budget))
@@ -1043,7 +1162,7 @@ def acquire(scene: dict, episode: dict, cfg: dict, budget: Budget, cache: Path) 
                            else "local_science_diagram_buoyancy")
             record = {"scene_id": scene["id"], "source": source_name,
                       "license": "original generated vector illustration", "source_url": "",
-                      "review": review, "cached": False,
+                      "media_type": "local_illustration", "review": review, "cached": False,
                       "audio_decision": "VOICE ONLY", "illustrative": True}
             atomic_json(meta, record)
             return visual, record
@@ -1051,6 +1170,14 @@ def acquire(scene: dict, episode: dict, cfg: dict, budget: Budget, cache: Path) 
                 subprocess.SubprocessError, KeyError, IndexError) as exc:
             visual.unlink(missing_ok=True)
             errors.append({"source": "local_science_diagram_buoyancy", "source_url": "",
+                           "error_type": type(exc).__name__, "error": str(exc)[:300]})
+    if cfg.get("free_only", True) and (quota_exhausted or candidate_count > 0):
+        try:
+            visual, record = _quota_fallback_record(scene, episode, cfg, budget, cache)
+            atomic_json(meta, record)
+            return visual, record
+        except RuntimeError as exc:
+            errors.append({"source": "local_topic_fallback", "source_url": "",
                            "error_type": type(exc).__name__, "error": str(exc)[:300]})
     if candidate_count == 0:
         errors.append({"source": "search", "query": str(scene.get("query", "")), "error_type": "NoCandidates",
@@ -1229,8 +1356,9 @@ def build(audio: Path, narration: str, output: Path, episode: dict, subtitles: P
         quality = verify_final(temporary, duration, cfg)
         temporary.replace(output)
         report = {"passed": True, "output": str(output), "caption_timing": timing, "quality": quality,
-                  "target_mix": {"image": 0.8, "stock": 0.2, "ai_video": 0.0} if cfg.get("free_only", True) else {"image": 0.7, "stock": 0.2, "ai_video": 0.1},
+                  "target_mix": {"stock_video": 0.7, "animated_stock_photo": 0.3, "paid_ai_video": 0.0} if cfg.get("free_only", True) else {"stock_video": 0.6, "animated_stock_photo": 0.3, "paid_ai_video": 0.1},
                   "actual_sources": {source: sum(r["source"] == source for r in records) for source in sorted({r["source"] for r in records})},
+                  "actual_media_mix": {media_type: sum(r.get("media_type", "unknown") == media_type for r in records) for media_type in sorted({r.get("media_type", "unknown") for r in records})},
                   "scene_count": len(records), "cached_scenes": sum(r["cached"] for r in records),
                   "estimated_episode_usd": budget.episode["estimated_usd"], "estimated_day_usd": budget.row["estimated_usd"],
                   "free_only": cfg.get("free_only", True), "free_api_calls": budget.episode.get("free_calls", 0),
