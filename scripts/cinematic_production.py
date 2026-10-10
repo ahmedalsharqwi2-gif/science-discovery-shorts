@@ -1087,7 +1087,7 @@ def acquire(scene: dict, episode: dict, cfg: dict, budget: Budget, cache: Path) 
     # Avoid spending an entire production slot on one impossible scene.
     # Only inspected footage is accepted; the existing subject-specific
     # offline fallback remains the final option, never unrelated stock.
-    max_candidates = max(1, int(os.getenv("CINEMATIC_MAX_SCENE_CANDIDATES", "8")))
+    max_candidates = max(1, int(os.getenv("CINEMATIC_MAX_SCENE_CANDIDATES", "20")))
     for attempt in itertools.islice(itertools.chain(options, ({"model": model, "image": True, "source": "generated_image", "license": "AI illustration"} for model in models if model)), max_candidates):
         candidate_count += 1
         source = cache / f"{digest}.{'png' if attempt['image'] else 'source.mp4'}"
