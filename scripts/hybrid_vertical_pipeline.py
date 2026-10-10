@@ -46,7 +46,7 @@ HEIGHT = 1920
 FPS = 30
 FONT_NAME = "Noto Sans Arabic"
 DEFAULT_VOICE = "ar-SA-HamedNeural"
-DEFAULT_RATE = "-4%"
+DEFAULT_RATE = "-10%"
 DEFAULT_PITCH = "-2Hz"
 
 
@@ -374,7 +374,7 @@ def build_storyboard(storyboard_path: Path, output: Path, music_override: Path |
             voice_path = work / f"voice_{index:03d}.mp3"
             asyncio.run(synthesize_voice(text, voice_path, voice, rate, pitch))
             voice_duration = probe_duration(voice_path)
-            scene_duration = voice_duration + float(raw.get("tail_seconds", 0.30))
+            scene_duration = voice_duration + float(raw.get("tail_seconds", 0.40))
             visual_path = work / f"visual_{index:03d}.mp4"
             render_scene_visual(image, visual_path, scene_duration, str(raw.get("motion", "zoom_in")))
             voice_paths.append(voice_path)
