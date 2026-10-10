@@ -164,6 +164,30 @@ class CinematicTests(unittest.TestCase):
         self.assertEqual(lines[0]['start'], 0)
         self.assertEqual(lines[0]['end'], 1)
 
+    def test_scene_plan_removes_overlapping_recognition_chunks(self):
+        events = [
+            {'start':0,'end':1,'text':'السحيقة تعتمد الحقيقة العلمية'},
+            {'start':1,'end':2,'text':'السحيقة تعتمد الحقيقة العلمية المثبتة في ميكانيكا المائعات'},
+            {'start':2,'end':3,'text':'المثبتة في ميكانيكا المائعات على مبدأ أرخميدس'},
+        ]
+        lines = cp.scene_plan_events(events)
+        self.assertEqual([line['text'] for line in lines], [
+            'السحيقة تعتمد الحقيقة العلمية',
+            'المثبتة في ميكانيكا المائعات',
+            'على مبدأ أرخميدس',
+        ])
+
+    def test_submarine_story_gets_a_topic_anchored_visual_query(self):
+        episode={'title':'كيف تتحكم الغواصات في الصعود والهبوط داخل الأعماق؟'}
+        scenes=cp.plan_scenes([{'start':0,'end':4,'text':'تتحكم الغواصات في الطفو وخزانات الاتزان'}],4,episode,self.cfg)
+        self.assertIn('submarine',scenes[0]['query'])
+        self.assertIn('ballast tanks',scenes[0]['query'])
+        self.assertIn('buoyancy',scenes[0]['query'])
+        pressure_episode={'title':'كيف تتحمل الغواصة ضغط الأعماق؟'}
+        pressure_scene=cp.plan_scenes([{'start':0,'end':4,'text':'يتحمل هيكل الغواصة ضغط الماء'}],4,pressure_episode,self.cfg)
+        self.assertIn('submarine',pressure_scene[0]['query'])
+        self.assertIn('pressure hull',pressure_scene[0]['query'])
+
     def test_local_science_plan_generates_search_query_when_director_is_unavailable(self):
         text='هل سألت نفسك لماذا يقف طائر النحام على ساق واحدة في مياه ضحلة'
         episode={'title':'لماذا يقف النحام على ساق واحدة؟'}
@@ -221,6 +245,38 @@ class CinematicTests(unittest.TestCase):
         self.assertEqual(record['review']['reviewer'], 'local-coral-reef-template')
         self.assertTrue(record['review']['passed'])
 
+    def test_exhausted_free_quota_uses_submarine_fallback_without_provider_calls(self):
+        scene={'id':'scene_submarine','start':0,'end':3,'motion':'zoom_in','kind':'image',
+               'query':'submarine underwater ballast tanks buoyancy',
+               'text':'تتحكم الغواصات في الصعود والهبوط بقوة الطفو'}
+        episode={'title':'كيف تتحكم الغواصات في الصعود والهبوط داخل الأعماق؟',
+                 'narration':'تتحكم الغواصات في الطفو عبر خزانات الاتزان.'}
+        cfg=dict(self.cfg,max_daily_free_calls=1)
+        budget=cp.Budget(self.root/'state/submarine-quota-budget.json',cfg,'episode-submarine')
+        self.assertTrue(budget.reserve('visual_review',.02))
+        with patch.object(cp,'candidates',side_effect=AssertionError('exhausted quota must use deterministic local art')), \
+             patch.object(cp,'render_visual',side_effect=lambda source,out,*a,**k: out.write_bytes(b'rendered-submarine-video')):
+            video,record=cp.acquire(scene,episode,cfg,budget,self.root/'.cinematic_cache')
+        self.assertTrue(video.exists())
+        self.assertEqual(record['source'],'local_submarine_science_illustration')
+        self.assertTrue(record['quota_fallback'])
+        self.assertEqual(record['review']['reviewer'],'local-submarine-science-template')
+        self.assertTrue(record['review']['passed'])
+
+    def test_exhausted_free_quota_uses_submarine_pressure_fallback(self):
+        scene={'id':'scene_pressure','start':0,'end':3,'motion':'zoom_in','kind':'image',
+               'query':'submarine deep sea pressure hull','text':'يتحمل هيكل الغواصة ضغط الماء في الأعماق'}
+        episode={'title':'كيف تتحمل الغواصة ضغط الأعماق؟','narration':'يضغط الماء على الهيكل عند الأعماق.'}
+        cfg=dict(self.cfg,max_daily_free_calls=1)
+        budget=cp.Budget(self.root/'state/pressure-quota-budget.json',cfg,'episode-pressure')
+        self.assertTrue(budget.reserve('visual_review',.02))
+        with patch.object(cp,'candidates',side_effect=AssertionError('quota path must use deterministic submarine art')), \
+             patch.object(cp,'render_visual',side_effect=lambda source,out,*a,**k: out.write_bytes(b'rendered-pressure-submarine-video')):
+            video,record=cp.acquire(scene,episode,cfg,budget,self.root/'.cinematic_cache')
+        self.assertTrue(video.exists())
+        self.assertEqual(record['source'],'local_submarine_science_illustration')
+        self.assertTrue(record['review']['passed'])
+
     def test_exhausted_free_quota_refuses_generic_placeholder_for_other_topics(self):
         scene={'id':'scene_ship','start':0,'end':3,'motion':'zoom_in','kind':'image',
                'query':'steel ship structure','text':'تتشقق الهياكل المعدنية بسبب الإجهاد'}
@@ -255,6 +311,18 @@ class CinematicTests(unittest.TestCase):
         with Image.open(image) as rendered:
             self.assertEqual(rendered.size,(self.cfg['width'],self.cfg['height']))
             self.assertGreater(len(rendered.convert('RGB').getcolors(maxcolors=1000000) or []),10)
+
+    def test_submarine_buoyancy_fallback_is_a_full_color_portrait_illustration(self):
+        scene={'id':'scene_submarine','start':0,'end':3,'motion':'zoom_in',
+               'query':'submarine underwater ballast tanks buoyancy',
+               'text':'تتحكم الغواصات في الصعود والهبوط بقوة الطفو'}
+        episode={'title':'كيف تتحكم الغواصات في الصعود والهبوط؟','narration':scene['text']}
+        image=self.root/'submarine-buoyancy.png'
+        self.assertTrue(cp._write_submarine_science_illustration(scene,image,self.cfg,episode))
+        from PIL import Image
+        with Image.open(image) as rendered:
+            self.assertEqual(rendered.size,(self.cfg['width'],self.cfg['height']))
+            self.assertGreater(len(rendered.convert('RGB').getcolors(maxcolors=1000000) or []),50)
         with (
             patch.object(cp,'candidates',return_value=iter([])),
             patch.object(cp,'render_visual',side_effect=lambda source,out,*a,**k: out.write_bytes(b'reviewable-video')),
@@ -263,7 +331,7 @@ class CinematicTests(unittest.TestCase):
         ):
             video,record=cp.acquire(scene,{'title':'كيف تطفو السفينة؟'},self.cfg,self.budget(),self.root/'.cinematic_cache')
         self.assertTrue(video.exists())
-        self.assertEqual(record['source'],'local_science_diagram_buoyancy')
+        self.assertEqual(record['source'],'local_submarine_science_illustration')
         self.assertTrue(record['review']['passed'])
 
     def test_buoyancy_diagram_is_not_used_for_unrelated_or_non_science_scenes(self):

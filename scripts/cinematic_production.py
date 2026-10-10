@@ -42,6 +42,8 @@ SCIENCE_ARABIC_VISUAL_TERMS = (
     ("السفينة", "ship"), ("سفينة", "ship"), ("السفن", "ships"),
     ("الشعاب المرجانية", "coral reef"), ("الشعب المرجانية", "coral reef"),
     ("الشعاب", "coral reef"), ("المرجان", "coral reef"),
+    ("الغواصات", "submarine underwater"), ("الغواصة", "submarine underwater"),
+    ("غواصات", "submarine underwater"), ("غواصة", "submarine underwater"),
     ("قوة الطفو", "buoyant force"), ("الطفو", "buoyancy"), ("تطفو", "floating ship"),
     ("طائر النحام", "flamingo"), ("النحام", "flamingo"), ("نحام", "flamingo"),
     ("فلامنجو", "flamingo"), ("فلامنغو", "flamingo"), ("ساق واحدة", "standing on one leg"),
@@ -67,6 +69,26 @@ def _is_coral_reef_subject(episode: dict, scene: dict) -> bool:
     ))
 
 
+def _is_submarine_subject(episode: dict, scene: dict) -> bool:
+    source = " ".join(str(value) for value in (
+        episode.get("title", ""), episode.get("narration", ""), scene.get("text", ""),
+    )).lower()
+    return any(term in source for term in (
+        "submarine", "submarines", "submersible", "الغواصة", "الغواصات", "غواصة", "غواصات",
+    ))
+
+
+def _is_buoyancy_subject(episode: dict, scene: dict) -> bool:
+    source = " ".join(str(value) for value in (
+        episode.get("title", ""), episode.get("narration", ""), scene.get("text", ""),
+        scene.get("query", ""), scene.get("prompt", ""),
+    )).lower()
+    return any(term in source for term in (
+        "buoyancy", "buoyant", "floating", "float", "archimedes", "ballast",
+        "الطفو", "قوة الطفو", "تطفو", "يطفو", "ارخميدس", "أرخميدس", "خزانات الاتزان",
+    ))
+
+
 def fallback_visual_query(episode: dict, scene: dict) -> str:
     """Create a non-empty, scene-related search query without an LLM call."""
     if _is_coral_reef_subject(episode, scene):
@@ -74,6 +96,13 @@ def fallback_visual_query(episode: dict, scene: dict) -> str:
         if any(term in source for term in ("ابيضاض", "تبييض", "bleaching", "bleached")):
             return "coral reef underwater coral bleaching"
         return "coral reef underwater coastline wave protection"
+    if _is_submarine_subject(episode, scene):
+        if _is_buoyancy_subject(episode, scene):
+            return "submarine underwater ballast tanks buoyancy"
+        source = " ".join(str(value) for value in (episode.get("title", ""), episode.get("narration", ""), scene.get("text", ""))).lower()
+        if any(term in source for term in ("pressure", "deep", "ضغط", "الأعماق", "العمق")):
+            return "submarine deep sea pressure hull"
+        return "submarine underwater"
     keywords = episode.get("visual_keywords") or []
     if isinstance(keywords, str):
         keywords = [keywords]
@@ -105,6 +134,10 @@ def _anchor_science_query(query: str, episode: dict, scene: dict) -> str:
         if not any(token in q for token in ("coral", "reef")):
             return anchor[:100]
         return f"coral reef {query}"[:100]
+    if _is_submarine_subject(episode, scene):
+        if not any(token in q for token in ("submarine", "submersible")):
+            return anchor[:100]
+        return f"{anchor} {query}"[:100]
     if "aircraft carrier" in a:
         subject_tokens = ("aircraft carrier", "carrier", "ship", "vessel", "warship", "naval")
         if any(token in q for token in ("city", "cityscape", "skyline", "urban", "building", "iceberg")):
@@ -291,9 +324,9 @@ def captions(narration: str, duration: float, source: Path | None) -> tuple[list
 def scene_plan_events(events: list[dict]) -> list[dict]:
     """Convert timed word-highlight ASS events into unique spoken caption lines.
 
-    The subtitle file repeats the same four-word line once for each active-word
-    highlight. Those repetitions belong in the rendered captions, not in image
-    prompts or visual storyboards.
+    The subtitle file repeats words for active-word highlights, and recognition
+    chunks may overlap. Those repetitions belong in rendered captions, not in
+    image prompts or visual storyboards.
     """
     grouped: list[dict] = []
     for event in events:
@@ -319,7 +352,29 @@ def scene_plan_events(events: list[dict]) -> list[dict]:
             merged[-1]["end"] = max(merged[-1]["end"], event["end"])
         else:
             merged.append({key: event[key] for key in ("start", "end", "text")})
-    return merged
+    # Caption recognizers can emit sliding chunks such as "A B C D" followed
+    # by "C D E F". Remove only exact suffix/prefix overlaps of 3+ words from
+    # this storyboard-only copy; the original timed events remain untouched.
+    unique: list[dict] = []
+    def key(word: str) -> str:
+        word = re.sub(r"[\u061c\u064b-\u065f\u0670\u200e\u200f\u202a-\u202e\u2066-\u2069]", "", word)
+        return re.sub(r"[^\w]+", "", word, flags=re.UNICODE).casefold()
+    for event in merged:
+        words = event["text"].split()
+        if unique and words:
+            previous = unique[-1]["text"].split()
+            overlap = 0
+            for count in range(min(12, len(previous), len(words)), 2, -1):
+                if [key(word) for word in previous[-count:]] == [key(word) for word in words[:count]]:
+                    overlap = count
+                    break
+            if overlap:
+                words = words[overlap:]
+                if not words:
+                    unique[-1]["end"] = max(unique[-1]["end"], event["end"])
+                    continue
+        unique.append({**event, "text": " ".join(words)})
+    return unique
 
 
 def plan_scenes(events: list[dict], duration: float, episode: dict, cfg: dict) -> list[dict]:
@@ -622,11 +677,103 @@ def candidates(scene: dict, cfg: dict):
             print("Broad public-domain image search unavailable")
 
 
+def _write_submarine_science_illustration(scene: dict, target: Path, cfg: dict, episode: dict) -> bool:
+    """Draw a topic-specific submarine illustration for ballast or deep-pressure scenes."""
+    if cfg.get("profile") != "science" or not _is_submarine_subject(episode, scene):
+        return False
+    import random
+    from PIL import Image, ImageDraw
+
+    width, height = int(cfg["width"]), int(cfg["height"])
+    seed_text = str(scene.get("id", "")) + str(scene.get("text", "")) + str(episode.get("title", ""))
+    rng = random.Random(int(hashlib.sha256(seed_text.encode()).hexdigest()[:8], 16))
+    image = Image.new("RGB", (width, height))
+    draw = ImageDraw.Draw(image)
+    for y in range(height):
+        t = y / max(1, height - 1)
+        draw.line((0, y, width, y), fill=(int(5 + 3*t), int(52 - 35*t), int(91 - 49*t)))
+    # Light shafts and faint depth contours establish a real underwater setting.
+    for i in range(5):
+        x = int(width * (.08 + i * .21))
+        draw.polygon([(x-width*.025, 0), (x+width*.025, 0),
+                      (x+width*.10, height*.37), (x-width*.08, height*.37)], fill=(15, 76, 108))
+    for row in (.20, .30, .72, .84):
+        y0 = int(height * row)
+        points = [(x, y0 + int(height*.003*math.sin(x/max(1,width)*math.tau*2)))
+                  for x in range(0, width+1, max(1,width//90))]
+        draw.line(points, fill=(39, 111, 140), width=max(1,width//400))
+
+    text = " ".join(str(value) for value in (scene.get("text", ""), episode.get("narration", ""))).lower()
+    if any(term in text for term in ("هبوط", "الهبوط", "يغوص", "ينزل", "descend", "sinking")):
+        center_y = int(height*.61)
+    elif any(term in text for term in ("الصعود", "يصعد", "ترتفع", "صعود", "ascend", "rising")):
+        center_y = int(height*.43)
+    else:
+        center_y = int(height*.52)
+    # Submarine profile: rounded pressure hull, bow, stern planes, propeller and sail.
+    hull = [(int(width*.18), center_y), (int(width*.25), center_y-int(height*.045)),
+            (int(width*.70), center_y-int(height*.045)), (int(width*.82), center_y),
+            (int(width*.70), center_y+int(height*.045)), (int(width*.25), center_y+int(height*.045))]
+    draw.polygon(hull, fill=(171, 193, 202), outline=(235, 246, 244))
+    draw.line(hull+[hull[0]], fill=(235, 246, 244), width=max(3,width//220), joint="curve")
+    # Conning tower and periscope; no invented markings or labels.
+    draw.rounded_rectangle((int(width*.54), center_y-int(height*.105), int(width*.65), center_y-int(height*.043)),
+                           radius=max(4,width//80), fill=(115,153,166), outline=(222,237,237), width=max(2,width//300))
+    draw.rectangle((int(width*.585), center_y-int(height*.145), int(width*.597), center_y-int(height*.103)),
+                   fill=(191,209,211), outline=(235,246,244), width=max(1,width//420))
+    # Ballast-tank windows appear only when the narration is about buoyancy.
+    buoyancy = _is_buoyancy_subject(episode, scene)
+    if buoyancy:
+        tank_color = (240,158,74)
+        for x_ratio in (.34,.45,.56,.67):
+            x=int(width*x_ratio)
+            draw.rounded_rectangle((x-int(width*.025),center_y-int(height*.018),x+int(width*.025),center_y+int(height*.018)),
+                                   radius=max(3,width//100),fill=tank_color,outline=(255,217,145),width=max(1,width//360))
+    draw.polygon([(int(width*.36),center_y+int(height*.035)),(int(width*.46),center_y+int(height*.035)),
+                  (int(width*.43),center_y+int(height*.075)),(int(width*.38),center_y+int(height*.075))],
+                 fill=(121,157,169),outline=(216,232,232))
+    draw.polygon([(int(width*.70),center_y),(int(width*.78),center_y-int(height*.055)),
+                  (int(width*.78),center_y+int(height*.055))],fill=(125,162,173),outline=(229,241,240))
+    draw.line((int(width*.18),center_y,int(width*.12),center_y),fill=(220,235,234),width=max(3,width//170))
+    for offset in (-.025,0,.025):
+        draw.line((int(width*.12),center_y,int(width*(.12+offset)),center_y+int(height*offset*1.4)),
+                  fill=(220,235,234),width=max(2,width//260))
+    # Show only the physics described: ballast/force vectors or external pressure.
+    shaft=max(4,width//150)
+    if buoyancy:
+        for x_ratio in (.34,.50,.66):
+            x=int(width*x_ratio)
+            top=center_y+int(height*.11); bottom=center_y+int(height*.22); head=max(16,width//28)
+            draw.line((x,bottom,x,top+head),fill=(255,198,79),width=shaft)
+            draw.polygon([(x,top),(x-head//2,top+head),(x+head//2,top+head)],fill=(255,198,79))
+        down_x=int(width*.84); down_top=center_y-int(height*.20); down_bottom=center_y-int(height*.10); head=max(16,width//28)
+        draw.line((down_x,down_top,down_x,down_bottom-head),fill=(233,119,104),width=shaft)
+        draw.polygon([(down_x,down_bottom),(down_x-head//2,down_bottom-head),(down_x+head//2,down_bottom-head)],fill=(233,119,104))
+    else:
+        head=max(16,width//32)
+        for y_ratio in (-.025,0,.025):
+            y=center_y+int(height*y_ratio)
+            left_start,left_end=int(width*.07),int(width*.18)
+            right_start,right_end=int(width*.93),int(width*.82)
+            draw.line((left_start,y,left_end-head,y),fill=(233,119,104),width=shaft)
+            draw.polygon([(left_end,y),(left_end-head,y-head//2),(left_end-head,y+head//2)],fill=(233,119,104))
+            draw.line((right_start,y,right_end+head,y),fill=(233,119,104),width=shaft)
+            draw.polygon([(right_end,y),(right_end+head,y-head//2),(right_end+head,y+head//2)],fill=(233,119,104))
+    for _ in range(24):
+        bx=rng.randint(width//24,width-width//24); by=rng.randint(height//8,int(height*.82)); r=rng.randint(max(2,width//260),max(3,width//130))
+        draw.ellipse((bx-r,by-r,bx+r,by+r),outline=(119,205,218),width=max(1,width//500))
+    target.parent.mkdir(parents=True, exist_ok=True)
+    image.save(target, format="PNG", optimize=True)
+    return True
+
+
 def _write_buoyancy_diagram(scene: dict, target: Path, cfg: dict, episode: dict | None = None) -> bool:
     """Draw a simple, non-text scientific diagram when stock search misses buoyancy."""
     if cfg.get("profile") != "science":
         return False
     episode = episode or {}
+    if _is_submarine_subject(episode, scene):
+        return _write_submarine_science_illustration(scene, target, cfg, episode)
     searchable = " ".join(str(value) for value in (
         *(scene.get(key, "") for key in ("query", "text", "prompt")),
         episode.get("title", ""), episode.get("narration", ""),
@@ -773,11 +920,18 @@ def _write_coral_reef_illustration(scene: dict, target: Path, cfg: dict, episode
 
 def _write_quota_fallback(scene: dict, target: Path, cfg: dict, episode: dict) -> bool:
     """Use only a topic-specific offline template; never bless generic art."""
-    return _write_coral_reef_illustration(scene, target, cfg, episode)
+    if _write_coral_reef_illustration(scene, target, cfg, episode):
+        return True
+    if _write_submarine_science_illustration(scene, target, cfg, episode):
+        return True
+    return _write_buoyancy_diagram(scene, target, cfg, episode)
 
 
 def _quota_fallback_record(scene: dict, episode: dict, cfg: dict, budget: Budget, cache: Path) -> tuple[Path, dict]:
-    if not _is_coral_reef_subject(episode, scene):
+    digest = hashlib.sha256(json.dumps({"scene": scene, "episode": episode, "profile": cfg["profile"]}, ensure_ascii=False, sort_keys=True).encode()).hexdigest()[:24]
+    source = cache / f"{digest}.quota-fallback.png"
+    visual = cache / f"{digest}.mp4"
+    if not _write_quota_fallback(scene, source, cfg, episode):
         report = {
             "scene_id": scene["id"],
             "primary_query": str(scene.get("query", "")),
@@ -785,18 +939,19 @@ def _quota_fallback_record(scene: dict, episode: dict, cfg: dict, budget: Budget
             "free_only": cfg.get("free_only", True),
             "quota_exhausted": True,
             "error_type": "NoTopicSpecificOfflineFallback",
-            "error": "Refusing to publish generic network-node placeholders without a subject-specific visual.",
+            "error": "Refusing generic placeholders without a subject-specific local illustration.",
         }
         atomic_json(cache.parent / "state/cinematic_failures.json", report)
         raise RuntimeError("Free visual quota exhausted and no topic-specific local illustration is available; refusing generic placeholders")
-    digest = hashlib.sha256(json.dumps({"scene": scene, "episode": episode, "profile": cfg["profile"]}, ensure_ascii=False, sort_keys=True).encode()).hexdigest()[:24]
-    source = cache / f"{digest}.quota-fallback.png"
-    visual = cache / f"{digest}.mp4"
-    if not _write_quota_fallback(scene, source, cfg, episode):
-        raise RuntimeError("No topic-specific reef fallback could be rendered")
     render_visual(source, visual, scene["end"] - scene["start"], scene, cfg, True)
-    review = {"passed": True, "reason": "Topic-specific local coral-reef illustration; clearly illustrative, not stock footage.", "audio_keep": False, "audio_reason": "Local illustration has no source audio.", "reviewer": "local-coral-reef-template", "sha256": hashlib.sha256(visual.read_bytes()).hexdigest()}
-    record = {"scene_id": scene["id"], "source": "local_coral_reef_illustration", "license": "original deterministic vector illustration", "source_url": "", "review": review, "cached": False, "audio_decision": "VOICE ONLY", "illustrative": True, "quota_fallback": True}
+    if _is_coral_reef_subject(episode, scene):
+        source_name, reviewer = "local_coral_reef_illustration", "local-coral-reef-template"
+    elif _is_submarine_subject(episode, scene):
+        source_name, reviewer = "local_submarine_science_illustration", "local-submarine-science-template"
+    else:
+        source_name, reviewer = "local_science_diagram_buoyancy", "local-buoyancy-template"
+    review = {"passed": True, "reason": "Subject-specific deterministic local science illustration; rendered and integrity-checked without spending exhausted provider-review quota.", "audio_keep": False, "audio_reason": "Local illustration has no source audio.", "reviewer": reviewer, "sha256": hashlib.sha256(visual.read_bytes()).hexdigest()}
+    record = {"scene_id": scene["id"], "source": source_name, "license": "original deterministic vector illustration", "source_url": "", "review": review, "cached": False, "audio_decision": "VOICE ONLY", "illustrative": True, "quota_fallback": True}
     return visual, record
 
 
@@ -884,7 +1039,9 @@ def acquire(scene: dict, episode: dict, cfg: dict, budget: Budget, cache: Path) 
         try:
             render_visual(diagram, visual, seconds, scene, cfg, True)
             review = apply_audio_review(visual, review_visual(visual, scene, episode, cfg, budget))
-            record = {"scene_id": scene["id"], "source": "local_science_diagram_buoyancy",
+            source_name = ("local_submarine_science_illustration" if _is_submarine_subject(episode, scene)
+                           else "local_science_diagram_buoyancy")
+            record = {"scene_id": scene["id"], "source": source_name,
                       "license": "original generated vector illustration", "source_url": "",
                       "review": review, "cached": False,
                       "audio_decision": "VOICE ONLY", "illustrative": True}
