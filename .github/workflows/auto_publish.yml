@@ -38,7 +38,7 @@ env:
   CINEMATIC_IMAGE_MODEL: ${{ vars.CINEMATIC_IMAGE_MODEL || 'gemini-3.1-flash-lite-image' }}
   CINEMATIC_IMAGE_FALLBACK_MODEL: ${{ vars.CINEMATIC_IMAGE_FALLBACK_MODEL || 'gemini-3.1-flash-image' }}
   CLIP_REVIEW_ENABLED: 'false'
-  QUALITY_GATES_BLOCKING: 'false'
+  QUALITY_GATES_BLOCKING: 'true'
   BACKGROUND_MUSIC_ENABLED: 'true'
   # Consecutive production runs cycle 1 -> 2 -> 3; retries keep the same track.
   MUSIC_ROTATION_INDEX: ${{ github.run_number }}

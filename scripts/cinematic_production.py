@@ -23,6 +23,7 @@ from urllib.parse import urlparse
 from zoneinfo import ZoneInfo
 
 import requests
+from scripts.rtl_caption_layout import layout_word_centers
 
 ROOT = Path(__file__).resolve().parents[1]
 API = "https://generativelanguage.googleapis.com/v1beta"
@@ -39,6 +40,8 @@ PROFILES = {
 SCIENCE_ARABIC_VISUAL_TERMS = (
     ("حاملة الطائرات", "aircraft carrier"), ("حاملة طائرات", "aircraft carrier"),
     ("السفينة", "ship"), ("سفينة", "ship"), ("السفن", "ships"),
+    ("الشعاب المرجانية", "coral reef"), ("الشعب المرجانية", "coral reef"),
+    ("الشعاب", "coral reef"), ("المرجان", "coral reef"),
     ("قوة الطفو", "buoyant force"), ("الطفو", "buoyancy"), ("تطفو", "floating ship"),
     ("طائر النحام", "flamingo"), ("النحام", "flamingo"), ("نحام", "flamingo"),
     ("فلامنجو", "flamingo"), ("فلامنغو", "flamingo"), ("ساق واحدة", "standing on one leg"),
@@ -55,8 +58,22 @@ SCIENCE_ARABIC_VISUAL_TERMS = (
 )
 
 
+def _is_coral_reef_subject(episode: dict, scene: dict) -> bool:
+    source = " ".join(str(value) for value in (
+        episode.get("title", ""), episode.get("narration", ""), scene.get("text", "")
+    )).lower()
+    return any(term in source for term in (
+        "coral reef", "coral reefs", "reef", "الشعاب المرجانية", "الشعب المرجانية", "الشعاب", "المرجان", "مرجانية",
+    ))
+
+
 def fallback_visual_query(episode: dict, scene: dict) -> str:
     """Create a non-empty, scene-related search query without an LLM call."""
+    if _is_coral_reef_subject(episode, scene):
+        source = " ".join(str(value) for value in (episode.get("title", ""), scene.get("text", ""))).lower()
+        if any(term in source for term in ("ابيضاض", "تبييض", "bleaching", "bleached")):
+            return "coral reef underwater coral bleaching"
+        return "coral reef underwater coastline wave protection"
     keywords = episode.get("visual_keywords") or []
     if isinstance(keywords, str):
         keywords = [keywords]
@@ -84,6 +101,10 @@ def _anchor_science_query(query: str, episode: dict, scene: dict) -> str:
     if not anchor or anchor == "science documentary subject":
         return query[:100]
     q, a = query.lower(), anchor.lower()
+    if _is_coral_reef_subject(episode, scene):
+        if not any(token in q for token in ("coral", "reef")):
+            return anchor[:100]
+        return f"coral reef {query}"[:100]
     if "aircraft carrier" in a:
         subject_tokens = ("aircraft carrier", "carrier", "ship", "vessel", "warship", "naval")
         if any(token in q for token in ("city", "cityscape", "skyline", "urban", "building", "iceberg")):
@@ -265,6 +286,40 @@ def captions(narration: str, duration: float, source: Path | None) -> tuple[list
     if not chunks:
         raise ValueError("Empty narration captions")
     return chunks, method
+
+
+def scene_plan_events(events: list[dict]) -> list[dict]:
+    """Convert timed word-highlight ASS events into unique spoken caption lines.
+
+    The subtitle file repeats the same four-word line once for each active-word
+    highlight. Those repetitions belong in the rendered captions, not in image
+    prompts or visual storyboards.
+    """
+    grouped: list[dict] = []
+    for event in events:
+        start, end = float(event["start"]), float(event["end"])
+        text = str(event.get("text", "")).strip()
+        if not text:
+            continue
+        same_interval = (
+            event.get("ass_text") and grouped and grouped[-1].get("source_ass")
+            and abs(grouped[-1]["start"] - start) <= .005
+            and abs(grouped[-1]["end"] - end) <= .005
+        )
+        if same_interval:
+            grouped[-1]["text"] = (grouped[-1]["text"] + " " + text).strip()
+        else:
+            grouped.append({"start": start, "end": end, "text": text,
+                            "source_ass": bool(event.get("ass_text"))})
+
+    merged: list[dict] = []
+    for event in grouped:
+        if (merged and event["text"] == merged[-1]["text"]
+                and event["start"] <= merged[-1]["end"] + .08):
+            merged[-1]["end"] = max(merged[-1]["end"], event["end"])
+        else:
+            merged.append({key: event[key] for key in ("start", "end", "text")})
+    return merged
 
 
 def plan_scenes(events: list[dict], duration: float, episode: dict, cfg: dict) -> list[dict]:
@@ -630,51 +685,118 @@ def _write_buoyancy_diagram(scene: dict, target: Path, cfg: dict, episode: dict 
     return True
 
 
-def _write_quota_fallback(scene: dict, target: Path, cfg: dict, episode: dict) -> bool:
-    """Create a deterministic, narration-bound visual without provider calls.
-
-    This is used only after the configured free visual quota is exhausted. It
-    keeps the episode renderable without pretending that an unrelated stock
-    clip passed visual inspection; the manifest records the local fallback.
-    """
+def _write_coral_reef_illustration(scene: dict, target: Path, cfg: dict, episode: dict) -> bool:
+    """Draw an unmistakably coral-reef-specific fallback when free calls run out."""
+    if cfg.get("profile") != "science" or not _is_coral_reef_subject(episode, scene):
+        return False
+    import random
     from PIL import Image, ImageDraw
+
     width, height = int(cfg["width"]), int(cfg["height"])
-    seed = int(hashlib.sha256((str(scene.get("text", "")) + str(episode.get("title", ""))).encode()).hexdigest()[:8], 16)
+    seed_text = str(scene.get("id", "")) + str(scene.get("text", "")) + str(episode.get("title", ""))
+    rng = random.Random(int(hashlib.sha256(seed_text.encode()).hexdigest()[:8], 16))
     image = Image.new("RGB", (width, height))
-    pixels = image.load()
+    draw = ImageDraw.Draw(image)
     for y in range(height):
         t = y / max(1, height - 1)
-        for x in range(width):
-            glow = int(18 * (1 - abs(x / max(1, width - 1) - .5) * 2))
-            pixels[x, y] = (7 + glow // 3, 17 + int(26 * (1 - t)) + glow // 2, 38 + int(48 * (1 - t)) + glow)
-    draw = ImageDraw.Draw(image)
-    cx, cy = width // 2, int(height * .48)
-    accent = ((seed >> 16) % 80 + 120, (seed >> 8) % 70 + 130, seed % 60 + 150)
-    for radius in (int(width*.12), int(width*.22), int(width*.34)):
-        draw.ellipse((cx-radius, cy-radius, cx+radius, cy+radius), outline=accent, width=max(2, width//240))
-    nodes = []
-    for i in range(7):
-        angle = (seed % 360 + i * 51) * math.pi / 180
-        radius = int(width * (.17 + (i % 3) * .07))
-        nodes.append((cx + int(math.cos(angle) * radius), cy + int(math.sin(angle) * radius)))
-    for i, point in enumerate(nodes):
-        draw.line((cx, cy, point[0], point[1]), fill=(70, 170, 210), width=max(2, width//300))
-        r = max(8, width//45)
-        draw.ellipse((point[0]-r, point[1]-r, point[0]+r, point[1]+r), fill=accent, outline=(235,245,255), width=max(2, width//360))
-    draw.ellipse((cx- max(12, width//28), cy-max(12, width//28), cx+max(12, width//28), cy+max(12, width//28)), fill=(245, 190, 78), outline=(255,245,205), width=max(2, width//300))
+        draw.line((0, y, width, y), fill=(int(5 + 8*t), int(56 - 23*t), int(99 - 39*t)))
+
+    # Soft surface light shafts and ripples establish an underwater scene.
+    for i in range(5):
+        x = int(width * (.10 + i * .20))
+        draw.polygon([(x-width*.035, 0), (x+width*.035, 0),
+                      (x+width*.16, height*.62), (x-width*.12, height*.62)],
+                     fill=(18, 83, 119))
+    for row in (.12, .19, .26):
+        y0 = int(height * row)
+        points = [(x, y0 + int(height*.004*math.sin(x/max(1,width)*math.tau*3)))
+                  for x in range(0, width+1, max(1, width//80))]
+        draw.line(points, fill=(78, 177, 196), width=max(1, width//360))
+
+    base_y = int(height * .86)
+    seabed = [(0, int(height*.82)), (int(width*.16), int(height*.79)),
+              (int(width*.33), int(height*.82)), (int(width*.52), int(height*.78)),
+              (int(width*.72), int(height*.81)), (width, int(height*.77)),
+              (width, height), (0, height)]
+    draw.polygon(seabed, fill=(78, 91, 73))
+    draw.line(seabed[:6], fill=(147, 154, 111), width=max(3, width//150), joint="curve")
+
+    source = " ".join(str(value) for value in (episode.get("title", ""), scene.get("text", ""))).lower()
+    bleaching = any(term in source for term in ("ابيضاض", "تبييض", "bleaching", "bleached"))
+    palette = [(239, 103, 91), (248, 148, 92), (206, 92, 157),
+               (235, 181, 92), (111, 202, 178), (153, 126, 224)]
+    if bleaching:
+        palette[0] = (216, 216, 195)
+
+    def branch(x: float, y: float, angle: float, length: float, stroke: int, depth: int, color):
+        if depth < 0 or length < 3:
+            return
+        end_x = x + math.cos(angle) * length
+        end_y = y - math.sin(angle) * length
+        draw.line((round(x), round(y), round(end_x), round(end_y)), fill=color, width=max(2, stroke))
+        tip = max(2, stroke // 2)
+        draw.ellipse((end_x-tip, end_y-tip, end_x+tip, end_y+tip), fill=color)
+        if depth:
+            branch(end_x, end_y, angle-rng.uniform(.34, .72), length*.70, max(2, int(stroke*.72)), depth-1, color)
+            branch(end_x, end_y, angle+rng.uniform(.34, .72), length*.68, max(2, int(stroke*.70)), depth-1, color)
+
+    # Layered branching coral silhouettes are the unmistakable subject.
+    for i in range(9):
+        x = int(width * (.06 + i*.11)) + rng.randint(-width//45, width//45)
+        length = height * rng.uniform(.13, .28)
+        color = palette[i % len(palette)]
+        thickness = max(4, width//48)
+        branch(x, base_y, math.pi/2 + rng.uniform(-.10,.10), length, thickness, 3, color)
+        if i % 2 == 0:
+            branch(x, base_y, math.pi/2 + rng.uniform(-.18,.18), length*.72, max(3, thickness-2), 2, palette[(i+2)%len(palette)])
+
+    # Small fish, sea fans and bubbles add scale without textual decoration.
+    for i in range(6):
+        fx = int(width * rng.uniform(.12, .88))
+        fy = int(height * rng.uniform(.34, .66))
+        size = max(14, width//14)
+        color = [(247,196,94),(95,208,213),(244,132,100)][i%3]
+        draw.ellipse((fx-size, fy-size//2, fx+size, fy+size//2), fill=color)
+        draw.polygon([(fx-size,fy),(fx-size-int(size*.65),fy-int(size*.55)),
+                      (fx-size-int(size*.65),fy+int(size*.55))], fill=color)
+        draw.ellipse((fx+size//2,fy-size//8,fx+size//2+max(2,size//8),fy+size//8), fill=(5,24,39))
+    for i in range(18):
+        bx = rng.randint(width//20, width-width//20)
+        by = rng.randint(height//5, int(height*.74))
+        r = rng.randint(max(2,width//220), max(3,width//100))
+        draw.ellipse((bx-r,by-r,bx+r,by+r), outline=(135,211,218), width=max(1,width//500))
+
     target.parent.mkdir(parents=True, exist_ok=True)
     image.save(target, format="PNG", optimize=True)
     return True
 
 
+def _write_quota_fallback(scene: dict, target: Path, cfg: dict, episode: dict) -> bool:
+    """Use only a topic-specific offline template; never bless generic art."""
+    return _write_coral_reef_illustration(scene, target, cfg, episode)
+
+
 def _quota_fallback_record(scene: dict, episode: dict, cfg: dict, budget: Budget, cache: Path) -> tuple[Path, dict]:
+    if not _is_coral_reef_subject(episode, scene):
+        report = {
+            "scene_id": scene["id"],
+            "primary_query": str(scene.get("query", "")),
+            "profile": cfg.get("profile"),
+            "free_only": cfg.get("free_only", True),
+            "quota_exhausted": True,
+            "error_type": "NoTopicSpecificOfflineFallback",
+            "error": "Refusing to publish generic network-node placeholders without a subject-specific visual.",
+        }
+        atomic_json(cache.parent / "state/cinematic_failures.json", report)
+        raise RuntimeError("Free visual quota exhausted and no topic-specific local illustration is available; refusing generic placeholders")
     digest = hashlib.sha256(json.dumps({"scene": scene, "episode": episode, "profile": cfg["profile"]}, ensure_ascii=False, sort_keys=True).encode()).hexdigest()[:24]
     source = cache / f"{digest}.quota-fallback.png"
     visual = cache / f"{digest}.mp4"
-    _write_quota_fallback(scene, source, cfg, episode)
+    if not _write_quota_fallback(scene, source, cfg, episode):
+        raise RuntimeError("No topic-specific reef fallback could be rendered")
     render_visual(source, visual, scene["end"] - scene["start"], scene, cfg, True)
-    review = {"passed": True, "reason": "Deterministic local science illustration used because the configured free visual quota was exhausted.", "audio_keep": False, "audio_reason": "Local illustration has no source audio.", "reviewer": "local-quota-fallback", "sha256": hashlib.sha256(visual.read_bytes()).hexdigest()}
-    record = {"scene_id": scene["id"], "source": "local_quota_fallback", "license": "original deterministic vector illustration", "source_url": "", "review": review, "cached": False, "audio_decision": "VOICE ONLY", "illustrative": True, "quota_fallback": True}
+    review = {"passed": True, "reason": "Topic-specific local coral-reef illustration; clearly illustrative, not stock footage.", "audio_keep": False, "audio_reason": "Local illustration has no source audio.", "reviewer": "local-coral-reef-template", "sha256": hashlib.sha256(visual.read_bytes()).hexdigest()}
+    record = {"scene_id": scene["id"], "source": "local_coral_reef_illustration", "license": "original deterministic vector illustration", "source_url": "", "review": review, "cached": False, "audio_decision": "VOICE ONLY", "illustrative": True, "quota_fallback": True}
     return visual, record
 
 
@@ -785,42 +907,75 @@ def acquire(scene: dict, episode: dict, cfg: dict, budget: Budget, cache: Path) 
     raise RuntimeError(f"No inspected visual for {scene['id']}; detailed report saved to state/cinematic_failures.json. Attempts: {len(errors)}")
 
 
+def _clean_caption_tokens(text: str) -> list[str]:
+    text = re.sub(r"[\u061c\u200e\u200f\u202a-\u202e\u2066-\u2069]", "", text)
+    tokens = [
+        re.sub(r'''[.,،؛:!?؟…/\\\-_()\[\]{}\"«»]''', "", token)
+        for token in text.split()
+    ]
+    return [token for token in tokens if token]
+
+
+def _positioned_caption_lines(
+    words: list[str], start: float, end: float, cfg: dict,
+    active_index: int | None = None,
+) -> list[str]:
+    centers, horizontal_scale = layout_word_centers(
+        words, int(cfg["width"]), 58, side_margin=90,
+    )
+    y = 300 + 58 // 2
+    output = []
+    for index, (word, center_x) in enumerate(zip(words, centers)):
+        color = r"\c&H000000FF&" if index == active_index else r"\c&H00FFFFFF&"
+        override = f"\\an5\\pos({center_x},{y})\\fscx{horizontal_scale}{color}"
+        output.append(
+            f"Dialogue: 0,{ass_time(start)},{ass_time(max(end, start + 0.04))},Caption,,0,0,0,,"
+            f"{{{override}}}{word}"
+        )
+    return output
+
+
 def write_captions(events: list[dict], path: Path, cfg: dict, *, illustrative=False) -> None:
-    """Write clean RTL captions: one line, at most four words, active word red."""
+    """Write stable Arabic captions with explicitly positioned RTL word runs."""
     header = ("[Script Info]\nScriptType: v4.00+\n" f"PlayResX: {cfg['width']}\nPlayResY: {cfg['height']}\nWrapStyle: 2\nScaledBorderAndShadow: yes\n\n"
         "[V4+ Styles]\nFormat: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding\n"
         "Style: Caption,Noto Naskh Arabic,58,&H00FFFFFF,&H00FFFFFF,&H0010182B,&HAA000000,1,0,0,0,100,100,0,0,1,4,1,8,90,120,300,1\n\n"
         "[Events]\nFormat: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\n")
     lines = [header]
     for event in events:
-        if event.get("ass_text"):
-            start_time, end_time = float(event["start"]), float(event["end"])
+        start_time, end_time = float(event["start"]), float(event["end"])
+        raw_ass = event.get("ass_text", "")
+        tokens = _clean_caption_tokens(event.get("text", ""))
+        # The first-stage writer already positioned each word separately.
+        # Preserve that geometry and the active-word color exactly.
+        if raw_ass and r"\pos(" in raw_ass and len(tokens) == 1:
             lines.append(
-                f"Dialogue: 0,{ass_time(start_time)},{ass_time(max(end_time, start_time + 0.04))},Caption,,0,0,0,,"
-                f"{rtl_ass_text(event['ass_text'])}"
+                f"Dialogue: 0,{ass_time(start_time)},{ass_time(max(end_time, start_time + 0.04))},Caption,,0,0,0,,{raw_ass}"
             )
             continue
-        tokens = [re.sub(r'''[.,،؛:!?؟…/\\\-—_()\[\]{}"«»]''', "", re.sub(r"[\u061c\u200e\u200f\u202a-\u202e\u2066-\u2069\u064b-\u065f\u0670\u06d6-\u06ed]", "", token)) for token in event["text"].split()]
-        tokens = [token for token in tokens if token]
         if not tokens:
             continue
-        start_time, end_time = float(event["start"]), float(event["end"])
+        active_index = None
+        if raw_ass:
+            active = re.search(r"\{\\c&H000000FF&\}\s*([^{}\s]+)", raw_ass, re.I)
+            if active:
+                active_word = _clean_caption_tokens(active.group(1))
+                if active_word:
+                    active_index = next(
+                        (i for i, word in enumerate(tokens) if word == active_word[0]),
+                        None,
+                    )
+            lines.extend(_positioned_caption_lines(tokens, start_time, end_time, cfg, active_index))
+            continue
         total = max(end_time - start_time, 0.04)
         for chunk_start in range(0, len(tokens), 4):
             chunk = tokens[chunk_start:chunk_start + 4]
             chunk_begin = start_time + total * chunk_start / len(tokens)
             chunk_end = end_time if chunk_start + len(chunk) >= len(tokens) else start_time + total * (chunk_start + len(chunk)) / len(tokens)
-            # Inline ASS color tags split libass bidi runs. Keep logical source
-            # order and use the RTL paragraph wrapper; never fade/restart line.
-            for active in range(len(chunk)):
-                word_start = chunk_begin + (chunk_end - chunk_begin) * active / len(chunk)
-                word_end = chunk_end if active == len(chunk) - 1 else chunk_begin + (chunk_end - chunk_begin) * (active + 1) / len(chunk)
-                rendered = [
-                    r"{\c&H000000FF&}" + token + r"{\c&H00FFFFFF&}" if index == active else token
-                    for index, token in enumerate(chunk)
-                ]
-                text = " ".join(rendered)
-                lines.append(f"Dialogue: 0,{ass_time(word_start)},{ass_time(max(word_end, word_start + 0.04))},Caption,,0,0,0,,{rtl_ass_text(text)}")
+            for active_index in range(len(chunk)):
+                word_start = chunk_begin + (chunk_end - chunk_begin) * active_index / len(chunk)
+                word_end = chunk_end if active_index == len(chunk) - 1 else chunk_begin + (chunk_end - chunk_begin) * (active_index + 1) / len(chunk)
+                lines.extend(_positioned_caption_lines(chunk, word_start, word_end, cfg, active_index))
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 def mix_audio(voice: Path, clean_video: Path, output: Path, duration: float, cfg: dict, scenes: list[dict], root: Path) -> None:
@@ -891,7 +1046,7 @@ def build(audio: Path, narration: str, output: Path, episode: dict, subtitles: P
     else:
         scenes = None
     if not scenes:
-        scenes = direct_scenes(plan_scenes(events, duration, episode, cfg), episode, cfg, budget)
+        scenes = direct_scenes(plan_scenes(scene_plan_events(events), duration, episode, cfg), episode, cfg, budget)
         atomic_json(plan_path, {"duration": duration, "profile": cfg["profile"], "scenes": scenes})
     atomic_json(root / "state/cinematic_storyboard.json", {"episode_id": episode_id, "profile": cfg["profile"], "scenes": scenes})
     records, paths = [], []

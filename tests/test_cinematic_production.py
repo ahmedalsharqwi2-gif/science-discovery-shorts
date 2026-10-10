@@ -126,7 +126,43 @@ class CinematicTests(unittest.TestCase):
         self.assertIn(r'{\c&H000000FF&}نص', events[0]['ass_text'])
         output = self.root / 'rendered.ass'
         cp.write_captions(events, output, self.cfg)
-        self.assertIn(r'{\c&H000000FF&}نص', output.read_text(encoding='utf-8'))
+        self.assertIn(r"\c&H000000FF&}نص", output.read_text(encoding='utf-8'))
+
+    def test_full_cinematic_caption_path_keeps_first_arabic_word_on_right(self):
+        from PIL import Image
+        from scripts.assemble_video import write_ass_subtitles
+        source = self.root / 'source.ass'
+        output = self.root / 'cinematic.ass'
+        frame = self.root / 'frame.png'
+        narration = 'الشعاب المرجانية تحمي السواحل'
+        write_ass_subtitles(narration, 4.0, source)
+        events, method = cp.captions(narration, 4.0, source)
+        self.assertEqual(method, 'existing_audio_timeline')
+        cp.write_captions(events, output, cp.settings())
+        subprocess.run([
+            'ffmpeg', '-y', '-v', 'error', '-f', 'lavfi', '-i',
+            'color=c=black:s=1080x1920:r=30:d=1', '-vf', f"subtitles='{output}'",
+            '-frames:v', '1', str(frame),
+        ], check=True)
+        image = Image.open(frame).convert('RGB')
+        red_x = [x for y in range(image.height) for x in range(image.width)
+                 if (lambda p: p[0] > 150 and p[1] < 110 and p[2] < 110)(image.getpixel((x,y)))]
+        self.assertTrue(red_x, 'active word was not rendered in red')
+        self.assertGreater(sum(red_x) / len(red_x), image.width / 2)
+
+    def test_scene_plan_collapses_repeated_four_word_highlight_events(self):
+        words = 'الشعاب المرجانية تحمي السواحل'.split()
+        events = []
+        for active in range(4):
+            start, end = active * .25, (active + 1) * .25
+            for word in words:
+                events.append({'start':start,'end':end,'text':word,
+                               'ass_text':rf'{{\an5\pos(500,300)}}{word}'})
+        lines = cp.scene_plan_events(events)
+        self.assertEqual(len(lines), 1)
+        self.assertEqual(lines[0]['text'], 'الشعاب المرجانية تحمي السواحل')
+        self.assertEqual(lines[0]['start'], 0)
+        self.assertEqual(lines[0]['end'], 1)
 
     def test_local_science_plan_generates_search_query_when_director_is_unavailable(self):
         text='هل سألت نفسك لماذا يقف طائر النحام على ساق واحدة في مياه ضحلة'
@@ -159,9 +195,18 @@ class CinematicTests(unittest.TestCase):
         self.assertIn('aircraft carrier',scene[0]['query'])
         self.assertNotIn('city',scene[0]['query'])
 
-    def test_exhausted_free_quota_uses_local_fallback_without_provider_calls(self):
+    def test_reef_director_query_cannot_drift_to_unrelated_subject(self):
+        episode={'title':'كيف تحمي الشعاب المرجانية السواحل؟'}
+        scene=cp.plan_scenes([{'start':0,'end':4,'text':'الشعاب المرجانية تحمي السواحل'}],4,episode,self.cfg)
+        director=[{'id':scene[0]['id'],'description':'Blood flow','query':'blood flow','motion':'zoom_in','sfx':'none'}]
+        with patch.object(cp,'gemini_json',return_value=director):
+            cp.direct_scenes(scene,episode,self.cfg,self.budget())
+        self.assertIn('coral reef',scene[0]['query'])
+        self.assertNotIn('blood',scene[0]['query'])
+
+    def test_exhausted_free_quota_uses_coral_specific_fallback_without_provider_calls(self):
         scene = {'id':'scene_quota','start':0,'end':3,'motion':'zoom_in','kind':'image',
-                 'query':'steel ship structure','text':'تتشقق الهياكل المعدنية بسبب الإجهاد'}
+                 'query':'coral reef coastline','text':'الشعاب المرجانية تحمي السواحل'}
         cfg = dict(self.cfg, max_daily_free_calls=1)
         budget = cp.Budget(self.root/'state/quota-budget.json', cfg, 'episode-quota')
         self.assertTrue(budget.reserve('visual_review', .02))
@@ -169,11 +214,25 @@ class CinematicTests(unittest.TestCase):
             patch.object(cp, 'candidates', side_effect=AssertionError('provider search must be skipped')),
             patch.object(cp, 'render_visual', side_effect=lambda source,out,*a,**k: out.write_bytes(b'reviewable-video')),
         ):
-            video, record = cp.acquire(scene, {'title':'هياكل السفن'}, cfg, budget, self.root/'.cinematic_cache')
+            video, record = cp.acquire(scene, {'title':'كيف تحمي الشعاب المرجانية السواحل؟'}, cfg, budget, self.root/'.cinematic_cache')
         self.assertTrue(video.exists())
-        self.assertEqual(record['source'], 'local_quota_fallback')
+        self.assertEqual(record['source'], 'local_coral_reef_illustration')
         self.assertTrue(record['quota_fallback'])
-        self.assertEqual(record['review']['reviewer'], 'local-quota-fallback')
+        self.assertEqual(record['review']['reviewer'], 'local-coral-reef-template')
+        self.assertTrue(record['review']['passed'])
+
+    def test_exhausted_free_quota_refuses_generic_placeholder_for_other_topics(self):
+        scene={'id':'scene_ship','start':0,'end':3,'motion':'zoom_in','kind':'image',
+               'query':'steel ship structure','text':'تتشقق الهياكل المعدنية بسبب الإجهاد'}
+        cfg=dict(self.cfg,max_daily_free_calls=1)
+        budget=cp.Budget(self.root/'state/quota-budget.json',cfg,'episode-ship')
+        self.assertTrue(budget.reserve('visual_review',.02))
+        with patch.object(cp,'candidates',side_effect=AssertionError('quota path must not search')), \
+             patch.object(cp,'render_visual',side_effect=AssertionError('generic fallback must not render')):
+            with self.assertRaisesRegex(RuntimeError,'refusing generic placeholders'):
+                cp.acquire(scene,{'title':'هياكل السفن'},cfg,budget,self.root/'.cinematic_cache')
+        report=json.loads((self.root/'state/cinematic_failures.json').read_text())
+        self.assertEqual(report['error_type'],'NoTopicSpecificOfflineFallback')
 
     def test_empty_asset_search_saves_a_specific_no_candidates_report(self):
         scene=cp.plan_scenes([{'start':0,'end':4,'text':'طائر النحام في ماء ضحل'}],4,{'title':'النحام'},self.cfg)[0]

@@ -11,6 +11,7 @@ from scripts.media_audio import add_topic_soundtrack
 
 from scripts.pexels_video import build_pexels_track
 from scripts.media_audio import ducking_filters
+from scripts.rtl_caption_layout import layout_word_centers
 
 VIDEO_WIDTH = 1080
 VIDEO_HEIGHT = 1920
@@ -190,19 +191,26 @@ def write_ass_subtitles(text: str, duration: float, ass_path: Path, audio_path: 
         end = min(duration, group[-1]["offset"] + group[-1]["duration"])
         if end <= start:
             end = min(duration, start + 0.25)
-        words = [e["text"] for e in group]
-        # Keep the complete four-word line stable, but replace only the
-        # highlighted color at each real word boundary. There is no fade and
-        # no gap, so the line cannot flash or appear to advance too quickly.
+        words = _caption_words([e["text"] for e in group])
+        centers, horizontal_scale = layout_word_centers(
+            words, VIDEO_WIDTH, FONT_SIZE, side_margin=70,
+        )
+        caption_y = CAPTION_TOP_SAFE_MARGIN + FONT_SIZE // 2
+        # Keep the whole caption line stable, but place each word in its own
+        # ASS event. This avoids libass's broken Bidi runs when a color override
+        # is inserted into a multiword Arabic line.
         for active_index, event in enumerate(group):
             word_start = max(start, float(event["offset"]))
             word_end = min(end, float(event["offset"]) + float(event["duration"]))
             if word_end <= word_start:
                 word_end = min(end, word_start + 0.04)
-            lines.append(
-                f"Dialogue: 0,{_ass_time(word_start)},{_ass_time(max(word_end, word_start + 0.04))},Caption,,0,0,0,,"
-                f"{_rtl_ass_line(_caption_text(words, active_index))}"
-            )
+            for token_index, (word, center_x) in enumerate(zip(words, centers)):
+                color = r"\c&H000000FF&" if token_index == active_index else r"\c&H00FFFFFF&"
+                override = f"\\an5\\pos({center_x},{caption_y})\\fscx{horizontal_scale}{color}"
+                lines.append(
+                    f"Dialogue: 0,{_ass_time(word_start)},{_ass_time(max(word_end, word_start + 0.04))},Caption,,0,0,0,,"
+                    f"{{{override}}}{_ass_escape(word)}"
+                )
     ass_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
