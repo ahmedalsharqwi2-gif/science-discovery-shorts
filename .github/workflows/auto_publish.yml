@@ -234,10 +234,9 @@ jobs:
 
 
           # --- TTS ---
-          # Prefer guarded SILMA; Edge candidates previously failed the strict
-          # Arabic ASR gate (best match 78.7% vs the required 82%). The Python
-          # generator falls back to Google/Edge if SILMA cannot pass its guard.
-          TTS_ENGINE: "silma"
+          # Keep Edge as the production engine; SILMA was explicitly removed
+          # from the voice workflow. Edge retries must pass the Arabic ASR gate.
+          TTS_ENGINE: "edge"
           # Hamed has clearer connected Arabic phonemes for scientific terms.
           EDGE_TTS_VOICE: "ar-SA-HamedNeural"
           EDGE_TTS_VOICES: "ar-SA-HamedNeural,ar-SA-ZariyahNeural,ar-SA-AmmarNeural"
