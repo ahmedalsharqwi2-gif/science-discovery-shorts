@@ -618,6 +618,54 @@ def _write_buoyancy_diagram(scene: dict, target: Path, cfg: dict, episode: dict 
     return True
 
 
+def _write_quota_fallback(scene: dict, target: Path, cfg: dict, episode: dict) -> bool:
+    """Create a deterministic, narration-bound visual without provider calls.
+
+    This is used only after the configured free visual quota is exhausted. It
+    keeps the episode renderable without pretending that an unrelated stock
+    clip passed visual inspection; the manifest records the local fallback.
+    """
+    from PIL import Image, ImageDraw
+    width, height = int(cfg["width"]), int(cfg["height"])
+    seed = int(hashlib.sha256((str(scene.get("text", "")) + str(episode.get("title", ""))).encode()).hexdigest()[:8], 16)
+    image = Image.new("RGB", (width, height))
+    pixels = image.load()
+    for y in range(height):
+        t = y / max(1, height - 1)
+        for x in range(width):
+            glow = int(18 * (1 - abs(x / max(1, width - 1) - .5) * 2))
+            pixels[x, y] = (7 + glow // 3, 17 + int(26 * (1 - t)) + glow // 2, 38 + int(48 * (1 - t)) + glow)
+    draw = ImageDraw.Draw(image)
+    cx, cy = width // 2, int(height * .48)
+    accent = ((seed >> 16) % 80 + 120, (seed >> 8) % 70 + 130, seed % 60 + 150)
+    for radius in (int(width*.12), int(width*.22), int(width*.34)):
+        draw.ellipse((cx-radius, cy-radius, cx+radius, cy+radius), outline=accent, width=max(2, width//240))
+    nodes = []
+    for i in range(7):
+        angle = (seed % 360 + i * 51) * math.pi / 180
+        radius = int(width * (.17 + (i % 3) * .07))
+        nodes.append((cx + int(math.cos(angle) * radius), cy + int(math.sin(angle) * radius)))
+    for i, point in enumerate(nodes):
+        draw.line((cx, cy, point[0], point[1]), fill=(70, 170, 210), width=max(2, width//300))
+        r = max(8, width//45)
+        draw.ellipse((point[0]-r, point[1]-r, point[0]+r, point[1]+r), fill=accent, outline=(235,245,255), width=max(2, width//360))
+    draw.ellipse((cx- max(12, width//28), cy-max(12, width//28), cx+max(12, width//28), cy+max(12, width//28)), fill=(245, 190, 78), outline=(255,245,205), width=max(2, width//300))
+    target.parent.mkdir(parents=True, exist_ok=True)
+    image.save(target, format="PNG", optimize=True)
+    return True
+
+
+def _quota_fallback_record(scene: dict, episode: dict, cfg: dict, budget: Budget, cache: Path) -> tuple[Path, dict]:
+    digest = hashlib.sha256(json.dumps({"scene": scene, "episode": episode, "profile": cfg["profile"]}, ensure_ascii=False, sort_keys=True).encode()).hexdigest()[:24]
+    source = cache / f"{digest}.quota-fallback.png"
+    visual = cache / f"{digest}.mp4"
+    _write_quota_fallback(scene, source, cfg, episode)
+    render_visual(source, visual, scene["end"] - scene["start"], scene, cfg, True)
+    review = {"passed": True, "reason": "Deterministic local science illustration used because the configured free visual quota was exhausted.", "audio_keep": False, "audio_reason": "Local illustration has no source audio.", "reviewer": "local-quota-fallback", "sha256": hashlib.sha256(visual.read_bytes()).hexdigest()}
+    record = {"scene_id": scene["id"], "source": "local_quota_fallback", "license": "original deterministic vector illustration", "source_url": "", "review": review, "cached": False, "audio_decision": "VOICE ONLY", "illustrative": True, "quota_fallback": True}
+    return visual, record
+
+
 def acquire(scene: dict, episode: dict, cfg: dict, budget: Budget, cache: Path) -> tuple[Path, dict]:
     seconds = scene["end"] - scene["start"]
     identity = json.dumps({"scene": scene, "context": episode, "profile": cfg["profile"], "dimensions": [cfg["width"], cfg["height"], cfg["fps"]], "models": [cfg["image_model"], cfg["image_fallback_model"], cfg["review_model"]]}, ensure_ascii=False, sort_keys=True)
@@ -628,6 +676,13 @@ def acquire(scene: dict, episode: dict, cfg: dict, budget: Budget, cache: Path) 
         if record.get("review", {}).get("sha256") == hashlib.sha256(visual.read_bytes()).hexdigest():
             return visual, {**record, "cached": True}
     errors = []
+    # Once the daily free visual quota is exhausted, do not spend time on
+    # doomed stock/review/image attempts. Use the deterministic local path.
+    if (cfg.get("free_only", True)
+            and budget.row.get("free_calls", 0) >= cfg.get("max_daily_free_calls", 0)):
+        visual, record = _quota_fallback_record(scene, episode, cfg, budget, cache)
+        atomic_json(meta, record)
+        return visual, record
     # Stock slots try at most two actual sources; every candidate still gets reviewed.
     options = candidates(scene, cfg) if cfg.get("free_only", True) or scene["kind"] == "stock" else iter(())
     # Free-only means no paid video. Production may explicitly enable the

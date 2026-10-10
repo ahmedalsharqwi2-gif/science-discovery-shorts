@@ -141,6 +141,22 @@ class CinematicTests(unittest.TestCase):
         self.assertIn('aircraft carrier',scene[0]['query'])
         self.assertNotIn('city',scene[0]['query'])
 
+    def test_exhausted_free_quota_uses_local_fallback_without_provider_calls(self):
+        scene = {'id':'scene_quota','start':0,'end':3,'motion':'zoom_in','kind':'image',
+                 'query':'steel ship structure','text':'تتشقق الهياكل المعدنية بسبب الإجهاد'}
+        cfg = dict(self.cfg, max_daily_free_calls=1)
+        budget = cp.Budget(self.root/'state/quota-budget.json', cfg, 'episode-quota')
+        self.assertTrue(budget.reserve('visual_review', .02))
+        with (
+            patch.object(cp, 'candidates', side_effect=AssertionError('provider search must be skipped')),
+            patch.object(cp, 'render_visual', side_effect=lambda source,out,*a,**k: out.write_bytes(b'reviewable-video')),
+        ):
+            video, record = cp.acquire(scene, {'title':'هياكل السفن'}, cfg, budget, self.root/'.cinematic_cache')
+        self.assertTrue(video.exists())
+        self.assertEqual(record['source'], 'local_quota_fallback')
+        self.assertTrue(record['quota_fallback'])
+        self.assertEqual(record['review']['reviewer'], 'local-quota-fallback')
+
     def test_empty_asset_search_saves_a_specific_no_candidates_report(self):
         scene=cp.plan_scenes([{'start':0,'end':4,'text':'طائر النحام في ماء ضحل'}],4,{'title':'النحام'},self.cfg)[0]
         with patch.dict(os.environ,{'PEXELS_API_KEY':'fixture-key'}),patch.object(cp,'candidates',return_value=iter([])):
