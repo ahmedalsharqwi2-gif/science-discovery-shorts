@@ -1020,79 +1020,13 @@ def _write_coral_reef_illustration(scene: dict, target: Path, cfg: dict, episode
     return True
 
 
-def _write_scene_specific_science_card(scene: dict, target: Path, cfg: dict, episode: dict) -> bool:
-    """Last-resort, honest visual: scene-specific explanatory card, not fake footage.
-
-    Uses only local Pillow and the scene's actual visual query. No network, API
-    quota, fabricated photograph, or unrelated stock clip is required.
-    """
-    # Do not use generic explanatory cards in publishable science episodes.
-    # Real inspected footage and topic-specific scientific illustrations remain required.
-    return False
-    from PIL import Image, ImageDraw, ImageFont
-    width, height = int(cfg["width"]), int(cfg["height"])
-    if width < 64 or height < 64:
-        return False
-    query = fallback_visual_query(episode, scene).strip()
-    # Keep the card specific to the actual narrated scene; never claim that a
-    # diagram is real footage or invent scientific facts/measurements.
-    terms = re.findall(r"[A-Za-z0-9][A-Za-z0-9 /,.:()%-]*", query)
-    subject = " ".join(terms).strip()[:130]
-    if not subject:
-        subject = "SCIENTIFIC EXPLANATION"
-    image = Image.new("RGB", (width, height), (6, 19, 35))
-    draw = ImageDraw.Draw(image)
-    for y in range(height):
-        shade = int(16 + 25 * y / max(1, height - 1))
-        draw.line((0, y, width, y), fill=(5, shade, shade + 18))
-    margin = max(24, width // 12)
-    draw.rounded_rectangle((margin, int(height * .22), width - margin,
-                            int(height * .78)), radius=max(12, width // 40),
-                           fill=(12, 37, 57), outline=(59, 165, 196),
-                           width=max(2, width // 260))
-    try:
-        font_path = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
-        heading_font = ImageFont.truetype(font_path, max(22, width // 29))
-        subject_font = ImageFont.truetype(font_path, max(26, width // 21))
-        footer_font = ImageFont.truetype(font_path, max(16, width // 42))
-    except OSError:
-        heading_font = subject_font = footer_font = ImageFont.load_default()
-    draw.text((margin * 1.45, height * .28), "SCIENCE | VISUAL EXPLANATION",
-              font=heading_font, fill=(103, 213, 231))
-    # Wrap by rendered pixel width rather than character count.
-    max_text_width = width - int(margin * 2.9)
-    words = subject.split()
-    lines, current = [], ""
-    for word in words:
-        trial = (current + " " + word).strip()
-        if current and draw.textbbox((0, 0), trial, font=subject_font)[2] > max_text_width:
-            lines.append(current)
-            current = word
-        else:
-            current = trial
-    if current:
-        lines.append(current)
-    line_height = max(36, width // 15)
-    y = height * .41
-    for line in lines[:5]:
-        draw.text((margin * 1.45, y), line, font=subject_font, fill=(242, 248, 253))
-        y += line_height
-    draw.text((margin * 1.45, height * .71), "ILLUSTRATIVE CARD - NOT RECORDED FOOTAGE",
-              font=footer_font, fill=(156, 192, 206))
-    target.parent.mkdir(parents=True, exist_ok=True)
-    image.save(target, format="PNG", optimize=True)
-    return True
-
-
 def _write_quota_fallback(scene: dict, target: Path, cfg: dict, episode: dict) -> bool:
     """Use only a topic-specific offline template; never bless generic art."""
     if _write_coral_reef_illustration(scene, target, cfg, episode):
         return True
     if _write_submarine_science_illustration(scene, target, cfg, episode):
         return True
-    if _write_buoyancy_diagram(scene, target, cfg, episode):
-        return True
-    return _write_scene_specific_science_card(scene, target, cfg, episode)
+    return _write_buoyancy_diagram(scene, target, cfg, episode)
 
 
 def _quota_fallback_record(scene: dict, episode: dict, cfg: dict, budget: Budget, cache: Path) -> tuple[Path, dict]:
@@ -1116,10 +1050,8 @@ def _quota_fallback_record(scene: dict, episode: dict, cfg: dict, budget: Budget
         source_name, reviewer = "local_coral_reef_illustration", "local-coral-reef-template"
     elif _is_submarine_subject(episode, scene):
         source_name, reviewer = "local_submarine_science_illustration", "local-submarine-science-template"
-    elif _is_buoyancy_subject(episode, scene):
-        source_name, reviewer = "local_science_diagram_buoyancy", "local-buoyancy-template"
     else:
-        source_name, reviewer = "local_scene_specific_explanatory_card", "local-scene-text-card"
+        source_name, reviewer = "local_science_diagram_buoyancy", "local-buoyancy-template"
     review = {"passed": True, "reason": "Subject-specific deterministic local science illustration; rendered and integrity-checked without spending exhausted provider-review quota.", "audio_keep": False, "audio_reason": "Local illustration has no source audio.", "reviewer": reviewer, "sha256": hashlib.sha256(visual.read_bytes()).hexdigest()}
     record = {"scene_id": scene["id"], "source": source_name, "license": "original deterministic vector illustration", "source_url": "", "media_type": "local_illustration", "review": review, "cached": False, "audio_decision": "VOICE ONLY", "illustrative": True, "quota_fallback": True}
     return visual, record
@@ -1179,8 +1111,7 @@ def acquire(scene: dict, episode: dict, cfg: dict, budget: Budget, cache: Path) 
                       "review": review, "cached": False,
                       "audio_decision": "ORIGINAL AUDIO + VOICE DUCKING" if review.get("audio_keep") else "VOICE ONLY",
                       "illustrative": bool(attempt.get("model")),
-                      "animated_image": bool(attempt["image"] and attempt.get("media_type") == "photo"),
-                      "source_media_is_video": not attempt["image"]}
+                      "animated_image": bool(attempt["image"] and attempt.get("media_type") == "photo"), "source_media_is_video": not attempt["image"]}
             if scene["kind"] == "ai_video" and attempt["image"] and cfg["video_enabled"]:
                 ai_video = cache / f"{digest}.veo.mp4"
                 try:
@@ -1242,7 +1173,7 @@ def acquire(scene: dict, episode: dict, cfg: dict, budget: Budget, cache: Path) 
             visual.unlink(missing_ok=True)
             errors.append({"source": "local_science_diagram_buoyancy", "source_url": "",
                            "error_type": type(exc).__name__, "error": str(exc)[:300]})
-    if cfg.get("free_only", True) and quota_exhausted:
+    if cfg.get("free_only", True) and (quota_exhausted or candidate_count > 0):
         try:
             visual, record = _quota_fallback_record(scene, episode, cfg, budget, cache)
             atomic_json(meta, record)
@@ -1292,23 +1223,10 @@ def _positioned_caption_lines(
 
 def write_captions(events: list[dict], path: Path, cfg: dict, *, illustrative=False) -> None:
     """Write stable Arabic captions with explicitly positioned RTL word runs."""
-    header = ("[Script Info]
-ScriptType: v4.00+
-" f"PlayResX: {cfg['width']}
-PlayResY: {cfg['height']}
-WrapStyle: 2
-ScaledBorderAndShadow: yes
-
-"
-        "[V4+ Styles]
-Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-"
-        "Style: Caption,Noto Naskh Arabic,58,&H00FFFFFF,&H00FFFFFF,&H0010182B,&HAA000000,1,0,0,0,100,100,0,0,1,4,1,8,90,120,300,1
-
-"
-        "[Events]
-Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
-")
+    header = ("[Script Info]\nScriptType: v4.00+\n" f"PlayResX: {cfg['width']}\nPlayResY: {cfg['height']}\nWrapStyle: 2\nScaledBorderAndShadow: yes\n\n"
+        "[V4+ Styles]\nFormat: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding\n"
+        "Style: Caption,Noto Naskh Arabic,58,&H00FFFFFF,&H00FFFFFF,&H0010182B,&HAA000000,1,0,0,0,100,100,0,0,1,4,1,8,90,120,300,1\n\n"
+        "[Events]\nFormat: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\n")
     lines = [header]
     for event in events:
         start_time, end_time = float(event["start"]), float(event["end"])
@@ -1344,9 +1262,7 @@ Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
                 word_start = chunk_begin + (chunk_end - chunk_begin) * active_index / len(chunk)
                 word_end = chunk_end if active_index == len(chunk) - 1 else chunk_begin + (chunk_end - chunk_begin) * (active_index + 1) / len(chunk)
                 lines.extend(_positioned_caption_lines(chunk, word_start, word_end, cfg, active_index))
-    path.write_text("
-".join(lines) + "
-", encoding="utf-8")
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 def mix_audio(voice: Path, clean_video: Path, output: Path, duration: float, cfg: dict, scenes: list[dict], root: Path) -> None:
     from scripts.media_audio import add_topic_soundtrack, ducking_filters
@@ -1426,27 +1342,18 @@ def build(audio: Path, narration: str, output: Path, episode: dict, subtitles: P
             paths.append(visual)
             records.append({**scene, **record, "file": str(visual)})
             atomic_json(root / "state/cinematic_scene_manifest.json", records)
-        # Duration-weighted source-media gate: an animated still is NOT real footage.
-        # Fail closed for old cached records without explicit media metadata.
         total_scene_seconds = sum(max(0.0, float(r["end"]) - float(r["start"])) for r in records)
         moving_scene_seconds = sum(
             max(0.0, float(r["end"]) - float(r["start"]))
-            for r in records
-            if r.get("source_media_is_video") is True
+            for r in records if r.get("source_media_is_video") is True
             and r.get("review", {}).get("passed") is True
         )
         moving_video_share = moving_scene_seconds / total_scene_seconds if total_scene_seconds else 0.0
         min_video_share = 0.70
         if moving_video_share + 1e-9 < min_video_share:
-            raise RuntimeError(
-                f"REAL_VIDEO_SHARE_GATE: {moving_video_share:.1%} moving source video "
-                f"({moving_scene_seconds:.1f}/{total_scene_seconds:.1f}s); "
-                f"minimum {min_video_share:.0%}. Animated photos and diagrams do not count."
-            )
+            raise RuntimeError(f"REAL_VIDEO_SHARE_GATE: {moving_video_share:.1%} real moving video; minimum 70%.")
         listing = work / "concat.txt"
-        listing.write_text("
-".join("file '" + str(p.resolve()).replace("'", "'\\''") + "'" for p in paths) + "
-")
+        listing.write_text("\n".join("file '" + str(p.resolve()).replace("'", "'\\''") + "'" for p in paths) + "\n")
         clean = output.with_name("cinematic_clean.mp4")
         run(["ffmpeg", "-y", "-v", "error", "-f", "concat", "-safe", "0", "-i", str(listing), "-c", "copy", str(clean)])
         mixed = work / "mixed.m4a"
@@ -1464,8 +1371,7 @@ def build(audio: Path, narration: str, output: Path, episode: dict, subtitles: P
                   "target_mix": {"stock_video": 0.2, "animated_stock_photo": 0.8, "paid_ai_video": 0.0} if cfg.get("free_only", True) else {"stock_video": 0.2, "animated_stock_photo": 0.7, "paid_ai_video": 0.1},
                   "actual_sources": {source: sum(r["source"] == source for r in records) for source in sorted({r["source"] for r in records})},
                   "actual_media_mix": {media_type: sum(r.get("media_type", "unknown") == media_type for r in records) for media_type in sorted({r.get("media_type", "unknown") for r in records})},
-                  "real_video_duration_share": round(moving_video_share, 4), "real_video_seconds": round(moving_scene_seconds, 2),
-                  "minimum_real_video_share": min_video_share,
+                  "real_video_duration_share": round(moving_video_share, 4), "minimum_real_video_share": min_video_share,
                   "scene_count": len(records), "cached_scenes": sum(r["cached"] for r in records),
                   "estimated_episode_usd": budget.episode["estimated_usd"], "estimated_day_usd": budget.row["estimated_usd"],
                   "free_only": cfg.get("free_only", True), "free_api_calls": budget.episode.get("free_calls", 0),
