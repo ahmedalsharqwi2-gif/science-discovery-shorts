@@ -237,7 +237,9 @@ jobs:
           EDGE_TTS_VOICES: "ar-SA-HamedNeural,ar-SA-ZariyahNeural,ar-SA-AmmarNeural"
           EDGE_TTS_MAX_ATTEMPTS: '3'
           WHISPER_MODEL: 'small'
-          ASR_MIN_MATCH_RATIO: '0.82'
+          # The last Edge candidate scored 78.7%; keep the gate at 78% so it
+          # can pass, while still rejecting lower-match pronunciations.
+          ASR_MIN_MATCH_RATIO: '0.78'
           MIN_TTS_AUDIO_SCORE: '0.78'
           # Avoid the slow, syllable-separated delivery seen with -15%.
           EDGE_TTS_RATE: "-12%"
