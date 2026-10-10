@@ -44,7 +44,7 @@ except ImportError as exc:  # pragma: no cover
 WIDTH = 1080
 HEIGHT = 1920
 FPS = 30
-FONT_NAME = "Noto Sans Arabic"
+FONT_NAME = "Noto Naskh Arabic"
 DEFAULT_VOICE = "ar-SA-HamedNeural"
 DEFAULT_RATE = "-10%"
 DEFAULT_PITCH = "-2Hz"
@@ -135,7 +135,7 @@ def write_ass(events: list[dict[str, Any]], output: Path) -> None:
                 display_chunk = list(reversed(chunk))
                 display_active = len(chunk) - 1 - active
                 rendered = [r"{\c&H000000FF&}" + ass_escape(token) + r"{\c}" if index == display_active else ass_escape(token) for index, token in enumerate(display_chunk)]
-                text = "\u200f" + " ".join(rendered) + "\u200f"
+                text = " ".join(rendered)
                 lines.append(f"Dialogue: 0,{ass_time(word_start)},{ass_time(max(word_end, word_start + 0.04))},Caption,,0,0,0,,{{\\fad(120,150)}}{text}")
     output.write_text("\n".join(lines) + "\n", encoding="utf-8")
 

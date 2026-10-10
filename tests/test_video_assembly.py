@@ -36,7 +36,7 @@ class VideoAssemblyTests(unittest.TestCase):
             self.assertIn("ثلاثة", text)
             self.assertIn("أربعة", text)
             self.assertIn(r"{\c&H000000FF&}", text)
-            self.assertIn("Noto Sans Arabic", text)
+            self.assertIn("Noto Naskh Arabic", text)
 
     def test_edge_tts_text_removes_formatting_and_repeated_pauses(self):
         text = normalize_edge_tts_text("  هذا\n**نص**، ،؛؛  مهم...  ")

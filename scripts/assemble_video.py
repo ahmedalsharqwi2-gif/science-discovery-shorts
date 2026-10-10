@@ -78,7 +78,7 @@ def _caption_text(words: list[str], active_index: int | None = None) -> str:
 
 def _rtl_ass_line(text: str) -> str:
     """Keep one bidi paragraph for Arabic; never place direction marks between words."""
-    return "\u200f" + text + "\u200f"
+    return text
 
 def _norm(word: str) -> str:
     return _display_word(word).lower()
@@ -153,7 +153,7 @@ def align_words_with_whisper(audio_path: Path, script_words: list[str]) -> list[
 
 
 def _ass_header() -> str:
-    return ("[Script Info]\nScriptType: v4.00+\n" f"PlayResX: {VIDEO_WIDTH}\nPlayResY: {VIDEO_HEIGHT}\n" "WrapStyle: 2\nScaledBorderAndShadow: yes\n\n[V4+ Styles]\n" "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding\n" f"Style: Caption,Noto Sans Arabic,{FONT_SIZE},&H00FFFFFF,&H00FFFFFF,&H0010182B,&HAA000000,1,0,0,0,100,100,0,0,1,3,1,8,70,70,{CAPTION_TOP_SAFE_MARGIN},1\n\n" "[Events]\nFormat: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\n")
+    return ("[Script Info]\nScriptType: v4.00+\n" f"PlayResX: {VIDEO_WIDTH}\nPlayResY: {VIDEO_HEIGHT}\n" "WrapStyle: 2\nScaledBorderAndShadow: yes\n\n[V4+ Styles]\n" "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding\n" f"Style: Caption,Noto Naskh Arabic,{FONT_SIZE},&H00FFFFFF,&H00FFFFFF,&H0010182B,&HAA000000,1,0,0,0,100,100,0,0,1,3,1,8,70,70,{CAPTION_TOP_SAFE_MARGIN},1\n\n" "[Events]\nFormat: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\n")
 
 
 def write_ass_subtitles(text: str, duration: float, ass_path: Path, audio_path: Path | None = None) -> None:

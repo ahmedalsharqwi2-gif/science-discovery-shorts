@@ -610,7 +610,7 @@ def write_captions(events: list[dict], path: Path, cfg: dict, *, illustrative=Fa
     """Write clean RTL captions: one line, at most four words, active word red."""
     header = ("[Script Info]\nScriptType: v4.00+\n" f"PlayResX: {cfg['width']}\nPlayResY: {cfg['height']}\nWrapStyle: 2\nScaledBorderAndShadow: yes\n\n"
         "[V4+ Styles]\nFormat: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding\n"
-        "Style: Caption,Noto Sans Arabic,58,&H00FFFFFF,&H00FFFFFF,&H0010182B,&HAA000000,1,0,0,0,100,100,0,0,1,4,1,8,90,120,300,1\n\n"
+        "Style: Caption,Noto Naskh Arabic,58,&H00FFFFFF,&H00FFFFFF,&H0010182B,&HAA000000,1,0,0,0,100,100,0,0,1,4,1,8,90,120,300,1\n\n"
         "[Events]\nFormat: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\n")
     lines = [header]
     for event in events:
@@ -635,7 +635,7 @@ def write_captions(events: list[dict], path: Path, cfg: dict, *, illustrative=Fa
                         rendered.append(r"{\c&H000000FF&}" + token + r"{\c&H00FFFFFF&}")
                     else:
                         rendered.append(token)
-                text = "\u200f" + " ".join(rendered) + "\u200f"
+                text = " ".join(rendered)
                 lines.append(f"Dialogue: 0,{ass_time(word_start)},{ass_time(max(word_end, word_start + 0.04))},Caption,,0,0,0,,{{\\fad(40,60)}}{text}")
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 

@@ -64,7 +64,7 @@ class HybridCaptionTimingTests(unittest.TestCase):
         self.assertIn("أين", content)
         self.assertIn(r"\fad(120,150)", content)
         self.assertIn(r"{\c&H000000FF&}اختفت{\c}", content)
-        self.assertIn("Noto Sans Arabic", content)
+        self.assertIn("Noto Naskh Arabic", content)
 
 
 if __name__ == "__main__":
