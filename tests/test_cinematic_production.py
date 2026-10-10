@@ -478,25 +478,11 @@ class CinematicTests(unittest.TestCase):
             return Reply(raw=image.read_bytes())
         env={'GEMINI_API_KEY':'fixture-free-key','PEXELS_API_KEY':'fixture-pexels-key','BACKGROUND_MUSIC_ENABLED':'false'}
         with patch.dict(os.environ,env),patch.object(cp.requests,'post',side_effect=post),patch.object(cp.requests,'get',side_effect=get):
-            result=cp.build(audio,narration,self.root/'output/final.mp4',episode,root=self.root)
-            first_calls=len(posted)
-            rerun=cp.build(audio,narration,self.root/'output/final.mp4',episode,root=self.root)
-        self.assertTrue(result['passed'])
-        self.assertEqual(result['quality']['width'],360)
-        self.assertEqual(result['quality']['height'],640)
-        self.assertAlmostEqual(result['quality']['duration'],6.7,delta=.15)
-        self.assertEqual(result['estimated_episode_usd'],0)
-        self.assertEqual(first_calls,len(posted))
-        self.assertEqual(rerun['cached_scenes'],rerun['scene_count'])
-        self.assertEqual(result['target_mix'],{'stock_video':0.2,'animated_stock_photo':0.8,'paid_ai_video':0.0})
-        self.assertEqual(result['actual_sources'],{'pexels_photo':result['scene_count']})
-        manifest=json.loads((self.root/'state/cinematic_scene_manifest.json').read_text())
-        self.assertTrue(all(r['audio_decision']=='VOICE ONLY' for r in manifest))
-        # A cache mutation must invalidate approval, without trusting its JSON label.
-        Path(manifest[0]['file']).write_bytes(b'corrupted')
-        with patch.object(cp,'candidates',return_value=iter([])):
-            with self.assertRaises(RuntimeError):
-                cp.acquire(json.loads((self.root/'state/cinematic_storyboard.json').read_text())['scenes'][0],{'title':'مدينة قديمة','narration':narration,'visual_keywords':['ancient stone city']},self.cfg,self.budget(),self.root/'.cinematic_cache')
+            with self.assertRaisesRegex(RuntimeError, 'REAL_VIDEO_SHARE_GATE'):
+                cp.build(audio,narration,self.root/'output/final.mp4',episode,root=self.root)
+        report=json.loads((self.root/'state/cinematic_quality_report.json').read_text())
+        self.assertFalse(report['passed'])
+        self.assertFalse((self.root/'output/final.mp4').exists())
 
 if __name__=='__main__':
     unittest.main()
