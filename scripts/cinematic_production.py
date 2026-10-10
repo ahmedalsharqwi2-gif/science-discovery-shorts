@@ -701,7 +701,7 @@ def _stock_search_queries(scene: dict) -> list[str]:
 
 
 def candidates(scene: dict, cfg: dict):
-    """Try free stock footage for every scene, then Pexels/Commons stills."""
+    """Try free stock footage only for planned stock scenes, then free stills."""
     queries = _stock_search_queries(scene)
     if not queries:
         return
@@ -716,8 +716,8 @@ def candidates(scene: dict, cfg: dict):
         seen.add(identity)
         return True
 
-    if key:
-        # Footage is searched for every scene (not just the old 20% "stock" slots).
+    if key and scene.get("kind") == "stock":
+        # Match the other repositories: footage is reserved for designated stock slots.
         # Landscape clips remain eligible because they are safely center-cropped to 9:16.
         for query in queries:
             try:
@@ -743,8 +743,9 @@ def candidates(scene: dict, cfg: dict):
             except (requests.RequestException, ValueError, KeyError, TypeError):
                 print(f"Pexels footage search unavailable for topic query: {query[:60]}")
 
-        # Only reached when footage is absent/rejected: turn topic photos into
-        # moving clips with the existing zoom/pan renderer.
+    if key:
+        # Stills remain available for every scene; stock scenes reach this
+        # fallback after their designated footage candidates are exhausted.
         for query in queries:
             try:
                 response = requests.get("https://api.pexels.com/v1/search", headers={"Authorization": key},
@@ -1356,7 +1357,7 @@ def build(audio: Path, narration: str, output: Path, episode: dict, subtitles: P
         quality = verify_final(temporary, duration, cfg)
         temporary.replace(output)
         report = {"passed": True, "output": str(output), "caption_timing": timing, "quality": quality,
-                  "target_mix": {"stock_video": 0.7, "animated_stock_photo": 0.3, "paid_ai_video": 0.0} if cfg.get("free_only", True) else {"stock_video": 0.6, "animated_stock_photo": 0.3, "paid_ai_video": 0.1},
+                  "target_mix": {"stock_video": 0.2, "animated_stock_photo": 0.8, "paid_ai_video": 0.0} if cfg.get("free_only", True) else {"stock_video": 0.2, "animated_stock_photo": 0.7, "paid_ai_video": 0.1},
                   "actual_sources": {source: sum(r["source"] == source for r in records) for source in sorted({r["source"] for r in records})},
                   "actual_media_mix": {media_type: sum(r.get("media_type", "unknown") == media_type for r in records) for media_type in sorted({r.get("media_type", "unknown") for r in records})},
                   "scene_count": len(records), "cached_scenes": sum(r["cached"] for r in records),

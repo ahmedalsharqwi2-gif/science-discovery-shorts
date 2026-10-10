@@ -300,7 +300,7 @@ class CinematicTests(unittest.TestCase):
                             for item in report['attempts']))
 
     def test_quota_exhaustion_accepts_topic_anchored_pexels_video_after_local_checks(self):
-        scene={'id':'scene_submarine','start':0,'end':3,'motion':'zoom_in','kind':'image',
+        scene={'id':'scene_submarine','start':0,'end':3,'motion':'zoom_in','kind':'stock',
                'query':'submarine underwater ballast tanks buoyancy','text':'تتحكم الغواصات في الطفو'}
         episode={'title':'كيف تتحكم الغواصات في الطفو؟','narration':scene['text']}
         cfg=dict(self.cfg,max_free_calls=10,max_daily_free_calls=1)
@@ -332,8 +332,8 @@ class CinematicTests(unittest.TestCase):
         self.assertEqual(record['review']['reviewer'],'local-stock-source-technical-check')
         self.assertFalse(record['review']['audio_keep'])
 
-    def test_image_scene_searches_video_before_still_photos(self):
-        scene={'id':'scene_video_first','kind':'image','query':'submarine underwater ballast tanks buoyancy'}
+    def test_stock_scene_searches_video_before_still_photos(self):
+        scene={'id':'scene_video_first','kind':'stock','query':'submarine underwater ballast tanks buoyancy'}
         video_result={'videos':[{'id':321,'url':'https://www.pexels.com/video/submarine-321/',
             'duration':8,'video_files':[{'link':'https://videos.pexels.com/321.mp4','width':720,'height':1280}]}]}
         with patch.dict(os.environ,{'PEXELS_API_KEY':'fixture-key'}), \
@@ -343,6 +343,19 @@ class CinematicTests(unittest.TestCase):
         self.assertEqual(candidate['media_type'],'video')
         self.assertEqual(candidate['source'],'pexels_video')
         self.assertIn('/videos/search',request.call_args.args[0])
+
+    def test_non_stock_scene_skips_video_search_and_uses_free_stills(self):
+        scene={'id':'scene_photo_only','kind':'image','query':'submarine underwater ballast tanks buoyancy'}
+        photo_result={'photos':[{'id':654,'src':{'large2x':'https://images.pexels.com/654.jpg'},
+            'url':'https://www.pexels.com/photo/submarine-654/','photographer':'Fixture'}]}
+        with patch.dict(os.environ,{'PEXELS_API_KEY':'fixture-key'}), \
+             patch('scripts.cinematic_production.requests.get',return_value=Reply(photo_result)) as request, \
+             patch('scripts.commons_media.search_images',return_value=[]):
+            candidate=next(cp.candidates(scene,self.cfg))
+        self.assertEqual(candidate['media_type'],'photo')
+        self.assertEqual(candidate['source'],'pexels_photo')
+        self.assertNotIn('/videos/search',request.call_args.args[0])
+        self.assertIn('/v1/search',request.call_args.args[0])
 
     def test_empty_asset_search_saves_a_specific_no_candidates_report(self):
         scene=cp.plan_scenes([{'start':0,'end':4,'text':'طائر النحام في ماء ضحل'}],4,{'title':'النحام'},self.cfg)[0]
@@ -480,6 +493,7 @@ class CinematicTests(unittest.TestCase):
         self.assertEqual(result['estimated_episode_usd'],0)
         self.assertEqual(first_calls,len(posted))
         self.assertEqual(rerun['cached_scenes'],rerun['scene_count'])
+        self.assertEqual(result['target_mix'],{'stock_video':0.2,'animated_stock_photo':0.8,'paid_ai_video':0.0})
         self.assertEqual(result['actual_sources'],{'pexels_photo':result['scene_count']})
         manifest=json.loads((self.root/'state/cinematic_scene_manifest.json').read_text())
         self.assertTrue(all(r['audio_decision']=='VOICE ONLY' for r in manifest))
