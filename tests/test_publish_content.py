@@ -9,10 +9,14 @@ from scripts.publish_content import ContentPublisher, build_social_description, 
 
 
 class PublisherTests(unittest.TestCase):
-    def test_social_description_has_topic_body_and_hashtags(self):
-        text = build_social_description("ثقب أسود في الفضاء", "شرح علمي مختصر")
-        self.assertIn("ثقب أسود في الفضاء", text)
-        self.assertIn("شرح علمي مختصر", text)
+    def test_social_description_contains_hashtags_but_not_title_or_narration(self):
+        text = build_social_description(
+            "ثقب أسود في الفضاء",
+            "شرح علمي مختصر، وهذا هو النص الكامل المستخرج من الصوت.",
+        )
+        self.assertNotIn("ثقب أسود في الفضاء", text)
+        self.assertNotIn("شرح علمي مختصر", text)
+        self.assertNotIn("النص الكامل المستخرج", text)
         self.assertIn("#علوم", text)
         self.assertIn("#فضاء", text)
 
@@ -27,6 +31,7 @@ class PublisherTests(unittest.TestCase):
             "شرح علمي مختصر",
             source_urls=["https://nasa.gov/black-holes", "https://nasa.gov/black-holes"],
         )
+        self.assertNotIn("شرح علمي مختصر", text)
         self.assertNotIn("المصادر العلمية:", text)
         self.assertNotIn("https://nasa.gov/black-holes", text)
     def test_channel_map_accepts_json_and_positional_values(self):

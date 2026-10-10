@@ -39,20 +39,18 @@ def _graphql_input(value: object) -> str:
 
 
 def build_social_description(topic: str, narration: str, source_urls: list[str] | None = None) -> str:
-    """Create platform metadata without publishing source links.
+    """Create a hashtag-only description without publishing narration or source links.
 
     ``source_urls`` remains an accepted argument for caller compatibility, but
-    scientific source URLs are deliberately kept out of public descriptions.
-    They are used only by the internal fact-check report.
+    scientific source URLs and the full extracted narration are deliberately
+    kept out of public descriptions. The video title is supplied separately.
     """
     topic = " ".join(str(topic or "").split()).strip() or "اكتشاف علمي جديد"
-    narration = " ".join(str(narration or "").split()).strip()
-    body = narration[:4000] if narration else topic
     tags = ["#علوم", "#معلومة_علمية", "#اكتشافات"]
     lowered = topic.lower()
     if any(word in lowered for word in ("فضاء", "كون", "كوكب", "نجمة", "ثقب")):
         tags.insert(1, "#فضاء")
-    return f"{topic}\n\n{body}\n\n{' '.join(dict.fromkeys(tags))}"
+    return " ".join(dict.fromkeys(tags))
 
 
 def post_text_for_service(title: str, description: str, service: str) -> str:

@@ -27,11 +27,11 @@ class CurrentContentOutputTests(unittest.TestCase):
             "حقيقة عن الفضاء",
         )
 
-    def test_social_description_contains_topic_narration_and_hashtags(self):
+    def test_social_description_contains_hashtags_without_topic_or_narration(self):
         result = build_social_description("كيف يعمل البرق؟", "شرح علمي قصير عن البرق.")
-        self.assertIn("كيف يعمل البرق؟", result)
-        self.assertIn("شرح علمي قصير عن البرق.", result)
-        self.assertIn("#", result)
+        self.assertNotIn("كيف يعمل البرق؟", result)
+        self.assertNotIn("شرح علمي قصير عن البرق.", result)
+        self.assertIn("#علوم", result)
 
 
 if __name__ == "__main__":
