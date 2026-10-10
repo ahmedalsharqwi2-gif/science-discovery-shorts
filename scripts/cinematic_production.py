@@ -1111,7 +1111,7 @@ def acquire(scene: dict, episode: dict, cfg: dict, budget: Budget, cache: Path) 
                       "review": review, "cached": False,
                       "audio_decision": "ORIGINAL AUDIO + VOICE DUCKING" if review.get("audio_keep") else "VOICE ONLY",
                       "illustrative": bool(attempt.get("model")),
-                      "animated_image": bool(attempt["image"] and attempt.get("media_type") == "photo")}
+                      "animated_image": bool(attempt["image"] and attempt.get("media_type") == "photo"), "source_media_is_video": not attempt["image"]}
             if scene["kind"] == "ai_video" and attempt["image"] and cfg["video_enabled"]:
                 ai_video = cache / f"{digest}.veo.mp4"
                 try:
@@ -1120,6 +1120,7 @@ def acquire(scene: dict, episode: dict, cfg: dict, budget: Budget, cache: Path) 
                     record["review"] = apply_audio_review(visual, review_visual(visual, scene, episode, cfg, budget))
                     record["audio_decision"] = "ORIGINAL AUDIO + VOICE DUCKING" if record["review"].get("audio_keep") else "VOICE ONLY"
                     record["source"] = "generated_video"
+                    record["source_media_is_video"] = True
                 except (requests.RequestException, RuntimeError, ValueError, KeyError, IndexError):
                     # Restore the previously inspected image animation if video fails review.
                     render_visual(source, visual, seconds, scene, cfg, True)
@@ -1341,6 +1342,16 @@ def build(audio: Path, narration: str, output: Path, episode: dict, subtitles: P
             paths.append(visual)
             records.append({**scene, **record, "file": str(visual)})
             atomic_json(root / "state/cinematic_scene_manifest.json", records)
+        total_scene_seconds = sum(max(0.0, float(r["end"]) - float(r["start"])) for r in records)
+        moving_scene_seconds = sum(
+            max(0.0, float(r["end"]) - float(r["start"]))
+            for r in records if r.get("source_media_is_video") is True
+            and r.get("review", {}).get("passed") is True
+        )
+        moving_video_share = moving_scene_seconds / total_scene_seconds if total_scene_seconds else 0.0
+        min_video_share = 0.70
+        if moving_video_share + 1e-9 < min_video_share:
+            raise RuntimeError(f"REAL_VIDEO_SHARE_GATE: {moving_video_share:.1%} real moving video; minimum 70%.")
         listing = work / "concat.txt"
         listing.write_text("\n".join("file '" + str(p.resolve()).replace("'", "'\\''") + "'" for p in paths) + "\n")
         clean = output.with_name("cinematic_clean.mp4")
@@ -1357,9 +1368,10 @@ def build(audio: Path, narration: str, output: Path, episode: dict, subtitles: P
         quality = verify_final(temporary, duration, cfg)
         temporary.replace(output)
         report = {"passed": True, "output": str(output), "caption_timing": timing, "quality": quality,
-                  "target_mix": {"stock_video": 0.2, "animated_stock_photo": 0.8, "paid_ai_video": 0.0} if cfg.get("free_only", True) else {"stock_video": 0.2, "animated_stock_photo": 0.7, "paid_ai_video": 0.1},
+                  "target_mix": {"real_source_video_minimum": 0.70, "photos_and_diagrams_maximum": 0.30},
                   "actual_sources": {source: sum(r["source"] == source for r in records) for source in sorted({r["source"] for r in records})},
                   "actual_media_mix": {media_type: sum(r.get("media_type", "unknown") == media_type for r in records) for media_type in sorted({r.get("media_type", "unknown") for r in records})},
+                  "real_video_duration_share": round(moving_video_share, 4), "minimum_real_video_share": min_video_share,
                   "scene_count": len(records), "cached_scenes": sum(r["cached"] for r in records),
                   "estimated_episode_usd": budget.episode["estimated_usd"], "estimated_day_usd": budget.row["estimated_usd"],
                   "free_only": cfg.get("free_only", True), "free_api_calls": budget.episode.get("free_calls", 0),
