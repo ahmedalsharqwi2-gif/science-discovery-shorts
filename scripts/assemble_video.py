@@ -18,7 +18,7 @@ MAX_FULL_VIDEO_SECONDS = 180.0
 FPS = 30
 # Six words keeps captions readable without flashing a new fragment every few
 # syllables; the timing still follows the actual spoken audio.
-WORDS_PER_CAPTION_CHUNK = 6
+WORDS_PER_CAPTION_CHUNK = 4
 FONT_SIZE = 58
 # 9:16 render; keep captions below phone camera notches and platform chrome.
 CAPTION_TOP_SAFE_MARGIN = 260
@@ -59,14 +59,18 @@ def _display_word(word: str) -> str:
     return ARABIC_DIACRITICS.sub("", word).translate(PUNCTUATION).strip()
 
 
-def _caption_text(words: list[str]) -> str:
-    words = [_display_word(w) for w in words]
-    words = [w for w in words if w]
-    if len(words) <= 2:
-        return " ".join(words)
-    midpoint = (len(words) + 1) // 2
-    return " ".join(words[:midpoint]) + r"\N" + " ".join(words[midpoint:])
+def _caption_words(words: list[str]) -> list[str]:
+    return [word for raw in words for word in [_display_word(raw)] if word]
 
+def _caption_text(words: list[str], active_index: int | None = None) -> str:
+    clean = _caption_words(words)
+    rendered = []
+    for index, word in enumerate(clean):
+        if active_index is not None and index == active_index:
+            rendered.append(r"{\c&H000000FF&}" + word + r"{\c&H00FFFFFF&}")
+        else:
+            rendered.append(word)
+    return " ".join(rendered)
 
 def _norm(word: str) -> str:
     return _display_word(word).lower()
@@ -171,7 +175,14 @@ def write_ass_subtitles(text: str, duration: float, ass_path: Path, audio_path: 
         end = min(duration, group[-1]["offset"] + group[-1]["duration"])
         if end <= start:
             end = min(duration, start + 0.25)
-        lines.append(f"Dialogue: 0,{_ass_time(start)},{_ass_time(end)},Caption,,0,0,0,,{_ass_escape(_caption_text([e['text'] for e in group]))}")
+        words = [e["text"] for e in group]
+        for active_index in range(len(words)):
+            word_start = max(0.0, group[active_index]["offset"])
+            word_end = min(duration, group[active_index]["offset"] + group[active_index]["duration"])
+            lines.append(
+                f"Dialogue: 0,{_ass_time(word_start)},{_ass_time(max(word_end, word_start + 0.12))},Caption,,0,0,0,,"
+                f"{_caption_text(words, active_index)}"
+            )
     ass_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 

@@ -13,9 +13,9 @@ class VideoAssemblyTests(unittest.TestCase):
 
         self.assertNotIn("\u200f", caption)
         self.assertNotIn("\u200e", caption)
-        self.assertEqual(caption, "هذا نص\\Nعربي سليم")
+        self.assertEqual(caption, "هذا نص عربي سليم")
 
-    def test_subtitles_use_stable_six_word_blocks_and_two_lines(self):
+    def test_subtitles_use_four_word_one_line_active_blocks(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "captions.ass"
             write_ass_subtitles(
@@ -24,10 +24,13 @@ class VideoAssemblyTests(unittest.TestCase):
                 path,
             )
             text = path.read_text(encoding="utf-8")
-            self.assertEqual(text.count("Dialogue:"), 2)
-            self.assertIn(r"\N", text)
-            self.assertIn("واحد اثنان", text)
-            self.assertIn("واحد اثنان ثلاثة", text)
+            self.assertEqual(text.count("Dialogue:"), 7)
+            self.assertNotIn(r"\N", text)
+            self.assertIn("واحد", text)
+            self.assertIn("اثنان", text)
+            self.assertIn("ثلاثة", text)
+            self.assertIn("أربعة", text)
+            self.assertIn(r"{\c&H000000FF&}", text)
             self.assertIn("Noto Sans Arabic", text)
 
     def test_edge_tts_text_removes_formatting_and_repeated_pauses(self):
@@ -53,8 +56,12 @@ class VideoAssemblyTests(unittest.TestCase):
             )
             text = path.read_text(encoding="utf-8")
         align.assert_called_once()
-        self.assertEqual(text.count("Dialogue:"), 2)
-        self.assertIn("خمسة ستة", text)
+        self.assertEqual(text.count("Dialogue:"), 8)
+        self.assertNotIn(r"\N", text)
+        self.assertIn("خمسة", text)
+        self.assertIn("ستة", text)
+        self.assertIn("سبعة", text)
+        self.assertIn("ثمانية", text)
 
 
 if __name__ == "__main__":

@@ -105,10 +105,7 @@ def ass_escape(text: str) -> str:
 
 def caption_text(text: str, max_words: int = 7) -> str:
     words = ass_escape(text).split()
-    if len(words) <= max_words:
-        return " ".join(words)
-    midpoint = (len(words) + 1) // 2
-    return " ".join(words[:midpoint]) + r"\N" + " ".join(words[midpoint:])
+    return " ".join(words[:max_words])
 
 
 def write_ass(events: list[dict[str, Any]], output: Path) -> None:
@@ -132,11 +129,7 @@ def write_ass(events: list[dict[str, Any]], output: Path) -> None:
             if normalize_match_word(token) in highlight_keys:
                 safe = r"{\c&H000000FF&}" + safe + r"{\c}"
             styled.append(safe)
-        if len(styled) > 7:
-            midpoint = (len(styled) + 1) // 2
-            rendered = " ".join(styled[:midpoint]) + r"\N" + " ".join(styled[midpoint:])
-        else:
-            rendered = " ".join(styled)
+        rendered = " ".join(styled[:4])
         lines.append(f"Dialogue: 0,{ass_time(event['start'])},{ass_time(event['end'])},Caption,,0,0,0,,{{\\fad(120,150)}}{rendered}")
     output.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
@@ -382,7 +375,7 @@ def build_storyboard(storyboard_path: Path, output: Path, music_override: Path |
             word_spans, alignment_method = _whisper_word_spans(voice_path, text, voice_duration)
             repo_profile = {"arabic-horror-stories": "horror", "documented-history-stories": "history"}.get(Path(__file__).resolve().parent.parent.name, "science")
             profile = str(raw.get("content_type") or config.get("content_type") or repo_profile).lower()
-            max_words = 5 if profile in {"horror", "رعب"} else 6 if profile in {"history", "التاريخ"} else 7
+            max_words = 4
             for caption in _caption_chunks(word_spans, max_words=max_words):
                 caption_events.append({"start": cursor + caption["start"],
                                        "end": min(cursor + voice_duration, cursor + caption["end"]),
