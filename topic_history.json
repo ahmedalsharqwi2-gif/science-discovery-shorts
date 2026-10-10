@@ -880,12 +880,13 @@
       "title": "كيف تطفو حاملة طائرات رغم وزنها الهائل؟",
       "hook": "[ \"voiceover\": \"كَيْفَ يُمْكِنُ لِجَبَلٍ حَدِيدِيٍّ أَنْ يَطْفُوَ فَوْقَ مَاءِ الْمُحِيطِ بَدَلًا مِنَ الْغَرَقِ فِي الْقَاعِ؟\" \"visual\": \"لَقْطَةٌ قَرِيبَةٌ وَحَادَّةٌ لِقَوْسِ حَامِلَةِ طَائِرَاتٍ تَقْشِرُ أَمْوَاجَ الْمَاءِ بِقُوَّةٍ، مَعَ إِضَاءَةٍ حَجْمِيَّةٍ وَظِلَالٍ عَمِيقَةٍ.\" \"subtitle\": \"كَيْفَ يُمْكِنُ",
       "region": "",
-      "status": "reserved",
+      "status": "published",
       "source": "science-pipeline",
       "reservation_id": "3a31b4b7bab74c2d91503d96aa7660d0",
       "reserved_at": "2026-10-10T02:09:07Z",
       "run_id": "38014622400",
-      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts",
+      "published_at": "2026-10-10T02:09:16Z"
     }
   ]
 }
