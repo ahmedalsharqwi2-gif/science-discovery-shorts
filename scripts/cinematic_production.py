@@ -1239,7 +1239,7 @@ def acquire(scene: dict, episode: dict, cfg: dict, budget: Budget, cache: Path) 
             visual.unlink(missing_ok=True)
             errors.append({"source": "local_science_diagram_buoyancy", "source_url": "",
                            "error_type": type(exc).__name__, "error": str(exc)[:300]})
-    if cfg.get("free_only", True) and (quota_exhausted or candidate_count > 0):
+    if cfg.get("free_only", True) and quota_exhausted:
         try:
             visual, record = _quota_fallback_record(scene, episode, cfg, budget, cache)
             atomic_json(meta, record)
