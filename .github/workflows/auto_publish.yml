@@ -7,11 +7,6 @@ on:
     - cron: '17 12 * * *'
   workflow_dispatch:
     inputs:
-      voice_profile:
-        description: 'SILMA voice profile'
-        required: false
-        default: 'auto'
-        type: string
       dry_run:
         description: 'Build and validate without publishing externally'
         required: false
@@ -241,17 +236,9 @@ jobs:
           EDGE_TTS_VOICE: "ar-SA-HamedNeural"
           EDGE_TTS_VOICES: "ar-SA-HamedNeural,ar-SA-ZariyahNeural,ar-SA-AmmarNeural"
           EDGE_TTS_MAX_ATTEMPTS: '3'
-          SILMA_REFERENCE_PROFILE: ${{ inputs.voice_profile || 'auto' }}
-          SILMA_VOICE_PROFILES_FILE: 'assets/voices/voice_profiles.json'
-          # قراءة طبيعية أبطأ؛ لا نسرّع الصوت ولا نضغط الكلمات.
-          SILMA_SPEED: '1.05'
-          SILMA_MAX_ATTEMPTS: '2'
-          SILMA_MIN_SCORE: '0.6'
-          SILMA_GUARD_ENABLED: 'true'
           WHISPER_MODEL: 'small'
           ASR_MIN_MATCH_RATIO: '0.82'
           MIN_TTS_AUDIO_SCORE: '0.78'
-          SILMA_FALLBACK_TO_EDGE: 'true'
           # Avoid the slow, syllable-separated delivery seen with -15%.
           EDGE_TTS_RATE: "-12%"
           EDGE_TTS_PITCH: "+0Hz"
