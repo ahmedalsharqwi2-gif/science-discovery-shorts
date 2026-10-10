@@ -283,21 +283,16 @@ class CinematicTests(unittest.TestCase):
         self.assertEqual(record['source'],'local_submarine_science_illustration')
         self.assertTrue(record['review']['passed'])
 
-    def test_exhausted_free_quota_uses_honest_topic_card_for_other_science_topics(self):
+    def test_exhausted_free_quota_does_not_publish_a_generic_card(self):
         scene={'id':'scene_ship','start':0,'end':3,'motion':'zoom_in','kind':'image',
                'query':'steel ship structure','text':'تتشقق الهياكل المعدنية بسبب الإجهاد'}
         cfg=dict(self.cfg,max_daily_free_calls=1)
         budget=cp.Budget(self.root/'state/quota-budget.json',cfg,'episode-ship')
         self.assertTrue(budget.reserve('visual_review',.02))
-        with patch.dict(os.environ, {'CINEMATIC_IMAGE_FALLBACK_ENABLED':'false'}), \\
-             patch.object(cp,'candidates',return_value=iter([])) as stock_search, \\
-             patch.object(cp,'render_visual',side_effect=lambda source,out,*a,**k: out.write_bytes(b'rendered-card')):
-            video,record=cp.acquire(scene,{'title':'هياكل السفن'},cfg,budget,self.root/'.cinematic_cache')
-        stock_search.assert_called_once()
-        self.assertTrue(video.exists())
-        self.assertEqual(record['source'],'local_scene_specific_explanatory_card')
-        self.assertTrue(record['illustrative'])
-        self.assertTrue(record['review']['passed'])
+        with patch.dict(os.environ, {'CINEMATIC_IMAGE_FALLBACK_ENABLED':'false'}), \
+             patch.object(cp,'candidates',return_value=iter([])):
+            with self.assertRaises(RuntimeError):
+                cp.acquire(scene,{'title':'هياكل السفن'},cfg,budget,self.root/'.cinematic_cache')
 
     def test_quota_exhaustion_accepts_topic_anchored_pexels_video_after_local_checks(self):
         scene={'id':'scene_submarine','start':0,'end':3,'motion':'zoom_in','kind':'stock',
