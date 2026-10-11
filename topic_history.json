@@ -945,12 +945,13 @@
       "title": "كيف يلتصق الوزغ بالجدران؟",
       "hook": "القصة\": \"يُعدّ مشهد سير الوزغ، المعروف محلياً بالبرص، مقلوباً على الأسقف والجدران الملساء بدقة وثبات تام، أحد أكثر مظاهر الطبيعة إثارة للدهشة ودفعاً للتساؤل العلمي المستمر. يعود سر هذه القدرة الفائقة إلى آقليات دقيقة ومجهرية",
       "region": "",
-      "status": "reserved",
+      "status": "published",
       "source": "science-pipeline",
       "reservation_id": "e2a3afc1f724472db17c5c826c95e678",
       "reserved_at": "2026-10-11T00:53:03Z",
       "run_id": "38097914364",
-      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts",
+      "published_at": "2026-10-11T00:53:15Z"
     }
   ]
 }
