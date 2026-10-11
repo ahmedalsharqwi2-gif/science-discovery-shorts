@@ -123,7 +123,7 @@ def align_words_with_whisper(audio_path: Path, script_words: list[str]) -> list[
     # A low match rate produces synthetic timings between unrelated words and
     # is perceived as stuttering captions. Use uniform timing instead unless
     # Whisper recognizes at least three quarters of the narration.
-    if len(known) < max(1, int(len(script_words) * 0.75)):
+    if len(known) < max(1, int(len(script_words) * 0.85)):
         raise RuntimeError(f"Whisper alignment too weak: {len(known)}/{len(script_words)} words")
     for i, item in enumerate(timings):
         if item is not None:
@@ -162,28 +162,14 @@ def write_ass_subtitles(text: str, duration: float, ass_path: Path, audio_path: 
     words = _script_words(text)
     if not words:
         raise ValueError("Narration contains no words for subtitles")
-    if audio_path is not None:
-        try:
-            events = align_words_with_whisper(audio_path, words)
-        except Exception as exc:
-            log.warning("Whisper alignment unavailable (%s); using weighted subtitle timing", exc)
-            weights = [max(1, len(_norm(word))) for word in words]
-            total_weight = sum(weights) or 1
-            cursor = 0.0
-            events = []
-            for word, weight in zip(words, weights):
-                word_duration = duration * weight / total_weight
-                events.append({"text": word, "offset": cursor, "duration": word_duration})
-                cursor += word_duration
-    else:
-        weights = [max(1, len(_norm(word))) for word in words]
-        total_weight = sum(weights) or 1
-        cursor = 0.0
-        events = []
-        for word, weight in zip(words, weights):
-            word_duration = duration * weight / total_weight
-            events.append({"text": word, "offset": cursor, "duration": word_duration})
-            cursor += word_duration
+    if audio_path is None:
+        raise RuntimeError("رفض النشر: يجب توفير ملف الصوت الفعلي لمزامنة الترجمة")
+    try:
+        events = align_words_with_whisper(audio_path, words)
+    except Exception as exc:
+        raise RuntimeError(
+            f"رفض النشر: فشلت محاذاة الترجمة مع الصوت الحقيقي ({exc})"
+        ) from exc
     lines = [_ass_header()]
     for index in range(0, len(events), WORDS_PER_CAPTION_CHUNK):
         group = events[index:index + WORDS_PER_CAPTION_CHUNK]
