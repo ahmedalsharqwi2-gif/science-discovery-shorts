@@ -38,6 +38,8 @@ env:
   CINEMATIC_IMAGE_MODEL: ${{ vars.CINEMATIC_IMAGE_MODEL || 'gemini-3.1-flash-lite-image' }}
   CINEMATIC_IMAGE_FALLBACK_MODEL: ${{ vars.CINEMATIC_IMAGE_FALLBACK_MODEL || 'gemini-3.1-flash-image' }}
   CLIP_REVIEW_ENABLED: 'false'
+  # Bounded free-source search; local illustrative fallback prevents stalls.
+  CINEMATIC_MAX_SCENE_CANDIDATES: '6'
   QUALITY_GATES_BLOCKING: 'true'
   MIN_EXTERNAL_SCENE_SOURCES: '6'
   MIN_EXTERNAL_SCENE_SHARE: '0.65'
@@ -118,8 +120,10 @@ jobs:
 
       - name: Install dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y ffmpeg fonts-noto-core
+          if ! command -v ffmpeg >/dev/null 2>&1 || ! fc-list | grep -qi 'Noto'; then
+            sudo apt-get update -qq
+            sudo apt-get install -y ffmpeg fonts-noto-core
+          fi
           pip install -r requirements.txt
 
       - name: Cache models
@@ -251,10 +255,6 @@ jobs:
           DRY_RUN: ${{ inputs.dry_run && 'true' || 'false' }}
 
         run: |
-          test -f main.py || { echo "ERROR: main.py is missing"; exit 1; }
-          test -f llm_gemini.py || { echo "ERROR: llm_gemini.py is missing"; exit 1; }
-          test -f tts_quality.py || { echo "ERROR: tts_quality.py is missing"; exit 1; }
-          test -f assets/voices/voice_profiles.json || { echo "ERROR: voice profiles config is missing"; exit 1; }
           python main.py
 
       - name: Verify final montage and B-roll output
