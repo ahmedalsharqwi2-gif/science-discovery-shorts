@@ -203,6 +203,12 @@ def normalize_narration_response(response: str) -> str:
                 text = match.group(1).replace('\\"', '"').replace('\\n', '\n')
         else:
             text = re.sub(r'^\s*(?:نص السرد|النص|NARRATION|narration)\s*:\s*', '', text, flags=re.IGNORECASE)
+    # Remove Arabic storyboard labels only when they are clearly metadata at
+    # the very beginning. Preserve genuine narration such as "القصة تبدأ...".
+    text = re.sub(
+        r"^\\s*(?:(?:ال)?قصة|القصة|عنوان القصة|نص القصة|السرد|نص السرد)\\s*[:：\\-–—]\\s*",
+        "", text, count=1, flags=re.IGNORECASE,
+    )
     # Decode escaped Unicode left by malformed or double-encoded wrappers.
     text = re.sub(r"\\u([0-9A-Fa-f]{4})", lambda match: chr(int(match.group(1), 16)), text)
     extracted = _extract_spoken_field(text)
