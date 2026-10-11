@@ -1,9 +1,6 @@
 name: Auto publish videos (Cairo 12-18)
 run-name: ${{ inputs.stock_date && format('stock {0} {1} Cairo', inputs.stock_date, inputs.stock_hour) || 'Manual science production' }}
 on:
-  schedule:
-    # Prepare at 06:00/12:00 UTC, at least three hours before Cairo publication.
-    # Final publication remains 12:00 and 18:00 Africa/Cairo, including DST changes.
   workflow_dispatch:
     inputs:
       stock_date:
@@ -90,7 +87,7 @@ jobs:
               target = datetime.combine(day, datetime.min.time(), ZoneInfo("Africa/Cairo")).replace(hour=int(stock_hour))
               due_at = target.astimezone(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
               with open(os.environ["GITHUB_ENV"], "a", encoding="utf-8") as env_file:
-                  env_file.write(f"PUBLISH_DUE_AT={due_at}\\n")
+                  env_file.write(f"PUBLISH_DUE_AT={due_at}\n")
               print(f"Stock publication slot: {due_at} UTC")
               raise SystemExit(0)
           if os.environ.get("PUBLISH_NOW", "false").lower() == "true":
