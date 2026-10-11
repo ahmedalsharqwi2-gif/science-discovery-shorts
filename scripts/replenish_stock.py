@@ -36,15 +36,25 @@ if any(r.get("status") in ("queued", "in_progress", "waiting", "pending", "reque
     print("Production already active or pending; defer replenishment to next poll.")
     raise SystemExit(0)
 
+# Three-day publication batches. Start the next batch on the final day.
+from datetime import date
+anchor = date(2026, 10, 11)
+batch_index = max(0, (now.date() - anchor).days // 3)
+batch_start = anchor + timedelta(days=batch_index * 3)
+batches = [batch_start]
+if now.date() >= batch_start + timedelta(days=2):
+    batches.append(batch_start + timedelta(days=3))
+
 slots = []
-for day in range(0, 4):
-    date = (now + timedelta(days=day)).date()
-    for hour in (18, 12):
-        target = datetime(date.year, date.month, date.day, hour, tzinfo=ZoneInfo("Africa/Cairo"))
-        # Do not schedule today's slot if insufficient time remains to render.
-        if target <= now + timedelta(hours=2):
-            continue
-        slots.append((target, f"stock {date.isoformat()} {hour:02d} Cairo"))
+for first_day in batches:
+    for day in range(3):
+        publication_day = first_day + timedelta(days=day)
+        for hour in (12, 18):
+            target = datetime(publication_day.year, publication_day.month,
+                              publication_day.day, hour, tzinfo=ZoneInfo('Africa/Cairo'))
+            if target <= now + timedelta(hours=2):
+                continue
+            slots.append((target, f'stock {publication_day.isoformat()} {hour:02d} Cairo'))
 
 for target, title in slots:
     matches = [r for r in runs if r.get("display_title") == title]
