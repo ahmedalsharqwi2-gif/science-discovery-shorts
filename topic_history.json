@@ -960,11 +960,23 @@
       "region": "",
       "status": "published",
       "source": "science-pipeline",
-      "reservation_id": "c6ffc2055478453b9cda0274a32c6a43",
       "reserved_at": "2026-10-11T01:16:02Z",
+      "published_at": "2026-10-11T01:16:13Z",
       "run_id": "38100415439",
-      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts",
-      "published_at": "2026-10-11T01:16:13Z"
+      "reservation_id": "c6ffc2055478453b9cda0274a32c6a43",
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
+    },
+    {
+      "id": "988104f50f519b1b95fa",
+      "title": "لماذا تصنع بعض الكائنات ضوءها الخاص؟",
+      "hook": "\": \"هَلْ سَأَلْتَ نَفْسَكَ يَوْمًا، كَيْفَ تُضِيءُ بَعْضُ الكَائِنَاتِ فِي الظَّلَامِ الحَالِكِ؟ فِي أَعْمَاقِ المُحِيطَاتِ السَّحِيقَةِ، تَتَوَهَّجُ أَجْسَامُ الكَائِنَاتِ الحَيَّةِ بِدُونِ شَمْسٍ أَوْ نَارٍ. الحَقِيقَةُ المُثْبَتَةُ عِلْمِيًّا هِيَ أَنَّ هَذَا الضَّوْءَ الحَيَوِيَّ يَنْتَجُ عَنْ تََفَاعُلٍ",
+      "region": "",
+      "status": "reserved",
+      "source": "science-pipeline",
+      "reservation_id": "70a65abe03764748ba405b80f70d8882",
+      "reserved_at": "2026-10-11T07:18:55Z",
+      "run_id": "38120234970",
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
     }
   ]
 }
