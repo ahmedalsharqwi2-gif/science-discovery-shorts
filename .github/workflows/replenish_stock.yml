@@ -1,7 +1,7 @@
 name: Replenish 3-day video stock
 on:
   schedule:
-    - cron: '37 3 * * *'
+    - cron: '7,22,37,52 * * * *'
   workflow_dispatch:
 permissions:
   actions: write
