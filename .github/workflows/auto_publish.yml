@@ -93,6 +93,8 @@ jobs:
                            cairo_now.replace(hour=18, minute=0, second=0, microsecond=0)]
                   target = next((slot for slot in slots if slot > cairo_now),
                                 slots[0] + timedelta(days=1))
+          # Keep scheduled production three days ahead; emergency publish_now is unchanged.
+          target += timedelta(days=3)
           due_at = target.astimezone(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
           print(f"Fixed publication slot: {due_at} UTC")
           with open(os.environ["GITHUB_ENV"], "a", encoding="utf-8") as env_file:
