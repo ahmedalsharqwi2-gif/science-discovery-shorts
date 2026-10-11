@@ -161,7 +161,7 @@ class VoiceGenerator:
         text: str,
         output_path: Path,
         voice: str = "ar-SA-AmmarNeural",
-        rate: str = os.getenv("EDGE_TTS_RATE", "-12%"),
+        rate: str = os.getenv("EDGE_TTS_RATE", "-16%"),
         pitch: Optional[str] = None,
     ) -> Tuple[bool, str]:
         """Generate speech using Edge TTS (fallback)."""
