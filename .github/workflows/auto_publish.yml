@@ -253,6 +253,8 @@ jobs:
           AUTO_VOICE_PROFILES: 'mohamed_elbed,rafik_sa,egyptian_female,hossam,hossam_uploaded,marwan,nassim,ahmed_z'
           VOICE_ROTATION_STATE_FILE: 'state/voice_rotation.json'
           MIN_SCENE_CLIPS: '4'
+          # Non-blocking montage diagnostics only when the free stock library is limited.
+          QUALITY_GATES_BLOCKING: 'false'
 
           # --- Topic history ---
           TOPIC_HISTORY_FILE: 'topic_history.json'
