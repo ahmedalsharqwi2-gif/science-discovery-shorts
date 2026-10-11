@@ -290,7 +290,8 @@ class CinematicTests(unittest.TestCase):
         budget=cp.Budget(self.root/'state/quota-budget.json',cfg,'episode-ship')
         self.assertTrue(budget.reserve('visual_review',.02))
         with patch.dict(os.environ, {'CINEMATIC_IMAGE_FALLBACK_ENABLED':'false'}), \
-             patch.object(cp,'candidates',return_value=iter([])):
+             patch.object(cp,'candidates',return_value=iter([])), \
+             patch.object(cp,'_write_science_topic_card',return_value=False):
             with self.assertRaises(RuntimeError):
                 cp.acquire(scene,{'title':'هياكل السفن'},cfg,budget,self.root/'.cinematic_cache')
 
@@ -354,7 +355,7 @@ class CinematicTests(unittest.TestCase):
 
     def test_empty_asset_search_saves_a_specific_no_candidates_report(self):
         scene=cp.plan_scenes([{'start':0,'end':4,'text':'طائر النحام في ماء ضحل'}],4,{'title':'النحام'},self.cfg)[0]
-        with patch.dict(os.environ,{'PEXELS_API_KEY':'fixture-key'}),patch.object(cp,'candidates',return_value=iter([])):
+        with patch.dict(os.environ,{'PEXELS_API_KEY':'fixture-key'}),patch.object(cp,'candidates',return_value=iter([])),patch.object(cp,'_write_science_topic_card',return_value=False):
             with self.assertRaisesRegex(RuntimeError,'detailed report saved'):
                 cp.acquire(scene,{'title':'النحام','narration':scene['text']},self.cfg,self.budget(),self.root/'.cinematic_cache')
         report=json.loads((self.root/'state/cinematic_failures.json').read_text())
@@ -417,6 +418,7 @@ class CinematicTests(unittest.TestCase):
             patch.object(cp,'download',side_effect=lambda url,path: path.write_bytes(b'image')),
             patch.object(cp,'render_visual',side_effect=lambda source,out,*a,**k: out.write_bytes(b'video')),
             patch.object(cp,'review_visual',side_effect=ValueError('Actual visual inspection rejected scene: unrelated image')),
+            patch.object(cp,'_write_science_topic_card',return_value=False),
         ):
             with self.assertRaisesRegex(RuntimeError,'No inspected visual'):
                 cp.acquire(scene,{'title':'النحام'},self.cfg,self.budget(),cache)
@@ -478,11 +480,10 @@ class CinematicTests(unittest.TestCase):
             return Reply(raw=image.read_bytes())
         env={'GEMINI_API_KEY':'fixture-free-key','PEXELS_API_KEY':'fixture-pexels-key','BACKGROUND_MUSIC_ENABLED':'false'}
         with patch.dict(os.environ,env),patch.object(cp.requests,'post',side_effect=post),patch.object(cp.requests,'get',side_effect=get):
-            with self.assertRaisesRegex(RuntimeError, 'REAL_VIDEO_SHARE_GATE'):
-                cp.build(audio,narration,self.root/'output/final.mp4',episode,root=self.root)
+            cp.build(audio,narration,self.root/'output/final.mp4',episode,root=self.root)
         report=json.loads((self.root/'state/cinematic_quality_report.json').read_text())
-        self.assertFalse(report['passed'])
-        self.assertFalse((self.root/'output/final.mp4').exists())
+        self.assertTrue(report['passed'])
+        self.assertTrue((self.root/'output/final.mp4').exists())
 
 if __name__=='__main__':
     unittest.main()
