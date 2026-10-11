@@ -39,7 +39,7 @@ if any(r.get("status") in ("queued", "in_progress", "waiting", "pending", "reque
 slots = []
 for day in range(0, 4):
     date = (now + timedelta(days=day)).date()
-    for hour in (12, 18):
+    for hour in (18, 12):
         target = datetime(date.year, date.month, date.day, hour, tzinfo=ZoneInfo("Africa/Cairo"))
         # Do not schedule today's slot if insufficient time remains to render.
         if target <= now + timedelta(hours=2):
@@ -51,8 +51,8 @@ for target, title in slots:
     if any(r.get("conclusion") == "success" for r in matches):
         print(f"Already produced: {title}")
         continue
-    if len(matches) >= 2:
-        print(f"ALERT: slot failed twice; manual intervention required: {title}")
+    if len(matches) >= 3:
+        print(f"ALERT: slot failed three times; manual intervention required: {title}")
         continue
     print(f"Dispatching ONE missing slot: {title}")
     api(f"actions/workflows/{workflow}/dispatches", {
