@@ -984,12 +984,13 @@
       "title": "{",
       "hook": "content\": \"هَلْ تَعْلَمُ أنَّ خَلايَا دِمَاغِكَ تَتَكَلَّمُ لُغَةً خَفِيَّةً لا نَفْهَمُهَا كَامِلَةً بَعْدُ؟ هذه اللغة ليست مجرد مجاز أدبي، بل هي نظام كهربائي وكيميائي معقد للغاية يتحكم في كل ما تفكره وتشعر به وتفعله. يتكون",
       "region": "",
-      "status": "reserved",
+      "status": "published",
       "source": "science-pipeline",
       "reservation_id": "d871818f83994a98b4403735d6460fd7",
       "reserved_at": "2026-10-11T15:54:23Z",
       "run_id": "38150600243",
-      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts",
+      "published_at": "2026-10-11T15:54:30Z"
     }
   ]
 }
