@@ -947,11 +947,23 @@
       "region": "",
       "status": "published",
       "source": "science-pipeline",
-      "reservation_id": "e2a3afc1f724472db17c5c826c95e678",
       "reserved_at": "2026-10-11T00:53:03Z",
+      "published_at": "2026-10-11T00:53:15Z",
       "run_id": "38097914364",
-      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts",
-      "published_at": "2026-10-11T00:53:15Z"
+      "reservation_id": "e2a3afc1f724472db17c5c826c95e678",
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
+    },
+    {
+      "id": "15abd93149450faab516",
+      "title": "كيف يقاوم هيكل الغواصة ضغط الماء؟",
+      "hook": "هَلْ تَسَاءَلْتَ كَيْفَ تَصْمُدُ الغَوَّاصَاتُ فِي ظُلُمَاتِ البِحَارِ التَّحْتِيَّةِ السَّحِيقَةِ؟ تَحْتَ السَّطْحِ، يَتَضَاعَفُ ضَغْطُ المَاءِ بِشَكْلٍ مُمِيتٍ مَعَ كُلِّ عُمْرٍ إِضَافِيٍّ نَحْوَ القَاعِ، وَهَذِهِ حَقِيقَةٌ فِيزْيَائِيَّةٌ تُحْسَبُ بِمِعْيَارِ الضَّغْطِ الجَوِّيِّ وَالهَيْدُرُولِيكِيِّ، حَيْثُ يَزِيدُ الضَّغْطُ بِمِقْدَارِ",
+      "region": "",
+      "status": "reserved",
+      "source": "science-pipeline",
+      "reservation_id": "c6ffc2055478453b9cda0274a32c6a43",
+      "reserved_at": "2026-10-11T01:16:02Z",
+      "run_id": "38100415439",
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
     }
   ]
 }
