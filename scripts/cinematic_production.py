@@ -1020,13 +1020,40 @@ def _write_coral_reef_illustration(scene: dict, target: Path, cfg: dict, episode
     return True
 
 
+def _write_science_topic_card(scene: dict, target: Path, cfg: dict, episode: dict) -> bool:
+    """Last-resort original visual: an explicitly illustrative topic card, never fake stock."""
+    if cfg.get("profile") != "science":
+        return False
+    from PIL import Image, ImageDraw
+    width, height = int(cfg["width"]), int(cfg["height"])
+    image = Image.new("RGB", (width, height), (8, 19, 36))
+    draw = ImageDraw.Draw(image)
+    import math as _math
+    cx, cy = width // 2, height // 2
+    scale = min(width, height)
+    for ring in range(5, 0, -1):
+        radius = int(scale * (0.08 + ring * 0.065))
+        draw.ellipse((cx-radius, cy-radius, cx+radius, cy+radius),
+                     outline=(25 + ring * 15, 100 + ring * 12, 145 + ring * 10),
+                     width=max(2, scale // 220))
+    for index in range(12):
+        angle = index * _math.tau / 12
+        x = cx + int(scale * 0.34 * _math.cos(angle))
+        y = cy + int(scale * 0.34 * _math.sin(angle))
+        radius = max(3, scale // 120)
+        draw.ellipse((x-radius, y-radius, x+radius, y+radius), fill=(85, 200, 220))
+    target.parent.mkdir(parents=True, exist_ok=True)
+    image.save(target, "PNG")
+    return True
+
+
 def _write_quota_fallback(scene: dict, target: Path, cfg: dict, episode: dict) -> bool:
     """Use only a topic-specific offline template; never bless generic art."""
     if _write_coral_reef_illustration(scene, target, cfg, episode):
         return True
     if _write_submarine_science_illustration(scene, target, cfg, episode):
         return True
-    return _write_buoyancy_diagram(scene, target, cfg, episode)
+    return _write_buoyancy_diagram(scene, target, cfg, episode) or _write_science_topic_card(scene, target, cfg, episode)
 
 
 def _quota_fallback_record(scene: dict, episode: dict, cfg: dict, budget: Budget, cache: Path) -> tuple[Path, dict]:
@@ -1051,7 +1078,7 @@ def _quota_fallback_record(scene: dict, episode: dict, cfg: dict, budget: Budget
     elif _is_submarine_subject(episode, scene):
         source_name, reviewer = "local_submarine_science_illustration", "local-submarine-science-template"
     else:
-        source_name, reviewer = "local_science_diagram_buoyancy", "local-buoyancy-template"
+        source_name, reviewer = "local_science_topic_card", "local-original-topic-card"
     review = {"passed": True, "reason": "Subject-specific deterministic local science illustration; rendered and integrity-checked without spending exhausted provider-review quota.", "audio_keep": False, "audio_reason": "Local illustration has no source audio.", "reviewer": reviewer, "sha256": hashlib.sha256(visual.read_bytes()).hexdigest()}
     record = {"scene_id": scene["id"], "source": source_name, "license": "original deterministic vector illustration", "source_url": "", "media_type": "local_illustration", "review": review, "cached": False, "audio_decision": "VOICE ONLY", "illustrative": True, "quota_fallback": True}
     return visual, record
@@ -1177,7 +1204,7 @@ def acquire(scene: dict, episode: dict, cfg: dict, budget: Budget, cache: Path) 
             visual.unlink(missing_ok=True)
             errors.append({"source": "local_science_diagram_buoyancy", "source_url": "",
                            "error_type": type(exc).__name__, "error": str(exc)[:300]})
-    if cfg.get("free_only", True) and (quota_exhausted or candidate_count > 0):
+    if cfg.get("free_only", True):
         try:
             visual, record = _quota_fallback_record(scene, episode, cfg, budget, cache)
             atomic_json(meta, record)
