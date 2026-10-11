@@ -1,7 +1,7 @@
-"""Keep six Cairo publishing slots reserved across the next three calendar days.
+"""Fill today's remaining Cairo slots and the next three days safely.
 
-Dispatches only missing/failed slots; never considers an in-progress build empty.
-GitHub workflow run names are the idempotency key, not local state.
+One production dispatch at a time prevents GitHub Actions pending-run eviction
+and avoids concurrent writes to shared topic/history state.
 """
 import json
 import os
@@ -15,6 +15,7 @@ workflow = os.environ["PRODUCTION_WORKFLOW"]
 now = datetime.now(ZoneInfo("Africa/Cairo"))
 headers = {"Authorization": f"Bearer {token}", "Accept": "application/vnd.github+json",
            "X-GitHub-Api-Version": "2022-11-28", "User-Agent": "stock-replenisher"}
+
 def api(path, payload=None):
     data = None if payload is None else json.dumps(payload).encode()
     req = urllib.request.Request(f"https://api.github.com/repos/{repo}/{path}",
@@ -24,24 +25,41 @@ def api(path, payload=None):
 
 runs = []
 for page in (1, 2, 3):
-    result = api(f"actions/workflows/{workflow}/runs?per_page=100&page={page}")
-    runs.extend(result.get("workflow_runs", []))
-    if len(result.get("workflow_runs", [])) < 100:
+    batch = api(f"actions/workflows/{workflow}/runs?per_page=100&page={page}").get("workflow_runs", [])
+    runs.extend(batch)
+    if len(batch) < 100:
         break
 
-for day in range(1, 4):
-    date = (now + timedelta(days=day)).date().isoformat()
+# GitHub Actions concurrency supports only one pending run per group.
+# Never flood the workflow with six simultaneous dispatches.
+if any(r.get("status") in ("queued", "in_progress", "waiting", "pending", "requested") for r in runs):
+    print("Production already active or pending; defer replenishment to next poll.")
+    raise SystemExit(0)
+
+slots = []
+for day in range(0, 4):
+    date = (now + timedelta(days=day)).date()
     for hour in (12, 18):
-        title = f"stock {date} {hour:02d} Cairo"
-        matches = [r for r in runs if r.get("display_title") == title]
-        good = any(r.get("status") != "completed" or r.get("conclusion") == "success" for r in matches)
-        if good:
-            print(f"Already reserved: {title}")
+        target = datetime(date.year, date.month, date.day, hour, tzinfo=ZoneInfo("Africa/Cairo"))
+        # Do not schedule today's slot if insufficient time remains to render.
+        if target <= now + timedelta(hours=2):
             continue
-        if len(matches) >= 2:
-            print(f"Needs human attention (2 failed attempts): {title}")
-            continue
-        print(f"Dispatching: {title}")
-        api(f"actions/workflows/{workflow}/dispatches", {
-            "ref": "main", "inputs": {"stock_date": date, "stock_hour": str(hour), "dry_run": "false"}
-        })
+        slots.append((target, f"stock {date.isoformat()} {hour:02d} Cairo"))
+
+for target, title in slots:
+    matches = [r for r in runs if r.get("display_title") == title]
+    if any(r.get("conclusion") == "success" for r in matches):
+        print(f"Already produced: {title}")
+        continue
+    if len(matches) >= 2:
+        print(f"ALERT: slot failed twice; manual intervention required: {title}")
+        continue
+    print(f"Dispatching ONE missing slot: {title}")
+    api(f"actions/workflows/{workflow}/dispatches", {
+        "ref": "main",
+        "inputs": {"stock_date": target.date().isoformat(), "stock_hour": str(target.hour),
+                   "dry_run": "false", "publish_now": "false"}
+    })
+    break
+else:
+    print("No missing eligible stock slots found.")
