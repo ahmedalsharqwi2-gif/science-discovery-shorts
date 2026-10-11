@@ -52,7 +52,9 @@ for first_day in batches:
         for hour in (12, 18):
             target = datetime(publication_day.year, publication_day.month,
                               publication_day.day, hour, tzinfo=ZoneInfo('Africa/Cairo'))
-            if target <= now + timedelta(hours=2):
+            # Keep today's missed or imminent slots eligible for immediate
+            # catch-up production; the publishing workflow handles due times.
+            if target <= now and publication_day != now.date():
                 continue
             slots.append((target, f'stock {publication_day.isoformat()} {hour:02d} Cairo'))
 
