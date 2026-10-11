@@ -249,7 +249,7 @@ jobs:
           ASR_MIN_MATCH_RATIO: '0.78'
           MIN_TTS_AUDIO_SCORE: '0.78'
           # Avoid the slow, syllable-separated delivery seen with -15%.
-          EDGE_TTS_RATE: "-12%"
+          EDGE_TTS_RATE: "-16%"
           EDGE_TTS_PITCH: "+0Hz"
           MUSIC_VOLUME: '0.07'
           DRY_RUN: ${{ inputs.dry_run && 'true' || 'false' }}
