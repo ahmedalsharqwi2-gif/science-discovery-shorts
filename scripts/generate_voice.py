@@ -239,6 +239,14 @@ class VoiceGenerator:
         
         output_path.parent.mkdir(parents=True, exist_ok=True)
 
+        if os.getenv("PREFER_FREE_GOOGLE_TTS", "false").lower() == "true":
+            try:
+                from scripts.free_tts_fallback import google_arabic_voice
+                google_arabic_voice(normalize_edge_tts_text(text), output_path)
+                log.info("Generated narration with independent free Google Arabic voice")
+                return output_path, True
+            except Exception as exc:
+                log.warning("Preferred free Arabic TTS unavailable; retaining provider recovery chain: %s", exc)
         configured_engine = os.getenv("TTS_ENGINE", engine).strip().lower()
         if configured_engine == "silma":
             try:

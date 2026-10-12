@@ -78,6 +78,7 @@ jobs:
 
   publish:
     env:
+      PREFER_FREE_GOOGLE_TTS: 'true'
       FREE_GOOGLE_TTS_ENABLED: 'true'
       PUBLICATION_RECEIPTS_ENABLED: 'true'
       PUBLISH_IMMEDIATE: ${{ inputs.publish_now && matrix.date == '' }}
