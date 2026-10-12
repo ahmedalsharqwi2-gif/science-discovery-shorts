@@ -1011,9 +1011,21 @@
       "region": "",
       "status": "reserved",
       "source": "science-pipeline",
-      "reservation_id": "7c27e045365a4c07af2e37eff53c246d",
       "reserved_at": "2026-10-12T22:40:30Z",
       "run_id": "38309598520",
+      "reservation_id": "7c27e045365a4c07af2e37eff53c246d",
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
+    },
+    {
+      "id": "897a2be25813c6a720db",
+      "title": "كيف تنجو الأشجار العالية من الجفاف رغم ارتفاعها الشاهق؟",
+      "hook": "كَيْفَ يَصْعَدُ المَاءُ ضِدَّ الجَاذِبِيَّةِ إِلَى قِمَّةِ شَجَرَةٍ عِمْلَاقَةٍ؟ تَرْتَفِعُ السِّيقَانُ الشَّاهِقَةُ مِئَاتِ الأَمْتَارِ نَحْوَ السَّمَاءِ بِلَا أَيِّ مِضَخَّةٍ مِيكَانِيكِيَّةٍ. تُثْبِتُ الحَقَائِقُ العِلْمِيَّةُ أَنَّ الأَشْجَارَ تَعْتَمِدُ عَلَى ظَاهِرَةِ التَّوَاطُؤِ الجُزَيْئِيِّ لِلسَّوَائِلِ، أو ما يُعرف بالتماسك",
+      "region": "",
+      "status": "reserved",
+      "source": "science-pipeline",
+      "reservation_id": "5e38d8e6bdff4b83a72bb0f17297e869",
+      "reserved_at": "2026-10-12T22:58:05Z",
+      "run_id": "38318093821",
       "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
     }
   ]
