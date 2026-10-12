@@ -999,9 +999,21 @@
       "region": "",
       "status": "reserved",
       "source": "science-pipeline",
-      "reservation_id": "609146516fb94b0fb80827e14aab5a0f",
       "reserved_at": "2026-10-12T22:17:08Z",
       "run_id": "38312113795",
+      "reservation_id": "609146516fb94b0fb80827e14aab5a0f",
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
+    },
+    {
+      "id": "de5791be0335a6cac7eb",
+      "title": "[كيف تتشكل الأقطاب المغناطيسية للشمس؟, لماذا ينعكس حقل الشمس المغناطيسي كل أحد عشر عاماً بدقة منتظمة تكشفها قوانين الديناميكا المائية الفلكية؟]",
+      "hook": "\": \"هَلْ تَسَاءَلْتَ مِنْ قَبْلُ عَنْ سِرِّ ذَلِكَ القَلْبِ المُخْتَفِي خَلْفَ الضَّوْءِ الحَارِقِ؟ كُلُّ أَحَدَعَشَرَ عَاماً، تَنْقَلِبُ أَقْطَابُ الشَّمْسِ المَغْنَطِيسِيَّةُ رَأْساً عَلَى عَقِبٍ، وَهَذِهِ حَقِيقَةٌ مُثْبَتَةٌ بِالرَّصْدِ الفَلَكِيِّ المُسْتَمَرِّ. تُعَدُّ هَذِهِ الظَّاهِرَةُ جزءاً أساسياً مِنْ",
+      "region": "",
+      "status": "reserved",
+      "source": "science-pipeline",
+      "reservation_id": "7c27e045365a4c07af2e37eff53c246d",
+      "reserved_at": "2026-10-12T22:40:30Z",
+      "run_id": "38309598520",
       "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
     }
   ]
