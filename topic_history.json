@@ -1034,12 +1034,13 @@
       "title": "لماذا تلمع الرمال في بعض الصحاري عند المشي فوقها؟,",
       "hook": "\": \"هَلْ سَمِعْتَ صَوْتَ الرِّمَالِ الْمُغَنِّيَةِ؟ إنها ظاهرة طبيعية نادرة ومذهلة تحدث في بعض الصحارى حول العالم، حيث تصدر الكثبان الرملية أصواتاً تشبه طنين النحل، أو ترانيم الأبواق، أو حتى أزير الطائرات النفاثة. يرجع هذا",
       "region": "",
-      "status": "reserved",
+      "status": "published",
       "source": "science-pipeline",
       "reservation_id": "5960e7b7d56747c08e0038634772288c",
       "reserved_at": "2026-10-12T23:36:39Z",
       "run_id": "38321467199",
-      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts",
+      "published_at": "2026-10-12T23:36:49Z"
     }
   ]
 }
