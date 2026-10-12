@@ -267,8 +267,22 @@ class VoiceGenerator:
             if success:
                 log.info(f"Audio generation successful with Edge TTS: {message}")
                 return output_path, True
-            log.error(f"Edge TTS failed: {message}")
-            return output_path, False
+            log.warning("Edge TTS unavailable; attempting local SILMA fallback: %s", message)
+            try:
+                profile = select_silma_profile()
+                config_path = Path(os.getenv("SILMA_VOICE_PROFILES_FILE", "assets/voices/voice_profiles.json"))
+                reference_wav, reference_text = resolve_reference_profile(profile, config_path)
+                generate_silma_guarded(
+                    text, output_path, reference_wav, reference_text,
+                    speed=float(os.getenv("SILMA_SPEED", "1.15")),
+                    attempts=int(os.getenv("SILMA_MAX_ATTEMPTS", "2")),
+                    min_score=float(os.getenv("SILMA_MIN_SCORE", "0.6")),
+                )
+                log.info("Recovered Edge TTS failure using local SILMA profile %s", profile)
+                return output_path, True
+            except Exception as exc:
+                log.error("Both Edge TTS and SILMA failed: %s", exc)
+                return output_path, False
 
         # Try Google Cloud TTS first for the legacy/default path
         if engine == "google" or not voice:
