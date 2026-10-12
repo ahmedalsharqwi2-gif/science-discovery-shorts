@@ -51,9 +51,14 @@ def forced_word_alignment(audio: Path, words: list[str]) -> list[dict]:
     with tempfile.TemporaryDirectory(prefix='forced-caption-', dir=audio.parent) as folder:
         root = Path(folder); transcript=root/'words.json'; output=root/'alignment.json'
         transcript.write_text(json.dumps(words,ensure_ascii=False),encoding='utf-8')
-        subprocess.run([sys.executable,str(Path(__file__).resolve()),'worker',str(audio.resolve()),
-                        str(transcript.resolve()),str(output.resolve())],
-                       capture_output=True,text=True,check=True,timeout=360)
+        try:
+            subprocess.run([sys.executable,str(Path(__file__).resolve()),'worker',str(audio.resolve()),
+                            str(transcript.resolve()),str(output.resolve())],
+                           capture_output=True,text=True,check=True,timeout=360)
+        except subprocess.CalledProcessError as exc:
+            raise RuntimeError('Local forced caption alignment failed: ' + (exc.stderr or '')[-1200:]) from exc
+        except subprocess.TimeoutExpired as exc:
+            raise RuntimeError('Local forced caption alignment exceeded its bounded runtime') from exc
         events=json.loads(output.read_text(encoding='utf-8'))
     result=validate_events(events,words,duration)
     print(f'Local forced alignment validated all {len(result)} words against the actual audio',flush=True)
