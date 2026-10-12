@@ -306,7 +306,25 @@ class TopicHistory:
         rebased = git("rebase", "FETCH_HEAD", check=False)
         if rebased.returncode != 0:
             git("rebase", "--abort", check=False)
-            raise TopicHistoryError("تعارض تحديث سجل المواضيع؛ أُوقف النشر بدل المخاطرة بالتكرار.")
+            # Concurrent runs can legitimately reserve different topics in the
+            # same JSON file.  A normal rebase cannot merge those edits.  Drop
+            # the rejected local commit, reload the remote history, and append
+            # our reservation only when it is not a real duplicate.
+            git("reset", "--hard", "FETCH_HEAD", check=False)
+            remote_entries = load_history(self.path)
+            if find_duplicate(candidate, remote_entries):
+                raise TopicHistoryError("حجز تشغيل متزامن موضوعًا مشابهًا أولًا؛ أُوقف هذا النشر.")
+            self.entries = remote_entries
+            self.entries.append(candidate)
+            write_history(self.path, self.entries)
+            git("add", "--", file_arg)
+            merged = git("commit", "-m", f"chore: {action} topic history [skip ci]", check=False)
+            if merged.returncode != 0:
+                raise TopicHistoryError("تعذر دمج حجز الموضوع في سجل المواضيع البعيد؛ أُوقف النشر.")
+            pushed = git("push", "origin", "HEAD:main", check=False)
+            if pushed.returncode != 0:
+                raise TopicHistoryError("تعذر حفظ سجل المواضيع بعد الدمج؛ أُوقف النشر.")
+            return
         own_reservation_id = candidate.get("reservation_id")
         remote_entries = [
             entry for entry in load_history(self.path)
@@ -353,4 +371,3 @@ def main(argv: list[str] | None = None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
