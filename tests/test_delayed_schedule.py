@@ -28,14 +28,14 @@ class DelayedScheduleTests(unittest.TestCase):
                 exec(compile(code, 'publication slot', 'exec'), {})
             return envfile.read_text().strip().split('=', 1)[1]
 
-    def test_delayed_morning_reaches_today_evening(self):
-        self.assertEqual(self.slot('2026-10-08T13:06:00+00:00', '17 6 * * *'), '2026-10-08T15:00:00Z')
+    def test_delayed_morning_replenishes_evening_three_days_ahead(self):
+        self.assertEqual(self.slot('2026-10-08T13:06:00+00:00', '17 6 * * *'), '2026-10-11T15:00:00Z')
 
-    def test_normal_morning_keeps_noon(self):
-        self.assertEqual(self.slot('2026-10-08T06:17:00+00:00', '17 6 * * *'), '2026-10-08T09:00:00Z')
+    def test_normal_morning_replenishes_noon_three_days_ahead(self):
+        self.assertEqual(self.slot('2026-10-08T06:17:00+00:00', '17 6 * * *'), '2026-10-11T09:00:00Z')
 
     def test_evening_respects_cairo_winter_offset(self):
-        self.assertEqual(self.slot('2026-11-08T12:17:00+00:00', '17 12 * * *'), '2026-11-08T16:00:00Z')
+        self.assertEqual(self.slot('2026-11-08T12:17:00+00:00', '17 12 * * *'), '2026-11-11T16:00:00Z')
 
 
 if __name__ == '__main__':
