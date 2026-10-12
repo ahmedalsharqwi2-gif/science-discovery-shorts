@@ -135,7 +135,10 @@ class CinematicTests(unittest.TestCase):
         output = self.root / 'cinematic.ass'
         frame = self.root / 'frame.png'
         narration = 'الشعاب المرجانية تحمي السواحل'
-        write_ass_subtitles(narration, 4.0, source)
+        words = narration.split()
+        timed = [{"text": word, "offset": i, "duration": 1.0} for i, word in enumerate(words)]
+        with patch("scripts.assemble_video.align_words_with_whisper", return_value=timed):
+            write_ass_subtitles(narration, 4.0, source, audio_path=self.root / "fixture.wav")
         events, method = cp.captions(narration, 4.0, source)
         self.assertEqual(method, 'existing_audio_timeline')
         cp.write_captions(events, output, cp.settings())
