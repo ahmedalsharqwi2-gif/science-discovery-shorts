@@ -123,6 +123,8 @@ def align_words_with_whisper(audio_path: Path, script_words: list[str]) -> list[
         for offset in range(block.size):
             si, ai = block.a + offset, block.b + offset
             timings[si] = {"text": script_words[si], "offset": heard[ai][1], "duration": max(heard[ai][2] - heard[ai][1], 0.06)}
+    from scripts.asr_token_boundaries import recover_token_boundaries
+    recover_token_boundaries(expected, actual, heard, script_words, timings)
     known = [i for i, item in enumerate(timings) if item is not None]
     # A low match rate produces synthetic timings between unrelated words and
     # is perceived as stuttering captions. Use uniform timing instead unless
