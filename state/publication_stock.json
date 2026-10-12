@@ -1,0 +1,33 @@
+{
+  "slots": {
+    "stock 2026-10-13 12 Cairo": {
+      "confirmed": true,
+      "receipts": {
+        "tiktok": {
+          "id": "6acd66055229b40e86854753",
+          "due_at": "2026-10-13T09:00:00Z",
+          "run_id": "38318093821",
+          "accepted_at": "2026-10-12T22:58:13.418601+00:00"
+        },
+        "youtube": {
+          "id": "6acd6605aec88be081e7788f",
+          "due_at": "2026-10-13T09:00:00Z",
+          "run_id": "38318093821",
+          "accepted_at": "2026-10-12T22:58:14.174824+00:00"
+        },
+        "facebook": {
+          "id": "6acd66069f22b96ae7e69d8a",
+          "due_at": "2026-10-13T09:00:00Z",
+          "run_id": "38318093821",
+          "accepted_at": "2026-10-12T22:58:14.882779+00:00"
+        }
+      },
+      "required_services": [
+        "facebook",
+        "tiktok",
+        "youtube"
+      ],
+      "confirmed_at": "2026-10-12T22:58:51.079742+00:00"
+    }
+  }
+}
