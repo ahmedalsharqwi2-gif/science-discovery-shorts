@@ -10,6 +10,15 @@ from scripts.assemble_video import _caption_text, write_ass_subtitles
 from scripts.generate_voice import normalize_edge_tts_text
 
 
+def write_fixture_subtitles(text, duration, path):
+    """Typography fixture: known word timestamps, independent of ASR availability."""
+    words = text.split()
+    events = [{"text": word, "offset": i * duration / len(words), "duration": duration / len(words)}
+              for i, word in enumerate(words)]
+    with patch("scripts.assemble_video.align_words_with_whisper", return_value=events):
+        write_ass_subtitles(text, duration, path, audio_path=path.with_suffix(".wav"))
+
+
 class VideoAssemblyTests(unittest.TestCase):
     def test_arabic_caption_payload_has_no_bidi_controls_that_break_shaping(self):
         caption = _caption_text("هذا نص عربي سليم".split())
@@ -26,7 +35,7 @@ class VideoAssemblyTests(unittest.TestCase):
     def test_subtitles_keep_four_word_line_and_highlight_each_word(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "captions.ass"
-            write_ass_subtitles(
+            write_fixture_subtitles(
                 "واحد اثنان ثلاثة أربعة خمسة ستة سبعة",
                 7.0,
                 path,
@@ -57,7 +66,7 @@ class VideoAssemblyTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             ass_path = Path(directory) / "reef.ass"
             frame_path = Path(directory) / "frame.png"
-            write_ass_subtitles("الشعاب المرجانية تحمي السواحل", 4.0, ass_path)
+            write_fixture_subtitles("الشعاب المرجانية تحمي السواحل", 4.0, ass_path)
             subprocess.run([
                 "ffmpeg", "-y", "-v", "error", "-f", "lavfi", "-i",
                 "color=c=black:s=1080x1920:r=30:d=1", "-vf", f"subtitles='{ass_path}'",
@@ -78,28 +87,19 @@ class VideoAssemblyTests(unittest.TestCase):
     def test_captions_are_top_centered_below_mobile_notch_safe_area(self):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "captions.ass"
-            write_ass_subtitles("نص تجريبي للترجمة العربية", 5.0, path)
+            write_fixture_subtitles("نص تجريبي للترجمة العربية", 5.0, path)
             text = path.read_text(encoding="utf-8")
         self.assertIn(",8,70,70,260,1", text)
 
     @patch("scripts.assemble_video.align_words_with_whisper", side_effect=RuntimeError("Whisper alignment too weak: 77/157 words"))
-    def test_weak_whisper_alignment_falls_back_to_weighted_timing(self, align):
+    def test_weak_whisper_alignment_blocks_publication(self, align):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "captions.ass"
-            write_ass_subtitles(
-                "واحد اثنان ثلاثة أربعة خمسة ستة سبعة ثمانية",
-                8.0,
-                path,
-                audio_path=Path(directory) / "narration.mp3",
-            )
-            text = path.read_text(encoding="utf-8")
+            with self.assertRaisesRegex(RuntimeError, "فشلت محاذاة"):
+                write_ass_subtitles("واحد اثنان ثلاثة أربعة خمسة ستة سبعة ثمانية", 8.0, path,
+                                    audio_path=Path(directory) / "narration.mp3")
+            self.assertFalse(path.exists())
         align.assert_called_once()
-        self.assertEqual(text.count("Dialogue:"), 32)
-        self.assertNotIn(r"\N", text)
-        self.assertIn("خمسة", text)
-        self.assertIn("ستة", text)
-        self.assertIn("سبعة", text)
-        self.assertIn("ثمانية", text)
 
 
 if __name__ == "__main__":

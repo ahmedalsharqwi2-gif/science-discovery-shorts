@@ -80,7 +80,7 @@ class ContentPublisher:
         self.buffer_api_key = os.getenv("BUFFER_API_KEY", "").strip()
         self.github_token = (os.getenv("GH_RELEASE_TOKEN") or os.getenv("GITHUB_TOKEN") or "").strip()
         self.repository = os.getenv("GITHUB_REPOSITORY", "").strip()
-        self.run_id = os.getenv("GITHUB_RUN_ID", "local").strip()
+        self.run_id = (os.getenv("PRODUCTION_MEDIA_ID") or os.getenv("GITHUB_RUN_ID", "local")).strip()
         self.schedule_mode = os.getenv("BUFFER_SCHEDULE_MODE", "addToQueue").strip()
 
     @staticmethod

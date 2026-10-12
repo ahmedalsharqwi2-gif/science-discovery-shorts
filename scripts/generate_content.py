@@ -537,6 +537,11 @@ class ContentGenerator:
                     "حافظ على الفكرة العلمية الأساسية، ولا تضف حقائق، وأنهِ جملة مكتملة بعلامة ترقيم. "
                     "أخرج السرد فقط.\n\nالنص:\n" + shortened
                 )
+        from scripts.narration_recovery import fit_complete_sentences
+        recovered = fit_complete_sentences(narration, minimum_words, target_words)
+        if recovered:
+            log.warning("Recovered narration length at whole sentence boundaries; retained opening and conclusion")
+            return recovered
         raise ValueError(
             f"تعذر اختصار السرد إلى {minimum_words}-{target_words} كلمة وجمل مكتملة "
             "بعد ثلاث محاولات؛ أوقف النشر بدل قطع النص أو تسريع الصوت بإفراط."

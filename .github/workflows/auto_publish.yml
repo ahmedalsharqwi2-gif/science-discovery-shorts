@@ -4,11 +4,11 @@ on:
   workflow_dispatch:
     inputs:
       stock_date:
-        description: 'Publication date in Cairo (YYYY-MM-DD); stock replenisher only'
+        description: 'Cairo date(s): YYYY-MM-DD or 13,14,15-10-2026; each slot gets its own video'
         required: false
         type: string
       stock_hour:
-        description: 'Publication hour in Cairo (12 or 18)'
+        description: 'Cairo hour(s): 12, 18, or 12,18'
         required: false
         type: string
       dry_run:
@@ -55,7 +55,29 @@ env:
   PYTHONPATH: ${{ github.workspace }}
 
 jobs:
+  plan_slots:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.slots.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+      - name: Validate and expand Cairo publication inputs
+        id: slots
+        env:
+          STOCK_DATE: ${{ inputs.stock_date || '' }}
+          STOCK_HOUR: ${{ inputs.stock_hour || '' }}
+        run: python3 scripts/publication_slots.py
+
   publish:
+    env:
+      PRODUCTION_MEDIA_ID: ${{ format('{0}-{1}-{2}', github.run_id, matrix.date, matrix.hour) }}
+    needs: plan_slots
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix: ${{ fromJSON(needs.plan_slots.outputs.matrix) }}
     runs-on: ubuntu-latest
     # Cold SILMA/Whisper setup plus TTS and FFmpeg can exceed one hour.
     timeout-minutes: 180
@@ -64,8 +86,8 @@ jobs:
         env:
           SCHEDULE_EXPR: ${{ github.event.schedule }}
           PUBLISH_NOW: ${{ inputs.publish_now || false }}
-          STOCK_DATE: ${{ inputs.stock_date || '' }}
-          STOCK_HOUR: ${{ inputs.stock_hour || '' }}
+          STOCK_DATE: ${{ matrix.date }}
+          STOCK_HOUR: ${{ matrix.hour }}
         run: |
           python - <<'PY'
           import os
@@ -132,7 +154,7 @@ jobs:
         uses: actions/cache/restore@v5
         with:
           path: .cinematic_cache
-          key: cinematic-v1-${{ github.repository_id }}-${{ github.run_id }}-${{ github.run_attempt }}
+          key: cinematic-v1-${{ github.repository_id }}-${{ github.run_id }}-${{ github.run_attempt }}-${{ matrix.date }}-${{ matrix.hour }}
           restore-keys: cinematic-v1-${{ github.repository_id }}-
 
       - uses: actions/setup-python@v6
@@ -301,7 +323,7 @@ jobs:
         if: ${{ inputs.dry_run }}
         uses: actions/upload-artifact@v6
         with:
-          name: science-video-review-${{ github.run_id }}
+          name: science-video-review-${{ github.run_id }}-${{ matrix.date }}-${{ matrix.hour }}
           path: output/final_video.mp4
           if-no-files-found: error
           retention-days: 3
@@ -327,7 +349,7 @@ jobs:
         if: ${{ failure() }}
         uses: actions/upload-artifact@v6
         with:
-          name: clip-review-candidates
+          name: clip-review-candidates-${{ matrix.date }}-${{ matrix.hour }}
           path: |
             state/clip_review_requests.json
             state/clip_reviews.json
@@ -340,7 +362,7 @@ jobs:
         uses: actions/cache/save@v5
         with:
           path: .cinematic_cache
-          key: cinematic-v1-${{ github.repository_id }}-${{ github.run_id }}-${{ github.run_attempt }}
+          key: cinematic-v1-${{ github.repository_id }}-${{ github.run_id }}-${{ github.run_attempt }}-${{ matrix.date }}-${{ matrix.hour }}
 
       - name: Persist cinematic cost reservations even after failure
         if: ${{ always() && env.CINEMATIC_ENABLED == 'true' }}
@@ -358,7 +380,7 @@ jobs:
         if: ${{ always() && env.CINEMATIC_ENABLED == 'true' }}
         uses: actions/upload-artifact@v6
         with:
-          name: cinematic-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          name: cinematic-evidence-${{ github.run_id }}-${{ github.run_attempt }}-${{ matrix.date }}-${{ matrix.hour }}
           path: |
             state/cinematic_storyboard.json
             state/cinematic_scene_manifest.json
