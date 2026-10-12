@@ -267,6 +267,14 @@ class VoiceGenerator:
             if success:
                 log.info(f"Audio generation successful with Edge TTS: {message}")
                 return output_path, True
+            if os.getenv("FREE_GOOGLE_TTS_ENABLED", "false").lower() == "true":
+                try:
+                    from scripts.free_tts_fallback import google_arabic_voice
+                    google_arabic_voice(normalize_edge_tts_text(text), output_path)
+                    log.info("Recovered Edge failure with independent free Google Arabic voice")
+                    return output_path, True
+                except Exception as exc:
+                    log.warning("Free Google Arabic voice unavailable: %s", exc)
             log.warning("Edge TTS unavailable; attempting local SILMA fallback: %s", message)
             try:
                 profile = select_silma_profile()

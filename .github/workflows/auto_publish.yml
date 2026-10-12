@@ -78,6 +78,7 @@ jobs:
 
   publish:
     env:
+      FREE_GOOGLE_TTS_ENABLED: 'true'
       PUBLICATION_RECEIPTS_ENABLED: 'true'
       PUBLISH_IMMEDIATE: ${{ inputs.publish_now && matrix.date == '' }}
       PRODUCTION_MEDIA_ID: ${{ format('{0}-{1}-{2}', github.run_id, matrix.date, matrix.hour) }}
