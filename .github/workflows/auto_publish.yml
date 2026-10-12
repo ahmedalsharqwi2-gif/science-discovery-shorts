@@ -71,6 +71,8 @@ jobs:
         run: python3 scripts/publication_slots.py
 
   publish:
+    env:
+      PRODUCTION_MEDIA_ID: ${{ format('{0}-{1}-{2}', github.run_id, matrix.date, matrix.hour) }}
     needs: plan_slots
     strategy:
       fail-fast: false
@@ -152,7 +154,7 @@ jobs:
         uses: actions/cache/restore@v5
         with:
           path: .cinematic_cache
-          key: cinematic-v1-${{ github.repository_id }}-${{ github.run_id }}-${{ github.run_attempt }}
+          key: cinematic-v1-${{ github.repository_id }}-${{ github.run_id }}-${{ github.run_attempt }}-${{ matrix.date }}-${{ matrix.hour }}
           restore-keys: cinematic-v1-${{ github.repository_id }}-
 
       - uses: actions/setup-python@v6
@@ -321,7 +323,7 @@ jobs:
         if: ${{ inputs.dry_run }}
         uses: actions/upload-artifact@v6
         with:
-          name: science-video-review-${{ github.run_id }}
+          name: science-video-review-${{ github.run_id }}-${{ matrix.date }}-${{ matrix.hour }}
           path: output/final_video.mp4
           if-no-files-found: error
           retention-days: 3
@@ -347,7 +349,7 @@ jobs:
         if: ${{ failure() }}
         uses: actions/upload-artifact@v6
         with:
-          name: clip-review-candidates
+          name: clip-review-candidates-${{ matrix.date }}-${{ matrix.hour }}
           path: |
             state/clip_review_requests.json
             state/clip_reviews.json
@@ -360,7 +362,7 @@ jobs:
         uses: actions/cache/save@v5
         with:
           path: .cinematic_cache
-          key: cinematic-v1-${{ github.repository_id }}-${{ github.run_id }}-${{ github.run_attempt }}
+          key: cinematic-v1-${{ github.repository_id }}-${{ github.run_id }}-${{ github.run_attempt }}-${{ matrix.date }}-${{ matrix.hour }}
 
       - name: Persist cinematic cost reservations even after failure
         if: ${{ always() && env.CINEMATIC_ENABLED == 'true' }}
@@ -378,7 +380,7 @@ jobs:
         if: ${{ always() && env.CINEMATIC_ENABLED == 'true' }}
         uses: actions/upload-artifact@v6
         with:
-          name: cinematic-evidence-${{ github.run_id }}-${{ github.run_attempt }}
+          name: cinematic-evidence-${{ github.run_id }}-${{ github.run_attempt }}-${{ matrix.date }}-${{ matrix.hour }}
           path: |
             state/cinematic_storyboard.json
             state/cinematic_scene_manifest.json
