@@ -23,7 +23,7 @@ def next_missing_slot(runs: list[dict], now: datetime):
         return None
     for target, title in desired_slots(now):
         matches = [run for run in runs if run.get("display_title") == title]
-        if any(run.get("conclusion") == "success" for run in matches):
+        if any(run.get("confirmed") is True for run in matches):
             continue
         failures = sorted((run for run in matches if run.get("conclusion") == "failure"),
                           key=lambda run: run.get("updated_at", ""), reverse=True)
@@ -59,7 +59,7 @@ def main():
     ledger_path = Path(__file__).resolve().parents[1] / "state/publication_stock.json"
     if ledger_path.exists():
         ledger = json.loads(ledger_path.read_text(encoding="utf-8"))
-        runs.extend({"display_title": title, "conclusion": "success"}
+        runs.extend({"display_title": title, "confirmed": True}
                     for title, entry in ledger.get("slots", {}).items() if entry.get("confirmed"))
     selected = next_missing_slot(runs, datetime.now(ZoneInfo("Africa/Cairo")))
     if selected is None:

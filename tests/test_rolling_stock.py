@@ -15,8 +15,15 @@ class RollingReserveTests(unittest.TestCase):
     def test_active_production_prevents_pending_run_eviction(self):
         self.assertIsNone(next_missing_slot([{"status": "in_progress"}], self.now))
 
-    def test_success_skips_only_its_exact_slot(self):
+    def test_dry_run_success_does_not_fill_reserve(self):
         selected = next_missing_slot([{"display_title": "stock 2026-10-13 12 Cairo", "conclusion": "success"}], self.now)
+        self.assertEqual(selected[1], "stock 2026-10-13 12 Cairo")
+
+    def test_queued_production_prevents_another_dispatch(self):
+        self.assertIsNone(next_missing_slot([{"status": "queued"}], self.now))
+
+    def test_success_skips_only_its_exact_slot(self):
+        selected = next_missing_slot([{"display_title": "stock 2026-10-13 12 Cairo", "confirmed": True}], self.now)
         self.assertEqual(selected[1], "stock 2026-10-13 18 Cairo")
 
     def test_recent_failure_cools_down_while_other_slots_can_fill(self):

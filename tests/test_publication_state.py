@@ -14,13 +14,14 @@ class PublicationReceiptsTests(unittest.TestCase):
         self.addCleanup(patch.stopall)
         self.root = Path(self.temp.name)
         patch.object(state, "ROOT", self.root).start()
-        patch.dict(os.environ, {"PUBLISH_DUE_AT": "2026-10-13T09:00:00Z", "PUBLISH_IMMEDIATE": "false", "BUFFER_OUTCOME": "success", "YOUTUBE_OUTCOME": "success"}).start()
+        patch.dict(os.environ, {"PUBLISH_DUE_AT": "2026-10-13T09:00:00Z", "PUBLISH_IMMEDIATE": "false", "BUFFER_OUTCOME": "success", "YOUTUBE_OUTCOME": "success", "PUBLICATION_RECEIPTS_ENABLED": "true"}).start()
 
     def test_generated_media_alone_does_not_confirm_reserve(self):
         with self.assertRaises(FileNotFoundError):
             state.confirm_stock()
 
     def test_real_receipts_and_successful_steps_confirm_exact_slot(self):
+        state.require_services({"facebook", "youtube"})
         state.record_receipt("facebook", "post-1", "2026-10-13T09:00:00Z")
         state.record_receipt("youtube", "video-2", "2026-10-13T09:00:00Z")
         state.confirm_stock()
@@ -33,6 +34,18 @@ class PublicationReceiptsTests(unittest.TestCase):
             state.confirm_stock()
         data = json.loads((self.root / "state/publication_stock.json").read_text())
         self.assertFalse(data["slots"][state.stock_key()]["confirmed"])
+
+    def test_success_outcomes_without_all_receipts_do_not_confirm(self):
+        state.require_services({"facebook", "youtube"})
+        state.record_receipt("facebook", "post-1")
+        with self.assertRaises(RuntimeError):
+            state.confirm_stock()
+
+    def test_retry_reuses_acceptance_from_previous_run(self):
+        state.record_receipt("facebook", "post-1")
+        with patch.dict(os.environ, {"GITHUB_RUN_ID": "later-run"}):
+            self.assertEqual(state.accepted_receipt("facebook")["id"], "post-1")
+            self.assertIsNone(state.accepted_receipt("youtube"))
 
     def test_missing_provider_identifier_cannot_look_successful(self):
         with self.assertRaises(ValueError):

@@ -243,6 +243,9 @@ class VoiceGenerator:
             try:
                 from scripts.free_tts_fallback import google_arabic_voice
                 google_arabic_voice(normalize_edge_tts_text(text), output_path)
+                score, issues = self.quality_checker.check_audio_quality(output_path, normalize_edge_tts_text(text))
+                if score < float(os.getenv("MIN_TTS_AUDIO_SCORE", "0.78")) or issues:
+                    raise RuntimeError(f"Free Google voice failed quality validation: {score}: {issues}")
                 log.info("Generated narration with independent free Google Arabic voice")
                 return output_path, True
             except Exception as exc:
@@ -279,6 +282,9 @@ class VoiceGenerator:
                 try:
                     from scripts.free_tts_fallback import google_arabic_voice
                     google_arabic_voice(normalize_edge_tts_text(text), output_path)
+                    score, issues = self.quality_checker.check_audio_quality(output_path, normalize_edge_tts_text(text))
+                    if score < float(os.getenv("MIN_TTS_AUDIO_SCORE", "0.78")) or issues:
+                        raise RuntimeError(f"Free Google voice failed quality validation: {score}: {issues}")
                     log.info("Recovered Edge failure with independent free Google Arabic voice")
                     return output_path, True
                 except Exception as exc:

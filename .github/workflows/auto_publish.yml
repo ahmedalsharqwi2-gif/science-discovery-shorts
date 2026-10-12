@@ -63,12 +63,6 @@ jobs:
       - uses: actions/checkout@v6
         with:
           ref: main
-      - name: Confirm actual publication receipts
-        if: ${{ !inputs.dry_run }}
-        env:
-          BUFFER_OUTCOME: ${{ steps.generate_publish.outcome }}
-        run: python scripts/publication_state.py confirm
-
       - name: Validate and expand Cairo publication inputs
         id: slots
         env:
@@ -357,6 +351,12 @@ jobs:
         with:
           path: .cinematic_cache
           key: cinematic-v1-${{ github.repository_id }}-${{ github.run_id }}-${{ github.run_attempt }}-${{ matrix.date }}-${{ matrix.hour }}
+
+      - name: Confirm actual publication receipts
+        if: ${{ always() && !inputs.dry_run && steps.generate_publish.outcome == 'success' }}
+        env:
+          BUFFER_OUTCOME: ${{ steps.generate_publish.outcome }}
+        run: python scripts/publication_state.py confirm
 
       - name: Persist confirmed stock and production counters
         if: always()

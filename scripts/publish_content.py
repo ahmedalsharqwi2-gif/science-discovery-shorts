@@ -259,13 +259,19 @@ class ContentPublisher:
 
         media_url = self._release_asset_url(video_path)
         due_at = os.getenv("PUBLISH_DUE_AT", "").strip() or (schedule_time.isoformat() if schedule_time else None)
-        from scripts.publication_state import immediate_requested, immediate_due, record_receipt
+        from scripts.publication_state import immediate_requested, immediate_due, record_receipt, accepted_receipt, require_services
+        if os.getenv("PUBLICATION_RECEIPTS_ENABLED", "false").lower() == "true":
+            require_services(services)
         if immediate_requested():
             due_at = immediate_due()
         failures: dict[str, str] = {}
         skipped: dict[str, str] = {}
         successes: dict[str, dict] = {}
         for service in services:
+            receipt = accepted_receipt(service)
+            if receipt:
+                successes[service] = receipt
+                continue
             channel_id = configured.get(service)
             if not channel_id:
                 failures[service] = "لا يوجد channel ID مضبوط"

@@ -28,6 +28,28 @@ def stock_key() -> str:
     return f"stock {local.date().isoformat()} {local.hour:02d} Cairo"
 
 
+def accepted_receipt(service: str) -> dict | None:
+    if os.getenv("PUBLICATION_RECEIPTS_ENABLED", "false").lower() != "true":
+        return None
+    path = ROOT / "state/publication_stock.json"
+    if not path.exists():
+        return None
+    data = json.loads(path.read_text(encoding="utf-8"))
+    receipt = data.get("slots", {}).get(stock_key(), {}).get("receipts", {}).get(service)
+    return receipt if receipt and receipt.get("id") else None
+
+
+def require_services(services) -> None:
+    path = ROOT / "state/publication_stock.json"
+    data = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {"slots": {}}
+    entry = data.setdefault("slots", {}).setdefault(stock_key(), {"confirmed": False, "receipts": {}})
+    entry["required_services"] = sorted(set(entry.get("required_services", [])) | set(services))
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temp = path.with_suffix(".tmp")
+    temp.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+    temp.replace(path)
+
+
 def record_receipt(service: str, identifier: str, due_at: str | None = None) -> None:
     if not identifier:
         raise ValueError("A publication receipt requires a real provider post/video ID")
@@ -50,11 +72,18 @@ def confirm_stock() -> None:
     path = ROOT / "state/publication_stock.json"
     data = json.loads(path.read_text(encoding="utf-8"))
     entry = data["slots"][stock_key()]
+    required = set(entry.get("required_services", []))
+    if "YOUTUBE_OUTCOME" in os.environ:
+        required.add("youtube")
+    if not required or any(not entry.get("receipts", {}).get(service, {}).get("id") for service in required):
+        raise RuntimeError("Missing acceptance receipts for required publishing destinations")
     if not entry.get("receipts") or any(not receipt.get("id") for receipt in entry["receipts"].values()):
         raise RuntimeError("No real provider acceptance receipts")
     entry["confirmed"] = True
     entry["confirmed_at"] = datetime.now(timezone.utc).isoformat()
-    path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+    temp = path.with_suffix(".tmp")
+    temp.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+    temp.replace(path)
     print(f"Confirmed publication receipts for {stock_key()}")
 
 
