@@ -259,6 +259,9 @@ class ContentPublisher:
 
         media_url = self._release_asset_url(video_path)
         due_at = os.getenv("PUBLISH_DUE_AT", "").strip() or (schedule_time.isoformat() if schedule_time else None)
+        from scripts.publication_state import immediate_requested, immediate_due, record_receipt
+        if immediate_requested():
+            due_at = immediate_due()
         failures: dict[str, str] = {}
         skipped: dict[str, str] = {}
         successes: dict[str, dict] = {}
@@ -282,6 +285,8 @@ class ContentPublisher:
                 post = self._create_buffer_post(
                     channel_id, post_text, media_url, due_at, service, title, facebook_type
                 )
+                if os.getenv("PUBLICATION_RECEIPTS_ENABLED", "false").lower() == "true":
+                    record_receipt(service, post.get("id"), due_at)
                 successes[service] = post
                 log.info("✓ Buffer confirmed %s post=%s dueAt=%s", service, post.get("id"), post.get("dueAt"))
             except Exception as exc:  # keep independent channel results visible
@@ -304,7 +309,7 @@ class ContentPublisher:
         if failures:
             log.error("Unpublished channels: %s", json.dumps(failures, ensure_ascii=False))
         eligible_channels = len(services) - len(skipped)
-        return eligible_channels > 0 and len(successes) == eligible_channels
+        return eligible_channels > 0 and len(successes) == eligible_channels and not skipped
 
     def save_metadata(self, metadata_path: Path, title: str, description: str, tags: list[str], video_path: Path) -> bool:
         try:
