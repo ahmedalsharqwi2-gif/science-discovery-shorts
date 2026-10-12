@@ -111,8 +111,12 @@ def align_words_with_whisper(audio_path: Path, script_words: list[str]) -> list[
                 heard.append((text, max(0.0, float(word.start)), max(0.0, float(word.end))))
     if not heard:
         raise RuntimeError("Whisper did not return Arabic word timestamps")
-    expected = [_norm(w) for w in script_words]
-    actual = [_norm(w) for w, _, _ in heard]
+    # Align common Arabic orthographic variants without changing caption text.
+    def _asr_norm(w: str) -> str:
+        return _norm(w).translate(str.maketrans({"أ": "ا", "إ": "ا", "آ": "ا", "ٱ": "ا", "ى": "ي", "ؤ": "و", "ئ": "ي", "ـ": ""}))
+
+    expected = [_asr_norm(w) for w in script_words]
+    actual = [_asr_norm(w) for w, _, _ in heard]
     matcher = difflib.SequenceMatcher(None, expected, actual, autojunk=False)
     timings: list[dict | None] = [None] * len(script_words)
     for block in matcher.get_matching_blocks():
