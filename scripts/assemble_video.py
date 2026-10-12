@@ -133,7 +133,8 @@ def align_words_with_whisper(audio_path: Path, script_words: list[str], *, stron
         if not stronger:
             log.info("Rechecking the same audio with local Whisper medium; alignment gate unchanged")
             return align_words_with_whisper(audio_path, script_words, stronger=True)
-        raise RuntimeError(f"Whisper alignment too weak: {len(known)}/{len(script_words)} words")
+        from scripts.forced_caption_alignment import forced_word_alignment
+        return forced_word_alignment(audio_path, script_words)
     for i, item in enumerate(timings):
         if item is not None:
             continue

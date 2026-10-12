@@ -9,3 +9,4 @@ pytrends>=4.9.2
 urllib3>=1.26,<2.0
 
 gTTS>=2.5.4,<3
+stable-ts>=2.18,<3
