@@ -1321,7 +1321,23 @@ def mix_audio(voice: Path, clean_video: Path, output: Path, duration: float, cfg
     add_topic_soundtrack(output, voice, duration, cfg["profile"])
 
 
-def verify_final(path: Path, duration: float, cfg: dict) -> dict:
+def _black_intervals(path: Path) -> list[tuple[float, float]]:
+    """Inspect actual decoded video for sustained near-black intervals."""
+    result = subprocess.run(
+        ["ffmpeg", "-hide_banner", "-nostats", "-i", str(path),
+         "-vf", "blackdetect=d=0.3:pic_th=0.99:pix_th=0.03",
+         "-an", "-f", "null", "-"],
+        capture_output=True, text=True, timeout=900,
+    )
+    if result.returncode:
+        raise ValueError(f"Black-frame inspection failed for {path.name}")
+    return [
+        (float(a), float(b))
+        for a, b in re.findall(r"black_start:([0-9.]+).*?black_end:([0-9.]+)", result.stderr)
+    ]
+
+
+def verify_final(path: Path, duration: float, cfg: dict, *, clean: Path | None = None) -> dict:
     data = probe(path)
     streams = data["streams"]
     video = next((s for s in streams if s["codec_type"] == "video"), {})
@@ -1331,13 +1347,28 @@ def verify_final(path: Path, duration: float, cfg: dict) -> dict:
     if abs(data["duration"] - duration) > 0.3:
         raise ValueError("Narration/video duration mismatch")
     run(["ffmpeg", "-v", "error", "-i", str(path), "-f", "null", "-"], timeout=900)
-    result = subprocess.run(["ffmpeg", "-hide_banner", "-nostats", "-i", str(path), "-vf", "blackdetect=d=0.3:pic_th=0.99:pix_th=0.03", "-an", "-f", "null", "-"], capture_output=True, text=True, timeout=900)
-    if result.returncode:
-        raise ValueError("Final black-frame inspection failed")
-    black = sum(float(b) - float(a) for a, b in re.findall(r"black_start:([0-9.]+).*black_end:([0-9.]+)", result.stderr))
-    if black > 0.3:
-        raise ValueError("Final montage contains blank frames")
-    return {"passed": True, "black_seconds": round(black, 3), "width": video["width"], "height": video["height"], "duration": data["duration"], "decoded": True}
+    final_black = _black_intervals(path)
+    source_black = _black_intervals(clean) if clean is not None else []
+    # Reviewed scientific footage, such as space, can be intentionally dark. A dark passage already
+    # present in the inspected source montage is not an editing blank. Reject
+    # new black gaps introduced by concat, subtitle rendering, or encoding.
+    tolerance = 0.12
+    introduced = [
+        (a, b) for a, b in final_black
+        if not any(sa - tolerance <= a and sb + tolerance >= b
+                   for sa, sb in source_black)
+    ]
+    if introduced:
+        detail = ", ".join(f"{a:.2f}-{b:.2f}s" for a, b in introduced[:8])
+        raise ValueError(f"Final montage introduced blank frames at {detail}")
+    return {
+        "passed": True,
+        "black_seconds": round(sum(b - a for a, b in final_black), 3),
+        "intentional_dark_intervals": [[round(a, 3), round(b, 3)] for a, b in final_black],
+        "introduced_black_intervals": [],
+        "width": video["width"], "height": video["height"],
+        "duration": data["duration"], "decoded": True,
+    }
 
 
 def build(audio: Path, narration: str, output: Path, episode: dict, subtitles: Path | None = None, *, root: Path = ROOT) -> dict:
@@ -1408,7 +1439,7 @@ def build(audio: Path, narration: str, output: Path, episode: dict, subtitles: P
         run(["ffmpeg", "-y", "-v", "error", "-i", str(clean), "-i", str(mixed), "-vf", f"subtitles='{escaped}'",
              "-map", "0:v:0", "-map", "1:a:0", "-t", str(duration), "-c:v", "libx264", "-preset", "fast", "-crf", "20",
              "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", str(temporary)], timeout=1200)
-        quality = verify_final(temporary, duration, cfg)
+        quality = verify_final(temporary, duration, cfg, clean=clean)
         temporary.replace(output)
         report = {"passed": True, "output": str(output), "caption_timing": timing, "quality": quality,
                   "target_mix": {"real_source_video_minimum": 0.70, "photos_and_diagrams_maximum": 0.30},
