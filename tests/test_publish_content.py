@@ -142,7 +142,7 @@ class PublisherTests(unittest.TestCase):
 
     @patch("scripts.publish_content.probe_video_duration", return_value=165.0)
     @patch("scripts.publish_content.ContentPublisher._release_asset_url", return_value="https://public/video.mp4")
-    def test_buffer_legacy_facebook_reel_limit_does_not_fail_confirmed_other_channels(self, _asset, _duration):
+    def test_partial_facebook_failure_does_not_count_as_complete_stock(self, _asset, _duration):
         publisher = ContentPublisher()
         publisher.buffer_api_key = "buffer-test"
         with tempfile.TemporaryDirectory() as directory:
@@ -162,7 +162,7 @@ class PublisherTests(unittest.TestCase):
                 },
                 clear=False,
             ):
-                self.assertTrue(publisher.publish_to_buffer(video, "title", "description", []))
+                self.assertFalse(publisher.publish_to_buffer(video, "title", "description", []))
 
 
 if __name__ == "__main__":
