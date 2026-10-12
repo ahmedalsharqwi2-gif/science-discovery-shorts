@@ -90,10 +90,10 @@ def _script_words(text: str) -> list[str]:
     return [w for w in re.findall(r"\S+", text) if _display_word(w)]
 
 
-def align_words_with_whisper(audio_path: Path, script_words: list[str]) -> list[dict]:
+def align_words_with_whisper(audio_path: Path, script_words: list[str], *, stronger: bool = False) -> list[dict]:
     """Return monotonically increasing timestamps from the final audio."""
     from faster_whisper import WhisperModel
-    model = WhisperModel(os.getenv("WHISPER_MODEL", "small"), device="cpu", compute_type="int8")
+    model = WhisperModel("medium" if stronger else os.getenv("WHISPER_MODEL", "small"), device="cpu", compute_type="int8")
     result = model.transcribe(
         str(audio_path),
         language="ar",
@@ -130,6 +130,9 @@ def align_words_with_whisper(audio_path: Path, script_words: list[str]) -> list[
     # is perceived as stuttering captions. Use uniform timing instead unless
     # Whisper recognizes at least three quarters of the narration.
     if len(known) < max(1, int(len(script_words) * 0.85)):
+        if not stronger:
+            log.info("Rechecking the same audio with local Whisper medium; alignment gate unchanged")
+            return align_words_with_whisper(audio_path, script_words, stronger=True)
         raise RuntimeError(f"Whisper alignment too weak: {len(known)}/{len(script_words)} words")
     for i, item in enumerate(timings):
         if item is not None:
