@@ -1,0 +1,66 @@
+name: Verify immediate publication delivery
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/verify_immediate_delivery.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+      - name: Read provider delivery status without creating posts
+        env:
+          BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
+          TARGET_RUN: '38358457130'
+        run: |
+          python - <<'PY'
+          import json, os, time, urllib.request, urllib.parse
+          from pathlib import Path
+          from datetime import datetime, timezone
+          data = json.loads(Path("state/publication_stock.json").read_text(encoding="utf-8"))
+          key = "immediate " + os.environ["TARGET_RUN"] + "--"
+          receipts = data["slots"][key]["receipts"]
+          token = os.environ["BUFFER_API_KEY"]
+          query = "query($input: PostInput!) { post(input: $input) { id status dueAt sentAt externalLink error { message } } }"
+          pending = dict(receipts)
+          results = {}
+          for attempt in range(12):
+              for service, receipt in list(pending.items()):
+                  post_id = receipt["id"]
+                  if service == "youtube" and len(post_id) == 11:
+                      url = "https://www.youtube.com/oembed?" + urllib.parse.urlencode({"url": "https://www.youtube.com/watch?v=" + post_id, "format": "json"})
+                      try:
+                          with urllib.request.urlopen(url, timeout=30) as response:
+                              info = json.load(response)
+                          row = {"service": service, "status": "public", "externalLink": "https://www.youtube.com/watch?v=" + post_id, "title": info.get("title")}
+                      except Exception as exc:
+                          row = {"service": service, "status": "unverified", "error": type(exc).__name__}
+                  else:
+                      payload = json.dumps({"query": query, "variables": {"input": {"id": post_id}}}).encode()
+                      request = urllib.request.Request("https://api.buffer.com", data=payload, headers={"Authorization": "Bearer " + token, "Content-Type": "application/json"})
+                      with urllib.request.urlopen(request, timeout=30) as response:
+                          result = json.load(response)
+                      if result.get("errors"):
+                          raise RuntimeError("Buffer status query failed: " + json.dumps(result["errors"])[:600])
+                      row = {"service": service, **result["data"]["post"]}
+                  print("DELIVERY " + json.dumps(row, ensure_ascii=False), flush=True)
+                  results[service] = row
+                  if row["status"] in ("sent", "public", "error"):
+                      pending.pop(service)
+              if not pending:
+                  break
+              if attempt < 11:
+                  time.sleep(20)
+          print("DELIVERY_FINAL " + json.dumps(results, ensure_ascii=False), flush=True)
+          Path(os.environ["GITHUB_STEP_SUMMARY"]).write_text("## Immediate delivery verification\n\n" + json.dumps(results, ensure_ascii=False, indent=2), encoding="utf-8")
+          if any(row["status"] == "error" for row in results.values()):
+              raise SystemExit("A destination reported a delivery error")
+          if pending:
+              raise SystemExit("Delivery is still pending or public visibility is unverified")
+          PY
