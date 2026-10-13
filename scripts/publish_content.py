@@ -10,6 +10,8 @@ from __future__ import annotations
 import json
 import logging
 import os
+import re
+import hashlib
 import subprocess
 from datetime import datetime
 from pathlib import Path
@@ -99,7 +101,12 @@ class ContentPublisher:
         if not video_path.is_file() or video_path.stat().st_size <= 0:
             raise RuntimeError(f"ملف الفيديو غير موجود أو فارغ: {video_path}")
 
-        tag = f"auto-publish-{self.run_id}"
+        # Matrix inputs are empty for immediate runs. Keep a valid, stable ref
+        # even if future callers supply punctuation or non-ASCII slot IDs.
+        media_id = re.sub(r"[^A-Za-z0-9_-]+", "-", self.run_id).strip("-_") or "local"
+        if media_id != self.run_id.strip("-_"):
+            media_id += "-" + hashlib.sha256(self.run_id.encode()).hexdigest()[:10]
+        tag = f"auto-publish-{media_id}"
         release_url = f"{GITHUB_API}/repos/{self.repository}/releases/tags/{tag}"
         response = requests.get(release_url, headers=self._headers(self.github_token), timeout=30)
         if response.status_code == 404:
@@ -108,12 +115,18 @@ class ContentPublisher:
                 headers=self._headers(self.github_token),
                 json={
                     "tag_name": tag,
+                    "target_commitish": os.getenv("GITHUB_SHA", "").strip() or "main",
                     "name": f"Auto publish media {self.run_id}",
                     "body": "Temporary public media asset for scheduled Buffer publishing.",
                     "prerelease": True,
                 },
                 timeout=30,
             )
+        if response.status_code == 422:
+            # A concurrent uploader may have created the same release.
+            existing_release = requests.get(release_url, headers=self._headers(self.github_token), timeout=30)
+            if existing_release.status_code == 200:
+                response = existing_release
         if response.status_code not in (200, 201):
             raise RuntimeError(f"تعذر إنشاء Release للفيديو: HTTP {response.status_code} {response.text[:300]}")
 
