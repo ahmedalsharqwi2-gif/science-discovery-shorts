@@ -1,3 +1,4 @@
+import subprocess
 import tempfile
 import types
 import sys
@@ -12,7 +13,10 @@ class FreeTTSFallbackTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as folder:
             output = Path(folder) / "voice.mp3"
             instance = Mock()
-            instance.save.side_effect = lambda path: Path(path).write_bytes(b"provider fixture")
+            instance.save.side_effect = lambda path: subprocess.run(
+                ["ffmpeg", "-y", "-v", "error", "-f", "lavfi", "-i",
+                 "sine=frequency=440:duration=0.3", "-c:a", "libmp3lame", str(path)], check=True
+            )
             constructor = Mock(return_value=instance)
             with patch.dict(sys.modules, {"gtts": types.SimpleNamespace(gTTS=constructor)}):
                 google_arabic_voice("هذا نص عربي مضبوط.", output)
