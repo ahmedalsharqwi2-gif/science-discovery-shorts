@@ -19,6 +19,8 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v6
+        with:
+          ref: main
       - name: Dispatch missing future publication slots
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

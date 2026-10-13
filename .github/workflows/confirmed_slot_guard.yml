@@ -1,0 +1,27 @@
+name: Protect confirmed publication slots
+on:
+  push:
+    branches: [main]
+    paths: ['scripts/guard_confirmed_slots.py', '.github/workflows/confirmed_slot_guard.yml']
+  workflow_dispatch:
+  workflow_run:
+    workflows: ["Auto publish videos (Cairo 12-18)"]
+    types: [requested]
+permissions:
+  actions: write
+  contents: read
+concurrency:
+  group: confirmed-slot-guard
+  cancel-in-progress: false
+jobs:
+  protect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: main
+      - name: Cancel only slots with complete confirmed receipts
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python scripts/guard_confirmed_slots.py
