@@ -1,3 +1,4 @@
+import os
 import tempfile
 import unittest
 import re
@@ -92,6 +93,7 @@ class VideoAssemblyTests(unittest.TestCase):
         self.assertIn(",8,70,70,260,1", text)
 
     @patch("scripts.assemble_video.align_words_with_whisper", side_effect=RuntimeError("Whisper alignment too weak: 77/157 words"))
+    @patch.dict(os.environ, {"QUALITY_GATES_BLOCKING": "true"})
     def test_weak_whisper_alignment_blocks_publication(self, align):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "captions.ass"
@@ -99,6 +101,20 @@ class VideoAssemblyTests(unittest.TestCase):
                 write_ass_subtitles("واحد اثنان ثلاثة أربعة خمسة ستة سبعة ثمانية", 8.0, path,
                                     audio_path=Path(directory) / "narration.mp3")
             self.assertFalse(path.exists())
+        align.assert_called_once()
+
+    @patch("scripts.assemble_video.align_words_with_whisper", side_effect=RuntimeError("word timings unavailable"))
+    @patch.dict(os.environ, {"QUALITY_GATES_BLOCKING": "false"})
+    def test_nonblocking_alignment_uses_plain_captions(self, align):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "captions.ass"
+            write_ass_subtitles("واحد اثنان ثلاثة أربعة", 8.0, path,
+                                audio_path=Path(directory) / "narration.mp3")
+            captions = path.read_text(encoding="utf-8")
+            self.assertIn("واحد", captions)
+            self.assertIn("أربعة", captions)
+            self.assertIn("Dialogue:", captions)
+            self.assertNotIn(r"\c&H000000FF&", captions)
         align.assert_called_once()
 
 
