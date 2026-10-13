@@ -174,12 +174,19 @@ def write_ass_subtitles(text: str, duration: float, ass_path: Path, audio_path: 
         raise ValueError("Narration contains no words for subtitles")
     if audio_path is None:
         raise RuntimeError("رفض النشر: يجب توفير ملف الصوت الفعلي لمزامنة الترجمة")
+    approximate_timing = False
     try:
         events = align_words_with_whisper(audio_path, words)
     except Exception as exc:
-        raise RuntimeError(
-            f"رفض النشر: فشلت محاذاة الترجمة مع الصوت الحقيقي ({exc})"
-        ) from exc
+        if os.getenv("QUALITY_GATES_BLOCKING", "false").lower() == "true":
+            raise
+        if duration <= 0:
+            raise ValueError("Audio duration must be positive")
+        log.warning("Caption alignment unavailable (%s); using approximate captions without word highlighting", exc)
+        approximate_timing = True
+        step = duration / len(words)
+        events = [{"text": word, "offset": i * step, "duration": step}
+                  for i, word in enumerate(words)]
     lines = [_ass_header()]
     for index in range(0, len(events), WORDS_PER_CAPTION_CHUNK):
         group = events[index:index + WORDS_PER_CAPTION_CHUNK]
@@ -201,7 +208,7 @@ def write_ass_subtitles(text: str, duration: float, ass_path: Path, audio_path: 
             if word_end <= word_start:
                 word_end = min(end, word_start + 0.04)
             for token_index, (word, center_x) in enumerate(zip(words, centers)):
-                color = r"\c&H000000FF&" if token_index == active_index else r"\c&H00FFFFFF&"
+                color = r"\c&H000000FF&" if token_index == active_index and not approximate_timing else r"\c&H00FFFFFF&"
                 override = f"\\an5\\pos({center_x},{caption_y})\\fscx{horizontal_scale}{color}"
                 lines.append(
                     f"Dialogue: 0,{_ass_time(word_start)},{_ass_time(max(word_end, word_start + 0.04))},Caption,,0,0,0,,"
@@ -257,3 +264,4 @@ def assemble_video(audio_path: Path, narration: str, output_path: Path, topic: s
         pexels_track.unlink(missing_ok=True)
         mixed_audio.unlink(missing_ok=True)
     return output_path
+
