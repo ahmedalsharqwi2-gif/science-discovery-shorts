@@ -153,6 +153,13 @@ jobs:
           # Queued manual runs must see topics reserved by the preceding run.
           ref: main
 
+      - name: Restore prepared text for this publication slot
+        id: prepared_text
+        uses: actions/cache/restore@v4
+        with:
+          path: state/prepared_narration.json
+          key: prepared-v1-${{ github.repository_id }}-${{ inputs.dry_run || false }}-${{ matrix.date || github.run_id }}-${{ matrix.hour }}
+
       - name: Restore inspected cinematic scenes
         if: ${{ env.CINEMATIC_ENABLED == 'true' }}
         uses: actions/cache/restore@v5
@@ -193,6 +200,7 @@ jobs:
           echo "Publishing credentials and channel mapping are present."
 
       - name: Validate and resolve AI model policy
+        if: steps.prepared_text.outputs.cache-hit != 'true'
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           LLM_FALLBACK_API_KEY: ${{ secrets.LLM_FALLBACK_API_KEY || secrets.GROQ_API_KEY }}
@@ -309,6 +317,13 @@ jobs:
         run: |
           python main.py
 
+      - name: Save prepared text independently of later media failures
+        if: ${{ always() && steps.prepared_text.outputs.cache-hit != 'true' && hashFiles('state/prepared_narration.json') != '' }}
+        uses: actions/cache/save@v4
+        with:
+          path: state/prepared_narration.json
+          key: prepared-v1-${{ github.repository_id }}-${{ inputs.dry_run || false }}-${{ matrix.date || github.run_id }}-${{ matrix.hour }}
+
       - name: Verify final montage and B-roll output
         run: |
           test -s output/final_video.mp4 || { echo "ERROR: final video missing or empty"; exit 1; }
@@ -388,3 +403,4 @@ jobs:
             state/publication_stock.json
           if-no-files-found: ignore
           retention-days: 14
+

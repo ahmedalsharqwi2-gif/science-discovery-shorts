@@ -115,20 +115,17 @@ def discover_gemini(policy: dict) -> tuple[str, list[str]]:
         )
         methods = detail.get("supportedGenerationMethods", []) if isinstance(detail, dict) else []
         if detail_status == 200 and "generateContent" in methods:
-            probe_status, _ = request_json(
-                f"https://generativelanguage.googleapis.com/v1beta/models/{urllib.parse.quote(candidate, safe='')}:generateContent",
-                {"x-goog-api-key": key},
-                {"contents": [{"parts": [{"text": "Reply OK."}]}],
-                 "generationConfig": {"maxOutputTokens": 16}},
-            )
-            if probe_status == 200:
-                verified.append(candidate)
-            else:
-                log(f"Gemini model {candidate} failed generation probe (HTTP {probe_status}); skipping", warning=True)
+            # Generation belongs to production, not a quota-consuming health probe.
+            verified.append(candidate)
+        elif detail_status == 429 or detail_status >= 500:
+            # Already confirmed by the live catalog; a transient detail error
+            # does not mean the model was removed or the key was rejected.
+            log(f"Gemini {candidate}: transient detail HTTP {detail_status}; retain catalog-confirmed candidate", warning=True)
+            verified.append(candidate)
         else:
             log(f"Gemini model {candidate} failed detail validation (HTTP {detail_status}); skipping", warning=True)
     if not verified:
-        log("Gemini has no individually verified generative model; skipping provider", warning=True)
+        log("Gemini has no catalog-confirmed generative model; skipping provider", warning=True)
         return "", []
     return verified[0], verified[1:6]
 
@@ -148,7 +145,7 @@ def discover_openai_provider(name: str, endpoint: str, key: str, preferred: list
     if status == 403 and (configured or preferred):
         verified = []
         for candidate in list(dict.fromkeys(configured + preferred))[:6]:
-            probe_status, _ = request_json(endpoint,
+            probe_status, probe_body = request_json(endpoint,
                 {"Authorization": "Bearer " + key},
                 {"model": candidate, "messages": [{"role": "user", "content": "Reply OK."}],
                  "max_tokens": 512,
@@ -158,6 +155,12 @@ def discover_openai_provider(name: str, endpoint: str, key: str, preferred: list
                 verified.append(candidate)
             else:
                 log(f"{name} model {candidate} completion probe failed (HTTP {probe_status})", warning=True)
+                error = probe_body.get("error", {}) if isinstance(probe_body, dict) else {}
+                code = str(error.get("code", "")) if isinstance(error, dict) else ""
+                provider_denials = {"invalid_api_key", "account_deactivated", "organization_restricted", "organization_blocked", "insufficient_permissions"}
+                if probe_status == 401 or (probe_status == 403 and code in provider_denials):
+                    log(f"{name}: provider access denied (HTTP {probe_status}, code={code or 'authentication'}); stop redundant model probes", warning=True)
+                    break
         if verified:
             log(f"{name} catalog forbidden; completion probe confirmed {verified[0]}")
             return verified[0], verified[1:]
@@ -223,3 +226,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
