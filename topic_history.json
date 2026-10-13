@@ -1036,11 +1036,23 @@
       "region": "",
       "status": "published",
       "source": "science-pipeline",
-      "reservation_id": "5960e7b7d56747c08e0038634772288c",
       "reserved_at": "2026-10-12T23:36:39Z",
+      "published_at": "2026-10-12T23:36:49Z",
       "run_id": "38321467199",
-      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts",
-      "published_at": "2026-10-12T23:36:49Z"
+      "reservation_id": "5960e7b7d56747c08e0038634772288c",
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
+    },
+    {
+      "id": "f9ed02061aa42ae10ff4",
+      "title": "كيف يمر الضوء عبر الأجسام المعتمة؟ — الظاهرة الكمومية التي تحير الفيزياء الحديثة",
+      "hook": "\": \"تتساءل الكائنات الحية والفضوليون أحيانًا عما إذا كان الضوء يستطيع العبور من خلال حجم الصخرة، والإجابة العلمية تبدأ بفهم طبيعة المادة وتفاعل الضوء معها. الصخور بمختلف أنواعها، كالجرانيت والبازلت، هي مواد معتمة وغير شفافة.",
+      "region": "",
+      "status": "reserved",
+      "source": "science-pipeline",
+      "reservation_id": "961dcd5979bb47ec8064a7e79e54207a",
+      "reserved_at": "2026-10-13T00:50:16Z",
+      "run_id": "38327879687",
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
     }
   ]
 }
