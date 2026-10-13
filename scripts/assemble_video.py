@@ -179,7 +179,7 @@ def write_ass_subtitles(text: str, duration: float, ass_path: Path, audio_path: 
         events = align_words_with_whisper(audio_path, words)
     except Exception as exc:
         if os.getenv("QUALITY_GATES_BLOCKING", "false").lower() == "true":
-            raise
+            raise RuntimeError(f"رفض النشر: فشلت محاذاة الترجمة مع الصوت الحقيقي ({exc})") from exc
         if duration <= 0:
             raise ValueError("Audio duration must be positive")
         log.warning("Caption alignment unavailable (%s); using approximate captions without word highlighting", exc)
