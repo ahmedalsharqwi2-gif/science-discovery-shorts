@@ -6,6 +6,7 @@ main.py - نقطة الدخول الرئيسية
 """
 
 import os
+import json
 import sys
 import logging
 from pathlib import Path
@@ -60,6 +61,18 @@ class AutoPublishPipeline:
         log.info("="*60)
 
         try:
+            prepared_path = Path("state/prepared_narration.json")
+            prepared = None
+            if prepared_path.exists():
+                prepared = json.loads(prepared_path.read_text(encoding="utf-8"))
+                if (not isinstance(prepared, dict) or prepared.get("schema_version") != 1
+                        or not isinstance(prepared.get("title"), str) or not prepared["title"].strip()
+                        or not isinstance(prepared.get("narration"), str) or not prepared["narration"].strip()):
+                    raise ValueError("Prepared narration checkpoint is invalid")
+                if topic is not None and topic != prepared["title"]:
+                    raise ValueError("Prepared narration belongs to a different topic")
+                topic = prepared["title"]
+                log.info("Resuming prepared text; all content and media checks remain active")
             # Step 1: Generate topic
             if topic is None:
                 log.info("\n[Step 1] Generating topic...")
@@ -74,7 +87,7 @@ class AutoPublishPipeline:
 
             # Step 2: Generate narration
             log.info("\n[Step 2] Generating narration...")
-            narration = self.content_generator.generate_narration(topic)
+            narration = prepared["narration"] if prepared else self.content_generator.generate_narration(topic)
             log.info(f"✓ Narration generated ({len(narration.split())} words)")
 
             # Step 3: Quality check
@@ -85,6 +98,13 @@ class AutoPublishPipeline:
             if not text_report.is_acceptable:
                 log.error("Content quality not acceptable for publishing")
                 return False
+
+            # Persist a complete checked text before costly audio/render/publishing.
+            prepared_path.parent.mkdir(parents=True, exist_ok=True)
+            checkpoint = prepared_path.with_suffix(".tmp")
+            checkpoint.write_text(json.dumps({"schema_version": 1, "title": topic,
+                                             "narration": checked_text}, ensure_ascii=False), encoding="utf-8")
+            checkpoint.replace(prepared_path)
 
             # Fact checking is disabled for the current publishing workflow.
             # Keep the gate available behind an explicit opt-in for controlled
@@ -277,3 +297,4 @@ if __name__ == "__main__":
     
     success = pipeline.run(category=category, topic=topic)
     sys.exit(0 if success else 1)
+
