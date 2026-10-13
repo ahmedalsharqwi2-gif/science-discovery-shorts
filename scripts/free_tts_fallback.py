@@ -3,7 +3,6 @@ from __future__ import annotations
 
 import array
 import re
-import shutil
 import subprocess
 import tempfile
 import wave
@@ -35,15 +34,8 @@ def narration_tokens(text: str) -> list[str]:
     return tokens
 
 
-def _ffmpeg() -> str:
-    executable = shutil.which("ffmpeg")
-    if executable is None:
-        raise FileNotFoundError("FFmpeg is required for narration assembly")
-    return str(Path(executable).resolve())
-
-
 def _decode(part: Path, target: Path) -> None:
-    subprocess.run([_ffmpeg(), "-y", "-v", "error", "-i", str(part),
+    subprocess.run(["/usr/bin/ffmpeg", "-y", "-v", "error", "-i", str(part),
                     "-ar", "24000", "-ac", "1", "-c:a", "pcm_s16le", str(target)],
                    check=True, timeout=120)
 
@@ -94,7 +86,7 @@ def google_arabic_voice(text: str, output: Path, *, slow: bool = False) -> None:
                          timeout=(10, 30)).save(str(part))
                     _decode(part, decoded)
                     joined.writeframes(_boundary_pcm(decoded))
-            subprocess.run([_ffmpeg(), "-y", "-v", "error", "-i", str(pcm_path),
+            subprocess.run(["/usr/bin/ffmpeg", "-y", "-v", "error", "-i", str(pcm_path),
                             "-c:a", "libmp3lame", "-b:a", "192k", str(temporary)],
                            check=True, timeout=120)
             if not temporary.exists() or temporary.stat().st_size == 0:
