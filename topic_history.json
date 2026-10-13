@@ -1087,11 +1087,23 @@
       "region": "",
       "status": "published",
       "source": "science-pipeline",
-      "reservation_id": "b8691eefef3848c1b9570035407dd0f3",
       "reserved_at": "2026-10-13T08:03:57Z",
+      "published_at": "2026-10-13T08:04:10Z",
       "run_id": "38358457130",
-      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts",
-      "published_at": "2026-10-13T08:04:10Z"
+      "reservation_id": "b8691eefef3848c1b9570035407dd0f3",
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
+    },
+    {
+      "id": "164131c1232bebdca0fc",
+      "title": "لماذا تموت النجوم القزمة البيضاء ببطء شديد وتتحول إلى بلورات؟,",
+      "hook": "\": \"هَلْ تَخَيَّلْتَ يَوماً كَيْفَ تَمُوتُ النُّجُومُ؟ الحَقِيقَةُ المُثْبَتَةُ أَنَّ القِزَامَ البَيْضَاءَ تُنْهِئُ حَيَاتَهَا بِبُطْءٍ شَدِيدٍ، فَمَا الذي يُجَمِّدُ قُلُوبَهَا الكَوْنِيَّةَ؟ النَّظَرِيَّةُ المَدْعُومَةُ تَقُولُ إنَّ الكَثَافَةَ الهَائِلَةَ النَّاتِجَةَ عَنْ انْكِمَاشِ النَّجْمِ تَدْفَعُ المَوَادَّ للتَّرَاصِّ بِشَدَّةٍ،",
+      "region": "",
+      "status": "reserved",
+      "source": "science-pipeline",
+      "reservation_id": "28bd6572b5b74149a5963dbf1d42b391",
+      "reserved_at": "2026-10-13T08:14:32Z",
+      "run_id": "38366840952",
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
     }
   ]
 }
