@@ -1124,12 +1124,13 @@
       "title": "[كيف تتشكل البلورات الثلجية داخل السحب؟, كيف تتشكل البلورات الثلجية داخل السحب بدقة هندسية مذهلة؟]",
       "hook": "[ \"هَلْ سَأَلْتَ نَفْسَكَ يَوْماً: كَيْفَ تَبْنِي السَّحَابَةُ هَنْدَسَةً مُتَمَاثِلَةً مِنَ المَاءِ المُتَجَمِّدِ؟ إنَّ هذه الظاهرة الطبيعية المذهلة تُعرف علمياً بتكوين بلورات الثلج داخل السحب، وهي عملية فيزيائية وديناميكية معقدة تحدث في الطبقات العليا من",
       "region": "",
-      "status": "reserved",
+      "status": "published",
       "source": "science-pipeline",
       "reservation_id": "49a081e93e7e48698c6383591632d777",
       "reserved_at": "2026-10-13T20:50:56Z",
       "run_id": "38464355607",
-      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts",
+      "published_at": "2026-10-13T20:51:06Z"
     }
   ]
 }
