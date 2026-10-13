@@ -6,16 +6,16 @@ from pathlib import Path
 
 
 class ModelPolicyTests(unittest.TestCase):
-    def test_model_detail_cannot_override_failed_generation_probe(self):
+    def test_catalog_and_detail_validation_do_not_consume_generation_quota(self):
         from scripts import model_preflight as preflight
-        policy = {"providers": {"gemini": {"preferred_models": ["old"]}}}
-        catalog = {"models": [{"name": "models/old", "supportedGenerationMethods": ["generateContent"]}]}
+        policy = {"providers": {"gemini": {"preferred_models": ["current"]}}}
+        catalog = {"models": [{"name": "models/current", "supportedGenerationMethods": ["generateContent"]}]}
         with patch.dict(os.environ, {"GEMINI_API_KEY": "test"}, clear=True), \
              patch.object(preflight, "request_json", side_effect=[
-                 (200, catalog), (200, {"supportedGenerationMethods": ["generateContent"]}),
-                 (404, {})]) as request:
-            self.assertEqual(preflight.discover_gemini(policy), ("", []))
-        self.assertIn(":generateContent", request.call_args.args[0])
+                 (200, catalog), (200, {"supportedGenerationMethods": ["generateContent"]})]) as request:
+            self.assertEqual(preflight.discover_gemini(policy), ("current", []))
+        self.assertEqual(request.call_count, 2)
+        self.assertFalse(any(":generateContent" in str(call) for call in request.call_args_list))
 
     def test_policy_has_one_shared_schema_and_provider_order(self):
         policy = json.loads(Path("config/model_policy.json").read_text(encoding="utf-8"))
