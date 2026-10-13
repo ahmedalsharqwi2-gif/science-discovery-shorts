@@ -26,19 +26,53 @@ jobs:
           from datetime import datetime, timezone
           from zoneinfo import ZoneInfo
 
+          import base64
+          from datetime import timedelta
+
           repos = [
-              ("science-discovery-shorts", "auto_publish.yml", "العلوم"),
-              ("documented-history-stories", "main.yml", "التاريخ الموثق"),
-              ("arabic-horror-stories", "main.yml", "القصص المرعبة"),
+              ("science-discovery-shorts", "العلوم", {"tiktok", "youtube", "facebook"}),
+              ("documented-history-stories", "التاريخ الموثق", {"facebook", "instagram", "youtube"}),
+              ("arabic-horror-stories", "القصص المرعبة", {"facebook", "instagram", "youtube"}),
           ]
           owner = "ahmedalsharqwi2-gif"
           cairo = ZoneInfo("Africa/Cairo")
-          today = datetime.now(timezone.utc).astimezone(cairo).date()
+          now = datetime.now(timezone.utc).astimezone(cairo)
+          today = now.date()
           rows = []
           failed = False
 
-          for repo, workflow, label in repos:
-              url = f"https://api.github.com/repos/{owner}/{repo}/actions/workflows/{workflow}/runs?event=schedule&per_page=10"
+          def confirmed(entry, required):
+              receipts = entry.get("receipts", {})
+              return entry.get("confirmed") is True and all(
+                  receipts.get(service, {}).get("id") for service in required
+              )
+
+          def summarize(slots, required, current):
+              day = current.date()
+              today_targets = [
+                  current.replace(hour=hour, minute=0, second=0, microsecond=0)
+                  for hour in (12, 18)
+              ]
+              def key(target):
+                  return f"stock {target.date().isoformat()} {target.hour:02d} Cairo"
+              accepted = sum(confirmed(slots.get(key(t), {}), required) for t in today_targets)
+              overdue = sum(t <= current and not confirmed(slots.get(key(t), {}), required)
+                            for t in today_targets)
+              future = [
+                  current.replace(hour=hour, minute=0, second=0, microsecond=0) + timedelta(days=offset)
+                  for offset in range(5) for hour in (12, 18)
+              ]
+              future = [t for t in future if t > current]
+              stocked = sum(confirmed(slots.get(key(t), {}), required) for t in future)
+              state = "MISSING" if overdue else ("ACCEPTED" if accepted == 2 else "PENDING")
+              detail = (f"قبول جدولة اليوم: {accepted}/2؛ المخزون القادم: {stocked}/{len(future)}. "
+                        "الإيصال يؤكد قبول المنصة للجدولة، ولا يثبت ظهور الفيديو للجمهور.")
+              if overdue:
+                  detail += f" مواعيد مضت بلا إيصال كامل: {overdue}."
+              return state, detail, bool(overdue)
+
+          for repo, label, required in repos:
+              url = f"https://api.github.com/repos/{owner}/{repo}/contents/state/publication_stock.json"
               request = urllib.request.Request(
                   url,
                   headers={"Accept": "application/vnd.github+json", "User-Agent": "daily-publish-status"},
@@ -46,39 +80,14 @@ jobs:
               try:
                   with urllib.request.urlopen(request, timeout=30) as response:
                       payload = json.load(response)
-                  runs = payload.get("workflow_runs", [])
-              except (urllib.error.URLError, json.JSONDecodeError) as exc:
+                  ledger = json.loads(base64.b64decode(payload["content"]))
+                  state, detail, missing = summarize(ledger.get("slots", {}), required, now)
+                  failed = failed or missing
+                  rows.append((label, state, detail,
+                               f"[إيصالات]({f'https://github.com/{owner}/{repo}/blob/main/state/publication_stock.json'})"))
+              except (urllib.error.URLError, ValueError, KeyError, TypeError) as exc:
                   rows.append((label, "API ERROR", str(exc), ""))
                   failed = True
-                  continue
-
-              today_runs = []
-              for run in runs:
-                  created = datetime.fromisoformat(run["created_at"].replace("Z", "+00:00"))
-                  if created.astimezone(cairo).date() == today:
-                      today_runs.append(run)
-
-              if len(today_runs) < 2:
-                  state = "INCOMPLETE"
-                  detail = f"اكتمل {len(today_runs)}/2 من التشغيلات المجدولة اليوم"
-                  failed = True
-                  rows.append((label, state, detail, ""))
-              else:
-                  today_runs = sorted(today_runs, key=lambda run: run["created_at"])[-2:]
-                  conclusions = [run.get("conclusion") or run.get("status") or "unknown" for run in today_runs]
-                  if all(conclusion == "success" for conclusion in conclusions):
-                      state = "SUCCESS"
-                      detail = "اكتمل تشغيلَا 12:00 و18:00 بنجاح"
-                  elif any(conclusion in {"queued", "in_progress", "waiting"} for conclusion in conclusions):
-                      state = "RUNNING"
-                      detail = "أحد تشغيلَي اليوم ما زال قيد التنفيذ"
-                      failed = True
-                  else:
-                      state = "FAILURE"
-                      detail = "فشل أحد تشغيلَي النشر أو كلاهما"
-                      failed = True
-                  links = " ".join(f"[سجل]({run.get('html_url', '')})" for run in today_runs if run.get("html_url"))
-                  rows.append((label, state, detail, links))
 
           generated = datetime.now(cairo).strftime("%Y-%m-%d %H:%M %Z")
           lines = [f"# تقرير النشر اليومي — {generated}", "", f"الموعد المحلي المفحوص: {today}", ""]
@@ -96,7 +105,7 @@ jobs:
               output.write(report)
           print(report)
           if failed:
-              raise SystemExit("One or more scheduled publication checks are not successful")
+              raise SystemExit("Missing complete acceptance receipts for elapsed publication slots or ledger unavailable")
           PY
 
       - name: Upload report artifact
