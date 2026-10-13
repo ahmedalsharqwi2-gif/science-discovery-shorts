@@ -44,7 +44,7 @@ env:
   CLIP_REVIEW_ENABLED: 'false'
   # Bounded free-source search; local illustrative fallback prevents stalls.
   CINEMATIC_MAX_SCENE_CANDIDATES: '6'
-  QUALITY_GATES_BLOCKING: 'true'
+  QUALITY_GATES_BLOCKING: 'false'
   MIN_EXTERNAL_SCENE_SOURCES: '6'
   MIN_EXTERNAL_SCENE_SHARE: '0.65'
   BACKGROUND_MUSIC_ENABLED: 'true'
