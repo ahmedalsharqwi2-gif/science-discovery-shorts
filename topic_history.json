@@ -1072,12 +1072,13 @@
       "title": "[",
       "hook": "هَلْ تَعْلَمُ أَنَّ المَاءَ يَحْمِلُ ذَاكِرَةً خَفِيَّةً تَحْتَ مِجْهَرِ العِلْمِ؟ هَذِهِ حَقِيقَةٌ مُثْبَتَةٌ بِأَنَّ الجُزَيْئَاتِ تَتَحَرَّكُ مِيكَانِيكِيّاً عِنْدَ التَّبَرُّدِ وَتُشَكِّلُ بِنَى هَنْدَسِيَّةً مُحَدَّدَةً تَعْتَمِدُ عَلَى الظُّرُوفِ المُحِيطَةِ والروابط الهيدروجينية المتغيرة باستمرار. لَكِنَّ الفَرْضِيَّةَ القَائِلَةَ بِأَنَّ",
       "region": "",
-      "status": "reserved",
+      "status": "published",
       "source": "science-pipeline",
       "reservation_id": "34b5078692914c66bb71fa792f5f1237",
       "reserved_at": "2026-10-13T07:22:22Z",
       "run_id": "38359039908",
-      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts",
+      "published_at": "2026-10-13T07:22:32Z"
     }
   ]
 }
