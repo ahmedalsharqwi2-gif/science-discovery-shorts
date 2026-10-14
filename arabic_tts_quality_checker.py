@@ -172,15 +172,33 @@ class ArabicTTSQualityChecker:
                 warnings.append(f"مدة الصوت مختلفة عن التقدير: {duration:.1f}s (متوقع تقريبيًا ~{expected_duration:.1f}s)")
                 score *= 0.8
 
-            model = WhisperModel(
-                os.getenv("WHISPER_MODEL", "base"), device="cpu", compute_type="int8"
-            )
-            result = model.transcribe(
-                str(audio_path), language="ar", word_timestamps=False, vad_filter=False
-            )
-            segments = result[0] if isinstance(result, (tuple, list)) else result
-            heard = _arabic_words(" ".join(getattr(seg, "text", "") or "" for seg in segments))
             expected = _arabic_words(expected_text)
+            primary = os.getenv("WHISPER_MODEL", "base")
+            # A second independent transcription distinguishes weak base-model
+            # recognition from missing narration. Never prompt ASR with the script.
+            models = list(dict.fromkeys([primary, os.getenv("ASR_VERIFY_MODEL", "small")]))
+            heard = []
+            best_ratio = -1.0
+            for model_name in models:
+                try:
+                    model = WhisperModel(model_name, device="cpu", compute_type="int8")
+                    result = model.transcribe(
+                        str(audio_path), language="ar", word_timestamps=False,
+                        vad_filter=False, beam_size=5, condition_on_previous_text=False,
+                    )
+                    segments = result[0] if isinstance(result, (tuple, list)) else result
+                    candidate = _arabic_words(" ".join(getattr(seg, "text", "") or "" for seg in segments))
+                    matched = sum(b.size for b in difflib.SequenceMatcher(
+                        None, expected, candidate, autojunk=False).get_matching_blocks())
+                    candidate_ratio = matched / len(expected) if expected else 0.0
+                    log.info("Arabic ASR model %s: %.1f%%", model_name, candidate_ratio * 100)
+                    if candidate_ratio > best_ratio:
+                        heard, best_ratio = candidate, candidate_ratio
+                    if candidate_ratio >= ASR_MIN_MATCH_RATIO:
+                        break
+                except Exception:
+                    log.warning("Arabic ASR model %s unavailable", model_name, exc_info=True)
+            # All verifiers failing or disagreeing still blocks publication.
             if not heard or not expected:
                 issues.append("بوابة ASR لم تستخرج كلمات عربية قابلة للمقارنة")
                 score *= 0.3
