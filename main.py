@@ -136,6 +136,9 @@ class AutoPublishPipeline:
 
             if not success:
                 log.error("Voice generation failed")
+                payload = json.loads(prepared_path.read_text(encoding="utf-8"))
+                payload["audio_rejected"] = True
+                prepared_path.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
                 return False
 
             log.info(f"✓ Voice generated: {output_path}")
@@ -184,6 +187,9 @@ class AutoPublishPipeline:
                     )
                     if not success:
                         log.error("Voice regeneration failed after narration shortening")
+                        payload = json.loads(prepared_path.read_text(encoding="utf-8"))
+                        payload["audio_rejected"] = True
+                        prepared_path.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
                         return False
                     continue
 
@@ -203,6 +209,9 @@ class AutoPublishPipeline:
 
             if not audio_report.is_acceptable:
                 log.error("Audio quality not acceptable for publishing")
+                payload = json.loads(prepared_path.read_text(encoding="utf-8"))
+                payload["audio_rejected"] = True
+                prepared_path.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
                 return False
 
             audio_duration = probe_duration(output_path)

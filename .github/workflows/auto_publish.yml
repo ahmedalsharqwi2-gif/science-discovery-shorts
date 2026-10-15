@@ -158,7 +158,9 @@ jobs:
         uses: actions/cache/restore@v4
         with:
           path: state/prepared_narration.json
-          key: prepared-v1-${{ github.repository_id }}-${{ inputs.dry_run || false }}-${{ matrix.date || github.run_id }}-${{ matrix.hour }}
+          key: prepared-v2-${{ github.repository_id }}-${{ inputs.dry_run || false }}-${{ matrix.date || github.run_id }}-${{ matrix.hour }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            prepared-v2-${{ github.repository_id }}-${{ inputs.dry_run || false }}-${{ matrix.date || github.run_id }}-${{ matrix.hour }}-
 
       - name: Validate restored text against current topic history
         id: checked_text
@@ -322,11 +324,11 @@ jobs:
           python main.py
 
       - name: Save prepared text independently of later media failures
-        if: ${{ always() && steps.prepared_text.outputs.cache-hit != 'true' && hashFiles('state/prepared_narration.json') != '' }}
+        if: ${{ always() && hashFiles('state/prepared_narration.json') != '' }}
         uses: actions/cache/save@v4
         with:
           path: state/prepared_narration.json
-          key: prepared-v1-${{ github.repository_id }}-${{ inputs.dry_run || false }}-${{ matrix.date || github.run_id }}-${{ matrix.hour }}
+          key: prepared-v2-${{ github.repository_id }}-${{ inputs.dry_run || false }}-${{ matrix.date || github.run_id }}-${{ matrix.hour }}-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Verify final montage and B-roll output
         run: |
