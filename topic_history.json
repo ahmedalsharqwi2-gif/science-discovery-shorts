@@ -1152,11 +1152,23 @@
       "region": "",
       "status": "published",
       "source": "science-pipeline",
-      "reservation_id": "4d58839973fd4f91b5c469d90dbe860d",
       "reserved_at": "2026-10-15T01:02:56Z",
+      "published_at": "2026-10-15T01:03:06Z",
       "run_id": "38661058941",
-      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts",
-      "published_at": "2026-10-15T01:03:06Z"
+      "reservation_id": "4d58839973fd4f91b5c469d90dbe860d",
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
+    },
+    {
+      "id": "b74407a85be909d15013",
+      "title": "لماذا تمتاز شفرات التوربينات الهوائية بتصميم يشبه أجنحة الحيتان؟,",
+      "hook": "\": \"هَلْ سَأَلْتَ نَفْسَكَ يَوْمًا، كَيْفَ تُحَقِّقُ حِيتَانُ الْحَدَبَاءِ حَرَكَاتٍ بِهْلُوَانِيَّةً فِي الْمَاءِ رَغْمَ أَجْسَامِهَا الضَّخْمَةِ؟ تُعد الحيتان الحدباء واحدة من أكثر الكائنات البحرية إثارة للدهشة، ويسعى العلماء باستمرار لفهم سر خفة حركة هذه الكائنات",
+      "region": "",
+      "status": "reserved",
+      "source": "science-pipeline",
+      "reservation_id": "e2123c39ba9f4c40aeaef4d7cd0bfbd2",
+      "reserved_at": "2026-10-15T22:34:09Z",
+      "run_id": "38815577546",
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
     }
   ]
 }
