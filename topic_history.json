@@ -1139,11 +1139,23 @@
       "region": "",
       "status": "published",
       "source": "science-pipeline",
-      "reservation_id": "dafbef7115024cc9b84892e4a00239bf",
       "reserved_at": "2026-10-14T15:48:07Z",
+      "published_at": "2026-10-14T15:48:19Z",
       "run_id": "38590401523",
-      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts",
-      "published_at": "2026-10-14T15:48:19Z"
+      "reservation_id": "dafbef7115024cc9b84892e4a00239bf",
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
+    },
+    {
+      "id": "de94a203ec8dbfd4ecfb",
+      "title": "[لماذا لا تنكسر عظام الطيور رغم خفة وزنها الشديدة؟, كيف يتحمل هيكل الطائر الجوفاء ضغط الهواء العالي أثناء الطيران رغم أن عظامه أشبه بالإسفنج المعزز بأسوار هندسية داخلية مذهلة؟]",
+      "hook": "هيكلٌ وعْريٌّ يزنُ غراماتٍ فحسب، كيف يقاومُ ضغطَ الهواء الهائلَ في الأعالي؟ الحقيقةُ المثبتة علمياً تؤكدُ أنَّ عظامَ الطيور جوفاءُ ومجوفةٌ من الداخل، لكنها ليست فارغةً تماماً. تظهرُ المشاهدُ المقربةُ تحتَ المجهرِ شبكةً دقيقةً من",
+      "region": "",
+      "status": "reserved",
+      "source": "science-pipeline",
+      "reservation_id": "4d58839973fd4f91b5c469d90dbe860d",
+      "reserved_at": "2026-10-15T01:02:56Z",
+      "run_id": "38661058941",
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
     }
   ]
 }
