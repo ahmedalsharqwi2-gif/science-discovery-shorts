@@ -1241,12 +1241,13 @@
       "title": "لماذا تبدو عيون القطط مشعة في الظلام الدامس؟,",
       "hook": "[ \"هَلْ سَأَلْتَ نَفْسَكَ يَوْمًا لِمَ تَتَوَهَّجُ عُيُونُ القِطَطِ فِي الظَّلَامِ الدَّامِسِ؟ فِي عَتْمَةِ اللَّيْلِ، تَبْدُو حَدَقَاتُ القِطَّةِ كَمِصْبَاحَيْنِ صَغِيرَيْنِ يَلْتَعِجَانِ بِبَرِيقٍ خَاصٍّ. الحَقِيقَةُ العِلْمِيَّةُ المُثْبَتَةُ تُؤَكِّدُ أَنَّ هَذَا الإِشْعَاعَ لَيْسَ ضَوْءًا ذَاتِيًّا، بَلْ هُوَ",
       "region": "",
-      "status": "reserved",
+      "status": "published",
       "source": "science-pipeline",
       "reservation_id": "cc2a452aa73548e5b2d5887b62555a05",
       "reserved_at": "2026-10-16T21:43:36Z",
       "run_id": "38969202605",
-      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts",
+      "published_at": "2026-10-16T21:43:46Z"
     }
   ]
 }
