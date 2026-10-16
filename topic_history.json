@@ -1215,12 +1215,13 @@
       "title": "لماذا تظهر جزيئات البلاستيك الدقيقة في دماء البشر وكيف تؤثر على الخلايا؟,",
       "hook": "يُعد تساؤل: هل يجري البلاستيك حقاً في دِمائنا؟ واحداً من أكثر الأسئلة إلحاحاً واهتماماً في الوسط العلمي الحديث، وخصوصاً مع تزايد إنتاج المواد البلاستيكية عالمياً ووصول مخلفاتها إلى أبقاع النظم البيئية كافة. لقد أثبتت الدراسات",
       "region": "",
-      "status": "reserved",
+      "status": "published",
       "source": "science-pipeline",
       "reservation_id": "719e72ffc39245dca2392992c3b268d3",
       "reserved_at": "2026-10-16T14:49:34Z",
       "run_id": "38915170854",
-      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts",
+      "published_at": "2026-10-16T14:49:44Z"
     }
   ]
 }
