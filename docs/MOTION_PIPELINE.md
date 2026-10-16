@@ -1,38 +1,57 @@
-# Local Canvas motion and Egyptian voice
+# قالب فيديو عمودي بأسلوب الأخطبوط
 
-The cinematic pipeline now has a domain-specific Canvas renderer selected by `config/cinematic_production.json` (`renderer: canvas`). It creates original animated diagrams locally in Chromium/Playwright and encodes 1080×1920, 30-fps scene clips (with a silent AAC compatibility track) using FFmpeg. The existing assembly step then adds the generated narration, timing-aligned Arabic captions, and the repository's existing audio mix. The quality gate requires at least 70% approved moving visuals; Canvas animations count as motion but are not mislabeled as source footage. Science, history, and horror share the same motion grammar but use different palettes and motifs; the art is labeled as illustrative, not documentary evidence.
+## ما ينتجه كل مستودع
 
-## Local setup and preview
+قنوات العلوم والتاريخ والرعب تستهدف **90–180 ثانية** بدقة 1080×1920 و30 إطارًا/ثانية، مع الراوي المصري المسجّل باسم `octopus_narrator`. الصوت مرجع التوقيت: يُقسَّم السرد إلى beats قصيرة ثم تُعرض الرسوم أو لقطات B-roll على نوافذها الفعلية. طول المشهد الافتراضي 6 ثوانٍ، قريب من إيقاع فيديو الأخطبوط المرجعي.
 
-Install the repository's Python requirements (the history repository uses `scripts/requirements.txt`; science and horror use `requirements.txt`), install FFmpeg and Arabic Noto fonts, then install the matching browser:
+كل beat ثالث تقريبًا مخصص لمقطع فيديو B-roll حقيقي من Pexels؛ بقية المشاهد موشن جرافيك أصلي مرسوم في Canvas. بوابة الجودة تمنع خروج فيديو تقل حركته عن 90%، وتفرض حدًا أدنى 45% رسومًا متحركة و20% B-roll. إذا لم تتوفر لقطات فيديو كافية، يفشل البناء بدل استبدالها بصور ثابتة أو الادعاء بأن الرسم لقطات حقيقية.
+
+يظهر على الرسوم عنوان قصير وعبارة مأخوذة من نص الحلقة، وعلى B-roll بطاقات beats مقابلة. هذه **بطاقات تحريرية** وليست تفريغًا كاملًا أو ترجمة آلية للكلام. لا يُحرق ملف الترجمة العام في الفيديو النهائي.
+
+في مشاهد Canvas تدخل كلمات العبارة واحدةً تلو الأخرى خلال الـbeat، مع حركة دخول وتلوين للكلمة النشطة، بينما تتحرك الرسوم خلفها. التوقيت موزع على مدة المشهد ومتزامن مع beat السرد؛ ليس ملف ترجمة سطرية مولدًا من GitHub.
+
+## مصدر المرئيات
+
+- `assets/motion/canvas.html`: رسوم Canvas محلية. الأخطبوط ورسومه وتحوّل ألوانه تُرسم بالكود؛ قوالب العلوم والتاريخ والرعب لها أشكال ولوحات ألوان مستقلة.
+- B-roll: فيديوهات Pexels عمودية تُبحث تلقائيًا من كلمات الحلقة. يلزم وجود `PEXELS_API_KEY` في تشغيل الإنتاج. هذا المسار لا يستخدم مولّد صور/فيديو مدفوعًا.
+- `assets/motion/NotoSansArabic-*.ttf`: الخطوط المحلية المستخدمة في رسوم Canvas والعناوين العربية؛ ملف حقوق الخط مرفق بجوارها.
+
+الموشن التوضيحي، بما في ذلك إعادة البناء التاريخية أو مشاهد الرعب، مُعنون بأنه رسم/إعادة تمثيل وليس دليلًا مصورًا.
+
+## الراوي المصري
+
+يُستخدم `TTS_ENGINE=silma` مع `SILMA_REFERENCE_PROFILE=octopus_narrator` و`SILMA_SPEED=1.0`. ملفات المرجع وملف تعريف الصوت موجودة في `assets/voices/`، وتُعطَّل التحويلات الصامتة إلى متحدث آخر. التوليد يركّب صوتًا جديدًا لنص الحلقة بصوت قريب من المرجع؛ لا يعيد استخدام ملف صوت الأخطبوط نفسه بدل السرد الجديد.
+
+## تثبيت المتطلبات محليًا
 
 ```bash
-python -m pip install -r requirements.txt  # use scripts/requirements.txt in documented-history-stories
+python -m pip install -r requirements.txt  # في documented-history-stories: scripts/requirements.txt
 python -m playwright install --with-deps chromium
+# ffmpeg مطلوب أيضًا، ومثبت على مشغلات GitHub Actions.
 ```
 
-Render a one-second preview without calling a visual-generation API:
+معاينة رسومية محلية بلا API مرئي:
 
 ```bash
-python scripts/canvas_renderer.py \
-  --profile science \
-  --duration 1 \
-  --text 'مثال على موضوع الحلقة' \
-  --output /tmp/canvas-preview.mp4
+python scripts/canvas_renderer.py --profile science --duration 2 --text 'مثال على موضوع الحلقة' --output /tmp/canvas-preview.mp4
 ```
 
-Choose `science`, `history`, or `horror` to preview the corresponding art direction. Production inputs must still exist before running the repository's normal workflow: script generation, narration generation, then `python scripts/assemble_video.py`.
+غيّر `--profile` إلى `history` أو `horror` لمعاينة الاتجاه المقابل. لتشغيل الحلقة كاملة، شغّل مولد النص والصوت المعتادين للقناة ثم `python scripts/assemble_video.py`؛ مسار العلوم يدخل من `python main.py`.
 
-## Changing the visual style
+## تغيير الحركة
 
-Edit `assets/motion/canvas.html`: `drawScience`, `drawHistory`, and `drawHorror` are intentionally separate so each channel can gain its own motion and effects without changing the voice or assembly pipeline. `background()` controls shared particles, grid, and vignette; each draw function controls its subject motif, palette accents, and motion. Keep the authored stage at 1080×1920/30fps unless the canvas layout is rescaled too. The scene text and visual keywords seed small variations, so videos remain topic-aware without turning the layout into a different template each time.
+حرّر `assets/motion/canvas.html`:
 
-## Voice profile
+- `octopus(t,p,mode)` و`tentacle(...)` و`science(t,p,s)` للأخطبوط والرسوم العلمية؛ كما يمكنك تعديل `molecule`, `dna` و`planet` للموضوعات المختلفة.
+- `history(t,p,s)` للورق الزمني والآثار الرمزية والخط الزمني.
+- `horror(t,p,s)` للممر والباب والضباب والإضاءة المتقطعة.
+- `bg(t,p)`, `dust(t,p,s)`, `block(...)`, `wordRows(...)`, `kineticWords(...)` و`draw(t)` للمظهر المشترك والعناوين الحركية.
 
-`assets/voices/octopus_narrator.wav` and `assets/voices/octopus_narrator.txt` are the approved reference audio and transcript. `assets/voices/voice_profiles.json` registers them as `octopus_narrator`; production defaults to `TTS_ENGINE=silma`, `SILMA_REFERENCE_PROFILE=octopus_narrator`, and `SILMA_SPEED=1.0`.
+كل الرسوم زمنية وحتمية: `window.renderAt(t)` يرسم الإطار عند زمن معيّن، ما يجعل إعادة الإنتاج قابلة للتكرار. تبقى الأبعاد 1080×1920/30fps ما لم يُعاد تحجيم اللوحة والتخطيط والخطوط.
 
-The speed is a new, adjustable baseline for these repositories—not a recovered setting from the original octopus MP4. No provider voice ID or original TTS model was recoverable. Automatic fallback to a different speaker is disabled so a failed SILMA run does not silently change the narrator; fix the SILMA issue or explicitly choose another profile if desired.
+## التكلفة والاعتماديات الخارجية
 
-## Cost and scope
-
-Canvas drawing, Chromium capture, FFmpeg encoding, and subtitle compositing are local steps and do not call a visual-generation API or use Manus media credits. The existing topic/script generation still uses each repository's configured LLM credentials, and voice synthesis uses its `silma-tts` dependency on the workflow runner; check that runtime's own compute/resource terms. No API keys are included in this repository change.
+- **محلي بلا كريديت Manus:** Canvas، تصوير الإطارات عبر Playwright، FFmpeg، تجميع المقاطع، مزج الموسيقى والمؤثرات المحلية، وإضافة بطاقات beats.
+- **لاستخدام B-roll:** اتصال Pexels ومفتاحه؛ لا يُولَّد B-roll مدفوع. شروط استخدام Pexels وترخيص كل مادة تظل واجبة المراجعة.
+- **لإنشاء حلقة جديدة:** مولد النص والـTTS مرحلتان خارجيتان بحسب موصلات/اعتمادات كل مستودع؛ قد يترتب عليهما استخدام API أو تكلفة لدى المزوّد، بخلاف الرندر المحلي.
+- لا تضع مفاتيح أو أسرار في المستودع؛ استخدم GitHub Secrets.

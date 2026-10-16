@@ -31,8 +31,13 @@ def render_scene(output: Path, seconds: float, scene: dict[str, Any], cfg: dict[
         "profile": str(cfg.get("profile", "science")),
         "text": str(scene.get("text", "")),
         "title": str(scene.get("title", "")),
+        "caption": str(scene.get("caption", scene.get("text", ""))),
+        "topic": str(scene.get("topic", "")),
         "visual_keywords": scene.get("visual_keywords", []),
         "scene_id": str(scene.get("id", "")),
+        "scene_index": int(scene.get("scene_index", 0)),
+        "total_scenes": int(scene.get("total_scenes", 1)),
+        "duration": float(seconds),
     }
 
     command = [

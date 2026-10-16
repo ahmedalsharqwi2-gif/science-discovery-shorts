@@ -22,6 +22,9 @@
   "max_free_calls": 80,
   "max_daily_free_calls": 240,
   "free_request_interval_seconds": 12,
-  "renderer": "canvas",
-  "min_motion_share": 0.70
+  "renderer": "hybrid",
+  "min_motion_share": 0.9,
+  "min_duration_seconds": 90,
+  "min_graphics_share": 0.45,
+  "min_broll_share": 0.2
 }
