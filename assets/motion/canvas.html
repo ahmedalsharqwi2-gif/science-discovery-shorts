@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Arabic Motion Canvas</title>
+<style>
+  html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #080d16; }
+  canvas { display: block; width: 1080px; height: 1920px; }
+</style>
+</head>
+<body>
+<canvas id="stage" width="1080" height="1920"></canvas>
+<script>
+(() => {
+  const canvas = document.getElementById('stage');
+  const c = canvas.getContext('2d', { alpha: false });
+  const W = canvas.width, H = canvas.height;
+  let scene = { profile: 'science', text: '', title: '' };
+  const palettes = {
+    science: { bg1: '#071426', bg2: '#12354b', accent: '#48e0d0', glow: '#54a9ff', label: '#b8fff4' },
+    history: { bg1: '#17130f', bg2: '#42301f', accent: '#e9b76a', glow: '#bd7042', label: '#ffe3ad' },
+    horror:  { bg1: '#090d17', bg2: '#192235', accent: '#e05059', glow: '#62728f', label: '#ffd6d6' }
+  };
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+  const hash = (s) => { let h = 2166136261; for (const ch of String(s || '')) { h ^= ch.codePointAt(0); h = Math.imul(h, 16777619); } return h >>> 0; };
+  const seed01 = (seed, n) => { const v = Math.sin(seed * 0.0001 + n * 127.1) * 43758.5453123; return v - Math.floor(v); };
+
+  function background(t, p) {
+    const g = c.createLinearGradient(0, 0, W * 0.7, H);
+    g.addColorStop(0, p.bg1); g.addColorStop(1, p.bg2);
+    c.fillStyle = g; c.fillRect(0, 0, W, H);
+    c.save(); c.globalAlpha = 0.16; c.strokeStyle = p.glow; c.lineWidth = 2;
+    const shift = (t * 18) % 120;
+    for (let x = -120 + shift; x < W + 120; x += 120) {
+      c.beginPath(); c.moveTo(x, 0); c.lineTo(x - 140, H); c.stroke();
+    }
+    c.restore();
+    const vg = c.createRadialGradient(W / 2, H * 0.47, 160, W / 2, H * 0.47, 1120);
+    vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,0.60)');
+    c.fillStyle = vg; c.fillRect(0, 0, W, H);
+  }
+
+  function glowDot(x, y, r, color, alpha = 1) {
+    c.save(); c.globalAlpha = alpha;
+    const g = c.createRadialGradient(x, y, 0, x, y, r * 2.6);
+    g.addColorStop(0, color); g.addColorStop(1, 'rgba(0,0,0,0)');
+    c.fillStyle = g; c.beginPath(); c.arc(x, y, r * 2.6, 0, Math.PI * 2); c.fill();
+    c.restore();
+  }
+
+  function drawScience(t, p, s) {
+    const seed = hash(s.text || s.title);
+    const cx = 540, cy = 850, pulse = 1 + 0.035 * Math.sin(t * 2.4);
+    // Molecule/cell-like illustration: deliberately abstract, not a measured diagram.
+    c.save(); c.translate(cx, cy); c.scale(pulse, pulse);
+    for (let k = 0; k < 3; k++) {
+      c.save(); c.rotate(k * 0.86 + t * (k % 2 ? -0.08 : 0.08));
+      c.strokeStyle = k === 1 ? p.glow : p.accent; c.globalAlpha = 0.43; c.lineWidth = 5;
+      c.beginPath(); c.ellipse(0, 0, 185 + k * 55, 92 + k * 31, 0, 0, Math.PI * 2); c.stroke();
+      const a = t * (0.72 + k * 0.16) + k * 2.2;
+      const px = Math.cos(a) * (185 + k * 55), py = Math.sin(a) * (92 + k * 31);
+      glowDot(px, py, 13, p.accent, 0.85); c.fillStyle = p.label; c.beginPath(); c.arc(px, py, 10, 0, Math.PI * 2); c.fill();
+      c.restore();
+    }
+    glowDot(0, 0, 48, p.glow, 0.68); c.fillStyle = '#d9fffb'; c.beginPath(); c.arc(0, 0, 29, 0, Math.PI * 2); c.fill();
+    c.restore();
+    // Data nodes pulse around the central motif.
+    for (let i = 0; i < 15; i++) {
+      const a = seed01(seed, i) * Math.PI * 2 + t * 0.12;
+      const r = 300 + seed01(seed, i + 30) * 180;
+      const x = cx + Math.cos(a) * r, y = cy + Math.sin(a) * r * 0.75;
+      c.strokeStyle = p.accent; c.globalAlpha = 0.15; c.lineWidth = 2;
+      c.beginPath(); c.moveTo(cx, cy); c.lineTo(x, y); c.stroke();
+      glowDot(x, y, 5 + 3 * Math.sin(t + i), p.accent, 0.55);
+    }
+    c.globalAlpha = 1;
+  }
+
+  function drawHistory(t, p, s) {
+    const seed = hash(s.text || s.title), cx = 540, cy = 810;
+    // Abstract parchment/map layers; not an actual geographic or archival record.
+    c.save();
+    const paper = c.createRadialGradient(cx, cy, 120, cx, cy, 650);
+    paper.addColorStop(0, 'rgba(231,181,111,0.22)'); paper.addColorStop(1, 'rgba(142,91,49,0.01)');
+    c.fillStyle = paper; c.beginPath(); c.ellipse(cx, cy, 430, 520, -0.08, 0, Math.PI * 2); c.fill();
+    c.strokeStyle = p.accent; c.globalAlpha = 0.23; c.lineWidth = 3;
+    for (let row = 0; row < 9; row++) {
+      c.beginPath();
+      for (let x = 125; x <= 955; x += 20) {
+        const y = 470 + row * 90 + Math.sin(x * 0.012 + row * 0.8 + t * 0.18) * (18 + row * 1.7) + Math.cos(x * 0.021 + seed * 0.001) * 12;
+        if (x === 125) c.moveTo(x, y); else c.lineTo(x, y);
+      }
+      c.stroke();
+    }
+    c.restore();
+    // Shared animated timeline marker, with no invented dates.
+    const y = 1325, x1 = 155, x2 = 925, progress = (t * 0.22) % 1;
+    c.strokeStyle = 'rgba(255,227,173,0.34)'; c.lineWidth = 8; c.beginPath(); c.moveTo(x1, y); c.lineTo(x2, y); c.stroke();
+    for (let i = 0; i < 5; i++) {
+      const x = x1 + (x2 - x1) * i / 4;
+      c.fillStyle = i / 4 <= progress ? p.accent : 'rgba(255,227,173,0.35)';
+      c.beginPath(); c.arc(x, y, 12, 0, Math.PI * 2); c.fill();
+    }
+    const marker = x1 + (x2 - x1) * progress;
+    glowDot(marker, y, 18, p.accent, 0.85);
+    // Architectural silhouette is symbolic, not a depiction of a named site.
+    c.save(); c.globalAlpha = 0.34; c.fillStyle = '#090b0d';
+    c.beginPath(); c.moveTo(270, 1110); c.lineTo(270, 920); c.quadraticCurveTo(540, 650, 810, 920); c.lineTo(810, 1110); c.closePath(); c.fill();
+    c.strokeStyle = p.accent; c.lineWidth = 8; c.stroke(); c.restore();
+  }
+
+  function drawHorror(t, p, s) {
+    const flicker = 0.78 + 0.14 * Math.sin(t * 3.2) + 0.08 * Math.sin(t * 8.1);
+    const cx = 540, top = 465, bottom = 1325;
+    c.save();
+    // Perspective corridor with a slowly revealed doorway; no people or gore.
+    c.strokeStyle = 'rgba(153,170,202,0.33)'; c.lineWidth = 7;
+    c.beginPath(); c.moveTo(65, 275); c.lineTo(cx - 120, top); c.lineTo(cx - 120, bottom); c.lineTo(85, 1675); c.stroke();
+    c.beginPath(); c.moveTo(1015, 275); c.lineTo(cx + 120, top); c.lineTo(cx + 120, bottom); c.lineTo(995, 1675); c.stroke();
+    for (let i = 0; i < 8; i++) {
+      const yy = top + i * 112;
+      const spread = 122 + i * 42;
+      c.globalAlpha = 0.12 + i * 0.012; c.lineWidth = 4;
+      c.beginPath(); c.moveTo(cx - spread, yy); c.lineTo(cx + spread, yy); c.stroke();
+    }
+    c.globalAlpha = 0.8; c.fillStyle = '#080c14';
+    const doorW = 205 + 12 * Math.sin(t * 0.55), doorH = 470;
+    c.fillRect(cx - doorW / 2, bottom - doorH, doorW, doorH);
+    c.strokeStyle = p.accent; c.lineWidth = 5; c.strokeRect(cx - doorW / 2, bottom - doorH, doorW, doorH);
+    c.fillStyle = p.accent; c.beginPath(); c.arc(cx + doorW * 0.34, bottom - doorH * 0.48, 10, 0, Math.PI * 2); c.fill();
+    const light = c.createRadialGradient(cx, top + 90, 20, cx, top + 90, 470);
+    light.addColorStop(0, `rgba(210,220,255,${0.17 * flicker})`); light.addColorStop(1, 'rgba(210,220,255,0)');
+    c.fillStyle = light; c.fillRect(0, 250, W, 900);
+    // Slow low-contrast fog motes.
+    const seed = hash(s.text || s.title);
+    for (let i = 0; i < 22; i++) {
+      const x = (seed01(seed, i) * W + t * (8 + i % 5) * (i % 2 ? 1 : -1) + W) % W;
+      const y = 1120 + seed01(seed, i + 55) * 470 + Math.sin(t * 0.6 + i) * 20;
+      glowDot(x, y, 16 + seed01(seed, i + 90) * 28, p.glow, 0.13);
+    }
+    c.restore();
+  }
+
+  function drawDust(t, p, s) {
+    const seed = hash(s.text || s.title);
+    for (let i = 0; i < 42; i++) {
+      const x = seed01(seed, i + 7) * W + Math.sin(t * 0.3 + i) * 14;
+      const y = (seed01(seed, i + 71) * H + t * (18 + i % 9) + H) % H;
+      c.globalAlpha = 0.18 + 0.18 * Math.sin(t + i);
+      c.fillStyle = p.label; c.beginPath(); c.arc(x, y, 2 + (i % 4), 0, Math.PI * 2); c.fill();
+    }
+    c.globalAlpha = 1;
+  }
+
+  function draw(t) {
+    const profile = ['science', 'history', 'horror'].includes(scene.profile) ? scene.profile : 'science';
+    const p = palettes[profile];
+    background(t, p);
+    c.save();
+    const zoom = 1 + 0.015 * Math.sin(t * 0.8);
+    c.translate(W / 2, H / 2); c.scale(zoom, zoom); c.translate(-W / 2, -H / 2);
+    if (profile === 'science') drawScience(t, p, scene);
+    else if (profile === 'history') drawHistory(t, p, scene);
+    else drawHorror(t, p, scene);
+    drawDust(t, p, scene);
+    c.restore();
+    // Persistent safety label: the Canvas art is illustrative, not evidence.
+    const label = profile === 'horror' ? 'إعادة تمثيل بصري' : 'رسوم توضيحية';
+    c.save(); c.direction = 'rtl'; c.textAlign = 'right'; c.font = '700 30px "Noto Naskh Arabic", "Noto Sans Arabic", sans-serif';
+    c.fillStyle = p.label; c.globalAlpha = 0.86; c.fillText(label, W - 76, H - 92); c.restore();
+  }
+
+  window.setScene = (value) => { scene = { ...scene, ...(value || {}) }; };
+  window.renderAt = (seconds) => { draw(Math.max(0, Number(seconds) || 0)); };
+  window.renderAt(0);
+})();
+</script>
+</body>
+</html>

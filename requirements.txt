@@ -10,3 +10,4 @@ urllib3>=1.26,<2.0
 
 gTTS>=2.5.4,<3
 stable-ts>=2.18,<3
+playwright==1.63.0

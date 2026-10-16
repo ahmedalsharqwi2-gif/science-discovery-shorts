@@ -1087,7 +1087,7 @@ def _quota_fallback_record(scene: dict, episode: dict, cfg: dict, budget: Budget
 def acquire(scene: dict, episode: dict, cfg: dict, budget: Budget, cache: Path) -> tuple[Path, dict]:
     seconds = scene["end"] - scene["start"]
     cache.mkdir(parents=True, exist_ok=True)
-    identity = json.dumps({"scene": scene, "context": episode, "profile": cfg["profile"], "dimensions": [cfg["width"], cfg["height"], cfg["fps"]], "models": [cfg["image_model"], cfg["image_fallback_model"], cfg["review_model"]]}, ensure_ascii=False, sort_keys=True)
+    identity = json.dumps({"scene": scene, "context": episode, "profile": cfg["profile"], "dimensions": [cfg["width"], cfg["height"], cfg["fps"]], "renderer": cfg.get("renderer", "hybrid"), "models": [cfg["image_model"], cfg["image_fallback_model"], cfg["review_model"]]}, ensure_ascii=False, sort_keys=True)
     digest = hashlib.sha256(identity.encode()).hexdigest()[:24]
     visual, meta = cache / f"{digest}.mp4", cache / f"{digest}.json"
     if visual.exists() and meta.exists():
@@ -1099,6 +1099,23 @@ def acquire(scene: dict, episode: dict, cfg: dict, budget: Budget, cache: Path) 
                 if asset_id:
                     cfg.setdefault("_used_media_ids", set()).add(str(asset_id))
                 return visual, {**record, "cached": True}
+    if cfg.get("renderer") == "canvas":
+        from scripts.canvas_renderer import render_scene
+        render_scene(visual, seconds, scene, cfg)
+        review = {
+            "passed": True,
+            "sha256": hashlib.sha256(visual.read_bytes()).hexdigest(),
+            "audio_keep": False,
+            "review_method": "deterministic local Canvas illustration",
+            "note": "Original animated illustration; not documentary footage or evidence.",
+        }
+        record = {"scene_id": scene["id"], "source": "canvas_motion",
+                  "license": "Original code-generated Canvas animation", "source_url": "",
+                  "media_type": "animation", "review": review, "cached": False,
+                  "audio_decision": "VOICE ONLY", "illustrative": True,
+                  "source_media_is_video": False, "animated_visual": True}
+        atomic_json(meta, record)
+        return visual, record
     errors = []
     quota_exhausted = _free_review_quota_exhausted(budget)
     if quota_exhausted:
@@ -1390,12 +1407,13 @@ def build(audio: Path, narration: str, output: Path, episode: dict, subtitles: P
     plan_path = cache / f"{episode_id}.plan.json"
     if plan_path.exists():
         plan_data = json.loads(plan_path.read_text())
-        scenes = plan_data["scenes"] if plan_data.get("duration") == duration and plan_data.get("profile") == cfg["profile"] else None
+        scenes = plan_data["scenes"] if plan_data.get("duration") == duration and plan_data.get("profile") == cfg["profile"] and plan_data.get("renderer") == cfg.get("renderer", "hybrid") else None
     else:
         scenes = None
     if not scenes:
-        scenes = direct_scenes(plan_scenes(scene_plan_events(events), duration, episode, cfg), episode, cfg, budget)
-        atomic_json(plan_path, {"duration": duration, "profile": cfg["profile"], "scenes": scenes})
+        planned_scenes = plan_scenes(scene_plan_events(events), duration, episode, cfg)
+        scenes = planned_scenes if cfg.get("renderer") == "canvas" else direct_scenes(planned_scenes, episode, cfg, budget)
+        atomic_json(plan_path, {"duration": duration, "profile": cfg["profile"], "renderer": cfg.get("renderer", "hybrid"), "scenes": scenes})
     atomic_json(root / "state/cinematic_storyboard.json", {"episode_id": episode_id, "profile": cfg["profile"], "scenes": scenes})
     records, paths = [], []
     try:
@@ -1407,13 +1425,20 @@ def build(audio: Path, narration: str, output: Path, episode: dict, subtitles: P
         total_scene_seconds = sum(max(0.0, float(r["end"]) - float(r["start"])) for r in records)
         moving_scene_seconds = sum(
             max(0.0, float(r["end"]) - float(r["start"]))
-            for r in records if r.get("source_media_is_video") is True
+            for r in records if (r.get("source_media_is_video") is True or r.get("animated_visual") is True)
             and r.get("review", {}).get("passed") is True
         )
-        moving_video_share = moving_scene_seconds / total_scene_seconds if total_scene_seconds else 0.0
-        min_video_share = 0.0
-        if moving_video_share + 1e-9 < min_video_share:
-            raise RuntimeError(f"REAL_VIDEO_SHARE_GATE: {moving_video_share:.1%} real moving video; minimum 70%.")
+        moving_visual_share = moving_scene_seconds / total_scene_seconds if total_scene_seconds else 0.0
+        real_source_video_seconds = sum(
+            max(0.0, float(r["end"]) - float(r["start"]))
+            for r in records if r.get("source_media_is_video") is True
+            and r.get("animated_visual") is not True
+            and r.get("review", {}).get("passed") is True
+        )
+        real_source_video_share = real_source_video_seconds / total_scene_seconds if total_scene_seconds else 0.0
+        min_motion_share = float(cfg.get("min_motion_share", 0.70))
+        if moving_visual_share + 1e-9 < min_motion_share:
+            raise RuntimeError(f"MOTION_VISUAL_SHARE_GATE: {moving_visual_share:.1%} moving visuals; minimum {min_motion_share:.0%}.")
         listing = work / "concat.txt"
         listing.write_text("\n".join("file '" + str(p.resolve()).replace("'", "'\\''") + "'" for p in paths) + "\n")
         clean = output.with_name("cinematic_clean.mp4")
@@ -1442,10 +1467,10 @@ def build(audio: Path, narration: str, output: Path, episode: dict, subtitles: P
         quality = verify_final(temporary, duration, cfg, clean=clean)
         temporary.replace(output)
         report = {"passed": True, "output": str(output), "caption_timing": timing, "quality": quality,
-                  "target_mix": {"real_source_video_minimum": 0.70, "photos_and_diagrams_maximum": 0.30},
+                  "target_mix": {"moving_visual_minimum": 0.70, "static_visual_maximum": 0.30},
                   "actual_sources": {source: sum(r["source"] == source for r in records) for source in sorted({r["source"] for r in records})},
                   "actual_media_mix": {media_type: sum(r.get("media_type", "unknown") == media_type for r in records) for media_type in sorted({r.get("media_type", "unknown") for r in records})},
-                  "real_video_duration_share": round(moving_video_share, 4), "minimum_real_video_share": min_video_share,
+                  "moving_visual_duration_share": round(moving_visual_share, 4), "real_source_video_duration_share": round(real_source_video_share, 4), "minimum_moving_visual_share": min_motion_share,
                   "scene_count": len(records), "cached_scenes": sum(r["cached"] for r in records),
                   "estimated_episode_usd": budget.episode["estimated_usd"], "estimated_day_usd": budget.row["estimated_usd"],
                   "free_only": cfg.get("free_only", True), "free_api_calls": budget.episode.get("free_calls", 0),

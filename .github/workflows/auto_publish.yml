@@ -72,8 +72,8 @@ jobs:
 
   publish:
     env:
-      PREFER_FREE_GOOGLE_TTS: 'true'
-      FREE_GOOGLE_TTS_ENABLED: 'true'
+      PREFER_FREE_GOOGLE_TTS: 'false'
+      FREE_GOOGLE_TTS_ENABLED: 'false'
       PUBLICATION_RECEIPTS_ENABLED: 'true'
       PUBLISH_IMMEDIATE: ${{ inputs.publish_now && matrix.date == '' }}
       PRODUCTION_MEDIA_ID: ${{ format('{0}-{1}-{2}', github.run_id, matrix.date, matrix.hour) }}
@@ -188,6 +188,9 @@ jobs:
           fi
           pip install -r requirements.txt
 
+      - name: Install Chromium for local Canvas scenes
+        run: python -m playwright install --with-deps chromium
+
       - name: Cache models
         uses: actions/cache@v5
         with:
@@ -289,9 +292,9 @@ jobs:
           # are intentionally disabled for this publishing pipeline.
           FACT_CHECK_ENABLED: 'false'
           TOPIC_GENERATION_MAX_ATTEMPTS: '3'
-          VOICE_ROTATION_ENABLED: 'true'
-          VOICE_SELECTION_MODE: 'content'
-          AUTO_VOICE_PROFILES: 'mohamed_elbed,rafik_sa,egyptian_female,hossam,hossam_uploaded,marwan,nassim,ahmed_z'
+          VOICE_ROTATION_ENABLED: 'false'
+          VOICE_SELECTION_MODE: 'fixed'
+          AUTO_VOICE_PROFILES: 'octopus_narrator'
           VOICE_ROTATION_STATE_FILE: 'state/voice_rotation.json'
           MIN_SCENE_CLIPS: '4'
           # Non-blocking montage diagnostics only when the free stock library is limited.
@@ -302,16 +305,18 @@ jobs:
 
 
           # --- TTS ---
-          # Keep Edge as the production engine; SILMA was explicitly removed
-          # from the voice workflow. Edge retries must pass the Arabic ASR gate.
-          TTS_ENGINE: "edge"
-          # Hamed has clearer connected Arabic phonemes for scientific terms.
-          EDGE_TTS_VOICE: "ar-SA-HamedNeural"
-          EDGE_TTS_VOICES: "ar-SA-HamedNeural,ar-SA-ZariyahNeural,ar-SA-AmmarNeural"
+          # Production uses the approved SILMA reference; changing speakers is disabled.
+          TTS_ENGINE: "silma"
+          SILMA_REFERENCE_PROFILE: "octopus_narrator"
+          SILMA_VOICE_PROFILES_FILE: "assets/voices/voice_profiles.json"
+          SILMA_SPEED: "1.0"
+          SILMA_FALLBACK_TO_EDGE: "false"
+          # Egyptian Edge voice is retained only for preflight/explicit fallback.
+          EDGE_TTS_VOICE: "ar-EG-ShakirNeural"
+          EDGE_TTS_VOICES: "ar-EG-ShakirNeural"
           EDGE_TTS_MAX_ATTEMPTS: '3'
           WHISPER_MODEL: 'small'
-          # The last Edge candidate scored 78.7%; keep the gate at 78% so it
-          # can pass, while still rejecting lower-match pronunciations.
+          # Preserve the existing Arabic ASR threshold; SILMA fallback is disabled.
           ASR_MIN_MATCH_RATIO: '0.78'
           MIN_TTS_AUDIO_SCORE: '0.78'
           # Avoid the slow, syllable-separated delivery seen with -15%.
@@ -409,4 +414,3 @@ jobs:
             state/publication_stock.json
           if-no-files-found: ignore
           retention-days: 14
-

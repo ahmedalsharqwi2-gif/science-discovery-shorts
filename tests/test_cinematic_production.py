@@ -34,14 +34,29 @@ class CinematicTests(unittest.TestCase):
         self.root = Path(self.temp.name)
         (self.root/'config').mkdir()
         self.cfg = cp.settings()
-        self.cfg.update(width=360, height=640, fps=30, scene_seconds=3,
-                        episode_budget_usd=.20, daily_budget_usd=.25, free_request_interval_seconds=0)
+        self.cfg.update(renderer="hybrid", width=360, height=640, fps=30, scene_seconds=3,
+                        min_motion_share=0.0, episode_budget_usd=.20, daily_budget_usd=.25, free_request_interval_seconds=0)
         (self.root/'config/cinematic_production.json').write_text(json.dumps(self.cfg))
         (self.root/'config/cinematic_sfx.json').write_text('{}')
         self.addCleanup(self.temp.cleanup)
 
     def budget(self, episode='one'):
         return cp.Budget(self.root/'state/budget.json', self.cfg, episode)
+
+    def test_canvas_renderer_branch_is_local_and_marks_animation(self):
+        cfg = dict(self.cfg, renderer='canvas')
+        scene = {'id':'canvas-test','start':0.0,'end':1.0,'text':'اختبار','kind':'image'}
+        def render_fixture(output, *_args):
+            output.parent.mkdir(parents=True, exist_ok=True)
+            output.write_bytes(b'canvas fixture')
+        with patch('scripts.canvas_renderer.render_scene', side_effect=render_fixture) as renderer, \
+             patch.object(cp, 'candidates', side_effect=AssertionError('Canvas must not search remote media')):
+            visual, record = cp.acquire(scene, {'title':'test'}, cfg, self.budget('canvas'), self.root/'.canvas-cache')
+        renderer.assert_called_once()
+        self.assertEqual(record['source'], 'canvas_motion')
+        self.assertTrue(record['animated_visual'])
+        self.assertFalse(record['source_media_is_video'])
+        self.assertTrue(record['review']['passed'])
 
     def test_science_config_uses_three_minute_ceiling(self):
         self.assertEqual(cp.settings()['max_duration_seconds'], 180)

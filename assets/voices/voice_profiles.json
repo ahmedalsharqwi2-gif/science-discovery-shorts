@@ -1,5 +1,5 @@
 {
-  "default": "mohamed_elbed",
+  "default": "octopus_narrator",
   "profiles": {
     "mohamed_elbed": {
       "label": "Arabic male — Mohamed ElBed",
@@ -40,6 +40,11 @@
       "label": "Arabic male — Ahmed Z",
       "wav": "assets/voices/ahmed_z.wav",
       "text": "assets/voices/ahmed_z.txt"
+    },
+    "octopus_narrator": {
+      "label": "راوي الأخطبوط — مرجع مصري",
+      "wav": "assets/voices/octopus_narrator.wav",
+      "text": "assets/voices/octopus_narrator.txt"
     }
   }
 }
