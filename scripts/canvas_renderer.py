@@ -48,7 +48,15 @@ def render_scene(output: Path, seconds: float, scene: dict[str, Any], cfg: dict[
         "-c:v", "libx264", "-preset", "veryfast", "-crf", "21", "-pix_fmt", "yuv420p",
         "-c:a", "aac", "-b:a", "128k", "-movflags", "+faststart", str(output),
     ]
-    proc = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
+    # Keep the argument vector shell-free; output paths remain one argv item.
+    proc = subprocess.Popen(
+        command,
+        stdin=subprocess.PIPE,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.PIPE,
+        shell=False,
+        close_fds=True,
+    )
     try:
         try:
             from playwright.sync_api import sync_playwright
