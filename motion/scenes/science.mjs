@@ -1,4 +1,9 @@
+import {drawOctopus} from './octopus.mjs';
 export function science(c,s,t,{accent,text}){
+ if(s.kind==='octopus'){drawOctopus(c,t+(s.seed??0)/100,accent);text('رسم توضيحي',540,1380,28,'#a5bdc2',400);return;}
+ if(s.kind==='concept'){
+  const terms=s.terms??[];terms.forEach((term,i)=>{const a=i*6.283/Math.max(1,terms.length)+Math.sin(t*.2)*.1,x=540+Math.cos(a)*270,y=930+Math.sin(a)*280;c.strokeStyle=accent+'66';c.lineWidth=3;c.beginPath();c.moveTo(540,930);c.lineTo(x,y);c.stroke();c.beginPath();c.arc(x,y,90,0,7);c.fillStyle='#173039';c.fill();c.strokeStyle=accent;c.stroke();text(term,x,y,29,'#eee9df',600,170);});text('مفاهيم من نص الحلقة',540,1380,28,'#a5bdc2',400);return;
+ }
  const seed=s.seed??0;
  for(let i=0;i<16;i++){
   const a=i*2.399+seed*.13,r=65+(i%5)*65,x=540+Math.cos(a)*r,y=880+Math.sin(a)*r;

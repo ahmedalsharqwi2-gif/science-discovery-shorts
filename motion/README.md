@@ -19,11 +19,14 @@ cd motion
 npm ci
 node render.mjs --plan examples/science.json --frame 3 --font /path/to/NotoSansArabic-Regular.ttf --out preview.png
 node render.mjs --plan /path/to/episode.json --audio /path/to/narration.wav --font /path/to/NotoSansArabic-Regular.ttf --out episode.mp4
+node render.mjs --episode /path/to/checked-episode.json --timings /path/to/captions.srt --channel science --audio /path/to/narration.wav --save-plan /path/to/plan.json --font /path/to/NotoSansArabic-Regular.ttf --out episode.mp4
 ```
 
 `--width 720` and `--fps 24` are supported for low-cost previews; production defaults are 1080×1920 at 30 fps.
 
-The JSON examples are six-second **visual fixtures**, not publishable factual episodes. For a real episode, the checked narration generator must supply the plan, source-grounded labels, scene data and captions timed against the final narration. The example drawings do not synthesize arbitrary new subjects automatically. New visual concepts require additional reviewed scene types or supplied assets.
+The JSON examples are six-second **visual fixtures**, not publishable factual episodes. For a real episode, the upstream checked narration generator supplies `title` and `narration` (or `topic` and `narration_script`) and the final audio. `plan.mjs` builds a plan from real SRT sentence cues or JSON alignment entries `{text,start,end}` / `{text,offset,duration}`. Every normalized narration word must be present, in order; no guessed timings or invented text are accepted. Sentence cues keep their original boundaries; word cues are grouped into up to five words. This checks coverage and timing, not factual correctness or ASR quality, which remain upstream checks.
+
+Science selects cells/signals/layers only for matching narration keywords, includes the user-provided octopus drawing for octopus topics, and otherwise uses concept labels drawn from the text. History uses illustrative documents and only renders timelines when `historical_events` with checked labels/dates are supplied. Horror progresses from corridor to shadows and reveal. A narration hash varies procedural parameters. These templates do not synthesize arbitrary new creatures, archaeology or photoreal footage. New visual concepts require additional reviewed scene types or supplied assets.
 
 ## Audio boundary
 
@@ -35,9 +38,11 @@ The manual preview workflow only creates downloadable review artifacts. It does 
 
 Before selecting this renderer in the production pipeline:
 
-1. Generate a complete source-checked plan for a new topic, with its approved narration and real word/sentence timings.
+1. Feed the existing source-checked episode and approved narration's real word/sentence timings into the automatic planner. Supply checked historical event metadata when a timeline is needed.
 2. Review the exported sample, including Egyptian pronunciation, caption placement, scene relevance and duration.
 3. Add a motion-specific visual quality check. An external B-roll share check is not applicable to procedural drawings; replace it with appropriate checks rather than disabling validation.
 4. Run a full unpublished episode, then connect the validated output to the existing unique-topic reservation and receipt-confirmed publisher.
 
 Do not infer that the voice in the Manus reference has been reproduced. Its recording is not a voice model, and the reference TTS service/voice ID remains unknown.
+
+The octopus scene is adapted from the user's supplied `octopus-colour-change-project.zip` / Canvas source. It does not call Manus or an image-generation API.

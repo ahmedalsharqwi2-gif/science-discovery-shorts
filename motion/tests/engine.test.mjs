@@ -8,7 +8,7 @@ test('refuses gaps, overlaps and cross-channel scenes',()=>{for(const scenes of 
 test('refuses captions outside audio and overlapping captions',()=>{assert.throws(()=>validatePlan({...sample(),captions:[{start:0,end:5,text:'كلام'}]}));assert.throws(()=>validatePlan({...sample(),captions:[{start:0,end:2,text:'أ'},{start:1,end:3,text:'ب'}]}));});
 test('historical routes require explicit data and schematic label',()=>{assert.throws(()=>validatePlan(sample('history','route')),/coordinates/);const p=sample('history','route');p.scenes[0].points=[[0,.5],[1,.5]];assert.throws(()=>validatePlan(p),/schematic/);p.scenes[0].schematic=true;assert.equal(validatePlan(p),p);});
 test('each channel renders different content and changes over time',()=>{
- const cases=[sample(),sample('history','artifact'),sample('horror','reveal')],hashes=[];
+ const cases=[sample(),sample('history','artifact'),sample('horror','reveal'),sample('science','octopus'),sample('science','concept')],hashes=[];
  for(const p of cases){validatePlan(p,4);const c=createCanvas(360,640),x=c.getContext('2d');drawFrame(x,p,.5,{width:360,height:640});const a=c.toBuffer('image/png');drawFrame(x,p,2,{width:360,height:640});const b=c.toBuffer('image/png');assert.notDeepEqual(a,b);hashes.push(a);}
  assert.notDeepEqual(hashes[0],hashes[1]);assert.notDeepEqual(hashes[1],hashes[2]);
 });

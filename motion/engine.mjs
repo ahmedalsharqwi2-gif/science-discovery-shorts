@@ -2,7 +2,7 @@ import {science} from './scenes/science.mjs';
 import {history} from './scenes/history.mjs';
 import {horror} from './scenes/horror.mjs';
 export const renderers={science,history,horror};
-const kinds={science:['cells','signal','layers'],history:['timeline','artifact','route'],horror:['corridor','shadow','reveal']};
+const kinds={science:['cells','signal','layers','concept','octopus'],history:['timeline','artifact','route'],horror:['corridor','shadow','reveal']};
 const finite=n=>typeof n==='number'&&Number.isFinite(n);
 export function validatePlan(p,audioDuration){
  if(!p||!kinds[p.channel])throw Error('Unknown channel');
@@ -16,6 +16,7 @@ export function validatePlan(p,audioDuration){
   if(!kinds[p.channel].includes(s.kind))throw Error('Scene kind does not belong to this channel');
   if(s.label!==undefined&&(typeof s.label!=='string'||s.label.length>100))throw Error('Invalid scene label');
   if(s.seed!==undefined&&(!finite(s.seed)||Math.abs(s.seed)>100000))throw Error('Invalid scene seed');
+  if(s.terms!==undefined&&(!Array.isArray(s.terms)||s.terms.length>5||s.terms.some(x=>typeof x!=='string'||x.length>60)))throw Error('Invalid concept terms');
   if(s.kind==='timeline'&&(!Array.isArray(s.events)||!s.events.length||s.events.length>4||s.events.some(e=>!e||typeof e.label!=='string'||e.label.length>100||typeof e.date!=='string'||e.date.length>60)))throw Error('Timeline requires 1–4 explicit dates and labels');
   if(s.kind==='route'&&(!Array.isArray(s.points)||s.points.length<2||s.points.some(v=>!Array.isArray(v)||v.length!==2||v.some(n=>!finite(n)||n<0||n>1))))throw Error('Route requires explicit normalized coordinates');
   if(s.kind==='route'&&s.schematic!==true)throw Error('Route must explicitly declare schematic=true; no invented map geography');

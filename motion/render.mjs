@@ -4,16 +4,25 @@ import {createRequire} from 'node:module';
 import {spawn,spawnSync} from 'node:child_process';
 import {once} from 'node:events';
 import {validatePlan,drawFrame} from './engine.mjs';
+import {buildPlan,parseSrt} from './plan.mjs';
 const {createCanvas,GlobalFonts}=createRequire(import.meta.url)('@napi-rs/canvas');
 const args=process.argv.slice(2),opt=(n,d)=>{const i=args.indexOf(n);return i<0?d:args[i+1];};
 function probe(file){const r=spawnSync('ffprobe',['-v','error','-show_entries','format=duration','-of','csv=p=0',file],{encoding:'utf8'});if(r.status!==0)throw Error('Cannot probe supplied narration');return Number(r.stdout.trim());}
 async function main(){
- const source=opt('--plan'),out=opt('--out'),audio=opt('--audio'),font=opt('--font'),still=opt('--frame');
- if(!source||!out||!font)throw Error('Required: --plan episode.json --out output.mp4 --font NotoSansArabic.ttf [--audio narration.wav | --frame seconds]');
+ const source=opt('--plan'),episodePath=opt('--episode'),timingsPath=opt('--timings'),out=opt('--out'),audio=opt('--audio'),font=opt('--font'),still=opt('--frame');
+ if((!source&&!episodePath)||!out||!font)throw Error('Required: --plan plan.json OR --episode episode.json --timings alignment.json/captions.srt --channel channel; plus --out, --font, --audio (or --frame for an existing plan)');
+ if(source&&episodePath)throw Error('Choose one plan input route');
  if(!fs.existsSync(font)||!GlobalFonts.registerFromPath(font,'Arabic'))throw Error('Arabic font could not be loaded');
- const p=JSON.parse(fs.readFileSync(source,'utf8'));
+ let p;
+ if(source)p=JSON.parse(fs.readFileSync(source,'utf8'));
+ else{
+  if(!audio||!timingsPath||!opt('--channel'))throw Error('Automatic planning requires real audio, timings, and channel');
+  const raw=fs.readFileSync(timingsPath,'utf8');p=buildPlan({channel:opt('--channel'),episode:JSON.parse(fs.readFileSync(episodePath,'utf8')),timings:timingsPath.toLowerCase().endsWith('.srt')?parseSrt(raw):JSON.parse(raw),duration:probe(audio)});
+ }
+ if(opt('--channel',p.channel)!==p.channel)throw Error('Plan belongs to another channel');
  if(still===undefined&&!audio)throw Error('A full render requires real narration; TTS is a separate stage');
  validatePlan(p,still===undefined?probe(audio):undefined);
+ if(opt('--save-plan'))fs.writeFileSync(opt('--save-plan'),JSON.stringify(p,null,2));
  const w=Number(opt('--width','1080')),fps=Number(opt('--fps','30')),h=w*16/9;
  if(![360,720,1080].includes(w)||![24,30].includes(fps))throw Error('Unsupported export dimensions or frame rate');
  const canvas=createCanvas(w,h),ctx=canvas.getContext('2d');fs.mkdirSync(path.dirname(path.resolve(out)),{recursive:true});
