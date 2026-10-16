@@ -1178,11 +1178,23 @@
       "region": "",
       "status": "published",
       "source": "science-pipeline",
-      "reservation_id": "93a38b87398c4567a0a981fbb26d74c6",
       "reserved_at": "2026-10-16T00:47:49Z",
+      "published_at": "2026-10-16T00:48:00Z",
       "run_id": "38829871906",
-      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts",
-      "published_at": "2026-10-16T00:48:00Z"
+      "reservation_id": "93a38b87398c4567a0a981fbb26d74c6",
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
+    },
+    {
+      "id": "4729d6da54ca5749dcd5",
+      "title": "لماذا تمتاز طيور القطرس بقدرتها على الطيران لمسافات شاسعة دون رفرفة أجنحتها؟,",
+      "hook": "هَكَذَا يَقْطَعُ طَائِرُ القَطْرَسِ مُحِيطَاتِ العَالَمِ دُونَ أَنْ يُحَرِّكَ جَنَاحَيْهِ بَتَّةً، فَكَيْفَ يَحْدُثُ هَذَا؟ تُؤَكُّدُ الحَقَائِقُ العِلْمِيَّةُ المُثْبَتَةُ أَنَّ هَذَا الطَّائِرَ يَعْتَمِدُ عَلَى تَقْنِيَّةِ الاِنْزِلَاقِ الدَّائِرِيِّ بَيْنَ مَوْجَاتِ البَحْرِ العَالِيَةِ. وَتُشِيرُ النَّظَرِيَّاتُ المَدْعُومَةُ بِالرَّصْدِ الحَقْلِيِّ",
+      "region": "",
+      "status": "reserved",
+      "source": "science-pipeline",
+      "reservation_id": "496b5c7cbf7c452d9b33b7f765da52f5",
+      "reserved_at": "2026-10-16T05:20:38Z",
+      "run_id": "38853283283",
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
     }
   ]
 }
