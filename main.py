@@ -42,8 +42,8 @@ class AutoPublishPipeline:
 
     def __init__(self):
         self.content_generator = ContentGenerator(
-            min_words=int(os.getenv("MIN_WORDS", "180")),
-            max_words=int(os.getenv("MAX_WORDS", "400")),
+            min_words=int(os.getenv("MIN_WORDS", "240")),
+            max_words=int(os.getenv("MAX_WORDS", "420")),
         )
         self.voice_generator = VoiceGenerator(
             output_dir=Path(os.getenv("OUTPUT_DIR", "./output"))

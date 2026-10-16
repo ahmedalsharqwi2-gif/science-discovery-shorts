@@ -189,7 +189,7 @@ def settings(root: Path = ROOT) -> dict:
         raise ValueError("Invalid cinematic profile or negative budget")
     if cfg["width"] * 16 != cfg["height"] * 9 or cfg["width"] <= 0 or cfg["height"] <= 0:
         raise ValueError("Cinematic output must have a positive 9:16 resolution")
-    if not 0 < cfg["scene_seconds"] <= 10 or cfg["fps"] != 30:
+    if not 0 < cfg["scene_seconds"] <= 15 or cfg["fps"] != 30:
         raise ValueError("Invalid cinematic pacing or frame rate")
     if not 0 < cfg.get("max_duration_seconds", 0) <= MAX_VIDEO_DURATION_SECONDS:
         raise ValueError("Cinematic videos must not exceed 180 seconds")
@@ -377,6 +377,49 @@ def scene_plan_events(events: list[dict]) -> list[dict]:
     return unique
 
 
+def _scene_caption_text(text: str, limit: int = 150) -> str:
+    """Make a short on-screen beat from the authored Arabic narration, not an ASR translation."""
+    clean = re.sub(r"\s+", " ", str(text or "")).strip()
+    sentence = re.split(r"(?<=[.!?؟؛])\s+", clean, maxsplit=1)[0]
+    chosen = sentence if len(sentence) >= 28 else clean
+    if len(chosen) <= limit:
+        return chosen
+    words, out = chosen.split(), []
+    for word in words:
+        candidate = " ".join(out + [word])
+        if len(candidate) > limit - 1:
+            break
+        out.append(word)
+    return " ".join(out).rstrip("،؛: ") + "…" if out else chosen[:limit - 1] + "…"
+
+
+def _scene_title_text(text: str, topic: str = "") -> str:
+    """Use a short phrase from the source script as the kinetic scene headline."""
+    value = str(text or topic or "مشهد من الحكاية")
+    value = re.sub(r"[،؛:!?؟….,\-]+", " ", value)
+    return " ".join(value.split()[:5]) or "مشهد من الحكاية"
+
+
+def apply_hybrid_scene_design(scenes: list[dict], episode: dict) -> list[dict]:
+    """Keep Canvas motion graphics as the lead; reserve every third beat for real B-roll."""
+    topic = str(episode.get("title", ""))
+    keywords = episode.get("visual_keywords", [])
+    total = len(scenes)
+    for index, scene in enumerate(scenes):
+        scene["kind"] = "stock" if index % 3 == 2 else "motion_graphic"
+        scene["require_video"] = scene["kind"] == "stock"
+        scene["scene_index"] = index
+        scene["total_scenes"] = total
+        scene["duration"] = max(0.0, float(scene.get("end", 0)) - float(scene.get("start", 0)))
+        scene["topic"] = topic
+        scene["visual_keywords"] = keywords if isinstance(keywords, list) else []
+        scene["title"] = _scene_title_text(scene.get("text", ""), topic)
+        scene["caption"] = _scene_caption_text(scene.get("text", ""))
+        if scene["kind"] == "stock" and not scene.get("query"):
+            scene["query"] = fallback_visual_query(episode, scene)
+    return scenes
+
+
 def plan_scenes(events: list[dict], duration: float, episode: dict, cfg: dict) -> list[dict]:
     scenes, start, pending = [], 0.0, []
     for event in events:
@@ -402,7 +445,7 @@ def plan_scenes(events: list[dict], duration: float, episode: dict, cfg: dict) -
                            "subject within central safe area, no text, no logos. " + scene["shot"]
                            + ". Episode context: " + json.dumps(context, ensure_ascii=False)
                            + ". Illustrate only this narrated scene: " + scene["text"])
-    return scenes
+    return apply_hybrid_scene_design(scenes, episode)
 
 
 _LAST_FREE_REQUEST = 0.0
@@ -1087,7 +1130,7 @@ def _quota_fallback_record(scene: dict, episode: dict, cfg: dict, budget: Budget
 def acquire(scene: dict, episode: dict, cfg: dict, budget: Budget, cache: Path) -> tuple[Path, dict]:
     seconds = scene["end"] - scene["start"]
     cache.mkdir(parents=True, exist_ok=True)
-    identity = json.dumps({"scene": scene, "context": episode, "profile": cfg["profile"], "dimensions": [cfg["width"], cfg["height"], cfg["fps"]], "models": [cfg["image_model"], cfg["image_fallback_model"], cfg["review_model"]]}, ensure_ascii=False, sort_keys=True)
+    identity = json.dumps({"scene": scene, "context": episode, "profile": cfg["profile"], "dimensions": [cfg["width"], cfg["height"], cfg["fps"]], "renderer": cfg.get("renderer", "hybrid"), "models": [cfg["image_model"], cfg["image_fallback_model"], cfg["review_model"]]}, ensure_ascii=False, sort_keys=True)
     digest = hashlib.sha256(identity.encode()).hexdigest()[:24]
     visual, meta = cache / f"{digest}.mp4", cache / f"{digest}.json"
     if visual.exists() and meta.exists():
@@ -1099,11 +1142,30 @@ def acquire(scene: dict, episode: dict, cfg: dict, budget: Budget, cache: Path) 
                 if asset_id:
                     cfg.setdefault("_used_media_ids", set()).add(str(asset_id))
                 return visual, {**record, "cached": True}
+    if cfg.get("renderer") == "canvas" or scene.get("kind") == "motion_graphic":
+        from scripts.canvas_renderer import render_scene
+        render_scene(visual, seconds, scene, cfg)
+        review = {
+            "passed": True,
+            "sha256": hashlib.sha256(visual.read_bytes()).hexdigest(),
+            "audio_keep": False,
+            "review_method": "deterministic local Canvas illustration",
+            "note": "Original animated illustration; not documentary footage or evidence.",
+        }
+        record = {"scene_id": scene["id"], "source": "canvas_motion",
+                  "license": "Original code-generated Canvas animation", "source_url": "",
+                  "media_type": "animation", "review": review, "cached": False,
+                  "audio_decision": "VOICE ONLY", "illustrative": True,
+                  "source_media_is_video": False, "animated_visual": True}
+        atomic_json(meta, record)
+        return visual, record
     errors = []
     quota_exhausted = _free_review_quota_exhausted(budget)
     if quota_exhausted:
         print("AI visual-review quota exhausted; continuing free Pexels/Commons search with local source checks.")
-    options = candidates(scene, cfg) if cfg.get("free_only", True) or scene["kind"] == "stock" else iter(())
+    options = candidates(scene, cfg) if (scene.get("kind") == "stock" or scene.get("kind") == "image" and not scene.get("require_video")) else iter(())
+    if scene.get("require_video"):
+        options = (candidate for candidate in options if not candidate.get("image", False))
     # Free-only means no paid video. Production may explicitly enable the
     # configured free image fallback after stock candidates are rejected;
     # keep it opt-in so a bare asset-search failure remains diagnosable.
@@ -1295,6 +1357,51 @@ def write_captions(events: list[dict], path: Path, cfg: dict, *, illustrative=Fa
                 lines.extend(_positioned_caption_lines(chunk, word_start, word_end, cfg, active_index))
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
+def _beat_ass_text(text: str, limit: int = 27) -> str:
+    clean = str(text or "").replace("\\", "").replace("{", "").replace("}", "")
+    clean = re.sub(r"[\r\n]+", " ", clean).strip()
+    words, lines, current = clean.split(), [], []
+    for word in words:
+        candidate = " ".join(current + [word])
+        if current and len(candidate) > limit:
+            lines.append(" ".join(current))
+            current = [word]
+        else:
+            current.append(word)
+    if current:
+        lines.append(" ".join(current))
+    return r"\N".join(lines[:4])
+
+
+def write_scene_overlays(scenes: list[dict], path: Path, cfg: dict) -> None:
+    """Render the original-style beat card over B-roll only; never burn generic ASR captions."""
+    header = (
+        "[Script Info]\nScriptType: v4.00+\n"
+        f"PlayResX: {cfg['width']}\nPlayResY: {cfg['height']}\nWrapStyle: 2\nScaledBorderAndShadow: yes\n\n"
+        "[V4+ Styles]\n"
+        "Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding\n"
+        "Style: BeatTitle,Noto Sans Arabic,54,&H00EEE9DF,&H00EEE9DF,&H00101010,&H880A0A0A,1,0,0,0,100,100,0,0,1,3,2,8,70,70,300,1\n"
+        "Style: BeatCaption,Noto Sans Arabic,39,&H00EEE9DF,&H00EEE9DF,&H00101010,&HAA0A0A0A,1,0,0,0,100,100,0,0,3,0,1,2,85,85,270,1\n\n"
+        "[Events]\nFormat: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\n"
+    )
+    rows = [header]
+    for scene in scenes:
+        if scene.get("kind") != "stock":
+            continue
+        start, end = float(scene.get("start", 0)), float(scene.get("end", 0))
+        if end <= start:
+            continue
+        title = _beat_ass_text(scene.get("title") or scene.get("topic") or "", 24)
+        caption = _beat_ass_text(scene.get("caption") or scene.get("text") or "", 30)
+        if title:
+            title_text = rtl_ass_text(title)
+            rows.append(f"Dialogue: 0,{ass_time(start)},{ass_time(max(end, start + 0.04))},BeatTitle,,0,0,0,,{{\\an8\\pos(540,300)\\fad(180,180)}}{title_text}")
+        if caption:
+            caption_text = rtl_ass_text(caption)
+            rows.append(f"Dialogue: 0,{ass_time(start)},{ass_time(max(end, start + 0.04))},BeatCaption,,0,0,0,,{{\\an5\\pos(540,1570)\\fad(180,180)\\q2}}{caption_text}")
+    path.write_text("\n".join(rows) + "\n", encoding="utf-8")
+
+
 def mix_audio(voice: Path, clean_video: Path, output: Path, duration: float, cfg: dict, scenes: list[dict], root: Path) -> None:
     from scripts.media_audio import add_topic_soundtrack, ducking_filters
     inputs = ["-i", str(voice), "-i", str(clean_video)]
@@ -1375,8 +1482,8 @@ def build(audio: Path, narration: str, output: Path, episode: dict, subtitles: P
     cfg = settings(root)
     duration = probe(audio)["duration"]
     output.unlink(missing_ok=True)
-    if not narration.strip() or not 0 < duration <= cfg["max_duration_seconds"]:
-        raise ValueError("Empty narration or unsupported episode duration")
+    if not narration.strip() or not cfg.get("min_duration_seconds", 90) <= duration <= cfg["max_duration_seconds"]:
+        raise ValueError("Narration must produce a 90–180 second episode")
     episode = {k: v for k, v in episode.items() if k in {"title", "era", "period", "location", "region", "visual_keywords", "narration"}}
     episode["narration"] = narration
     episode_id = hashlib.sha256(json.dumps(episode, ensure_ascii=False, sort_keys=True).encode()).hexdigest()[:24]
@@ -1390,12 +1497,13 @@ def build(audio: Path, narration: str, output: Path, episode: dict, subtitles: P
     plan_path = cache / f"{episode_id}.plan.json"
     if plan_path.exists():
         plan_data = json.loads(plan_path.read_text())
-        scenes = plan_data["scenes"] if plan_data.get("duration") == duration and plan_data.get("profile") == cfg["profile"] else None
+        scenes = plan_data["scenes"] if plan_data.get("duration") == duration and plan_data.get("profile") == cfg["profile"] and plan_data.get("renderer") == cfg.get("renderer", "hybrid") else None
     else:
         scenes = None
     if not scenes:
-        scenes = direct_scenes(plan_scenes(scene_plan_events(events), duration, episode, cfg), episode, cfg, budget)
-        atomic_json(plan_path, {"duration": duration, "profile": cfg["profile"], "scenes": scenes})
+        planned_scenes = plan_scenes(scene_plan_events(events), duration, episode, cfg)
+        scenes = planned_scenes if cfg.get("renderer") == "canvas" else direct_scenes(planned_scenes, episode, cfg, budget)
+        atomic_json(plan_path, {"duration": duration, "profile": cfg["profile"], "renderer": cfg.get("renderer", "hybrid"), "scenes": scenes})
     atomic_json(root / "state/cinematic_storyboard.json", {"episode_id": episode_id, "profile": cfg["profile"], "scenes": scenes})
     records, paths = [], []
     try:
@@ -1407,45 +1515,59 @@ def build(audio: Path, narration: str, output: Path, episode: dict, subtitles: P
         total_scene_seconds = sum(max(0.0, float(r["end"]) - float(r["start"])) for r in records)
         moving_scene_seconds = sum(
             max(0.0, float(r["end"]) - float(r["start"]))
-            for r in records if r.get("source_media_is_video") is True
+            for r in records if (r.get("source_media_is_video") is True or r.get("animated_visual") is True)
             and r.get("review", {}).get("passed") is True
         )
-        moving_video_share = moving_scene_seconds / total_scene_seconds if total_scene_seconds else 0.0
-        min_video_share = 0.0
-        if moving_video_share + 1e-9 < min_video_share:
-            raise RuntimeError(f"REAL_VIDEO_SHARE_GATE: {moving_video_share:.1%} real moving video; minimum 70%.")
+        moving_visual_share = moving_scene_seconds / total_scene_seconds if total_scene_seconds else 0.0
+        graphics_seconds = sum(
+            max(0.0, float(r["end"]) - float(r["start"]))
+            for r in records if r.get("source") == "canvas_motion" and r.get("review", {}).get("passed") is True
+        )
+        broll_seconds = sum(
+            max(0.0, float(r["end"]) - float(r["start"]))
+            for r in records if r.get("kind") == "stock" and r.get("source_media_is_video") is True
+            and r.get("review", {}).get("passed") is True
+        )
+        graphics_share = graphics_seconds / total_scene_seconds if total_scene_seconds else 0.0
+        broll_share = broll_seconds / total_scene_seconds if total_scene_seconds else 0.0
+        min_graphics_share = float(cfg.get("min_graphics_share", 0.45))
+        min_broll_share = float(cfg.get("min_broll_share", 0.20))
+        if graphics_share + 1e-9 < min_graphics_share:
+            raise RuntimeError(f"MOTION_GRAPHICS_SHARE_GATE: {graphics_share:.1%}; minimum {min_graphics_share:.0%}.")
+        if broll_share + 1e-9 < min_broll_share:
+            raise RuntimeError(f"BROLL_SHARE_GATE: {broll_share:.1%}; minimum {min_broll_share:.0%} real footage.")
+        real_source_video_seconds = sum(
+            max(0.0, float(r["end"]) - float(r["start"]))
+            for r in records if r.get("source_media_is_video") is True
+            and r.get("animated_visual") is not True
+            and r.get("review", {}).get("passed") is True
+        )
+        real_source_video_share = real_source_video_seconds / total_scene_seconds if total_scene_seconds else 0.0
+        min_motion_share = float(cfg.get("min_motion_share", 0.90))
+        if moving_visual_share + 1e-9 < min_motion_share:
+            raise RuntimeError(f"MOTION_VISUAL_SHARE_GATE: {moving_visual_share:.1%} moving visuals; minimum {min_motion_share:.0%}.")
         listing = work / "concat.txt"
         listing.write_text("\n".join("file '" + str(p.resolve()).replace("'", "'\\''") + "'" for p in paths) + "\n")
         clean = output.with_name("cinematic_clean.mp4")
         run(["ffmpeg", "-y", "-v", "error", "-f", "concat", "-safe", "0", "-i", str(listing), "-c", "copy", str(clean)])
         mixed = work / "mixed.m4a"
         mix_audio(audio, clean, mixed, duration, cfg, scenes, root)
-        ass = work / "captions.ass"
-        if subtitles and subtitles.exists() and r"\pos(" in subtitles.read_text(encoding="utf-8-sig"):
-            # Preserve word-level alignment from the final synthesized narration.
-            # Overlapping ASS events are simultaneous positioned words, not timing errors.
-            original_ass = subtitles.read_text(encoding="utf-8-sig")
-            original_ass = re.sub(
-                r"\\pos\(\s*([0-9.]+)\s*,\s*[0-9.]+\s*\)",
-                lambda match: r"\pos(" + match.group(1) + ",329)",
-                original_ass,
-            )
-            ass.write_text(original_ass, encoding="utf-8")
-            timing = "whisper_aligned_source_ass"
-        else:
-            write_captions(events, ass, cfg)
+        ass = work / "scene_beats.ass"
+        write_scene_overlays(scenes, ass, cfg)
+        timing = "authored_scene_beats_from_audio_timeline"
         escaped = str(ass.resolve()).replace("\\", "/").replace(":", r"\:").replace("'", r"\'")
+        font_dir = str((root / "assets/motion").resolve()).replace("\\", "/").replace("'", r"\'")
         temporary = output.with_name(output.stem + ".building.mp4")
-        run(["ffmpeg", "-y", "-v", "error", "-i", str(clean), "-i", str(mixed), "-vf", f"subtitles='{escaped}'",
+        run(["ffmpeg", "-y", "-v", "error", "-i", str(clean), "-i", str(mixed), "-vf", f"subtitles='{escaped}':fontsdir='{font_dir}'",
              "-map", "0:v:0", "-map", "1:a:0", "-t", str(duration), "-c:v", "libx264", "-preset", "fast", "-crf", "20",
              "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", str(temporary)], timeout=1200)
         quality = verify_final(temporary, duration, cfg, clean=clean)
         temporary.replace(output)
         report = {"passed": True, "output": str(output), "caption_timing": timing, "quality": quality,
-                  "target_mix": {"real_source_video_minimum": 0.70, "photos_and_diagrams_maximum": 0.30},
+                  "target_mix": {"moving_visual_minimum": min_motion_share, "motion_graphics_minimum": min_graphics_share, "broll_minimum": min_broll_share, "static_visual_maximum": round(1 - min_motion_share, 3)},
                   "actual_sources": {source: sum(r["source"] == source for r in records) for source in sorted({r["source"] for r in records})},
                   "actual_media_mix": {media_type: sum(r.get("media_type", "unknown") == media_type for r in records) for media_type in sorted({r.get("media_type", "unknown") for r in records})},
-                  "real_video_duration_share": round(moving_video_share, 4), "minimum_real_video_share": min_video_share,
+                  "moving_visual_duration_share": round(moving_visual_share, 4), "motion_graphics_duration_share": round(graphics_share, 4), "broll_duration_share": round(broll_share, 4), "real_source_video_duration_share": round(real_source_video_share, 4), "minimum_moving_visual_share": min_motion_share,
                   "scene_count": len(records), "cached_scenes": sum(r["cached"] for r in records),
                   "estimated_episode_usd": budget.episode["estimated_usd"], "estimated_day_usd": budget.row["estimated_usd"],
                   "free_only": cfg.get("free_only", True), "free_api_calls": budget.episode.get("free_calls", 0),
