@@ -1191,11 +1191,23 @@
       "region": "",
       "status": "published",
       "source": "science-pipeline",
-      "reservation_id": "496b5c7cbf7c452d9b33b7f765da52f5",
       "reserved_at": "2026-10-16T05:20:38Z",
+      "published_at": "2026-10-16T05:20:47Z",
       "run_id": "38853283283",
-      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts",
-      "published_at": "2026-10-16T05:20:47Z"
+      "reservation_id": "496b5c7cbf7c452d9b33b7f765da52f5",
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
+    },
+    {
+      "id": "de2c1038810349cbc69b",
+      "title": "لماذا تمتاز شظايا النيازك الحديدية ببنية هندسية تسمى أشكال ويدمانشتاتن؟,",
+      "hook": "[ \"هَلْ تَسَاءَلْتَ يَوْمًا كَيْفَ تَرْوَى قِصَصُ الأَعْمَاقِ البَعِيدَةِ عَلَى صُفُوفِ مَعَادِنِ السَّمَاءِ؟ عِنْدَمَا تَقْطَعُ صَخْرَةً حَدِيدِيَّةً قَادِمَةً مِنَ الفَضَاءِ وَتُصْفِحُهَا، تَظْهَرُ بِنْيَةٌ هَنْدِسِيَّةٌ مَذْهُلَةٌ تَتَكَوَّنُ مِنْ تَقَاطُعَاتٍ بِلُورِيَّةٍ فَرِيدَةٍ. تُسَمَّى هَذِهِ الظَّاهِرَةُ أَشْكَالَ وِيدْمَانْشْتَاتِنَ،",
+      "region": "",
+      "status": "reserved",
+      "source": "science-pipeline",
+      "reservation_id": "feef6f4b4486481dbe603f2cbdbd2fc5",
+      "reserved_at": "2026-10-16T10:04:08Z",
+      "run_id": "38882293766",
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
     }
   ]
 }
