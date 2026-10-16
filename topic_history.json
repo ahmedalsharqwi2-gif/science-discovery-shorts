@@ -1204,11 +1204,23 @@
       "region": "",
       "status": "published",
       "source": "science-pipeline",
-      "reservation_id": "feef6f4b4486481dbe603f2cbdbd2fc5",
       "reserved_at": "2026-10-16T10:04:08Z",
+      "published_at": "2026-10-16T10:04:20Z",
       "run_id": "38882293766",
-      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts",
-      "published_at": "2026-10-16T10:04:20Z"
+      "reservation_id": "feef6f4b4486481dbe603f2cbdbd2fc5",
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
+    },
+    {
+      "id": "9d85d4df7edf0afa70b3",
+      "title": "لماذا تظهر جزيئات البلاستيك الدقيقة في دماء البشر وكيف تؤثر على الخلايا؟,",
+      "hook": "يُعد تساؤل: هل يجري البلاستيك حقاً في دِمائنا؟ واحداً من أكثر الأسئلة إلحاحاً واهتماماً في الوسط العلمي الحديث، وخصوصاً مع تزايد إنتاج المواد البلاستيكية عالمياً ووصول مخلفاتها إلى أبقاع النظم البيئية كافة. لقد أثبتت الدراسات",
+      "region": "",
+      "status": "reserved",
+      "source": "science-pipeline",
+      "reservation_id": "719e72ffc39245dca2392992c3b268d3",
+      "reserved_at": "2026-10-16T14:49:34Z",
+      "run_id": "38915170854",
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
     }
   ]
 }
