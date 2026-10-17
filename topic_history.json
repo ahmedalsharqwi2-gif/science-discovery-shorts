@@ -1243,11 +1243,23 @@
       "region": "",
       "status": "published",
       "source": "science-pipeline",
-      "reservation_id": "cc2a452aa73548e5b2d5887b62555a05",
       "reserved_at": "2026-10-16T21:43:36Z",
+      "published_at": "2026-10-16T21:43:46Z",
       "run_id": "38969202605",
-      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts",
-      "published_at": "2026-10-16T21:43:46Z"
+      "reservation_id": "cc2a452aa73548e5b2d5887b62555a05",
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
+    },
+    {
+      "id": "d6226c8a973b70bfcfef",
+      "title": "أسرار هندسة أعشاش النحل السداسية",
+      "hook": "لماذا تبني النحلة خلاياها على شكل سداسي دقيق؟ تشير الدراسات الفيزيائية الموثقة إلى أن الشكل السداسي يمثل الحل الأمثل لتغطية مساحة ما بأقل قدر ممكن من مادة الشمع وبأعلى كفاءة تخزينية. تفيد الحقيقة المثبتة بأن",
+      "region": "",
+      "status": "reserved",
+      "source": "science-pipeline",
+      "reservation_id": "cdcb7c03110d437189a08920a124dfa4",
+      "reserved_at": "2026-10-17T00:10:14Z",
+      "run_id": "38983596704",
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
     }
   ]
 }
