@@ -1,0 +1,38 @@
+name: Shared motion renderer checks
+on:
+  pull_request:
+    paths: ['motion/**', '.github/workflows/motion_engine.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  renderer:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci --ignore-scripts
+        working-directory: motion
+      - run: npm test
+        working-directory: motion
+      - name: Install Arabic font
+        run: sudo apt-get update -qq && sudo apt-get install -y fonts-noto-core ffmpeg
+      - name: Render all channel previews and an audio mux smoke test
+        run: |
+          mkdir -p motion-preview
+          for channel in science history horror; do
+            node motion/render.mjs --plan "motion/examples/$channel.json" --frame 3 --width 720 --font /usr/share/fonts/truetype/noto/NotoSansArabic-Regular.ttf --out "motion-preview/$channel.png"
+          done
+          ffmpeg -v error -f lavfi -i 'sine=frequency=220:duration=6' -y /tmp/motion-test.wav
+          node motion/render.mjs --plan motion/examples/science.json --audio /tmp/motion-test.wav --width 360 --fps 24 --font /usr/share/fonts/truetype/noto/NotoSansArabic-Regular.ttf --out motion-preview/smoke-test.mp4
+          node -e 'require("fs").writeFileSync("/tmp/motion-episode.json",JSON.stringify({title:"اختبار التخطيط",narration:"هذه خلايا"}));require("fs").writeFileSync("/tmp/motion-timings.json",JSON.stringify([{text:"هذه",start:0,end:1},{text:"خلايا",start:1,end:2}]))'
+          node motion/render.mjs --episode /tmp/motion-episode.json --timings /tmp/motion-timings.json --channel science --audio /tmp/motion-test.wav --width 360 --fps 24 --font /usr/share/fonts/truetype/noto/NotoSansArabic-Regular.ttf --out motion-preview/automatic-plan-smoke.mp4
+      - uses: actions/upload-artifact@v4
+        with:
+          name: motion-renderer-review
+          path: motion-preview/
