@@ -2,6 +2,8 @@ name: Auto-Heal Failed Workflow
 
 on:
   workflow_run:
+    # Publishing paused by owner request on 2026-10-17.
+    if: ${{ false }}
     workflows: ["Auto publish videos (Cairo 12-18)"]
     types: [completed]
 
@@ -12,7 +14,8 @@ permissions:
 
 jobs:
   diagnose-and-recover:
-    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    # Publishing paused by owner request on 2026-10-17.
+    if: ${{ false }}
     runs-on: ubuntu-latest
     env:
       TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}

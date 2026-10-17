@@ -2,6 +2,8 @@ name: Auto publish videos (Cairo 12-18)
 run-name: ${{ inputs.stock_date && format('stock {0} {1} Cairo', inputs.stock_date, inputs.stock_hour) || 'Manual science production' }}
 on:
   workflow_dispatch:
+    # Publishing paused by owner request on 2026-10-17.
+    if: ${{ false }}
     inputs:
       stock_date:
         description: 'Cairo date(s): YYYY-MM-DD or 13,14,15-10-2026; each slot gets its own video'
@@ -56,6 +58,8 @@ env:
 
 jobs:
   plan_slots:
+    # Publishing paused by owner request on 2026-10-17.
+    if: ${{ false }}
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.slots.outputs.matrix }}
@@ -71,6 +75,8 @@ jobs:
         run: python3 scripts/publication_slots.py
 
   publish:
+    # Publishing paused by owner request on 2026-10-17.
+    if: ${{ false }}
     env:
       PREFER_FREE_GOOGLE_TTS: 'true'
       FREE_GOOGLE_TTS_ENABLED: 'true'

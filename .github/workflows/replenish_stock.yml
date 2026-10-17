@@ -1,9 +1,15 @@
 name: Replenish rolling 4-day video stock
 on:
   schedule:
+    # Publishing paused by owner request on 2026-10-17.
+    if: ${{ false }}
     - cron: '7,22,37,52 * * * *'
   workflow_dispatch:
+    # Publishing paused by owner request on 2026-10-17.
+    if: ${{ false }}
   workflow_run:
+    # Publishing paused by owner request on 2026-10-17.
+    if: ${{ false }}
     workflows: ["Auto publish videos (Cairo 12-18)"]
     branches: [main]
     types: [completed]
@@ -15,6 +21,8 @@ concurrency:
   cancel-in-progress: false
 jobs:
   replenish:
+    # Publishing paused by owner request on 2026-10-17.
+    if: ${{ false }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
