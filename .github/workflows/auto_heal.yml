@@ -2,8 +2,6 @@ name: Auto-Heal Failed Workflow
 
 on:
   workflow_run:
-    # Publishing paused by owner request on 2026-10-17.
-    if: ${{ false }}
     workflows: ["Auto publish videos (Cairo 12-18)"]
     types: [completed]
 

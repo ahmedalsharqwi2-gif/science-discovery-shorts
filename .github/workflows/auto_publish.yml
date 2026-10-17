@@ -2,8 +2,6 @@ name: Auto publish videos (Cairo 12-18)
 run-name: ${{ inputs.stock_date && format('stock {0} {1} Cairo', inputs.stock_date, inputs.stock_hour) || 'Manual science production' }}
 on:
   workflow_dispatch:
-    # Publishing paused by owner request on 2026-10-17.
-    if: ${{ false }}
     inputs:
       stock_date:
         description: 'Cairo date(s): YYYY-MM-DD or 13,14,15-10-2026; each slot gets its own video'
