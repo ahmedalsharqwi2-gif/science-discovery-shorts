@@ -1254,12 +1254,13 @@
       "title": "أسرار هندسة أعشاش النحل السداسية",
       "hook": "لماذا تبني النحلة خلاياها على شكل سداسي دقيق؟ تشير الدراسات الفيزيائية الموثقة إلى أن الشكل السداسي يمثل الحل الأمثل لتغطية مساحة ما بأقل قدر ممكن من مادة الشمع وبأعلى كفاءة تخزينية. تفيد الحقيقة المثبتة بأن",
       "region": "",
-      "status": "reserved",
+      "status": "published",
       "source": "science-pipeline",
       "reservation_id": "cdcb7c03110d437189a08920a124dfa4",
       "reserved_at": "2026-10-17T00:10:14Z",
       "run_id": "38983596704",
-      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts",
+      "published_at": "2026-10-17T00:10:22Z"
     }
   ]
 }
