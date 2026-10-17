@@ -1256,11 +1256,23 @@
       "region": "",
       "status": "published",
       "source": "science-pipeline",
-      "reservation_id": "cdcb7c03110d437189a08920a124dfa4",
       "reserved_at": "2026-10-17T00:10:14Z",
+      "published_at": "2026-10-17T00:10:22Z",
       "run_id": "38983596704",
-      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts",
-      "published_at": "2026-10-17T00:10:22Z"
+      "reservation_id": "cdcb7c03110d437189a08920a124dfa4",
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
+    },
+    {
+      "id": "1f1ed76d91081e75e578",
+      "title": "لماذا تمتاز أعناق الزرافات بصوت خفي عند التواصل؟,",
+      "hook": "\": \"هل تصدق أن الزرافات الهادئة تصدر أصواتاً خفية في ظلام الليل؟ لفترة طويلة، اعتقد العلماء أن هذه الحيوانات العظيمة التي تتميز بأعناقها الطويلة ووداعتها الظاهرة صامتة تماماً، لعدم وجود حبال صوتية تقليدية لديها كالتي",
+      "region": "",
+      "status": "reserved",
+      "source": "science-pipeline",
+      "reservation_id": "091a783b9aee44de99b71baa0159c85d",
+      "reserved_at": "2026-10-17T02:55:16Z",
+      "run_id": "38995437395",
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts"
     }
   ]
 }
