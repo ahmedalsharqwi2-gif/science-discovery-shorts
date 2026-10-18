@@ -60,7 +60,7 @@ def validate_narration(text: str, min_arabic_ratio: float = 0.85) -> list[Issue]
 
 
 def format_feedback(issues: list[Issue]) -> str:
-    lines = ["أعد كتابة النص بالعربية الفصحى فقط، وصحّح ما يلي:"]
+    lines = ["أعد صياغة النص باللهجة المصرية الواضحة مع سلامة اللغة، وصحّح ما يلي:"]
     for issue in issues[:12]:
         lines.append(f"- {issue.kind}: {issue.sample}")
     lines.append("اكتب الأعداد بالحروف، وترجم أي عبارة أجنبية أو احذفها.")

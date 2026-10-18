@@ -34,14 +34,29 @@ class CinematicTests(unittest.TestCase):
         self.root = Path(self.temp.name)
         (self.root/'config').mkdir()
         self.cfg = cp.settings()
-        self.cfg.update(width=360, height=640, fps=30, scene_seconds=3,
-                        episode_budget_usd=.20, daily_budget_usd=.25, free_request_interval_seconds=0)
+        self.cfg.update(renderer="hybrid", width=1080, height=1920, fps=30, scene_seconds=3,
+                        min_motion_share=0.0, min_graphics_share=0.0, min_broll_share=0.0, min_duration_seconds=0.1, episode_budget_usd=.20, daily_budget_usd=.25, free_request_interval_seconds=0)
         (self.root/'config/cinematic_production.json').write_text(json.dumps(self.cfg))
         (self.root/'config/cinematic_sfx.json').write_text('{}')
         self.addCleanup(self.temp.cleanup)
 
     def budget(self, episode='one'):
         return cp.Budget(self.root/'state/budget.json', self.cfg, episode)
+
+    def test_canvas_renderer_branch_is_local_and_marks_animation(self):
+        cfg = dict(self.cfg, renderer='canvas')
+        scene = {'id':'canvas-test','start':0.0,'end':1.0,'text':'اختبار','kind':'image'}
+        def render_fixture(output, *_args):
+            output.parent.mkdir(parents=True, exist_ok=True)
+            output.write_bytes(b'canvas fixture')
+        with patch('scripts.canvas_renderer.render_scene', side_effect=render_fixture) as renderer, \
+             patch.object(cp, 'candidates', side_effect=AssertionError('Canvas must not search remote media')):
+            visual, record = cp.acquire(scene, {'title':'test'}, cfg, self.budget('canvas'), self.root/'.canvas-cache')
+        renderer.assert_called_once()
+        self.assertEqual(record['source'], 'canvas_motion')
+        self.assertTrue(record['animated_visual'])
+        self.assertFalse(record['source_media_is_video'])
+        self.assertTrue(record['review']['passed'])
 
     def test_science_config_uses_three_minute_ceiling(self):
         self.assertEqual(cp.settings()['max_duration_seconds'], 180)
@@ -310,7 +325,7 @@ class CinematicTests(unittest.TestCase):
                    'license':'Pexels','source_url':'https://www.pexels.com/video/submarine-123/',
                    'query_used':'submarine underwater ballast tanks buoyancy'}
         source_probe={'duration':5,'streams':[{'codec_type':'video','width':720,'height':1280}]}
-        output_probe={'duration':3,'streams':[{'codec_type':'video','width':360,'height':640}]}
+        output_probe={'duration':3,'streams':[{'codec_type':'video','width':1080,'height':1920}]}
         def write_source(url,target):
             target.write_bytes(b'fixture-source-video')
         def render(source,out,*args,**kwargs):
@@ -358,6 +373,7 @@ class CinematicTests(unittest.TestCase):
 
     def test_empty_asset_search_saves_a_specific_no_candidates_report(self):
         scene=cp.plan_scenes([{'start':0,'end':4,'text':'طائر النحام في ماء ضحل'}],4,{'title':'النحام'},self.cfg)[0]
+        scene.update(kind='stock', require_video=True)
         with patch.dict(os.environ,{'PEXELS_API_KEY':'fixture-key'}),patch.object(cp,'candidates',return_value=iter([])),patch.object(cp,'_write_science_topic_card',return_value=False):
             with self.assertRaisesRegex(RuntimeError,'detailed report saved'):
                 cp.acquire(scene,{'title':'النحام','narration':scene['text']},self.cfg,self.budget(),self.root/'.cinematic_cache')

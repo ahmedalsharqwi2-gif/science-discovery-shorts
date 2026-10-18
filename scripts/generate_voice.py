@@ -84,7 +84,7 @@ def select_silma_profile() -> str:
     profiles = [profile for profile in configured if profile in available] or available
     if not profiles:
         raise ValueError("No SILMA voice profiles are configured")
-    requested = os.getenv("SILMA_REFERENCE_PROFILE", "auto").strip()
+    requested = os.getenv("SILMA_REFERENCE_PROFILE", "octopus_narrator").strip()
     if requested and requested != "auto":
         if requested not in available:
             raise ValueError(f"Unknown SILMA voice profile: {requested}")
@@ -230,7 +230,7 @@ class VoiceGenerator:
         self,
         text: str,
         output_path: Optional[Path] = None,
-        engine: str = "google",
+        engine: str = "silma",
         voice: Optional[str] = None,
     ) -> Tuple[Path, bool]:
         """Generate speech with fallback strategy."""
@@ -262,13 +262,15 @@ class VoiceGenerator:
                     output_path,
                     reference_wav,
                     reference_text,
-                    speed=float(os.getenv("SILMA_SPEED", "1.15")),
+                    speed=float(os.getenv("SILMA_SPEED", "1.0")),
                     attempts=int(os.getenv("SILMA_MAX_ATTEMPTS", "2")),
                     min_score=float(os.getenv("SILMA_MIN_SCORE", "0.6")),
                 )
                 return output_path, True
             except Exception as exc:
-                log.warning("SILMA generation failed, trying Google/Edge fallback: %s", exc)
+                log.warning("SILMA generation failed: %s", exc)
+                if os.getenv("SILMA_FALLBACK_TO_EDGE", "false").lower() != "true":
+                    raise RuntimeError("SILMA failed; fallback to another speaker is disabled") from exc
         
         # Edge is an explicit production engine in the free workflow. Skip
         # Google probing and use the configured per-repository Edge voice.
@@ -296,7 +298,7 @@ class VoiceGenerator:
                 reference_wav, reference_text = resolve_reference_profile(profile, config_path)
                 generate_silma_guarded(
                     text, output_path, reference_wav, reference_text,
-                    speed=float(os.getenv("SILMA_SPEED", "1.15")),
+                    speed=float(os.getenv("SILMA_SPEED", "1.0")),
                     attempts=int(os.getenv("SILMA_MAX_ATTEMPTS", "2")),
                     min_score=float(os.getenv("SILMA_MIN_SCORE", "0.6")),
                 )
