@@ -91,3 +91,4 @@ jobs:
 # Editorial repair is bounded to one targeted correction, never a full provider loop.
 # One attribution correction is verified again before any audio generation.
 # Egyptian colloquial narration and story-specific titles are required before TTS.
+# Provider-enforced JSON schemas prevent malformed draft and review responses.
