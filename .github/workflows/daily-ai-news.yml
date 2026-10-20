@@ -1,0 +1,91 @@
+name: Daily Egyptian AI News
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '15 9 * * *'
+  push:
+    branches: ['codex/ai-news-daily-starter']
+    paths: ['.github/workflows/daily-ai-news.yml']
+permissions:
+  contents: read
+concurrency:
+  group: daily-ai-news-production
+  cancel-in-progress: false
+jobs:
+  produce:
+    # Enable the schedule after the first reviewed sample. No social publishing.
+    if: github.event_name != 'schedule' || vars.AI_NEWS_DAILY_ENABLED == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      GEMINI_TEXT_API_KEY: ${{ secrets.GEMINI_TEXT_API_KEY || secrets.GEMINI_API_KEY }}
+      GEMINI_TTS_API_KEY: ${{ secrets.GEMINI_TTS_API_KEY || secrets.GEMINI_API_KEY }}
+      PYTHONPATH: ${{ github.workspace }}
+      PYTHONUNBUFFERED: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - uses: actions/cache/restore@v4
+        with:
+          path: |
+            .voice_cache
+            state/api_budget.sqlite3
+            state/news_history.json
+            ~/.cache/huggingface
+          key: ai-news-state-v1-${{ github.repository_id }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: ai-news-state-v1-${{ github.repository_id }}-
+      - name: Restore this run's editorial checkpoint after a failed render
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            .work
+            output/narration.wav
+            output/narration.source.json
+            output/timing.json
+          key: ai-news-checkpoint-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: ai-news-checkpoint-${{ github.run_id }}-
+      - run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg fonts-dejavu-core
+          python -m pip install -r requirements.txt
+      - run: python -m unittest discover -s tests -v
+      - name: Official news, checked script, full Charon voice, motion and tail validation
+        run: python -m news.produce
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ai-news-daily-${{ github.run_id }}
+          path: |
+            output/ai-news-daily.mp4
+            output/plan.json
+            output/source.json
+            output/feed-status.json
+            output/editorial-review.json
+            output/narration.wav
+            output/narration.source.json
+            output/timing.json
+            output/verification.json
+            output/status.json
+          retention-days: 30
+          if-no-files-found: warn
+      - uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: |
+            .voice_cache
+            state/api_budget.sqlite3
+            state/news_history.json
+            ~/.cache/huggingface
+          key: ai-news-state-v1-${{ github.repository_id }}-${{ github.run_id }}-${{ github.run_attempt }}
+      - uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: |
+            .work
+            output/narration.wav
+            output/narration.source.json
+            output/timing.json
+          key: ai-news-checkpoint-${{ github.run_id }}-${{ github.run_attempt }}
+# Editorial repair is bounded to one targeted correction, never a full provider loop.

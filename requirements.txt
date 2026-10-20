@@ -1,10 +1,5 @@
-requests>=2.31.0
-Pillow>=10.0.0
-edge-tts>=6.1.0
-numpy>=1.26.0
-av<19
-faster-whisper
-pytrends>=4.9.2
-urllib3>=1.26,<2.0
-
-stable-ts>=2.18,<3
+requests>=2.32,<3
+Pillow>=11,<13
+numpy>=1.26,<3
+beautifulsoup4>=4.12,<5
+faster-whisper==1.2.1

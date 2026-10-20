@@ -1,6 +1,0 @@
-{
-  "source_policy": "general_public_web_except_wikipedia",
-  "minimum_confidence": 0.85,
-  "max_contradicted_claims": 0,
-  "max_uncertain_claims": 0
-}
