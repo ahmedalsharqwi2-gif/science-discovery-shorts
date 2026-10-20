@@ -80,6 +80,7 @@ def validate(plan,source):
     narration=' '.join(s.get('narration','') for s in plan['scenes'])
     if not 135<=len(narration.split())<=230:raise ValueError('Narration must be 135–230 words')
     if re.search(r'\d|[A-Za-z]',narration):raise ValueError('Spoken numbers and names must be written in Arabic')
+    if 'حوسبة إنسبشن' in narration or 'حوسبة انسبشن' in narration:raise ValueError('Inception is a startup program, not a compute provider; verify brand roles against the source')
     clean=re.sub(r'[\u064b-\u065fـ]','',narration)
     egyptian=re.findall(r'(?<![\u0621-\u064a])(ده|دي|مش|عشان|اللي|إزاي|ازاي|دلوقتي|كده|بيعمل|بيحصل|هنعرف|بتستخدم|بتغير|بتكشف)(?![\u0621-\u064a])',clean)
     if len(egyptian)<8:raise ValueError('Narration needs natural Egyptian speech: use ده، دي، مش، عشان، اللي، إزاي in context; avoid formal newsreader Arabic')
@@ -105,6 +106,15 @@ def prepare():
     planfile=Path('.work/plan.json')
     if planfile.exists():
         p=json.loads(planfile.read_text());validate(p,p['source']);return p
+    prepared=os.getenv('AI_NEWS_PREPARED_PLAN','').strip()
+    if prepared:
+        # Explicit source-checked pilot only; the daily schedule leaves this unset.
+        plan=json.loads(Path(prepared).read_text())
+        source=article(plan['source'])
+        plan=validate(plan,source)
+        plan['editorial_review']={'supported':True,'issues':[],'primary_source_manually_checked':True,'corrections':plan.get('editorial_corrections',{})}
+        planfile.write_text(json.dumps(plan,ensure_ascii=False,indent=2))
+        return plan
     rows=candidates()
     if not rows:
         (output/'status.json').write_text(json.dumps({'status':'no_fresh_verified_news','video_generated':False}))

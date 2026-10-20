@@ -23,6 +23,7 @@ jobs:
       GEMINI_TTS_API_KEY: ${{ secrets.GEMINI_TTS_API_KEY || secrets.GEMINI_API_KEY }}
       PYTHONPATH: ${{ github.workspace }}
       PYTHONUNBUFFERED: '1'
+      AI_NEWS_PREPARED_PLAN: ${{ github.event_name == 'push' && 'review/checked-pilot.json' || '' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -92,3 +93,4 @@ jobs:
 # One attribution correction is verified again before any audio generation.
 # Egyptian colloquial narration and story-specific titles are required before TTS.
 # Provider-enforced JSON schemas prevent malformed draft and review responses.
+# The push-only reviewed pilot is explicit; daily production always selects fresh sources.
