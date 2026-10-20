@@ -1,6 +1,7 @@
 """1080x1920 native motion cards; Arabic shaping, mobile safe area, measured captions."""
 import json, math, re, subprocess
 from pathlib import Path
+from functools import lru_cache
 from difflib import SequenceMatcher
 import numpy as np
 from PIL import Image,ImageDraw,ImageFont
@@ -8,7 +9,9 @@ W,H,FPS=1080,1920,30
 BG=(7,14,31);CYAN=(65,223,233);GOLD=(255,185,82);INK=(237,244,255);MUTED=(148,168,195)
 FONT=Path(__file__).resolve().parent.parent/'assets/NotoSansArabic-Bold.ttf'
 REG=FONT.with_name('NotoSansArabic-Regular.ttf')
+@lru_cache(maxsize=128)
 def font(size,bold=True):return ImageFont.truetype(str(FONT if bold else REG),size)
+@lru_cache(maxsize=512)
 def textfont(text,size,bold=True):
     if re.search(r'[A-Za-z/•]',str(text)):
         path='/usr/share/fonts/truetype/dejavu/DejaVuSans'+('-Bold' if bold else '')+'.ttf'

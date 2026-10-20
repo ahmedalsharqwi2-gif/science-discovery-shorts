@@ -121,4 +121,7 @@ def prepare():
     (output/'editorial-review.json').write_text(json.dumps(review,ensure_ascii=False,indent=2))
     if review.get('supported') is not True or review.get('issues'):raise ValueError('Factual review rejected the script; source and draft retained')
     plan['editorial_review']=review;plan['script_model']='gemini-3.5-flash-lite';plan['generated_at']=datetime.now(timezone.utc).isoformat()
-    planfile.write_text(json.dumps(plan,ensure_ascii=False,indent=2));return plan
+    planfile.write_text(json.dumps(plan,ensure_ascii=False,indent=2))
+    public={**plan,'source':{k:v for k,v in source.items() if k not in ('article','summary')}}
+    (output/'plan.json').write_text(json.dumps(public,ensure_ascii=False,indent=2))
+    return plan
