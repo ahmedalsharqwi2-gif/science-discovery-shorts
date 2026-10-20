@@ -84,14 +84,13 @@ def select(preferred: list[str], configured: list[str], available: list[str], de
 
 
 def discover_gemini(policy: dict) -> tuple[str, list[str]]:
-    key = os.getenv("GEMINI_API_KEY", "").strip()
+    key = (os.getenv("GEMINI_TEXT_API_KEY") or os.getenv("GEMINI_API_KEY", "")).strip()
     configured = configured_list("GEMINI_MODEL", "GEMINI_MODELS", "GEMINI_FALLBACK_MODELS")
     preferred = policy["providers"]["gemini"].get("preferred_models", [])
     if not key:
         log("Gemini key is absent; skipping Gemini discovery", warning=True)
         return "", []
-    query = urllib.parse.urlencode({"key": key, "pageSize": "100"})
-    status, payload = request_json("https://generativelanguage.googleapis.com/v1beta/models?" + query)
+    status, payload = request_json("https://generativelanguage.googleapis.com/v1beta/models?pageSize=100", headers={"x-goog-api-key": key})
     available = []
     for item in payload.get("models", []):
         name = str(item.get("name", "")).removeprefix("models/")
@@ -107,11 +106,12 @@ def discover_gemini(policy: dict) -> tuple[str, list[str]]:
     # Listing models is not sufficient: restricted keys can list a model but
     # receive 404 on its detail/generation endpoint. Confirm the selected
     # candidates individually before exporting them to the production step.
-    selected, fallbacks = select(preferred, configured, available)
+    allowed = set(policy["providers"]["gemini"].get("allowed_models", preferred))
+    selected, fallbacks = select(preferred, [x for x in configured if x in allowed], [x for x in available if x in allowed])
     verified = []
     for candidate in [selected, *fallbacks]:
         detail_status, detail = request_json(
-            f"https://generativelanguage.googleapis.com/v1beta/models/{urllib.parse.quote(candidate, safe='')}?key={urllib.parse.quote(key)}"
+            f"https://generativelanguage.googleapis.com/v1beta/models/{urllib.parse.quote(candidate, safe='')}", headers={"x-goog-api-key": key}
         )
         methods = detail.get("supportedGenerationMethods", []) if isinstance(detail, dict) else []
         if detail_status == 200 and "generateContent" in methods:

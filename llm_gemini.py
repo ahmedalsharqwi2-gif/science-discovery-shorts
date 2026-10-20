@@ -18,6 +18,7 @@ from typing import Any
 import requests
 
 from provider_pool import Provider, ProviderPool
+from api_budget import reserve
 
 log = logging.getLogger("llm_gemini")
 
@@ -30,7 +31,7 @@ def _clean_key(raw: str | None) -> str:
     return key
 
 
-GEMINI_API_KEY = _clean_key(os.getenv("GEMINI_API_KEY"))
+GEMINI_API_KEY = _clean_key(os.getenv("GEMINI_TEXT_API_KEY") or os.getenv("GEMINI_API_KEY"))
 GEMINI_BASE_URL = os.getenv(
     "GEMINI_BASE_URL", "https://generativelanguage.googleapis.com/v1beta"
 ).rstrip("/")
@@ -170,6 +171,7 @@ def gemini_chat(
                 body["systemInstruction"] = {"parts": [{"text": system}]}
 
             try:
+                reserve("text", model, GEMINI_API_KEY)
                 response = requests.post(
                     url, headers=headers, json=body, timeout=timeout
                 )

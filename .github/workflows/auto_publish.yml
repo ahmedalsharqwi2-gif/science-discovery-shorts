@@ -31,6 +31,9 @@ permissions:
   contents: write
 
 env:
+  GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+  GEMINI_TEXT_API_KEY: ${{ secrets.GEMINI_TEXT_API_KEY || secrets.GEMINI_API_KEY }}
+  GEMINI_TTS_API_KEY: ${{ secrets.GEMINI_TTS_API_KEY || secrets.GEMINI_API_KEY }}
   CINEMATIC_ENABLED: 'true'
   # Free-only production: repository variables cannot unlock paid endpoints.
   CINEMATIC_FREE_ONLY: 'true'
@@ -178,6 +181,14 @@ jobs:
           key: cinematic-v1-${{ github.repository_id }}-${{ github.run_id }}-${{ github.run_attempt }}-${{ matrix.date }}-${{ matrix.hour }}
           restore-keys: cinematic-v1-${{ github.repository_id }}-
 
+      - uses: actions/cache/restore@v4
+        with:
+          path: |
+            state/api_budget.sqlite3
+            .voice_cache
+          key: api-budget-v1-${{ github.repository_id }}-${{ github.run_id }}-${{ github.run_attempt }}-${{ strategy.job-index || 0 }}
+          restore-keys: api-budget-v1-${{ github.repository_id }}-
+
       - uses: actions/setup-python@v6
         with:
           python-version: '3.11'
@@ -222,7 +233,7 @@ jobs:
           MODEL_POLICY_FILE: config/model_policy.json
         run: python scripts/model_preflight.py
 
-      - name: Install the accepted VoiceTut voice in an isolated runtime
+      - name: Validate the approved Gemini Charon voice
         run: bash voice_provider/install.sh
 
       - name: Generate and publish
@@ -309,8 +320,8 @@ jobs:
 
 
           # --- TTS ---
-          # Use the approved Egyptian VoiceTut speaker without provider fallback.
-          TTS_ENGINE: "voicetut"
+          # Use the approved Egyptian Gemini Charon voice without provider fallback.
+          TTS_ENGINE: "gemini"
           # Hamed has clearer connected Arabic phonemes for scientific terms.
           EDGE_TTS_VOICE: "ar-SA-HamedNeural"
           EDGE_TTS_VOICES: "ar-SA-HamedNeural,ar-SA-ZariyahNeural,ar-SA-AmmarNeural"
@@ -416,3 +427,11 @@ jobs:
           if-no-files-found: ignore
           retention-days: 14
 
+
+      - uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: |
+            state/api_budget.sqlite3
+            .voice_cache
+          key: api-budget-v1-${{ github.repository_id }}-${{ github.run_id }}-${{ github.run_attempt }}-${{ strategy.job-index || 0 }}

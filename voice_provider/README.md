@@ -1,7 +1,7 @@
-# الصوت المعتمد
+# Accepted narration provider
 
-VoiceTut-TTS / Mohammed / arz / speed=1 / num_step=32. عينة المستخدم المعتمدة: تشغيل GitHub رقم 39464050913.
+Gemini 3.8 Flash TTS, Charon; exact approved Egyptian full-narration style in `config/accepted_voice.json`. `generate(text, output_path)` returns the output Path and supports genuine PCM WAV and correctly encoded MP3. One full transcript per API request. No silent fallback or reference-video audio.
 
-مسارات الإنتاج تضبط TTS_ENGINE=voicetut. ثبّت البيئة المعزولة بالأمر bash voice_provider/install.sh؛ يضبط GitHub متغير VOICETUT_PYTHON. فشل التوليد يوقف الخطوة دون تبديل الصوت. بيانات الموديل والنص وبصمة الصوت تحفظ بجانب كل ملف في *.voice.json.
+Credentials: `GEMINI_TTS_API_KEY` or existing `GEMINI_API_KEY`; writing can use `GEMINI_TEXT_API_KEY`. Never print keys or provider error bodies. Atomic outputs, audio length validation, SHA-verified cache, two maximum attempts, no retry of explicit daily quota exhaustion. SQLite safety limits are local safeguards, not live Google remaining quotas.
 
-البيئة المستقلة تمنع تعارض Transformers 5 الخاص بـOmniVoice مع اعتماديات الصوت القديمة. توليد 14.54 ثانية استغرق نحو 440 ثانية على CPU. هذا التعديل لا يعيد تفعيل جداول الإنتاج والنشر الموقوفة.
+Run `python -m voice_provider.smoke` for one real newly generated test and an exact cache reuse check. CI unit tests use synthetic WAV bytes, never a fabricated provider proof. Historical VoiceTut experiments require `VOICETUT_LEGACY=1 bash voice_provider/install.sh`; they do not change this accepted provider.

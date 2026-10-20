@@ -1,0 +1,51 @@
+name: Charon and API Budget Integration
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/charon-api-integration.yml']
+permissions:
+  contents: read
+concurrency:
+  group: api-production-serial
+  cancel-in-progress: false
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    env:
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+      GEMINI_TEXT_API_KEY: ${{ secrets.GEMINI_TEXT_API_KEY || secrets.GEMINI_API_KEY }}
+      GEMINI_TTS_API_KEY: ${{ secrets.GEMINI_TTS_API_KEY || secrets.GEMINI_API_KEY }}
+      PYTHONPATH: ${{ github.workspace }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - uses: actions/cache/restore@v4
+        with:
+          path: |
+            state/api_budget.sqlite3
+            .voice_cache
+          key: api-budget-v1-${{ github.repository_id }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: api-budget-v1-${{ github.repository_id }}-
+      - run: sudo apt-get update -qq && sudo apt-get install -y ffmpeg
+      - run: python -m unittest discover -s voice_provider/tests -v
+      - name: Catalog-only text preflight (no generation request)
+        run: python scripts/model_preflight.py
+      - name: Generate a real Charon paragraph and verify cache and tail duration
+        run: python -m voice_provider.smoke
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: charon-integration-${{ github.run_id }}
+          path: charon-integration/
+          if-no-files-found: warn
+          retention-days: 30
+      - uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: |
+            state/api_budget.sqlite3
+            .voice_cache
+          key: api-budget-v1-${{ github.repository_id }}-${{ github.run_id }}-${{ github.run_attempt }}

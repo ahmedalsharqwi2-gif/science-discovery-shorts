@@ -1,14 +1,11 @@
 {
-  "provider": "voicetut",
-  "model": "mohammedaly22/VoiceTut-TTS",
-  "speaker": "Mohammed",
-  "language": "arz",
-  "speed": 1,
-  "num_step": 32,
-  "guidance_scale": 2,
-  "seed": 20261020,
-  "wrapper_commit": "44cba00cd3ddb04b5213353e19e960045e332da7",
-  "backbone_commit": "08be0b4ccbac3e13e374e86fbfead4b4cac343e2",
+  "provider": "gemini",
+  "model": "gemini-3.8-flash-tts",
+  "speaker": "Charon",
+  "language": "ar-EG",
+  "style": "Egyptian Arabic ar-EG, native conversational Cairo accent. Mature warm male documentary storyteller, low resonant register, clear exact articulation, measured pace around 140 words per minute. Say the year numbers naturally in Egyptian Arabic. Preserve every word and sentence of the transcript, finish the last sentence clearly. No music, no sound effects, no singing, no spoken instructions.",
   "fallback_allowed": false,
-  "approved_sample_run": 39464050913
+  "approved_sample_run": 39508370425,
+  "approval": "User selected complete Egyptian Charon narration",
+  "full_transcript_per_request": true
 }

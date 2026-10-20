@@ -230,7 +230,7 @@ class VoiceGenerator:
         self,
         text: str,
         output_path: Optional[Path] = None,
-        engine: str = "google",
+        engine: str = "gemini",
         voice: Optional[str] = None,
     ) -> Tuple[Path, bool]:
         """Generate speech with fallback strategy."""
@@ -239,7 +239,7 @@ class VoiceGenerator:
         
         output_path.parent.mkdir(parents=True, exist_ok=True)
 
-        if os.getenv("TTS_ENGINE", engine).strip().lower() == "voicetut":
+        if os.getenv("TTS_ENGINE", engine).strip().lower() in {"gemini", "voicetut"}:
             from voice_provider.client import generate
             generate(text, output_path)
             return output_path, True
