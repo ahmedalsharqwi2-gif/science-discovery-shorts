@@ -1,0 +1,1 @@
+"""Accepted Egyptian narration provider."""

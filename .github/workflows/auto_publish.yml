@@ -222,6 +222,9 @@ jobs:
           MODEL_POLICY_FILE: config/model_policy.json
         run: python scripts/model_preflight.py
 
+      - name: Install the accepted VoiceTut voice in an isolated runtime
+        run: bash voice_provider/install.sh
+
       - name: Generate and publish
         id: generate_publish
         env:
@@ -306,9 +309,8 @@ jobs:
 
 
           # --- TTS ---
-          # Keep Edge as the production engine; SILMA was explicitly removed
-          # from the voice workflow. Edge retries must pass the Arabic ASR gate.
-          TTS_ENGINE: "edge"
+          # Use the approved Egyptian VoiceTut speaker without provider fallback.
+          TTS_ENGINE: "voicetut"
           # Hamed has clearer connected Arabic phonemes for scientific terms.
           EDGE_TTS_VOICE: "ar-SA-HamedNeural"
           EDGE_TTS_VOICES: "ar-SA-HamedNeural,ar-SA-ZariyahNeural,ar-SA-AmmarNeural"

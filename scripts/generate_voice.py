@@ -239,6 +239,11 @@ class VoiceGenerator:
         
         output_path.parent.mkdir(parents=True, exist_ok=True)
 
+        if os.getenv("TTS_ENGINE", engine).strip().lower() == "voicetut":
+            from voice_provider.client import generate
+            generate(text, output_path)
+            return output_path, True
+
         if os.getenv("PREFER_FREE_GOOGLE_TTS", "false").lower() == "true":
             try:
                 from scripts.free_tts_fallback import google_arabic_voice

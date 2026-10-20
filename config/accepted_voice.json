@@ -1,0 +1,14 @@
+{
+  "provider": "voicetut",
+  "model": "mohammedaly22/VoiceTut-TTS",
+  "speaker": "Mohammed",
+  "language": "arz",
+  "speed": 1,
+  "num_step": 32,
+  "guidance_scale": 2,
+  "seed": 20261020,
+  "wrapper_commit": "44cba00cd3ddb04b5213353e19e960045e332da7",
+  "backbone_commit": "08be0b4ccbac3e13e374e86fbfead4b4cac343e2",
+  "fallback_allowed": false,
+  "approved_sample_run": 39464050913
+}
