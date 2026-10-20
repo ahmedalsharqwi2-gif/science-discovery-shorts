@@ -277,6 +277,9 @@ class ContentPublisher:
             require_services(services)
         if immediate_requested():
             due_at = immediate_due()
+        elif due_at:
+            from scripts.daily_schedule import validate_slot
+            validate_slot(due_at)
         failures: dict[str, str] = {}
         skipped: dict[str, str] = {}
         successes: dict[str, dict] = {}
