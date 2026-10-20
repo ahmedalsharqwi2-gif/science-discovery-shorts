@@ -3,6 +3,8 @@ from news.editor import canonical,date,validate
 class NewsIntegrityTests(unittest.TestCase):
  def test_unofficial_source_is_rejected(self):
   with self.assertRaises(ValueError):canonical('https://example.com/fake-news')
+ def test_unknown_community_author_is_not_a_primary_news_source(self):
+  with self.assertRaises(ValueError):canonical('https://huggingface.co/blog/random-user/unverified-claims')
  def test_links_drop_tracking_not_identity(self):
   self.assertEqual(canonical('https://huggingface.co/blog/new?utm=x#f'),'https://huggingface.co/blog/new')
  def test_date_has_timezone(self):self.assertIsNotNone(date('2026-10-20T09:00:00Z').tzinfo)

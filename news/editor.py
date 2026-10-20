@@ -14,6 +14,10 @@ UA={'User-Agent':'AI-News-Daily/1.0 (official-source editorial reader)'}
 def canonical(url):
     p=urlparse(url)
     if p.scheme!='https' or p.hostname not in ALLOWED or p.username or p.password:raise ValueError('Non-official news source')
+    if p.hostname=='huggingface.co':
+        parts=[x for x in p.path.split('/') if x]
+        if not parts or parts[0]!='blog' or (len(parts)>2 and parts[1] not in {'allenai','huggingface','deepseek-ai','nvidia','google'}):
+            raise ValueError('Unverified community author; require an official editorial or known organization blog')
     return p._replace(query='',fragment='').geturl()
 def date(raw):
     try:d=parsedate_to_datetime(raw)
@@ -33,7 +37,8 @@ def candidates(now=None):
                         el=item.find(tag)
                         if el is not None:return el.text or el.attrib.get('href','')
                     return ''
-                link=canonical(value('link','{http://www.w3.org/2005/Atom}link'))
+                try:link=canonical(value('link','{http://www.w3.org/2005/Atom}link'))
+                except ValueError:continue
                 published=date(value('pubDate','{http://www.w3.org/2005/Atom}published','{http://www.w3.org/2005/Atom}updated'))
                 if link in seen or not now-timedelta(hours=72)<=published<=now+timedelta(minutes=5):continue
                 title=text(value('title','{http://www.w3.org/2005/Atom}title'))
