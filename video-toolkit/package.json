@@ -1,0 +1,32 @@
+{
+  "name": "arabic-video-toolkit",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:motion": "vite build --config motion/vite.config.ts",
+    "build:effects": "vite build --config vite.config.ts",
+    "check": "npm run build:motion && npm run build:effects && node scripts/check.mjs"
+  },
+  "dependencies": {
+    "@motion-canvas/2d": "3.17.2",
+    "@motion-canvas/core": "3.17.2",
+    "@motion-canvas/ui": "3.17.2",
+    "@remotion/bundler": "4.0.537",
+    "@remotion/renderer": "4.0.537",
+    "gsap": "3.14.2",
+    "pixi.js": "8.16.0",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "remotion": "4.0.537",
+    "three": "0.183.2"
+  },
+  "devDependencies": {
+    "@motion-canvas/vite-plugin": "3.17.2",
+    "@types/react": "19.2.14",
+    "@types/three": "0.183.1",
+    "playwright": "1.58.2",
+    "typescript": "5.9.3",
+    "vite": "5.4.21"
+  }
+}
