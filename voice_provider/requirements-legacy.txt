@@ -1,0 +1,3 @@
+# Optional historical experiments only; not installed by production
+silma-tts
+gTTS>=2.5.4,<3

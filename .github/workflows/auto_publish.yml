@@ -79,8 +79,6 @@ jobs:
     # Publishing paused by owner request on 2026-10-17.
     if: ${{ false }}
     env:
-      PREFER_FREE_GOOGLE_TTS: 'true'
-      FREE_GOOGLE_TTS_ENABLED: 'true'
       PUBLICATION_RECEIPTS_ENABLED: 'true'
       PUBLISH_IMMEDIATE: ${{ inputs.publish_now && matrix.date == '' }}
       PRODUCTION_MEDIA_ID: ${{ format('{0}-{1}-{2}', github.run_id, matrix.date, matrix.hour) }}
@@ -307,10 +305,6 @@ jobs:
           # are intentionally disabled for this publishing pipeline.
           FACT_CHECK_ENABLED: 'false'
           TOPIC_GENERATION_MAX_ATTEMPTS: '3'
-          VOICE_ROTATION_ENABLED: 'true'
-          VOICE_SELECTION_MODE: 'content'
-          AUTO_VOICE_PROFILES: 'mohamed_elbed,rafik_sa,egyptian_female,hossam,hossam_uploaded,marwan,nassim,ahmed_z'
-          VOICE_ROTATION_STATE_FILE: 'state/voice_rotation.json'
           MIN_SCENE_CLIPS: '4'
           # Non-blocking montage diagnostics only when the free stock library is limited.
           QUALITY_GATES_BLOCKING: 'false'
@@ -323,17 +317,12 @@ jobs:
           # Use the approved Egyptian Gemini Charon voice without provider fallback.
           TTS_ENGINE: "gemini"
           # Hamed has clearer connected Arabic phonemes for scientific terms.
-          EDGE_TTS_VOICE: "ar-SA-HamedNeural"
-          EDGE_TTS_VOICES: "ar-SA-HamedNeural,ar-SA-ZariyahNeural,ar-SA-AmmarNeural"
-          EDGE_TTS_MAX_ATTEMPTS: '3'
           WHISPER_MODEL: 'small'
           # The last Edge candidate scored 78.7%; keep the gate at 78% so it
           # can pass, while still rejecting lower-match pronunciations.
           ASR_MIN_MATCH_RATIO: '0.78'
           MIN_TTS_AUDIO_SCORE: '0.78'
           # Avoid the slow, syllable-separated delivery seen with -15%.
-          EDGE_TTS_RATE: "-16%"
-          EDGE_TTS_PITCH: "+0Hz"
           MUSIC_VOLUME: '0.07'
           DRY_RUN: ${{ inputs.dry_run && 'true' || 'false' }}
 

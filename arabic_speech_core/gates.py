@@ -24,6 +24,10 @@ def text_gate(text: str, *, min_words=1, max_words=2500, min_arabic_ratio=.55, l
     return {"display_text": prepared.display_text, "align_text": prepared.align_text, "spoken_text": spoken, "words": count, "arabic_ratio": ratio}
 
 def provider_preflight(*, engine="edge", locale="ar-SA", voice="ar-SA-HamedNeural", max_chars=4500) -> dict:
+    if engine == "gemini":
+        if locale != "ar-EG" or voice != "Charon": raise GateError("PROVIDER_PREFLIGHT: approved Egyptian Charon profile required")
+        if not (os.getenv("GEMINI_TTS_API_KEY") or os.getenv("GEMINI_API_KEY")): raise GateError("PROVIDER_PREFLIGHT: Gemini key missing")
+        return {"engine": engine, "locale": locale, "voice": voice, "max_chars": max_chars}
     if not locale.startswith("ar-"): raise GateError(f"PROVIDER_PREFLIGHT: unsupported locale {locale}")
     if not voice or not voice.startswith("ar-"): raise GateError(f"PROVIDER_PREFLIGHT: invalid Arabic voice {voice}")
     if engine not in {"edge", "silma", "google", "azure", "fake"}: raise GateError(f"PROVIDER_PREFLIGHT: unsupported engine {engine}")
