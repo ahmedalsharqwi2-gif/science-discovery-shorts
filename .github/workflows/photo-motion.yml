@@ -1,0 +1,55 @@
+name: Approved Photo Motion
+on:
+  workflow_dispatch:
+    inputs:
+      manifest:
+        description: 'Path to a reviewed episode.json in this repository'
+        type: string
+        required: false
+        default: ''
+  push:
+    branches: [main]
+    paths:
+      - 'photo_motion/**'
+      - '.github/workflows/photo-motion.yml'
+permissions:
+  contents: read
+concurrency:
+  group: approved-photo-motion-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  approved-render:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      EPISODE_MANIFEST: ${{ inputs.manifest || '' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: photo_motion/requirements.txt
+      - name: Install image, Arabic layout and encoding dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg libraqm0
+          pip install -r photo_motion/requirements.txt
+      - name: Test media integrity, narration boundaries and render verification
+        run: python -m unittest discover -s photo_motion/tests -v
+      - name: Validate reviewed episode
+        if: env.EPISODE_MANIFEST != ''
+        run: python -m photo_motion.engine --manifest "$EPISODE_MANIFEST" --validate-only
+      - name: Render full episode with reviewed audio and imagery
+        if: env.EPISODE_MANIFEST != ''
+        run: python -m photo_motion.engine --manifest "$EPISODE_MANIFEST" --output output/final_video_full.mp4
+      - uses: actions/upload-artifact@v4
+        if: env.EPISODE_MANIFEST != ''
+        with:
+          name: approved-photo-motion-video
+          path: |
+            output/final_video_full.mp4
+            output/final_video_full.verification.json
+            output/photo-motion-frames/
+          if-no-files-found: error
+          retention-days: 14

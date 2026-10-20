@@ -237,6 +237,9 @@ def _mix_science_audio(voice_path: Path, duration: float, output_path: Path, sou
 
 
 def assemble_video(audio_path: Path, narration: str, output_path: Path, topic: str = "") -> Path:
+    from photo_motion.bridge import render_if_requested
+    if render_if_requested(audio_path, narration, output_path, "science"):
+        return output_path
     from scripts.cinematic_production import enabled, build
     if enabled():
         duration = probe_duration(audio_path)
