@@ -9,6 +9,10 @@ from scripts import source_episode as source
 
 
 class SourceExpansionTests(unittest.TestCase):
+    def test_only_foreign_words_are_repaired_without_rewriting_arabic(self):
+        with patch.object(source,'ask',return_value={'replacements':[{'original':'hub','spoken':'المحور'}]}):
+            self.assertEqual(source.spoken_foreign_words('الطرف أسرع من hub، وده مش ضعف ثابت.'),'الطرف أسرع من المحور، وده مش ضعف ثابت.')
+
     def test_short_draft_is_extended_before_editorial_review(self):
         original=' '.join(['ده الشرح اللي بنقوله عشان نفهم ليه المروحة مش بسيطة.']*20)
         extra=' '.join(['ودي كمان فكرة بتوضح اللي بيحصل عشان كده بنشرحها بهدوء.']*12)

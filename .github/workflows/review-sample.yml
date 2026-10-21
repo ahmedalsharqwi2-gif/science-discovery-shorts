@@ -1,6 +1,6 @@
 {
   "name": "Review sample — no social publishing",
-  "run-name": "Science review — source correction and generated images",
+  "run-name": "Science review — repaired pronunciation and generated images",
   "on": {
     "workflow_dispatch": {
       "inputs": {
