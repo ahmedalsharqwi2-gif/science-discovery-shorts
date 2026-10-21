@@ -34,6 +34,7 @@ def frame(scene,profile,t,duration):
     label(im,brand,540,130,40,accent)
     title=' '.join(clean(scene['text']).split()[:9])
     label(im,title,540,370,54,width=900,maxlines=2)
+    context=clean(scene.get('prompt','')+' '+scene.get('query','')+' '+scene['text'])
     if profile=='history' and re.search('سور|أسوار|حصار|قلع|مدافع|حجارة|القسطنط|المدينة',clean(scene['text'])):
         # A schematic fortified city: no invented troop coordinates or geography.
         d.rounded_rectangle((90,650,990,1320),radius=30,fill='#162c32',outline='#43636a',width=2)
@@ -60,6 +61,22 @@ def frame(scene,profile,t,duration):
             d.ellipse((x-5,y-5,x+5,y+5),fill=accent)
         a=t*.35;d.line((540,960,540+130*math.sin(a),960-130*math.cos(a)),fill=accent,width=7)
         label(im,'تفاصيل بتغير الحكاية',540,1300,39,accent)
+    elif profile=='science' and re.search('مراوح|مروحي|شفرات|شفرة|propeller|rotor',context,re.I):
+        d.rounded_rectangle((85,650,995,1420),radius=28,fill='#102e3e',outline='#2d6478',width=3)
+        cx,cy=540,950
+        for k in range(4):
+            a=k*math.tau/4+t*.6
+            def pt(radius,side):return (cx+radius*math.cos(a)+side*math.cos(a+math.pi/2),cy+radius*math.sin(a)+side*math.sin(a+math.pi/2))
+            d.polygon([pt(60,-42),pt(300,-22),pt(335,5),pt(285,36),pt(90,47)],fill='#5dafbb',outline=accent,width=4)
+            d.line([pt(80,0),pt(300,0)],fill='#e6f2c7',width=3)
+        d.ellipse((485,895,595,1005),fill='#e4bc70',outline='#fbf0ce',width=4)
+        for i in range(9):
+            y=735+i*56;x=150+((t*70+i*53)%760)
+            d.line((x,y,x+75,y),fill='#3e7e95',width=3)
+        label(im,'قرب المحور',300,1290,33,accent);label(im,'عند الطرف',785,1290,33,accent)
+        d.line((215,1350,350,1350),fill=accent,width=5);d.polygon([(350,1350),(330,1338),(330,1362)],fill=accent)
+        d.line((650,1350,900,1350),fill=accent,width=5);d.polygon([(900,1350),(880,1338),(880,1362)],fill=accent)
+        label(im,'مروحة مبسطة • الأسهم توضيحية',540,720,30,accent)
     elif profile=='science':
         center=(540,960)
         for ring in [170,300]:d.ellipse((540-ring,960-ring,540+ring,960+ring),outline='#276078',width=3)
@@ -71,6 +88,21 @@ def frame(scene,profile,t,duration):
         d.rounded_rectangle((427,850,653,1070),radius=38,fill='#194154',outline=accent,width=5)
         label(im,'الفكرة',540,960,51,accent)
         label(im,'علاقات توضيحية • بدون قياسات مفترضة',540,1350,27,accent)
+    elif profile=='horror' and re.search('سفينة|سيليست|شراعية|Mary|ship|sailing',context,re.I):
+        d.rounded_rectangle((85,650,995,1440),radius=28,fill='#0c2132',outline='#355367',width=3)
+        d.ellipse((800,720,890,810),fill='#afc4ca')
+        cy=1100+7*math.sin(t*.7)
+        for row in range(5):
+            points=[(x,1210+row*38+9*math.sin(x*.018-t*1.5-row)) for x in range(95,990,8)]
+            d.line(points,fill='#477487',width=3)
+        d.polygon([(220,cy),(895,cy),(790,cy+170),(340,cy+170)],fill='#604f40',outline=accent,width=4)
+        for y in range(1,5):d.line((265,cy+y*25,850,cy+y*25),fill='#89735b',width=2)
+        for x,h in [(455,350),(645,400)]:
+            d.line((x,cy,x,cy-h),fill=accent,width=7)
+            d.polygon([(x+9,cy-h+30),(x+155,cy-35),(x+9,cy-35)],fill='#b2bec0',outline=accent,width=2)
+            d.line((x,cy-h,260,cy),fill='#617885',width=2)
+        d.rectangle((350,cy-60,790,cy),fill='#415767',outline=accent,width=3)
+        label(im,'تصور توضيحي لسفينة شراعية',540,1380,30,accent)
     else:
         # Original suspense set: door, shadow, drifting light and dust.
         d.polygon([(90,660),(990,660),(850,1380),(230,1380)],fill='#101b27',outline='#344859')
@@ -87,7 +119,7 @@ def frame(scene,profile,t,duration):
     label(im,takeaway,540,1620,44,accent,width=860,maxlines=2)
     d.line((70,1820,1010,1820),fill='#3d535e',width=3)
     d.line((70,1820,70+940*min(1,t/max(duration,.1)),1820),fill=accent,width=6)
-    label(im,'رسوم أصلية متحركة • التعليق بصوت شارون',540,1870,25,'#a7bcc3')
+    label(im,'رسوم توضيحية أصلية',540,1870,25,'#a7bcc3')
     return im
 
 def render_explainer(output,seconds,scene,cfg):
