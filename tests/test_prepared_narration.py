@@ -62,7 +62,7 @@ class PreparedNarrationTests(unittest.TestCase):
         self.assertFalse(result)
         self.assertEqual(saved, {'schema_version': 1, 'title': 'موضوع جديد', 'narration': 'نص كامل صالح للاختبار.', 'audio_rejected': True})
 
-    def test_audio_rejected_checkpoint_is_not_reused_next_run(self):
+    def test_audio_failure_preserves_valid_script_for_independent_verification(self):
         import sys
         scripts = str(Path(__file__).resolve().parents[1] / 'scripts')
         with patch.object(sys, 'path', [scripts] + sys.path):
@@ -70,8 +70,8 @@ class PreparedNarrationTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / 'text.json'
             path.write_text(json.dumps({'title': 'موضوع', 'narration': 'نص كامل.', 'audio_rejected': True}))
-            self.assertFalse(usable_checkpoint(path, Path(tmp) / 'history.json'))
-            self.assertFalse(path.exists())
+            self.assertTrue(usable_checkpoint(path, Path(tmp) / 'history.json'))
+            self.assertTrue(path.exists())
 
     def test_corrupt_checkpoint_does_not_publish_or_silently_change_topic(self):
         result, _ = self.execute({'schema_version': 1, 'title': 'موضوع', 'narration': ''})

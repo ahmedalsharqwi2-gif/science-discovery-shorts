@@ -12,7 +12,7 @@ def usable_checkpoint(path: Path, history_path: Path) -> bool:
         return False
     try:
         payload = json.loads(path.read_text(encoding="utf-8"))
-        if (not isinstance(payload, dict) or payload.get("audio_rejected") is True
+        if (not isinstance(payload, dict)
                 or not isinstance(payload.get("title"), str)
                 or not payload["title"].strip() or not isinstance(payload.get("narration"), str)
                 or not payload["narration"].strip()):

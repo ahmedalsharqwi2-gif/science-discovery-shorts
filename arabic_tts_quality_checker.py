@@ -36,6 +36,18 @@ def _arabic_words(text: str) -> list[str]:
     return [word.casefold() for word in normalized.split() if word]
 
 
+def _matched_words(expected, heard):
+    """Accept identical letters split into different tokens, never missing speech."""
+    matched = 0
+    for tag, a, b, c, d in difflib.SequenceMatcher(None, expected, heard, autojunk=False).get_opcodes():
+        if tag == 'equal':
+            matched += b-a
+        elif tag == 'replace' and 0 < b-a <= 4 and 0 < d-c <= 4:
+            if ''.join(expected[a:b]) == ''.join(heard[c:d]):
+                matched += b-a
+    return matched
+
+
 @dataclass
 class QualityReport:
     """تقرير شامل عن جودة النص/الصوت."""
@@ -176,9 +188,11 @@ class ArabicTTSQualityChecker:
             primary = os.getenv("WHISPER_MODEL", "base")
             # A second independent transcription distinguishes weak base-model
             # recognition from missing narration. Never prompt ASR with the script.
-            models = list(dict.fromkeys([primary, os.getenv("ASR_VERIFY_MODEL", "small")]))
+            verifier = os.getenv("ASR_VERIFY_MODEL", "medium" if primary == "small" else "small")
+            models = list(dict.fromkeys([primary, verifier]))
             heard = []
             best_ratio = -1.0
+            diagnostics = []
             for model_name in models:
                 try:
                     model = WhisperModel(model_name, device="cpu", compute_type="int8")
@@ -188,9 +202,10 @@ class ArabicTTSQualityChecker:
                     )
                     segments = result[0] if isinstance(result, (tuple, list)) else result
                     candidate = _arabic_words(" ".join(getattr(seg, "text", "") or "" for seg in segments))
-                    matched = sum(b.size for b in difflib.SequenceMatcher(
-                        None, expected, candidate, autojunk=False).get_matching_blocks())
+                    matched = _matched_words(expected, candidate)
                     candidate_ratio = matched / len(expected) if expected else 0.0
+                    diagnostics.append({'model': model_name, 'ratio': candidate_ratio, 'heard': candidate})
+                    del model
                     log.info("Arabic ASR model %s: %.1f%%", model_name, candidate_ratio * 100)
                     if candidate_ratio > best_ratio:
                         heard, best_ratio = candidate, candidate_ratio
@@ -203,9 +218,13 @@ class ArabicTTSQualityChecker:
                 issues.append("بوابة ASR لم تستخرج كلمات عربية قابلة للمقارنة")
                 score *= 0.3
             else:
-                matcher = difflib.SequenceMatcher(None, expected, heard, autojunk=False)
-                matched = sum(block.size for block in matcher.get_matching_blocks())
+                matched = _matched_words(expected, heard)
                 ratio = matched / len(expected)
+                report_path = Path('state/asr_verification.json')
+                report_path.parent.mkdir(parents=True, exist_ok=True)
+                report_path.write_text(json.dumps({'required_ratio': ASR_MIN_MATCH_RATIO,
+                    'best_ratio': ratio, 'expected': expected, 'attempts': diagnostics},
+                    ensure_ascii=False, indent=2), encoding='utf-8')
                 log.info("Arabic ASR match: %d/%d (%.1f%%)", matched, len(expected), ratio * 100)
                 if ratio < ASR_MIN_MATCH_RATIO:
                     # A low match means the audio can no longer be trusted to

@@ -13,6 +13,11 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class NarrationTextQualityTests(unittest.TestCase):
+    def test_exact_token_splits_do_not_look_like_missing_audio(self):
+        from arabic_tts_quality_checker import _matched_words
+        self.assertEqual(_matched_words(['وبكده','المروحة'],['و','بكده','المروحة']),2)
+        self.assertEqual(_matched_words(['المروحة','تدور','بسرعة'],['المروحة','بسرعة']),2)
+
     @patch("arabic_tts_quality_checker.subprocess.run")
     def test_mp3_duration_uses_ffprobe(self, run):
         run.return_value.stdout = "180.0\n"
