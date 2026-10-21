@@ -45,8 +45,19 @@ def align(plan,wav):
     expected=plan['narration'].split();matcher=SequenceMatcher(None,[norm(w) for w in expected],[norm(w['text']) for w in actual],autojunk=False);anchors={}
     for b in matcher.get_matching_blocks():
         for k in range(b.size):anchors[b.a+k]=actual[b.b+k]
+    # Recover exact token splits/merges from actual ASR timestamps first.
+    from news.asr_token_boundaries import recover_token_boundaries
+    recovered=[anchors.get(i) and {'text':expected[i],'offset':anchors[i]['start'],'duration':anchors[i]['end']-anchors[i]['start']} for i in range(len(expected))]
+    recover_token_boundaries([norm(w) for w in expected],[norm(w['text']) for w in actual],[(w['text'],w['start'],w['end']) for w in actual],expected,recovered)
+    for i,event in enumerate(recovered):
+        if event is not None:anchors[i]={'text':expected[i],'start':event['offset'],'end':event['offset']+event['duration']}
     coverage=len(anchors)/max(1,len(expected))
-    if coverage<.65:raise ValueError(f'Insufficient measured Arabic timing anchors ({coverage:.1%}); retained audio for review')
+    if coverage<.65:
+        if coverage<.50:raise ValueError(f'The recorded narration differs substantially from the script ({coverage:.1%})')
+        from news.forced_caption_alignment import forced_word_alignment
+        measured=forced_word_alignment(Path(wav),expected)
+        anchors={i:{'text':w['text'],'start':w['offset'],'end':w['offset']+w['duration']} for i,w in enumerate(measured)}
+        coverage=1.0
     duration=float(subprocess.check_output(['ffprobe','-v','error','-show_entries','format=duration','-of','csv=p=0',str(wav)]))
     def at(index):
         if index in anchors:return anchors[index]['start']

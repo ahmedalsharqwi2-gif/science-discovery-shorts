@@ -47,10 +47,11 @@ jobs:
             output/narration.source.json
             output/timing.json
           key: ai-news-checkpoint-${{ github.run_id }}-${{ github.run_attempt }}
-          restore-keys: ai-news-checkpoint-${{ github.run_id }}-
+          restore-keys: ${{ github.event_name == 'push' && 'ai-news-checkpoint-39540875058-' || format('ai-news-checkpoint-{0}-', github.run_id) }}
       - run: |
           sudo apt-get update -qq
           sudo apt-get install -y ffmpeg fonts-dejavu-core
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
           python -m pip install -r requirements.txt
       - run: python -m unittest discover -s tests -v
       - name: Official news, checked script, full Charon voice, motion and tail validation
@@ -106,3 +107,5 @@ jobs:
 # Recognize Egyptian clitics and common colloquial verbs in the editorial gate.
 
 # A one-word spoken punchline is valid comedy, provided it exists in the narration.
+
+# Reuse the accepted Gemini script and voice while improving local alignment only.

@@ -5,3 +5,4 @@ beautifulsoup4>=4.12,<5
 faster-whisper==1.2.1
 
 av<19
+stable-ts>=2.18,<3
