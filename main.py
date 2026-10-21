@@ -90,6 +90,9 @@ class AutoPublishPipeline:
             narration = prepared["narration"] if prepared else self.content_generator.generate_narration(topic)
             log.info(f"✓ Narration generated ({len(narration.split())} words)")
 
+            from scripts.spoken_numbers import spoken_numbers
+            narration = spoken_numbers(narration)
+
             # Step 3: Quality check
             log.info("\n[Step 3] Checking content quality...")
             checked_text, text_report = self.quality_checker.check_text(narration)
