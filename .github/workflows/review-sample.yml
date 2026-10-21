@@ -1,6 +1,6 @@
 {
   "name": "Review sample — no social publishing",
-  "run-name": "Source-backed science review — requested 2026-10-21",
+  "run-name": "Science review with scene-specific Pollinations images",
   "on": {
     "workflow_dispatch": {
       "inputs": {

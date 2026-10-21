@@ -442,7 +442,7 @@ def gemini_json(parts: list[dict], model: str, budget: Budget, cost: float, kind
 
 
 def direct_scenes(scenes: list[dict], episode: dict, cfg: dict, budget: Budget) -> list[dict]:
-    if os.getenv("CINEMATIC_MOTION_ONLY", "false").lower() == "true":
+    if os.getenv("CINEMATIC_MOTION_ONLY", "false").lower() == "true" and not cfg.get('_pollinations_director'):
         return scenes
     prompt = ("You are a cinematic director. Return a JSON array with exactly one object per scene, in the same order: "
         "id, description (English visible scene only), query (short English search), motion (zoom_in/zoom_out/pan_left/pan_right), "
@@ -1089,7 +1089,8 @@ def _quota_fallback_record(scene: dict, episode: dict, cfg: dict, budget: Budget
 def acquire(scene: dict, episode: dict, cfg: dict, budget: Budget, cache: Path) -> tuple[Path, dict]:
     seconds = scene["end"] - scene["start"]
     cache.mkdir(parents=True, exist_ok=True)
-    identity = json.dumps({"scene": scene, "context": episode, "profile": cfg["profile"], "visual_revision": "native-motion-v1", "dimensions": [cfg["width"], cfg["height"], cfg["fps"]], "models": [cfg["image_model"], cfg["image_fallback_model"], cfg["review_model"]]}, ensure_ascii=False, sort_keys=True)
+    image_provider = os.getenv('MOTION_IMAGE_PROVIDER', 'none')
+    identity = json.dumps({"scene": scene, "context": episode, "profile": cfg["profile"], "visual_revision": "native-motion-v2", "image_provider": image_provider, "dimensions": [cfg["width"], cfg["height"], cfg["fps"]], "models": [cfg["image_model"], cfg["image_fallback_model"], cfg["review_model"]]}, ensure_ascii=False, sort_keys=True)
     digest = hashlib.sha256(identity.encode()).hexdigest()[:24]
     visual, meta = cache / f"{digest}.mp4", cache / f"{digest}.json"
     if visual.exists() and meta.exists():
@@ -1103,9 +1104,15 @@ def acquire(scene: dict, episode: dict, cfg: dict, budget: Budget, cache: Path) 
                 return visual, {**record, "cached": True}
     if os.getenv("CINEMATIC_MOTION_ONLY", "false").lower() == "true":
         from scripts.motion_graphics import render_explainer
+        scene = dict(scene)
+        if image_provider == 'pollinations-classic':
+            from scripts.pollinations_images import generated_illustration
+            image_scene = {**scene, 'prompt': scene.get('illustration_prompt', scene['prompt'])}
+            scene['generated_illustration'] = generated_illustration(image_scene, cache)
         render_explainer(visual, seconds, scene, cfg)
         record={"scene_id":scene["id"],"source":"local_explainer","license":"Original motion graphics",
                 "source_media_is_video":False,"graphic_kind":"original_editorial_schematic",
+                "generated_illustration":scene.get('generated_illustration'),
                 "review":{"passed":True,"method":"deterministic_native_layout","sha256":hashlib.sha256(visual.read_bytes()).hexdigest()}}
         atomic_json(meta,record)
         return visual,{**record,"cached":False}
@@ -1406,6 +1413,20 @@ def build(audio: Path, narration: str, output: Path, episode: dict, subtitles: P
     if not scenes:
         scenes = direct_scenes(plan_scenes(scene_plan_events(events), duration, episode, cfg), episode, cfg, budget)
         atomic_json(plan_path, {"duration": duration, "profile": cfg["profile"], "scenes": scenes})
+    if os.getenv('MOTION_IMAGE_PROVIDER') == 'pollinations-classic':
+        # Six images cover contiguous passages. Each six-second graphic scene keeps
+        # its own captions and motion while reusing its passage's generated image.
+        group_cfg = {**cfg, 'scene_seconds': max(24, duration / 6),
+                     'review_model': 'gemini-3.5-flash-lite', '_pollinations_director': True}
+        image_plan_path = cache / f'{episode_id}.pollinations-plan.json'
+        if image_plan_path.exists():
+            groups = json.loads(image_plan_path.read_text(encoding='utf-8'))
+        else:
+            groups = direct_scenes(plan_scenes(scene_plan_events(events), duration, episode, group_cfg), episode, group_cfg, budget)
+            atomic_json(image_plan_path, groups)
+        for scene in scenes:
+            group = next((g for g in groups if g['start'] <= scene['start'] < g['end']), groups[-1])
+            scene['illustration_prompt'] = group['prompt']
     atomic_json(root / "state/cinematic_storyboard.json", {"episode_id": episode_id, "profile": cfg["profile"], "scenes": scenes})
     records, paths = [], []
     try:
