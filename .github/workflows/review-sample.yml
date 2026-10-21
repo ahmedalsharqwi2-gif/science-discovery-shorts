@@ -22,3 +22,5 @@ jobs:
 # Evaluate a source-grounded Egyptian explanation of propeller twist.
 
 # Review topic-specific motion graphics for the verified source capsule.
+
+# Source-first narration; reuse only the matching reviewed-text cache revision.

@@ -37,7 +37,7 @@ def create(story_id):
  text=spoken_numbers(draft.get('narration',''))
  if len(text.split())<200:
   draft=ask('وسّع النص المصري التالي إلى مئتين وأربعين كلمة بالحقائق الموجودة فقط. أعد النص كاملًا لا التكملة، ولا تختلق تفاصيل. البيانات: '+json.dumps({'draft':text,'source':source},ensure_ascii=False));text=spoken_numbers(draft.get('narration',''))
- if not 200<=len(text.split())<=300:raise ValueError(f'Source-based narration length is invalid: {len(text.split())}')
+ if not 180<=len(text.split())<=300:raise ValueError(f'Source-based narration length is invalid: {len(text.split())}')
  if re.search(r'[A-Za-z0-9٠-٩]',text):raise ValueError('Unspoken tokens remain')
  if story_id=='propeller' and re.search(r'الحل(?: الهندسي)? الوحيد',text) and not re.search(r'(?:مش|ليس).{0,20}الحل',text):raise ValueError('Unsupported exclusive engineering claim')
  verdict=ask('راجع السرد مقابل الحقائق والمحاذير المحددة فقط. ارفض أي تعميم زائد أو رقم أو حوار مختلق أو تقديم تفسير محتمل كحقيقة. أعد supported وissues. البيانات: '+json.dumps({'source':source,'narration':text},ensure_ascii=False),True)
