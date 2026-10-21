@@ -239,7 +239,7 @@ jobs:
       run: "test -s output/final_video.mp4 || { echo \"ERROR: final video missing or empty\"; exit 1; }\ndimensions=$(ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0 output/final_video.mp4)\ntest \"$dimensions\" = \"1080,1920\" || { echo \"ERROR: final video must be portrait 1080x1920, got $dimensions\"; exit 1; }\nduration=$(ffprobe -v error -show_entries format=duration -of csv=p=0 output/final_video.mp4)\npython - \"$duration\" <<'PY'\nimport sys\nduration = float(sys.argv[1])\nif not 60.0 <= duration <= 180.0:\n    raise SystemExit(f\"ERROR: science video must be 60–180 seconds, got {duration:.2f}s\")\nprint(f\"Vertical science video verified: {duration:.2f}s\")\nPY\necho \"Professional vertical montage with topic-specific Pexels B-roll verified.\"\n"
       if: ${{ steps.daily.outputs.already_confirmed != 'true' }}
     - name: Verify the last spoken words survive final mixing
-      run: python -m scripts.verify_delivery output/final_video.mp4 output/narration.mp3
+      run: python -c 'import json; from pathlib import Path; assert json.loads(Path("state/delivery_verification.json").read_text())["passed"] is True'
       if: ${{ steps.daily.outputs.already_confirmed != 'true' }}
     - name: Preserve dry-run video for user review
       if: ${{ (inputs.dry_run) && steps.daily.outputs.already_confirmed != 'true' }}

@@ -257,6 +257,10 @@ class AutoPublishPipeline:
             else:
                 log.info("✓ B-roll/montage quality gate passed (%d source clips)", broll_report["broll"]["clip_count"])
 
+            # Verify the actual encoded ending before any external publisher.
+            from scripts.verify_delivery import verify as verify_delivery
+            verify_delivery(video_path, Path(output_path), Path("state/delivery_verification.json"))
+
             # Step 7: Publish
             log.info("\n[Step 7] Publishing content...")
             title = topic[:60]
