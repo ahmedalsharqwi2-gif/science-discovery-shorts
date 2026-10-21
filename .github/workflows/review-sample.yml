@@ -1,6 +1,6 @@
 {
   "name": "Review sample — no social publishing",
-  "run-name": "Science review with scene-specific Pollinations images",
+  "run-name": "Science review — complete narration with Pollinations images",
   "on": {
     "workflow_dispatch": {
       "inputs": {

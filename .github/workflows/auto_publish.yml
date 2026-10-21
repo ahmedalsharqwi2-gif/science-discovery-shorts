@@ -76,8 +76,8 @@ jobs:
       uses: actions/cache/restore@v4
       with:
         path: state/prepared_narration.json
-        key: prepared-v8-${{ inputs.source_backed_sample || false }}-${{ github.repository_id }}-${{ inputs.dry_run || false }}-${{ env.PUBLISH_DATE || github.run_id }}-${{ env.PUBLISH_HOUR }}-${{ github.run_id }}-${{ github.run_attempt }}
-        restore-keys: 'prepared-v8-${{ inputs.source_backed_sample || false }}-${{ github.repository_id }}-${{ inputs.dry_run || false }}-${{ env.PUBLISH_DATE || github.run_id }}-${{ env.PUBLISH_HOUR }}-
+        key: prepared-v9-${{ inputs.source_backed_sample || false }}-${{ github.repository_id }}-${{ inputs.dry_run || false }}-${{ env.PUBLISH_DATE || github.run_id }}-${{ env.PUBLISH_HOUR }}-${{ github.run_id }}-${{ github.run_attempt }}
+        restore-keys: 'prepared-v9-${{ inputs.source_backed_sample || false }}-${{ github.repository_id }}-${{ inputs.dry_run || false }}-${{ env.PUBLISH_DATE || github.run_id }}-${{ env.PUBLISH_HOUR }}-
 
           '
       if: ${{ steps.daily.outputs.already_confirmed != 'true' }}
@@ -91,7 +91,7 @@ jobs:
         if p.exists():
             try:
                 d=json.loads(p.read_text(encoding="utf-8"))
-                valid=(d.get("editorial_review",{}).get("source")=="https://www.grc.nasa.gov/www/k-12/airplane/propth.html" and d.get("editorial_review",{}).get("style_revision")==3)
+                valid=(d.get("editorial_review",{}).get("source")=="https://www.grc.nasa.gov/www/k-12/airplane/propth.html" and d.get("editorial_review",{}).get("style_revision")==4)
             except (ValueError, TypeError, AttributeError):
                 valid=False
             if not valid:
@@ -235,7 +235,7 @@ jobs:
       uses: actions/cache/save@v4
       with:
         path: state/prepared_narration.json
-        key: prepared-v8-${{ inputs.source_backed_sample || false }}-${{ github.repository_id }}-${{ inputs.dry_run || false }}-${{ env.PUBLISH_DATE || github.run_id }}-${{ env.PUBLISH_HOUR }}-${{ github.run_id }}-${{ github.run_attempt }}
+        key: prepared-v9-${{ inputs.source_backed_sample || false }}-${{ github.repository_id }}-${{ inputs.dry_run || false }}-${{ env.PUBLISH_DATE || github.run_id }}-${{ env.PUBLISH_HOUR }}-${{ github.run_id }}-${{ github.run_attempt }}
     - name: Verify final montage and B-roll output
       run: "test -s output/final_video.mp4 || { echo \"ERROR: final video missing or empty\"; exit 1; }\ndimensions=$(ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0 output/final_video.mp4)\ntest \"$dimensions\" = \"1080,1920\" || { echo \"ERROR: final video must be portrait 1080x1920, got $dimensions\"; exit 1; }\nduration=$(ffprobe -v error -show_entries format=duration -of csv=p=0 output/final_video.mp4)\npython - \"$duration\" <<'PY'\nimport sys\nduration = float(sys.argv[1])\nif not 60.0 <= duration <= 180.0:\n    raise SystemExit(f\"ERROR: science video must be 60–180 seconds, got {duration:.2f}s\")\nprint(f\"Vertical science video verified: {duration:.2f}s\")\nPY\necho \"Professional vertical montage with topic-specific Pexels B-roll verified.\"\n"
       if: ${{ steps.daily.outputs.already_confirmed != 'true' }}
@@ -312,6 +312,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: review-evidence-${{ github.run_id }}
+        include-hidden-files: true
         path: 'state/current_episode.json
 
           state/prepared_narration.json
