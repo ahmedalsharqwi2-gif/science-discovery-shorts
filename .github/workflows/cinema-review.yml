@@ -1,0 +1,120 @@
+{
+  "name": "Photographic cinema review — no social publishing",
+  "on": {
+    "workflow_dispatch": {},
+    "push": {
+      "branches": [
+        "main"
+      ],
+      "paths": [
+        "film_factory/**",
+        "tests/test_film_factory.py",
+        ".github/workflows/cinema-review.yml"
+      ]
+    }
+  },
+  "permissions": {
+    "contents": "read"
+  },
+  "concurrency": {
+    "group": "photographic-cinema-review",
+    "cancel-in-progress": false
+  },
+  "jobs": {
+    "review": {
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 45,
+      "env": {
+        "GEMINI_API_KEY": "${{ secrets.GEMINI_API_KEY }}",
+        "GEMINI_TEXT_API_KEY": "${{ secrets.GEMINI_TEXT_API_KEY || secrets.GEMINI_API_KEY }}",
+        "GEMINI_TTS_API_KEY": "${{ secrets.GEMINI_TTS_API_KEY || secrets.GEMINI_API_KEY }}",
+        "CLOUDFLARE_API_TOKEN": "${{ secrets.CLOUDFLARE_API_TOKEN }}",
+        "CLOUDFLARE_ACCOUNT_ID": "${{ secrets.CLOUDFLARE_ACCOUNT_ID }}",
+        "PYTHONPATH": "${{ github.workspace }}",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "steps": [
+        {
+          "uses": "actions/checkout@v4"
+        },
+        {
+          "uses": "actions/setup-python@v5",
+          "with": {
+            "python-version": "3.11"
+          }
+        },
+        {
+          "name": "Check required provider configuration without revealing credentials",
+          "run": "python - <<'PY'\nimport os\nrequired=['GEMINI_API_KEY','CLOUDFLARE_ACCOUNT_ID','CLOUDFLARE_API_TOKEN']\nmissing=[x for x in required if not os.getenv(x,'').strip()]\nif missing:raise SystemExit('Missing Actions secrets: '+', '.join(missing))\nprint('Required provider secret names configured; no credential values logged.')\nPY"
+        },
+        {
+          "uses": "actions/cache/restore@v4",
+          "with": {
+            "path": ".voice_cache\n.image_cache\nstate/api_budget.sqlite3\n~/.cache/huggingface",
+            "key": "film-state-v1-${{ github.repository_id }}-${{ github.run_id }}-${{ github.run_attempt }}",
+            "restore-keys": "film-state-v1-${{ github.repository_id }}-\nvoice-budget-${{ github.repository_id }}-\napi-budget-v1-${{ github.repository_id }}-"
+          }
+        },
+        {
+          "uses": "actions/cache/restore@v4",
+          "with": {
+            "path": ".film_work\noutput/narration.wav\noutput/narration.source.json\noutput/timing.json",
+            "key": "film-review-v1-${{ github.repository_id }}-${{ github.run_id }}-${{ github.run_attempt }}",
+            "restore-keys": "film-review-v1-${{ github.repository_id }}-"
+          }
+        },
+        {
+          "name": "Check code and narration-cued Foley",
+          "run": "python -m pip install requests Pillow numpy\npython -m compileall -q film_factory\npython -m unittest discover -s tests -p test_film_factory.py -v"
+        },
+        {
+          "name": "Write a new Gemini episode and generate six topic-specific photographs",
+          "run": "python -m film_factory.produce science --prepare-only"
+        },
+        {
+          "uses": "actions/upload-artifact@v4",
+          "if": "always()",
+          "with": {
+            "name": "cinema-image-proof-${{ github.run_id }}",
+            "path": "output/images/\noutput/image_manifest.json\noutput/plan.json",
+            "retention-days": 14
+          }
+        },
+        {
+          "name": "Install audio alignment and encoding dependencies",
+          "run": "sudo apt-get update -qq\nsudo apt-get install -y ffmpeg fonts-dejavu-core\npython -m pip install torch torchaudio --index-url https://download.pytorch.org/whl/cpu\npython -m pip install -r film_factory/requirements.txt"
+        },
+        {
+          "name": "Perform Charon narration and render complete photographic episode",
+          "run": "python -m film_factory.produce science"
+        },
+        {
+          "uses": "actions/upload-artifact@v4",
+          "if": "always()",
+          "with": {
+            "name": "science-photographic-review-${{ github.run_id }}",
+            "path": "output/",
+            "retention-days": 14,
+            "if-no-files-found": "warn"
+          }
+        },
+        {
+          "uses": "actions/cache/save@v4",
+          "if": "always()",
+          "with": {
+            "path": ".voice_cache\n.image_cache\nstate/api_budget.sqlite3\n~/.cache/huggingface",
+            "key": "film-state-v1-${{ github.repository_id }}-${{ github.run_id }}-${{ github.run_attempt }}"
+          }
+        },
+        {
+          "uses": "actions/cache/save@v4",
+          "if": "always()",
+          "with": {
+            "path": ".film_work\noutput/narration.wav\noutput/narration.source.json\noutput/timing.json",
+            "key": "film-review-v1-${{ github.repository_id }}-${{ github.run_id }}-${{ github.run_attempt }}"
+          }
+        }
+      ]
+    }
+  }
+}
