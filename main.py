@@ -265,7 +265,8 @@ class AutoPublishPipeline:
 
             # Step 7: Publish
             log.info("\n[Step 7] Publishing content...")
-            title = topic[:60]
+            from scripts.channel_brand import display_title
+            title = display_title(topic)
             description = build_social_description(topic, narration, source_urls=source_urls)
             channels = os.getenv("PUBLISH_CHANNELS", "youtube,tiktok,instagram").split(",")
 

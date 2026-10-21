@@ -1089,7 +1089,7 @@ def _quota_fallback_record(scene: dict, episode: dict, cfg: dict, budget: Budget
 def acquire(scene: dict, episode: dict, cfg: dict, budget: Budget, cache: Path) -> tuple[Path, dict]:
     seconds = scene["end"] - scene["start"]
     cache.mkdir(parents=True, exist_ok=True)
-    identity = json.dumps({"scene": scene, "context": episode, "profile": cfg["profile"], "visual_revision": "semantic-motion-v4", "dimensions": [cfg["width"], cfg["height"], cfg["fps"]], "models": [cfg["image_model"], cfg["image_fallback_model"], cfg["review_model"]]}, ensure_ascii=False, sort_keys=True)
+    identity = json.dumps({"scene": scene, "context": episode, "profile": cfg["profile"], "visual_revision": "kinetic-mechanism-v5", "dimensions": [cfg["width"], cfg["height"], cfg["fps"]], "models": [cfg["image_model"], cfg["image_fallback_model"], cfg["review_model"]]}, ensure_ascii=False, sort_keys=True)
     digest = hashlib.sha256(identity.encode()).hexdigest()[:24]
     visual, meta = cache / f"{digest}.mp4", cache / f"{digest}.json"
     if visual.exists() and meta.exists():

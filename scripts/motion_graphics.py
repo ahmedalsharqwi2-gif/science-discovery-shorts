@@ -33,7 +33,7 @@ def frame(scene,profile,t,duration):
     for x in range(-80,W+80,80):d.line((x+shift,250,x+shift,1550),fill='#172b35')
     for y in range(300,1560,80):d.line((45,y,1035,y),fill='#172b35')
     d.rounded_rectangle((45,75,1035,190),radius=25,fill='#132530',outline=accent,width=2)
-    brand={'history':'على خط الحكاية','science':'أسرار الكون','horror':'قبل ما تطفي النور'}[profile]
+    brand={'history':'على خط الحكاية','science':'اسرار الكون','horror':'قبل ما تطفي النور'}[profile]
     label(im,brand,540,130,40,accent)
     title=' '.join(clean(scene['text']).split()[:9])
     label(im,title,540,370,54,width=900,maxlines=2)

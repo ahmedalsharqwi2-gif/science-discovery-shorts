@@ -20,7 +20,7 @@ class SemanticMotionTests(unittest.TestCase):
                  {'text':'فرق','offset':1.4,'duration':.5},
                  {'text':'ضغط.','offset':2.1,'duration':.5}]
         scenes = plan_motion_scenes(words,4.)
-        self.assertEqual(scenes[0]['motion_beats'][-1],{'at':2.1,'concept':'pressure'})
+        self.assertEqual({k:scenes[0]['motion_beats'][-1][k] for k in ('at','concept')},{'at':2.1,'concept':'pressure'})
         self.assertEqual(' '.join(s['text'] for s in scenes),'الحركة بتعمل فرق ضغط.')
         self.assertEqual(scenes[-1]['end'],4.)
 

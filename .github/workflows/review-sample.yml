@@ -1,6 +1,6 @@
 {
   "name": "Review sample — no social publishing",
-  "run-name": "Science review — motion only, timed to the actual narration",
+  "run-name": "Science review — animated mechanism and اسرار الكون identity",
   "on": {
     "workflow_dispatch": {
       "inputs": {
@@ -41,7 +41,7 @@
           "id": "check",
           "uses": "actions/github-script@v8",
           "env": {
-            "FORCE_REVIEW": "${{ inputs.force || false }}"
+            "FORCE_REVIEW": "${{ github.event_name == 'push' || inputs.force || false }}"
           },
           "with": {
             "script": "if(process.env.FORCE_REVIEW === \"true\"){core.setOutput(\"pending\",\"true\");return;}\ntry {\n const release = (await github.rest.repos.getReleaseByTag({...context.repo,tag:\"science-review-2026-10-21\"})).data;\n core.setOutput(\"pending\",String(!release.assets.some(a=>a.name===\"science-charon.mp4\")));\n} catch(error) {\n if(error.status!==404)throw error;\n core.setOutput(\"pending\",\"true\");\n}"
