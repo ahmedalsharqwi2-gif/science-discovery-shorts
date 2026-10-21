@@ -88,7 +88,11 @@ def validate(plan,source):
     generic={'خطاف','ما الجديد','كيف يعمل','من يستفيد','الحدود','خلاصة','الخلاصة'}
     for s in plan['scenes']:
         if s.get('title','').strip() in generic:raise ValueError('Scene titles must explain this specific story, not internal labels such as خطاف or خلاصة')
-        if not s.get('punchline') or s['punchline'] not in s['narration'] or not 2<=len(s['punchline'].split())<=7:raise ValueError('Each meme punchline must be an exact 2–7 word phrase inside its narration')
+        punch=str(s.get('punchline','')).split();spoken=s['narration'].split()
+        def token(w):return re.sub(r'[^\u0621-\u064a0-9]','',re.sub(r'[\u064b-\u065fـ]','',w))
+        hit=next((i for i in range(len(spoken)-len(punch)+1) if [token(w) for w in spoken[i:i+len(punch)]]==[token(w) for w in punch]),None)
+        if not 2<=len(punch)<=10 or hit is None:raise ValueError('Meme punchline must occur in narration: '+json.dumps({'punchline':s.get('punchline'),'narration':s['narration']},ensure_ascii=False))
+        s['punchline']=' '.join(spoken[hit:hit+len(punch)])
         if s.get('reaction') not in ('shock','suspicious','loading','smug'):raise ValueError('Missing supported meme reaction')
         if s.get('kind') not in ('network','chip','cards','comparison','timeline'):raise ValueError('Unsupported visual')
         if not s.get('title') or len(s['title'])>75 or not 1<=len(s.get('labels',[]))<=3 or any(len(x)>64 for x in s['labels']):raise ValueError('Invalid mobile labels')
@@ -127,7 +131,7 @@ def prepare():
 المقتطفات للاستدلال الداخلي فقط، مجموع evidence لا يتجاوز خمسًا وعشرين كلمة. لا تكتب إرشادات للمشاهد بدل الخبر.
 المصدر: '''+json.dumps(source,ensure_ascii=False)
     meme_rules="""
-الأسلوب إلزامي: ميمز مصرية خفيفة وسخرية من مواقف المستخدمين اليومية، مش نشرة أخبار رسمية. افتح بمفارقة مضحكة تخص الخبر. امزج الحقيقة بالمثال الكوميدي، لكن لا تنسب النكتة إلى المصدر ولا تختلق حقيقة أو اقتباس شركة. ممنوع إهانة أشخاص أو اختلاق أسعار أو نسب أداء. كل مشهد فيه قفلة قصيرة واضحة من كلمتين إلى سبع كلمات داخل narration نفسه، وفي حقل punchline انسخ نفس العبارة حرفيًا. لا تكتب تعليمات مثل مؤثر صوتي أو زووم داخل السرد. reaction واحدة من shock,suspicious,loading,smug. عناوين المشاهد تصلح ملصق ميم، قصيرة ومصرية ومتصلة بالخبر. الجمهور مصري، الأرقام بالحروف والأسماء بالنطق العربي. إجمالي السرد ١٣٥ إلى ٢٣٠ كلمة، ستة مشاهد. اقفل بمفارقة أو سؤال مضحك حقيقي الصلة بالخبر. السخرية واضحة باعتبارها تعليقًا، والمعلومة التقنية دقيقة ومسنَدة.
+الأسلوب إلزامي: ميمز مصرية خفيفة وسخرية من مواقف المستخدمين اليومية، مش نشرة أخبار رسمية. افتح بمفارقة مضحكة تخص الخبر. امزج الحقيقة بالمثال الكوميدي، لكن لا تنسب النكتة إلى المصدر ولا تختلق حقيقة أو اقتباس شركة. ممنوع إهانة أشخاص أو اختلاق أسعار أو نسب أداء. كل مشهد فيه قفلة قصيرة واضحة من كلمتين إلى سبع كلمات، بدون أي تغيير للحروف أو الترقيم داخل narration نفسه، وفي حقل punchline انسخ نفس العبارة حرفيًا. لا تكتب تعليمات مثل مؤثر صوتي أو زووم داخل السرد. reaction واحدة من shock,suspicious,loading,smug. عناوين المشاهد تصلح ملصق ميم، قصيرة ومصرية ومتصلة بالخبر. الجمهور مصري، الأرقام بالحروف والأسماء بالنطق العربي. إجمالي السرد ١٣٥ إلى ٢٣٠ كلمة، ستة مشاهد. اقفل بمفارقة أو سؤال مضحك حقيقي الصلة بالخبر. السخرية واضحة باعتبارها تعليقًا، والمعلومة التقنية دقيقة ومسنَدة.
 """
     prompt+=meme_rules
     draft=llm(prompt)

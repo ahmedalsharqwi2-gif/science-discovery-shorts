@@ -97,3 +97,5 @@ jobs:
 # The push-only reviewed pilot is explicit; daily production always selects fresh sources.
 
 # New Gemini-written meme script; timed reaction art and original comedic accents.
+
+# Match comedic beat words while tolerating punctuation and diacritic differences.
