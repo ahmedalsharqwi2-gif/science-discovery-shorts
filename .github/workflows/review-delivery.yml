@@ -1,0 +1,117 @@
+{
+  "name": "Deliver and inspect review artifacts",
+  "on": {
+    "workflow_dispatch": {
+      "inputs": {
+        "run_id": {
+          "type": "string",
+          "required": true
+        },
+        "artifact_name": {
+          "type": "string",
+          "required": true
+        },
+        "asset_name": {
+          "type": "string",
+          "required": true,
+          "default": "review-sample.mp4"
+        },
+        "release_tag": {
+          "type": "string",
+          "required": true,
+          "default": "review-samples-2026-10-21"
+        },
+        "source_sha": {
+          "type": "string",
+          "required": false
+        },
+        "inspect_only": {
+          "type": "boolean",
+          "required": false,
+          "default": false
+        }
+      }
+    },
+    "workflow_call": {
+      "inputs": {
+        "run_id": {
+          "type": "string",
+          "required": true
+        },
+        "artifact_name": {
+          "type": "string",
+          "required": true
+        },
+        "asset_name": {
+          "type": "string",
+          "required": true
+        },
+        "release_tag": {
+          "type": "string",
+          "required": true
+        },
+        "source_sha": {
+          "type": "string",
+          "required": false
+        },
+        "inspect_only": {
+          "type": "boolean",
+          "required": false,
+          "default": false
+        }
+      }
+    },
+    "push": {
+      "branches": [
+        "main"
+      ],
+      "paths": [
+        ".github/workflows/review-delivery.yml"
+      ]
+    }
+  },
+  "permissions": {
+    "contents": "write",
+    "actions": "read"
+  },
+  "jobs": {
+    "deliver": {
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 10,
+      "env": {
+        "GH_TOKEN": "${{ github.token }}",
+        "GH_REPO": "${{ github.repository }}",
+        "RUN_ID": "${{ inputs.run_id || '39542102942' }}",
+        "ASSET_NAME": "${{ inputs.asset_name || 'ai-memes-charon.mp4' }}",
+        "RELEASE_TAG": "${{ inputs.release_tag || 'ai-memes-review-2026-10-21' }}",
+        "SOURCE_SHA": "${{ inputs.source_sha || '2df29f2119b33fddd1d4a1f6c097c8e0add959c7' }}",
+        "FORCE_JAVASCRIPT_ACTIONS_TO_NODE24": "true"
+      },
+      "steps": [
+        {
+          "uses": "actions/download-artifact@v4",
+          "with": {
+            "name": "${{ inputs.artifact_name || 'ai-news-daily-39542102942' }}",
+            "run-id": "${{ inputs.run_id || '39542102942' }}",
+            "github-token": "${{ github.token }}",
+            "path": "review"
+          }
+        },
+        {
+          "name": "Ensure ffmpeg",
+          "run": "if ! command -v ffprobe >/dev/null 2>&1; then sudo apt-get update -qq && sudo apt-get install -y ffmpeg; fi"
+        },
+        {
+          "name": "Inspect the editorial result and actual video",
+          "id": "files",
+          "run": "python3 - <<'PY'\nimport json,os,pathlib,shutil,subprocess,re\nroot=pathlib.Path(\"review\")\nfor p in sorted(root.rglob(\"*.json\")):\n    if p.name in {\"plan.json\",\"current_episode.json\",\"history_editorial_review.json\",\"verification.json\",\"delivery_verification.json\",\"delivery-verification.json\",\"source_editorial_review.json\"}:\n        d=json.loads(p.read_text(encoding=\"utf-8\"))\n        keys=(\"title\",\"narration\",\"needs_review\",\"edits\",\"editorial_review\",\"source\",\"audio\",\"passed\",\"last_speech_correlation\")\n        show={k:d[k] for k in keys if k in d}\n        if isinstance(show.get(\"source\"),dict):\n            show[\"source\"]={k:v for k,v in show[\"source\"].items() if k in (\"title\",\"url\",\"publisher\",\"published\")}\n        print(\"EDITORIAL_REVIEW \"+str(p)+\" \"+json.dumps(show,ensure_ascii=False),flush=True)\nvideos=sorted(root.rglob(\"*.mp4\"))\nname=os.environ[\"ASSET_NAME\"]\nif not re.fullmatch(r\"[A-Za-z0-9][A-Za-z0-9._-]{0,100}\\.mp4\",name):raise ValueError(\"Unsafe asset name\")\ntag=os.environ[\"RELEASE_TAG\"]\nif not re.fullmatch(r\"[A-Za-z0-9][A-Za-z0-9._/-]{0,100}\",tag):raise ValueError(\"Unsafe release tag\")\npathlib.Path(\"delivery\").mkdir(exist_ok=True)\nif videos:\n    target=pathlib.Path(\"delivery\")/name;shutil.copyfile(videos[0],target)\n    data=json.loads(subprocess.check_output([\"ffprobe\",\"-v\",\"error\",\"-show_streams\",\"-show_format\",\"-of\",\"json\",str(target)]))\n    v=next(s for s in data[\"streams\"] if s[\"codec_type\"]==\"video\")\n    print(\"VIDEO_REVIEW \"+json.dumps({\"duration\":float(data[\"format\"][\"duration\"]),\"width\":v[\"width\"],\"height\":v[\"height\"],\"file\":name}),flush=True)\nwith open(os.environ[\"GITHUB_OUTPUT\"],\"a\") as f:f.write(\"has_video=\"+str(bool(videos)).lower()+\"\\n\")\n\nPY"
+        },
+        {
+          "name": "Make the requested review video downloadable",
+          "if": "${{ steps.files.outputs.has_video == 'true' && !inputs.inspect_only }}",
+          "run": "set -eu\nif ! gh release view \"$RELEASE_TAG\" --repo \"$GH_REPO\" >/dev/null 2>&1; then\n  gh release create \"$RELEASE_TAG\" --repo \"$GH_REPO\" --target \"$SOURCE_SHA\" --title \"Generated video review sample\" --notes \"Review video generated by GitHub Actions run $RUN_ID. No social publishing.\"\nfi\ngh release upload \"$RELEASE_TAG\" delivery/*.mp4 --repo \"$GH_REPO\" --clobber\n"
+        }
+      ]
+    }
+  }
+}
