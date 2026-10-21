@@ -16,3 +16,5 @@ jobs:
     secrets: inherit
 
 # Audio verification dependencies are explicit; cached Charon narration is reused.
+
+# Render the approved narration using native original motion graphics.

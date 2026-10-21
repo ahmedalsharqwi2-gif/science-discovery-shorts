@@ -45,6 +45,7 @@ env:
   BACKGROUND_MUSIC_VOLUME: '0.07'
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
   PYTHONPATH: ${{ github.workspace }}
+  CINEMATIC_MOTION_ONLY: 'true'
 jobs:
   publish:
     env:
