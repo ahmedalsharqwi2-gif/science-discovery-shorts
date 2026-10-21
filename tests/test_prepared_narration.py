@@ -62,6 +62,11 @@ class PreparedNarrationTests(unittest.TestCase):
         self.assertFalse(result)
         self.assertEqual(saved, {'schema_version': 1, 'title': 'موضوع جديد', 'narration': 'نص كامل صالح للاختبار.', 'audio_rejected': True})
 
+    def test_source_review_metadata_survives_media_failure(self):
+        review={'source':'https://example.org/source','style_revision':4}
+        _,saved=self.execute({'schema_version':1,'title':'موضوع جديد','narration':'نص كامل صالح للاختبار.','editorial_review':review})
+        self.assertEqual(saved['editorial_review'],review)
+
     def test_audio_failure_preserves_valid_script_for_independent_verification(self):
         import sys
         scripts = str(Path(__file__).resolve().parents[1] / 'scripts')

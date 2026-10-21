@@ -1,6 +1,6 @@
 {
   "name": "Review sample — no social publishing",
-  "run-name": "Science review — independent audio verification and generated images",
+  "run-name": "Science review — reuse approved Gemini narration and render images",
   "on": {
     "workflow_dispatch": {
       "inputs": {

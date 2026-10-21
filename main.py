@@ -105,8 +105,10 @@ class AutoPublishPipeline:
             # Persist a complete checked text before costly audio/render/publishing.
             prepared_path.parent.mkdir(parents=True, exist_ok=True)
             checkpoint = prepared_path.with_suffix(".tmp")
-            checkpoint.write_text(json.dumps({"schema_version": 1, "title": topic,
-                                             "narration": checked_text}, ensure_ascii=False), encoding="utf-8")
+            checkpoint_payload = {**(prepared or {}), "schema_version": 1, "title": topic,
+                                  "narration": checked_text}
+            checkpoint_payload.pop("audio_rejected", None)
+            checkpoint.write_text(json.dumps(checkpoint_payload, ensure_ascii=False), encoding="utf-8")
             checkpoint.replace(prepared_path)
 
             # Fact checking is disabled for the current publishing workflow.

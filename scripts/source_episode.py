@@ -86,6 +86,17 @@ def write_horror_pilot():
  episode={'title':source['title'],'narration':text,'hook':re.split(r'(?<=[.!؟])\s+',text)[0],'caption':source['title'],'visual_keywords':source['keywords'],'phonetic_hints':[],'source_reference':source['source'],'source_type':'Source-backed historical mystery','verification_report':{'decision':'APPROVED','method':'Gemini review against a manually checked source capsule','all_facts_independently_verified':False},'editorial_review':record}
  Path('state/current_episode.json').write_text(json.dumps(episode,ensure_ascii=False,indent=2),encoding='utf-8')
 def write_science_pilot():
+ seed=Path(__file__).resolve().parents[1]/'review/propeller-gemini-approved.json'
+ if seed.exists():
+  payload=json.loads(seed.read_text(encoding='utf-8'));record=payload.get('editorial_review',{})
+  if (record.get('source')!=STORIES['propeller']['source'] or record.get('review',{}).get('supported') is not True
+      or payload.get('narration')!=record.get('narration') or not 320<=len(payload['narration'].split())<=400):
+   raise ValueError('Reviewed Gemini pilot identity or narration is invalid')
+  Path('state').mkdir(exist_ok=True)
+  Path('state/prepared_narration.json').write_text(json.dumps(payload,ensure_ascii=False,indent=2),encoding='utf-8')
+  Path('state/source_editorial_review.json').write_text(json.dumps(record,ensure_ascii=False,indent=2),encoding='utf-8')
+  print('Reusing the approved Gemini script from Actions run '+str(payload['generation_run']),flush=True)
+  return
  source,text,record=create('propeller')
  Path('state/prepared_narration.json').write_text(json.dumps({'schema_version':1,'title':source['title'],'narration':text,'editorial_review':record},ensure_ascii=False,indent=2),encoding='utf-8')
 if __name__=='__main__':
