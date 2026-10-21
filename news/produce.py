@@ -18,6 +18,10 @@ def soundtrack(duration,scenes):
     for scene in scenes:
         local=t-scene['start'];mask=(local>=0)&(local<.22)
         z=local[mask];fx[mask]+=.07*np.exp(-22*z)*np.sin(2*np.pi*(780*z+650*z*z))
+    for scene in scenes:
+        age=t-scene.get('beat',scene['end']);mask=(age>=0)&(age<.32);z=age[mask]
+        # Original short comedic bass drop; narration remains the dominant track.
+        fx[mask]+=.15*np.exp(-14*z)*np.sin(2*np.pi*(160*z-130*z*z))
     for name,a in [('music.wav',bed),('effects.wav',fx)]:
         with wave.open('output/'+name,'wb') as w:w.setnchannels(1);w.setsampwidth(2);w.setframerate(rate);w.writeframes((a.clip(-1,1)*32767).astype('<i2').tobytes())
 

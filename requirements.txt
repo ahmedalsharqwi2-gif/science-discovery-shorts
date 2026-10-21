@@ -3,3 +3,5 @@ Pillow>=11,<13
 numpy>=1.26,<3
 beautifulsoup4>=4.12,<5
 faster-whisper==1.2.1
+
+av<19

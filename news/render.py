@@ -60,7 +60,11 @@ def align(plan,wav):
         count=len(scene['narration'].split());start=at(cursor) if cursor else 0;cursor+=count
         end=at(cursor) if cursor<len(expected) else duration
         if end-start<2:raise ValueError('A scene has insufficient actual speech time')
-        scenes.append({**scene,'start':start,'end':end})
+        scene_words=scene['narration'].split();punch=scene['punchline'].split()
+        positions=[i for i in range(len(scene_words)-len(punch)+1) if scene_words[i:i+len(punch)]==punch]
+        if not positions:raise ValueError('Punchline not found in actual script')
+        beat=at(cursor-count+positions[0])
+        scenes.append({**scene,'start':start,'end':end,'beat':beat})
     if actual and duration-actual[-1]['end']>2.5:raise ValueError('Unexpected long trailing silence; review final spoken sentence')
     result={'coverage':coverage,'duration':duration,'words':words,'scenes':scenes,'asr_words':actual,'interpolated_words':[i for i in range(len(words)) if i not in anchors]}
     Path('output/timing.json').write_text(json.dumps(result,ensure_ascii=False,indent=2))
@@ -86,7 +90,7 @@ class Renderer:
         im=Image.new('RGBA',(960,1090),(0,0,0,0));d=ImageDraw.Draw(im)
         d.rounded_rectangle((0,0,959,1089),radius=42,fill=(15,29,49,250),outline=(39,72,101,255),width=2)
         d.rounded_rectangle((32,35,135,99),radius=18,fill=(*CYAN,255));txt(im,f'{index+1:02}',(83,69),32,BG)
-        txt(im,'الفكرة في لقطة',(910,70),27,MUTED,anchor='rm')
+        txt(im,'خبر بضحكة',(910,70),27,MUTED,anchor='rm')
         para(im,s['title'],480,165,57,850,maxlines=2)
         labels=s['labels'];n=len(labels)
         if s['kind']=='comparison':
@@ -101,7 +105,7 @@ class Renderer:
                 d.rounded_rectangle((75,y,885,y+130),radius=24,fill=(19,39,59,255),outline=(46,89,117,255),width=2)
                 d.rounded_rectangle((835,y+23,847,y+105),radius=6,fill=(*CYAN,255))
                 para(im,label,450,y+49,42,720,maxlines=2)
-        txt(im,'ما الجديد؟  •  ماذا يعني لك؟',(480,1025),26,MUTED)
+        txt(im,'الخبر حقيقي • التعليق هزار',(480,1025),26,MUTED)
         return im
     def frame(self,t):
         im=self.base.copy();d=ImageDraw.Draw(im)
@@ -109,7 +113,7 @@ class Renderer:
         shift=int(t*8)%90
         for x in range(-90,W+90,90):d.line((x+shift,200,x+shift,1600),fill=(14,32,49),width=1)
         d.rounded_rectangle((60,92,1020,210),radius=28,fill=(11,27,45),outline=(33,78,101),width=2)
-        txt(im,'كل يوم',(950,147),46,anchor='rm');txt(im,'AI',(700,147),46,CYAN);txt(im,'تحديث موثّق',(110,149),26,CYAN,anchor='lm')
+        txt(im,'كل يوم',(950,147),46,anchor='rm');txt(im,'AI',(700,147),46,CYAN);txt(im,'ميمز تقنية',(110,149),26,CYAN,anchor='lm')
         txt(im,self.plan['source']['publisher'],(540,263),30,MUTED)
         index=next((i for i,s in enumerate(self.t['scenes']) if s['start']<=t<s['end']),len(self.cards)-1)
         s=self.t['scenes'][index];local=t-s['start'];reveal=min(1,max(0,local/.55));ease=1-(1-reveal)**3
@@ -123,6 +127,25 @@ class Renderer:
             for k in range(6):
                 ang=k*math.tau/6+t*.09;x=cx+math.cos(ang)*135;y=cy+math.sin(ang)*110
                 d.line((cx,cy,x,y),fill=(35,100,128),width=2);d.ellipse((x-7,y-7,x+7,y+7),fill=CYAN)
+        # Short zoom and original reaction art are synchronized to the spoken punchline.
+        age=t-s.get('beat',s['end'])
+        if 0<=age<1.6:
+            gain=1+.045*math.exp(-age*5)
+            zw,zh=int(W*gain),int(H*gain)
+            im=im.resize((zw,zh),Image.Resampling.BICUBIC).crop(((zw-W)//2,(zh-H)//2,(zw+W)//2,(zh+H)//2))
+            d=ImageDraw.Draw(im);cx,cy=875,1160
+            d.ellipse((cx-95,cy-95,cx+95,cy+95),fill=(255,202,79),outline=(36,24,17),width=5)
+            reaction=s.get('reaction','shock')
+            if reaction=='suspicious':
+                d.line((cx-55,cy-27,cx-12,cy-13),fill=BG,width=9);d.line((cx+15,cy-13,cx+55,cy-27),fill=BG,width=9)
+            else:
+                for x in [cx-35,cx+35]:d.ellipse((x-11,cy-35,x+11,cy-8),fill=BG)
+            if reaction in ('shock','loading'):d.ellipse((cx-19,cy+15,cx+19,cy+62),fill=BG)
+            else:d.arc((cx-50,cy-5,cx+50,cy+70),0,180,fill=BG,width=9)
+            bubble=Image.new('RGBA',(790,135),(0,0,0,0));bd=ImageDraw.Draw(bubble)
+            bd.rounded_rectangle((0,0,789,134),radius=25,fill=(255,202,79,255),outline=(255,245,210,255),width=3)
+            para(bubble,s['punchline'],395,45,39,740,fill=BG,maxlines=2)
+            im.paste(bubble,(60,1305),bubble)
         for start,end,p in self.captions:
             if start<=t<end:im.paste(p,(60,1480),p);break
         txt(im,'المصدر: '+self.plan['source']['url'].split('/')[2],(540,1770),25,MUTED)
