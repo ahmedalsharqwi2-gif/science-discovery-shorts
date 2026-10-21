@@ -80,6 +80,23 @@ jobs:
 
           '
       if: ${{ steps.daily.outputs.already_confirmed != 'true' }}
+    - name: Check source identity before resuming a review script
+      if: ${{ inputs.source_backed_sample }}
+      run: |
+        python - <<'PY'
+        import json
+        from pathlib import Path
+        p=Path("state/prepared_narration.json")
+        if p.exists():
+            try:
+                d=json.loads(p.read_text(encoding="utf-8"))
+                valid=d.get("editorial_review",{}).get("source")=="https://www.grc.nasa.gov/www/k-12/airplane/propth.html"
+            except (ValueError, TypeError, AttributeError):
+                valid=False
+            if not valid:
+                p.unlink()
+                print("Removed a checkpoint from a different editorial source")
+        PY
     - name: Validate restored text against current topic history
       id: checked_text
       run: python scripts/check_prepared_text.py --path state/prepared_narration.json --history topic_history.json
