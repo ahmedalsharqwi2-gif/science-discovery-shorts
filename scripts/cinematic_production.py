@@ -1106,7 +1106,7 @@ def acquire(scene: dict, episode: dict, cfg: dict, budget: Budget, cache: Path) 
         scene = dict(scene)
         render_explainer(visual, seconds, scene, cfg)
         record={"scene_id":scene["id"],"source":"local_explainer","license":"Original motion graphics",
-                "source_media_is_video":False,"graphic_kind":"original_editorial_schematic",
+                "source_media_is_video":False,"media_type":"motion_graphics","graphic_kind":"original_editorial_schematic",
                 "review":{"passed":True,"method":"deterministic_native_layout","sha256":hashlib.sha256(visual.read_bytes()).hexdigest()}}
         atomic_json(meta,record)
         return visual,{**record,"cached":False}
@@ -1458,7 +1458,7 @@ def build(audio: Path, narration: str, output: Path, episode: dict, subtitles: P
         quality = verify_final(temporary, duration, cfg, clean=clean)
         temporary.replace(output)
         report = {"passed": True, "output": str(output), "caption_timing": timing, "quality": quality,
-                  "target_mix": {"real_source_video_minimum": 0.70, "photos_and_diagrams_maximum": 0.30},
+                  "target_mix": ({"original_motion_graphics": 1.0} if os.getenv("CINEMATIC_MOTION_ONLY", "false").lower() == "true" else {"real_source_video_minimum": 0.70, "photos_and_diagrams_maximum": 0.30}),
                   "actual_sources": {source: sum(r["source"] == source for r in records) for source in sorted({r["source"] for r in records})},
                   "actual_media_mix": {media_type: sum(r.get("media_type", "unknown") == media_type for r in records) for media_type in sorted({r.get("media_type", "unknown") for r in records})},
                   "real_video_duration_share": round(moving_video_share, 4), "minimum_real_video_share": min_video_share,
