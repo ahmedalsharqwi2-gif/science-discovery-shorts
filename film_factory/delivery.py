@@ -10,7 +10,7 @@ def mix_audio(narration,music,effects,duration,out):
     run(['-i',narration,'-af','loudnorm=I=-16:TP=-2:LRA=7,aresample=48000','-c:a','pcm_s16le',voice])
     if abs(float(probe(voice)['format']['duration'])-duration)>.001:raise ValueError('Normalizer changed narration duration')
     run(['-stream_loop','-1','-i',music,'-t',duration,'-af',f'atrim=duration={duration},asetpts=PTS-STARTPTS,loudnorm=I=-27:TP=-9:LRA=7,aresample=48000,afade=t=in:d=1.2,afade=t=out:st={duration-2}:d=2','-c:a','pcm_s16le',bed])
-    graph='[0:a]asplit=2[voice][control];[2:a]aresample=48000,volume=.65[sfx];[1:a][sfx]amix=inputs=2:duration=longest:normalize=0[env];[env][control]sidechaincompress=threshold=.025:ratio=8:attack=15:release=350[ducked];[voice][ducked]amix=inputs=2:duration=first:normalize=0,alimiter=limit=.94:latency=1[mix]'
+    graph='[0:a]aformat=channel_layouts=stereo,asplit=2[voice][control];[2:a]aresample=48000,volume=.65[sfx];[1:a][sfx]amix=inputs=2:duration=longest:normalize=0[env];[env][control]sidechaincompress=threshold=.025:ratio=8:attack=15:release=350[ducked];[voice][ducked]amix=inputs=2:duration=first:normalize=0,alimiter=limit=.94:latency=1[mix]'
     run(['-i',voice,'-i',bed,'-i',effects,'-filter_complex',graph,'-map','[mix]','-c:a','pcm_s16le',out])
     if abs(float(probe(out)['format']['duration'])-duration)>.001:raise ValueError('Mixer truncated audio; do not pad over lost speech')
     return voice

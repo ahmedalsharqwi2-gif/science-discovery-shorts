@@ -25,7 +25,7 @@ class FilmTests(unittest.TestCase):
    import os,wave
    before=os.getcwd();os.chdir(td);Path('output').mkdir()
    try:
-    r=build(6,[{'effect':'knock','beat':2.25,'cue':'خبط الباب'}],'horror');self.assertEqual([e['at'] for e in r['events']],[2.25,2.67])
+    r=build(6,[{'effect':'knock','beat':2.25,'cue':'خبط الباب'}],'horror');self.assertEqual([e['at'] for e in r['events']],[2.25,2.67,3.09])
     with wave.open('output/effects.wav') as w:self.assertEqual(w.getnchannels(),2);self.assertEqual(w.getnframes(),144000)
    finally:os.chdir(before)
 

@@ -1,0 +1,79 @@
+{
+  "name": "Finish stereo sound review — reuse verified pictures and Charon",
+  "on": {
+    "workflow_dispatch": {
+      "inputs": {
+        "source_run_id": {
+          "description": "Successful complete photographic review run",
+          "required": true,
+          "default": "39637804329",
+          "type": "string"
+        }
+      }
+    },
+    "push": {
+      "branches": [
+        "main"
+      ],
+      "paths": [
+        ".github/workflows/sound-review.yml"
+      ]
+    }
+  },
+  "permissions": {
+    "contents": "read",
+    "actions": "read"
+  },
+  "jobs": {
+    "sound": {
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 10,
+      "env": {
+        "PYTHONPATH": "${{ github.workspace }}",
+        "PYTHONUNBUFFERED": "1",
+        "SOURCE_RUN_ID": "${{ inputs.source_run_id || '39637804329' }}"
+      },
+      "steps": [
+        {
+          "uses": "actions/checkout@v4"
+        },
+        {
+          "uses": "actions/setup-python@v5",
+          "with": {
+            "python-version": "3.11"
+          }
+        },
+        {
+          "uses": "actions/download-artifact@v4",
+          "with": {
+            "name": "science-photographic-review-${{ env.SOURCE_RUN_ID }}",
+            "run-id": "${{ env.SOURCE_RUN_ID }}",
+            "github-token": "${{ github.token }}",
+            "path": "output"
+          }
+        },
+        {
+          "name": "Install local audio dependencies",
+          "run": "sudo apt-get update -qq\nsudo apt-get install -y ffmpeg\npython -m pip install numpy"
+        },
+        {
+          "name": "Check that sound follows spoken words",
+          "run": "python -m unittest discover -s tests -p test_audio_semantics.py -v"
+        },
+        {
+          "name": "Finish verified stereo mix without generating new speech or images",
+          "run": "python scripts/finish_audio_review.py science"
+        },
+        {
+          "uses": "actions/upload-artifact@v4",
+          "with": {
+            "name": "science-final-sound-${{ github.run_id }}",
+            "path": "output/science-photo-charon.mp4\noutput/verification.json\noutput/plan.json\noutput/narration.source.json\noutput/timing.json",
+            "retention-days": 14,
+            "if-no-files-found": "error"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -28,7 +28,7 @@ def main():
  duration=timing['duration']
  if not 70<=duration<=180:raise ValueError(f'Expected 70–180 seconds of complete speech, got {duration:.2f}')
  FilmRenderer(plan,timing,images).encode('output/visuals.mp4')
- sound=build(duration,timing['scenes'],args.profile)
+ sound=build(duration,timing['scenes'],args.profile,timing['words'])
  normalized=mix_audio(voice,'output/music.wav','output/effects.wav',duration,'output/mix.wav')
  final=Path('output')/(args.profile+'-photo-charon.mp4')
  subprocess.run(['ffmpeg','-v','error','-y','-i','output/visuals.mp4','-i','output/mix.wav','-map','0:v','-map','1:a','-c:v','copy','-c:a','aac','-b:a','192k','-t',str(duration),'-movflags','+faststart',str(final)],check=True)

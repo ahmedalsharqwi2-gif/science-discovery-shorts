@@ -1,17 +1,7 @@
 {
   "name": "Photographic cinema review — no social publishing",
   "on": {
-    "workflow_dispatch": {},
-    "push": {
-      "branches": [
-        "main"
-      ],
-      "paths": [
-        "film_factory/**",
-        "tests/test_film_factory.py",
-        ".github/workflows/cinema-review.yml"
-      ]
-    }
+    "workflow_dispatch": {}
   },
   "permissions": {
     "contents": "read"

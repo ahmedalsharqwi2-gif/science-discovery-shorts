@@ -1,12 +1,34 @@
 """Original stereo Foley, scene-specific cues, no stock music dependency."""
-import math,wave
+import math,wave,re
 from pathlib import Path
 import numpy as np
 
 def pan(x,p):return np.stack((x*np.sqrt((1-p)/2),x*np.sqrt((1+p)/2)),axis=-1)
 def write(path,data,rate):
  with wave.open(str(path),'wb') as w:w.setnchannels(2);w.setsampwidth(2);w.setframerate(rate);w.writeframes((np.clip(data,-.95,.95)*32767).astype('<i2').tobytes())
-def build(duration,scenes,profile):
+def speech_cues(words,profile):
+ cues=[];last={}
+ for i,word in enumerate(words):
+  token=re.sub(r'[^\u0621-\u064a]','',word['text'])
+  kind=None
+  if profile=='horror':
+   if re.search(r'خبطات|خبطة|خبطه|دقات.*الباب',token):kind='knock'
+   elif 'خطوات' in token:kind='footsteps'
+   elif re.search(r'ترباس|مقبض',token):kind='latch'
+   elif re.search(r'قلبي|نبضات',token):kind='heartbeat'
+   elif re.search(r'^و?سكت$',token):kind='silence'
+  elif profile=='history':
+   if re.search(r'يهدم|هدم|تفجير|فراغات',token):kind='firebreak'
+   elif token in ('النار','نار','النيران'):kind='embers'
+  else:
+   if re.search(r'الجاذبية|السقوط|بيطفوا',token):kind='orbit'
+  if not kind:continue
+  at=float(word['start'])
+  if at-last.get(kind,-100)<12:continue
+  last[kind]=at;cues.append({'effect':kind,'beat':at,'cue':' '.join(x['text'] for x in words[max(0,i-1):i+3])})
+ return cues
+
+def build(duration,scenes,profile,words=None):
  rate=24000;n=math.ceil(duration*rate);t=np.arange(n,dtype=np.float32)/rate;rng=np.random.default_rng(773)
  bed=np.zeros((n,2),dtype=np.float32);fx=np.zeros_like(bed);events=[]
  if profile=='horror':
@@ -30,12 +52,12 @@ def build(duration,scenes,profile):
   echo=round(.085*rate)
   if len(a)>echo:a[echo:]+=.23*a[:-echo]
   fx[lo:hi]+=pan(a,p)
- for i,s in enumerate(scenes):
+ for i,s in enumerate(speech_cues(words,profile) if words is not None else scenes):
   kind=s.get('effect','none');at=s['beat'];p=(-.65 if i%2 else .65)
   if kind=='silence':
    a=max(0,round((at-.25)*rate));b=min(n,round((at+1.4)*rate));bed[a:b]*=.06;events.append({'kind':kind,'at':at,'cue':s['cue']});continue
   if kind=='none':continue
-  for j,offset in enumerate((0,.42) if kind=='knock' else (0,.75,1.5) if kind=='footsteps' else (0,1.1,2.2) if kind=='heartbeat' else (0,)):
+  for j,offset in enumerate((0,.42,.84) if kind=='knock' else (0,.75,1.5) if kind=='footsteps' else (0,1.1,2.2) if kind=='heartbeat' else (0,)):
    put(at+offset,.8 if kind!='firebreak' else 1.7,kind,p);events.append({'kind':kind,'at':at+offset,'cue':s['cue']})
  fade=np.minimum(1,t/1.3)*np.minimum(1,np.maximum(0,duration-t)/1.5)
  bed*=fade[:,None];fx*=fade[:,None]
