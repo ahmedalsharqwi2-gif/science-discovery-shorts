@@ -3,7 +3,9 @@ from pathlib import Path
 import numpy as np
 from voice_provider.client import generate
 from news.editor import prepare
-from news.render import align, Renderer
+from news.render import align
+from news.images import prepare_images
+from news.photo_render import PhotoRenderer
 from news.delivery import mix_audio,verify_tail
 
 def soundtrack(duration,scenes):
@@ -32,6 +34,7 @@ def main():
     plan['series']='ai على السريع'
     if not plan['title'].startswith('ai على السريع'):
         plan['title']='ai على السريع | '+plan['title']
+    images=prepare_images(plan)
     voice=generate(plan['narration'],'output/narration.wav')
     timing_path=Path('output/timing.json')
     digest=hashlib.sha256(plan['narration'].encode()).hexdigest()
@@ -40,14 +43,14 @@ def main():
         timing=align(plan,voice)
     duration=timing['duration']
     if not 45<=duration<=120:raise ValueError(f'Daily news narration must be 45–120 seconds, got {duration:.1f}')
-    Renderer(plan,timing).encode('output/visuals.mp4')
+    PhotoRenderer(plan,timing,images).encode('output/visuals.mp4')
     soundtrack(duration,timing['scenes'])
     normalized=mix_audio(voice,'output/music.wav','output/effects.wav',duration,'output/mix.wav')
     final=Path('output/ai-news-daily.mp4')
     subprocess.run(['ffmpeg','-v','error','-y','-i','output/visuals.mp4','-i','output/mix.wav','-map','0:v','-map','1:a','-c:v','copy','-c:a','aac','-b:a','192k','-t',str(duration),'-movflags','+faststart',str(final)],check=True)
     audit=verify_tail(final,normalized,duration)
     subprocess.run(['ffmpeg','-v','error','-i',str(final),'-f','null','-'],check=True)
-    (Path('output')/'verification.json').write_text(json.dumps({'video':str(final),'width':1080,'height':1920,'fps':30,'voice':'Charon','script_model':plan.get('script_model'),'source_url':plan['source']['url'],'source_published':plan['source']['published'],'audio':audit,'automatically_published':False,'editorial_review':plan['editorial_review']},ensure_ascii=False,indent=2))
+    (Path('output')/'verification.json').write_text(json.dumps({'video':str(final),'width':1080,'height':1920,'fps':30,'voice':'Charon','script_model':plan.get('script_model'),'source_url':plan['source']['url'],'source_published':plan['source']['published'],'audio':audit,'automatically_published':False,'visual_provider':'Cloudflare Workers AI','generated_image_count':len(images),'editorial_review':plan['editorial_review']},ensure_ascii=False,indent=2))
     safe={**plan,'source':{k:v for k,v in plan['source'].items() if k not in ('article','summary')}}
     (Path('output')/'plan.json').write_text(json.dumps(safe,ensure_ascii=False,indent=2))
     history=Path('state/news_history.json');h=json.loads(history.read_text()) if history.exists() else {'urls':[]}
