@@ -1,5 +1,6 @@
 {
   "name": "Review sample — no social publishing",
+  "run-name": "Source-backed science review after daily budget reset",
   "on": {
     "workflow_dispatch": {
       "inputs": {
