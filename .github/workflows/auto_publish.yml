@@ -11,6 +11,12 @@ run-name: Daily 17:00 Cairo — ${{ github.run_number }}
   schedule:
   - cron: 10 13 * * *
     timezone: Africa/Cairo
+  workflow_call:
+    inputs:
+      dry_run:
+        required: false
+        default: false
+        type: boolean
 concurrency:
   group: science-topic-history-main
   cancel-in-progress: false
@@ -115,7 +121,7 @@ jobs:
         echo "Publishing credentials and channel mapping are present."
 
         '
-      if: ${{ steps.daily.outputs.already_confirmed != 'true' }}
+      if: ${{ !inputs.dry_run && (steps.daily.outputs.already_confirmed != 'true') }}
     - name: Validate and resolve AI model policy
       if: ${{ (steps.checked_text.outputs.usable != 'true') && steps.daily.outputs.already_confirmed != 'true' }}
       env:
@@ -237,7 +243,7 @@ jobs:
         BUFFER_OUTCOME: ${{ steps.generate_publish.outcome }}
       run: python scripts/publication_state.py confirm
     - name: Persist confirmed stock and production counters
-      if: ${{ (always()) && steps.daily.outputs.already_confirmed != 'true' }}
+      if: ${{ !inputs.dry_run && ((always()) && steps.daily.outputs.already_confirmed != 'true') }}
       run: "git config user.name 'content-bot'\ngit config user.email 'bot@users.noreply.github.com'\nfor path in state/publication_stock.json state/cinematic_budget.json state/yt_token_last_success.json state/used_clips.json topic_history.json state/voice_rotation.json state/science_visual_history.json; do\n  if [ -f \"$path\" ]; then git add \"$path\"; fi\ndone\nif git diff --cached --quiet; then exit 0; fi\ngit commit -m 'chore: persist publication receipts and counters [skip ci]'\nfor attempt in 1 2 3; do\n  if git pull --rebase --autostash origin main && git push origin HEAD:main; then exit 0; fi\n  sleep $((attempt * 5))\ndone\nexit 1\n"
     - name: Preserve cinematic storyboard and quality evidence
       if: ${{ (always() && env.CINEMATIC_ENABLED == 'true') && steps.daily.outputs.already_confirmed != 'true' }}

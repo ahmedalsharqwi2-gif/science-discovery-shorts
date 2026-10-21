@@ -1,0 +1,16 @@
+name: Review sample — no social publishing
+'on':
+  workflow_dispatch: {}
+  push:
+    branches:
+    - main
+    paths:
+    - .github/workflows/review-sample.yml
+permissions:
+  contents: write
+jobs:
+  sample:
+    uses: ./.github/workflows/auto_publish.yml
+    with:
+      dry_run: true
+    secrets: inherit

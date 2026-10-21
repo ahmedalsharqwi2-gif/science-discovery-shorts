@@ -6,7 +6,6 @@ from pathlib import Path
 from unittest.mock import patch
 
 from arabic_tts_quality_checker import ArabicTTSQualityChecker
-from scripts.generate_voice import edge_fallback_voice, normalize_edge_pitch
 from tts_quality import enforce_text_quality, resolve_reference_profile
 
 
@@ -52,15 +51,7 @@ class NarrationTextQualityTests(unittest.TestCase):
         self.assertEqual(issues, [])
         self.assertEqual(run.call_args.args[0][0], "ffprobe")
 
-    def test_google_voice_is_mapped_to_valid_edge_voice(self):
-        self.assertEqual(edge_fallback_voice("ar-XA-Neural2-B"), "ar-SA-HamedNeural")
-        self.assertEqual(edge_fallback_voice("ar-SA-AmmarNeural"), "ar-SA-AmmarNeural")
 
-    def test_edge_pitch_always_has_required_sign(self):
-        self.assertEqual(normalize_edge_pitch("0Hz"), "+0Hz")
-        self.assertEqual(normalize_edge_pitch("-5Hz"), "-5Hz")
-        self.assertEqual(normalize_edge_pitch("7"), "+7Hz")
-        self.assertEqual(normalize_edge_pitch("invalid"), "+0Hz")
 
     @patch("arabic_tts_quality_checker.subprocess.run")
     def test_low_asr_match_is_a_publish_blocker(self, run):

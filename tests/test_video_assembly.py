@@ -8,7 +8,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from scripts.assemble_video import _caption_text, write_ass_subtitles
-from scripts.generate_voice import normalize_edge_tts_text
+from scripts.generate_voice import normalize_spoken_text
 
 
 def write_fixture_subtitles(text, duration, path):
@@ -81,8 +81,8 @@ class VideoAssemblyTests(unittest.TestCase):
             self.assertTrue(red_pixels, "active word was not rendered in red")
             self.assertGreater(sum(red_pixels) / len(red_pixels), image.width / 2)
 
-    def test_edge_tts_text_removes_formatting_and_repeated_pauses(self):
-        text = normalize_edge_tts_text("  هذا\n**نص**، ،؛؛  مهم...  ")
+    def test_spoken_text_removes_formatting_and_repeated_pauses(self):
+        text = normalize_spoken_text("  هذا\n**نص**، ،؛؛  مهم...  ")
         self.assertEqual(text, "هذا نص، مهم…")
 
     def test_captions_are_top_centered_below_mobile_notch_safe_area(self):
