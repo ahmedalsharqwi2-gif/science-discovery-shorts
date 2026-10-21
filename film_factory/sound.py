@@ -2,6 +2,7 @@
 import math,wave,re
 from pathlib import Path
 import numpy as np
+from film_factory.motion import lexical_match
 
 def pan(x,p):return np.stack((x*np.sqrt((1-p)/2),x*np.sqrt((1+p)/2)),axis=-1)
 def write(path,data,rate):
@@ -17,7 +18,7 @@ def speech_cues(words,profile):
    elif re.search(r'ترباس|مقبض',token):kind='latch'
    elif re.search(r'قلبي|نبضات',token):kind='heartbeat'
    elif re.search(r'^و?سكت$',token):kind='silence'
-   elif re.search(r'موج|بحر|المحيط',token):kind='waves'
+   elif lexical_match(r'موج|موجة|أمواج|بحر|المحيط',token):kind='waves'
    elif re.search(r'منارة|مناره|مصباح',token):kind='lamp'
   elif profile=='history':
    if re.search(r'يهدم|هدم|تفجير|فراغات',token):kind='firebreak'

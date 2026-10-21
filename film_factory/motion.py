@@ -3,6 +3,7 @@ import math,re
 from PIL import Image,ImageDraw
 
 LEX={
+ 'gas':r'غاز|الكربون|المتراكم',
  'waves':r'موج|بحر|المحيط|سفينة|سفينه',
  'lamp':r'منارة|مناره|المصباح|النور',
  'battle':r'معركة|معركه|جيش|جنود|حصار',
@@ -12,12 +13,17 @@ LEX={
  'magnet':r'مغناطيس|مغناطيسي',
  'network':r'نموذج|ذكاء|بيانات|شريحة|شريحه|معالج|رقاقة',
 }
+def lexical_match(pattern,text):
+ token=re.sub(r'[^\u0621-\u064a]','',str(text)).translate(str.maketrans({'أ':'ا','إ':'ا','آ':'ا','ة':'ه','ى':'ي'}))
+ pattern=pattern.translate(str.maketrans({'أ':'ا','إ':'ا','آ':'ا','ة':'ه','ى':'ي'}))
+ return re.fullmatch(r'(?:و|ف)?(?:ب|ل|ك)?(?:ال)?(?:'+pattern+r')',token) is not None
+
 def events(words,profile):
- allowed={'horror':{'waves','lamp'},'history':{'battle','construction','waves'},'science':{'cell','wave','magnet'},'news':{'network'}}[profile]
+ allowed={'horror':{'waves','lamp','gas'},'history':{'battle','construction','waves'},'science':{'cell','wave','magnet'},'news':{'network'}}[profile]
  result=[];last={}
  for word in words:
   for kind in allowed:
-   if re.search(LEX[kind],word['text']) and word['start']-last.get(kind,-100)>9:
+   if lexical_match(LEX[kind],word['text']) and word['start']-last.get(kind,-100)>9:
     last[kind]=word['start'];result.append({'kind':kind,'at':word['start'],'word':word['text']})
  return result
 def draw(im,t,cues,accent):
@@ -26,7 +32,16 @@ def draw(im,t,cues,accent):
   age=t-cue['at']
   if not 0<=age<5.5:continue
   a=int(190*min(1,age/.35)*min(1,(5.5-age)/.6));color=(*accent,a);kind=cue['kind']
-  if kind=='waves':
+  if kind=='gas':
+   d.rounded_rectangle((160,650,920,1130),radius=25,fill=(4,15,24,210))
+   d.polygon([(210,750),(360,1050),(650,1050),(780,750)],fill=(20,67,103,a),outline=color)
+   for k in range(18):
+    x=370+k*17;y=1020-((age*65+k*19)%240)
+    d.ellipse((x-4,y-4,x+4,y+4),fill=(*accent,int(a*.7)))
+   for k in range(3):
+    x=760+age*16;y=790+k*65
+    d.line((710,y,x,y+90),fill=color,width=4)
+  elif kind=='waves':
    for row in range(4):
     pts=[(x,1150+row*45+math.sin(x/100-age*1.8+row)*22) for x in range(0,w+20,20)]
     d.line(pts,fill=color,width=3)

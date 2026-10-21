@@ -4,6 +4,7 @@ from pathlib import Path
 from unittest.mock import patch
 from film_factory.metadata import create
 from film_factory.motion import events
+from film_factory.sound import speech_cues
 from film_factory.publish import channels
 from film_factory.topics import NYOS,select
 from scripts.daily_schedule import next_slot,validate_slot
@@ -34,6 +35,10 @@ class DailyCinemaTests(unittest.TestCase):
  def test_effect_follows_spoken_subject_and_not_a_generic_scene_time(self):
   cues=events([{'text':'الموج','start':18.4},{'text':'منارة','start':22.2}], 'horror')
   self.assertEqual([(x['kind'],x['at']) for x in cues],[('waves',18.4),('lamp',22.2)])
+ def test_existing_is_not_misread_as_waves_in_picture_or_sound(self):
+  words=[{'text':'الموجودة.','start':116.82},{'text':'وبالبحر','start':130.0}]
+  self.assertEqual([(x['kind'],x['at']) for x in events(words,'horror')],[('waves',130.0)])
+  self.assertEqual([(x['effect'],x['beat']) for x in speech_cues(words,'horror')],[('waves',130.0)])
  def test_news_channel_selection_never_uses_an_unrelated_page(self):
   replies=[{'account':{'organizations':[{'id':'org'}]}},{'channels':[{'id':'science','name':'اسرار الكون','displayName':'اسرار الكون','service':'facebook','isQueuePaused':False}]}]
   with patch.dict(os.environ,{},clear=True),patch('film_factory.publish.query',side_effect=replies):
