@@ -1,15 +1,16 @@
 import os
+import tempfile
 import unittest
 from pathlib import Path
 from types import SimpleNamespace
-from unittest.mock import patch
+from unittest.mock import patch, Mock
 
 import main
 from scripts.generate_content import ContentGenerator
 
 
 class CurrentNarrationPolicyTests(unittest.TestCase):
-    def test_default_word_limits_leave_headroom_for_edge_tts(self):
+    def test_default_word_limits_leave_headroom_for_narration(self):
         with patch.dict(os.environ, {}, clear=True):
             pipeline = main.AutoPublishPipeline()
         self.assertEqual(pipeline.content_generator.min_words, 180)
@@ -64,9 +65,37 @@ class CurrentNarrationPolicyTests(unittest.TestCase):
             patch.object(main, "fit_narration", return_value=135.0),
             patch.object(main, "assemble_video", return_value=Path("output/final_video.mp4")),
             patch.object(main, "evaluate_broll", return_value={"passed": True, "broll": {"clip_count": 4}}),
+            patch("scripts.verify_delivery.verify", return_value={"passed": True}),
             patch.object(main.TopicHistory, "check_unique"),
         ):
             self.assertTrue(pipeline.run(topic="موضوع اختباري"))
+
+    def test_missing_final_speech_blocks_external_publication(self):
+        pipeline = main.AutoPublishPipeline()
+        report = SimpleNamespace(is_acceptable=True, overall_score=1.0)
+        pipeline.content_generator.generate_narration = lambda _topic: "شرح علمي للمراجعة."
+        pipeline.quality_checker.check_text = lambda text: (text, report)
+        pipeline.quality_checker.check_audio = lambda _path, _text: report
+        pipeline.voice_generator.generate = lambda _text, output_path: (output_path, True)
+        pipeline.publisher.publish_to_buffer = Mock()
+        cwd = Path.cwd()
+        with tempfile.TemporaryDirectory() as folder:
+            try:
+                os.chdir(folder)
+                with (
+                    patch.dict(os.environ, {"PUBLISH_DRY_RUN":"false", "FACT_CHECK_ENABLED":"false"}),
+                    patch.object(main.TopicHistory, "check_unique"),
+                    patch.object(main, "probe_duration", return_value=135.0),
+                    patch.object(main, "fit_narration", return_value=135.0),
+                    patch.object(main, "assemble_video", return_value=Path("output/final_video.mp4")),
+                    patch.object(main, "evaluate_broll", return_value={"passed":True,"broll":{"clip_count":4}}),
+                    patch("scripts.verify_delivery.verify", side_effect=ValueError("Final spoken ending disappeared")) as guard,
+                ):
+                    self.assertFalse(pipeline.run(topic="اختبار نهاية الصوت"))
+                    guard.assert_called_once()
+                    pipeline.publisher.publish_to_buffer.assert_not_called()
+            finally:
+                os.chdir(cwd)
 
 
 if __name__ == "__main__":
