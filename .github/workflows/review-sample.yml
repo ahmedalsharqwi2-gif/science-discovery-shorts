@@ -1,18 +1,62 @@
-name: Review sample — no social publishing
-'on':
-  workflow_dispatch: {}
-  push:
-    branches:
-    - main
-    paths:
-    - .github/workflows/review-sample.yml
-permissions:
-  contents: write
-jobs:
-  sample:
-    uses: ./.github/workflows/auto_publish.yml
-    with:
-      dry_run: true
-      source_backed_sample: true
-    secrets: inherit
-
+{
+  "name": "Review sample — no social publishing",
+  "on": {
+    "workflow_dispatch": {
+      "inputs": {
+        "force": {
+          "description": "Render another review after a sample was delivered",
+          "type": "boolean",
+          "required": false,
+          "default": false
+        }
+      }
+    },
+    "push": {
+      "branches": [
+        "main"
+      ],
+      "paths": [
+        ".github/workflows/review-sample.yml"
+      ]
+    },
+    "schedule": [
+      {
+        "cron": "10 8 * * *",
+        "timezone": "Etc/UTC"
+      }
+    ]
+  },
+  "permissions": {
+    "contents": "write"
+  },
+  "jobs": {
+    "pending_review": {
+      "runs-on": "ubuntu-24.04",
+      "outputs": {
+        "pending": "${{ steps.check.outputs.pending }}"
+      },
+      "steps": [
+        {
+          "id": "check",
+          "uses": "actions/github-script@v8",
+          "env": {
+            "FORCE_REVIEW": "${{ inputs.force || false }}"
+          },
+          "with": {
+            "script": "if(process.env.FORCE_REVIEW === \"true\"){core.setOutput(\"pending\",\"true\");return;}\ntry {\n const release = (await github.rest.repos.getReleaseByTag({...context.repo,tag:\"science-review-2026-10-21\"})).data;\n core.setOutput(\"pending\",String(!release.assets.some(a=>a.name===\"science-charon.mp4\")));\n} catch(error) {\n if(error.status!==404)throw error;\n core.setOutput(\"pending\",\"true\");\n}"
+          }
+        }
+      ]
+    },
+    "sample": {
+      "needs": "pending_review",
+      "if": "${{ needs.pending_review.outputs.pending == 'true' }}",
+      "uses": "./.github/workflows/auto_publish.yml",
+      "with": {
+        "dry_run": true,
+        "source_backed_sample": true
+      },
+      "secrets": "inherit"
+    }
+  }
+}
