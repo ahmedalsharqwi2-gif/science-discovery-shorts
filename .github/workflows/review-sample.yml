@@ -1,6 +1,6 @@
 {
   "name": "Review sample — no social publishing",
-  "run-name": "Science review — reuse approved Gemini narration and render images",
+  "run-name": "Science review — validated captions and existing Pollinations illustration",
   "on": {
     "workflow_dispatch": {
       "inputs": {

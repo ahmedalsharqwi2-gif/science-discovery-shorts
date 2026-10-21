@@ -1,0 +1,14 @@
+{
+  "provider": "Pollinations.ai Classic",
+  "generated": true,
+  "illustrative": true,
+  "archival_evidence": false,
+  "paid_fallback_used": false,
+  "authenticated_api_used": false,
+  "source_width": 580,
+  "source_height": 1015,
+  "sha256": "fce5a373e09d9703a35d1a577a5c71c798789c601dbb157f714760e6ceb34ba0",
+  "narration_sha256": "502df205b4328577e2f512fea0fdc6e7191b06c1c256fa5d037f4b8d71eb241d",
+  "generation_context": "Previously generated propeller illustration used for the silent local review demo; original prompt was not retained. Reused as a single topic illustration, not newly generated for each passage.",
+  "file": "propeller-illustration.jpg"
+}

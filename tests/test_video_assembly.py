@@ -104,7 +104,7 @@ class VideoAssemblyTests(unittest.TestCase):
         align.assert_called_once()
 
     @patch("scripts.assemble_video.align_words_with_whisper", side_effect=RuntimeError("word timings unavailable"))
-    @patch.dict(os.environ, {"QUALITY_GATES_BLOCKING": "false"})
+    @patch.dict(os.environ, {"QUALITY_GATES_BLOCKING": "false", "CAPTION_ALIGNMENT_REQUIRED": "false"})
     def test_nonblocking_alignment_uses_plain_captions(self, align):
         with tempfile.TemporaryDirectory() as directory:
             path = Path(directory) / "captions.ass"

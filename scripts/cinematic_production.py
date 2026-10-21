@@ -1090,7 +1090,7 @@ def acquire(scene: dict, episode: dict, cfg: dict, budget: Budget, cache: Path) 
     seconds = scene["end"] - scene["start"]
     cache.mkdir(parents=True, exist_ok=True)
     image_provider = os.getenv('MOTION_IMAGE_PROVIDER', 'none')
-    identity = json.dumps({"scene": scene, "context": episode, "profile": cfg["profile"], "visual_revision": "native-motion-v2", "image_provider": image_provider, "dimensions": [cfg["width"], cfg["height"], cfg["fps"]], "models": [cfg["image_model"], cfg["image_fallback_model"], cfg["review_model"]]}, ensure_ascii=False, sort_keys=True)
+    identity = json.dumps({"scene": scene, "context": episode, "profile": cfg["profile"], "visual_revision": "native-motion-v3", "image_provider": image_provider, "dimensions": [cfg["width"], cfg["height"], cfg["fps"]], "models": [cfg["image_model"], cfg["image_fallback_model"], cfg["review_model"]]}, ensure_ascii=False, sort_keys=True)
     digest = hashlib.sha256(identity.encode()).hexdigest()[:24]
     visual, meta = cache / f"{digest}.mp4", cache / f"{digest}.json"
     if visual.exists() and meta.exists():
@@ -1105,7 +1105,10 @@ def acquire(scene: dict, episode: dict, cfg: dict, budget: Budget, cache: Path) 
     if os.getenv("CINEMATIC_MOTION_ONLY", "false").lower() == "true":
         from scripts.motion_graphics import render_explainer
         scene = dict(scene)
-        if image_provider == 'pollinations-classic':
+        if image_provider == 'review-approved':
+            from scripts.review_illustration import approved_illustration
+            scene['generated_illustration'] = approved_illustration(episode)
+        elif image_provider == 'pollinations-classic':
             from scripts.pollinations_images import generated_illustration
             image_scene = {**scene, 'prompt': scene.get('illustration_prompt', scene['prompt'])}
             scene['generated_illustration'] = generated_illustration(image_scene, cache)

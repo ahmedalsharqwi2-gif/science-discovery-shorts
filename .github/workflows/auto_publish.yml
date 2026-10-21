@@ -54,7 +54,8 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
   PYTHONPATH: ${{ github.workspace }}
   CINEMATIC_MOTION_ONLY: 'true'
-  MOTION_IMAGE_PROVIDER: ${{ inputs.dry_run && 'pollinations-classic' || 'none' }}
+  MOTION_IMAGE_PROVIDER: ${{ inputs.source_backed_sample && 'review-approved' || 'none' }}
+  CAPTION_ALIGNMENT_REQUIRED: 'true'
 jobs:
   publish:
     env:

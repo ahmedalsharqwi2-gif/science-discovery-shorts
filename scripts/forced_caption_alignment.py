@@ -19,14 +19,14 @@ def validate_events(events, words, duration):
         raise RuntimeError('Forced alignment did not cover every caption word')
     previous_end = 0.0
     output = []
-    for event, expected in zip(events, words):
+    for index, (event, expected) in enumerate(zip(events, words)):
         if normalized(event['text']) != normalized(expected):
             raise RuntimeError('Forced alignment changed approved caption text')
         start, end = float(event['start']), float(event['end'])
         if not math.isfinite(start) or not math.isfinite(end) or start < 0 or end > duration + .1:
             raise RuntimeError('Forced alignment timestamps outside audio')
         if end - start < .02 or end - start > 3 or start < previous_end - .04:
-            raise RuntimeError('Forced alignment has missing, overlapping or implausible word timings')
+            raise RuntimeError(f'Invalid timing at word {index}: {expected!r}, start={start:.3f}, end={end:.3f}, previous_end={previous_end:.3f}')
         previous_end = end
         output.append({'text': expected, 'offset': start, 'duration': end-start})
     return output
@@ -36,13 +36,27 @@ def align_worker(audio, words):
     import stable_whisper
     import torch
     torch.set_num_threads(2)
-    model = stable_whisper.load_faster_whisper('small', device='cpu', compute_type='int8')
-    result = model.align(str(audio), ' '.join(words), language='ar',
-                         failure_threshold=0.0, max_word_dur=3.0, fast_mode=False)
-    if result is None:
-        raise RuntimeError('Local aligner did not return timestamps')
-    return [{'text': word.word.strip(), 'start': word.start, 'end': word.end}
-            for segment in result.segments for word in (segment.words or [])]
+    duration = float(subprocess.run(['ffprobe','-v','error','-show_entries','format=duration',
+        '-of','default=noprint_wrappers=1:nokey=1',str(audio)],capture_output=True,text=True,check=True).stdout)
+    failures = []
+    for size in ('small', 'medium'):
+        model = stable_whisper.load_faster_whisper(size, device='cpu', compute_type='int8')
+        result = model.align(str(audio), ' '.join(words), language='ar',
+                             failure_threshold=0.0, max_word_dur=3.0, fast_mode=False)
+        del model
+        if result is None:
+            failures.append(size + ': no timestamps')
+            continue
+        events = [{'text': word.word.strip(), 'start': word.start, 'end': word.end}
+                  for segment in result.segments for word in (segment.words or [])]
+        try:
+            validate_events(events, words, duration)
+        except RuntimeError as exc:
+            failures.append(size + ': ' + str(exc))
+            continue
+        print('Validated waveform alignment using ' + size, flush=True)
+        return events
+    raise RuntimeError('; '.join(failures))
 
 
 def forced_word_alignment(audio: Path, words: list[str]) -> list[dict]:
@@ -54,7 +68,7 @@ def forced_word_alignment(audio: Path, words: list[str]) -> list[dict]:
         try:
             subprocess.run([sys.executable,str(Path(__file__).resolve()),'worker',str(audio.resolve()),
                             str(transcript.resolve()),str(output.resolve())],
-                           capture_output=True,text=True,check=True,timeout=360)
+                           capture_output=True,text=True,check=True,timeout=900)
         except subprocess.CalledProcessError as exc:
             raise RuntimeError('Local forced caption alignment failed: ' + (exc.stderr or '')[-1200:]) from exc
         except subprocess.TimeoutExpired as exc:
