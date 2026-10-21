@@ -1,0 +1,75 @@
+{
+  "name": "Deliver successful review sample",
+  "on": {
+    "workflow_run": {
+      "workflows": [
+        "Review sample — no social publishing"
+      ],
+      "types": [
+        "completed"
+      ],
+      "branches": [
+        "main"
+      ]
+    },
+    "workflow_dispatch": {
+      "inputs": {
+        "run_id": {
+          "type": "string",
+          "required": true,
+          "default": "39545901237"
+        }
+      }
+    },
+    "push": {
+      "branches": [
+        "main"
+      ],
+      "paths": [
+        ".github/workflows/review-inspect.yml"
+      ]
+    }
+  },
+  "permissions": {
+    "contents": "write",
+    "actions": "read"
+  },
+  "jobs": {
+    "resolve": {
+      "runs-on": "ubuntu-24.04",
+      "outputs": {
+        "ready": "${{ steps.artifacts.outputs.ready }}",
+        "run_id": "${{ steps.artifacts.outputs.run_id }}",
+        "artifact": "${{ steps.artifacts.outputs.artifact }}",
+        "evidence": "${{ steps.artifacts.outputs.evidence }}",
+        "source_sha": "${{ steps.artifacts.outputs.source_sha }}"
+      },
+      "steps": [
+        {
+          "id": "artifacts",
+          "uses": "actions/github-script@v8",
+          "env": {
+            "REVIEW_RUN_ID": "${{ inputs.run_id || '39545901237' }}"
+          },
+          "with": {
+            "script": "const id = Number(context.payload.workflow_run?.id || process.env.REVIEW_RUN_ID);\nconst run = (await github.rest.actions.getWorkflowRun({...context.repo,run_id:id})).data;\nif (run.name !== \"Review sample — no social publishing\" || run.head_branch !== \"main\" || run.conclusion !== \"success\") {\n  core.notice(\"No successful main-branch review to deliver\"); core.setOutput(\"ready\",\"false\"); return;\n}\nconst artifacts = await github.paginate(github.rest.actions.listWorkflowRunArtifacts,{...context.repo,run_id:id,per_page:100});\nconst media = artifacts.find(a=>a.name.startsWith(\"science-video-review-\"+id+\"-\") && !a.expired);\nconst evidence = artifacts.find(a=>a.name===\"review-evidence-\"+id && !a.expired);\nif (!media || !evidence) throw new Error(\"Review media or editorial evidence missing\");\ncore.setOutput(\"ready\",\"true\");core.setOutput(\"run_id\",String(id));core.setOutput(\"artifact\",media.name);core.setOutput(\"evidence\",evidence.name);core.setOutput(\"source_sha\",run.head_sha);\n"
+          }
+        }
+      ]
+    },
+    "deliver": {
+      "needs": "resolve",
+      "if": "${{ needs.resolve.outputs.ready == 'true' }}",
+      "uses": "ahmedalsharqwi2-gif/science-discovery-shorts/.github/workflows/review-delivery.yml@96c9d486102a8bf50bdfa177f1067f66d21c7f7d",
+      "with": {
+        "run_id": "${{ needs.resolve.outputs.run_id }}",
+        "artifact_name": "${{ needs.resolve.outputs.artifact }}",
+        "evidence_name": "${{ needs.resolve.outputs.evidence }}",
+        "source_sha": "${{ needs.resolve.outputs.source_sha }}",
+        "asset_name": "science-charon.mp4",
+        "release_tag": "science-review-2026-10-21"
+      },
+      "secrets": "inherit"
+    }
+  }
+}
