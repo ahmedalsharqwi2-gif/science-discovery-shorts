@@ -14,3 +14,5 @@ jobs:
     with:
       dry_run: true
     secrets: inherit
+
+# Audio verification dependencies are explicit; cached Charon narration is reused.
