@@ -29,6 +29,10 @@
           "type": "boolean",
           "required": false,
           "default": false
+        },
+        "evidence_name": {
+          "type": "string",
+          "required": false
         }
       }
     },
@@ -58,16 +62,12 @@
           "type": "boolean",
           "required": false,
           "default": false
+        },
+        "evidence_name": {
+          "type": "string",
+          "required": false
         }
       }
-    },
-    "push": {
-      "branches": [
-        "main"
-      ],
-      "paths": [
-        ".github/workflows/review-delivery.yml"
-      ]
     }
   },
   "permissions": {
@@ -98,13 +98,24 @@
           }
         },
         {
+          "name": "Download the narration and editorial evidence",
+          "if": "${{ inputs.evidence_name != '' }}",
+          "uses": "actions/download-artifact@v4",
+          "with": {
+            "name": "${{ inputs.evidence_name }}",
+            "run-id": "${{ inputs.run_id }}",
+            "github-token": "${{ github.token }}",
+            "path": "review/evidence"
+          }
+        },
+        {
           "name": "Ensure ffmpeg",
           "run": "if ! command -v ffprobe >/dev/null 2>&1; then sudo apt-get update -qq && sudo apt-get install -y ffmpeg; fi"
         },
         {
           "name": "Inspect the editorial result and actual video",
           "id": "files",
-          "run": "python3 - <<'PY'\nimport json,os,pathlib,shutil,subprocess,re\nroot=pathlib.Path(\"review\")\nfor p in sorted(root.rglob(\"*.json\")):\n    if p.name in {\"plan.json\",\"current_episode.json\",\"history_editorial_review.json\",\"verification.json\",\"delivery_verification.json\",\"delivery-verification.json\",\"source_editorial_review.json\"}:\n        d=json.loads(p.read_text(encoding=\"utf-8\"))\n        keys=(\"title\",\"narration\",\"needs_review\",\"edits\",\"editorial_review\",\"source\",\"audio\",\"passed\",\"last_speech_correlation\")\n        show={k:d[k] for k in keys if k in d}\n        if isinstance(show.get(\"source\"),dict):\n            show[\"source\"]={k:v for k,v in show[\"source\"].items() if k in (\"title\",\"url\",\"publisher\",\"published\")}\n        print(\"EDITORIAL_REVIEW \"+str(p)+\" \"+json.dumps(show,ensure_ascii=False),flush=True)\nvideos=sorted(root.rglob(\"*.mp4\"))\nname=os.environ[\"ASSET_NAME\"]\nif not re.fullmatch(r\"[A-Za-z0-9][A-Za-z0-9._-]{0,100}\\.mp4\",name):raise ValueError(\"Unsafe asset name\")\ntag=os.environ[\"RELEASE_TAG\"]\nif not re.fullmatch(r\"[A-Za-z0-9][A-Za-z0-9._/-]{0,100}\",tag):raise ValueError(\"Unsafe release tag\")\npathlib.Path(\"delivery\").mkdir(exist_ok=True)\nif videos:\n    target=pathlib.Path(\"delivery\")/name;shutil.copyfile(videos[0],target)\n    data=json.loads(subprocess.check_output([\"ffprobe\",\"-v\",\"error\",\"-show_streams\",\"-show_format\",\"-of\",\"json\",str(target)]))\n    v=next(s for s in data[\"streams\"] if s[\"codec_type\"]==\"video\")\n    print(\"VIDEO_REVIEW \"+json.dumps({\"duration\":float(data[\"format\"][\"duration\"]),\"width\":v[\"width\"],\"height\":v[\"height\"],\"file\":name}),flush=True)\nwith open(os.environ[\"GITHUB_OUTPUT\"],\"a\") as f:f.write(\"has_video=\"+str(bool(videos)).lower()+\"\\n\")\n\nPY"
+          "run": "python3 - <<'PY'\nimport json,os,pathlib,shutil,subprocess,re\nroot=pathlib.Path(\"review\")\nfor p in sorted(root.rglob(\"*.json\")):\n    if p.name in {\"plan.json\",\"prepared_narration.json\",\"current_episode.json\",\"history_editorial_review.json\",\"verification.json\",\"delivery_verification.json\",\"delivery-verification.json\",\"source_editorial_review.json\"}:\n        d=json.loads(p.read_text(encoding=\"utf-8\"))\n        keys=(\"title\",\"narration\",\"needs_review\",\"edits\",\"editorial_review\",\"source\",\"audio\",\"passed\",\"last_speech_correlation\")\n        show={k:d[k] for k in keys if k in d}\n        if isinstance(show.get(\"source\"),dict):\n            show[\"source\"]={k:v for k,v in show[\"source\"].items() if k in (\"title\",\"url\",\"publisher\",\"published\")}\n        print(\"EDITORIAL_REVIEW \"+str(p)+\" \"+json.dumps(show,ensure_ascii=False),flush=True)\nvideos=sorted(root.rglob(\"*.mp4\"))\nname=os.environ[\"ASSET_NAME\"]\nif not re.fullmatch(r\"[A-Za-z0-9][A-Za-z0-9._-]{0,100}\\.mp4\",name):raise ValueError(\"Unsafe asset name\")\ntag=os.environ[\"RELEASE_TAG\"]\nif not re.fullmatch(r\"[A-Za-z0-9][A-Za-z0-9._/-]{0,100}\",tag):raise ValueError(\"Unsafe release tag\")\npathlib.Path(\"delivery\").mkdir(exist_ok=True)\nif videos:\n    target=pathlib.Path(\"delivery\")/name;shutil.copyfile(videos[0],target)\n    data=json.loads(subprocess.check_output([\"ffprobe\",\"-v\",\"error\",\"-show_streams\",\"-show_format\",\"-of\",\"json\",str(target)]))\n    v=next(s for s in data[\"streams\"] if s[\"codec_type\"]==\"video\")\n    print(\"VIDEO_REVIEW \"+json.dumps({\"duration\":float(data[\"format\"][\"duration\"]),\"width\":v[\"width\"],\"height\":v[\"height\"],\"file\":name}),flush=True)\nwith open(os.environ[\"GITHUB_OUTPUT\"],\"a\") as f:f.write(\"has_video=\"+str(bool(videos)).lower()+\"\\n\")\n\nPY"
         },
         {
           "name": "Make the requested review video downloadable",
