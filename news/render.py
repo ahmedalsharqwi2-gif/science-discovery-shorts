@@ -1,5 +1,5 @@
 """1080x1920 native motion cards; Arabic shaping, mobile safe area, measured captions."""
-import json, math, re, subprocess
+import json, math, re, subprocess, hashlib
 from pathlib import Path
 from functools import lru_cache
 from difflib import SequenceMatcher
@@ -52,7 +52,7 @@ def align(plan,wav):
     for i,event in enumerate(recovered):
         if event is not None:anchors[i]={'text':expected[i],'start':event['offset'],'end':event['offset']+event['duration']}
     coverage=len(anchors)/max(1,len(expected))
-    if coverage<.65:
+    if coverage<.85:
         if coverage<.50:raise ValueError(f'The recorded narration differs substantially from the script ({coverage:.1%})')
         from news.forced_caption_alignment import forced_word_alignment
         measured=forced_word_alignment(Path(wav),expected)
@@ -75,9 +75,14 @@ def align(plan,wav):
         positions=[i for i in range(len(scene_words)-len(punch)+1) if scene_words[i:i+len(punch)]==punch]
         if not positions:raise ValueError('Punchline not found in actual script')
         beat=at(cursor-count+positions[0])
-        scenes.append({**scene,'start':start,'end':end,'beat':beat})
+        label_beats=[]
+        for label in scene['labels']:
+            keys=[norm(w) for w in label.split() if len(norm(w))>=3]
+            position=next((i for i,w in enumerate(scene_words) if norm(w) in keys),None)
+            label_beats.append(at(cursor-count+position) if position is not None else end)
+        scenes.append({**scene,'start':start,'end':end,'beat':beat,'label_beats':label_beats})
     if actual and duration-actual[-1]['end']>2.5:raise ValueError('Unexpected long trailing silence; review final spoken sentence')
-    result={'coverage':coverage,'duration':duration,'words':words,'scenes':scenes,'asr_words':actual,'interpolated_words':[i for i in range(len(words)) if i not in anchors]}
+    result={'narration_sha256':hashlib.sha256(plan['narration'].encode()).hexdigest(),'coverage':coverage,'duration':duration,'words':words,'scenes':scenes,'asr_words':actual,'interpolated_words':[i for i in range(len(words)) if i not in anchors]}
     Path('output/timing.json').write_text(json.dumps(result,ensure_ascii=False,indent=2))
     return result
 
@@ -109,13 +114,11 @@ class Renderer:
                 x=40+i*int(880/n);ww=int(850/n)
                 d.rounded_rectangle((x,410,x+ww,790),radius=26,fill=(19,39,59,255),outline=(*CYAN,255),width=2)
                 txt(im,f'{i+1:02}',(x+ww/2,475),40,GOLD)
-                para(im,label,x+ww/2,600,38,ww-25,maxlines=3)
         else:
             for i,label in enumerate(labels):
                 y=490+i*160
                 d.rounded_rectangle((75,y,885,y+130),radius=24,fill=(19,39,59,255),outline=(46,89,117,255),width=2)
                 d.rounded_rectangle((835,y+23,847,y+105),radius=6,fill=(*CYAN,255))
-                para(im,label,450,y+49,42,720,maxlines=2)
         txt(im,'الخبر حقيقي • التعليق هزار',(480,1025),26,MUTED)
         return im
     def frame(self,t):
@@ -138,6 +141,16 @@ class Renderer:
             for k in range(6):
                 ang=k*math.tau/6+t*.09;x=cx+math.cos(ang)*135;y=cy+math.sin(ang)*110
                 d.line((cx,cy,x,y),fill=(35,100,128),width=2);d.ellipse((x-7,y-7,x+7,y+7),fill=CYAN)
+        # Labels appear only once their words occur in this scene's narration.
+        for i,label in enumerate(s['labels']):
+            cue=s['label_beats'][i]
+            if t<cue:continue
+            settle=1-min(1,(t-cue)/.3)
+            if s['kind']=='comparison':
+                n=len(s['labels']);x=40+i*int(880/n);ww=int(850/n)
+                para(im,label,60+x+ww/2,940+int(12*settle),38,ww-25,maxlines=3)
+            else:
+                para(im,label,510,879+i*160+int(12*settle),42,720,maxlines=2)
         # Short zoom and original reaction art are synchronized to the spoken punchline.
         age=t-s.get('beat',s['end'])
         if 0<=age<1.6:

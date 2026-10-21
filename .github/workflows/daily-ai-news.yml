@@ -46,8 +46,8 @@ jobs:
             output/narration.wav
             output/narration.source.json
             output/timing.json
-          key: ai-news-checkpoint-${{ github.run_id }}-${{ github.run_attempt }}
-          restore-keys: ${{ github.event_name == 'push' && 'ai-news-checkpoint-39541727831-' || format('ai-news-checkpoint-{0}-', github.run_id) }}
+          key: ai-news-checkpoint-v2-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: ai-news-checkpoint-v2-${{ github.run_id }}-
       - run: |
           sudo apt-get update -qq
           sudo apt-get install -y ffmpeg fonts-dejavu-core
@@ -113,3 +113,5 @@ jobs:
 # Keep satire about the narrator and technology, with no medical claims or national stereotypes.
 
 # Match CPU torch and torchaudio, retaining the current source-checked script.
+
+# Fresh Egyptian meme script and labels revealed on their actual spoken words.

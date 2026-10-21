@@ -1,4 +1,4 @@
-import json, math, wave, subprocess, os
+import json, math, wave, subprocess, os, hashlib
 from pathlib import Path
 import numpy as np
 from voice_provider.client import generate
@@ -31,7 +31,10 @@ def main():
     if plan is None:print('No fresh verified source; no invented news video.',flush=True);return
     voice=generate(plan['narration'],'output/narration.wav')
     timing_path=Path('output/timing.json')
-    timing=json.loads(timing_path.read_text()) if timing_path.exists() else align(plan,voice)
+    digest=hashlib.sha256(plan['narration'].encode()).hexdigest()
+    timing=json.loads(timing_path.read_text()) if timing_path.exists() else None
+    if not timing or timing.get('narration_sha256')!=digest:
+        timing=align(plan,voice)
     duration=timing['duration']
     if not 45<=duration<=120:raise ValueError(f'Daily news narration must be 45–120 seconds, got {duration:.1f}')
     Renderer(plan,timing).encode('output/visuals.mp4')
