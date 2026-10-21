@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import difflib
+import json
 import logging
 import os
 import re
@@ -215,6 +216,12 @@ def write_ass_subtitles(text: str, duration: float, ass_path: Path, audio_path: 
                     f"{{{override}}}{_ass_escape(word)}"
                 )
     ass_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    if not approximate_timing:
+        ass_path.with_suffix('.words.json').write_text(json.dumps({
+            'timing': 'final_audio_word_alignment', 'duration': duration,
+            'narration': text, 'words': events,
+        }, ensure_ascii=False, indent=2), encoding='utf-8')
+
 
 
 def _filter_path(path: Path) -> str:

@@ -2,7 +2,7 @@
 from pathlib import Path
 from functools import lru_cache
 import math,re,subprocess
-from PIL import Image,ImageDraw,ImageFont,ImageOps,ImageEnhance
+from PIL import Image,ImageDraw,ImageFont
 W,H=1080,1920
 @lru_cache(None)
 def font(size):
@@ -12,27 +12,6 @@ def font(size):
     if p is None:raise RuntimeError('Arabic font missing; cannot render professional motion')
     return ImageFont.truetype(str(p),size)
 def clean(text):return re.sub(r'[\u0610-\u061a\u064b-\u065f\u0670ـ]','',str(text)).replace('•','،')
-@lru_cache(16)
-def illustration(path):
-    with Image.open(path) as image:
-        return ImageEnhance.Brightness(ImageOps.exif_transpose(image).convert('RGB')).enhance(.88)
-
-def image_panel(im,record,t,duration,accent):
-    # Preserve the schematic as an inset over the scene-specific illustration.
-    schematic=im.crop((90,650,990,1440)).resize((340,298),Image.Resampling.LANCZOS)
-    source=illustration(record['path'])
-    phase=min(1,max(0,t/max(duration,.1)))
-    zoom=1.0+.08*phase
-    size=(round(900*zoom),round(790*zoom))
-    picture=ImageOps.fit(source,size,method=Image.Resampling.LANCZOS,centering=(.5,.5))
-    left=round((size[0]-900)*(.25+.5*phase));top=(size[1]-790)//2
-    im.paste(picture.crop((left,top,left+900,top+790)),(90,650))
-    im.paste(schematic,(630,1120))
-    draw=ImageDraw.Draw(im)
-    draw.rounded_rectangle((90,650,990,1440),radius=18,outline=accent,width=4)
-    draw.rounded_rectangle((628,1118,972,1420),radius=8,outline=accent,width=3)
-    draw.rounded_rectangle((110,665,970,735),radius=14,fill='#101e29')
-    label(im,'صورة مولدة • ورسم مبسط للشرح',540,700,29,accent)
 def label(im,text,x,y,size=44,color='#eee9dd',width=860,maxlines=3):
     d=ImageDraw.Draw(im);words=clean(text).split();rows=[];row=''
     for word in words:
@@ -44,6 +23,9 @@ def label(im,text,x,y,size=44,color='#eee9dd',width=860,maxlines=3):
         return label(im,text,x,y,max(28,size-6),color,width,maxlines+1)
     for i,row in enumerate(rows):d.text((x,y+i*size*1.65),row,font=font(size),fill=color,anchor='mm',direction='rtl')
 def frame(scene,profile,t,duration):
+    if scene.get("motion_beats"):
+        from scripts.propeller_motion import semantic_frame
+        return semantic_frame(scene,t,duration)
     bg={'history':'#101b20','science':'#071726','horror':'#0b101c'}[profile]
     accent={'history':'#edb76e','science':'#57e2ec','horror':'#d09180'}[profile]
     im=Image.new('RGB',(W,H),bg);d=ImageDraw.Draw(im)
@@ -134,18 +116,13 @@ def frame(scene,profile,t,duration):
             x=130+(i*83)%820;y=700+((i*57+t*17)%650);d.ellipse((x,y,x+3,y+3),fill='#889596')
         d.arc((180,760,900,1340),int(t*18)%360,int(t*18)%360+100,fill=accent,width=3)
         label(im,'مشهد توضيحي للسرد',540,1450,29,accent)
-    if scene.get('generated_illustration'):
-        image_panel(im,scene['generated_illustration'],t,duration,accent)
     # Static narrative callout; precise word captions are composited by the main pipeline.
     takeaway=' '.join(clean(scene['text']).split()[-7:])
     d.rounded_rectangle((65,1535,1015,1725),radius=28,fill='#172b35',outline=accent,width=2)
     label(im,takeaway,540,1620,44,accent,width=860,maxlines=2)
     d.line((70,1820,1010,1820),fill='#3d535e',width=3)
     d.line((70,1820,70+940*min(1,t/max(duration,.1)),1820),fill=accent,width=6)
-    footer='صور مولدة ورسم توضيحي' if scene.get('generated_illustration') else 'رسوم توضيحية أصلية'
-    label(im,footer,540,1870,25,'#a7bcc3')
-    if scene.get('generated_illustration'):
-        ImageDraw.Draw(im).text((540,1905),'Pollinations.ai',font=ImageFont.load_default(size=18),fill='#a7bcc3',anchor='mm')
+    label(im,'رسوم توضيحية أصلية',540,1870,25,'#a7bcc3')
     return im
 
 def render_explainer(output,seconds,scene,cfg):

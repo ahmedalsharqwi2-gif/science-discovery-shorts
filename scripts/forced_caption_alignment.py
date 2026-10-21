@@ -32,13 +32,46 @@ def validate_events(events, words, duration):
     return output
 
 
+def merge_waveform_alignments(candidates, words, duration):
+    """Choose measured word intervals from independent aligners; never pad a gap."""
+    candidates = [c for c in candidates if len(c) == len(words)]
+    if len(candidates) < 2:
+        raise RuntimeError('Two complete waveform alignments are needed for recovery')
+    paths = [(0, [], -1)]
+    for index, expected in enumerate(words):
+        options = []
+        reference = float(candidates[-1][index]['start'])
+        for source, candidate in enumerate(candidates):
+            event = candidate[index]
+            try:
+                validate_events([event], [expected], duration)
+            except (RuntimeError, ValueError, TypeError):
+                continue
+            if abs(float(event['start']) - reference) <= 1.0:
+                options.append((source, event))
+        following = []
+        for source, event in options:
+            valid = [(cost, events, last) for cost, events, last in paths
+                     if not events or float(event['start']) >= float(events[-1]['end']) - .04]
+            if valid:
+                cost, events, last = min(valid, key=lambda p:p[0] + (p[2] != source)*.1)
+                following.append((cost + (last != source)*.1 + (source != len(candidates)-1)*.01,
+                                  events + [event], source))
+        paths = following
+        if not paths:
+            raise RuntimeError(f'No measured non-overlapping timing for word {index}: {expected!r}')
+    result = min(paths, key=lambda p:p[0])[1]
+    validate_events(result, words, duration)
+    return result
+
+
 def align_worker(audio, words):
     import stable_whisper
     import torch
     torch.set_num_threads(2)
     duration = float(subprocess.run(['ffprobe','-v','error','-show_entries','format=duration',
         '-of','default=noprint_wrappers=1:nokey=1',str(audio)],capture_output=True,text=True,check=True).stdout)
-    failures = []
+    failures, candidates = [], []
     for size in ('small', 'medium'):
         model = stable_whisper.load_faster_whisper(size, device='cpu', compute_type='int8')
         result = model.align(str(audio), ' '.join(words), language='ar',
@@ -49,6 +82,7 @@ def align_worker(audio, words):
             continue
         events = [{'text': word.word.strip(), 'start': word.start, 'end': word.end}
                   for segment in result.segments for word in (segment.words or [])]
+        candidates.append(events)
         try:
             validate_events(events, words, duration)
         except RuntimeError as exc:
@@ -56,7 +90,12 @@ def align_worker(audio, words):
             continue
         print('Validated waveform alignment using ' + size, flush=True)
         return events
-    raise RuntimeError('; '.join(failures))
+    try:
+        result = merge_waveform_alignments(candidates, words, duration)
+        print('Validated combined small/medium waveform alignment; no uniform timings', flush=True)
+        return result
+    except RuntimeError as exc:
+        raise RuntimeError('; '.join(failures) + '; recovery: ' + str(exc)) from exc
 
 
 def forced_word_alignment(audio: Path, words: list[str]) -> list[dict]:

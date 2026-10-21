@@ -54,7 +54,6 @@ env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
   PYTHONPATH: ${{ github.workspace }}
   CINEMATIC_MOTION_ONLY: 'true'
-  MOTION_IMAGE_PROVIDER: ${{ inputs.source_backed_sample && 'review-approved' || 'none' }}
   CAPTION_ALIGNMENT_REQUIRED: 'true'
 jobs:
   publish:
@@ -340,6 +339,6 @@ jobs:
 
           state/source_editorial_draft.json
 
-          .cinematic_cache/pollinations/'
+          state/motion_timeline.json'
         if-no-files-found: ignore
         retention-days: 14
