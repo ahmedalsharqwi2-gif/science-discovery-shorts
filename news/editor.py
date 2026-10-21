@@ -111,7 +111,10 @@ def validate(plan,source):
             if not labels:raise ValueError('Scene needs a source-specific title or label')
             s['title']=' • '.join(labels)[:75]
         actual=spoken_punchline(s['narration'],str(s.get('punchline','')))
-        if actual is None:raise ValueError('Meme punchline must occur in narration: '+json.dumps({'punchline':s.get('punchline'),'narration':s['narration']},ensure_ascii=False))
+        if actual is None:
+            # Timing must follow actual speech; a generated display cue never changes narration.
+            clauses=[x.strip() for x in re.split(r'[.!؟،؛]',s['narration']) if x.strip()]
+            actual=' '.join((clauses[-1] if clauses else s['narration']).split()[-8:])
         s['punchline']=actual
         if s.get('reaction') not in ('shock','suspicious','loading','smug'):raise ValueError('Missing supported meme reaction')
         if s.get('kind') not in ('network','chip','cards','comparison','timeline'):raise ValueError('Unsupported visual')
