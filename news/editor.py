@@ -91,7 +91,7 @@ def validate(plan,source):
         punch=str(s.get('punchline','')).split();spoken=s['narration'].split()
         def token(w):return re.sub(r'[^\u0621-\u064a0-9]','',re.sub(r'[\u064b-\u065fـ]','',w))
         hit=next((i for i in range(len(spoken)-len(punch)+1) if all(a==b or (k==0 and a=='و'+b) for k,(a,b) in enumerate(zip([token(w) for w in spoken[i:i+len(punch)]],[token(w) for w in punch])))),None)
-        if not 2<=len(punch)<=10 or hit is None:raise ValueError('Meme punchline must occur in narration: '+json.dumps({'punchline':s.get('punchline'),'narration':s['narration']},ensure_ascii=False))
+        if not 1<=len(punch)<=10 or hit is None:raise ValueError('Meme punchline must occur in narration: '+json.dumps({'punchline':s.get('punchline'),'narration':s['narration']},ensure_ascii=False))
         s['punchline']=' '.join(spoken[hit:hit+len(punch)])
         if s.get('reaction') not in ('shock','suspicious','loading','smug'):raise ValueError('Missing supported meme reaction')
         if s.get('kind') not in ('network','chip','cards','comparison','timeline'):raise ValueError('Unsupported visual')
