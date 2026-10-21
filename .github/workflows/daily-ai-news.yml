@@ -47,7 +47,7 @@ jobs:
             output/narration.source.json
             output/timing.json
           key: ai-news-checkpoint-${{ github.run_id }}-${{ github.run_attempt }}
-          restore-keys: ${{ github.event_name == 'push' && 'ai-news-checkpoint-39540875058-' || format('ai-news-checkpoint-{0}-', github.run_id) }}
+          restore-keys: ai-news-checkpoint-${{ github.run_id }}-
       - run: |
           sudo apt-get update -qq
           sudo apt-get install -y ffmpeg fonts-dejavu-core
@@ -109,3 +109,5 @@ jobs:
 # A one-word spoken punchline is valid comedy, provided it exists in the narration.
 
 # Reuse the accepted Gemini script and voice while improving local alignment only.
+
+# Keep satire about the narrator and technology, with no medical claims or national stereotypes.
