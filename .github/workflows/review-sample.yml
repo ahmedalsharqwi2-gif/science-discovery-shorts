@@ -18,3 +18,5 @@ jobs:
 # Audio verification dependencies are explicit; cached Charon narration is reused.
 
 # Render the approved narration using native original motion graphics.
+
+# Evaluate a source-grounded Egyptian explanation of propeller twist.
