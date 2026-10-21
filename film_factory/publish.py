@@ -47,6 +47,8 @@ def preflight(profile):
  return mapping,direct
 def main():
  parser=argparse.ArgumentParser();parser.add_argument('profile',choices=list(BRANDS));parser.add_argument('--preflight',action='store_true');args=parser.parse_args()
+ policy=Path('config/quality_release.json')
+ if policy.exists() and json.loads(policy.read_text()).get('publication_approved') is not True:raise ValueError('Publication paused: visual and sound quality rejected; a new sample needs approval')
  mapping,direct=preflight(args.profile)
  if args.preflight:return
  out=Path('output');plan=json.loads((out/'plan.json').read_text());report=json.loads((out/'verification.json').read_text())

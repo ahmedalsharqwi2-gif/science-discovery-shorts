@@ -40,7 +40,7 @@
   },
   "jobs": {
     "produce-and-publish": {
-      "if": "${{ github.event_name != 'push' || (github.event_name == 'push' && github.event.head_commit.message == 'Activate approved daily factory and publish first episode') }}",
+      "if": "${{ github.event_name == 'workflow_dispatch' && !inputs.publish }}",
       "runs-on": "ubuntu-24.04",
       "timeout-minutes": 60,
       "env": {
