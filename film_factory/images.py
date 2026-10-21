@@ -12,7 +12,7 @@ from PIL import Image
 from api_budget import reserve
 
 MODEL = '@cf/black-forest-labs/flux-1-schnell'
-REVISION = 'cinema-scenes-v1'
+REVISION = 'documented-cinema-scenes-v2'
 
 def decoded_image(response):
     if response.status_code != 200:
@@ -35,7 +35,7 @@ def decoded_image(response):
 
 def photo_prompts(plan,cache):
     world=plan['visual_world']
-    return [world+' '+s['image_prompt']+' Photographic editorial reconstruction, plausible geometry and anatomy, real materials, no text or logos. Main subject within center 60 percent for vertical crop.' for s in plan['scenes']]
+    return [world+' '+s['image_prompt']+' Cinematic editorial reconstruction, dramatic but realistic practical lighting, 35mm or 85mm lens, layered foreground depth, tactile materials, clear silhouette and strong visual focal point, restrained film grain. Each shot must illustrate the actual narrated action. No generic filler, no fake evidence, no writing or logos, no anachronistic landmarks, plausible geometry and anatomy. Main subject within center 60 percent for vertical crop.' for s in plan['scenes']]
 
 def prepare_images(plan):
     token=os.getenv('CLOUDFLARE_API_TOKEN','').strip();account=os.getenv('CLOUDFLARE_ACCOUNT_ID','').strip()

@@ -1,9 +1,3 @@
-# النشر اليومي
+# Daily photographic production
 
-التشغيل التلقائي يبدأ يوميًا الساعة 13:10 بتوقيت `Africa/Cairo` لتجهيز الفيديو، ثم يطلب من Buffer وYouTube نشره الساعة **17:00 بتوقيت القاهرة**. تتغير قيمة UTC تلقائيًا مع التوقيت الصيفي والشتوي.
-
-التشغيل اليدوي يستخدم أقرب موعد 17:00 قادم؛ اختيار `dry_run` ينتج الفيديو دون نشره. إذا تأخر التجهيز حتى فات الموعد، يرفض الناشر الموعد بدل النشر الفوري. تشغيل GitHub قد يتأخر، وقبول الجدولة لا يضمن نجاح منصة النشر نفسها.
-
-يُتخطى الموعد إذا كان مؤكدًا بإيصالات فعلية لكل الوجهات المطلوبة في `state/publication_stock.json`. عند النجاح الجزئي، تحفظ الإيصالات لتجنب تكرار النشر عند إعادة المحاولة.
-
-أزيلت مسارات التجارب القديمة ومهام تعبئة مواعيد 12/18 والمراقبة المنفصلة؛ فحص الموعد وتأكيد الإيصالات جزء من مسار الإنتاج نفسه. هذا التغيير لا يعدّل أي منشور قديم موجود بالفعل في طابور Buffer.
+Production starts at 13:10 Africa/Cairo; platforms release at 17:00 local time including DST. First approved launch publishes in a separate immediate slot. Manual publish=false produces a review. Unused documented topics are checked against prior history. Complete speech and stereo are verified before publication. Partial receipts persist to avoid duplicates. No paid fallback.

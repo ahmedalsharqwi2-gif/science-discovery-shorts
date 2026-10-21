@@ -39,26 +39,42 @@ def norm(w):return re.sub(r'[^\u0621-\u064a0-9]','',re.sub(r'[\u064b-\u065fـ]',
 
 def align(plan,wav):
     from faster_whisper import WhisperModel
-    model=WhisperModel('small',device='cpu',compute_type='int8',cpu_threads=4)
-    segs,_=model.transcribe(str(wav),language='ar',word_timestamps=True,beam_size=5,vad_filter=False)
-    actual=[{'text':w.word.strip(),'start':float(w.start),'end':float(w.end)} for s in segs for w in s.words or [] if norm(w.word)]
-    expected=plan['narration'].split();matcher=SequenceMatcher(None,[norm(w) for w in expected],[norm(w['text']) for w in actual],autojunk=False);anchors={}
-    for b in matcher.get_matching_blocks():
-        for k in range(b.size):anchors[b.a+k]=actual[b.b+k]
-    # Recover exact token splits/merges from actual ASR timestamps first.
+    expected=plan['narration'].split()
     from scripts.asr_token_boundaries import recover_token_boundaries
-    recovered=[anchors.get(i) and {'text':expected[i],'offset':anchors[i]['start'],'duration':anchors[i]['end']-anchors[i]['start']} for i in range(len(expected))]
-    recover_token_boundaries([norm(w) for w in expected],[norm(w['text']) for w in actual],[(w['text'],w['start'],w['end']) for w in actual],expected,recovered)
-    for i,event in enumerate(recovered):
-        if event is not None:anchors[i]={'text':expected[i],'start':event['offset'],'end':event['offset']+event['duration']}
+    def transcribe(name):
+        model=WhisperModel(name,device='cpu',compute_type='int8',cpu_threads=4)
+        segs,_=model.transcribe(str(wav),language='ar',word_timestamps=True,beam_size=5,vad_filter=False)
+        actual=[{'text':w.word.strip(),'start':float(w.start),'end':float(w.end)} for s in segs for w in s.words or [] if norm(w.word)]
+        matcher=SequenceMatcher(None,[norm(w) for w in expected],[norm(w['text']) for w in actual],autojunk=False);anchors={}
+        for block in matcher.get_matching_blocks():
+            for k in range(block.size):anchors[block.a+k]=actual[block.b+k]
+        recovered=[anchors.get(i) and {'text':expected[i],'offset':anchors[i]['start'],'duration':anchors[i]['end']-anchors[i]['start']} for i in range(len(expected))]
+        recover_token_boundaries([norm(w) for w in expected],[norm(w['text']) for w in actual],[(w['text'],w['start'],w['end']) for w in actual],expected,recovered)
+        for i,event in enumerate(recovered):
+            if event is not None and event['duration']>0:anchors[i]={'text':expected[i],'start':event['offset'],'end':event['offset']+event['duration']}
+        return actual,anchors
+    actual,anchors=transcribe('small');alignment_method='measured_word_asr'
     coverage=len(anchors)/max(1,len(expected))
+    if coverage<.85 and plan.get('profile')!='horror':
+        other,other_anchors=transcribe('medium')
+        if len(other_anchors)>len(anchors):actual,anchors=other,other_anchors
+        coverage=len(anchors)/max(1,len(expected))
+    print(f'Independent speech transcription matched {coverage:.1%} of words',flush=True)
+    duration=float(subprocess.check_output(['ffprobe','-v','error','-show_entries','format=duration','-of','csv=p=0',str(wav)]))
+    asr_coverage=coverage;caption_groups=None
     if coverage<.85:
         if coverage<.50:raise ValueError(f'The recorded narration differs substantially from the script ({coverage:.1%})')
-        from scripts.forced_caption_alignment import forced_word_alignment
-        measured=forced_word_alignment(Path(wav),expected)
-        anchors={i:{'text':w['text'],'start':w['offset'],'end':w['offset']+w['duration']} for i,w in enumerate(measured)}
-        coverage=1.0
-    duration=float(subprocess.check_output(['ffprobe','-v','error','-show_entries','format=duration','-of','csv=p=0',str(wav)]))
+        if plan.get('profile')=='horror':
+            from film_factory.phrase_alignment import force_phrase_alignment
+            events,caption_groups=force_phrase_alignment(wav,expected,duration,anchors)
+            anchors={i:event for i,event in enumerate(events) if event['end']>event['start']}
+            alignment_method='measured_waveform_phrase_captions'
+            print(f'Validated {len(caption_groups)} whole-phrase captions against the actual whispered waveform; no active-word precision claim',flush=True)
+        else:
+            from scripts.forced_caption_alignment import forced_word_alignment
+            measured=forced_word_alignment(Path(wav),expected)
+            anchors={i:{'text':w['text'],'start':w['offset'],'end':w['offset']+w['duration']} for i,w in enumerate(measured)}
+            coverage=1.0;alignment_method='forced_word_alignment'
     def at(index):
         if index in anchors:return anchors[index]['start']
         left=max([i for i in anchors if i<index],default=None);right=min([i for i in anchors if i>index],default=None)
@@ -82,7 +98,7 @@ def align(plan,wav):
             label_beats.append(at(cursor-count+position) if position is not None else end)
         scenes.append({**scene,'start':start,'end':end,'beat':beat,'label_beats':label_beats})
     if actual and duration-actual[-1]['end']>2.5:raise ValueError('Unexpected long trailing silence; review final spoken sentence')
-    result={'narration_sha256':hashlib.sha256(plan['narration'].encode()).hexdigest(),'coverage':coverage,'duration':duration,'words':words,'scenes':scenes,'asr_words':actual,'interpolated_words':[i for i in range(len(words)) if i not in anchors]}
+    result={'narration_sha256':hashlib.sha256(plan['narration'].encode()).hexdigest(),'coverage':coverage,'alignment_method':alignment_method,'independent_asr_coverage':asr_coverage,'caption_groups':caption_groups,'active_word_precision_claimed':False,'duration':duration,'words':words,'scenes':scenes,'asr_words':actual,'interpolated_words':[i for i in range(len(words)) if i not in anchors]}
     Path('output/timing.json').write_text(json.dumps(result,ensure_ascii=False,indent=2))
     return result
 

@@ -1,344 +1,191 @@
-name: Daily Science — 17:00 Cairo
-run-name: Daily 17:00 Cairo — ${{ github.run_number }}
-'on':
-  workflow_dispatch:
-    inputs:
-      source_backed_sample:
-        type: boolean
-        required: false
-        default: false
-      dry_run:
-        description: Produce and validate without social publishing
-        required: false
-        default: false
-        type: boolean
-  schedule:
-  - cron: 10 13 * * *
-    timezone: Africa/Cairo
-  workflow_call:
-    inputs:
-      source_backed_sample:
-        type: boolean
-        required: false
-        default: false
-      dry_run:
-        required: false
-        default: false
-        type: boolean
-concurrency:
-  group: science-topic-history-main
-  cancel-in-progress: false
-permissions:
-  contents: write
-env:
-  GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-  GEMINI_TEXT_API_KEY: ${{ secrets.GEMINI_TEXT_API_KEY || secrets.GEMINI_API_KEY }}
-  GEMINI_TTS_API_KEY: ${{ secrets.GEMINI_TTS_API_KEY || secrets.GEMINI_API_KEY }}
-  CINEMATIC_ENABLED: 'true'
-  CINEMATIC_FREE_ONLY: 'true'
-  CINEMATIC_PAID_ENABLED: 'false'
-  CINEMATIC_VIDEO_ENABLED: 'false'
-  CINEMATIC_IMAGE_FALLBACK_ENABLED: 'false'
-  CINEMATIC_EPISODE_BUDGET_USD: '0'
-  CINEMATIC_DAILY_BUDGET_USD: '0'
-  CINEMATIC_IMAGE_MODEL: ${{ vars.CINEMATIC_IMAGE_MODEL || 'gemini-3.1-flash-lite-image' }}
-  CINEMATIC_IMAGE_FALLBACK_MODEL: ${{ vars.CINEMATIC_IMAGE_FALLBACK_MODEL || 'gemini-3.1-flash-image' }}
-  CLIP_REVIEW_ENABLED: 'false'
-  CINEMATIC_MAX_SCENE_CANDIDATES: '6'
-  QUALITY_GATES_BLOCKING: 'false'
-  MIN_EXTERNAL_SCENE_SOURCES: '6'
-  MIN_EXTERNAL_SCENE_SHARE: '0.65'
-  BACKGROUND_MUSIC_ENABLED: 'true'
-  MUSIC_ROTATION_INDEX: ${{ github.run_number }}
-  BACKGROUND_MUSIC_VOLUME: '0.07'
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
-  PYTHONPATH: ${{ github.workspace }}
-  CINEMATIC_MOTION_ONLY: 'true'
-  CAPTION_ALIGNMENT_REQUIRED: 'true'
-jobs:
-  publish:
-    env:
-      PUBLICATION_RECEIPTS_ENABLED: 'true'
-      PUBLISH_IMMEDIATE: 'false'
-      PRODUCTION_MEDIA_ID: ${{ github.run_id }}
-      BUFFER_SCHEDULE_MODE: customScheduled
-    runs-on: ubuntu-latest
-    timeout-minutes: 180
-    steps:
-    - uses: actions/checkout@v6
-      with:
-        ref: main
-    - name: Select the unique 17:00 Cairo slot
-      id: daily
-      run: python scripts/daily_schedule.py
-    - name: Restore prepared text for this publication slot
-      id: prepared_text
-      uses: actions/cache/restore@v4
-      with:
-        path: state/prepared_narration.json
-        key: prepared-v9-${{ inputs.source_backed_sample || false }}-${{ github.repository_id }}-${{ inputs.dry_run || false }}-${{ env.PUBLISH_DATE || github.run_id }}-${{ env.PUBLISH_HOUR }}-${{ github.run_id }}-${{ github.run_attempt }}
-        restore-keys: 'prepared-v9-${{ inputs.source_backed_sample || false }}-${{ github.repository_id }}-${{ inputs.dry_run || false }}-${{ env.PUBLISH_DATE || github.run_id }}-${{ env.PUBLISH_HOUR }}-
-
-          '
-      if: ${{ steps.daily.outputs.already_confirmed != 'true' }}
-    - name: Check source identity before resuming a review script
-      if: ${{ inputs.source_backed_sample }}
-      run: |
-        python - <<'PY'
-        import json
-        from pathlib import Path
-        p=Path("state/prepared_narration.json")
-        if p.exists():
-            try:
-                d=json.loads(p.read_text(encoding="utf-8"))
-                valid=(d.get("editorial_review",{}).get("source")=="https://www.grc.nasa.gov/www/k-12/airplane/propth.html" and d.get("editorial_review",{}).get("style_revision")==4)
-            except (ValueError, TypeError, AttributeError):
-                valid=False
-            if not valid:
-                p.unlink()
-                print("Removed a checkpoint from a different editorial source")
-        PY
-    - name: Validate restored text against current topic history
-      id: checked_text
-      run: python scripts/check_prepared_text.py --path state/prepared_narration.json --history topic_history.json
-      if: ${{ steps.daily.outputs.already_confirmed != 'true' }}
-    - name: Restore inspected cinematic scenes
-      if: ${{ (env.CINEMATIC_ENABLED == 'true') && steps.daily.outputs.already_confirmed != 'true' }}
-      uses: actions/cache/restore@v5
-      with:
-        path: .cinematic_cache
-        key: cinematic-v1-${{ github.repository_id }}-${{ github.run_id }}-${{ github.run_attempt }}-${{ env.PUBLISH_DATE }}-${{ env.PUBLISH_HOUR }}
-        restore-keys: cinematic-v1-${{ github.repository_id }}-
-    - uses: actions/cache/restore@v4
-      with:
-        path: 'state/api_budget.sqlite3
-
-          .voice_cache
-
-          '
-        key: api-budget-v1-${{ github.repository_id }}-${{ github.run_id }}-${{ github.run_attempt }}-${{ 0 }}
-        restore-keys: api-budget-v1-${{ github.repository_id }}-
-      if: ${{ steps.daily.outputs.already_confirmed != 'true' }}
-    - uses: actions/setup-python@v6
-      with:
-        python-version: '3.11'
-        cache: pip
-        cache-dependency-path: requirements.txt
-      if: ${{ steps.daily.outputs.already_confirmed != 'true' }}
-    - name: Install the small source-writing dependencies
-      if: ${{ inputs.source_backed_sample && steps.checked_text.outputs.usable != 'true' && steps.daily.outputs.already_confirmed != 'true' }}
-      run: python -m pip install requests 'num2words>=0.5.14,<0.6'
-    - name: Prepare the source-backed science sample
-      if: ${{ inputs.source_backed_sample && steps.checked_text.outputs.usable != 'true' && steps.daily.outputs.already_confirmed != 'true' }}
-      run: python -m scripts.source_episode propeller
-    - name: Install dependencies
-      run: "python -m pip install torch torchaudio --index-url https://download.pytorch.org/whl/cpu\nif ! command -v ffmpeg >/dev/null 2>&1 || ! fc-list | grep -qi 'Noto'; then\n  sudo apt-get update -qq\n  sudo apt-get install -y ffmpeg fonts-noto-core\nfi\npip install -r requirements.txt\n"
-      if: ${{ steps.daily.outputs.already_confirmed != 'true' }}
-    - name: Cache models
-      uses: actions/cache@v5
-      with:
-        path: ~/.cache/huggingface
-        key: hf-models-v2-small-medium
-      if: ${{ steps.daily.outputs.already_confirmed != 'true' }}
-    - name: Validate publishing configuration
-      env:
-        BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
-        BUFFER_CHANNEL_IDS: ${{ secrets.BUFFER_CHANNEL_IDS }}
-        GH_RELEASE_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: 'test -n "$BUFFER_API_KEY" || { echo "ERROR: BUFFER_API_KEY is missing"; exit 1; }
-
-        test -n "$BUFFER_CHANNEL_IDS" || { echo "ERROR: BUFFER_CHANNEL_IDS is missing"; exit 1; }
-
-        test -n "$GH_RELEASE_TOKEN" || { echo "ERROR: GitHub release token is missing"; exit 1; }
-
-        echo "Publishing credentials and channel mapping are present."
-
-        '
-      if: ${{ !inputs.dry_run && (steps.daily.outputs.already_confirmed != 'true') }}
-    - name: Validate and resolve AI model policy
-      if: ${{ !inputs.source_backed_sample && (steps.checked_text.outputs.usable != 'true') && steps.daily.outputs.already_confirmed != 'true' }}
-      env:
-        GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        LLM_FALLBACK_API_KEY: ${{ secrets.LLM_FALLBACK_API_KEY || secrets.GROQ_API_KEY }}
-        LLM_FALLBACK_ENDPOINT: ${{ vars.LLM_FALLBACK_ENDPOINT || 'https://api.groq.com/openai/v1/chat/completions' }}
-        LLM_FALLBACK_MODEL: ${{ vars.LLM_FALLBACK_MODEL || vars.GROQ_MODEL || 'openai/gpt-oss-20b' }}
-        OPENROUTER_API_KEY: ''
-        MODEL_POLICY_FILE: config/model_policy.json
-      run: python scripts/model_preflight.py
-    - name: Validate the approved Gemini Charon voice
-      run: bash voice_provider/install.sh
-      if: ${{ steps.daily.outputs.already_confirmed != 'true' }}
-    - name: Generate and publish
-      id: generate_publish
-      env:
-        GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-        GEMINI_THINKING_LEVEL: low
-        GEMINI_MIN_OUTPUT_TOKENS: '0'
-        GEMINI_RETRIES: '3'
-        LLM_MAX_COMPLETION_TOKENS: '6000'
-        PYTHONUNBUFFERED: '1'
-        LLM_TIMEOUT: '45'
-        OPENROUTER_API_KEY: ''
-        OPENROUTER_MAX_ATTEMPTS: '3'
-        OPENROUTER_TITLE: Auto Publish Reels
-        GEMINI_RATE_LIMIT: '0.2'
-        GEMINI_RATE_BURST: '1'
-        OPENROUTER_RATE_LIMIT: '0.5'
-        OPENROUTER_RATE_BURST: '1'
-        OPENROUTER_POOL_ATTEMPTS: '2'
-        LLM_FALLBACK_API_KEY: ${{ secrets.LLM_FALLBACK_API_KEY || secrets.GROQ_API_KEY }}
-        LLM_FALLBACK_ENDPOINT: ${{ vars.LLM_FALLBACK_ENDPOINT || 'https://api.groq.com/openai/v1/chat/completions' }}
-        LLM_FALLBACK_REASONING_EFFORT: low
-        LLM_FALLBACK_RETRIES: '2'
-        FALLBACK_RATE_LIMIT: '0.5'
-        FALLBACK_RATE_BURST: '1'
-        LLM_POOL_BACKOFF_BASE: '2'
-        LLM_POOL_BACKOFF_MAX: '30'
-        PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
-        PEXELS_REQUIRED: 'true'
-        ENGINEERING_PILOT_ENABLED: 'true'
-        TOPIC_BANK_REQUIRED: 'false'
-        TOPIC_SELECTION_MODE: dynamic
-        TOPIC_ROTATION_SEED: ${{ github.run_id }}
-        TOPIC_PERFORMANCE_FILE: topic_performance.json
-        BUFFER_API_KEY: ${{ secrets.BUFFER_API_KEY }}
-        BUFFER_CHANNEL_IDS: ${{ secrets.BUFFER_CHANNEL_IDS }}
-        GH_RELEASE_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        GITHUB_REPOSITORY: ${{ github.repository }}
-        MIN_AUDIO_SECONDS: ${{ inputs.source_backed_sample && '125' || '60' }}
-        MAX_AUDIO_SECONDS: '180'
-        TARGET_AUDIO_SECONDS: '135'
-        MIN_WORDS: '180'
-        MAX_WORDS: '400'
-        PUBLISH_CHANNELS: tiktok,youtube,facebook
-        PUBLISH_DRY_RUN: ${{ inputs.dry_run || false }}
-        BUFFER_SCHEDULE_MODE: customScheduled
-        REQUIRE_EXTERNAL_SOURCES: 'false'
-        EDITORIAL_REVIEW_ENABLED: 'true'
-        MIN_TASHKEEL_COVERAGE_WARN: '0.85'
-        MIN_TASHKEEL_COVERAGE_FATAL: '0.65'
-        FACT_CHECK_ENABLED: 'false'
-        TOPIC_GENERATION_MAX_ATTEMPTS: '3'
-        MIN_SCENE_CLIPS: '4'
-        QUALITY_GATES_BLOCKING: 'false'
-        TOPIC_HISTORY_FILE: topic_history.json
-        TTS_ENGINE: gemini
-        WHISPER_MODEL: small
-        ASR_VERIFY_MODEL: medium
-        ASR_MIN_MATCH_RATIO: '0.78'
-        MIN_TTS_AUDIO_SCORE: '0.78'
-        MUSIC_VOLUME: '0.07'
-        DRY_RUN: ${{ inputs.dry_run && 'true' || 'false' }}
-      run: 'python main.py
-
-        '
-      if: ${{ steps.daily.outputs.already_confirmed != 'true' }}
-    - name: Save prepared text independently of later media failures
-      if: ${{ (always() && hashFiles('state/prepared_narration.json') != '') && steps.daily.outputs.already_confirmed != 'true' }}
-      uses: actions/cache/save@v4
-      with:
-        path: state/prepared_narration.json
-        key: prepared-v9-${{ inputs.source_backed_sample || false }}-${{ github.repository_id }}-${{ inputs.dry_run || false }}-${{ env.PUBLISH_DATE || github.run_id }}-${{ env.PUBLISH_HOUR }}-${{ github.run_id }}-${{ github.run_attempt }}
-    - name: Verify final montage and B-roll output
-      run: "test -s output/final_video.mp4 || { echo \"ERROR: final video missing or empty\"; exit 1; }\ndimensions=$(ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0 output/final_video.mp4)\ntest \"$dimensions\" = \"1080,1920\" || { echo \"ERROR: final video must be portrait 1080x1920, got $dimensions\"; exit 1; }\nduration=$(ffprobe -v error -show_entries format=duration -of csv=p=0 output/final_video.mp4)\npython - \"$duration\" <<'PY'\nimport sys\nduration = float(sys.argv[1])\nif not 60.0 <= duration <= 180.0:\n    raise SystemExit(f\"ERROR: science video must be 60–180 seconds, got {duration:.2f}s\")\nprint(f\"Vertical science video verified: {duration:.2f}s\")\nPY\necho \"Vertical motion graphics and final audio verified.\"\n"
-      if: ${{ steps.daily.outputs.already_confirmed != 'true' }}
-    - name: Verify the last spoken words survive final mixing
-      run: python -c 'import json; from pathlib import Path; assert json.loads(Path("state/delivery_verification.json").read_text())["passed"] is True'
-      if: ${{ steps.daily.outputs.already_confirmed != 'true' }}
-    - name: Preserve dry-run video for user review
-      if: ${{ (inputs.dry_run) && steps.daily.outputs.already_confirmed != 'true' }}
-      uses: actions/upload-artifact@v6
-      with:
-        name: science-video-review-${{ github.run_id }}-${{ env.PUBLISH_DATE }}-${{ env.PUBLISH_HOUR }}
-        path: output/final_video.mp4
-        if-no-files-found: error
-        retention-days: 3
-    - name: Preserve clip review candidates
-      if: ${{ (failure()) && steps.daily.outputs.already_confirmed != 'true' }}
-      uses: actions/upload-artifact@v6
-      with:
-        name: clip-review-candidates-${{ env.PUBLISH_DATE }}-${{ env.PUBLISH_HOUR }}
-        path: 'state/clip_review_requests.json
-
-          state/clip_reviews.json
-
-          output/pexels_clips/raw_*
-
-          '
-        if-no-files-found: ignore
-        retention-days: 3
-    - name: Save inspected cinematic scenes even after a failed run
-      if: ${{ (always() && env.CINEMATIC_ENABLED == 'true') && steps.daily.outputs.already_confirmed != 'true' }}
-      uses: actions/cache/save@v5
-      with:
-        path: .cinematic_cache
-        key: cinematic-v1-${{ github.repository_id }}-${{ github.run_id }}-${{ github.run_attempt }}-${{ env.PUBLISH_DATE }}-${{ env.PUBLISH_HOUR }}
-    - name: Confirm actual publication receipts
-      if: ${{ (always() && !inputs.dry_run && steps.generate_publish.outcome == 'success') && steps.daily.outputs.already_confirmed != 'true' }}
-      env:
-        BUFFER_OUTCOME: ${{ steps.generate_publish.outcome }}
-      run: python scripts/publication_state.py confirm
-    - name: Persist confirmed stock and production counters
-      if: ${{ !inputs.dry_run && ((always()) && steps.daily.outputs.already_confirmed != 'true') }}
-      run: "git config user.name 'content-bot'\ngit config user.email 'bot@users.noreply.github.com'\nfor path in state/publication_stock.json state/cinematic_budget.json state/yt_token_last_success.json state/used_clips.json topic_history.json state/voice_rotation.json state/science_visual_history.json; do\n  if [ -f \"$path\" ]; then git add \"$path\"; fi\ndone\nif git diff --cached --quiet; then exit 0; fi\ngit commit -m 'chore: persist publication receipts and counters [skip ci]'\nfor attempt in 1 2 3; do\n  if git pull --rebase --autostash origin main && git push origin HEAD:main; then exit 0; fi\n  sleep $((attempt * 5))\ndone\nexit 1\n"
-    - name: Preserve cinematic storyboard and quality evidence
-      if: ${{ (always() && env.CINEMATIC_ENABLED == 'true') && steps.daily.outputs.already_confirmed != 'true' }}
-      uses: actions/upload-artifact@v6
-      with:
-        name: cinematic-evidence-${{ github.run_id }}-${{ github.run_attempt }}-${{ env.PUBLISH_DATE }}-${{ env.PUBLISH_HOUR }}
-        path: 'state/cinematic_storyboard.json
-
-          state/cinematic_scene_manifest.json
-
-          state/cinematic_quality_report.json
-
-          state/cinematic_failures.json
-
-          state/cinematic_budget.json
-
-          state/publication_stock.json
-
-          '
-        if-no-files-found: ignore
-        retention-days: 14
-    - uses: actions/cache/save@v4
-      if: ${{ (always()) && steps.daily.outputs.already_confirmed != 'true' }}
-      with:
-        path: 'state/api_budget.sqlite3
-
-          .voice_cache
-
-          '
-        key: api-budget-v1-${{ github.repository_id }}-${{ github.run_id }}-${{ github.run_attempt }}-${{ 0 }}
-    - name: Preserve review narration and script
-      if: ${{ always() && inputs.dry_run }}
-      uses: actions/upload-artifact@v4
-      with:
-        name: review-evidence-${{ github.run_id }}
-        include-hidden-files: true
-        path: 'state/current_episode.json
-
-          state/prepared_narration.json
-
-          output/narration.mp3
-
-          output/narration.source.json
-
-          downloaded_clips/narration.mp3
-
-          downloaded_clips/narration.source.json
-
-          downloaded_clips/narration_voice.source.json
-
-          state/asr_verification.json
-
-          state/delivery_verification.json
-
-          state/source_editorial_review.json
-
-          state/source_editorial_draft.json
-
-          state/motion_timeline.json'
-        if-no-files-found: ignore
-        retention-days: 14
+{
+  "name": "اسرار الكون — daily photographic factory",
+  "on": {
+    "workflow_dispatch": {
+      "inputs": {
+        "publish": {
+          "description": "Publish to configured social channels",
+          "type": "boolean",
+          "default": true
+        },
+        "use_approved_sample": {
+          "description": "Reuse approved complete sample with improved motion",
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "schedule": [
+      {
+        "cron": "10 13 * * *",
+        "timezone": "Africa/Cairo"
+      }
+    ],
+    "push": {
+      "branches": [
+        "main"
+      ],
+      "paths": [
+        ".github/workflows/auto_publish.yml"
+      ]
+    }
+  },
+  "permissions": {
+    "contents": "write",
+    "actions": "read"
+  },
+  "concurrency": {
+    "group": "science-auto-publish",
+    "cancel-in-progress": false
+  },
+  "jobs": {
+    "produce-and-publish": {
+      "if": "${{ github.event_name != 'push' || (github.event_name == 'push' && github.event.head_commit.message == 'Activate approved daily factory and publish first episode') }}",
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 60,
+      "env": {
+        "GEMINI_API_KEY": "${{ secrets.GEMINI_API_KEY }}",
+        "CLOUDFLARE_API_TOKEN": "${{ secrets.CLOUDFLARE_API_TOKEN }}",
+        "CLOUDFLARE_ACCOUNT_ID": "${{ secrets.CLOUDFLARE_ACCOUNT_ID }}",
+        "BUFFER_API_KEY": "${{ secrets.BUFFER_API_KEY }}",
+        "BUFFER_CHANNEL_ID": "${{ secrets.BUFFER_CHANNEL_ID }}",
+        "BUFFER_YOUTUBE_CHANNEL_ID": "${{ secrets.BUFFER_YOUTUBE_CHANNEL_ID }}",
+        "BUFFER_FACEBOOK_CHANNEL_ID": "${{ secrets.BUFFER_FACEBOOK_CHANNEL_ID }}",
+        "BUFFER_INSTAGRAM_CHANNEL_ID": "${{ secrets.BUFFER_INSTAGRAM_CHANNEL_ID }}",
+        "BUFFER_TIKTOK_CHANNEL_ID": "${{ secrets.BUFFER_TIKTOK_CHANNEL_ID }}",
+        "YT_CLIENT_ID": "${{ secrets.YT_CLIENT_ID }}",
+        "YT_CLIENT_SECRET": "${{ secrets.YT_CLIENT_SECRET }}",
+        "YT_REFRESH_TOKEN": "${{ secrets.YT_REFRESH_TOKEN }}",
+        "YT_REFRESH_TOKEN_FALLBACK": "${{ secrets.YT_REFRESH_TOKEN_FALLBACK }}",
+        "GEMINI_TEXT_API_KEY": "${{ secrets.GEMINI_TEXT_API_KEY || secrets.GEMINI_API_KEY }}",
+        "GEMINI_TTS_API_KEY": "${{ secrets.GEMINI_TTS_API_KEY || secrets.GEMINI_API_KEY }}",
+        "BUFFER_CHANNEL_IDS": "${{ secrets.BUFFER_CHANNEL_IDS || vars.BUFFER_CHANNEL_IDS }}",
+        "GITHUB_TOKEN": "${{ github.token }}",
+        "PYTHONPATH": "${{ github.workspace }}",
+        "PYTHONUNBUFFERED": "1",
+        "CHANNEL_BRAND": "اسرار الكون",
+        "PUBLICATION_RECEIPTS_ENABLED": "true",
+        "BUFFER_SCHEDULE_MODE": "customScheduled",
+        "PUBLISH_IMMEDIATE": "${{ github.event_name == 'push' && github.event.head_commit.message == 'Activate approved daily factory and publish first episode' }}",
+        "PRODUCTION_MEDIA_ID": "${{ (github.event_name == 'push' && github.event.head_commit.message == 'Activate approved daily factory and publish first episode') && 'approved-photo-v3-science' || github.run_id }}",
+        "USE_APPROVED_SAMPLE": "${{ inputs.use_approved_sample || (github.event_name == 'push' && github.event.head_commit.message == 'Activate approved daily factory and publish first episode') }}",
+        "FIRST_APPROVED_PUBLISH": "${{ github.event_name == 'push' && github.event.head_commit.message == 'Activate approved daily factory and publish first episode' }}"
+      },
+      "steps": [
+        {
+          "uses": "actions/checkout@v4",
+          "with": {
+            "ref": "main"
+          }
+        },
+        {
+          "uses": "actions/setup-python@v5",
+          "with": {
+            "python-version": "3.11"
+          }
+        },
+        {
+          "name": "Select unique 17:00 Cairo publication slot",
+          "id": "slot",
+          "run": "python scripts/daily_schedule.py\npython - <<'PY'\nimport os\nif os.getenv('FIRST_APPROVED_PUBLISH') == 'true':\n with open(os.environ['GITHUB_ENV'],'a') as f:f.write('PUBLISH_IMMEDIATE=true\\n')\nPY"
+        },
+        {
+          "name": "Install validation dependencies",
+          "run": "python -m pip install requests Pillow numpy beautifulsoup4\npython -m compileall -q film_factory scripts\npython -m unittest discover -s tests -p test_daily_cinema.py -v",
+          "if": "${{ (steps.slot.outputs.already_confirmed != 'true' || env.PUBLISH_IMMEDIATE == 'true' || inputs.use_approved_sample) }}"
+        },
+        {
+          "name": "Verify intended publishing destinations before generation",
+          "if": "${{ (steps.slot.outputs.already_confirmed != 'true' || env.PUBLISH_IMMEDIATE == 'true' || inputs.use_approved_sample) && ((github.event_name != 'workflow_dispatch' || inputs.publish)) }}",
+          "run": "python -m film_factory.publish science --preflight"
+        },
+        {
+          "uses": "actions/cache/restore@v4",
+          "with": {
+            "path": ".voice_cache\n.image_cache\n.film_work\nstate/api_budget.sqlite3\n~/.cache/huggingface",
+            "key": "documented-factory-v2-${{ github.repository_id }}-${{ github.run_id }}-${{ github.run_attempt }}",
+            "restore-keys": "documented-factory-v2-${{ github.repository_id }}-\nfilm-state-v1-${{ github.repository_id }}-"
+          },
+          "if": "${{ (steps.slot.outputs.already_confirmed != 'true' || env.PUBLISH_IMMEDIATE == 'true' || inputs.use_approved_sample) }}"
+        },
+        {
+          "uses": "actions/cache/restore@v4",
+          "with": {
+            "path": "output/",
+            "key": "documented-slot-v2-${{ github.repository_id }}-${{ env.PUBLISH_DATE }}-${{ env.USE_APPROVED_SAMPLE }}-${{ github.run_id }}-${{ github.run_attempt }}",
+            "restore-keys": "documented-slot-v2-${{ github.repository_id }}-${{ env.PUBLISH_DATE }}-${{ env.USE_APPROVED_SAMPLE }}-"
+          },
+          "if": "${{ (steps.slot.outputs.already_confirmed != 'true' || env.PUBLISH_IMMEDIATE == 'true' || inputs.use_approved_sample) }}"
+        },
+        {
+          "name": "Install encoding dependencies",
+          "run": "sudo apt-get update -qq\nsudo apt-get install -y ffmpeg fonts-dejavu-core\npython -m pip install google-api-python-client google-auth-oauthlib",
+          "if": "${{ (steps.slot.outputs.already_confirmed != 'true' || env.PUBLISH_IMMEDIATE == 'true' || inputs.use_approved_sample) }}"
+        },
+        {
+          "name": "Recover approved complete photographic sample",
+          "if": "${{ (steps.slot.outputs.already_confirmed != 'true' || env.PUBLISH_IMMEDIATE == 'true' || inputs.use_approved_sample) && (env.USE_APPROVED_SAMPLE == 'true') }}",
+          "uses": "actions/download-artifact@v4",
+          "with": {
+            "name": "science-photographic-review-39637804329",
+            "run-id": "39637804329",
+            "github-token": "${{ github.token }}",
+            "path": "output"
+          }
+        },
+        {
+          "name": "Install alignment only when generating new speech",
+          "if": "${{ (steps.slot.outputs.already_confirmed != 'true' || env.PUBLISH_IMMEDIATE == 'true' || inputs.use_approved_sample) && (env.USE_APPROVED_SAMPLE != 'true') }}",
+          "run": "python -m pip install torch torchaudio --index-url https://download.pytorch.org/whl/cpu\npython -m pip install -r film_factory/requirements.txt"
+        },
+        {
+          "name": "Enrich approved complete sample with speech-cued motion and stereo sound",
+          "if": "${{ (steps.slot.outputs.already_confirmed != 'true' || env.PUBLISH_IMMEDIATE == 'true' || inputs.use_approved_sample) && (env.USE_APPROVED_SAMPLE == 'true') }}",
+          "run": "python scripts/refresh_approved_sample.py science"
+        },
+        {
+          "name": "Produce a fresh documented episode with Charon",
+          "if": "${{ (steps.slot.outputs.already_confirmed != 'true' || env.PUBLISH_IMMEDIATE == 'true' || inputs.use_approved_sample) && (env.USE_APPROVED_SAMPLE != 'true') }}",
+          "run": "python -m film_factory.produce science"
+        },
+        {
+          "name": "Publish or schedule only the complete verified video",
+          "if": "${{ (steps.slot.outputs.already_confirmed != 'true' || env.PUBLISH_IMMEDIATE == 'true' || inputs.use_approved_sample) && ((github.event_name != 'workflow_dispatch' || inputs.publish)) }}",
+          "run": "python -m film_factory.publish science"
+        },
+        {
+          "name": "Preserve complete video and publication evidence",
+          "if": "always()",
+          "uses": "actions/upload-artifact@v4",
+          "with": {
+            "name": "science-daily-cinema-${{ github.run_id }}",
+            "path": "output/\nstate/publication_stock.json",
+            "retention-days": 30,
+            "if-no-files-found": "warn"
+          }
+        },
+        {
+          "uses": "actions/cache/save@v4",
+          "if": "always()",
+          "with": {
+            "path": ".voice_cache\n.image_cache\n.film_work\nstate/api_budget.sqlite3\n~/.cache/huggingface",
+            "key": "documented-factory-v2-${{ github.repository_id }}-${{ github.run_id }}-${{ github.run_attempt }}"
+          }
+        },
+        {
+          "uses": "actions/cache/save@v4",
+          "if": "always()",
+          "with": {
+            "path": "output/",
+            "key": "documented-slot-v2-${{ github.repository_id }}-${{ env.PUBLISH_DATE }}-${{ env.USE_APPROVED_SAMPLE }}-${{ github.run_id }}-${{ github.run_attempt }}"
+          }
+        },
+        {
+          "name": "Persist actual receipts and topic history even after partial failure",
+          "if": "always()",
+          "run": "git config user.name content-bot\ngit config user.email bot@users.noreply.github.com\nfor path in state/publication_stock.json state/film_topics.json state/yt_token_last_success.json state/news_history.json; do\n  if [ -f \"$path\" ]; then git add \"$path\"; fi\ndone\nif git diff --cached --quiet; then exit 0; fi\ngit commit -m 'Persist daily video and actual publication receipts [skip ci]'\nfor attempt in 1 2 3; do\n  if git pull --rebase --autostash origin main && git push origin HEAD:main; then exit 0; fi\n  sleep 3\ndone\nexit 1"
+        }
+      ]
+    }
+  }
+}

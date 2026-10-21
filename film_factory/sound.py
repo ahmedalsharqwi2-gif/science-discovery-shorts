@@ -17,9 +17,13 @@ def speech_cues(words,profile):
    elif re.search(r'ترباس|مقبض',token):kind='latch'
    elif re.search(r'قلبي|نبضات',token):kind='heartbeat'
    elif re.search(r'^و?سكت$',token):kind='silence'
+   elif re.search(r'موج|بحر|المحيط',token):kind='waves'
+   elif re.search(r'منارة|مناره|مصباح',token):kind='lamp'
   elif profile=='history':
    if re.search(r'يهدم|هدم|تفجير|فراغات',token):kind='firebreak'
    elif token in ('النار','نار','النيران'):kind='embers'
+  elif profile=='news':
+   if re.search(r'نموذج|ذكاء|شريحة|معالج|بيانات',token):kind='network'
   else:
    if re.search(r'الجاذبية|السقوط|بيطفوا',token):kind='orbit'
   if not kind:continue
@@ -46,6 +50,8 @@ def build(duration,scenes,profile,words=None):
   elif kind=='latch':a=.045*noise*np.exp(-16*z)+.035*np.sin(2*np.pi*(640*z-180*z*z))*np.exp(-11*z)
   elif kind=='heartbeat':a=.045*np.sin(2*np.pi*57*z)*np.exp(-20*z)+.025*np.sin(2*np.pi*65*z)*np.exp(-30*np.abs(z-.15))
   elif kind=='embers':a=.018*noise*np.exp(-3*z)+.02*np.sin(2*np.pi*65*z)*np.exp(-2*z)
+  elif kind=='waves':a=.018*noise*(.3+.7*np.sin(np.pi*z/1.8)**2)*np.exp(-.5*z)
+  elif kind=='lamp':a=.012*np.sin(2*np.pi*420*z)*np.exp(-10*z)
   elif kind=='firebreak':a=.07*noise*np.exp(-5*z)+.05*np.sin(2*np.pi*60*z)*np.exp(-4*z)
   else:a=.025*np.sin(2*np.pi*(420*z+180*z*z))*np.exp(-10*z)
   # Short reflected tail on the environment only, never on speech.
@@ -58,7 +64,7 @@ def build(duration,scenes,profile,words=None):
    a=max(0,round((at-.25)*rate));b=min(n,round((at+1.4)*rate));bed[a:b]*=.06;events.append({'kind':kind,'at':at,'cue':s['cue']});continue
   if kind=='none':continue
   for j,offset in enumerate((0,.42,.84) if kind=='knock' else (0,.75,1.5) if kind=='footsteps' else (0,1.1,2.2) if kind=='heartbeat' else (0,)):
-   put(at+offset,.8 if kind!='firebreak' else 1.7,kind,p);events.append({'kind':kind,'at':at+offset,'cue':s['cue']})
+   put(at+offset,1.8 if kind=='waves' else .8 if kind!='firebreak' else 1.7,kind,p);events.append({'kind':kind,'at':at+offset,'cue':s['cue']})
  fade=np.minimum(1,t/1.3)*np.minimum(1,np.maximum(0,duration-t)/1.5)
  bed*=fade[:,None];fx*=fade[:,None]
  out=Path('output');write(out/'music.wav',bed,rate);write(out/'effects.wav',fx,rate)

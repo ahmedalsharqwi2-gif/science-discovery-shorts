@@ -13,10 +13,10 @@ def fixture(profile='horror'):
 class FilmTests(unittest.TestCase):
  def test_cue_is_always_real_speech_even_if_model_misquotes_it(self):
   p=fixture();p['scenes'][0]['cue']='كلام لم يتم نطقه';p=validate(p,'horror',BRIEFS['horror'])
-  self.assertIn(p['scenes'][0]['cue'],p['scenes'][0]['narration']);self.assertTrue(p['fiction'])
+  self.assertIn(p['scenes'][0]['cue'],p['scenes'][0]['narration']);self.assertFalse(p['fiction'])
  def test_whisper_direction_uses_exact_spoken_anchors_without_changing_script(self):
   p=validate(fixture(),'horror',BRIEFS['horror']);before=p['narration'];style=performance(p)
-  self.assertIn('terrified',style);self.assertIn(' '.join(p['scenes'][0]['narration'].split()[:7]),style);self.assertEqual(before,p['narration'])
+  self.assertIn('restrained',style);self.assertIn(' '.join(p['scenes'][0]['narration'].split()[:7]),style);self.assertEqual(before,p['narration'])
  def test_perfect_accuracy_claim_is_rejected(self):
   p=fixture('science');p['scenes'][0]['narration']+=' من غير أي غلطة'
   with self.assertRaisesRegex(ValueError,'Unsupported'):validate(p,'science',BRIEFS['science'])

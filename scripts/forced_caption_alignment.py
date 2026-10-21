@@ -65,6 +65,63 @@ def merge_waveform_alignments(candidates, words, duration):
     return result
 
 
+def recover_local_alignment(audio, words, candidates, duration):
+    """Re-align short real-audio windows when whole-file attention misses a word."""
+    import stable_whisper
+    candidates = [c for c in candidates if len(c) == len(words)]
+    missing = []
+    for index, word in enumerate(words):
+        valid = False
+        for candidate in candidates:
+            try:
+                validate_events([candidate[index]], [word], duration)
+                valid = True
+            except RuntimeError:
+                pass
+        if not valid:missing.append(index)
+    if not missing:
+        try:merge_waveform_alignments(candidates, words, duration)
+        except RuntimeError as exc:
+            match = re.search(r'word (\d+)', str(exc))
+            if match:missing.append(int(match.group(1)))
+    if not candidates or not missing or len(missing)>12:
+        raise RuntimeError('Local waveform recovery has no bounded word window')
+    windows = []
+    for index in missing:
+        lo, hi = max(0,index-5), min(len(words),index+6)
+        if windows and lo<=windows[-1][1]:windows[-1]=(windows[-1][0],hi)
+        else:windows.append((lo,hi))
+    if len(windows)>4:raise RuntimeError('Too many unresolved audio windows')
+    with tempfile.TemporaryDirectory(prefix='word-realign-',dir=Path(audio).parent) as folder:
+        for size in ('medium', 'large-v3'):
+            model = stable_whisper.load_faster_whisper(size,device='cpu',compute_type='int8')
+            for lo,hi in windows:
+                reference=candidates[1]
+                start=max(0,float(reference[lo]['start'])-.15)
+                end=min(duration,float(reference[hi-1]['end'])+.15)
+                if end-start<=0:continue
+                crop=Path(folder)/f'{lo}-{hi}.wav'
+                subprocess.run(['ffmpeg','-v','error','-y','-ss',str(start),'-i',str(audio),
+                    '-t',str(end-start),'-ar','16000','-ac','1',str(crop)],check=True)
+                result=model.align(str(crop),' '.join(words[lo:hi]),language='ar',
+                    failure_threshold=0.0,max_word_dur=3.0,fast_mode=False)
+                if result is None:continue
+                measured=[{'text':w.word.strip(),'start':float(w.start)+start,'end':float(w.end)+start}
+                    for segment in result.segments for w in (segment.words or [])]
+                if len(measured)!=hi-lo:continue
+                repaired=[dict(e) for e in reference]
+                repaired[lo:hi]=measured
+                candidates.append(repaired)
+                try:
+                    complete=merge_waveform_alignments(candidates,words,duration)
+                    print(f'Validated local waveform recovery with {size}; no synthetic word timing',flush=True)
+                    return complete
+                except RuntimeError:
+                    pass
+            del model
+    raise RuntimeError('Independent local waveform recovery did not resolve every word')
+
+
 def align_worker(audio, words):
     import stable_whisper
     import torch
@@ -95,7 +152,10 @@ def align_worker(audio, words):
         print('Validated combined small/medium waveform alignment; no uniform timings', flush=True)
         return result
     except RuntimeError as exc:
-        raise RuntimeError('; '.join(failures) + '; recovery: ' + str(exc)) from exc
+        try:
+            return recover_local_alignment(audio, words, candidates, duration)
+        except RuntimeError as local:
+            raise RuntimeError('; '.join(failures) + '; recovery: ' + str(exc) + '; ' + str(local)) from local
 
 
 def forced_word_alignment(audio: Path, words: list[str]) -> list[dict]:
