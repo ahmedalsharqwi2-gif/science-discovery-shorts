@@ -1,4 +1,6 @@
-import os
-def display_title(title):
- brand=os.environ['CHANNEL_BRAND'];title=' '.join(str(title).split())
- return (title if title.startswith(brand) else brand+' | '+title)[:100]
+"""Visible channel identity; topic matching retains the original subject."""
+BRAND = "اسرار الكون"
+
+def display_title(topic, limit=100):
+    topic=' '.join(str(topic or '').split()).strip()
+    return (topic if topic.startswith(BRAND+' | ') else BRAND+' | '+topic)[:limit].rstrip()
