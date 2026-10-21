@@ -1,6 +1,6 @@
 {
   "name": "Review sample — no social publishing",
-  "run-name": "Source-backed science review after daily budget reset",
+  "run-name": "Source-backed science review — requested 2026-10-21",
   "on": {
     "workflow_dispatch": {
       "inputs": {
@@ -61,4 +61,3 @@
     }
   }
 }
-# Review sample trigger requested 2026-10-21; dry_run, no social publishing.
