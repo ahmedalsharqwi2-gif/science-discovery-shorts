@@ -60,7 +60,7 @@
     "deliver": {
       "needs": "resolve",
       "if": "${{ needs.resolve.outputs.ready == 'true' }}",
-      "uses": "ahmedalsharqwi2-gif/science-discovery-shorts/.github/workflows/review-delivery.yml@96c9d486102a8bf50bdfa177f1067f66d21c7f7d",
+      "uses": "ahmedalsharqwi2-gif/science-discovery-shorts/.github/workflows/review-delivery.yml@d5d0d59cb22333ffd1a4fd7548b58b731c011bbb",
       "with": {
         "run_id": "${{ needs.resolve.outputs.run_id }}",
         "artifact_name": "${{ needs.resolve.outputs.artifact }}",
