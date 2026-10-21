@@ -127,7 +127,7 @@ class Renderer:
         shift=int(t*8)%90
         for x in range(-90,W+90,90):d.line((x+shift,200,x+shift,1600),fill=(14,32,49),width=1)
         d.rounded_rectangle((60,92,1020,210),radius=28,fill=(11,27,45),outline=(33,78,101),width=2)
-        txt(im,'كل يوم',(950,147),46,anchor='rm');txt(im,'AI',(700,147),46,CYAN);txt(im,'ميمز تقنية',(110,149),26,CYAN,anchor='lm')
+        txt(im,'على السريع',(445,147),50,anchor='mm');txt(im,'ai',(770,147),50,CYAN)
         txt(im,self.plan['source']['publisher'],(540,263),30,MUTED)
         index=next((i for i,s in enumerate(self.t['scenes']) if s['start']<=t<s['end']),len(self.cards)-1)
         s=self.t['scenes'][index];local=t-s['start'];reveal=min(1,max(0,local/.55));ease=1-(1-reveal)**3

@@ -1,4 +1,4 @@
-name: Daily Egyptian AI Memes
+name: ai على السريع
 on:
   workflow_dispatch:
   schedule:
@@ -47,7 +47,7 @@ jobs:
             output/narration.source.json
             output/timing.json
           key: ai-news-checkpoint-v2-${{ github.run_id }}-${{ github.run_attempt }}
-          restore-keys: ai-news-checkpoint-v2-${{ github.run_id }}-
+          restore-keys: ${{ github.event_name == 'push' && 'ai-news-checkpoint-v2-39588735714-' || format('ai-news-checkpoint-v2-{0}-', github.run_id) }}
       - run: |
           sudo apt-get update -qq
           sudo apt-get install -y ffmpeg fonts-dejavu-core
@@ -115,3 +115,5 @@ jobs:
 # Match CPU torch and torchaudio, retaining the current source-checked script.
 
 # Fresh Egyptian meme script and labels revealed on their actual spoken words.
+
+# Series title requested by user: ai على السريع. Preserve the checked voice for this branding review.

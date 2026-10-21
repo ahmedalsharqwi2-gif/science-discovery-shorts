@@ -29,6 +29,9 @@ def main():
     Path('output').mkdir(exist_ok=True);Path('state').mkdir(exist_ok=True)
     plan=prepare()
     if plan is None:print('No fresh verified source; no invented news video.',flush=True);return
+    plan['series']='ai على السريع'
+    if not plan['title'].startswith('ai على السريع'):
+        plan['title']='ai على السريع | '+plan['title']
     voice=generate(plan['narration'],'output/narration.wav')
     timing_path=Path('output/timing.json')
     digest=hashlib.sha256(plan['narration'].encode()).hexdigest()
