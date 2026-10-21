@@ -5,7 +5,6 @@ from pathlib import Path
 from urllib.parse import urlparse,urljoin
 import xml.etree.ElementTree as ET
 import requests
-from bs4 import BeautifulSoup
 
 REVISION='documented-daily-v1'
 NYOS={'topic_id':'nyos-cameroon-1986-documented','title':'بحيرة نيوس: الخطر اللي خرج من الميه في ليلة واحدة','source':{'publisher':'NASA Earth Observatory','url':'https://science.nasa.gov/earth/earth-observatory/lake-nyos-cameroon-86244/','checked_on':'2026-10-22'},'facts':['On the evening of 21 August 1986, Lake Nyos in northwestern Cameroon released a deadly cloud of carbon dioxide.','The gas moved into lower valleys and suffocated people and animals. More than seventeen hundred people died; avoid claiming an exact final toll.','The lake occupies a volcanic crater; carbon dioxide of magmatic origin accumulated in deep water over time.','The release was not evidence of a supernatural curse or a conventional fiery volcanic eruption. Do not invent a definite initial trigger.','The gas was invisible: do not describe a visibly colored gas cloud as historical evidence.','Scientists installed a controlled degassing pipe in 2001 and two more in 2011 to release accumulated gas gradually. Do not claim all risk was permanently eliminated.','Do not invent victim dialogue, screams, names, final moments, hot meals or sensory evidence not supplied here. End with the documented mechanism and prevention, not a fictional monster.'],'visual_world':'Lake Nyos northwestern Cameroon in August 1986, steep green crater hills and dark water above a rural valley, West African highland vegetation, simple unbranded rural houses. Cinematic documentary reconstruction, empty landscape and household objects, never identifiable victims or bodies. At dusk and night use realistic moonlight and low practical light. Show water, valley topography and later plain degassing pipe with historical period separation. Invisible gas must remain invisible in the photograph; any gas arrows are visibly illustrative diagrams added by code. No ghosts, colored poisonous fog, lava, gore, modern smartphones, fabricated documents or writing.','region':'Cameroon','era':'1986','documented':True}
@@ -36,6 +35,7 @@ def mark_produced(plan):
  if not any(x['url']==url for x in h['produced']):h['produced'].append({'url':url,'topic_id':plan.get('topic_id',url),'title':plan['title'],'at':datetime.now(timezone.utc).isoformat()})
  p=Path('state/film_topics.json');p.parent.mkdir(exist_ok=True);p.write_text(json.dumps(h,ensure_ascii=False,indent=2))
 def article(url):
+ from bs4 import BeautifulSoup
  if not allowed(url):raise ValueError('Source is not on the editorial allowlist')
  r=requests.get(url,headers={'User-Agent':'DocumentedVideoFactory/1.0'},timeout=35);r.raise_for_status()
  if not allowed(r.url):raise ValueError('Source redirected outside editorial allowlist')
