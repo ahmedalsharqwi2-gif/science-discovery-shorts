@@ -76,6 +76,23 @@ def llm(prompt, *, review=False):
     raw=''.join(x.get('text','') for x in c.get('content',{}).get('parts',[]) if not x.get('thought'))
     return json.loads(raw)
 
+def spoken_punchline(narration,punchline):
+    """Recover the actual spoken span, allowing at most two colloquial fillers."""
+    words=narration.split();wanted=punchline.split()
+    def token(w):return re.sub(r'[^\u0621-\u064a0-9]','',re.sub(r'[\u064b-\u065fـ]','',w))
+    target=[token(w) for w in wanted]
+    if not 1<=len(target)<=10:return None
+    fillers={'ده','دي','بقى','يعني','كده','نقدر'}
+    for start in range(len(words)):
+        cursor=0;extra=0
+        for end in range(start,min(len(words),start+10)):
+            current=token(words[end]);expected=target[cursor]
+            if current==expected or (cursor==0 and current=='و'+expected):cursor+=1
+            elif cursor and current in fillers and extra<2:extra+=1
+            else:break
+            if cursor==len(target):return ' '.join(words[start:end+1])
+    return None
+
 def validate(plan,source):
     if not isinstance(plan,dict) or not 5<=len(plan.get('scenes',[]))<=7:raise ValueError('Need 5–7 scenes')
     narration=' '.join(s.get('narration','') for s in plan['scenes'])
@@ -90,11 +107,9 @@ def validate(plan,source):
     generic={'خطاف','ما الجديد','كيف يعمل','من يستفيد','الحدود','خلاصة','الخلاصة'}
     for s in plan['scenes']:
         if s.get('title','').strip() in generic:raise ValueError('Scene titles must explain this specific story, not internal labels such as خطاف or خلاصة')
-        punch=str(s.get('punchline','')).split();spoken=s['narration'].split()
-        def token(w):return re.sub(r'[^\u0621-\u064a0-9]','',re.sub(r'[\u064b-\u065fـ]','',w))
-        hit=next((i for i in range(len(spoken)-len(punch)+1) if all(a==b or (k==0 and a=='و'+b) for k,(a,b) in enumerate(zip([token(w) for w in spoken[i:i+len(punch)]],[token(w) for w in punch])))),None)
-        if not 1<=len(punch)<=10 or hit is None:raise ValueError('Meme punchline must occur in narration: '+json.dumps({'punchline':s.get('punchline'),'narration':s['narration']},ensure_ascii=False))
-        s['punchline']=' '.join(spoken[hit:hit+len(punch)])
+        actual=spoken_punchline(s['narration'],str(s.get('punchline','')))
+        if actual is None:raise ValueError('Meme punchline must occur in narration: '+json.dumps({'punchline':s.get('punchline'),'narration':s['narration']},ensure_ascii=False))
+        s['punchline']=actual
         if s.get('reaction') not in ('shock','suspicious','loading','smug'):raise ValueError('Missing supported meme reaction')
         if s.get('kind') not in ('network','chip','cards','comparison','timeline'):raise ValueError('Unsupported visual')
         if not s.get('title') or len(s['title'])>75 or not 1<=len(s.get('labels',[]))<=3 or any(len(x)>64 for x in s['labels']):raise ValueError('Invalid mobile labels')
