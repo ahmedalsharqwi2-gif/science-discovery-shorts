@@ -61,6 +61,7 @@ jobs:
           name: ai-news-daily-${{ github.run_id }}
           path: |
             output/ai-news-daily.mp4
+            output/draft.json
             output/plan.json
             output/source.json
             output/feed-status.json
@@ -101,3 +102,5 @@ jobs:
 # Match comedic beat words while tolerating punctuation and diacritic differences.
 
 # Short explicit meme brief, with spoken clitics preserved in timing.
+
+# Recognize Egyptian clitics and common colloquial verbs in the editorial gate.

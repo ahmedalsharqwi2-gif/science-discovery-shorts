@@ -82,8 +82,8 @@ def validate(plan,source):
     if re.search(r'\d|[A-Za-z]',narration):raise ValueError('Spoken numbers and names must be written in Arabic')
     if 'حوسبة إنسبشن' in narration or 'حوسبة انسبشن' in narration:raise ValueError('Inception is a startup program, not a compute provider; verify brand roles against the source')
     clean=re.sub(r'[\u064b-\u065fـ]','',narration)
-    egyptian=re.findall(r'(?<![\u0621-\u064a])(ده|دي|مش|عشان|اللي|إزاي|ازاي|دلوقتي|كده|بيعمل|بيحصل|هنعرف|بتستخدم|بتغير|بتكشف)(?![\u0621-\u064a])',clean)
-    if len(egyptian)<8:raise ValueError('Narration needs natural Egyptian speech: use ده، دي، مش، عشان، اللي، إزاي in context; avoid formal newsreader Arabic')
+    egyptian=re.findall(r'(?<![\u0621-\u064a])(?:[وف])?(ده|دي|مش|عشان|اللي|إزاي|ازاي|دلوقتي|كده|بيعمل|بيحصل|هنعرف|بتستخدم|بتغير|بتكشف|إنت|انت|إحنا|احنا|ليه|لسه|بقى|بجد|طب|يا|عايز|عاوز|أهو|بيفكر|بيفهم|بيشغل|بيساعد|بيوفر|بيتعلم|بيحاول|بتقول|هنشوف|هتعمل|هنعمل|معاك|عندك|كده|فيه)(?![\u0621-\u064a])',clean)
+    if len(egyptian)<8:raise ValueError('Egyptian speech markers='+str(len(egyptian))+'; draft='+narration)
     if any(x in clean for x in ['أهلا بكم','في نشرتنا','في الختام','في ختام']):raise ValueError('Start directly with a concrete hook; remove generic introductions and conclusions')
     generic={'خطاف','ما الجديد','كيف يعمل','من يستفيد','الحدود','خلاصة','الخلاصة'}
     for s in plan['scenes']:
@@ -130,6 +130,7 @@ def prepare():
     prompt=meme_rules+'المصدر الرسمي: '+json.dumps(source,ensure_ascii=False)+'\nتذكير: نريد ميمز وقفشات مصرية فعلية، كل مشهد يحتوي punchline حرفيًا في narration، لا أسلوب نشرة أخبار.'
     draft=llm(prompt)
     Path('.work/draft.json').write_text(json.dumps(draft,ensure_ascii=False,indent=2))
+    Path('output/draft.json').write_text(json.dumps(draft,ensure_ascii=False,indent=2))
     print('Draft narration word counts:',[len(s.get('narration','').split()) for s in draft.get('scenes',[])],flush=True)
     try:
         plan=validate(draft,source)
