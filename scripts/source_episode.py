@@ -42,7 +42,7 @@ def create(story_id):
  minimum=320 if story_id=='propeller' else 240
  for attempt in range(2):
   if len(text.split())>=minimum:break
-  extra=spoken_numbers(ask('اكتب فقرتين إضافيتين بالمصري المحكي، نحو مية وعشرين كلمة، لتوسيع شرح النص الموجود من غير تكراره. اشرح أفكار المصدر ببساطة وتشبيه معلن وليس حادثة حقيقية. بلاش مقدمة ولا خاتمة ولا عناوين ولا حقائق جديدة. اكتب الإضافة فقط في narration. '+json.dumps({'source':source,'existing_narration':text,'needed_words':minimum-len(text.split())},ensure_ascii=False)).get('narration',''))
+  extra=spoken_numbers(ask('اكتب فقرتين إضافيتين بالمصري المحكي، نحو مية وعشرين كلمة، لتوسيع شرح النص الموجود من غير تكراره. اشرح الحقائق نفسها والروابط بينها ببساطة. ممنوع اختراع تشبيهات أو تجارب أو حوار أو استخدام عصاية مكنسة أو ماء أو سباحة أو نسب خواص غير مذكورة للمصدر. بلاش مقدمة ولا خاتمة ولا عناوين ولا حقائق جديدة. اكتب الإضافة فقط في narration. '+json.dumps({'source':source,'existing_narration':text,'needed_words':minimum-len(text.split())},ensure_ascii=False)).get('narration',''))
   sentences=re.split(r'(?<=[.!؟])\s+',text)
   text=' '.join(sentences[:-1]+[extra,sentences[-1]]) if len(sentences)>1 else text+' '+extra
  if not egyptian_style(text):raise ValueError('Narration remained formal after bounded revisions')
@@ -53,7 +53,16 @@ def create(story_id):
  if not minimum<=len(text.split())<=400:raise ValueError(f'Source-based narration length is invalid: {len(text.split())}')
  if re.search(r'[A-Za-z0-9٠-٩]',text):raise ValueError('Unspoken tokens remain')
  if story_id=='propeller' and re.search(r'الحل(?: الهندسي)? الوحيد',text) and not re.search(r'(?:مش|ليس).{0,20}الحل',text):raise ValueError('Unsupported exclusive engineering claim')
+ Path('state').mkdir(exist_ok=True)
+ Path('state/source_editorial_draft.json').write_text(json.dumps({'narration':text,'source':source['source'],'status':'AWAITING_REVIEW'},ensure_ascii=False,indent=2),encoding='utf-8')
  verdict=ask('راجع السرد مقابل الحقائق والمحاذير المحددة فقط. ارفض أي تعميم زائد أو رقم أو حوار مختلق أو تقديم تفسير محتمل كحقيقة. أعد supported وissues. البيانات: '+json.dumps({'source':source,'narration':text},ensure_ascii=False),True)
+ if verdict.get('supported') is not True or verdict.get('issues'):
+  repaired=spoken_numbers(ask('صحح فقط المشكلات الواردة في المراجعة مع الحفاظ على شرح كامل من تلتمية وتلاتين إلى تلتمية وتسعين كلمة بالمصري. لا تختصر النص ولا تغير الموضوع. استبدل أي تشبيه مخترع بشرح مباشر للحقائق نفسها. ممنوع حوار أو وقائع أو تجارب أو تشبيهات جديدة. أعد النص المصحح كاملًا في narration. '+json.dumps({'source':source,'narration':text,'issues':verdict.get('issues',[])},ensure_ascii=False)).get('narration',''))
+  if not 320<=len(repaired.split())<=400 or not egyptian_style(repaired):
+   raise ValueError('Editorial correction did not preserve narration length and Egyptian style; draft saved')
+  text=repaired
+  Path('state/source_editorial_draft.json').write_text(json.dumps({'narration':text,'source':source['source'],'status':'AWAITING_REVIEW'},ensure_ascii=False,indent=2),encoding='utf-8')
+  verdict=ask('راجع الادعاءات مقابل الحقائق والمحاذير. الأسئلة البلاغية الموجهة للمشاهد ليست حوارًا تاريخيًا. ارفض أي تشبيه فيزيائي مضلل أو واقعة مختلقة. أعد supported وissues. '+json.dumps({'source':source,'narration':text},ensure_ascii=False),True)
  if verdict.get('supported') is not True or verdict.get('issues'):raise ValueError('Source-based editorial check rejected: '+json.dumps(verdict,ensure_ascii=False))
  record={'style_revision':4,'source':source['source'],'model':MODEL,'review':verdict,'narration':text,'source_capsule_reviewed_on':'2026-10-21'}
  Path('state').mkdir(exist_ok=True);Path('state/source_editorial_review.json').write_text(json.dumps(record,ensure_ascii=False,indent=2),encoding='utf-8')

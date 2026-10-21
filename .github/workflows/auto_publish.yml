@@ -125,6 +125,12 @@ jobs:
         cache: pip
         cache-dependency-path: requirements.txt
       if: ${{ steps.daily.outputs.already_confirmed != 'true' }}
+    - name: Install the small source-writing dependencies
+      if: ${{ inputs.source_backed_sample && steps.checked_text.outputs.usable != 'true' && steps.daily.outputs.already_confirmed != 'true' }}
+      run: python -m pip install requests 'num2words>=0.5.14,<0.6'
+    - name: Prepare the source-backed science sample
+      if: ${{ inputs.source_backed_sample && steps.checked_text.outputs.usable != 'true' && steps.daily.outputs.already_confirmed != 'true' }}
+      run: python -m scripts.source_episode propeller
     - name: Install dependencies
       run: "python -m pip install torch torchaudio --index-url https://download.pytorch.org/whl/cpu\nif ! command -v ffmpeg >/dev/null 2>&1 || ! fc-list | grep -qi 'Noto'; then\n  sudo apt-get update -qq\n  sudo apt-get install -y ffmpeg fonts-noto-core\nfi\npip install -r requirements.txt\n"
       if: ${{ steps.daily.outputs.already_confirmed != 'true' }}
@@ -149,9 +155,6 @@ jobs:
 
         '
       if: ${{ !inputs.dry_run && (steps.daily.outputs.already_confirmed != 'true') }}
-    - name: Prepare the source-backed science sample
-      if: ${{ inputs.source_backed_sample && steps.checked_text.outputs.usable != 'true' && steps.daily.outputs.already_confirmed != 'true' }}
-      run: python -m scripts.source_episode propeller
     - name: Validate and resolve AI model policy
       if: ${{ !inputs.source_backed_sample && (steps.checked_text.outputs.usable != 'true') && steps.daily.outputs.already_confirmed != 'true' }}
       env:
@@ -330,6 +333,8 @@ jobs:
           state/delivery_verification.json
 
           state/source_editorial_review.json
+
+          state/source_editorial_draft.json
 
           .cinematic_cache/pollinations/'
         if-no-files-found: ignore
