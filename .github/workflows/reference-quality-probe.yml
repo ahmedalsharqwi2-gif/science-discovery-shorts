@@ -63,7 +63,7 @@
         },
         {
           "name": "Check code and narration-cued Foley",
-          "run": "python -m pip install requests Pillow numpy\npython -m compileall -q film_factory\npython -m unittest discover -s tests -p test_film_factory.py -v"
+          "run": "python -m pip install requests Pillow numpy beautifulsoup4\npython -m compileall -q film_factory\npython -m unittest discover -s tests -p test_film_factory.py -v"
         },
         {
           "name": "Write a new Gemini episode and generate six topic-specific photographs",
