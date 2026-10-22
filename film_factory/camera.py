@@ -1,3 +1,4 @@
+from film_factory.cinematic_overlay import over as cinematic_overlay
 """A photographic world, spatial reveals and diagrams tied to actual speech."""
 import math
 from PIL import Image,ImageDraw,ImageOps
@@ -60,6 +61,7 @@ class FilmRenderer(Renderer):
     txt(panel,'بيسقطوا مع بعض',(410,550),38)
    im.alpha_composite(panel,(130,540))
   semantic_motion(im,t,self.motion_events,accent)
+  cinematic_overlay(im,t,s,profile)
   # Brief editorial focus changes every few seconds, without covering captions.
   cut=int((t-s['start'])/4.5)
   if cut%2:
