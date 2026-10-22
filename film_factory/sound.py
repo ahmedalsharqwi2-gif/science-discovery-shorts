@@ -46,7 +46,10 @@ def build(duration,scenes,profile,words=None):
   lo=max(0,round(at*rate));hi=min(n,lo+round(length*rate))
   if hi<=lo:return
   z=np.arange(hi-lo,dtype=np.float32)/rate;noise=rng.standard_normal(len(z)).astype(np.float32)
-  if kind=='knock':a=.16*(np.sin(2*np.pi*165*z)+.3*np.sin(2*np.pi*390*z))*np.exp(-35*z)+.025*noise*np.exp(-70*z)
+  if kind=='scene_whoosh':
+   # Soft original swept noise, intentionally quieter than narration.
+   a=.025*noise*np.exp(-8*z)*np.sin(np.pi*np.minimum(1,z/.35))+.016*np.sin(2*np.pi*(180*z+420*z*z))*np.exp(-9*z)
+  elif kind=='knock':a=.16*(np.sin(2*np.pi*165*z)+.3*np.sin(2*np.pi*390*z))*np.exp(-35*z)+.025*noise*np.exp(-70*z)
   elif kind=='footsteps':a=.055*noise*np.exp(-30*z)+.08*np.sin(2*np.pi*90*z)*np.exp(-24*z)
   elif kind=='latch':a=.045*noise*np.exp(-16*z)+.035*np.sin(2*np.pi*(640*z-180*z*z))*np.exp(-11*z)
   elif kind=='heartbeat':a=.045*np.sin(2*np.pi*57*z)*np.exp(-20*z)+.025*np.sin(2*np.pi*65*z)*np.exp(-30*np.abs(z-.15))
@@ -66,6 +69,15 @@ def build(duration,scenes,profile,words=None):
   if kind=='none':continue
   for j,offset in enumerate((0,.42,.84) if kind=='knock' else (0,.75,1.5) if kind=='footsteps' else (0,1.1,2.2) if kind=='heartbeat' else (0,)):
    put(at+offset,1.8 if kind=='waves' else .8 if kind!='firebreak' else 1.7,kind,p);events.append({'kind':kind,'at':at+offset,'cue':s['cue']})
+ # Motion Kit scene-cut cues use measured scene starts, independent of speech keywords.
+ # Avoid introducing repetitive whooshes for rapid scene changes.
+ last_transition=-100.0
+ for scene in scenes:
+  start=float(scene.get('start',0))
+  if start>=1.0 and start<duration-.5 and start-last_transition>=3.0:
+   put(start,.65,'scene_whoosh',.2)
+   events.append({'kind':'scene_whoosh','at':start,'cue':'scene transition'})
+   last_transition=start
  fade=np.minimum(1,t/1.3)*np.minimum(1,np.maximum(0,duration-t)/1.5)
  bed*=fade[:,None];fx*=fade[:,None]
  out=Path('output');write(out/'music.wav',bed,rate);write(out/'effects.wav',fx,rate)
