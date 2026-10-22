@@ -1,4 +1,4 @@
-import asyncio, subprocess, time
+import asyncio, subprocess, time, shutil
 from pathlib import Path
 from playwright.async_api import async_playwright
 async def main():
@@ -6,7 +6,7 @@ async def main():
  try:
   await asyncio.sleep(2)
   async with async_playwright() as p:
-   browser=await p.chromium.launch(executable_path='/usr/bin/chromium',args=['--no-sandbox','--enable-webgl','--use-gl=angle','--use-angle=swiftshader','--ignore-gpu-blocklist'])
+   browser=await p.chromium.launch(executable_path=shutil.which('google-chrome') or shutil.which('chromium'),args=['--no-sandbox','--enable-webgl','--use-gl=angle','--use-angle=swiftshader','--ignore-gpu-blocklist'])
    page=await browser.new_page(viewport={'width':540,'height':960})
    page.on('pageerror',lambda e: print('JS ERROR:',e))
    await page.goto('http://127.0.0.1:8765',wait_until='load')
