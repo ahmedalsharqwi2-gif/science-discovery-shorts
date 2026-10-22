@@ -1,3 +1,4 @@
+from film_factory.motion_kit_timeline import save as save_motion_timeline
 import argparse,hashlib,json,subprocess
 from pathlib import Path
 from film_factory.editor import prepare
@@ -28,6 +29,7 @@ def main():
   timing=align(plan,voice);timing['audio_sha256']=voice_digest;p.write_text(json.dumps(timing,ensure_ascii=False,indent=2))
  duration=timing['duration']
  if not 70<=duration<=180:raise ValueError(f'Expected 70–180 seconds of complete speech, got {duration:.2f}')
+ save_motion_timeline(timing, args.profile)
  FilmRenderer(plan,timing,images).encode('output/visuals.mp4')
  sound=build(duration,timing['scenes'],args.profile,timing['words'])
  normalized=mix_audio(voice,'output/music.wav','output/effects.wav',duration,'output/mix.wav')
