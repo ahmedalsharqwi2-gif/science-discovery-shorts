@@ -1,3 +1,4 @@
+from film_factory.image_fallback import fallback
 """Bounded Cloudflare FLUX generation. Credentials never enter files or logs."""
 import base64
 import hashlib
@@ -70,14 +71,24 @@ def prepare_images(plan):
                 with Image.open(target) as im:im.verify()
                 hit=True
             except (OSError,ValueError):target.unlink()
+        source_meta=None
         if not hit:
-            response=request_image(account,token,prompt)
-            im=decoded_image(response)
+            try:
+                response=request_image(account,token,prompt)
+                im=decoded_image(response)
+            except (CloudflareUnavailable,requests.RequestException) as cloud_error:
+                substitute=fallback(prompt,cache)
+                if substitute is None:raise CloudflareUnavailable('Cloudflare unavailable and no rights-cleared suitable fallback image; refusing irrelevant imagery') from cloud_error
+                im,source_meta=substitute
             temporary=target.with_suffix('.tmp');im.save(temporary,format='JPEG',quality=95);temporary.replace(target)
+            if source_meta:target.with_suffix('.source.json').write_text(json.dumps(source_meta,ensure_ascii=False))
+        else:
+            meta_file=target.with_suffix('.source.json')
+            if meta_file.exists():source_meta=json.loads(meta_file.read_text())
         with Image.open(target) as im:dimensions=list(im.size)
         public=Path('output/images')/f'scene-{index+1:02}.jpg';public.parent.mkdir(exist_ok=True);shutil.copyfile(target,public)
         paths.append(public)
-        records.append({'scene':index,'file':str(public),'prompt':prompt,'sha256':hashlib.sha256(target.read_bytes()).hexdigest(),'dimensions':dimensions,'cache_hit':hit,'provider':'Cloudflare Workers AI','model':MODEL,'steps':4 if MODEL==PORTRAIT_MODEL else 8,'source_url':plan['source']['url'],'illustration_not_evidence':True})
+        records.append({'scene':index,'file':str(public),'prompt':prompt,'sha256':hashlib.sha256(target.read_bytes()).hexdigest(),'dimensions':dimensions,'cache_hit':hit,'provider':source_meta['provider'] if source_meta else 'Cloudflare Workers AI','fallback_rights':source_meta,'model':MODEL,'steps':4 if MODEL==PORTRAIT_MODEL else 8,'source_url':plan['source']['url'],'illustration_not_evidence':True})
         print(f'Cloudflare scene {index+1}/{len(prompts)} ready; cached={hit}',flush=True)
         Path('output/image_manifest.json').write_text(json.dumps({'revision':REVISION,'images':records,'completed':len(records)==len(prompts)},ensure_ascii=False,indent=2))
     return paths
