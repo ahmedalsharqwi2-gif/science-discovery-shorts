@@ -1,0 +1,35 @@
+name: Visual quality gate validation (no publishing)
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'visual_quality_gate.py'
+      - '.github/workflows/visual-quality-gate.yml'
+permissions:
+  contents: read
+jobs:
+  validation:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install video probe tools
+        run: sudo apt-get update -qq && sudo apt-get install -y ffmpeg
+      - name: Exercise rejection of solid red, accept moving valid footage
+        run: |
+          mkdir -p /tmp/quality-check
+          ffmpeg -y -v error -f lavfi -i color=c=red:s=1080x1920:r=30:d=10 -c:v libx264 -preset ultrafast -pix_fmt yuv420p /tmp/quality-check/red.mp4
+          ffmpeg -y -v error -f lavfi -i testsrc2=s=1080x1920:r=30:d=10 -c:v libx264 -preset ultrafast -pix_fmt yuv420p /tmp/quality-check/moving.mp4
+          python - <<'PY'
+          from visual_quality_gate import audit
+          failed = False
+          try:
+              audit('/tmp/quality-check/red.mp4','/tmp/quality-check/red.json')
+          except ValueError as exc:
+              print('Correctly rejected red:',exc)
+              failed = True
+          assert failed, 'Safety gate incorrectly accepted all-red output'
+          result = audit('/tmp/quality-check/moving.mp4','/tmp/quality-check/moving.json')
+          assert result['passed'],result
+          print('Accepted moving frames, sampled:',result['samples'])
+          PY
