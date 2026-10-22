@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'Motion_as_kit/**'
+      - 'motion_3d/aerodynamics.ts'
       - 'Motion_as_kit_Linux_ready.zip'
       - '.github/workflows/original-motion-kit.yml'
 permissions:
@@ -66,6 +67,20 @@ jobs:
           (p/"audio.approx.json").write_text(json.dumps(dict(duration=duration,bpm=110,fps=fps,beats=[],downbeats=[],sections=[],features=features,onsets={})))
           (p/"lyrics.approx.json").write_text(json.dumps(dict(lines=lines)))
           PY
+      - name: Replace demo timeline with original-engine science scene
+        run: |
+          cp motion_3d/aerodynamics.ts Motion_as_kit/app/src/scenes/aerodynamics.ts
+          python - <<'PY'
+          from pathlib import Path
+          p=Path("Motion_as_kit/app/src/timeline.ts")
+          s=p.read_text()
+          i=s.index("export function makeTimeline(")
+          s=s[:i]+"""export function makeTimeline(_ly: Lyrics, _au: AudioData): TimelineEntry[] {
+            return [{ id: 'aerodynamics', load: scene('aerodynamics'), start: 0, end: 8 }];
+          }
+          """
+          p.write_text(s)
+          PY
       - uses: oven-sh/setup-bun@v2
       - run: |
           sudo apt-get update -qq
@@ -80,7 +95,7 @@ jobs:
         run: |
           mkdir -p ../out
           set -o pipefail
-          bun scripts/render.ts video --from 0 --to 10 --fps 30 --samples 1 --crf 19 --noaudio --out ../out/motion-kit-10s.mp4 2>&1 | tee ../out/render.log
+          bun scripts/render.ts video --from 0 --to 8 --fps 30 --samples 1 --crf 19 --noaudio --out ../out/motion-kit-10s.mp4 2>&1 | tee ../out/render.log
           if grep -q 'SCENE ERRORS:' ../out/render.log; then echo 'Scenes failed: reject red fallback video'; exit 1; fi
       - uses: actions/upload-artifact@v4
         with:
