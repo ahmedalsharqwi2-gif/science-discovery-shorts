@@ -54,5 +54,5 @@ void main(){
 export default class Aerodynamics extends Scene {
  pass = new FSPass(frag,{uTime:{value:0}});
  override render(f:Frame,out:THREE.WebGLRenderTarget){this.pass.mat.uniforms.uTime.value=f.t;this.pass.render(this.ctx.renderer,out);return {};}
- override dispose(){this.pass.dispose();}
+ override dispose(){this.pass.mat.dispose();}
 }
