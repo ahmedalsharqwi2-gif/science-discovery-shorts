@@ -18,6 +18,35 @@ jobs:
         run: |
           if [ -f Motion_as_kit_Linux_ready.zip ]; then unzip -oq Motion_as_kit_Linux_ready.zip; fi
           test -f Motion_as_kit/app/package.json
+      - name: Generate missing audio and lyric timing metadata
+        run: |
+          python - <<'PY'
+          import json, pathlib, math
+          p=pathlib.Path("Motion_as_kit/app/public/data")
+          p.mkdir(parents=True,exist_ok=True)
+          duration=62
+          fps=60
+          names=["rms","low","mid","high","vocal","drums","bass","other"]
+          features={name:[round(0.08+0.03*math.sin(i/19),4) for i in range(duration*fps+1)] for name in names}
+          phrases=[
+            ("What if I told you you can create motion graphics like this",0,5),
+            ("This is Claude",5,10),
+            ("For example",10,17),
+            ("where it gets crazy",17,24),
+            ("It writes the animation",24,31),
+            ("Then that code",31,38),
+            ("So instead of",38,45),
+            ("And because the animation",45,53),
+            ("Does this replace",53,62),
+          ]
+          lines=[]
+          for index,(phrase,start,end) in enumerate(phrases):
+            words=phrase.split()
+            linewords=[dict(w=word,start=round(start+(end-start)*j/len(words),3),end=round(start+(end-start)*(j+1)/len(words),3)) for j,word in enumerate(words)]
+            lines.append(dict(i=index,text=phrase,start=start,end=end,words=linewords))
+          (p/"audio.approx.json").write_text(json.dumps(dict(duration=duration,bpm=110,fps=fps,beats=[],downbeats=[],sections=[],features=features,onsets={})))
+          (p/"lyrics.approx.json").write_text(json.dumps(dict(lines=lines)))
+          PY
       - uses: oven-sh/setup-bun@v2
       - run: |
           sudo apt-get update -qq
