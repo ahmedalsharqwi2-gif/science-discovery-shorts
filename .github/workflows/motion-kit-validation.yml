@@ -1,0 +1,33 @@
+name: Motion Kit regression checks
+on:
+  push:
+    paths:
+      - 'film_factory/motion_kit_timeline.py'
+      - 'film_factory/cinematic_overlay.py'
+      - 'film_factory/sound.py'
+      - 'film_factory/camera.py'
+      - 'news/photo_render.py'
+      - 'news/produce.py'
+      - 'film_factory/produce.py'
+      - 'tests/test_motion_kit_*.py'
+      - 'tests/test_cinematic_overlay.py'
+      - '.github/workflows/motion-kit-validation.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  motion-kit-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install local rendering test dependencies
+        run: python -m pip install pillow numpy
+      - name: Compile and test scene cues, SFX and frame overlays
+        run: |
+          python -m py_compile film_factory/motion_kit_timeline.py film_factory/cinematic_overlay.py film_factory/sound.py
+          python -m unittest discover -s tests -p 'test_motion_kit_*.py' -v
+          python -m unittest discover -s tests -p 'test_cinematic_overlay.py' -v
