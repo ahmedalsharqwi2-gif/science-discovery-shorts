@@ -1,0 +1,24 @@
+<!doctype html><html><body style="margin:0;background:#060b12"><script type="module">
+import * as T from 'three';
+const w=540,h=960,scene=new T.Scene();scene.background=new T.Color('#07111b');scene.fog=new T.FogExp2('#101923',.024);
+const camera=new T.PerspectiveCamera(52,w/h,.1,150);camera.position.set(0,6,18);
+const r=new T.WebGLRenderer({antialias:true,preserveDrawingBuffer:true});r.setSize(w,h);r.toneMapping=T.ACESFilmicToneMapping;document.body.appendChild(r.domElement);
+scene.add(new T.HemisphereLight(0x95b4ce,0x242029,3));const sunlight=new T.DirectionalLight(0xffc38d,3);sunlight.position.set(-5,10,6);scene.add(sunlight);
+function add(g,m,x,y,z,p=scene){let a=new T.Mesh(g,m);a.position.set(x,y,z);p.add(a);return a;}
+const floor=add(new T.PlaneGeometry(170,170),new T.MeshStandardMaterial({color:0x414b3c}),0,-.5,0);floor.rotation.x=-Math.PI/2;
+const stone=new T.MeshStandardMaterial({color:0x565548});for(let j=0;j<32;j++)add(new T.DodecahedronGeometry(.4+(j%4)*.37,0),stone,(j*17%40)-20,-.4,-(j*13%65));
+const soldiers=[];for(let j=0;j<24;j++){const x=(j%6-2.5)*1.5,z=-3-Math.floor(j/6)*3;const group=new T.Group();group.position.set(x,0,z);scene.add(group);
+const coat=new T.MeshStandardMaterial({color:j%3?0x40546b:0x654038});const head=new T.MeshStandardMaterial({color:0xd2a175});
+add(new T.CylinderGeometry(.18,.27,1.2,9),coat,0,.5,0,group);add(new T.SphereGeometry(.19,10,8),head,0,1.3,0,group);
+const l=add(new T.BoxGeometry(.16,.75,.15),coat,-.14,-.36,0,group),rr=add(new T.BoxGeometry(.16,.75,.15),coat,.14,-.36,0,group);soldiers.push({group,l,rr,z,phase:j*.8});}
+const steel=new T.MeshStandardMaterial({color:0x333a3d,metalness:.7,roughness:.4});const wood=new T.MeshStandardMaterial({color:0x755033});
+const cannon=new T.Group();cannon.position.set(-2,0,2);scene.add(cannon);add(new T.BoxGeometry(2,.35,2.5),wood,0,0,0,cannon);
+for(let x of [-1.1,1.1]){const wheel=add(new T.CylinderGeometry(.65,.65,.25,16),wood,x,0,.2,cannon);wheel.rotation.z=Math.PI/2;}
+const barrel=add(new T.CylinderGeometry(.35,.48,2.8,18),steel,0,.55,-1.1,cannon);barrel.rotation.x=Math.PI/2;
+const flash=new T.PointLight(0xffaf63,0,15);flash.position.set(-2,.65,-.4);scene.add(flash);
+const smoke=[];for(let i=0;i<28;i++){const mat=new T.MeshStandardMaterial({color:0x787c79,transparent:true,opacity:.12,depthWrite:false});smoke.push(add(new T.SphereGeometry(.5,8,6),mat,-2,0,-2));}
+window.renderTime=t=>{const burst=Math.max(Math.exp(-((t-1.2)/.12)**2),Math.exp(-((t-3.6)/.12)**2));flash.intensity=burst*90;cannon.position.z=2+burst*.55;
+for(const p of soldiers){p.group.position.z=p.z+t*.7;p.group.position.y=.04*Math.sin(t*9+p.phase);p.l.rotation.x=Math.sin(t*9+p.phase)*.6;p.rr.rotation.x=-p.l.rotation.x;}
+for(let i=0;i<smoke.length;i++){const s=smoke[i],v=Math.max(0,t-1.2);s.visible=v>0;s.position.set(-2+Math.sin(i*9)*v*.25,1+i%5*.22+v*.5,-1.3-v*1.2);s.scale.setScalar(.4+v*.3+i%3*.2);s.material.opacity=Math.max(0,.14-v*.01);}
+camera.position.x=Math.sin(t*.25)*1.1;camera.position.z=18-t*.5;camera.lookAt(0,1,-7);r.render(scene,camera);};window.renderTime(0);
+</script></body></html>
