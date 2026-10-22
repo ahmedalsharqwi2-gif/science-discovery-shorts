@@ -3,6 +3,7 @@ on:
   push:
     paths:
       - '.github/workflows/threejs-3d-demo.yml'
+      - 'motion_3d/**'
   workflow_dispatch:
 permissions:
   contents: read
