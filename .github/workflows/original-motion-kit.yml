@@ -4,16 +4,21 @@ on:
   push:
     paths:
       - 'Motion_as_kit/**'
+      - 'Motion_as_kit_Linux_ready.zip'
       - '.github/workflows/original-motion-kit.yml'
 permissions:
   contents: read
 jobs:
   render:
-    if: ${{ hashFiles('Motion_as_kit/app/package.json') != '' }}
+    if: ${{ hashFiles('Motion_as_kit_Linux_ready.zip') != '' || hashFiles('Motion_as_kit/app/package.json') != '' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
+      - name: Unpack single uploaded archive
+        run: |
+          if [ -f Motion_as_kit_Linux_ready.zip ]; then unzip -oq Motion_as_kit_Linux_ready.zip; fi
+          test -f Motion_as_kit/app/package.json
       - uses: oven-sh/setup-bun@v2
       - run: |
           sudo apt-get update -qq
@@ -27,7 +32,7 @@ jobs:
           BROWSER_CHANNEL: chromium
         run: |
           mkdir -p ../out
-          bun scripts/render.ts video --from 0 --to 10 --fps 30 --samples 1 --crf 19 --noaudio --out ../out/motion-kit-10s.mp4
+          bun scripts/render.ts video --from 0 --to 10 --fps 30 --samples 1 --crf 19 --out ../out/motion-kit-10s.mp4
       - uses: actions/upload-artifact@v4
         with:
           name: motion-kit-native-render-${{ github.run_id }}
