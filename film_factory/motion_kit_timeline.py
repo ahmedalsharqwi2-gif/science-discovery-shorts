@@ -2,6 +2,7 @@
 No API calls; this is an edit decision list, not a 3D renderer.
 """
 import json
+from film_factory.scene_director import shots
 from pathlib import Path
 
 PALETTES = {
@@ -20,7 +21,7 @@ def timeline(timing, profile):
     result={"schema":"motion-kit-timeline-v1","profile":profile,
             "format":{"width":1080,"height":1920,"fps":30,"safe_margin_x":110,"safe_margin_bottom":340},
             "art_direction":PALETTES[profile],"duration":duration,
-            "events":[],"words":[]}
+            "events":[],"words":[],"directed_shots":shots(timing,profile)}
     for word in words:
         start=float(word.get("start",0));end=float(word.get("end",start))
         if not 0<=start<=end<=duration+.15:raise ValueError("Invalid word timing")
