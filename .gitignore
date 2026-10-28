@@ -31,3 +31,5 @@ state/api_budget.sqlite3*
 professional_motion/node_modules/
 professional_motion/delivery/
 professional_motion/output/
+
+/review_download/
