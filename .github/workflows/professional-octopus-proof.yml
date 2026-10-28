@@ -1,0 +1,86 @@
+{
+  "name": "Professional octopus proof — original Charon narration",
+  "on": {
+    "push": {
+      "branches": [
+        "codex/professional-octopus-proof"
+      ],
+      "paths": [
+        ".github/workflows/professional-octopus-proof.yml"
+      ]
+    },
+    "workflow_dispatch": {}
+  },
+  "permissions": {
+    "contents": "write"
+  },
+  "concurrency": {
+    "group": "professional-octopus-voice",
+    "cancel-in-progress": false
+  },
+  "jobs": {
+    "voice": {
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 25,
+      "env": {
+        "GEMINI_API_KEY": "${{ secrets.GEMINI_API_KEY }}",
+        "GEMINI_TTS_API_KEY": "${{ secrets.GEMINI_TTS_API_KEY || secrets.GEMINI_API_KEY }}",
+        "PYTHONPATH": "${{ github.workspace }}"
+      },
+      "steps": [
+        {
+          "uses": "actions/checkout@v4"
+        },
+        {
+          "uses": "actions/setup-python@v5",
+          "with": {
+            "python-version": "3.11"
+          }
+        },
+        {
+          "name": "Dependencies",
+          "run": "sudo apt-get update -qq\nsudo apt-get install -y ffmpeg\npython -m pip install numpy requests faster-whisper==1.2.1"
+        },
+        {
+          "uses": "actions/cache/restore@v4",
+          "with": {
+            "path": ".voice_cache\nstate/api_budget.sqlite3\n~/.cache/huggingface",
+            "key": "octopus-proof-${{ github.run_id }}",
+            "restore-keys": "motion-factory-v1-${{ github.repository_id }}-\noctopus-proof-"
+          }
+        },
+        {
+          "name": "Generate and measure original narration",
+          "id": "voice",
+          "run": "python -m professional_motion.voice_job"
+        },
+        {
+          "name": "Review artifact",
+          "if": "always()",
+          "uses": "actions/upload-artifact@v4",
+          "with": {
+            "name": "original-charon-octopus-${{ github.run_id }}",
+            "path": "professional_motion/delivery/",
+            "if-no-files-found": "warn"
+          }
+        },
+        {
+          "name": "Deliver generated media on a separate review branch",
+          "if": "always()",
+          "env": {
+            "VOICE_OUTCOME": "${{ steps.voice.outcome }}"
+          },
+          "run": "python - <<'PY2'\nimport os,json\nfrom pathlib import Path\np=Path('professional_motion/delivery');p.mkdir(exist_ok=True)\n(p/'status.json').write_text(json.dumps({'run_id':os.environ['GITHUB_RUN_ID'],'voice_outcome':os.environ['VOICE_OUTCOME']}))\nPY2\ngit config user.name content-review-bot\ngit config user.email bot@users.noreply.github.com\ngit add -f professional_motion/delivery/status.json\nfor file in professional_motion/delivery/narration.wav professional_motion/delivery/narration.source.json professional_motion/delivery/timing.json; do\n  if [ -f \"$file\" ]; then git add -f \"$file\"; fi\ndone\ngit commit -m 'Deliver generated octopus narration for review [skip ci]'\ngit push origin HEAD:refs/heads/codex/octopus-review-run-${{ github.run_id }}"
+        },
+        {
+          "uses": "actions/cache/save@v4",
+          "if": "always()",
+          "with": {
+            "path": ".voice_cache\nstate/api_budget.sqlite3\n~/.cache/huggingface",
+            "key": "octopus-proof-${{ github.run_id }}"
+          }
+        }
+      ]
+    }
+  }
+}

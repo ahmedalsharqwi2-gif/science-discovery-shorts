@@ -26,3 +26,8 @@ venv/
 .voice_cache/
 state/api_budget.sqlite3*
 .env
+
+# Professional renderer dependencies and local media
+professional_motion/node_modules/
+professional_motion/delivery/
+professional_motion/output/
