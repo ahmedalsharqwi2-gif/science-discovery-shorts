@@ -177,7 +177,7 @@ class MotionRenderer:
             text(d,'تنفيس تدريجي',(540,1250),36)
         text(d,'رسم تفسيري ، مش تصوير للحادثة',(540,1510),29,MUTED)
 
-    def network(self,d,t,kind):
+    def network(self,d,t,kind,labels=()):
         if kind=='comparison':
             for i in range(2):
                 x=140+i*440
@@ -186,7 +186,10 @@ class MotionRenderer:
                     y=760+k*85
                     d.ellipse((x+50,y-8,x+66,y+8),fill=self.accent)
                     d.line((x+85,y,x+290,y),fill=(61,88,99),width=3)
-                text(d,'فكرة' if i==0 else 'فكرة تانية',(x+180,1080),30,width=300)
+                    if k==int(t/2)%4:
+                        d.rounded_rectangle((x+28,y-24,x+320,y+24),radius=10,outline=self.accent,width=4)
+                label=labels[i] if i<len(labels) else ('فكرة' if i==0 else 'فكرة تانية')
+                text(d,label,(x+180,1080),30,width=300)
             text(d,'مقارنة مفاهيمية ، ليست نتائج أداء',(540,1310),30,MUTED)
             return
         d.rounded_rectangle((405,760,675,1030),radius=22,fill=(26,42,56),outline=self.accent,width=5)
@@ -226,7 +229,7 @@ class MotionRenderer:
         elif kind in ('canal','route','excavation'):self.canal(d,action,kind,index)
         elif kind in ('lake','gas','valley','pipe'):self.lake(d,action,kind)
         elif kind=='timeline':self.timeline(d,action,profile)
-        elif kind in ('network','chip','comparison','flow'):self.network(d,action,kind)
+        elif kind in ('network','chip','comparison','flow'):self.network(d,action,kind,s.get('labels',[]))
         else:raise ValueError('Unsupported scene kind: '+kind)
         caption=next((v for a,b,v in self.captions if a<=t<b),'')
         if self.preview:caption='معاينة حركة صامتة ، ليست الفيديو النهائي'

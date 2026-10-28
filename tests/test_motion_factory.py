@@ -62,5 +62,29 @@ class MotionFactoryTests(unittest.TestCase):
         self.assertNotIn('CLOUDFLARE',json.dumps(doc))
         self.assertNotIn('schedule',doc['on'])
 
+    def test_long_scenes_pass_diagram_gate_without_relying_on_scene_cuts(self):
+        import io
+        from motion_factory.quality import audit
+        for profile in KINDS:
+            plan=preview_plan(profile)
+            timing={'duration':96,'words':[], 'scenes':[dict(s,start=i*16,end=(i+1)*16) for i,s in enumerate(plan['scenes'])]}
+            renderer=MotionRenderer(plan,timing)
+            def output(command):
+                if command[0]=='ffprobe':
+                    return json.dumps({'streams':[{'codec_type':'video','width':1080,'height':1920}], 'format':{'duration':'96'}}).encode()
+                at=float(command[command.index('-ss')+1]);buf=io.BytesIO()
+                renderer.frame(at).save(buf,format='PNG');return buf.getvalue()
+            with self.subTest(profile=profile),tempfile.TemporaryDirectory() as folder,patch('motion_factory.quality.subprocess.check_output',side_effect=output):
+                self.assertTrue(audit('fixture.mp4',timing['scenes'],str(Path(folder)/'audit.json'))['passed'])
+
+    def test_diagram_gate_rejects_a_real_encoded_frozen_diagram(self):
+        from motion_factory.quality import audit
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder);image=root/'still.png';video=root/'still.mp4'
+            self.renderer('history').frame(.5).save(image)
+            subprocess.run(['ffmpeg','-v','error','-y','-loop','1','-i',str(image),'-t','10','-r','2','-c:v','libx264','-pix_fmt','yuv420p',str(video)],check=True)
+            with self.assertRaisesRegex(ValueError,'frozen explanatory'):
+                audit(video,[{'start':0,'end':10}],str(root/'audit.json'))
+
 
 if __name__=='__main__':unittest.main()

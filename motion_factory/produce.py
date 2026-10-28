@@ -67,8 +67,8 @@ def produce(profile, preview=False, width=1080, fps=30):
     subprocess.run(['ffmpeg','-v','error','-y','-i',str(out/'visuals.mp4'),'-i',str(out/'mix.wav'),
         '-map','0:v','-map','1:a','-c:v','copy','-c:a','aac','-b:a','192k',
         '-t',str(duration),'-movflags','+faststart',str(staging)],check=True)
-    from visual_quality_gate import audit
-    visual = audit(staging)
+    from .quality import audit
+    visual = audit(staging, timing['scenes'])
     audio = verify_tail(staging, normalized, duration)
     subprocess.run(['ffmpeg','-v','error','-i',str(staging),'-f','null','-'],check=True)
     staging.replace(final)
