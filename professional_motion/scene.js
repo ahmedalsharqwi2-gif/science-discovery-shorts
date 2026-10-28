@@ -214,7 +214,7 @@ function drawChannelText(t,index,local,p){
  let g=ctx.createLinearGradient(0,0,0,650);g.addColorStop(0,'rgba(2,12,19,.97)');g.addColorStop(.7,'rgba(2,12,19,.6)');g.addColorStop(1,'rgba(2,12,19,0)');ctx.fillStyle=g;ctx.fillRect(0,0,W,650);
  g=ctx.createLinearGradient(0,1480,0,H);g.addColorStop(0,'rgba(2,12,19,0)');g.addColorStop(.45,'rgba(2,12,19,.7)');g.addColorStop(1,'rgba(2,12,19,.98)');ctx.fillStyle=g;ctx.fillRect(0,1480,W,440);
  const colors={science:'#87e7d8',history:'#efbb80',horror:'#a6cec9',news:'#b7a1ff'},accent=colors[config.profile];
- const names={science:'SCIENCE / FIELD NOTES',history:'HISTORY / STRUCTURES',horror:'DOCUMENTED / MYSTERIES',news:'AI / VERIFIED SOURCE'};
+ const names={science:'SCIENCE / FIELD NOTES',history:'HISTORY / STRUCTURES',horror:'DOCUMENTED / MYSTERIES',news:'AI / OFFICIAL SOURCE'};
  mono(names[config.profile],75,100,21);type(config.series,1005,90,27,WHITE,'right');line(75,142,1005,142,accent,.25);mono('0'+(index+1)+' / 08',75,202,21);
  const s=config.scenes[index],a=ease(local/.65),y=335+(1-a)*30;
  const words=s.label.split(' ');let size=76;ctx.font=`${size}px Noto`;while(ctx.measureText(s.label).width>930&&size>46){size-=2;ctx.font=`${size}px Noto`;}
@@ -222,7 +222,7 @@ function drawChannelText(t,index,local,p){
  if(index===0)type(config.title,540,455,35,WHITE,'center',a);
  if(config.visual_family==='maritime'&&index===1)label('مسار تخطيطي، مش خريطة ملاحة',540,1460,25);
  if(config.visual_family==='maritime'&&index===3){const dates=(config.milestones||[]).slice(0,3);dates.forEach((v,i)=>type(v,205+i*335,1110,32,accent));}
- if(config.visual_family==='compute')mono('ILLUSTRATIVE / NO BENCHMARK CLAIM',540,1470,18,accent,'center');
+ 
  const labels=s.labels||[];labels.slice(0,2).forEach((v,i)=>{if(local>.7+i*.5){label(v,i?820:260,i?1350:700,28);line(i?770:310,i?1300:750,i?670:420,i?1200:850,accent,.45);}});
  caption(t);
  mono(config.source.publisher.slice(0,48),540,1810,17,MUTED,'center');ctx.fillStyle='#183337';ctx.fillRect(75,1848,930,3);ctx.fillStyle=accent;ctx.fillRect(75,1848,930*clamp(t/D),3);

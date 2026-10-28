@@ -45,4 +45,10 @@ class DailyProfessionalTests(unittest.TestCase):
    p=Path(td)/'release.json';p.write_text(json.dumps({'style_approved':True,'publication_approved':True}))
    with patch('professional_motion.publisher.POLICY',p):self.assertFalse(approved())
 
+ def test_legacy_provenance_strings_do_not_crash_novelty_checks(self):
+  with tempfile.TemporaryDirectory() as td:
+   root=Path(td)
+   with patch.object(e,'STATE',root/'registry.json'),patch.object(e,'ROOT',root),patch.object(e,'prior',return_value=[{'source':'git-history-backfill','title':'old subject'}]),patch.object(e,'candidates',return_value=[]):
+    with self.assertRaisesRegex(RuntimeError,'No unused'):e.prepare('horror','new-slot')
+
 if __name__=='__main__':unittest.main()
