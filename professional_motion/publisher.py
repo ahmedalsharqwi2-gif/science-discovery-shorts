@@ -17,18 +17,52 @@ def approved():
     return p.get('publication_approved') is True and p.get('style_approved') is True and bool(p.get('approved_sample_sha256'))
 
 
+def verified_mapping(profile,rows):
+    services={'tiktok','youtube','facebook','instagram'}
+    by_id={r['id']:r for r in rows}
+    explicit={s:os.getenv('BUFFER_'+s.upper()+'_CHANNEL_ID','').strip() for s in services}
+    explicit={k:v for k,v in explicit.items() if v}
+    raw=os.getenv('BUFFER_CHANNEL_IDS','').strip();legacy=[]
+    if raw:
+        try:parsed=json.loads(raw)
+        except ValueError:parsed=raw.split(',')
+        if isinstance(parsed,dict):explicit.update({str(k).lower():str(v) for k,v in parsed.items()})
+        else:
+            for value in parsed:
+                value=str(value).strip()
+                if ':' in value and value.split(':',1)[0].lower() in services:
+                    service,identifier=value.split(':',1);explicit[service.lower()]=identifier
+                elif value:legacy.append(value)
+    selected={}
+    def accept(row,service=None):
+        actual=row.get('service','').lower()
+        if actual not in services or (service and actual!=service) or row.get('isQueuePaused') or not any(norm(BRANDS[profile]) in norm(row.get(k,'')) for k in ('name','displayName')):
+            raise ValueError('Connected destination does not match this repository brand/service')
+        if actual in selected and selected[actual]!=row['id']:raise ValueError('Ambiguous destination; configure an explicit channel ID')
+        selected[actual]=row['id']
+    for service,identifier in explicit.items():
+        if identifier not in by_id:raise ValueError('Configured channel is not connected')
+        accept(by_id[identifier],service)
+    for identifier in legacy:
+        if identifier not in by_id:raise ValueError('Configured channel is not connected')
+        accept(by_id[identifier])
+    if not explicit and not legacy:
+        for row in rows:
+            if any(norm(BRANDS[profile]) in norm(row.get(k,'')) for k in ('name','displayName')):accept(row)
+    return selected
+
+
 def preflight(profile,strict=False):
     result={'buffer':{},'direct_youtube':False,'problems':[],'credential_presence':{n:bool(os.getenv(n)) for n in ('BUFFER_API_KEY','YT_CLIENT_ID','YT_CLIENT_SECRET','YT_REFRESH_TOKEN','YT_REFRESH_TOKEN_FALLBACK')}}
     if os.getenv('BUFFER_API_KEY'):
         try:
-            selected=channels(profile);rows=[]
+            rows=[]
             for org in query('query { account { organizations { id name } } }')['account']['organizations']:
                 rows+=query('query { channels(input: {organizationId: '+json.dumps(org['id'])+'}) { id name displayName service isQueuePaused } }')['channels']
-            for service,identifier in selected.items():
-                found=next((r for r in rows if r['id']==identifier and r['service'].lower()==service),None)
-                if not found or found.get('isQueuePaused') or not any(norm(BRANDS[profile]) in norm(found.get(k,'')) for k in ('name','displayName')):
-                    raise ValueError('Configured channel does not uniquely match this repository brand')
+            result['available_channels']=[{'name':r.get('displayName') or r.get('name'),'service':r.get('service'),'id':r.get('id'),'paused':r.get('isQueuePaused')} for r in rows]
+            selected=verified_mapping(profile,rows)
             result['buffer']=selected
+            result['matched_channels']=[{'name':r.get('displayName') or r.get('name'),'service':r['service'],'id':r['id']} for r in rows if r['id'] in selected.values()]
         except Exception as e:result['problems'].append({'provider':'buffer','error_class':type(e).__name__})
     direct=all(os.getenv(k) for k in ('YT_CLIENT_ID','YT_CLIENT_SECRET')) and bool(os.getenv('YT_REFRESH_TOKEN') or os.getenv('YT_REFRESH_TOKEN_FALLBACK'))
     if direct:

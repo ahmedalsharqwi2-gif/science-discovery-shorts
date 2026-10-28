@@ -51,4 +51,20 @@ class DailyProfessionalTests(unittest.TestCase):
    with patch.object(e,'STATE',root/'registry.json'),patch.object(e,'ROOT',root),patch.object(e,'prior',return_value=[{'source':'git-history-backfill','title':'old subject'}]),patch.object(e,'candidates',return_value=[]):
     with self.assertRaisesRegex(RuntimeError,'No unused'):e.prepare('horror','new-slot')
 
+ def test_legacy_ids_are_mapped_by_provider_service_not_positional_guess(self):
+  from professional_motion.publisher import verified_mapping
+  rows=[{'id':'a','service':'tiktok','name':'ملفات غامضه'},{'id':'b','service':'youtube','name':'ملفات غامضة'},{'id':'c','service':'facebook','name':'ملفات غامضه'}]
+  with patch.dict(os.environ,{'BUFFER_CHANNEL_IDS':'a,b,c'},clear=True):
+   self.assertEqual(verified_mapping('horror',rows),{'tiktok':'a','youtube':'b','facebook':'c'})
+ def test_a_valid_id_for_an_unrelated_brand_is_rejected(self):
+  from professional_motion.publisher import verified_mapping
+  rows=[{'id':'a','service':'facebook','name':'اسرار الكون'}]
+  with patch.dict(os.environ,{'BUFFER_CHANNEL_IDS':'a'},clear=True):
+   with self.assertRaisesRegex(ValueError,'brand'):verified_mapping('news',rows)
+ def test_explicit_channel_service_must_match_provider(self):
+  from professional_motion.publisher import verified_mapping
+  rows=[{'id':'a','service':'facebook','name':'اسرار الكون'}]
+  with patch.dict(os.environ,{'BUFFER_YOUTUBE_CHANNEL_ID':'a'},clear=True):
+   with self.assertRaises(ValueError):verified_mapping('science',rows)
+
 if __name__=='__main__':unittest.main()

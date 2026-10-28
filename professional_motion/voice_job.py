@@ -24,7 +24,7 @@ def main():
     duration=float(subprocess.check_output(['ffprobe','-v','error','-show_entries','format=duration','-of','csv=p=0',str(wav)]))
     from faster_whisper import WhisperModel
     transcripts=[];timing=None
-    for name in ('medium','small'):
+    for name in ('medium','small','large-v3'):
         model=WhisperModel(name,device='cpu',compute_type='int8',cpu_threads=2)
         segments,_=model.transcribe(str(wav),language='ar',word_timestamps=True,beam_size=5,vad_filter=False)
         actual=[{'text':w.word.strip(),'start':float(w.start),'end':float(w.end)} for s in segments for w in s.words or []]
@@ -32,7 +32,7 @@ def main():
         del model
         try:timing=measured_timing(story,duration,transcripts);break
         except ValueError:
-            if name=='small':raise
+            if name=='large-v3':raise
     timing['audio_sha256']=hashlib.sha256(wav.read_bytes()).hexdigest()
     (out/'timing.json').write_text(json.dumps(timing,ensure_ascii=False,indent=2))
     timing['profile']=story['profile'];timing['topic_key']=story['topic_key']
