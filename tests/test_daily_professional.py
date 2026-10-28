@@ -67,4 +67,21 @@ class DailyProfessionalTests(unittest.TestCase):
   with patch.dict(os.environ,{'BUFFER_YOUTUBE_CHANNEL_ID':'a'},clear=True):
    with self.assertRaises(ValueError):verified_mapping('science',rows)
 
+ def test_generic_numbered_slides_are_not_a_topic_specific_film(self):
+  story={'suitable':True,'title':'موضوع جديد','scenes':[{'label':'الشريحة الأولى','narration':'ده مش مجرد لون عشان اللي قدامك جزء من موضوع علمي جديد','labels':[]} for _ in range(8)]}
+  with self.assertRaisesRegex(ValueError,'topic-specific'):e.validate(story,'science',{'family':'space'})
+
+class EvidenceAndTimingTests(unittest.TestCase):
+ def test_a_fabricated_source_quote_is_rejected(self):
+  with self.assertRaises(ValueError):e.verify_evidence({'scenes':[{'evidence_quote':'this invented quotation is not in source'}]},'An actual source with different statements.')
+ def test_conflicting_models_use_a_monotonic_exact_match_chain(self):
+  from professional_motion.alignment import measured_timing
+  words='ده شرح جديد عن القوس اللي بيحمل حجر عشان نفهم شكله'.split()
+  story={'scenes':[{'narration':' '.join(words)}]}
+  a=[{'text':w,'start':float(i),'end':i+.5} for i,w in enumerate(words)]
+  bad=[{**w,'start':w['start']+(.1 if i%2 else 2),'end':w['end']+(.1 if i%2 else 2)} for i,w in enumerate(a)]
+  t=measured_timing(story,20,[('one',bad),('two',a)])
+  self.assertEqual(t['coverage'],1)
+  self.assertTrue(all(x['start']<=x['end'] for x in t['caption_groups']))
+
 if __name__=='__main__':unittest.main()

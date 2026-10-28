@@ -1,5 +1,5 @@
 """Conditional, receipt-backed publication at an absolute 17:00 Cairo slot."""
-import hashlib,json,os,shutil
+import hashlib,json,os,shutil,re
 from datetime import datetime,timezone
 from pathlib import Path
 from scripts.daily_schedule import next_slot,validate_slot
@@ -14,7 +14,7 @@ POLICY=Path('config/professional_release.json')
 
 def approved():
     p=json.loads(POLICY.read_text()) if POLICY.exists() else {}
-    return p.get('publication_approved') is True and p.get('style_approved') is True and bool(p.get('approved_sample_sha256'))
+    return p.get('publication_approved') is True and p.get('style_approved') is True and bool(re.fullmatch(r'[0-9a-f]{64}',str(p.get('approved_sample_sha256',''))))
 
 
 def verified_mapping(profile,rows):

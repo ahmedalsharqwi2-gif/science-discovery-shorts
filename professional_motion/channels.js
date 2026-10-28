@@ -47,11 +47,39 @@ export function channelStage(scene){
  const pediment=new THREE.Shape();pediment.moveTo(-2.1,0);pediment.lineTo(0,.65);pediment.lineTo(2.1,0);pediment.lineTo(-2.1,0);
  mesh(building,new THREE.ExtrudeGeometry(pediment,{depth:.5,bevelEnabled:false}),stone,0,.74,1.25);
  const aquaBridge=group('aqueduct');
- for(let floor=0;floor<2;floor++)for(let i=0;i<6;i++){
-  const x=-2.5+i;box(aquaBridge,.21,1.5,.65,stone,x,floor*1.6-1,0);
-  const a=mesh(aquaBridge,new THREE.TorusGeometry(.4,.12,10,36,Math.PI),stone,x+.5,floor*1.6-.25,0);arches.push(a);
+ const bridgeBlocks=[];
+ // Three levels: broad lower arches, smaller upper arches, channel at the top.
+ for(let floor=0;floor<3;floor++){
+  const span=floor===2?.5:1, count=floor===2?12:6;
+  const base=-1.55+floor*1.15, radius=span*.39;
+  for(let i=0;i<=count;i++)bridgeBlocks.push(box(aquaBridge,span*.19,.74,.68,stone,-3+i*span,base+.37,0));
+  for(let i=0;i<count;i++){
+   const x=-3+(i+.5)*span;
+   const a=mesh(aquaBridge,new THREE.TorusGeometry(radius,span*.10,8,28,Math.PI),stone,x,base+.69,0);arches.push(a);bridgeBlocks.push(a);
+  }
+  bridgeBlocks.push(box(aquaBridge,6.3,.18,.8,stone,0,base+1.08,0));
  }
- box(aquaBridge,6.2,.25,.85,stone,.2,1.55,0);const waterLine=box(aquaBridge,6,.05,.35,aqua,.2,1.72,0);
+ box(aquaBridge,6.3,.18,.85,stone,0,1.96,0);
+ const waterLine=box(aquaBridge,6,.045,.32,aqua,0,2.08,0);
+ const waterDrops=[];for(let i=0;i<14;i++)waterDrops.push(mesh(aquaBridge,new THREE.SphereGeometry(.045,8,8),aqua,0,2.12,0));
+ const archDemo=group('archDemo'),archStones=[];
+ for(let i=0;i<13;i++){
+  const o=mesh(archDemo,new THREE.RingGeometry(1.05,1.48,4,1,i*Math.PI/13+.012,Math.PI/13-.024),i===6?brass:stone,0,-.3,.15);
+  archStones.push(o);
+ }
+ box(archDemo,.43,1.45,.65,stone,-1.28,-1.02,0);box(archDemo,.43,1.45,.65,stone,1.28,-1.02,0);
+ const archPulse=mesh(archDemo,new THREE.SphereGeometry(.085,12,10),aqua);
+ const pierDemo=group('pierDemo');
+ box(pierDemo,.9,2.6,1.2,stone,0,-.15,0);
+ const nose=new THREE.Shape();nose.moveTo(-.45,0);nose.lineTo(0,1.1);nose.lineTo(.45,0);nose.closePath();
+ const cutwater=mesh(pierDemo,new THREE.ExtrudeGeometry(nose,{depth:2.6,bevelEnabled:false}),stone);cutwater.rotation.x=Math.PI/2;cutwater.position.set(0,1.15,.6);
+ const stream=[];for(let i=0;i<16;i++)stream.push(mesh(pierDemo,new THREE.SphereGeometry(.05,10,8),aqua));
+ const pump=group('pump');box(pump,3,.2,1.7,mat(0x594031,.8),0,-1.3,0);
+ mesh(pump,new THREE.CylinderGeometry(.36,.36,1.65,28,1,true),brass,0,-.35,0);
+ const piston=mesh(pump,new THREE.CylinderGeometry(.07,.07,1.55,12),copper,0,.9,0);
+ const handle=box(pump,1.8,.12,.13,brass,.5,1.5,0);
+ curve(pump,[[0,-.8,0],[.8,-.8,0],[1,.1,0],[1.5,.1,0]],brass,.09);
+ const pumpDrop=mesh(pump,new THREE.SphereGeometry(.09,12,10),aqua,1.5,0,0);
  const arena=group('arena');for(let floor=0;floor<3;floor++)for(let i=0;i<28;i++){const a=i/28*TAU,x=Math.cos(a)*2.2,z=Math.sin(a)*1.5,y=-1.15+floor*.72;const c=mesh(arena,new THREE.CylinderGeometry(.07,.08,.7,8),stone,x,y,z);const arch=mesh(arena,new THREE.TorusGeometry(.19,.055,6,18,Math.PI),stone,x,y+.3,z);arch.rotation.y=-a+Math.PI/2;}
  const pyramid=group('pyramid');const pyr=mesh(pyramid,new THREE.ConeGeometry(2.7,3.3,4),stone,0,-.05,0);pyr.rotation.y=Math.PI/4;
  for(let i=0;i<7;i++){const e=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(3.7-i*.45,.01,3.7-i*.45)),new THREE.LineBasicMaterial({color:0xaa8050}));e.position.y=-1.5+i*.44;pyramid.add(e);}
@@ -92,7 +120,11 @@ export function channelStage(scene){
   all.forEach(g=>{g.visible=false;g.position.set(0,-.25,0);g.rotation.set(0,0,0);g.scale.setScalar(1);});
   let g;const family=story.visual_family;
   if(family==='maritime'){
-   g=[fleet,globe,fleet,timeline,wreck,wreck,papers,fleet][index];
+   const modes={hero:fleet,route:globe,weather:fleet,timeline,research:globe,evidence:story.variant==='polar'?wreck:pump,papers,wreck,pump};
+   const mode=story.scenes[index].visual_mode;g=mode?modes[mode]:[fleet,globe,fleet,timeline,story.variant==='polar'?wreck:globe,story.variant==='polar'?wreck:pump,papers,fleet][index];
+   if(!g)throw Error('Unsupported maritime visual mode');
+   piston.position.y=.9+Math.sin(local*2)*.2;handle.rotation.z=Math.sin(local*2)*.16;pumpDrop.position.y=.1-(local*.8%1);
+   ships[1].visible=story.topic_key!=='mary-celeste-1872';
    ice.forEach(o=>o.visible=story.variant==='polar');ocean.material.color.setHex(story.variant==='polar'?0x143e51:0x092f4a);
    ships.forEach((s,i)=>{s.rotation.set(Math.sin(t*.7+i)*.035,Math.sin(t*.13)*.12,Math.sin(t*.8+i)*.045);s.position.y=(i?.1:-.2)+Math.sin(t*.8+i)*.035;s.userData.sails.forEach(o=>{const pos=o.geometry.attributes.position;for(let k=0;k<pos.count;k++)pos.setZ(k,.03+Math.sin(pos.getX(k)*3+t*.8)*.05);pos.needsUpdate=true;o.geometry.computeVertexNormals();});});
    const positions=ocean.geometry.attributes.position;for(let k=0;k<positions.count;k++)positions.setZ(k,Math.sin(positions.getX(k)*2+t)*.035+Math.sin(positions.getY(k)*2-t*.8)*.025);positions.needsUpdate=true;ocean.geometry.computeVertexNormals();
@@ -101,14 +133,20 @@ export function channelStage(scene){
    if(index===2)g.scale.setScalar(1.18);
   }else if(family==='architecture'){
    const hero=story.variant==='aqueduct'?aquaBridge:story.variant==='pyramid'?pyramid:story.variant==='arena'?arena:building;
-   g=[hero,structure,hero,hero,structure,material,hero,hero][index];
+   const modes={hero,levels:hero,arch:story.variant==='aqueduct'||story.variant==='arena'?archDemo:structure,section:story.variant==='aqueduct'?pierDemo:hero,water:hero,material,assembly:hero};
+   const mode=story.scenes[index].visual_mode;g=mode?modes[mode]:[hero,story.variant==='aqueduct'?hero:structure,story.variant==='aqueduct'?pierDemo:hero,hero,story.variant==='aqueduct'?archDemo:structure,material,hero,hero][index];
+   if(!g)throw Error('Unsupported architecture visual mode');
+   bridgeBlocks.forEach((o,i)=>{if(o.userData.baseY===undefined)o.userData.baseY=o.position.y;o.position.y=o.userData.baseY+(mode==='assembly'?(1-Math.min(1,Math.max(0,local*.7-i*.035)))*1.8:0);});
+   waterDrops.forEach((o,i)=>o.position.x=-3+((local*.8+i*.43)%6));
+   archStones.forEach((o,i)=>o.position.z=.15+(mode==='assembly'?(1-p)*i*.08:0));archPulse.position.set(Math.cos(local*.8)*1.26,Math.abs(Math.sin(local*.8))*1.26-.3,.24);
+   stream.forEach((o,i)=>{const z=2-((local*.9+i*.3)%4);o.position.set((i%2?1:-1)*(.7+.3*Math.exp(-z*z)), -1.1,z);});
    dome.visible=!(index===2&&p>.35);cylinder.material.transparent=true;cylinder.material.opacity=index===2?.42:1;
    loads.forEach((o,i)=>o.position.copy(ribs[i].curve.getPoint((local*.3+i*.1)%1)));
    if(index===3)g.rotation.x=.35*Math.sin(p*Math.PI);
    if(index===6)g.position.y=-.25+(1-Math.min(1,local/2))*.7;
    waterLine.material.emissiveIntensity=1+.5*Math.sin(local*2);
   }else if(family==='compute'){
-   g=[chip,network,network,compare,racks,chip,compare,chip][index];
+   const modes={chip,network,comparison:compare,deployment:racks,flow:network,limits:compare};const mode=story.scenes[index].visual_mode;g=mode?modes[mode]:[chip,network,network,compare,racks,chip,compare,chip][index];if(!g)throw Error('Unsupported computing visual mode');
    cores.forEach((o,i)=>o.material=i%5?violet:aqua);leds.forEach((o,i)=>o.visible=Math.sin(local*3+i)>.0);
    pulses.forEach((o,i)=>o.position.copy(links[i].getPoint((local*.32+i*.037)%1)));compareDot.position.set(Math.sin(local)*1.2,.7*Math.cos(local*.7),.25);
    if(g===chip){g.rotation.x=.38;g.rotation.y=.1+local*.1;}

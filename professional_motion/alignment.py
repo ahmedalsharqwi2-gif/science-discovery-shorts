@@ -8,18 +8,30 @@ def norm(s):
 
 
 def measured_timing(story, duration, transcripts):
-    expected=' '.join(s['narration'] for s in story['scenes']).split();anchors={};models=[]
+    expected=' '.join(s['narration'] for s in story['scenes']).split();models=[];candidates={}
     for model,actual in transcripts:
         models.append(model)
         matcher=SequenceMatcher(None,[norm(w) for w in expected],[norm(w['text']) for w in actual],autojunk=False)
         for block in matcher.get_matching_blocks():
-            for i in range(block.size):anchors.setdefault(block.a+i,actual[block.b+i])
+            for i in range(block.size):
+                w=actual[block.b+i]
+                if 0<=w['start']<=w['end']<=duration+.1:
+                    candidates.setdefault(block.a+i,[]).append(w)
+    # Choose the largest chronological chain of exact matches. Combining the
+    # first match from each model can cross-align repeated words and conflict.
+    nodes=[(i,w) for i in sorted(candidates) for w in candidates[i]]
+    scores=[1]*len(nodes);parents=[-1]*len(nodes)
+    for j,(idx,word) in enumerate(nodes):
+        for k,(prev_idx,prev_word) in enumerate(nodes[:j]):
+            if prev_idx<idx and prev_word['end']<=word['start']+.03 and scores[k]+1>scores[j]:
+                scores[j]=scores[k]+1;parents[j]=k
+    anchors={}
+    if nodes:
+        k=max(range(len(nodes)),key=lambda x:scores[x])
+        while k>=0:
+            idx,word=nodes[k];anchors[idx]=word;k=parents[k]
     coverage=len(anchors)/len(expected)
     if coverage<.85:raise ValueError('Insufficient exact-token evidence for phrase timing')
-    previous=-1
-    for i in sorted(anchors):
-        if anchors[i]['start']<previous:raise ValueError('Conflicting measured ASR anchors')
-        previous=anchors[i]['start']
     cursor=0;scenes=[]
     for i,s in enumerate(story['scenes']):
         candidates=[anchors[k]['start'] for k in range(cursor,min(cursor+4,len(expected))) if k in anchors]
