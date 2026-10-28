@@ -22,7 +22,7 @@ def main():
        'Start with curiosity, build momentum, thoughtful final payoff. No music or sound effects. '
        'Read only the supplied words. Finish the last sentence. Clear natural pace.')
     from faster_whisper import WhisperModel
-    model=WhisperModel('small',device='cpu',compute_type='int8',cpu_threads=2)
+    model=WhisperModel('medium',device='cpu',compute_type='int8',cpu_threads=2)
     segments,_=model.transcribe(str(wav),language='ar',word_timestamps=True,beam_size=5,vad_filter=False)
     actual=[{'text':w.word.strip(),'start':float(w.start),'end':float(w.end)} for s in segments for w in s.words or []]
     expected=full.split();matcher=SequenceMatcher(None,[norm(w) for w in expected],[norm(w['text']) for w in actual],autojunk=False)
@@ -31,7 +31,7 @@ def main():
         for i in range(block.size):anchors[block.a+i]=actual[block.b+i]
     coverage=len(anchors)/len(expected)
     (out/'alignment-debug.json').write_text(json.dumps({'coverage':coverage,'recognized_words':actual},ensure_ascii=False,indent=2))
-    if coverage<.8:raise RuntimeError('Narration alignment coverage below review threshold')
+    if coverage<.85:raise RuntimeError('Narration alignment coverage below review threshold')
     duration=float(subprocess.check_output(['ffprobe','-v','error','-show_entries','format=duration','-of','csv=p=0',str(wav)]))
     cursor=0;scenes=[]
     for i,s in enumerate(story['scenes']):
@@ -40,7 +40,12 @@ def main():
         scenes.append({**s,'start':0 if i==0 else min(candidates)})
         cursor+=len(s['narration'].split())
     for i,s in enumerate(scenes):s['end']=scenes[i+1]['start'] if i+1<len(scenes) else duration
-    (out/'timing.json').write_text(json.dumps({'duration':duration,'scenes':scenes,'words':actual,'coverage':coverage,'timing_method':'ASR scene anchors; captions use measured recognized words'},ensure_ascii=False,indent=2))
+    caption_groups=[]
+    for start in range(0,len(expected),6):
+        stop=min(start+6,len(expected));matched=[anchors[k] for k in range(start,stop) if k in anchors]
+        if not matched:raise RuntimeError('Caption phrase has no measured anchors')
+        caption_groups.append({'text':' '.join(expected[start:stop]),'start':matched[0]['start'],'end':matched[-1]['end']})
+    (out/'timing.json').write_text(json.dumps({'duration':duration,'scenes':scenes,'words':actual,'caption_groups':caption_groups,'coverage':coverage,'asr_model':'medium','timing_method':'Measured ASR scene anchors; phrase captions use supplied script between measured anchors, no active-word precision claim'},ensure_ascii=False,indent=2))
     print('Generated original Charon narration; aligned coverage',round(coverage,3))
 
 
