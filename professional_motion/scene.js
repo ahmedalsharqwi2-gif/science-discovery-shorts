@@ -164,6 +164,8 @@ const endCanvas=document.createElement('canvas');endCanvas.width=W;endCanvas.hei
 const channel=channelStage(scene);
 const storyResponse=await fetch('./delivery/story.json');if(!storyResponse.ok)throw Error('Missing authored daily story');
 let config=await storyResponse.json();const useOctopus=config.visual_family==='octopus';
+const backdrop={science:0x030c14,horror:0x030b10,history:0x100d09,news:0x090713}[config.profile];
+renderer.setClearColor(backdrop);scene.fog.color.setHex(backdrop);
 let timing=null;const response=await fetch('./delivery/timing.json');if(response.ok)timing=await response.json();
 const DEFAULT=[0,4.4,9.5,15.1,21.2,27.4,33.5,40];
 const defaultDuration=46.5;

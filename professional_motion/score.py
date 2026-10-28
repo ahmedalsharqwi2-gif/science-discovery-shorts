@@ -34,6 +34,8 @@ def build(duration,starts,directory,profile="science"):
             a=(np.sin(2*np.pi*freq*t)+.18*np.sin(2*np.pi*freq*2*t))*np.minimum(1,t/.012)*np.exp(-3*t)
         return a.astype(np.float32)
     chords=[(50,57,60,64),(46,53,57,60),(53,60,64,69),(48,55,57,64)]
+    if profile=='horror':chords=[(38,45,50,53),(37,44,48,52),(41,48,50,56),(38,45,49,53)]
+    elif profile=='history':chords=[(48,55,60,63),(46,53,58,62),(43,50,55,58),(48,55,58,63)]
     bar=beat*4
     for i in range(math.ceil(duration/bar)):
         chord=chords[(i//2)%4];at=i*bar;intensity=.55 if at<4 else .9 if at<duration-6 else .6
@@ -42,6 +44,7 @@ def build(duration,starts,directory,profile="science"):
         for k,degree in enumerate(pattern):
             note=chord[degree]+12+(12 if k in (3,7) and i%2 else 0)
             a=tone(midi(note),1.25);pos=at+k*beat/2
+            if profile=='horror':a*=.38 if k%2 else .6
             pan=.6*math.sin(i+k*1.3)
             put(music,a,pos,.11*intensity,pan)
             put(music,a,pos+beat*.75,.027*intensity,-pan)

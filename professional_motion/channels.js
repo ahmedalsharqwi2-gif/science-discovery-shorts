@@ -28,7 +28,7 @@ export function channelStage(scene){
   s.userData.sails=sails;return s;
  }
  const fleet=group('fleet');const ships=[ship(fleet,.85),ship(fleet,.62)];ships[0].position.set(-.7,-.2,.1);ships[1].position.set(1.45,.1,-2.1);
- const ocean=mesh(fleet,new THREE.PlaneGeometry(20,18,45,45),new THREE.MeshStandardMaterial({color:0x082c3f,roughness:.27,metalness:.3,transparent:true,opacity:.8}),0,-.85,-2);ocean.rotation.x=-Math.PI/2;
+ const ocean=mesh(fleet,new THREE.PlaneGeometry(120,120,65,65),new THREE.MeshStandardMaterial({color:0x082c3f,roughness:.27,metalness:.3,transparent:true,opacity:.8}),0,-.85,-2);ocean.rotation.x=-Math.PI/2;
  const ice=[];
  for(let i=0;i<30;i++){const o=mesh(fleet,new THREE.DodecahedronGeometry(.3+(i%5)*.12,0),iceMat,Math.sin(i*14.3)*5,-.68,Math.cos(i*8.7)*5-2);o.scale.set(1,.18,1);o.rotation.y=i;ice.push(o);}
  const globe=group('globe');mesh(globe,new THREE.SphereGeometry(2,48,32),mat(0x113247,.5,.2));
