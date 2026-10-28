@@ -24,4 +24,5 @@ def main():
  report=json.loads((out/'verification.json').read_text());report.update(audio=audit,sound=sound,audio_channels=2,sound_revision='spoken-foley-stereo-v1',original_photographic_frames_reused=True,automatically_published=False)
  (out/'verification.json').write_text(json.dumps(report,ensure_ascii=False,indent=2))
  print('Verified stereo final sound review:',args.profile,'duration=',duration,'tail correlation=',audit['last_speech_window_correlation'])
-if __name__=='__main__':main()
+if __name__ == '__main__':
+    raise SystemExit('Retired production path. Run: python -m motion_factory.produce science')

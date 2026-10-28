@@ -1,0 +1,27 @@
+{
+  "removed_workflows": [
+    "auto_publish.yml",
+    "charon-api-integration.yml",
+    "cinema-review.yml",
+    "original-motion-kit.yml",
+    "photo-motion.yml",
+    "reference-quality-probe.yml",
+    "renew-topic-bank.yml",
+    "review-delivery.yml",
+    "review-inspect.yml",
+    "review-sample.yml",
+    "sound-review.yml",
+    "threejs-3d-demo.yml"
+  ],
+  "retired_direct_entrypoints": [
+    "main.py",
+    "scripts/cinematic_production.py",
+    "scripts/finish_audio_review.py",
+    "scripts/refresh_approved_sample.py",
+    "photo_motion/engine.py",
+    "scripts/hybrid_vertical_pipeline.py",
+    "scripts/publish_youtube_direct.py",
+    "film_factory/publish.py"
+  ],
+  "profile": "science"
+}

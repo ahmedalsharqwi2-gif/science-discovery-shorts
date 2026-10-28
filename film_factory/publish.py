@@ -75,4 +75,5 @@ def main():
  if direct:os.environ['YOUTUBE_OUTCOME']='success'
  confirm_stock()
  (out/'publication-result.json').write_text(json.dumps({'provider_acceptance_confirmed':True,'services':sorted(required),'receipts':{s:accepted_receipt(s) for s in required},'social_delivery_still_subject_to_platform_processing':True},ensure_ascii=False,indent=2))
-if __name__=='__main__':main()
+if __name__ == '__main__':
+    raise SystemExit('Retired production path. Run: python -m motion_factory.produce science')

@@ -166,4 +166,5 @@ def main():
     if args.validate_only:
         Renderer(args.manifest);print('Approved media, full timeline, Arabic layout and reviews validated.');return
     render(args.manifest,args.output)
-if __name__=='__main__':main()
+if __name__ == '__main__':
+    raise SystemExit('Retired production path. Run: python -m motion_factory.produce science')

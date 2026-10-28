@@ -1,0 +1,100 @@
+{
+  "name": "Arabic motion graphics — science",
+  "on": {
+    "workflow_dispatch": {
+      "inputs": {
+        "preview": {
+          "description": "Silent 12-second storyboard only; false produces the complete Charon film",
+          "type": "boolean",
+          "default": false
+        }
+      }
+    }
+  },
+  "concurrency": {
+    "group": "motion-production",
+    "cancel-in-progress": false
+  },
+  "jobs": {
+    "produce": {
+      "permissions": {
+        "contents": "read"
+      },
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 90,
+      "env": {
+        "GEMINI_API_KEY": "${{ secrets.GEMINI_API_KEY }}",
+        "GEMINI_TEXT_API_KEY": "${{ secrets.GEMINI_TEXT_API_KEY || secrets.GEMINI_API_KEY }}",
+        "GEMINI_TTS_API_KEY": "${{ secrets.GEMINI_TTS_API_KEY || secrets.GEMINI_API_KEY }}",
+        "PYTHONUNBUFFERED": "1",
+        "PYTHONPATH": "${{ github.workspace }}"
+      },
+      "steps": [
+        {
+          "uses": "actions/checkout@v4"
+        },
+        {
+          "uses": "actions/setup-python@v5",
+          "with": {
+            "python-version": "3.11"
+          }
+        },
+        {
+          "name": "Install renderer and regression dependencies",
+          "run": "sudo apt-get update -qq\nsudo apt-get install -y ffmpeg fonts-dejavu-core fonts-noto-core\npython -m pip install \"Pillow>=11,<12\" \"numpy>=2,<3\" requests beautifulsoup4 pyyaml num2words google-genai edge-tts google-auth google-api-python-client"
+        },
+        {
+          "name": "Test all scene kinds and real MP4 encoding",
+          "run": "python -m unittest discover -s tests -p 'test_motion_factory.py' -v"
+        },
+        {
+          "uses": "actions/cache/restore@v4",
+          "with": {
+            "path": ".voice_cache\nstate/api_budget.sqlite3\nstate/news_history.json\n~/.cache/huggingface",
+            "key": "motion-factory-v1-${{ github.repository_id }}-${{ github.run_id }}-${{ github.run_attempt }}",
+            "restore-keys": "motion-factory-v1-${{ github.repository_id }}-"
+          }
+        },
+        {
+          "name": "Check existing repository credentials",
+          "if": "${{ !inputs.preview }}",
+          "run": "python -c \"from motion_factory.produce import preflight; preflight()\""
+        },
+        {
+          "name": "Install measured Arabic speech alignment",
+          "if": "${{ !inputs.preview }}",
+          "run": "python -m pip install torch torchaudio --index-url https://download.pytorch.org/whl/cpu\npython -m pip install faster-whisper==1.2.1 \"stable-ts>=2.18,<3\" \"av>=14,<17\" scipy"
+        },
+        {
+          "name": "Render original silent motion storyboard",
+          "if": "${{ inputs.preview }}",
+          "run": "python -m motion_factory.produce science --preview"
+        },
+        {
+          "name": "Produce complete narrated motion film",
+          "if": "${{ !inputs.preview }}",
+          "run": "python -m motion_factory.produce science"
+        },
+        {
+          "name": "Save video and review evidence",
+          "if": "always()",
+          "uses": "actions/upload-artifact@v4",
+          "with": {
+            "name": "science-motion-${{ github.run_id }}",
+            "path": "output/",
+            "retention-days": 30,
+            "if-no-files-found": "warn"
+          }
+        },
+        {
+          "uses": "actions/cache/save@v4",
+          "if": "${{ always() && !inputs.preview }}",
+          "with": {
+            "path": ".voice_cache\nstate/api_budget.sqlite3\nstate/news_history.json\n~/.cache/huggingface",
+            "key": "motion-factory-v1-${{ github.repository_id }}-${{ github.run_id }}-${{ github.run_attempt }}"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1491,8 +1491,5 @@ def build_episode(root: Path = ROOT) -> dict:
     return report
 
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--check-config", action="store_true")
-    args = parser.parse_args()
-    print(json.dumps(settings() if args.check_config else build_episode(), ensure_ascii=False, indent=2))
+if __name__ == '__main__':
+    raise SystemExit('Retired production path. Run: python -m motion_factory.produce science')

@@ -476,5 +476,5 @@ def main() -> int:
         return 1
 
 
-if __name__ == "__main__":
-    raise SystemExit(main())
+if __name__ == '__main__':
+    raise SystemExit('Retired production path. Run: python -m motion_factory.produce science')

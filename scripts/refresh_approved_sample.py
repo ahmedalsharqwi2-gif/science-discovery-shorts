@@ -25,4 +25,5 @@ def main():
  report=json.loads((out/'verification.json').read_text());report.update(audio=audio,sound=sound,audio_channels=2,motion_revision='spoken-semantics-v2',documented=True,fiction=False,approved_speech_reused=True)
  (out/'verification.json').write_text(json.dumps(report,ensure_ascii=False,indent=2));(out/'plan.json').write_text(json.dumps(plan,ensure_ascii=False,indent=2));mark_produced(plan)
  print('Upgraded approved complete sample:',args.profile,round(duration,2),flush=True)
-if __name__=='__main__':main()
+if __name__ == '__main__':
+    raise SystemExit('Retired production path. Run: python -m motion_factory.produce science')

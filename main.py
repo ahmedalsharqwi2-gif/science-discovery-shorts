@@ -307,13 +307,6 @@ class AutoPublishPipeline:
             return False
 
 
-if __name__ == "__main__":
-    pipeline = AutoPublishPipeline()
-    
-    # Get topic from environment or command line
-    topic = os.getenv("TOPIC") or (sys.argv[1] if len(sys.argv) > 1 else None)
-    category = os.getenv("CATEGORY", "عام")
-    
-    success = pipeline.run(category=category, topic=topic)
-    sys.exit(0 if success else 1)
+if __name__ == '__main__':
+    raise SystemExit('Retired production path. Run: python -m motion_factory.produce science')
 

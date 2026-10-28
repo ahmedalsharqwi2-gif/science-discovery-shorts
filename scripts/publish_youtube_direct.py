@@ -214,5 +214,5 @@ def main() -> int:
         print(f"❌ YouTube publication failed: {exc}")
         return 1
     return 0
-if __name__ == "__main__":
-    raise SystemExit(main())
+if __name__ == '__main__':
+    raise SystemExit('Retired production path. Run: python -m motion_factory.produce science')
