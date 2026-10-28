@@ -1,0 +1,17 @@
+{
+  "provider": "Gemini TTS",
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Charon",
+  "style": "Egyptian Arabic ar-EG, native conversational Cairo accent. Mature warm male documentary storyteller, low resonant register, clear exact articulation, measured pace around 140 words per minute. Say the year numbers naturally in Egyptian Arabic. Preserve every word and sentence of the transcript, finish the last sentence clearly. No music, no sound effects, no singing, no spoken instructions.\nEgyptian Arabic engaging science explanation. Start with curiosity, build momentum, thoughtful final payoff. No music or sound effects. Read only the supplied words. Finish the last sentence. Clear natural pace.",
+  "text": "الشمس هي الجسم الوحيد في المجموعة الشمسية الذي يضيء بذاته بينما يعكس القمر ضوءها. من الفضاء نرى الأرض والقمر يتحركان معا في مدارهما المستمر حول الشمس بكل دقة. يحتوي القمر على جانب نهاري وجانب ليلي يتغيران باستمرار أثناء دوران القمر حول نفسه. يتغير شكل القمر في السماء تدريجيا بين الهلال والبدر بسبب زاوية الرؤية وحركة مداره. تتكرر دورة أطوار القمر الكاملة خلال مدة تقارب خمسة وعشرين يوما من كل شهر. يرتبط القمر بالأرض بقفل مددي يجعلنا نرى وجها واحدا منه طوال رحلته الفضائية. تؤدي حركة المدار غير الدائرية إلى ظهور ميل طفيف يتيح لنا رؤية أجزاء إضافية أحيانا. توضح هذه الظواهر كيف تتفاعل حركة الكواكب والنجوم لترسم أطوار القمر المتنوعة بوضوح تام.",
+  "interaction_id": "v1_Chdlb0xpYXBhM0hvSzlxdHNQbGZmMGtBWRIXZW9MaWFwYTNIb0s5cXRzUGxmZjBrQVk",
+  "duration": 55.76,
+  "sample_rate": 24000,
+  "channels": 1,
+  "sha256": "153f476550c76e66fdf9ae867783423375f780b473324a5dfc4795c7a8309b61",
+  "newly_synthesized": true,
+  "original_video_audio_used": false,
+  "fallback_used": false,
+  "cache_hit": false,
+  "output_sha256": "153f476550c76e66fdf9ae867783423375f780b473324a5dfc4795c7a8309b61"
+}

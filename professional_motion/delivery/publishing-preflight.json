@@ -1,0 +1,21 @@
+{
+  "buffer": {},
+  "direct_youtube": false,
+  "problems": [
+    {
+      "provider": "buffer",
+      "error_class": "ValueError"
+    },
+    {
+      "provider": "destinations",
+      "error_class": "NoVerifiedDestination"
+    }
+  ],
+  "credential_presence": {
+    "BUFFER_API_KEY": true,
+    "YT_CLIENT_ID": false,
+    "YT_CLIENT_SECRET": false,
+    "YT_REFRESH_TOKEN": false,
+    "YT_REFRESH_TOKEN_FALLBACK": false
+  }
+}

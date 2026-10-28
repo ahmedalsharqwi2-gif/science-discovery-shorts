@@ -1,0 +1,105 @@
+{
+  "title": "ليه شكل القمر بيتغير؟",
+  "canonical_subject": "moon-phases",
+  "suitable": true,
+  "facts": [
+    "The Moon does not make its own light and moonlight is reflected sunlight.",
+    "The Sun always illuminates half of the Moon while the other half remains dark.",
+    "The Moon is tidally locked with Earth and shows the same side to us."
+  ],
+  "milestones": [
+    "New Moon",
+    "Full Moon",
+    "29.5 days"
+  ],
+  "scenes": [
+    {
+      "id": "scene_1",
+      "label": "الشمس والقمر",
+      "narration": "الشمس هي الجسم الوحيد في المجموعة الشمسية الذي يضيء بذاته بينما يعكس القمر ضوءها.",
+      "labels": [
+        "شمس",
+        "ضوء"
+      ]
+    },
+    {
+      "id": "scene_2",
+      "label": "دوران الفضاء",
+      "narration": "من الفضاء نرى الأرض والقمر يتحركان معا في مدارهما المستمر حول الشمس بكل دقة.",
+      "labels": [
+        "الفضاء",
+        "مدار"
+      ]
+    },
+    {
+      "id": "scene_3",
+      "label": "إضاءة الجانبين",
+      "narration": "يحتوي القمر على جانب نهاري وجانب ليلي يتغيران باستمرار أثناء دوران القمر حول نفسه.",
+      "labels": [
+        "جانب نهاري",
+        "جانب ليلي"
+      ]
+    },
+    {
+      "id": "scene_4",
+      "label": "مراحل النور",
+      "narration": "يتغير شكل القمر في السماء تدريجيا بين الهلال والبدر بسبب زاوية الرؤية وحركة مداره.",
+      "labels": [
+        "هلال",
+        "بدر"
+      ]
+    },
+    {
+      "id": "scene_5",
+      "label": "دورة الشهر",
+      "narration": "تتكرر دورة أطوار القمر الكاملة خلال مدة تقارب خمسة وعشرين يوما من كل شهر.",
+      "labels": [
+        "دورة",
+        "شهر"
+      ]
+    },
+    {
+      "id": "scene_6",
+      "label": "القفل المددي",
+      "narration": "يرتبط القمر بالأرض بقفل مددي يجعلنا نرى وجها واحدا منه طوال رحلته الفضائية.",
+      "labels": [
+        "قفل مددي",
+        "وجه واحد"
+      ]
+    },
+    {
+      "id": "scene_7",
+      "label": "التذبذب والظلال",
+      "narration": "تؤدي حركة المدار غير الدائرية إلى ظهور ميل طفيف يتيح لنا رؤية أجزاء إضافية أحيانا.",
+      "labels": [
+        "تذبذب",
+        "مدار"
+      ]
+    },
+    {
+      "id": "scene_8",
+      "label": "الخلاصة الكونية",
+      "narration": "توضح هذه الظواهر كيف تتفاعل حركة الكواكب والنجوم لترسم أطوار القمر المتنوعة بوضوح تام.",
+      "labels": [
+        "ظواهر",
+        "كواكب"
+      ]
+    }
+  ],
+  "profile": "science",
+  "series": "اسرار الكون",
+  "visual_family": "space",
+  "variant": "moon",
+  "topic_key": "moon-phases",
+  "source": {
+    "url": "https://science.nasa.gov/moon/moon-phases/",
+    "publisher": "NASA Science"
+  },
+  "fiction": false,
+  "documented": true,
+  "editorial_review": {
+    "supported": true,
+    "novel": true,
+    "issues": []
+  }
+}
