@@ -16,7 +16,7 @@
       "canonical_subject": "moon-phases",
       "title": "ليه شكل القمر بيتغير؟",
       "url": "https://science.nasa.gov/moon/moon-phases/",
-      "status": "reserved",
+      "status": "rendered",
       "story": {
         "title": "ليه شكل القمر بيتغير؟",
         "canonical_subject": "moon-phases",
@@ -122,7 +122,8 @@
           "issues": []
         }
       },
-      "reserved_at": "2026-10-28T23:17:11.339497+00:00"
+      "reserved_at": "2026-10-28T23:17:11.339497+00:00",
+      "video_sha256": "43722e8ca4153de299616994c635c087c55f56fca757b560fee5e61c7a74ef6b"
     }
   ]
 }
