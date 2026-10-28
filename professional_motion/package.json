@@ -1,0 +1,19 @@
+{
+  "name": "professional-octopus-motion",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "stills": "node render.mjs --stills",
+    "render": "node render.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "playwright-core": "1.56.1",
+    "three": "0.180.0"
+  },
+  "private": true
+}

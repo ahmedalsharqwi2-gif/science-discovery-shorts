@@ -1,5 +1,5 @@
 {
-  "name": "Professional octopus proof — medium Arabic alignment",
+  "name": "Professional octopus film — voice, 3D motion and original score",
   "on": {
     "push": {
       "branches": [
@@ -21,7 +21,7 @@
   "jobs": {
     "voice": {
       "runs-on": "ubuntu-24.04",
-      "timeout-minutes": 25,
+      "timeout-minutes": 90,
       "env": {
         "GEMINI_API_KEY": "${{ secrets.GEMINI_API_KEY }}",
         "GEMINI_TTS_API_KEY": "${{ secrets.GEMINI_TTS_API_KEY || secrets.GEMINI_API_KEY }}",
@@ -39,7 +39,7 @@
         },
         {
           "name": "Dependencies",
-          "run": "sudo apt-get update -qq\nsudo apt-get install -y ffmpeg\npython -m pip install numpy requests faster-whisper==1.2.1"
+          "run": "sudo apt-get update -qq\nsudo apt-get install -y ffmpeg\npython -m pip install numpy requests Pillow faster-whisper==1.2.1"
         },
         {
           "name": "Reuse generated original narration; no second TTS charge",
@@ -59,6 +59,37 @@
           "run": "python -m professional_motion.voice_job"
         },
         {
+          "uses": "actions/setup-node@v4",
+          "with": {
+            "node-version": "22"
+          }
+        },
+        {
+          "name": "Install pinned motion renderer and Chromium",
+          "run": "cd professional_motion\nnpm ci\nnpx playwright-core install --with-deps chromium"
+        },
+        {
+          "name": "Render the complete measured film",
+          "run": "node professional_motion/render.mjs --stills\nnode professional_motion/render.mjs",
+          "id": "render"
+        },
+        {
+          "name": "Compose music, mix and verify complete speech",
+          "run": "python -m professional_motion.finish",
+          "id": "finish"
+        },
+        {
+          "name": "Save the finished professional review",
+          "if": "always()",
+          "uses": "actions/upload-artifact@v4",
+          "with": {
+            "name": "professional-octopus-film-${{ github.run_id }}",
+            "path": "professional_motion/output/",
+            "if-no-files-found": "warn",
+            "retention-days": 30
+          }
+        },
+        {
           "name": "Review artifact",
           "if": "always()",
           "uses": "actions/upload-artifact@v4",
@@ -72,9 +103,11 @@
           "name": "Deliver generated media on a separate review branch",
           "if": "always()",
           "env": {
-            "VOICE_OUTCOME": "${{ steps.voice.outcome }}"
+            "VOICE_OUTCOME": "${{ steps.voice.outcome }}",
+            "RENDER_OUTCOME": "${{ steps.render.outcome }}",
+            "FINISH_OUTCOME": "${{ steps.finish.outcome }}"
           },
-          "run": "python - <<'PY2'\nimport os,json\nfrom pathlib import Path\np=Path('professional_motion/delivery');p.mkdir(exist_ok=True)\n(p/'status.json').write_text(json.dumps({'run_id':os.environ['GITHUB_RUN_ID'],'voice_outcome':os.environ['VOICE_OUTCOME']}))\nPY2\ngit config user.name content-review-bot\ngit config user.email bot@users.noreply.github.com\ngit add -f professional_motion/delivery/status.json\nfor file in professional_motion/delivery/narration.wav professional_motion/delivery/narration.source.json professional_motion/delivery/timing.json professional_motion/delivery/error.json professional_motion/delivery/alignment-debug.json; do\n  if [ -f \"$file\" ]; then git add -f \"$file\"; fi\ndone\ngit commit -m 'Deliver generated octopus narration for review [skip ci]'\ngit push origin HEAD:refs/heads/codex/octopus-review-run-${{ github.run_id }}"
+          "run": "python - <<'PY2'\nimport os,json\nfrom pathlib import Path\np=Path('professional_motion/delivery');p.mkdir(exist_ok=True)\n(p/'status.json').write_text(json.dumps({'run_id':os.environ['GITHUB_RUN_ID'],'voice_outcome':os.environ['VOICE_OUTCOME'],'render_outcome':os.environ['RENDER_OUTCOME'],'finish_outcome':os.environ['FINISH_OUTCOME']}))\nPY2\ngit config user.name content-review-bot\ngit config user.email bot@users.noreply.github.com\ngit add -f professional_motion/delivery/status.json\nfor file in professional_motion/delivery/narration.wav professional_motion/delivery/narration.source.json professional_motion/delivery/timing.json professional_motion/delivery/error.json professional_motion/delivery/alignment-debug.json professional_motion/delivery/asr-medium.json professional_motion/delivery/asr-small.json; do\n  if [ -f \"$file\" ]; then git add -f \"$file\"; fi\ndone\ngit commit -m 'Deliver generated octopus narration for review [skip ci]'\ngit push origin HEAD:refs/heads/codex/octopus-review-run-${{ github.run_id }}"
         },
         {
           "uses": "actions/cache/save@v4",

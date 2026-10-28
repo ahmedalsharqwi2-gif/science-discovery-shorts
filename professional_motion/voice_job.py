@@ -1,52 +1,37 @@
-"""Run inside Actions; publish only generated review media, never credentials."""
+"""Generate/reuse approved original voice and measure scene/phrase timing in Actions."""
+import hashlib
 import json
-from pathlib import Path
-from difflib import SequenceMatcher
-import re
 import subprocess
+from pathlib import Path
 from film_factory.voice import generate
-
-
-def norm(s):
-    return re.sub(r'[^\u0621-\u064a]','',s).translate(str.maketrans({'أ':'ا','إ':'ا','آ':'ا','ة':'ه','ى':'ي'}))
+from .alignment import measured_timing
 
 
 def main():
-    story=json.loads(Path('professional_motion/story.json').read_text())
-    out=Path('professional_motion/delivery');out.mkdir(exist_ok=True)
-    full=' '.join(s['narration'] for s in story['scenes'])
-    wav=str(out/'narration.wav')
-    if not Path(wav).exists():
-        wav=generate(full,str(out/'narration.wav'),
-       'Read this complete Egyptian Arabic science explanation, warm engaging Charon voice. '
-       'Start with curiosity, build momentum, thoughtful final payoff. No music or sound effects. '
-       'Read only the supplied words. Finish the last sentence. Clear natural pace.')
-    from faster_whisper import WhisperModel
-    model=WhisperModel('medium',device='cpu',compute_type='int8',cpu_threads=2)
-    segments,_=model.transcribe(str(wav),language='ar',word_timestamps=True,beam_size=5,vad_filter=False)
-    actual=[{'text':w.word.strip(),'start':float(w.start),'end':float(w.end)} for s in segments for w in s.words or []]
-    expected=full.split();matcher=SequenceMatcher(None,[norm(w) for w in expected],[norm(w['text']) for w in actual],autojunk=False)
-    anchors={}
-    for block in matcher.get_matching_blocks():
-        for i in range(block.size):anchors[block.a+i]=actual[block.b+i]
-    coverage=len(anchors)/len(expected)
-    (out/'alignment-debug.json').write_text(json.dumps({'coverage':coverage,'recognized_words':actual},ensure_ascii=False,indent=2))
-    if coverage<.85:raise RuntimeError('Narration alignment coverage below review threshold')
+    root=Path('professional_motion');story=json.loads((root/'story.json').read_text());out=root/'delivery';out.mkdir(exist_ok=True)
+    full=' '.join(s['narration'] for s in story['scenes']);wav=out/'narration.wav';source=out/'narration.source.json'
+    if wav.exists():
+        if not source.exists() or json.loads(source.read_text()).get('text')!=full:
+            raise ValueError('Cached review voice does not match the complete current script')
+    else:
+        generate(full,str(wav),'Read this complete Egyptian Arabic science explanation, warm engaging Charon voice. '
+                 'Start with curiosity, build momentum, thoughtful final payoff. No music or sound effects. '
+                 'Read only the supplied words. Finish the last sentence. Clear natural pace.')
     duration=float(subprocess.check_output(['ffprobe','-v','error','-show_entries','format=duration','-of','csv=p=0',str(wav)]))
-    cursor=0;scenes=[]
-    for i,s in enumerate(story['scenes']):
-        candidates=[anchors[k]['start'] for k in range(cursor,min(cursor+4,len(expected))) if k in anchors]
-        if not candidates:raise RuntimeError('Scene start lacks a measured speech anchor')
-        scenes.append({**s,'start':0 if i==0 else min(candidates)})
-        cursor+=len(s['narration'].split())
-    for i,s in enumerate(scenes):s['end']=scenes[i+1]['start'] if i+1<len(scenes) else duration
-    caption_groups=[]
-    for start in range(0,len(expected),6):
-        stop=min(start+6,len(expected));matched=[anchors[k] for k in range(start,stop) if k in anchors]
-        if not matched:raise RuntimeError('Caption phrase has no measured anchors')
-        caption_groups.append({'text':' '.join(expected[start:stop]),'start':matched[0]['start'],'end':matched[-1]['end']})
-    (out/'timing.json').write_text(json.dumps({'duration':duration,'scenes':scenes,'words':actual,'caption_groups':caption_groups,'coverage':coverage,'asr_model':'medium','timing_method':'Measured ASR scene anchors; phrase captions use supplied script between measured anchors, no active-word precision claim'},ensure_ascii=False,indent=2))
-    print('Generated original Charon narration; aligned coverage',round(coverage,3))
+    from faster_whisper import WhisperModel
+    transcripts=[];timing=None
+    for name in ('medium','small'):
+        model=WhisperModel(name,device='cpu',compute_type='int8',cpu_threads=2)
+        segments,_=model.transcribe(str(wav),language='ar',word_timestamps=True,beam_size=5,vad_filter=False)
+        actual=[{'text':w.word.strip(),'start':float(w.start),'end':float(w.end)} for s in segments for w in s.words or []]
+        transcripts.append((name,actual));(out/('asr-'+name+'.json')).write_text(json.dumps({'recognized_words':actual},ensure_ascii=False,indent=2))
+        del model
+        try:timing=measured_timing(story,duration,transcripts);break
+        except ValueError:
+            if name=='small':raise
+    timing['audio_sha256']=hashlib.sha256(wav.read_bytes()).hexdigest()
+    (out/'timing.json').write_text(json.dumps(timing,ensure_ascii=False,indent=2))
+    print('Original voice measured; exact-token coverage',round(timing['coverage'],3))
 
 
 if __name__=='__main__':
