@@ -1,0 +1,151 @@
+{
+  "file": "professional-review.mp4",
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "duration": 55.76,
+  "voice": "original Gemini Charon",
+  "asr_model": "medium",
+  "independent_asr_word_coverage": 0.9107142857142857,
+  "visual_gate": {
+    "passed": true,
+    "duration": 55.766667,
+    "resolution": [
+      1080,
+      1920
+    ],
+    "method": "within-scene diagram-region pixel changes",
+    "scenes": [
+      {
+        "scene": 1,
+        "diagram_spatial_std": [
+          20.93790999222046,
+          21.35521154119499,
+          20.979677802090226
+        ],
+        "changed_pixel_ratios": [
+          0.028786799620132954,
+          0.022993827160493828
+        ],
+        "passed": true
+      },
+      {
+        "scene": 2,
+        "diagram_spatial_std": [
+          20.954811724482717,
+          24.676899622926708,
+          27.902554279966633
+        ],
+        "changed_pixel_ratios": [
+          0.17571225071225072,
+          0.22630579297245965
+        ],
+        "passed": true
+      },
+      {
+        "scene": 3,
+        "diagram_spatial_std": [
+          22.836218117815466,
+          23.65717091044199,
+          23.295595026845216
+        ],
+        "changed_pixel_ratios": [
+          0.012962962962962963,
+          0.026448243114909783
+        ],
+        "passed": true
+      },
+      {
+        "scene": 4,
+        "diagram_spatial_std": [
+          21.071356174907688,
+          21.294434994414598,
+          21.008137851469737
+        ],
+        "changed_pixel_ratios": [
+          0.01574074074074074,
+          0.027943969610636277
+        ],
+        "passed": true
+      },
+      {
+        "scene": 5,
+        "diagram_spatial_std": [
+          20.8347878884133,
+          21.228235416501693,
+          20.902564301239384
+        ],
+        "changed_pixel_ratios": [
+          0.01429249762583096,
+          0.0222340930674264
+        ],
+        "passed": true
+      },
+      {
+        "scene": 6,
+        "diagram_spatial_std": [
+          22.121922872711114,
+          22.62014340527671,
+          22.21078966546108
+        ],
+        "changed_pixel_ratios": [
+          0.020643399810066475,
+          0.026258309591642926
+        ],
+        "passed": true
+      },
+      {
+        "scene": 7,
+        "diagram_spatial_std": [
+          20.869889207619128,
+          21.275639858065677,
+          20.889974463344526
+        ],
+        "changed_pixel_ratios": [
+          0.015883190883190883,
+          0.022542735042735042
+        ],
+        "passed": true
+      },
+      {
+        "scene": 8,
+        "diagram_spatial_std": [
+          21.10106879895814,
+          21.505018720260527,
+          21.12808792088809
+        ],
+        "changed_pixel_ratios": [
+          0.01633428300094967,
+          0.022756410256410255
+        ],
+        "passed": true
+      }
+    ],
+    "note": "Technical blank/freeze detection only; not a judgement of artistic or factual quality."
+  },
+  "audio_tail": {
+    "audio_seconds": 55.76,
+    "video_seconds": 55.76,
+    "difference_seconds": 0.0,
+    "last_speech_window_correlation": 0.9764831066131592,
+    "audio_tail_checked": true,
+    "silence_padding_used_to_hide_lost_speech": false
+  },
+  "music": "Original composed score",
+  "music_bpm": 112,
+  "source": {
+    "url": "https://science.nasa.gov/moon/moon-phases/",
+    "publisher": "NASA Science"
+  },
+  "topic_key": "moon-phases",
+  "profile": "science",
+  "editorial_review": {
+    "supported": true,
+    "novel": true,
+    "issues": []
+  },
+  "render": "Three.js procedural geometry, physical lighting, custom skin shader, layered optical bloom",
+  "reference_audio_reused": false,
+  "automatically_published": false,
+  "status": "Technical checks passed; artistic judgement requires viewing the complete film."
+}
