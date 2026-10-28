@@ -15,7 +15,9 @@ def main():
     story=json.loads(Path('professional_motion/story.json').read_text())
     out=Path('professional_motion/delivery');out.mkdir(exist_ok=True)
     full=' '.join(s['narration'] for s in story['scenes'])
-    wav=generate(full,str(out/'narration.wav'),
+    wav=str(out/'narration.wav')
+    if not Path(wav).exists():
+        wav=generate(full,str(out/'narration.wav'),
        'Read this complete Egyptian Arabic science explanation, warm engaging Charon voice. '
        'Start with curiosity, build momentum, thoughtful final payoff. No music or sound effects. '
        'Read only the supplied words. Finish the last sentence. Clear natural pace.')
@@ -28,6 +30,7 @@ def main():
     for block in matcher.get_matching_blocks():
         for i in range(block.size):anchors[block.a+i]=actual[block.b+i]
     coverage=len(anchors)/len(expected)
+    (out/'alignment-debug.json').write_text(json.dumps({'coverage':coverage,'recognized_words':actual},ensure_ascii=False,indent=2))
     if coverage<.8:raise RuntimeError('Narration alignment coverage below review threshold')
     duration=float(subprocess.check_output(['ffprobe','-v','error','-show_entries','format=duration','-of','csv=p=0',str(wav)]))
     cursor=0;scenes=[]
@@ -41,4 +44,9 @@ def main():
     print('Generated original Charon narration; aligned coverage',round(coverage,3))
 
 
-if __name__=='__main__':main()
+if __name__=='__main__':
+    try:main()
+    except Exception as error:
+        out=Path('professional_motion/delivery');out.mkdir(exist_ok=True)
+        (out/'error.json').write_text(json.dumps({'error_class':type(error).__name__,'stage':'voice-or-alignment'}))
+        raise

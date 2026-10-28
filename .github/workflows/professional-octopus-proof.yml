@@ -42,6 +42,10 @@
           "run": "sudo apt-get update -qq\nsudo apt-get install -y ffmpeg\npython -m pip install numpy requests faster-whisper==1.2.1"
         },
         {
+          "name": "Reuse generated original narration; no second TTS charge",
+          "run": "mkdir -p professional_motion/delivery\ngit fetch origin refs/heads/codex/octopus-review-run-40757507937 --depth=1\ngit show FETCH_HEAD:professional_motion/delivery/narration.wav > professional_motion/delivery/narration.wav\ngit show FETCH_HEAD:professional_motion/delivery/narration.source.json > professional_motion/delivery/narration.source.json"
+        },
+        {
           "uses": "actions/cache/restore@v4",
           "with": {
             "path": ".voice_cache\nstate/api_budget.sqlite3\n~/.cache/huggingface",
@@ -70,7 +74,7 @@
           "env": {
             "VOICE_OUTCOME": "${{ steps.voice.outcome }}"
           },
-          "run": "python - <<'PY2'\nimport os,json\nfrom pathlib import Path\np=Path('professional_motion/delivery');p.mkdir(exist_ok=True)\n(p/'status.json').write_text(json.dumps({'run_id':os.environ['GITHUB_RUN_ID'],'voice_outcome':os.environ['VOICE_OUTCOME']}))\nPY2\ngit config user.name content-review-bot\ngit config user.email bot@users.noreply.github.com\ngit add -f professional_motion/delivery/status.json\nfor file in professional_motion/delivery/narration.wav professional_motion/delivery/narration.source.json professional_motion/delivery/timing.json; do\n  if [ -f \"$file\" ]; then git add -f \"$file\"; fi\ndone\ngit commit -m 'Deliver generated octopus narration for review [skip ci]'\ngit push origin HEAD:refs/heads/codex/octopus-review-run-${{ github.run_id }}"
+          "run": "python - <<'PY2'\nimport os,json\nfrom pathlib import Path\np=Path('professional_motion/delivery');p.mkdir(exist_ok=True)\n(p/'status.json').write_text(json.dumps({'run_id':os.environ['GITHUB_RUN_ID'],'voice_outcome':os.environ['VOICE_OUTCOME']}))\nPY2\ngit config user.name content-review-bot\ngit config user.email bot@users.noreply.github.com\ngit add -f professional_motion/delivery/status.json\nfor file in professional_motion/delivery/narration.wav professional_motion/delivery/narration.source.json professional_motion/delivery/timing.json professional_motion/delivery/error.json professional_motion/delivery/alignment-debug.json; do\n  if [ -f \"$file\" ]; then git add -f \"$file\"; fi\ndone\ngit commit -m 'Deliver generated octopus narration for review [skip ci]'\ngit push origin HEAD:refs/heads/codex/octopus-review-run-${{ github.run_id }}"
         },
         {
           "uses": "actions/cache/save@v4",
