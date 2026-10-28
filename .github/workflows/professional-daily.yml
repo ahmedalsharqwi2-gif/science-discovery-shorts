@@ -1,0 +1,193 @@
+{
+  "name": "Professional daily factory — science",
+  "on": {
+    "push": {
+      "branches": [
+        "codex/daily-professional-factory"
+      ],
+      "paths": [
+        ".github/workflows/professional-daily.yml"
+      ]
+    },
+    "workflow_dispatch": {
+      "inputs": {
+        "mode": {
+          "description": "Review never publishes; daily requires explicit approved release configuration",
+          "type": "choice",
+          "options": [
+            "review",
+            "daily"
+          ],
+          "default": "review"
+        }
+      }
+    },
+    "schedule": [
+      {
+        "cron": "0 9,10 * * *"
+      }
+    ]
+  },
+  "permissions": {
+    "contents": "write"
+  },
+  "concurrency": {
+    "group": "professional-daily-science",
+    "cancel-in-progress": false
+  },
+  "jobs": {
+    "produce": {
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 110,
+      "env": {
+        "PYTHONPATH": "${{ github.workspace }}",
+        "PYTHONUNBUFFERED": "1",
+        "GEMINI_API_KEY": "${{ secrets.GEMINI_API_KEY }}",
+        "GEMINI_TEXT_API_KEY": "${{ secrets.GEMINI_TEXT_API_KEY || secrets.GEMINI_API_KEY }}",
+        "GEMINI_TTS_API_KEY": "${{ secrets.GEMINI_TTS_API_KEY || secrets.GEMINI_API_KEY }}",
+        "GITHUB_TOKEN": "${{ github.token }}",
+        "GH_RELEASE_TOKEN": "${{ secrets.GH_RELEASE_TOKEN }}",
+        "BUFFER_API_KEY": "${{ secrets.BUFFER_API_KEY }}",
+        "BUFFER_CHANNEL_IDS": "${{ secrets.BUFFER_CHANNEL_IDS || vars.BUFFER_CHANNEL_IDS }}",
+        "YT_CLIENT_ID": "${{ secrets.YT_CLIENT_ID }}",
+        "YT_CLIENT_SECRET": "${{ secrets.YT_CLIENT_SECRET }}",
+        "YT_REFRESH_TOKEN": "${{ secrets.YT_REFRESH_TOKEN }}",
+        "YT_REFRESH_TOKEN_FALLBACK": "${{ secrets.YT_REFRESH_TOKEN_FALLBACK }}",
+        "BUFFER_YOUTUBE_CHANNEL_ID": "${{ secrets.BUFFER_YOUTUBE_CHANNEL_ID }}",
+        "BUFFER_FACEBOOK_CHANNEL_ID": "${{ secrets.BUFFER_FACEBOOK_CHANNEL_ID }}",
+        "BUFFER_INSTAGRAM_CHANNEL_ID": "${{ secrets.BUFFER_INSTAGRAM_CHANNEL_ID }}",
+        "BUFFER_TIKTOK_CHANNEL_ID": "${{ secrets.BUFFER_TIKTOK_CHANNEL_ID }}"
+      },
+      "steps": [
+        {
+          "uses": "actions/checkout@v4",
+          "with": {
+            "fetch-depth": 0
+          }
+        },
+        {
+          "uses": "actions/setup-python@v5",
+          "with": {
+            "python-version": "3.11"
+          }
+        },
+        {
+          "name": "Install planning prerequisites",
+          "run": "python -m pip install requests beautifulsoup4"
+        },
+        {
+          "name": "Check approval and Cairo civil-time guard",
+          "id": "decision",
+          "run": "python -m professional_motion.cli decision science --mode \"${{ inputs.mode || 'review' }}\""
+        },
+        {
+          "name": "Install native media dependencies",
+          "if": "steps.decision.outputs.run == 'true'",
+          "run": "sudo apt-get update -qq\nsudo apt-get install -y ffmpeg\npython -m pip install numpy Pillow faster-whisper==1.2.1 google-api-python-client google-auth-oauthlib"
+        },
+        {
+          "uses": "actions/cache/restore@v4",
+          "if": "steps.decision.outputs.run == 'true'",
+          "with": {
+            "path": ".voice_cache\nstate/api_budget.sqlite3\n~/.cache/huggingface",
+            "key": "professional-v2-${{ github.repository_id }}-${{ github.run_id }}-${{ github.run_attempt }}",
+            "restore-keys": "professional-v2-${{ github.repository_id }}-\noctopus-proof-"
+          }
+        },
+        {
+          "name": "Choose a genuinely new sourced topic and author eight scenes",
+          "if": "steps.decision.outputs.run == 'true'",
+          "id": "prepare",
+          "run": "python -m professional_motion.cli prepare science --slot \"${{ steps.decision.outputs.slot }}\""
+        },
+        {
+          "name": "Persist topic reservation before synthesis",
+          "if": "steps.prepare.outcome == 'success'",
+          "run": "git config user.name content-factory-bot\ngit config user.email bot@users.noreply.github.com\nfor file in state/professional_topics.json state/publication_stock.json state/yt_token_last_success.json; do\n  if [ -f \"$file\" ]; then git add \"$file\"; fi\ndone\nif git diff --cached --quiet; then exit 0; fi\ngit commit -m 'Persist professional episode and publication receipts [skip ci]'\nfor attempt in 1 2 3; do\n  if git pull --rebase --autostash origin \"${GITHUB_REF_NAME}\" && git push origin \"HEAD:refs/heads/${GITHUB_REF_NAME}\"; then exit 0; fi\n  sleep 3\ndone\nexit 1"
+        },
+        {
+          "name": "Read-only publishing destination preflight",
+          "if": "steps.prepare.outcome == 'success'",
+          "continue-on-error": true,
+          "run": "python -m professional_motion.cli preflight science"
+        },
+        {
+          "name": "Generate complete original Charon and measure phrase timing",
+          "if": "steps.prepare.outcome == 'success'",
+          "id": "voice",
+          "run": "python -m professional_motion.voice_job"
+        },
+        {
+          "uses": "actions/setup-node@v4",
+          "if": "steps.voice.outcome == 'success'",
+          "with": {
+            "node-version": "22"
+          }
+        },
+        {
+          "name": "Install pinned 3D renderer and headless browser",
+          "if": "steps.voice.outcome == 'success'",
+          "run": "cd professional_motion\nnpm ci\nnpx playwright-core install --with-deps chromium"
+        },
+        {
+          "name": "Render the complete authored 3D film",
+          "id": "render",
+          "if": "steps.voice.outcome == 'success'",
+          "run": "node professional_motion/render.mjs --stills\nnode professional_motion/render.mjs"
+        },
+        {
+          "name": "Compose music, mix, and verify actual final media",
+          "id": "finish",
+          "if": "steps.render.outcome == 'success'",
+          "run": "python -m professional_motion.finish\npython -m professional_motion.cli rendered science --slot \"${{ steps.decision.outputs.slot }}\""
+        },
+        {
+          "name": "Persist rendered subject and checksum",
+          "if": "steps.finish.outcome == 'success'",
+          "run": "git config user.name content-factory-bot\ngit config user.email bot@users.noreply.github.com\nfor file in state/professional_topics.json state/publication_stock.json state/yt_token_last_success.json; do\n  if [ -f \"$file\" ]; then git add \"$file\"; fi\ndone\nif git diff --cached --quiet; then exit 0; fi\ngit commit -m 'Persist professional episode and publication receipts [skip ci]'\nfor attempt in 1 2 3; do\n  if git pull --rebase --autostash origin \"${GITHUB_REF_NAME}\" && git push origin \"HEAD:refs/heads/${GITHUB_REF_NAME}\"; then exit 0; fi\n  sleep 3\ndone\nexit 1"
+        },
+        {
+          "name": "Schedule approved daily film for exactly 17:00 Cairo",
+          "if": "steps.finish.outcome == 'success' && steps.decision.outputs.publish == 'true'",
+          "run": "python -m professional_motion.cli publish science --slot \"${{ steps.decision.outputs.slot }}\" --due \"${{ steps.decision.outputs.due }}\""
+        },
+        {
+          "name": "Save video and review evidence",
+          "if": "always()",
+          "uses": "actions/upload-artifact@v4",
+          "with": {
+            "name": "science-professional-${{ github.run_id }}",
+            "path": "professional_motion/output/\nprofessional_motion/delivery/\nstate/professional_topics.json",
+            "retention-days": 30,
+            "if-no-files-found": "warn"
+          }
+        },
+        {
+          "name": "Persist partial receipts even on provider failure",
+          "if": "always() && steps.prepare.outcome == 'success'",
+          "run": "git config user.name content-factory-bot\ngit config user.email bot@users.noreply.github.com\nfor file in state/professional_topics.json state/publication_stock.json state/yt_token_last_success.json; do\n  if [ -f \"$file\" ]; then git add \"$file\"; fi\ndone\nif git diff --cached --quiet; then exit 0; fi\ngit commit -m 'Persist professional episode and publication receipts [skip ci]'\nfor attempt in 1 2 3; do\n  if git pull --rebase --autostash origin \"${GITHUB_REF_NAME}\" && git push origin \"HEAD:refs/heads/${GITHUB_REF_NAME}\"; then exit 0; fi\n  sleep 3\ndone\nexit 1"
+        },
+        {
+          "name": "Save reusable voice and API budget state",
+          "if": "always() && steps.decision.outputs.run == 'true'",
+          "uses": "actions/cache/save@v4",
+          "with": {
+            "path": ".voice_cache\nstate/api_budget.sqlite3\n~/.cache/huggingface",
+            "key": "professional-v2-${{ github.repository_id }}-${{ github.run_id }}-${{ github.run_attempt }}"
+          }
+        },
+        {
+          "name": "Deliver review narration and diagnostic metadata over Git",
+          "if": "always() && steps.decision.outputs.run == 'true'",
+          "env": {
+            "PREPARE_OUTCOME": "${{ steps.prepare.outcome }}",
+            "VOICE_OUTCOME": "${{ steps.voice.outcome }}",
+            "RENDER_OUTCOME": "${{ steps.render.outcome }}",
+            "FINISH_OUTCOME": "${{ steps.finish.outcome }}"
+          },
+          "run": "python - <<'PY2'\nimport os,json\nfrom pathlib import Path\np=Path('professional_motion/delivery');p.mkdir(exist_ok=True)\n(p/'status.json').write_text(json.dumps({'run_id':os.environ['GITHUB_RUN_ID'],**{k.lower():os.getenv(k) for k in ('PREPARE_OUTCOME','VOICE_OUTCOME','RENDER_OUTCOME','FINISH_OUTCOME')}}))\nPY2\ngit config user.name content-review-bot\ngit config user.email bot@users.noreply.github.com\ngit add -f professional_motion/delivery/*.json\nif [ -f professional_motion/delivery/narration.wav ]; then git add -f professional_motion/delivery/narration.wav; fi\ngit commit -m 'Deliver professional review evidence [skip ci]'\ngit push origin HEAD:refs/heads/codex/professional-review-run-${{ github.run_id }}"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "renderer": "professional-threejs-v2",
+  "style_approved": true,
+  "publication_approved": false,
+  "approved_sample_sha256": "03c47e12297a3872f9bb102b461fbb46bce9dc3442bb85cf3565e82bdae708bd",
+  "reason": "Science style approved by user; automatic release waits for the other channel reviews requested by the user.",
+  "timezone": "Africa/Cairo",
+  "publication_local_time": "17:00",
+  "generation_local_time": "12:00"
+}

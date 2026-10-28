@@ -3,18 +3,22 @@ import hashlib
 import json
 import subprocess
 from pathlib import Path
-from film_factory.voice import generate
+try:
+    from film_factory.voice import generate
+except ImportError:
+    from voice_provider.client import generate as basic_generate
+    def generate(text,path,performance=None):return basic_generate(text,path)
 from .alignment import measured_timing
 
 
 def main():
-    root=Path('professional_motion');story=json.loads((root/'story.json').read_text());out=root/'delivery';out.mkdir(exist_ok=True)
+    root=Path('professional_motion');story=json.loads((root/'delivery/story.json').read_text());out=root/'delivery';out.mkdir(exist_ok=True)
     full=' '.join(s['narration'] for s in story['scenes']);wav=out/'narration.wav';source=out/'narration.source.json'
     if wav.exists():
         if not source.exists() or json.loads(source.read_text()).get('text')!=full:
             raise ValueError('Cached review voice does not match the complete current script')
     else:
-        generate(full,str(wav),'Read this complete Egyptian Arabic science explanation, warm engaging Charon voice. '
+        generate(full,str(wav),{'science':'Egyptian Arabic engaging science explanation. ','history':'Egyptian Arabic cinematic historical explanation, clear grounded delivery. ','horror':'Egyptian Arabic restrained tense factual maritime documentary, no invented screams or voices. ','news':'Egyptian Arabic energetic technology explanation, natural conversational pace. '}[story['profile']]+
                  'Start with curiosity, build momentum, thoughtful final payoff. No music or sound effects. '
                  'Read only the supplied words. Finish the last sentence. Clear natural pace.')
     duration=float(subprocess.check_output(['ffprobe','-v','error','-show_entries','format=duration','-of','csv=p=0',str(wav)]))
@@ -30,6 +34,8 @@ def main():
         except ValueError:
             if name=='small':raise
     timing['audio_sha256']=hashlib.sha256(wav.read_bytes()).hexdigest()
+    (out/'timing.json').write_text(json.dumps(timing,ensure_ascii=False,indent=2))
+    timing['profile']=story['profile'];timing['topic_key']=story['topic_key']
     (out/'timing.json').write_text(json.dumps(timing,ensure_ascii=False,indent=2))
     print('Original voice measured; exact-token coverage',round(timing['coverage'],3))
 

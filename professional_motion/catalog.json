@@ -1,0 +1,21 @@
+{
+ "science": [
+  {"key":"saturn-rings","family":"space","variant":"saturn","title":"حلقات زحل مش قرص واحد","publisher":"NASA Science","url":"https://science.nasa.gov/saturn/rings/"},
+  {"key":"moon-phases","family":"space","variant":"moon","title":"ليه شكل القمر بيتغير؟","publisher":"NASA Science","url":"https://science.nasa.gov/moon/moon-phases/"},
+  {"key":"solar-eclipse","family":"space","variant":"eclipse","title":"الكسوف بيحصل إزاي؟","publisher":"NASA Science","url":"https://science.nasa.gov/eclipses/"},
+  {"key":"earth-magnetosphere","family":"field","variant":"magnet","title":"درع الأرض المغناطيسي","publisher":"NASA Science","url":"https://science.nasa.gov/earth/earths-magnetosphere/"},
+  {"key":"sound-waves","family":"wave","variant":"sound","title":"الصوت بيعدي في الهوا إزاي؟","publisher":"NASA Glenn","url":"https://www.grc.nasa.gov/www/k-12/airplane/sound.html"}
+ ],
+ "horror": [
+  {"key":"franklin-expedition-1845","family":"maritime","variant":"polar","title":"سفن فرانكلين: اختفاء في الجليد","publisher":"Royal Museums Greenwich","url":"https://www.rmg.co.uk/stories/maritime-history/what-happened-erebus-terror"},
+  {"key":"mary-celeste-1872","family":"maritime","variant":"atlantic","title":"ماري سيليست: سفينة من غير طاقم","publisher":"Smithsonian Magazine","url":"https://www.smithsonianmag.com/history/abandoned-ship-the-mary-celeste-174488104/"},
+  {"key":"endurance-1915","family":"maritime","variant":"polar","title":"إنديورانس: الجليد حاصر السفينة","publisher":"Royal Museums Greenwich","url":"https://www.rmg.co.uk/stories/explorers/sir-ernest-shackleton"}
+ ],
+ "history": [
+  {"key":"pantheon-rome-dome","family":"architecture","variant":"dome","title":"قبة البانثيون واقفة إزاي؟","publisher":"Smarthistory","url":"https://smarthistory.org/the-pantheon/"},
+  {"key":"pont-du-gard-aqueduct","family":"architecture","variant":"aqueduct","title":"جسر بيشيل الميه: بون دو جار","publisher":"UNESCO","url":"https://whc.unesco.org/en/list/344/"},
+  {"key":"roman-colosseum-structure","family":"architecture","variant":"arena","title":"الكولوسيوم: هندسة لآلاف الناس","publisher":"Smarthistory","url":"https://smarthistory.org/the-colosseum/"},
+  {"key":"great-pyramid-construction","family":"architecture","variant":"pyramid","title":"هرم الجيزة: إيه المعروف وإيه المختلف عليه؟","publisher":"Smarthistory","url":"https://smarthistory.org/the-great-pyramids-of-giza/"}
+ ],
+ "news": []
+}

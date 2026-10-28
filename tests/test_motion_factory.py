@@ -50,17 +50,16 @@ class MotionFactoryTests(unittest.TestCase):
         renderer=self.renderer('science');renderer.scenes[0]['kind']='unknown'
         with self.assertRaisesRegex(ValueError,'Unsupported scene'):renderer.frame(.5)
 
-    def test_single_workflow_has_no_publication_or_cloudflare(self):
+    def test_daily_workflow_only_publishes_after_release_gate(self):
         import yaml
         root=Path(__file__).resolve().parents[1]
-        doc=yaml.safe_load((root/'.github/workflows/motion-production.yml').read_text())
-        job=doc['jobs']['produce']
-        self.assertEqual(job['permissions'],{'contents':'read'})
-        commands='\n'.join(s.get('run','') for s in job['steps'])
-        self.assertIn('python -m motion_factory.produce',commands)
-        self.assertNotIn('film_factory.publish',commands)
+        doc=yaml.safe_load((root/'.github/workflows/professional-daily.yml').read_text())
+        steps=doc['jobs']['produce']['steps']
+        publish=next(s for s in steps if s.get('name')=='Schedule approved daily film for exactly 17:00 Cairo')
+        self.assertIn("steps.decision.outputs.publish == 'true'",publish['if'])
+        self.assertIn('professional_motion.cli publish',publish['run'])
         self.assertNotIn('CLOUDFLARE',json.dumps(doc))
-        self.assertNotIn('schedule',doc['on'])
+        self.assertEqual(doc['on']['workflow_dispatch']['inputs']['mode']['default'],'review')
 
     def test_long_scenes_pass_diagram_gate_without_relying_on_scene_cuts(self):
         import io

@@ -9,9 +9,9 @@ import numpy as np
 SR=48000
 
 
-def build(duration,starts,directory):
+def build(duration,starts,directory,profile="science"):
     out=Path(directory);n=math.ceil(duration*SR);music=np.zeros((n,2),np.float32);sfx=np.zeros_like(music)
-    rng=np.random.default_rng(2197);beat=60/112
+    rng=np.random.default_rng(2197);bpm={'science':112,'history':104,'horror':94,'news':120}[profile];beat=60/bpm
     def midi(m):return 440*2**((m-69)/12)
     def put(target,audio,at,gain=1,pan=0):
         lo=round(at*SR)
@@ -89,7 +89,7 @@ def build(duration,starts,directory):
         with wave.open(str(out/name),'wb') as w:
             w.setnchannels(2);w.setsampwidth(2);w.setframerate(SR);w.writeframes((data*32767).astype('<i2').tobytes())
     out.mkdir(exist_ok=True,parents=True);save('score.wav',music);save('sfx.wav',sfx)
-    (out/'score.json').write_text(json.dumps({'bpm':112,'original_composition':True,'reference_audio_sampled':False,'cues':cues,'duration':duration},indent=2))
+    (out/'score.json').write_text(json.dumps({'bpm':bpm,'original_composition':True,'reference_audio_sampled':False,'cues':cues,'duration':duration},indent=2))
 
 
 if __name__=='__main__':

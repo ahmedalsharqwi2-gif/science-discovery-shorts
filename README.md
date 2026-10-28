@@ -1,14 +1,9 @@
-# إنتاج موشن جرافيك — science
+# Professional daily factory — science
 
-مسار الإنتاج الوحيد المدعوم: `python -m motion_factory.produce science`.
-في GitHub افتح Actions ثم **Arabic motion graphics — science** ثم Run workflow على الفرع المحتوي على هذا التغيير. اترك preview=false للفيديو الكامل، أو true لمعاينة صامتة مدتها 12 ثانية. نزّل MP4 من Artifact `science-motion-<run_id>` بعد انتهاء التشغيل.
+One supported production workflow: `.github/workflows/professional-daily.yml`. Each successful film chooses a different sourced subject, creates eight authored 3D scenes, produces original Charon narration, measures phrase timing, composes music, verifies the final video, and reserves the subject durably in `state/professional_topics.json`. A new title for an old topic is still a repeat. If no new suitable evidence-backed subject is available, production stops rather than recycling a film or inventing facts.
 
-أسرار المستودع الحالية تستخدم داخل Actions: GEMINI_API_KEY، أو GEMINI_TEXT_API_KEY وGEMINI_TTS_API_KEY. لا تنقلها للبيئة المحلية. Cloudflare غير مطلوب: الرسوم تنتج بالكود، لا بمسار الصور القديم.
+Review mode never posts externally. The current release configuration blocks all automatic publication until the user reviews the other channel samples. The science style is already approved. Future approval must record the actual reviewed film checksum in `config/professional_release.json`, set `style_approved` and `publication_approved` true, and update the matching legacy hold. An input cannot bypass this gate.
 
-الفيديو الكامل: 1080×1920، 30fps، صوت Charon كامل، توقيت مستمد من الصوت الفعلي مع توثيق الكلمات المستنتجة، رسوم توضيحية خاصة بالقناة، موسيقى ومؤثرات محلية، واختبار فك ترميز وصوت النهاية. مراجعة الحقائق تقارن بالملخص المقدم؛ ليست تحققًا مستقلاً من المصادر. بوابة الصورة تقنية وليست ضمانًا للجودة الفنية. العينات المرفوعة مرجع للأسلوب؛ لا يعاد استخدام صوتها.
+The UTC cron runs at 09:00 and 10:00; a timezone-aware `Africa/Cairo` guard selects local noon, across summer and winter. Once approved, the noon job prepares a new film and submits an absolute 17:00 Cairo scheduled publication to verified configured channels. It never changes a missed slot into immediate posting. GitHub dispatch timing and platform processing can delay execution/delivery; provider acceptance receipts are retained. Partial acceptance reuses receipts instead of republishing accepted destinations.
 
-لا توجد جدولة أو إعادة نشر تلقائية في المسار البديل. الناتج للمراجعة. يحتفظ الكاش بالصوت والحصة، وبسجل المصادر الحديثة للأخبار. أمثلة العلوم والتاريخ والرعب هي حلقات تجريبية محددة، وليست بنك موضوعات يوميًا؛ الأخبار تتطلب مصدرًا رسميًا حديثًا خلال 72 ساعة.
-
-حذفت مسارات تشغيل الإنتاج السابقة (12 ملفًا)، وأبقيت اختبارات CI والمكتبات التي يستعملها المسار الجديد أو اختبارات الانحدار. نقاط الدخول القديمة الرئيسية توجه للمسار الجديد، وأدوات الإنتاج الخاصة السابقة توقف التشغيل المباشر برسالة واضحة.
-
-تحقق محلي بدون مفاتيح: `python -m unittest discover -s tests -p test_motion_factory.py -v`. معاينة محلية: `python -m motion_factory.produce science --preview --width 360 --fps 15`.
+Videos and diagnostics are Actions artifacts. Review voice and safe metadata are also delivered to a run-specific review branch for Git-based inspection; secrets are never copied there. Media downloads for the user belong on separate review-media branches, not main. No publication is confirmed without real provider post/video IDs.

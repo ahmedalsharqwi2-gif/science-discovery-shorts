@@ -1,31 +1,11 @@
-# Professional octopus proof
+# Professional daily factory — science
 
-An isolated science film, with eight purpose-designed scenes. This is a review candidate, not a claim that artistic quality has surpassed a reference.
+One supported production workflow: `.github/workflows/professional-daily.yml`. Each successful film chooses a different sourced subject, creates eight authored 3D scenes, produces original Charon narration, measures phrase timing, composes music, verifies the final video, and reserves the subject durably in `state/professional_topics.json`. A new title for an old topic is still a repeat. If no new suitable evidence-backed subject is available, production stops rather than recycling a film or inventing facts.
 
-The film uses a procedurally modelled octopus, physical lighting, a changing chromatophore skin shader, a microscopic pigment sac with radial muscles, travelling nerve impulses, exploded skin layers, underwater particles and a camouflage scene. Arabic typography is drawn separately at native 1080×1920. Music is an original 112 BPM arrangement of pads, arpeggios, bass, percussion and timed scene swells. No reference audio is reused.
+Review mode never posts externally. The current release configuration blocks all automatic publication until the user reviews the other channel samples. The science style is already approved. Future approval must record the actual reviewed film checksum in `config/professional_release.json`, set `style_approved` and `publication_approved` true, and update the matching legacy hold. An input cannot bypass this gate.
 
-## Generate inside GitHub Actions
+The UTC cron runs at 09:00 and 10:00; a timezone-aware `Africa/Cairo` guard selects local noon, across summer and winter. Once approved, the noon job prepares a new film and submits an absolute 17:00 Cairo scheduled publication to verified configured channels. It never changes a missed slot into immediate posting. GitHub dispatch timing and platform processing can delay execution/delivery; provider acceptance receipts are retained. Partial acceptance reuses receipts instead of republishing accepted destinations.
 
-The `Professional octopus proof` workflow runs on the dedicated `codex/professional-octopus-proof` branch when its workflow file changes, and can also be manually dispatched where GitHub exposes it. The workflow generates/reuses Charon narration with the repository's existing Gemini secrets, measures Arabic scene and phrase anchors with ASR, renders frames in Chromium, mixes the sound and saves review artifacts. It never publishes to social channels and does not alter `main`.
+Videos and diagnostics are Actions artifacts. Review voice and safe metadata are also delivered to a run-specific review branch for Git-based inspection; secrets are never copied there. Media downloads for the user belong on separate review-media branches, not main. No publication is confirmed without real provider post/video IDs.
 
-Generated narration is delivered to a separate run-specific `codex/octopus-review-run-<id>` branch so review can continue through normal Git when the cloud instance cannot reach GitHub's Actions API. That branch contains generated voice/media metadata only, never secrets. Finished films are Actions artifacts, not source commits.
-
-## Render a measured local review
-
-From repository root, with generated `professional_motion/delivery/narration.wav`, `narration.source.json` and `timing.json`:
-
-```sh
-cd professional_motion
-npm ci
-npx playwright-core install chromium
-cd ..
-node professional_motion/render.mjs --stills
-node professional_motion/render.mjs
-python -m professional_motion.finish
-```
-
-The renderer uses a system Chromium when available, otherwise Playwright's installed Chromium; `CHROMIUM_PATH` can select an executable. Rendering is deterministic, at 1080×1920 / 30fps. Any page or shader error stops encoding. An audio-free render is explicitly labelled as a visual study and cannot pass the final mixing step.
-
-Review files: `professional_motion/output/octopus-professional-review.mp4`, `verification.json`, `visual-quality.json`, `score.json` and the eight still frames. Frame checks reject blank/frozen diagrams; audio-tail correlation detects lost speech. These are technical checks, not an independent fact check or aesthetic approval. Phrase captions use the supplied script between measured anchors; no word-perfect highlighting is claimed. The factual brief is based on Smithsonian Ocean and the diagrams simplify the mechanisms.
-
-The current proof is specific to the octopus topic. Other channels need their own authored visual scenes; swapping titles alone is not a supported adaptation.
+Local renderer: npm ci in professional_motion, then node professional_motion/render.mjs from repository root after prepared delivery/story.json and measured timing exist.

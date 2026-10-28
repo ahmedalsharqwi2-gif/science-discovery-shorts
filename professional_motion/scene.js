@@ -1,3 +1,4 @@
+import {channelStage} from './channels.js';
 import * as THREE from 'three';
 import {EffectComposer} from 'three/addons/postprocessing/EffectComposer.js';
 import {RenderPass} from 'three/addons/postprocessing/RenderPass.js';
@@ -160,7 +161,9 @@ for(let i=0;i<16;i++){
 }
 const overlay=document.querySelector('#text'),ctx=overlay.getContext('2d');
 const endCanvas=document.createElement('canvas');endCanvas.width=W;endCanvas.height=H;const endCtx=endCanvas.getContext('2d');
-let config=await fetch('./story.json').then(r=>r.json());
+const channel=channelStage(scene);
+const storyResponse=await fetch('./delivery/story.json');if(!storyResponse.ok)throw Error('Missing authored daily story');
+let config=await storyResponse.json();const useOctopus=config.visual_family==='octopus';
 let timing=null;const response=await fetch('./delivery/timing.json');if(response.ok)timing=await response.json();
 const DEFAULT=[0,4.4,9.5,15.1,21.2,27.4,33.5,40];
 const defaultDuration=46.5;
@@ -205,13 +208,35 @@ function drawText(t,index,local,p){
  // A brief asymmetric slit transition masks the cut without obscuring the whole film.
  const flash=1-clamp(local/.28);if(index>0&&flash>0){ctx.fillStyle=`rgba(103,228,208,${flash*.13})`;ctx.fillRect(W*(1-flash),230,10+flash*26,1330);}
 }
+
+function drawChannelText(t,index,local,p){
+ ctx.clearRect(0,0,W,H);
+ let g=ctx.createLinearGradient(0,0,0,650);g.addColorStop(0,'rgba(2,12,19,.97)');g.addColorStop(.7,'rgba(2,12,19,.6)');g.addColorStop(1,'rgba(2,12,19,0)');ctx.fillStyle=g;ctx.fillRect(0,0,W,650);
+ g=ctx.createLinearGradient(0,1480,0,H);g.addColorStop(0,'rgba(2,12,19,0)');g.addColorStop(.45,'rgba(2,12,19,.7)');g.addColorStop(1,'rgba(2,12,19,.98)');ctx.fillStyle=g;ctx.fillRect(0,1480,W,440);
+ const colors={science:'#87e7d8',history:'#efbb80',horror:'#a6cec9',news:'#b7a1ff'},accent=colors[config.profile];
+ const names={science:'SCIENCE / FIELD NOTES',history:'HISTORY / STRUCTURES',horror:'DOCUMENTED / MYSTERIES',news:'AI / VERIFIED SOURCE'};
+ mono(names[config.profile],75,100,21);type(config.series,1005,90,27,WHITE,'right');line(75,142,1005,142,accent,.25);mono('0'+(index+1)+' / 08',75,202,21);
+ const s=config.scenes[index],a=ease(local/.65),y=335+(1-a)*30;
+ const words=s.label.split(' ');let size=76;ctx.font=`${size}px Noto`;while(ctx.measureText(s.label).width>930&&size>46){size-=2;ctx.font=`${size}px Noto`;}
+ type(s.label,540,y,size,index===0||index===7?accent:WHITE,'center',a);
+ if(index===0)type(config.title,540,455,35,WHITE,'center',a);
+ if(config.visual_family==='maritime'&&index===1)label('مسار تخطيطي، مش خريطة ملاحة',540,1460,25);
+ if(config.visual_family==='maritime'&&index===3){const dates=(config.milestones||[]).slice(0,3);dates.forEach((v,i)=>type(v,205+i*335,1110,32,accent));}
+ if(config.visual_family==='compute')mono('ILLUSTRATIVE / NO BENCHMARK CLAIM',540,1470,18,accent,'center');
+ const labels=s.labels||[];labels.slice(0,2).forEach((v,i)=>{if(local>.7+i*.5){label(v,i?820:260,i?1350:700,28);line(i?770:310,i?1300:750,i?670:420,i?1200:850,accent,.45);}});
+ caption(t);
+ mono(config.source.publisher.slice(0,48),540,1810,17,MUTED,'center');ctx.fillStyle='#183337';ctx.fillRect(75,1848,930,3);ctx.fillStyle=accent;ctx.fillRect(75,1848,930*clamp(t/D),3);
+ type('رسوم توضيحية، مش تصوير للأحداث',540,1890,21,MUTED);
+ const flash=1-clamp(local/.28);if(index>0&&flash>0){ctx.fillStyle=`rgba(103,228,208,${flash*.12})`;ctx.fillRect(W*(1-flash),230,10+flash*26,1330);}
+}
+
 window.renderAt=(time,duration=D)=>{
  D=duration;const t=Math.max(0,time),u=t/D;
  let index=times.findLastIndex(s=>s<=u);index=Math.max(0,index);
  const sceneStart=times[index]*D,sceneEnd=(times[index+1]??1)*D,local=t-sceneStart,p=clamp(local/(sceneEnd-sceneStart));
  uniforms.clock.value=t;uniforms.morph.value=index===6?(.5-.5*Math.cos(p*Math.PI*2)):0;
  poseOctopus(t);
- octopus.visible=[0,1,6,7].includes(index);macro.visible=[2,3].includes(index);neural.visible=index===4;layers.visible=index===5;reef.visible=index===6;
+ octopus.visible=useOctopus&&[0,1,6,7].includes(index);macro.visible=useOctopus&&[2,3].includes(index);neural.visible=useOctopus&&index===4;layers.visible=useOctopus&&index===5;reef.visible=useOctopus&&index===6;channel.root.visible=!useOctopus;if(!useOctopus)channel.update(config,index,local,p,t);
  octopus.scale.setScalar(index===0?.78+.14*ease(p*2):index===6?.85:index===7?.9:.91);
  octopus.position.set(index===0?Math.sin(t*.3)*.08:0,index===0?-.4+.25*ease(p*2):-.25,0);
  octopus.rotation.set(.08*Math.sin(t*.3),index===0?-.45+.5*ease(p):.12*Math.sin(t*.2),index===0?-.18*(1-ease(p)):.035*Math.sin(t*.3));
@@ -226,7 +251,7 @@ window.renderAt=(time,duration=D)=>{
  layers.rotation.y=.12+Math.sin(local*.25)*.11;layers.position.y=-.3;layers.scale.setScalar(1.03);
  photons.forEach((m,i)=>{const q=(local*.35+i*.13)%1,travel=q<.5?q*2:2-q*2;m.position.set(-1.5+(i%4)+Math.max(0,q-.5)*.8,1.7-travel*2.5,Math.sin(i)*.8);m.material.color.setHex(q<.5?0xe2f6ff:0x87d5ff);});
  dust.rotation.y=t*.012;dust.position.y=Math.sin(t*.11)*.5;shafts.forEach((m,i)=>m.material.uniforms.opacity.value=.025+.015*(.5+.5*Math.sin(t*.2+i)));
- composer.render();drawText(t,index,local,p);
+ composer.render();if(useOctopus)drawText(t,index,local,p);else drawChannelText(t,index,local,p);
  return {scene:index+1,time:t,duration:D,originalVoice:!!timing};
 };
 window.captureFrame=()=>{endCtx.drawImage(renderer.domElement,0,0);endCtx.drawImage(overlay,0,0);return endCanvas.toDataURL('image/jpeg',.96).split(',')[1];};

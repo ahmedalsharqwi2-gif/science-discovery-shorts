@@ -1,0 +1,14 @@
+{
+  "version": 2,
+  "episodes": [
+    {
+      "slot": "approved-octopus-proof",
+      "topic_key": "octopus-colour-change",
+      "canonical_subject": "octopus-colour-change",
+      "title": "جلد الأخطبوط بيعيد رسم نفسه",
+      "url": "https://ocean.si.edu/ocean-life/invertebrates/how-octopuses-and-squids-change-color",
+      "status": "rendered",
+      "review_only": true
+    }
+  ]
+}
