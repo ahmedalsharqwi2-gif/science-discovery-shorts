@@ -10,6 +10,7 @@ def norm(s):
 def measured_timing(story, duration, transcripts):
     expected=' '.join(s['narration'] for s in story['scenes']).split();models=[];candidates={}
     for model,actual in transcripts:
+        if any(a['start']>b['start'] for a,b in zip(actual,actual[1:])):continue
         models.append(model)
         matcher=SequenceMatcher(None,[norm(w) for w in expected],[norm(w['text']) for w in actual],autojunk=False)
         for block in matcher.get_matching_blocks():
@@ -17,6 +18,7 @@ def measured_timing(story, duration, transcripts):
                 w=actual[block.b+i]
                 if 0<=w['start']<=w['end']<=duration+.1:
                     candidates.setdefault(block.a+i,[]).append(w)
+    if not models:raise ValueError('Conflicting measured ASR anchors within every transcript')
     # Choose the largest chronological chain of exact matches. Combining the
     # first match from each model can cross-align repeated words and conflict.
     nodes=[(i,w) for i in sorted(candidates) for w in candidates[i]]

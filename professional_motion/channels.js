@@ -109,7 +109,8 @@ export function channelStage(scene){
  // Space / waves / magnetic fields provide fresh science subject families.
  const cosmos=group('cosmos');const planet=mesh(cosmos,new THREE.SphereGeometry(1.2,64,40),mat(0xa99567,.65),0,0,0);
  const rings=mesh(cosmos,new THREE.RingGeometry(1.5,2.3,128),new THREE.MeshStandardMaterial({color:0xbda97f,side:THREE.DoubleSide,roughness:.8,transparent:true,opacity:.7}));rings.rotation.x=-Math.PI/2+.25;
- const moon=mesh(cosmos,new THREE.SphereGeometry(.26,32,20),mat(0xbdb9a9,.9));
+ const moonShader=new THREE.ShaderMaterial({uniforms:{lightPosition:{value:new THREE.Vector3(-6,1,0)}},vertexShader:`varying vec3 n;varying vec3 wp;void main(){n=normalize(mat3(modelMatrix)*normal);wp=(modelMatrix*vec4(position,1.)).xyz;gl_Position=projectionMatrix*viewMatrix*vec4(wp,1.);}`,fragmentShader:`uniform vec3 lightPosition;varying vec3 n;varying vec3 wp;void main(){float d=dot(normalize(n),normalize(lightPosition-wp));float grain=.93+.07*sin(wp.x*73.)*sin(wp.y*91.);vec3 c=mix(vec3(.014,.019,.025),vec3(.72,.70,.65)*grain,smoothstep(-.018,.08,d));gl_FragColor=vec4(c,1.);}`});
+ const moon=mesh(cosmos,new THREE.SphereGeometry(.38,48,32),moonShader);
  const sun=mesh(cosmos,new THREE.SphereGeometry(.7,48,32),emit(0xffc265),-3,0,-1);
  const field=group('field');mesh(field,new THREE.SphereGeometry(.72,48,32),mat(0x286c90,.6));
  for(let i=0;i<12;i++){const a=i/12*TAU;curve(field,[[0,.8,0],[Math.cos(a)*2.1,.6,Math.sin(a)*2.1],[Math.cos(a)*2.1,-.6,Math.sin(a)*2.1],[0,-.8,0]],aqua,.012);}
@@ -154,7 +155,8 @@ export function channelStage(scene){
   }else if(family==='space'){
    g=cosmos;rings.visible=story.variant==='saturn';sun.visible=story.variant==='eclipse'||index===3;
    planet.material.color.setHex(story.variant==='saturn'?0xa99567:0x286c90);
-   moon.position.set(Math.cos(local*.3)*2.3,Math.sin(local*.3)*.35,Math.sin(local*.3)*2.3);planet.rotation.y=t*.1;rings.rotation.z=.12;
+   moon.position.set(Math.cos(local*.3)*2.3,Math.sin(local*.3)*.15,Math.sin(local*.3)*2.3);planet.rotation.y=t*.1;rings.rotation.z=.12;
+   if(story.variant==='moon'&&[2,3,5].includes(index)){planet.visible=false;moon.position.set(0,0,0);moon.scale.setScalar(3.3);moonShader.uniforms.lightPosition.value.set(Math.cos(local*.35)*6,1,Math.sin(local*.35)*6);sun.visible=false;}else{planet.visible=true;moon.scale.setScalar(1);moonShader.uniforms.lightPosition.value.set(-6,1,0);}
   }else if(family==='field'){g=field;g.rotation.y=local*.12;}
   else if(family==='wave'){g=wave;beads.forEach((b,i)=>b.position.x=-2.4+(i%28)*.18+Math.sin(i%28*.45-local*4)*.09);}
   else throw Error('Unsupported authored visual family: '+family);
