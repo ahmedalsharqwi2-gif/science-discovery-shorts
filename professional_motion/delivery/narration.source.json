@@ -1,0 +1,17 @@
+{
+  "provider": "Gemini TTS",
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Charon",
+  "style": "Egyptian Arabic ar-EG, native conversational Cairo accent. Mature warm male documentary storyteller, low resonant register, clear exact articulation, measured pace around 140 words per minute. Say the year numbers naturally in Egyptian Arabic. Preserve every word and sentence of the transcript, finish the last sentence clearly. No music, no sound effects, no singing, no spoken instructions.\nRead this complete Egyptian Arabic science explanation, warm engaging Charon voice. Start with curiosity, build momentum, thoughtful final payoff. No music or sound effects. Read only the supplied words. Finish the last sentence. Clear natural pace.",
+  "text": "الأخطبوط ده مش بيلبس لون تاني. هو بيغير شكل جلده قدامك، في لحظة. بس إزاي؟ السر مش مجرد صبغة ساكنة. جوه الجلد خلايا فيها أكياس صغيرة مليانة ألوان، اسمها كروماتوفورات. لما الكيس يتمدد، مساحة اللون اللي عينك شايفاها بتكبر. ولما ينكمش، اللون ده بيبان أقل. حول كل كيس عضلات دقيقة. شد العضلات بيفرد كيس الصبغة، فتتغير البقعة اللي ظاهرة فوق الجلد. الجهاز العصبي بينسق الحركة دي. مش كيس واحد وبس، ده أنماط بتتغير عبر مساحة من الجلد. وفي خلايا عاكسة للضوء بتساهم في المظهر النهائي. يعني اللي شايفه نتيجة صبغة، وضوء، وتحكم عصبي. التغييرات دي ممكن تساعده يندمج مع البيئة، أو يبعث إشارات. وكمان بعض الأخطبوطات بتغير ملمس الجلد. فاللي قدامك مش علبة ألوان. ده جلد حي، عضلات وأعصاب وخلايا ضوئية، شغالة مع بعض في لحظة.",
+  "interaction_id": "v1_ChdtRkhpYXJyUEVOeUxxdHNQd2ZQVmlBWRIXbUZIaWFyclBFTnlMcXRzUHdmUFZpQVk",
+  "duration": 62.4,
+  "sample_rate": 24000,
+  "channels": 1,
+  "sha256": "e749a9e707a4b668f0cf358bafb36b74999c788b628cbac3e27188ca76dd7932",
+  "newly_synthesized": true,
+  "original_video_audio_used": false,
+  "fallback_used": false,
+  "cache_hit": false,
+  "output_sha256": "e749a9e707a4b668f0cf358bafb36b74999c788b628cbac3e27188ca76dd7932"
+}
