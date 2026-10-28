@@ -144,6 +144,7 @@ export function channelStage(scene){
    loads.forEach((o,i)=>o.position.copy(ribs[i].curve.getPoint((local*.3+i*.1)%1)));
    if(index===3)g.rotation.x=.35*Math.sin(p*Math.PI);
    if(index===6)g.position.y=-.25+(1-Math.min(1,local/2))*.7;
+   if(g===aquaBridge)g.scale.setScalar(index===1?.64:.78);
    waterLine.material.emissiveIntensity=1+.5*Math.sin(local*2);
   }else if(family==='compute'){
    const modes={chip,network,comparison:compare,deployment:racks,flow:network,limits:compare};const mode=story.scenes[index].visual_mode;g=mode?modes[mode]:[chip,network,network,compare,racks,chip,compare,chip][index];if(!g)throw Error('Unsupported computing visual mode');
