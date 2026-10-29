@@ -1,0 +1,10 @@
+{
+  "profile": "science",
+  "duration": 62.4,
+  "sha256": "03c47e12297a3872f9bb102b461fbb46bce9dc3442bb85cf3565e82bdae708bd",
+  "review_approved_by_user": true,
+  "downloads": {
+    "720p": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/raw/refs/heads/codex/octopus-video-review-20261028/octopus-review-720p.mp4",
+    "1080p": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/raw/refs/heads/codex/octopus-video-review-20261028/octopus-review-1080p.mp4"
+  }
+}

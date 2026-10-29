@@ -1,0 +1,29 @@
+{
+  "checked_at_cairo_date": "2026-10-29",
+  "read_only": true,
+  "profile": "science",
+  "buffer": {
+    "tiktok": "6a9edf14cd8b9c702c230272",
+    "youtube": "6a9edee8cd8b9c702c2301cb",
+    "facebook": "6a9edebbcd8b9c702c230128"
+  },
+  "direct_youtube": false,
+  "problems": [],
+  "matched_channels": [
+    {
+      "name": "pagesof_history",
+      "service": "tiktok",
+      "id": "6a9edf14cd8b9c702c230272"
+    },
+    {
+      "name": "Ahmed Alsharqwi",
+      "service": "youtube",
+      "id": "6a9edee8cd8b9c702c2301cb"
+    },
+    {
+      "name": "أسرار الكون  Cosmic Secrets",
+      "service": "facebook",
+      "id": "6a9edebbcd8b9c702c230128"
+    }
+  ]
+}
