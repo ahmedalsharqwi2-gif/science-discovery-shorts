@@ -252,7 +252,13 @@
         }
       },
       "reserved_at": "2026-10-29T08:52:44.915392+00:00",
-      "video_sha256": "db425c0246c457281a9c0ddccf37fab507917d015c1648630f922fcf92ab3e76"
+      "video_sha256": "db425c0246c457281a9c0ddccf37fab507917d015c1648630f922fcf92ab3e76",
+      "one_off_publication": {
+        "status": "submitting",
+        "approved_video_sha256": "db425c0246c457281a9c0ddccf37fab507917d015c1648630f922fcf92ab3e76",
+        "media_id": "approved-eclipse-40845210819",
+        "title": "الكسوف بيحصل إزاي؟ لما القمر يحجب الشمس"
+      }
     }
   ]
 }

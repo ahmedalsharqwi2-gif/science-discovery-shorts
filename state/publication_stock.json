@@ -608,6 +608,15 @@
         "youtube"
       ],
       "confirmed_at": "2026-10-21T23:05:30.643384+00:00"
+    },
+    "immediate approved-eclipse-40845210819": {
+      "confirmed": false,
+      "receipts": {},
+      "required_services": [
+        "facebook",
+        "tiktok",
+        "youtube"
+      ]
     }
   }
 }
