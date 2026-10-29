@@ -1,0 +1,147 @@
+{
+  "file": "octopus-professional-review.mp4",
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "duration": 62.4,
+  "voice": "original Gemini Charon",
+  "asr_model": "medium+small",
+  "independent_asr_word_coverage": 0.8968253968253969,
+  "visual_gate": {
+    "passed": true,
+    "duration": 62.4,
+    "resolution": [
+      1080,
+      1920
+    ],
+    "method": "within-scene diagram-region pixel changes",
+    "scenes": [
+      {
+        "scene": 1,
+        "diagram_spatial_std": [
+          39.33470674780239,
+          45.558568779384046,
+          43.88128966297466
+        ],
+        "changed_pixel_ratios": [
+          0.2202516619183286,
+          0.18364197530864199
+        ],
+        "passed": true
+      },
+      {
+        "scene": 2,
+        "diagram_spatial_std": [
+          38.01745702381568,
+          45.230338660092535,
+          57.93295121911992
+        ],
+        "changed_pixel_ratios": [
+          0.230650522317189,
+          0.28878205128205126
+        ],
+        "passed": true
+      },
+      {
+        "scene": 3,
+        "diagram_spatial_std": [
+          42.71812714897653,
+          46.33712131873364,
+          33.79362940312102
+        ],
+        "changed_pixel_ratios": [
+          0.11245251661918329,
+          0.2120489078822412
+        ],
+        "passed": true
+      },
+      {
+        "scene": 4,
+        "diagram_spatial_std": [
+          33.233371511041796,
+          33.26777736861525,
+          28.870351270798206
+        ],
+        "changed_pixel_ratios": [
+          0.057075023741690406,
+          0.1415242165242165
+        ],
+        "passed": true
+      },
+      {
+        "scene": 5,
+        "diagram_spatial_std": [
+          31.276525693686974,
+          31.736700038558265,
+          31.972022118735644
+        ],
+        "changed_pixel_ratios": [
+          0.05331196581196581,
+          0.0461301044634378
+        ],
+        "passed": true
+      },
+      {
+        "scene": 6,
+        "diagram_spatial_std": [
+          27.07791606028498,
+          26.790436159327992,
+          26.837756614929265
+        ],
+        "changed_pixel_ratios": [
+          0.09996438746438746,
+          0.06112298195631529
+        ],
+        "passed": true
+      },
+      {
+        "scene": 7,
+        "diagram_spatial_std": [
+          43.23962835576557,
+          43.20770868631135,
+          38.87094131063066
+        ],
+        "changed_pixel_ratios": [
+          0.13605175688509022,
+          0.17612773029439696
+        ],
+        "passed": true
+      },
+      {
+        "scene": 8,
+        "diagram_spatial_std": [
+          37.95202484600443,
+          42.66366477567162,
+          46.9329651117962
+        ],
+        "changed_pixel_ratios": [
+          0.1551400759734093,
+          0.1635565052231719
+        ],
+        "passed": true
+      }
+    ],
+    "note": "Technical blank/freeze detection only; not a judgement of artistic or factual quality."
+  },
+  "audio_tail": {
+    "audio_seconds": 62.4,
+    "video_seconds": 62.4,
+    "difference_seconds": 0.0,
+    "last_speech_window_correlation": 0.9940402507781982,
+    "audio_tail_checked": true,
+    "silence_padding_used_to_hide_lost_speech": false
+  },
+  "music": "Original 112 BPM electronica composition",
+  "source": "https://ocean.si.edu/ocean-life/invertebrates/how-octopuses-and-squids-change-color",
+  "render": "Three.js procedural geometry, physical lighting, custom skin shader, layered optical bloom",
+  "reference_audio_reused": false,
+  "automatically_published": false,
+  "status": "Technical checks passed; artistic judgement requires viewing the complete film.",
+  "profile": "science",
+  "topic_key": "octopus-colour-change",
+  "music_target_lufs": -27,
+  "music_reduction_db": 4,
+  "voice_regenerated": false,
+  "video_frames_unchanged": true,
+  "original_voice_sha256": "e749a9e707a4b668f0cf358bafb36b74999c788b628cbac3e27188ca76dd7932"
+}
