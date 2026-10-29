@@ -1,5 +1,5 @@
 {
-  "name": "Read-only confirmed science publishing destination check",
+  "name": "Verify exactly three connected active science destinations without posting",
   "on": {
     "push": {
       "branches": [
@@ -19,11 +19,7 @@
       "env": {
         "PYTHONPATH": "${{ github.workspace }}",
         "PYTHONUNBUFFERED": "1",
-        "GEMINI_API_KEY": "${{ secrets.GEMINI_API_KEY }}",
-        "GEMINI_TEXT_API_KEY": "${{ secrets.GEMINI_TEXT_API_KEY || secrets.GEMINI_API_KEY }}",
-        "GEMINI_TTS_API_KEY": "${{ secrets.GEMINI_TTS_API_KEY || secrets.GEMINI_API_KEY }}",
         "GITHUB_TOKEN": "${{ github.token }}",
-        "GH_RELEASE_TOKEN": "${{ secrets.GH_RELEASE_TOKEN }}",
         "BUFFER_API_KEY": "${{ secrets.BUFFER_API_KEY }}",
         "BUFFER_CHANNEL_IDS": "${{ secrets.BUFFER_CHANNEL_IDS || vars.BUFFER_CHANNEL_IDS }}",
         "YT_CLIENT_ID": "${{ secrets.YT_CLIENT_ID }}",
@@ -49,10 +45,20 @@
           "run": "python -m pip install requests beautifulsoup4 google-api-python-client google-auth-oauthlib"
         },
         {
-          "name": "Read channel identities only; do not upload or schedule anything",
-          "run": "python -m professional_motion.cli preflight science\npython - <<'PY2'\nimport subprocess\nfrom pathlib import Path\ndef git(*args,data=None):return subprocess.check_output(['git',*args],input=data).decode().strip()\np=Path('professional_motion/delivery/publishing-preflight.json')\nb=git('hash-object','-w',str(p));tree=git('mktree',data=('100644 blob '+b+'\\tpublishing-preflight.json\\n').encode());c=git('-c','user.name=destination-check-bot','-c','user.email=bot@users.noreply.github.com','commit-tree',tree,'-m','Read-only destination verification [skip ci]');git('push','origin',c+':refs/heads/codex/destination-check-'+__import__('os').environ['GITHUB_RUN_ID'])\nPY2"
+          "name": "Verify three configured destinations against live Buffer accounts",
+          "run": "python - <<'PY2'\nimport json\nfrom pathlib import Path\nfrom professional_motion.publisher import preflight\nexpected=json.loads(Path('config/professional_destinations.json').read_text())['buffer_channel_ids']\nresult=preflight('science',True)\nassert len(expected)==3 and result['buffer']==expected, 'Expected exactly the three user-confirmed destinations'\nassert result['direct_youtube'] is False, 'No duplicate direct upload route'\nPath('professional_motion/delivery/three-destinations-verified.json').write_text(json.dumps({'profile':'science','verified':True,'destinations':result['matched_channels'],'no_posts_created':True},ensure_ascii=False,indent=2))\nprint(json.dumps(result['matched_channels'],ensure_ascii=False))\nPY2"
+        },
+        {
+          "name": "Retain safe read-only channel evidence",
+          "if": "always()",
+          "env": {
+            "REVIEW_STAGE": "three-destinations-verification",
+            "REVIEW_ONLY": "true"
+          },
+          "run": "python -m professional_motion.review_evidence"
         }
-      ]
+      ],
+      "timeout-minutes": 5
     }
   }
 }
