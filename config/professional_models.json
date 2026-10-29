@@ -1,0 +1,7 @@
+{
+  "writer": "gemini-3.8-flash",
+  "reviewer": "gemini-3.8-flash",
+  "verified_generation_date": "2026-10-29",
+  "verification": "Catalog listed and minimal structured generation succeeded with HTTP 200. Review is a separate source-checking request.",
+  "no_silent_quality_downgrade": true
+}

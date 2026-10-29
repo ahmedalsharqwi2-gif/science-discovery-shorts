@@ -1,0 +1,19 @@
+[Unit]
+Description=Repository video production and approved cloud scheduling
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=video-factory
+Group=video-factory
+UMask=0077
+WorkingDirectory=/srv/video-factory
+ExecStart=/srv/video-factory/venv/bin/python /opt/video-factory/runner.py --config /etc/video-factory/config.json run --mode daily --resume
+TimeoutStartSec=7h
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/srv/video-factory
+

@@ -7,12 +7,16 @@ def clean_tag(value):
     if not re.fullmatch(r'[\w\u0621-\u064a]{2,50}',value):raise ValueError('Use concise topic hashtags containing letters, digits or underscores')
     return value
 
-def validate_tags(story):
+def validate_tags(story,context=""):
     tags=list(dict.fromkeys(clean_tag(t) for t in story.get('hashtags',[])))
     if not 3<=len(tags)<=5:raise ValueError('Provide three to five distinct relevant topic hashtags')
     if any(t.lower() in {'fyp','viral','trending','اكسبلور','ترند'} for t in tags):raise ValueError('Use topic-relevant hashtags instead of unrelated reach bait')
-    corpus=' '.join([story['title'],story.get('canonical_subject','').replace('-',' '),*[s['narration'] for s in story['scenes']]])
-    def norm(t):return re.sub(r'[^\w\u0621-\u064a]','',t).lower().translate(str.maketrans({'أ':'ا','إ':'ا','آ':'ا','ة':'ه','ى':'ي'}))
+    corpus=' '.join([story['title'],story.get('canonical_subject','').replace('-',' '),*[s['narration'] for s in story['scenes']],context,story.get('source',{}).get('title','')])
+    def norm(t):
+        t=re.sub(r'[^\w\u0621-\u064a]','',t).lower().translate(str.maketrans({'أ':'ا','إ':'ا','آ':'ا','ة':'ه','ى':'ي'}))
+        if t.startswith(('بال','وال','فال','كال')) and len(t)>5:t=t[1:]
+        if t.startswith('ال') and len(t)>4:t=t[2:]
+        return t
     words={norm(w) for w in corpus.split()}
     topical=sum(any(len(norm(w))>=3 and norm(w) in words for w in tag.split('_')) for tag in tags)
     if topical<2:raise ValueError('At least two hashtags must refer to specific subjects actually discussed in this film')

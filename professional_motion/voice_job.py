@@ -18,8 +18,10 @@ def main():
         if not source.exists() or json.loads(source.read_text()).get('text')!=full:
             raise ValueError('Cached review voice does not match the complete current script')
     else:
+        ending=('Keep tension through the final sentence. Finish every word, then stop without a warm resolving tone. '
+                if story['profile']=='horror' else 'Start with curiosity, build momentum, thoughtful final payoff. ')
         generate(full,str(wav),{'science':'Egyptian Arabic engaging science explanation. ','history':'Egyptian Arabic cinematic historical explanation, clear grounded delivery. ','horror':'Egyptian Arabic gripping horror storyteller. Natural resonant Charon voice with exceptionally clear everyday Egyptian diction. Calm controlled tension and short uneasy pauses, escalating urgency near reveals. Do not whisper, mumble, distort words, scream, add words or swallow sentence endings. Read every supplied word exactly. ','news':'Egyptian Arabic energetic AI-news storyteller with witty dry meme punchlines. Clear facts, natural comedic timing, never a solemn news bulletin. '}[story['profile']]+
-                 'Start with curiosity, build momentum, thoughtful final payoff. No music or sound effects. '
+                 ending+'No music or sound effects. '
                  'Read only the supplied words. Finish the last sentence. Clear natural pace.')
     duration=float(subprocess.check_output(['ffprobe','-v','error','-show_entries','format=duration','-of','csv=p=0',str(wav)]))
     from .policy import require_duration

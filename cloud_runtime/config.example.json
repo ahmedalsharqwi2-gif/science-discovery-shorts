@@ -1,0 +1,38 @@
+{
+  "runtime_root": "/srv/video-factory/runtime",
+  "python": "/srv/video-factory/venv/bin/python",
+  "node": "/usr/bin/node",
+  "chromium": "/usr/bin/chromium",
+  "generation_hour_cairo": 9,
+  "latest_start_hour_cairo": 12,
+  "render_workers": 2,
+  "max_parallel_projects": 1,
+  "public_root": "/srv/video-factory/public",
+  "media_base_url": "https://media.example.com",
+  "projects": [
+    {
+      "profile": "science",
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts",
+      "path": "/srv/video-factory/repos/science-discovery-shorts",
+      "secrets_file": "/etc/video-factory/science.json"
+    },
+    {
+      "profile": "horror",
+      "repository": "ahmedalsharqwi2-gif/arabic-horror-stories",
+      "path": "/srv/video-factory/repos/arabic-horror-stories",
+      "secrets_file": "/etc/video-factory/horror.json"
+    },
+    {
+      "profile": "history",
+      "repository": "ahmedalsharqwi2-gif/documented-history-stories",
+      "path": "/srv/video-factory/repos/documented-history-stories",
+      "secrets_file": "/etc/video-factory/history.json"
+    },
+    {
+      "profile": "news",
+      "repository": "ahmedalsharqwi2-gif/ai-news-daily",
+      "path": "/srv/video-factory/repos/ai-news-daily",
+      "secrets_file": "/etc/video-factory/news.json"
+    }
+  ]
+}

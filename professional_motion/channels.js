@@ -7,7 +7,7 @@ export function channelStage(scene){
  const brass=mat(0xad7944,.32,.5),stone=mat(0xb6a58c,.8,.02),iceMat=mat(0x97d5e3,.25,.1),blue=mat(0x243d51,.35,.4),copper=mat(0xb57540,.3,.6);
  const emit=c=>new THREE.MeshStandardMaterial({color:c,emissive:c,emissiveIntensity:1.2,roughness:.3});
  const aqua=emit(0x49d3c7),violet=emit(0x9975ee);
- const group=name=>{const g=new THREE.Group();root.add(g);groups[name]=g;return g;};
+ const group=name=>{const g=new THREE.Group();g.name=name;root.add(g);groups[name]=g;return g;};
  const mesh=(g,geo,m,x=0,y=0,z=0)=>{let o=new THREE.Mesh(geo,m);o.position.set(x,y,z);g.add(o);return o;};
  const box=(g,x,y,z,m,px=0,py=0,pz=0)=>mesh(g,new THREE.BoxGeometry(x,y,z),m,px,py,pz);
  function curve(g,points,m,r=.018){const c=new THREE.CatmullRomCurve3(points.map(p=>new THREE.Vector3(...p)));const o=mesh(g,new THREE.TubeGeometry(c,48,r,7,false),m);return {curve:c,mesh:o};}
@@ -66,19 +66,20 @@ export function channelStage(scene){
  const pediment=new THREE.Shape();pediment.moveTo(-2.1,0);pediment.lineTo(0,.65);pediment.lineTo(2.1,0);pediment.lineTo(-2.1,0);
  mesh(building,new THREE.ExtrudeGeometry(pediment,{depth:.5,bevelEnabled:false}),stone,0,.74,1.25);
  const aquaBridge=group('aqueduct');
- const bridgeBlocks=[];
+ const bridgeBlocks=[],bridgeTiers=[];
  // Three levels: broad lower arches, smaller upper arches, channel at the top.
  for(let floor=0;floor<3;floor++){
   const span=floor===2?.5:1, count=floor===2?12:6;
   const base=-1.55+floor*1.15, radius=span*.39;
-  for(let i=0;i<=count;i++)bridgeBlocks.push(box(aquaBridge,span*.19,.74,.68,stone,-3+i*span,base+.37,0));
+  const tier=new THREE.Group();tier.userData.tier=floor;aquaBridge.add(tier);bridgeTiers.push(tier);
+  for(let i=0;i<=count;i++)bridgeBlocks.push(box(tier,span*.19,.74,.68,stone,-3+i*span,base+.37,0));
   for(let i=0;i<count;i++){
    const x=-3+(i+.5)*span;
-   const a=mesh(aquaBridge,new THREE.TorusGeometry(radius,span*.10,8,28,Math.PI),stone,x,base+.69,0);arches.push(a);bridgeBlocks.push(a);
+   const a=mesh(tier,new THREE.TorusGeometry(radius,span*.10,8,28,Math.PI),stone,x,base+.69,0);arches.push(a);bridgeBlocks.push(a);
   }
-  bridgeBlocks.push(box(aquaBridge,6.3,.18,.8,stone,0,base+1.08,0));
+  bridgeBlocks.push(box(tier,6.3,.18,.8,stone,0,base+1.08,0));
  }
- box(aquaBridge,6.3,.18,.85,stone,0,1.96,0);
+ const channelCap=box(aquaBridge,6.3,.18,.85,stone,0,1.96,0);
  const waterLine=box(aquaBridge,6,.045,.32,aqua,0,2.08,0);
  const waterDrops=[];for(let i=0;i<14;i++)waterDrops.push(mesh(aquaBridge,new THREE.SphereGeometry(.045,8,8),aqua,0,2.12,0));
  const archDemo=group('archDemo'),archStones=[];
@@ -99,7 +100,7 @@ export function channelStage(scene){
  const handle=box(pump,1.8,.12,.13,brass,.5,1.5,0);
  curve(pump,[[0,-.8,0],[.8,-.8,0],[1,.1,0],[1.5,.1,0]],brass,.09);
  const pumpDrop=mesh(pump,new THREE.SphereGeometry(.09,12,10),aqua,1.5,0,0);
- const arena=group('arena');for(let floor=0;floor<3;floor++)for(let i=0;i<28;i++){const a=i/28*TAU,x=Math.cos(a)*2.2,z=Math.sin(a)*1.5,y=-1.15+floor*.72;const c=mesh(arena,new THREE.CylinderGeometry(.07,.08,.7,8),stone,x,y,z);const arch=mesh(arena,new THREE.TorusGeometry(.19,.055,6,18,Math.PI),stone,x,y+.3,z);arch.rotation.y=-a+Math.PI/2;}
+ const arena=group('arena'),arenaTiers=[];for(let floor=0;floor<3;floor++){const tier=new THREE.Group();tier.userData.tier=floor;arena.add(tier);arenaTiers.push(tier);for(let i=0;i<28;i++){const a=i/28*TAU,x=Math.cos(a)*2.2,z=Math.sin(a)*1.5,y=-1.15+floor*.72;mesh(tier,new THREE.CylinderGeometry(.07,.08,.7,8),stone,x,y,z);const arch=mesh(tier,new THREE.TorusGeometry(.19,.055,6,18,Math.PI),stone,x,y+.3,z);arch.rotation.y=-a+Math.PI/2;}}
  const pyramid=group('pyramid');const pyr=mesh(pyramid,new THREE.ConeGeometry(2.7,3.3,4),stone,0,-.05,0);pyr.rotation.y=Math.PI/4;
  for(let i=0;i<7;i++){const e=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(3.7-i*.45,.01,3.7-i*.45)),new THREE.LineBasicMaterial({color:0xaa8050}));e.position.y=-1.5+i*.44;pyramid.add(e);}
  // Material and structural forces: non-quantitative explanatory diagrams.
@@ -131,6 +132,19 @@ export function channelStage(scene){
  const moonShader=new THREE.ShaderMaterial({uniforms:{lightPosition:{value:new THREE.Vector3(-6,1,0)}},vertexShader:`varying vec3 n;varying vec3 wp;void main(){n=normalize(mat3(modelMatrix)*normal);wp=(modelMatrix*vec4(position,1.)).xyz;gl_Position=projectionMatrix*viewMatrix*vec4(wp,1.);}`,fragmentShader:`uniform vec3 lightPosition;varying vec3 n;varying vec3 wp;void main(){float d=dot(normalize(n),normalize(lightPosition-wp));float grain=.93+.07*sin(wp.x*73.)*sin(wp.y*91.);vec3 c=mix(vec3(.014,.019,.025),vec3(.72,.70,.65)*grain,smoothstep(-.018,.08,d));gl_FragColor=vec4(c,1.);}`});
  const moon=mesh(cosmos,new THREE.SphereGeometry(.38,48,32),moonShader);
  const sun=mesh(cosmos,new THREE.SphereGeometry(.7,48,32),emit(0xffc265),-3,0,-1);
+ // Two separate eclipse diagrams: shadow geometry and an apparent disk close-up.
+ // Dimensions are deliberately schematic, never a scaled prediction of an event.
+ const eclipseShadow=group('eclipseShadow');
+ mesh(eclipseShadow,new THREE.SphereGeometry(.65,40,28),emit(0xffc265),-2.8,0,0);
+ mesh(eclipseShadow,new THREE.SphereGeometry(.23,32,24),mat(0x716f68,.9),-.7,0,0);
+ mesh(eclipseShadow,new THREE.SphereGeometry(.88,40,28),mat(0x286c90,.7),2,0,0);
+ const shadowMaterial=new THREE.MeshBasicMaterial({color:0x17233b,transparent:true,opacity:.55,depthWrite:false,side:THREE.DoubleSide});
+ const shadowCone=mesh(eclipseShadow,new THREE.ConeGeometry(.23,2.5,48,1,true),shadowMaterial,.55,0,0);shadowCone.rotation.z=-Math.PI/2;
+ for(let side of [-1,1])curve(eclipseShadow,[[-2.8,side*.65,0],[-.7,side*.23,0],[1.8,0,0]],aqua,.012);
+ const eclipseClose=group('eclipseClose');
+ mesh(eclipseClose,new THREE.CircleGeometry(1.35,96),emit(0xffce80),0,0,0);
+ const corona=[];for(let i=0;i<48;i++){const a=i/48*TAU;const ray=mesh(eclipseClose,new THREE.PlaneGeometry(.025, .24+(i%5)*.055),emit(0xffb451),Math.cos(a)*1.52,Math.sin(a)*1.52,-.03);ray.rotation.z=a-Math.PI/2;corona.push(ray);}
+ const eclipseDisk=mesh(eclipseClose,new THREE.CircleGeometry(1.38,96),new THREE.MeshBasicMaterial({color:0x050a13}),0,0,.06);
  const field=group('field');mesh(field,new THREE.SphereGeometry(.72,48,32),mat(0x286c90,.6));
  for(let i=0;i<12;i++){const a=i/12*TAU;curve(field,[[0,.8,0],[Math.cos(a)*2.1,.6,Math.sin(a)*2.1],[Math.cos(a)*2.1,-.6,Math.sin(a)*2.1],[0,-.8,0]],aqua,.012);}
  const wave=group('wave');const beads=[];for(let j=0;j<6;j++)for(let i=0;i<28;i++)beads.push(mesh(wave,new THREE.SphereGeometry(.035,8,6),j%2?aqua:violet,-2.4+i*.18,-.9+j*.36,0));
@@ -154,7 +168,17 @@ export function channelStage(scene){
   }else if(family==='architecture'){
    const hero=story.variant==='aqueduct'?aquaBridge:story.variant==='pyramid'?pyramid:story.variant==='arena'?arena:building;
    const modes={hero,levels:hero,arch:story.variant==='aqueduct'||story.variant==='arena'?archDemo:structure,section:story.variant==='aqueduct'?pierDemo:hero,water:hero,material,assembly:hero};
-   const mode=story.scenes[index].visual_mode;g=mode?modes[mode]:[hero,story.variant==='aqueduct'?hero:structure,story.variant==='aqueduct'?pierDemo:hero,hero,story.variant==='aqueduct'?archDemo:structure,material,hero,hero][index];
+   const mode=story.scenes[index].visual_mode;
+   const contract=story.visual_contract;
+   if(contract && (!contract.allowed_modes?.includes(mode)||contract.focus!==story.variant))throw Error('Architecture view conflicts with source geometry contract');
+   if(story.variant==='pyramid' && ['arch','water'].includes(mode))throw Error('Pyramid cannot show an aqueduct or dome view');
+   g=mode?modes[mode]:hero;
+   const tiers=contract?.tier_count??3;
+   if(!Number.isInteger(tiers)||tiers<1||tiers>3)throw Error('Unsupported architecture tier count');
+   bridgeTiers.forEach((o,i)=>o.visible=i<tiers);arenaTiers.forEach((o,i)=>o.visible=i<tiers);
+   const topShift=(tiers-3)*1.15;
+   channelCap.position.y=1.96+topShift;waterLine.position.y=2.08+topShift;
+   waterDrops.forEach(o=>o.position.y=2.12+topShift);
    if(!g)throw Error('Unsupported architecture visual mode');
    bridgeBlocks.forEach((o,i)=>{if(o.userData.baseY===undefined)o.userData.baseY=o.position.y;o.position.y=o.userData.baseY+(mode==='assembly'?(1-Math.min(1,Math.max(0,local*.7-i*.035)))*1.8:0);});
    waterDrops.forEach((o,i)=>o.position.x=-3+((local*.8+i*.43)%6));
@@ -172,9 +196,18 @@ export function channelStage(scene){
    pulses.forEach((o,i)=>o.position.copy(links[i].getPoint((local*.32+i*.037)%1)));compareDot.position.set(Math.sin(local)*1.2,.7*Math.cos(local*.7),.25);
    if(g===chip){g.rotation.x=.38;g.rotation.y=.1+local*.1;}
   }else if(family==='space'){
-   g=cosmos;rings.visible=story.variant==='saturn';sun.visible=story.variant==='eclipse'||index===3;
+   const mode=story.scenes[index].visual_mode||'hero';
+   if(!['hero','orbit','light','detail'].includes(mode))throw Error('Unsupported space visual mode');
+   g=story.variant==='eclipse'&&mode==='light'?eclipseShadow:story.variant==='eclipse'&&mode==='detail'?eclipseClose:cosmos;
+   rings.visible=story.variant==='saturn';sun.visible=story.variant==='eclipse'||index===3;
    planet.material.color.setHex(story.variant==='saturn'?0xa99567:0x286c90);
    moon.position.set(Math.cos(local*.3)*2.3,Math.sin(local*.3)*.15,Math.sin(local*.3)*2.3);planet.rotation.y=t*.1;rings.rotation.z=.12;
+   if(story.variant==='eclipse'){
+    if(mode==='hero')moon.position.set(-1.9,Math.sin(local*.12)*.05,0);
+    eclipseDisk.position.x=.12*Math.sin(local*.16);
+    corona.forEach((o,i)=>o.scale.y=1+.08*Math.sin(local*.6+i));
+    if(g===eclipseClose)g.rotation.y=-.18-.15*Math.sin(local*.18);
+   }
    if(story.variant==='moon'&&[2,3,5].includes(index)){planet.visible=false;moon.position.set(0,0,0);moon.scale.setScalar(3.3);moonShader.uniforms.lightPosition.value.set(Math.cos(local*.35)*6,1,Math.sin(local*.35)*6);sun.visible=false;}else{planet.visible=true;moon.scale.setScalar(1);moonShader.uniforms.lightPosition.value.set(-6,1,0);}
   }else if(family==='field'){g=field;g.rotation.y=local*.12;}
   else if(family==='wave'){g=wave;beads.forEach((b,i)=>b.position.x=-2.4+(i%28)*.18+Math.sin(i%28*.45-local*4)*.09);}

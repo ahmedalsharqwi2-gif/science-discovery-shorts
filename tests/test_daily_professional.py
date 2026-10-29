@@ -71,6 +71,15 @@ class DailyProfessionalTests(unittest.TestCase):
   story={'suitable':True,'title':'موضوع جديد','scenes':[{'label':'الشريحة الأولى','narration':'ده مش مجرد لون عشان اللي قدامك جزء من موضوع علمي جديد','labels':[]} for _ in range(8)]}
   with self.assertRaisesRegex(ValueError,'topic-specific'):e.validate(story,'science',{'family':'space'})
 
+class ExactSourceSelectionTests(unittest.TestCase):
+ def test_indexed_excerpts_keep_the_original_source_words(self):
+  source=' '.join('sourceword'+str(i) for i in range(45))
+  story={'scenes':[{'evidence_excerpt_id':1}]};e.attach_evidence(story,source)
+  self.assertEqual(story['scenes'][0]['evidence_quote'],' '.join(source.split()[15:30]))
+ def test_invalid_excerpt_ids_cannot_invent_evidence(self):
+  for index in (True,-1,20,'1'):
+   with self.assertRaises(ValueError):e.attach_evidence({'scenes':[{'evidence_excerpt_id':index}]},'one two three four five six seven eight nine ten')
+
 class EvidenceAndTimingTests(unittest.TestCase):
  def test_a_fabricated_source_quote_is_rejected(self):
   with self.assertRaises(ValueError):e.verify_evidence({'scenes':[{'evidence_quote':'this invented quotation is not in source'}]},'An actual source with different statements.')

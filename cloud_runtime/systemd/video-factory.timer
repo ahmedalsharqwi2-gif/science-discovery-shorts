@@ -1,0 +1,11 @@
+[Unit]
+Description=Start daily production at 09:00 Cairo, including DST changes
+
+[Timer]
+OnCalendar=*-*-* 09:00:00 Africa/Cairo
+Persistent=true
+AccuracySec=1min
+Unit=video-factory.service
+
+[Install]
+WantedBy=timers.target
