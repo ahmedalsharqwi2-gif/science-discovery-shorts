@@ -17,6 +17,13 @@ def approved():
     return p.get('publication_approved') is True and p.get('style_approved') is True and bool(re.fullmatch(r'[0-9a-f]{64}',str(p.get('approved_sample_sha256',''))))
 
 
+def confirmed_bindings(profile):
+    path=Path('config/professional_destinations.json')
+    if not path.exists():return {}
+    policy=json.loads(path.read_text())
+    if policy.get('profile')!=profile or policy.get('existing_bindings_confirmed_by_user') is not True:return {}
+    return policy.get('buffer_channel_ids',{})
+
 def verified_mapping(profile,rows):
     services={'tiktok','youtube','facebook','instagram'}
     by_id={r['id']:r for r in rows}
@@ -33,10 +40,10 @@ def verified_mapping(profile,rows):
                 if ':' in value and value.split(':',1)[0].lower() in services:
                     service,identifier=value.split(':',1);explicit[service.lower()]=identifier
                 elif value:legacy.append(value)
-    selected={}
+    selected={};confirmed=confirmed_bindings(profile)
     def accept(row,service=None):
         actual=row.get('service','').lower()
-        if actual not in services or (service and actual!=service) or row.get('isQueuePaused') or not any(norm(BRANDS[profile]) in norm(row.get(k,'')) for k in ('name','displayName')):
+        if actual not in services or (service and actual!=service) or row.get('isQueuePaused') or not (confirmed.get(actual)==row['id'] or any(norm(BRANDS[profile]) in norm(row.get(k,'')) for k in ('name','displayName'))):
             raise ValueError('Connected destination does not match this repository brand/service')
         if actual in selected and selected[actual]!=row['id']:raise ValueError('Ambiguous destination; configure an explicit channel ID')
         selected[actual]=row['id']
@@ -48,7 +55,7 @@ def verified_mapping(profile,rows):
         accept(by_id[identifier])
     if not explicit and not legacy:
         for row in rows:
-            if any(norm(BRANDS[profile]) in norm(row.get(k,'')) for k in ('name','displayName')):accept(row)
+            if confirmed.get(row.get('service','').lower())==row['id'] or any(norm(BRANDS[profile]) in norm(row.get(k,'')) for k in ('name','displayName')):accept(row)
     return selected
 
 
@@ -65,7 +72,7 @@ def preflight(profile,strict=False):
             result['matched_channels']=[{'name':r.get('displayName') or r.get('name'),'service':r['service'],'id':r['id']} for r in rows if r['id'] in selected.values()]
         except Exception as e:result['problems'].append({'provider':'buffer','error_class':type(e).__name__})
     direct=all(os.getenv(k) for k in ('YT_CLIENT_ID','YT_CLIENT_SECRET')) and bool(os.getenv('YT_REFRESH_TOKEN') or os.getenv('YT_REFRESH_TOKEN_FALLBACK'))
-    if direct:
+    if direct and 'youtube' not in result['buffer']:
         try:
             from google.oauth2.credentials import Credentials
             from google.auth.transport.requests import Request

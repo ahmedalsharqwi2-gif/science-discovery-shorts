@@ -1,0 +1,11 @@
+{
+  "profile": "science",
+  "existing_bindings_confirmed_by_user": true,
+  "confirmation_date_cairo": "2026-10-29",
+  "confirmation": "User instructed to retain existing repository publication connections; IDs verified read-only against Buffer service metadata.",
+  "buffer_channel_ids": {
+    "tiktok": "6a9edf14cd8b9c702c230272",
+    "youtube": "6a9edee8cd8b9c702c2301cb",
+    "facebook": "6a9edebbcd8b9c702c230128"
+  }
+}
