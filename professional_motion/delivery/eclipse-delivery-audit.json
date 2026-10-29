@@ -1,0 +1,26 @@
+[
+  {
+    "service": "tiktok",
+    "id": "6ae35c1c10365a6fbeedc352",
+    "status": "sent",
+    "dueAt": "2026-10-29T14:47:48.000Z",
+    "sentAt": "2026-10-29T14:49:43.994Z",
+    "externalLink": "https://tiktok.com/@pagesof_history/video/7702101671656230162"
+  },
+  {
+    "service": "youtube",
+    "id": "6ae35c1da87e7858ef13441e",
+    "status": "sent",
+    "dueAt": "2026-10-29T14:47:48.000Z",
+    "sentAt": "2026-10-29T14:48:02.158Z",
+    "externalLink": "https://www.youtube.com/shorts/w_TiO_SWZAI"
+  },
+  {
+    "service": "facebook",
+    "id": "6ae35c1ee079e57982e090b4",
+    "status": "sent",
+    "dueAt": "2026-10-29T14:47:48.000Z",
+    "sentAt": "2026-10-29T14:48:07.078Z",
+    "externalLink": "https://www.facebook.com/reel/1352436220165143/"
+  }
+]
