@@ -1,0 +1,46 @@
+{
+  "name": "Read actual eclipse delivery status without posting",
+  "on": {
+    "push": {
+      "branches": [
+        "codex/daily-professional-factory"
+      ],
+      "paths": [
+        ".github/workflows/professional-eclipse-delivery-audit.yml"
+      ]
+    }
+  },
+  "permissions": {
+    "contents": "write"
+  },
+  "jobs": {
+    "audit": {
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 5,
+      "env": {
+        "BUFFER_API_KEY": "${{ secrets.BUFFER_API_KEY }}"
+      },
+      "steps": [
+        {
+          "uses": "actions/checkout@v4"
+        },
+        {
+          "run": "python -m pip install requests beautifulsoup4"
+        },
+        {
+          "name": "Read live delivery states only",
+          "run": "python -m professional_motion.audit_approved_publication"
+        },
+        {
+          "name": "Save safe status evidence",
+          "if": "always()",
+          "env": {
+            "REVIEW_STAGE": "publication-delivery-audit",
+            "REVIEW_ONLY": "false"
+          },
+          "run": "python -m professional_motion.review_evidence"
+        }
+      ]
+    }
+  }
+}
