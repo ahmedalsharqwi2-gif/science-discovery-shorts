@@ -1,5 +1,5 @@
 {
-  "name": "Read-only editorial model capabilities",
+  "name": "Confirm stronger editorial model generation",
   "on": {
     "push": {
       "branches": [
@@ -56,3 +56,4 @@
     }
   }
 }
+
