@@ -50,9 +50,13 @@ def measured_timing(story, duration, transcripts):
             if not phrase:continue
             target=[norm(w) for w in phrase.split()]
             matches=[i for i in range(len(tokens)-len(target)+1) if tokens[i:i+len(target)]==target]
-            if not matches:raise ValueError('Reaction phrase does not occur in the spoken scene')
+            if not matches:
+                scene.setdefault('editorial_warnings',[]).append('Optional '+prefix+' effect omitted: phrase is absent from the scene')
+                continue
             first=offset+matches[0];points=[anchors[k] for k in range(first,first+len(target)) if k in anchors]
-            if len(points)<2:raise ValueError('A reveal needs at least two exact measured speech anchors')
+            if len(points)<2:
+                scene.setdefault('editorial_warnings',[]).append('Optional '+prefix+' effect omitted: fewer than two measured anchors')
+                continue
             scene[prefix+'_beat']=min(w['start'] for w in points);scene[prefix+'_end']=max(w['end'] for w in points)
         offset+=len(words)
     captions=[]

@@ -68,8 +68,9 @@ class DailyProfessionalTests(unittest.TestCase):
    with self.assertRaises(ValueError):verified_mapping('science',rows)
 
  def test_generic_numbered_slides_are_not_a_topic_specific_film(self):
-  story={'suitable':True,'title':'موضوع جديد','scenes':[{'label':'الشريحة الأولى','narration':'ده مش مجرد لون عشان اللي قدامك جزء من موضوع علمي جديد','labels':[]} for _ in range(8)]}
-  with self.assertRaisesRegex(ValueError,'topic-specific'):e.validate(story,'science',{'family':'space'})
+  story={'suitable':True,'title':'موضوع جديد','hashtags':['موضوع','علمي','الفضاء'],'scenes':[{'label':'الشريحة الأولى','narration':'ده مش مجرد لون عشان اللي قدامك جزء من موضوع علمي جديد','labels':[],'visual_mode':'hero'} for _ in range(8)]}
+  result=e.validate(story,'science',{'key':'new-topic','family':'space','variant':'moon','url':'https://science.nasa.gov/moon/','publisher':'NASA'})
+  self.assertTrue(any('topic-specific' in x for x in result['editorial_warnings']))
 
 class ExactSourceSelectionTests(unittest.TestCase):
  def test_indexed_excerpts_keep_the_original_source_words(self):

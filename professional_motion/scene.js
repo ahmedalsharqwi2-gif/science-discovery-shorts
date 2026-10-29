@@ -1,3 +1,4 @@
+import {drawCaption} from './caption_layout.js';
 import {hauntedStage} from './haunted.js';
 import {channelStage} from './channels.js';
 import * as THREE from 'three';
@@ -187,8 +188,7 @@ function caption(time){
  if(timing?.caption_groups){content=timing.caption_groups.find(g=>time>=g.start&&time<g.end)?.text||'';}
  else if(timing){const words=timing.words;const index=words.findIndex(w=>time>=w.start&&time<w.end+.08);if(index>=0){const start=Math.floor(index/6)*6;content=words.slice(start,start+6).map(w=>w.text).join(' ');}}
  if(!content)return;
- const words=content.split(' '),rows=[''];ctx.font='38px Noto';for(const word of words){const test=(rows[rows.length-1]+' '+word).trim();if(ctx.measureText(test).width>860)rows.push(word);else rows[rows.length-1]=test;}
- rows.forEach((r,i)=>type(r,W/2,1710+i*60,38,WHITE));
+ drawCaption(ctx,content,WHITE);
 }
 function drawText(t,index,local,p){
  ctx.clearRect(0,0,W,H);
@@ -237,9 +237,9 @@ function drawMeme(t,index){
   if(reaction==='loading')for(let i=0;i<5;i++){ctx.fillStyle=`rgba(255,245,195,${.3+.7*(.5+.5*Math.sin(age*8+i))})`;ctx.beginPath();ctx.arc(-38+i*19,-112,5,0,Math.PI*2);ctx.fill();}
  }
  ctx.restore();
- ctx.save();ctx.globalAlpha=gain;ctx.fillStyle='#efbd65';ctx.beginPath();ctx.roundRect(88,1355,904,126,24);ctx.fill();
- let size=42;ctx.font=`${size}px Noto`;while(ctx.measureText(s.punchline).width>840&&size>28){size-=2;ctx.font=`${size}px Noto`;}
- type(s.punchline,540,1431,size,'#181727','center');ctx.restore();
+ ctx.save();ctx.globalAlpha=gain;ctx.fillStyle='#efbd65';ctx.beginPath();ctx.roundRect(72,1150,818,116,24);ctx.fill();
+ let size=42;ctx.font=`${size}px Noto`;while(ctx.measureText(s.punchline).width>754&&size>28){size-=2;ctx.font=`${size}px Noto`;}
+ type(s.punchline,481,1215,size,'#181727','center');ctx.restore();
 }
 
 function drawChannelText(t,index,local,p){

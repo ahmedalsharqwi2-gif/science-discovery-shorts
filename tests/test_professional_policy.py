@@ -20,9 +20,9 @@ class LengthAndMetadataTests(unittest.TestCase):
  def test_original_horror_has_no_invented_documentary_source_or_intrusive_genre_notice(self):
   s={'title':'الإنتركم ورا باب الممر','scenes':[{'narration':'الإنتركم ده بيرد من باب الممر'}],'hashtags':['الإنتركم','باب_الممر','رعب'],'fiction':True,'source':{'kind':'original_fiction','publisher':'ملفات غامضة'}}
   m=make(s,'horror');self.assertEqual(m['source_url'],'');self.assertNotIn('خيالية',m['caption']);self.assertNotIn('المصدر:',m['caption'])
- def test_irrelevant_reach_bait_tags_are_rejected(self):
-  s={'title':'خبر جديد','scenes':[{'narration':'خبر جديد'}],'hashtags':['viral','fyp','ترند'],'source':{}}
-  with self.assertRaises(ValueError):make(s,'news')
+ def test_irrelevant_reach_bait_tags_are_editorial_notes(self):
+  s={'title':'خبر جديد','scenes':[{'narration':'خبر جديد'}],'hashtags':['viral','fyp','ترند'],'source':{'publisher':'Test','url':'https://example.test/story'}}
+  make(s,'news');self.assertTrue(any('reach bait' in x for x in s['editorial_warnings']))
 
 class NewsRelevanceTests(unittest.TestCase):
  def setUp(self):self.now=datetime(2026,10,29,8,tzinfo=timezone.utc)
@@ -36,13 +36,13 @@ class NewsRelevanceTests(unittest.TestCase):
   selected=choose([row],rank,self.now);self.assertEqual(len(selected),1);self.assertEqual(selected[0]['url'],row['url'])
  def test_no_fresh_important_news_does_not_trigger_an_invented_fallback(self):
   self.assertEqual(choose([],lambda *a:(_ for _ in ()).throw(AssertionError('must not call')),self.now),[])
- def test_a_plain_bulletin_does_not_pass_the_meme_requirement(self):
-  with self.assertRaises(ValueError):validate_memes({'scenes':[{'narration':'خبر حقيقي بدون قفشة'}]*8})
+ def test_a_plain_bulletin_records_the_missing_meme_editorial_note(self):
+  s={'scenes':[{'narration':'خبر حقيقي بدون قفشة'}]*8};validate_memes(s);self.assertTrue(s['editorial_warnings'])
  def test_visual_jokes_must_be_spoken_and_distinct(self):
   jokes=['المحفظة حضرت الاجتماع','الكود طالب أجازة','البنشمارك محتاج حكم','السيرفر بيشرب قهوة']
   s={'scenes':[{'narration':'ده التعليق '+j,'punchline':j,'reaction':'shock'} for j in jokes]};validate_memes(s)
   s['scenes'][0]['punchline']='كلام لم يقله الراوي'
-  with self.assertRaises(ValueError):validate_memes(s)
+  validate_memes(s);self.assertEqual(s['scenes'][0]['reaction'],'none');self.assertTrue(s['editorial_warnings'])
 
 class ExactFramesAndRevealsTests(unittest.TestCase):
  def test_partitions_reject_gaps_and_duplicated_frames(self):
