@@ -1,0 +1,47 @@
+[
+  {
+    "key": "saturn-rings",
+    "title": "حلقات زحل مش قرص واحد",
+    "url": "https://science.nasa.gov/saturn/rings/",
+    "family": "space",
+    "variant": "saturn",
+    "published": null,
+    "already_reserved": false
+  },
+  {
+    "key": "moon-phases",
+    "title": "ليه شكل القمر بيتغير؟",
+    "url": "https://science.nasa.gov/moon/moon-phases/",
+    "family": "space",
+    "variant": "moon",
+    "published": null,
+    "already_reserved": true
+  },
+  {
+    "key": "solar-eclipse",
+    "title": "الكسوف بيحصل إزاي؟",
+    "url": "https://science.nasa.gov/eclipses/",
+    "family": "space",
+    "variant": "eclipse",
+    "published": null,
+    "already_reserved": true
+  },
+  {
+    "key": "earth-magnetosphere",
+    "title": "درع الأرض المغناطيسي",
+    "url": "https://science.nasa.gov/earth/earths-magnetosphere/",
+    "family": "field",
+    "variant": "magnet",
+    "published": null,
+    "already_reserved": false
+  },
+  {
+    "key": "sound-waves",
+    "title": "الصوت بيعدي في الهوا إزاي؟",
+    "url": "https://www.grc.nasa.gov/www/k-12/airplane/sound.html",
+    "family": "wave",
+    "variant": "sound",
+    "published": null,
+    "already_reserved": false
+  }
+]
