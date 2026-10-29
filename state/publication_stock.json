@@ -610,13 +610,33 @@
       "confirmed_at": "2026-10-21T23:05:30.643384+00:00"
     },
     "immediate approved-eclipse-40845210819": {
-      "confirmed": false,
-      "receipts": {},
+      "confirmed": true,
+      "receipts": {
+        "tiktok": {
+          "id": "6ae35c1c10365a6fbeedc352",
+          "due_at": "2026-10-29T14:47:48Z",
+          "run_id": "40894586107",
+          "accepted_at": "2026-10-29T14:45:49.133186+00:00"
+        },
+        "youtube": {
+          "id": "6ae35c1da87e7858ef13441e",
+          "due_at": "2026-10-29T14:47:48Z",
+          "run_id": "40894586107",
+          "accepted_at": "2026-10-29T14:45:50.112549+00:00"
+        },
+        "facebook": {
+          "id": "6ae35c1ee079e57982e090b4",
+          "due_at": "2026-10-29T14:47:48Z",
+          "run_id": "40894586107",
+          "accepted_at": "2026-10-29T14:45:50.775516+00:00"
+        }
+      },
       "required_services": [
         "facebook",
         "tiktok",
         "youtube"
-      ]
+      ],
+      "confirmed_at": "2026-10-29T14:45:50.776899+00:00"
     }
   }
 }
