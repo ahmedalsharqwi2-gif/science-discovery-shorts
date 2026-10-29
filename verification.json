@@ -1,0 +1,174 @@
+{
+  "file": "professional-review.mp4",
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "duration": 135.52,
+  "story_sha256": "9186f22d469e45cb6514d4c3edb3806ad679c7bd7f15529cb5cdb0f63a7c1d2a",
+  "voice": "original Gemini Charon",
+  "asr_model": "medium",
+  "independent_asr_word_coverage": 0.8710801393728222,
+  "visual_gate": {
+    "passed": true,
+    "duration": 135.533333,
+    "resolution": [
+      1080,
+      1920
+    ],
+    "method": "within-scene diagram-region pixel changes",
+    "scenes": [
+      {
+        "scene": 1,
+        "diagram_spatial_std": [
+          26.725891295855963,
+          24.43852196184729,
+          26.061294341808722
+        ],
+        "changed_pixel_ratios": [
+          0.0673076923076923,
+          0.025367996201329533
+        ],
+        "passed": true
+      },
+      {
+        "scene": 2,
+        "diagram_spatial_std": [
+          26.897345984400747,
+          23.986963756550168,
+          26.852348510564575
+        ],
+        "changed_pixel_ratios": [
+          0.2189102564102564,
+          0.22653133903133904
+        ],
+        "passed": true
+      },
+      {
+        "scene": 3,
+        "diagram_spatial_std": [
+          29.679202993109747,
+          27.172902455513768,
+          26.620838004128874
+        ],
+        "changed_pixel_ratios": [
+          0.0627730294396961,
+          0.05010683760683761
+        ],
+        "passed": true
+      },
+      {
+        "scene": 4,
+        "diagram_spatial_std": [
+          26.301416667925217,
+          23.57090910528292,
+          25.334456382912435
+        ],
+        "changed_pixel_ratios": [
+          0.0573005698005698,
+          0.024620132953466288
+        ],
+        "passed": true
+      },
+      {
+        "scene": 5,
+        "diagram_spatial_std": [
+          26.341395575160643,
+          23.74623263078426,
+          22.632647929912675
+        ],
+        "changed_pixel_ratios": [
+          0.054962013295346626,
+          0.030947293447293446
+        ],
+        "passed": true
+      },
+      {
+        "scene": 6,
+        "diagram_spatial_std": [
+          28.067407002632702,
+          23.09008106375649,
+          21.24116990191778
+        ],
+        "changed_pixel_ratios": [
+          0.06621557454890788,
+          0.02761158594491928
+        ],
+        "passed": true
+      },
+      {
+        "scene": 7,
+        "diagram_spatial_std": [
+          26.602606548975295,
+          24.034495513493383,
+          25.24647045057763
+        ],
+        "changed_pixel_ratios": [
+          0.05684947768281102,
+          0.048824786324786325
+        ],
+        "passed": true
+      },
+      {
+        "scene": 8,
+        "diagram_spatial_std": [
+          26.461879490779328,
+          23.9435189977659,
+          24.39442433888196
+        ],
+        "changed_pixel_ratios": [
+          0.05871320037986705,
+          0.0449667616334283
+        ],
+        "passed": true
+      }
+    ],
+    "note": "Technical blank/freeze detection only; not a judgement of artistic or factual quality."
+  },
+  "audio_tail": {
+    "audio_seconds": 135.52,
+    "video_seconds": 135.52,
+    "difference_seconds": 0.0,
+    "last_speech_window_correlation": 0.9909077882766724,
+    "audio_tail_checked": true,
+    "silence_padding_used_to_hide_lost_speech": false
+  },
+  "publication_metadata": {
+    "title": "اسرار الكون | الكسوف بيحصل إزاي؟",
+    "caption": "رسوم توضيحية وإعادة تمثيل درامية؛ ليست تسجيلًا للأحداث.\nالمصدر: NASA Science\nhttps://science.nasa.gov/eclipses/\n#الكسوف #الفضاء #ناسا",
+    "description": "رسوم توضيحية وإعادة تمثيل درامية؛ ليست تسجيلًا للأحداث.\nالمصدر: NASA Science\nhttps://science.nasa.gov/eclipses/\n#الكسوف #الفضاء #ناسا",
+    "tags": [
+      "الكسوف",
+      "الفضاء",
+      "ناسا"
+    ],
+    "hashtags": [
+      "#الكسوف",
+      "#الفضاء",
+      "#ناسا"
+    ],
+    "source_url": "https://science.nasa.gov/eclipses/",
+    "containsSyntheticMedia": true
+  },
+  "duration_policy": {
+    "minimum_exclusive": 90,
+    "maximum_exclusive": 180
+  },
+  "music_target_lufs": -27,
+  "music": "Original composed score",
+  "music_bpm": 112,
+  "source": {
+    "url": "https://science.nasa.gov/eclipses/",
+    "publisher": "NASA Science"
+  },
+  "topic_key": "solar-eclipse",
+  "profile": "science",
+  "editorial_review": {
+    "supported": true,
+    "novel": true,
+    "issues": []
+  },
+  "render": "Three.js procedural geometry, physical lighting, custom skin shader, layered optical bloom",
+  "reference_audio_reused": false,
+  "automatically_published": false,
+  "status": "Technical checks passed; artistic judgement requires viewing the complete film."
+}
