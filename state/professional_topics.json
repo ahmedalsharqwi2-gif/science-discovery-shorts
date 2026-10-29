@@ -131,7 +131,7 @@
       "canonical_subject": "solar-eclipse",
       "title": "الكسوف بيحصل إزاي؟",
       "url": "https://science.nasa.gov/eclipses/",
-      "status": "reserved",
+      "status": "rendered",
       "story": {
         "title": "الكسوف بيحصل إزاي؟",
         "canonical_subject": "solar-eclipse",
@@ -251,7 +251,8 @@
           "issues": []
         }
       },
-      "reserved_at": "2026-10-29T08:52:44.915392+00:00"
+      "reserved_at": "2026-10-29T08:52:44.915392+00:00",
+      "video_sha256": "db425c0246c457281a9c0ddccf37fab507917d015c1648630f922fcf92ab3e76"
     }
   ]
 }
