@@ -1,5 +1,5 @@
 {
-  "name": "Read actual eclipse delivery status without posting",
+  "name": "Check remaining TikTok delivery without creating another post",
   "on": {
     "push": {
       "branches": [
