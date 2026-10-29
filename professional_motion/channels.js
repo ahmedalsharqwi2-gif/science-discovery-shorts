@@ -11,23 +11,42 @@ export function channelStage(scene){
  const mesh=(g,geo,m,x=0,y=0,z=0)=>{let o=new THREE.Mesh(geo,m);o.position.set(x,y,z);g.add(o);return o;};
  const box=(g,x,y,z,m,px=0,py=0,pz=0)=>mesh(g,new THREE.BoxGeometry(x,y,z),m,px,py,pz);
  function curve(g,points,m,r=.018){const c=new THREE.CatmullRomCurve3(points.map(p=>new THREE.Vector3(...p)));const o=mesh(g,new THREE.TubeGeometry(c,48,r,7,false),m);return {curve:c,mesh:o};}
- function ship(g,scale=1){
+ function ship(g,scale=1,mastCount=3){
   const s=new THREE.Group();g.add(s);s.scale.setScalar(scale);
   const hull=new THREE.Shape();hull.moveTo(-1.8,.1);hull.lineTo(-1.35,-.6);hull.lineTo(1.2,-.6);hull.lineTo(1.95,.2);hull.lineTo(-1.8,.1);
   const h=mesh(s,new THREE.ExtrudeGeometry(hull,{depth:.78,bevelEnabled:true,bevelSegments:2,steps:1,bevelSize:.04,bevelThickness:.04}),mat(0x594031,.7,.05));h.position.z=-.39;
   box(s,3.3,.12,.8,brass,0,.1,0);
+  // Deck planking, rail posts, hatch and ropes give the ship tangible detail.
+  const timber=mat(0x30251f,.9,.02);
+  for(let i=0;i<16;i++)box(s,.014,.013,.73,timber,-1.5+i*.2,.17,0);
+  for(let side of [-1,1]){
+   for(let i=0;i<15;i++)box(s,.018,.24,.018,brass,-1.5+i*.22,.29,side*.37);
+   box(s,3.2,.025,.025,timber,0,.42,side*.37);
+   for(let i=0;i<6;i++)box(s,.38,.018,.012,brass,-1.28+i*.5,-.17,side*.405);
+  }
+  box(s,.65,.25,.47,timber,-.92,.27,0);box(s,.75,.055,.55,brass,-.92,.42,0);
+  box(s,.5,.09,.42,timber,.25,.24,0);
+  for(let i=0;i<4;i++)box(s,.026,.02,.4,brass,.05+i*.13,.3,0);
+  for(let i=0;i<3;i++)mesh(s,new THREE.TorusGeometry(.1-i*.02,.012,6,22),brass,1.02,.21+i*.015,.04).rotation.x=Math.PI/2;
   const sails=[];
-  for(let i=0;i<3;i++){
-   const x=-1+i*.96;mesh(s,new THREE.CylinderGeometry(.025,.035,2.25,10),brass,x,1.12,0);
-   for(let j=0;j<2;j++){
+  for(let i=0;i<mastCount;i++){
+   const x=mastCount===2?-.62+i*1.22:-1+i*.96;mesh(s,new THREE.CylinderGeometry(.025,.035,2.25,10),brass,x,1.12,0);
+   if(mastCount===2&&i===0){
+    const shape=new THREE.Shape();shape.moveTo(0,.55);shape.lineTo(0,2.1);shape.lineTo(-.8,1.8);shape.lineTo(-.8,.65);shape.closePath();
+    const sail=mesh(s,new THREE.ShapeGeometry(shape,10),new THREE.MeshStandardMaterial({color:0xd2cbb1,side:THREE.DoubleSide,roughness:.95}),x,0,.03);sails.push(sail);
+    curve(s,[[x,2.1,0],[x-.8,1.8,0]],brass,.016);
+   }
+   for(let j=0;j<(mastCount===2&&i===0?0:2);j++){
     const sail=mesh(s,new THREE.PlaneGeometry(.75,.7,12,10),new THREE.MeshStandardMaterial({color:0xc6c3a8,side:THREE.DoubleSide,roughness:.85}),x,.7+j*.85,.03);sails.push(sail);
     const bar=mesh(s,new THREE.CylinderGeometry(.018,.018,.86,8),brass,x,1.08+j*.85,.02);bar.rotation.z=Math.PI/2;
    }
+   for(let side of [-1,1])for(let rope=0;rope<3;rope++)curve(s,[[x,2.0,0],[x-.22+rope*.2,.22,side*.35]],timber,.007);
    curve(s,[[x,2.25,0],[x-.55,.1,.38]],brass,.008);curve(s,[[x,2.25,0],[x+.55,.1,-.38]],brass,.008);
   }
   s.userData.sails=sails;return s;
  }
  const fleet=group('fleet');const ships=[ship(fleet,.85),ship(fleet,.62)];ships[0].position.set(-.7,-.2,.1);ships[1].position.set(1.45,.1,-2.1);
+ const mary=ship(fleet,.85,2);mary.position.set(-.7,-.2,.1);
  const ocean=mesh(fleet,new THREE.PlaneGeometry(120,120,65,65),new THREE.MeshStandardMaterial({color:0x082c3f,roughness:.27,metalness:.3,transparent:true,opacity:.8}),0,-.85,-2);ocean.rotation.x=-Math.PI/2;
  const ice=[];
  for(let i=0;i<30;i++){const o=mesh(fleet,new THREE.DodecahedronGeometry(.3+(i%5)*.12,0),iceMat,Math.sin(i*14.3)*5,-.68,Math.cos(i*8.7)*5-2);o.scale.set(1,.18,1);o.rotation.y=i;ice.push(o);}
@@ -125,7 +144,7 @@ export function channelStage(scene){
    const mode=story.scenes[index].visual_mode;g=mode?modes[mode]:[fleet,globe,fleet,timeline,story.variant==='polar'?wreck:globe,story.variant==='polar'?wreck:pump,papers,fleet][index];
    if(!g)throw Error('Unsupported maritime visual mode');
    piston.position.y=.9+Math.sin(local*2)*.2;handle.rotation.z=Math.sin(local*2)*.16;pumpDrop.position.y=.1-(local*.8%1);
-   ships[1].visible=story.topic_key!=='mary-celeste-1872';
+   ships.forEach(s=>s.visible=story.topic_key!=='mary-celeste-1872');mary.visible=story.topic_key==='mary-celeste-1872';mary.rotation.set(Math.sin(t*.7)*.035,Math.sin(t*.13)*.12,Math.sin(t*.8)*.045);mary.position.y=-.2+Math.sin(t*.8)*.035;mary.userData.sails.forEach(o=>{const pos=o.geometry.attributes.position;for(let k=0;k<pos.count;k++)pos.setZ(k,.03+Math.sin(pos.getX(k)*3+t*.8)*.04);pos.needsUpdate=true;o.geometry.computeVertexNormals();});
    ice.forEach(o=>o.visible=story.variant==='polar');ocean.material.color.setHex(story.variant==='polar'?0x143e51:0x092f4a);
    ships.forEach((s,i)=>{s.rotation.set(Math.sin(t*.7+i)*.035,Math.sin(t*.13)*.12,Math.sin(t*.8+i)*.045);s.position.y=(i?.1:-.2)+Math.sin(t*.8+i)*.035;s.userData.sails.forEach(o=>{const pos=o.geometry.attributes.position;for(let k=0;k<pos.count;k++)pos.setZ(k,.03+Math.sin(pos.getX(k)*3+t*.8)*.05);pos.needsUpdate=true;o.geometry.computeVertexNormals();});});
    const positions=ocean.geometry.attributes.position;for(let k=0;k<positions.count;k++)positions.setZ(k,Math.sin(positions.getX(k)*2+t)*.035+Math.sin(positions.getY(k)*2-t*.8)*.025);positions.needsUpdate=true;ocean.geometry.computeVertexNormals();

@@ -93,4 +93,18 @@ class EvidenceAndTimingTests(unittest.TestCase):
   self.assertEqual(t['coverage'],1)
   self.assertTrue(all(x['start']<=x['end'] for x in t['caption_groups']))
 
+class ConfirmedDestinationTests(unittest.TestCase):
+ def test_user_confirmed_id_can_keep_its_existing_display_name(self):
+  from professional_motion.publisher import verified_mapping
+  rows=[{'id':'confirmed-yt','service':'youtube','name':'Existing display name'}]
+  with patch('professional_motion.publisher.confirmed_bindings',return_value={'youtube':'confirmed-yt'}),patch.dict(os.environ,{},clear=True):
+   self.assertEqual(verified_mapping('horror',rows),{'youtube':'confirmed-yt'})
+ def test_verified_buffer_youtube_does_not_require_a_second_oauth_route(self):
+  from professional_motion.publisher import preflight
+  with tempfile.TemporaryDirectory() as td:
+   env={'BUFFER_API_KEY':'test','YT_CLIENT_ID':'test','YT_CLIENT_SECRET':'test','YT_REFRESH_TOKEN':'test'}
+   responses=[{'account':{'organizations':[{'id':'org'}]}},{'channels':[{'id':'yt','service':'youtube','name':'AI على السريع','isQueuePaused':False}]}]
+   with patch('professional_motion.publisher.ROOT',Path(td)),patch('professional_motion.publisher.query',side_effect=responses),patch('professional_motion.publisher.verified_mapping',return_value={'youtube':'yt'}),patch.dict(os.environ,env,clear=True):
+    result=preflight('news');self.assertEqual(result['buffer'],{'youtube':'yt'});self.assertEqual(result['problems'],[]);self.assertFalse(result['direct_youtube'])
+
 if __name__=='__main__':unittest.main()
