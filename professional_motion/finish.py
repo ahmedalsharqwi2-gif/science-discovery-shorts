@@ -45,7 +45,7 @@ def main():
     final=out/'professional-review.mp4';staging.replace(final)
     (out/'verification.json').write_text(json.dumps({'file':str(final.name),'width':1080,'height':1920,'fps':30,
         'duration':duration,'story_sha256':story_hash,'voice':'original Gemini Charon','asr_model':timing.get('asr_model'),
-        'independent_asr_word_coverage':timing['coverage'],'visual_gate':visuals,'audio_tail':audio,
+        'independent_asr_word_coverage':timing['coverage'],'exact_token_coverage':timing.get('exact_token_coverage',timing['coverage']),'speech_matching_method':timing.get('timing_method'),'known_name_normalization_applied':timing.get('known_name_and_egyptian_normalization_applied',False),'visual_gate':visuals,'audio_tail':audio,
         'publication_metadata':__import__('professional_motion.metadata',fromlist=['make']).make(story,story['profile']),'duration_policy':{'minimum_exclusive':90,'maximum_exclusive':180},'music_target_lufs':-27,'music':'Original composed score','music_bpm':json.loads((out/'score.json').read_text())['bpm'],'source':story['source'],'topic_key':story['topic_key'],'profile':story['profile'],'editorial_review':story['editorial_review'],
         'render':'Three.js procedural geometry, physical lighting, custom skin shader, layered optical bloom',
         'reference_audio_reused':False,'automatically_published':False,

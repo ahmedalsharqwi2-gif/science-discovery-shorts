@@ -31,7 +31,7 @@ def audit(path, scenes, report='output/visual_quality.json'):
                 '-frames:v','1','-f','image2pipe','-vcodec','png','-'])
             im=Image.open(io.BytesIO(raw)).convert('RGB')
             # Excludes titles, captions, source footer and progress bar.
-            diagram=im.crop((90,500,990,1100 if scene.get('punchline') else 1540)).resize((270,312),Image.Resampling.LANCZOS)
+            diagram=im.crop((90,500,990,1100 if scene.get('punchline') else 1320)).resize((270,312),Image.Resampling.LANCZOS)
             spatial.append(max(ImageStat.Stat(diagram).stddev))
             frames.append(diagram)
         changes=[]
