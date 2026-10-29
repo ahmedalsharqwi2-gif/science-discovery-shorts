@@ -124,6 +124,134 @@
       },
       "reserved_at": "2026-10-28T23:17:11.339497+00:00",
       "video_sha256": "43722e8ca4153de299616994c635c087c55f56fca757b560fee5e61c7a74ef6b"
+    },
+    {
+      "slot": "review-40845210819",
+      "topic_key": "solar-eclipse",
+      "canonical_subject": "solar-eclipse",
+      "title": "الكسوف بيحصل إزاي؟",
+      "url": "https://science.nasa.gov/eclipses/",
+      "status": "reserved",
+      "story": {
+        "title": "الكسوف بيحصل إزاي؟",
+        "canonical_subject": "solar-eclipse",
+        "suitable": true,
+        "facts": [
+          "الكسوف هو حدث سماوي بيغير شكل الشمس والقمر في السماء.",
+          "بيحصل الكسوف لما الأرض والقمر والشمس بينتظموا على خط واحد في الفضاء.",
+          "الكسوف الشمسي بيحصل في مرحلة القمر الجديد أو المحاق.",
+          "هناك أربعة أنواع مختلفة للكسوف الشمسي تعتمد على حركة الأجرام."
+        ],
+        "milestones": [
+          "الكسوف الشمسي",
+          "القمري",
+          "الهالة الشمسية"
+        ],
+        "scenes": [
+          {
+            "id": "scene_1",
+            "label": "حدث سماوي",
+            "narration": "الكسوف ده حدث سماوي بيغير شكل أكبر جسمين بنشوفهم في السما، وهما الشمس والقمر. الناس على الأرض بتعيش اللحظة دي لما الظاهرة بتحصل، عشان كدة هي بتلفت انتباه الكل وبتغير شكل السماء بشكل واضح ومميز قدامنا.",
+            "labels": [
+              "حدث سماوي"
+            ],
+            "visual_mode": "hero",
+            "evidence_excerpt_id": 3,
+            "evidence_quote": "event that drastically changes the appearance of the two biggest objects we see in our"
+          },
+          {
+            "id": "scene_2",
+            "label": "خط واحد",
+            "narration": "في الفضاء الواسع، لما الأرض والقمر والشمس بينتظموا ويكونوا على خط واحد، نقدر نشوف الكسوف بوضوح. الانتظام ده هو اللي بيخلي الظاهرة تتكرر، ووكالة ناسا بتدرس الفترات دي عشان تفهم حركة الكواكب وتأثيراتها المختلفة على كوكبنا بشكل دقيق.",
+            "labels": [
+              "على خط واحد"
+            ],
+            "visual_mode": "orbit",
+            "evidence_excerpt_id": 0,
+            "evidence_quote": "Explore This Section Eclipses When the Earth, Moon, and Sun line up in space, we"
+          },
+          {
+            "id": "scene_3",
+            "label": "مرحلة القمر الجديد",
+            "narration": "العلاقة بين الأجرام السماوية بتحدد نوع الكسوف اللي بنشوفه. الكسوف الشمسي بيحصل بالتحديد خلال مرحلة القمر الجديد، بينما الكسوف القمري بيحصل في وقت تاني لما تكون الأرض في النص بين الشمس والقمر في مدارها الدائم.",
+            "labels": [
+              "مرحلة القمر الجديد"
+            ],
+            "visual_mode": "orbit",
+            "evidence_excerpt_id": 8,
+            "evidence_quote": "will be on Aug. 23, 2044. Lunar eclipses occur during the full moon phase, and"
+          },
+          {
+            "id": "scene_4",
+            "label": "ضوء الشمس",
+            "narration": "عادة مش بنقدر نشوف هالة الشمس عشان سطحها بيكون ساطع وقوي جدا بالنسبة لنا. النور الشديد ده بيخفي الغلاف الخارجي، لكن الظاهرة بتغير الوضع ده وبتسمح للباحثين برؤية أجزاء جديدة ومهمة من الشمس اللي مش بتظهر في الأوقات العادية.",
+            "labels": [],
+            "visual_mode": "light",
+            "evidence_excerpt_id": 10,
+            "evidence_quote": "outer atmosphere — because Sun's surface below it is so much brighter. But during a"
+          },
+          {
+            "id": "scene_5",
+            "label": "مواسم الكسوف",
+            "narration": "حركة الأجرام في مداراتها بتخلق مواسم محددة للكسوف كل سنة. المواسم دي بتتكرر بانتظام، وخلالها بتتحاذى الشمس والقمر والأرض بالشكل اللي بيسمح بوقوع الظاهرة، وده بيدل على دقة النظام الكوني اللي بيحكم حركة الكواكب والنجوم حولنا.",
+            "labels": [],
+            "visual_mode": "orbit",
+            "evidence_excerpt_id": 12,
+            "evidence_quote": "is one of only two periods during each year when the Sun, the Moon, and"
+          },
+          {
+            "id": "scene_6",
+            "label": "أنواع الكسوف",
+            "narration": "فيه تفاصيل كتير لازم نعرفها عن أنواع الكسوف المختلفة. الكسوف الشمسي بيتقسم لأربعة أنواع رئيسية تشمل الكلي والجزئي والهجين والحلقي، والنوع اللي بنشوفه بيعتمد على مسافة القمر وطريقة اصطفافه مع الأرض والشمس بدقة.",
+            "labels": [
+              "أنواع الكسوف"
+            ],
+            "visual_mode": "detail",
+            "evidence_excerpt_id": 38,
+            "evidence_quote": "are four types of solar eclipses: Total, partial, hybrid, and annular. The type of eclipse"
+          },
+          {
+            "id": "scene_7",
+            "label": "حماية العين",
+            "narration": "رغم جمال الظاهرة، إلا إن فيه حدود وقواعد لازم نحافظ عليها عشان سلامتنا. النظر المباشر للشمس مش مسموح بيه إلا في وقت الكلي بحذر شديد، وعشان كدة لازم نستخدم وسائل حماية مخصصة ومش النظارات العادية.",
+            "labels": [],
+            "visual_mode": "detail",
+            "evidence_excerpt_id": 19,
+            "evidence_quote": "during a total solar eclipse, you must never look directly at the Sun without proper"
+          },
+          {
+            "id": "scene_8",
+            "label": "فهم الكون",
+            "narration": "في الختام، الظواهر دي مش بس منظر جميل بنشوفه في السما، دي كمان بتساعد العلماء في فهم أسرار الكون وتاريخ دوران الأرض عبر الزمن، عشان كدة ناسا لسه بتدرس الكسوف لحد النهاردة لاكتشاف معلومات جديدة.",
+            "labels": [],
+            "visual_mode": "hero",
+            "evidence_excerpt_id": 46,
+            "evidence_quote": "images) depending on the viewer's location. Science of Eclipses Eclipses aren’t just beautiful – they’re"
+          }
+        ],
+        "hashtags": [
+          "الكسوف",
+          "الفضاء",
+          "ناسا"
+        ],
+        "profile": "science",
+        "series": "اسرار الكون",
+        "visual_family": "space",
+        "variant": "eclipse",
+        "topic_key": "solar-eclipse",
+        "source": {
+          "url": "https://science.nasa.gov/eclipses/",
+          "publisher": "NASA Science"
+        },
+        "fiction": false,
+        "documented": true,
+        "editorial_review": {
+          "supported": true,
+          "novel": true,
+          "issues": []
+        }
+      },
+      "reserved_at": "2026-10-29T08:52:44.915392+00:00"
     }
   ]
 }
