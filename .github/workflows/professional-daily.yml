@@ -16,7 +16,7 @@
     },
     "schedule": [
       {
-        "cron": "0 9,10 * * *"
+        "cron": "0 6,7 * * *"
       }
     ]
   },
@@ -39,7 +39,7 @@
         "GEMINI_TEXT_API_KEY": "${{ secrets.GEMINI_TEXT_API_KEY || secrets.GEMINI_API_KEY }}",
         "GEMINI_TTS_API_KEY": "${{ secrets.GEMINI_TTS_API_KEY || secrets.GEMINI_API_KEY }}",
         "GITHUB_TOKEN": "${{ github.token }}",
-        "GH_RELEASE_TOKEN": "${{ secrets.GH_RELEASE_TOKEN }}",
+        "GH_RELEASE_TOKEN": "${{ github.token }}",
         "BUFFER_API_KEY": "${{ secrets.BUFFER_API_KEY }}",
         "BUFFER_CHANNEL_IDS": "${{ secrets.BUFFER_CHANNEL_IDS || vars.BUFFER_CHANNEL_IDS }}",
         "YT_CLIENT_ID": "${{ secrets.YT_CLIENT_ID }}",
@@ -233,7 +233,7 @@
         "GEMINI_TEXT_API_KEY": "${{ secrets.GEMINI_TEXT_API_KEY || secrets.GEMINI_API_KEY }}",
         "GEMINI_TTS_API_KEY": "${{ secrets.GEMINI_TTS_API_KEY || secrets.GEMINI_API_KEY }}",
         "GITHUB_TOKEN": "${{ github.token }}",
-        "GH_RELEASE_TOKEN": "${{ secrets.GH_RELEASE_TOKEN }}",
+        "GH_RELEASE_TOKEN": "${{ github.token }}",
         "BUFFER_API_KEY": "${{ secrets.BUFFER_API_KEY }}",
         "BUFFER_CHANNEL_IDS": "${{ secrets.BUFFER_CHANNEL_IDS || vars.BUFFER_CHANNEL_IDS }}",
         "YT_CLIENT_ID": "${{ secrets.YT_CLIENT_ID }}",

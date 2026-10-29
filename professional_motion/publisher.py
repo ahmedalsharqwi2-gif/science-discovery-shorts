@@ -118,6 +118,9 @@ def publish(profile,slot,due):
     Path('state/current_episode.json').write_text(json.dumps({**story,**metadata},ensure_ascii=False,indent=2));shutil.copy2(video,out/'final_video_full.mp4')
     mapping=destinations['buffer'];required=set(mapping)|({'youtube'} if destinations['direct_youtube'] else set());require_services(required)
     episode['status']='publishing';save(data)
+    # Persist intent before external mutations; retries reconcile stable receipts.
+    import subprocess,sys
+    subprocess.run([sys.executable,'-m','professional_motion.persist_state'],check=True)
     errors=[]
     if mapping:
         os.environ.update(BUFFER_CHANNEL_IDS=','.join(k+':'+v for k,v in mapping.items()),PUBLISH_CHANNELS=','.join(mapping))

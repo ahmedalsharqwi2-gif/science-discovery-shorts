@@ -1,5 +1,5 @@
 {
-  "publication_approved": false,
   "style_approved": true,
-  "reason": "Professional motion review gate replaces the obsolete photographic-quality hold. Other channel videos await user review."
+  "publication_approved": true,
+  "reason": "Superseded by user-approved professional release with exact reviewed sample checksum."
 }

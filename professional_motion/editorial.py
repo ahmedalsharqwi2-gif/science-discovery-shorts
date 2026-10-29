@@ -106,9 +106,6 @@ def candidates(profile):
     if profile=='history':
         from .historical_sources import candidates as official
         return official()
-    if profile=='horror' and os.getenv('HORROR_REVIEW_GENRE')=='original_fiction':
-        from .fiction import candidates as original
-        return original()
     if profile=='news':
         from news.editor import candidates as fresh
         from .news_policy import choose
@@ -139,20 +136,14 @@ def candidates(profile):
             seen={canonical(row['url']) for row in rows}
             for anchor in soup.select('a[href]'):
                 title=anchor.get_text(' ',strip=True);url=urljoin(response.url,anchor['href'])
-                if not re.search(r'Franklin|Endurance|shipwreck|lost ship|maritime mystery',title,re.I):continue
+                if not re.search(r'Franklin|Endurance|Erebus|Terror|Mary Celeste|HMS Captain|SS Freshfield|shipwreck|lost ship|maritime mystery',title,re.I):continue
                 try:key=canonical(url)
                 except ValueError:continue
                 if key in seen:continue
                 seen.add(key);rows.append({'key':hashlib.sha256(key.encode()).hexdigest()[:16],'family':'maritime','variant':'polar' if re.search(r'Franklin|Endurance|Arctic|Antarctic',title,re.I) else 'atlantic','title':title,'publisher':'Royal Museums Greenwich','url':url})
         except requests.RequestException:pass
-    if profile=='horror':
-        from .fiction import candidates as fiction_candidates
-        # Original stories and documented incidents share durable plot/topic history.
-        from zoneinfo import ZoneInfo
-        fiction=fiction_candidates()
-        mode=os.getenv('HORROR_REVIEW_GENRE','')
-        documentary_day=datetime.now(ZoneInfo('Africa/Cairo')).date().toordinal()%3==0
-        rows=(rows+fiction) if mode=='documented' or (mode not in {'original_fiction','documented'} and documentary_day) else (fiction+rows)
+    # Future horror episodes use sourced incidents. The already approved fiction
+    # film remains a one-off grant, never an automatic daily genre fallback.
     return rows
 
 

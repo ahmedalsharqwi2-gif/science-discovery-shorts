@@ -14,5 +14,8 @@ class ApprovedReviewTests(unittest.TestCase):
     with self.assertRaises(ValueError):validate(grant,video,changed,story)
    video.write_bytes(b'replacement')
    with self.assertRaises(ValueError):validate(grant,video,report,story)
- def test_scoped_permission_does_not_enable_daily_publication(self):
-  self.assertFalse(json.loads(Path('config/professional_release.json').read_text())['publication_approved'])
+ def test_user_approved_daily_release_pins_the_reviewed_sample(self):
+  daily=json.loads(Path('config/professional_release.json').read_text())
+  grant=json.loads(Path('config/approved_eclipse_publication.json').read_text())
+  self.assertTrue(daily['publication_approved'])
+  self.assertEqual(daily['approved_sample_sha256'],grant['video_sha256'])

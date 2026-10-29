@@ -13,7 +13,7 @@ def decision(profile,mode,event,now=None):
     daily=mode=='daily' or event=='schedule'
     enabled=approved()
     # Two UTC cron hours cover both Cairo offsets. The civil-time guard selects one.
-    run=not daily or (enabled and (event!='schedule' or local.hour==12))
+    run=not daily or (enabled and (event!='schedule' or local.hour==9))
     due=next_slot(now).isoformat(timespec='seconds').replace('+00:00','Z')
     slot=('daily-'+due[:10]) if daily else 'review-'+os.getenv('GITHUB_RUN_ID','local')
     return {'run':run,'publish':daily and enabled,'due':due,'slot':slot,'profile':profile,'approval_pending':daily and not enabled}

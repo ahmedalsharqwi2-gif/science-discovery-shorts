@@ -48,15 +48,15 @@
       "variant": "polar",
       "title": "سفن فرانكلين: اختفاء في الجليد",
       "publisher": "Royal Museums Greenwich",
-      "url": "https://www.rmg.co.uk/stories/maritime-history/what-happened-erebus-terror"
+      "url": "https://www.rmg.co.uk/stories/maritime-history/what-happened-to-erebus-terror-crew-true-story"
     },
     {
       "key": "mary-celeste-1872",
       "family": "maritime",
       "variant": "atlantic",
       "title": "ماري سيليست: سفينة من غير طاقم",
-      "publisher": "Smithsonian Magazine",
-      "url": "https://www.smithsonianmag.com/history/abandoned-ship-the-mary-celeste-174488104/"
+      "publisher": "Royal Museums Greenwich",
+      "url": "https://www.rmg.co.uk/stories/maritime-history/mystery-mary-celeste"
     },
     {
       "key": "endurance-1915",
@@ -64,7 +64,23 @@
       "variant": "polar",
       "title": "إنديورانس: الجليد حاصر السفينة",
       "publisher": "Royal Museums Greenwich",
-      "url": "https://www.rmg.co.uk/stories/explorers/sir-ernest-shackleton"
+      "url": "https://www.rmg.co.uk/stories/maritime-history/sir-ernest-shackleton"
+    },
+    {
+      "key": "hms-captain-1870",
+      "family": "maritime",
+      "variant": "atlantic",
+      "title": "إتش إم إس كابتن: الكارثة اللي ابتلعت السفينة",
+      "publisher": "Royal Museums Greenwich",
+      "url": "https://www.rmg.co.uk/stories/maritime-history/hms-captain-britains-forgotten-maritime-disaster"
+    },
+    {
+      "key": "ss-freshfield-loss",
+      "family": "maritime",
+      "variant": "atlantic",
+      "title": "فريشفيلد: آخر رحلة للسفينة",
+      "publisher": "Royal Museums Greenwich",
+      "url": "https://www.rmg.co.uk/stories/maritime-history/library-archive/loss-ss-freshfield"
     }
   ],
   "history": [
