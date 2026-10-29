@@ -1,5 +1,5 @@
 {
-  "name": "Safe fixed-category failure diagnosis",
+  "name": "Safe fixed-category failure diagnosis with bounded access report",
   "on": {
     "push": {
       "branches": [
