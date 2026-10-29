@@ -1,10 +1,21 @@
 {
   "profile": "science",
-  "duration": 62.4,
-  "sha256": "03c47e12297a3872f9bb102b461fbb46bce9dc3442bb85cf3565e82bdae708bd",
+  "run_id": "40845210819",
+  "duration": 135.52,
+  "sha256": "db425c0246c457281a9c0ddccf37fab507917d015c1648630f922fcf92ab3e76",
   "review_approved_by_user": true,
+  "publication_status": "sent",
+  "youtube_url": "https://www.youtube.com/shorts/w_TiO_SWZAI",
+  "daily_schedule": {
+    "timezone": "Africa/Cairo",
+    "production": "09:00",
+    "publication": "17:00",
+    "executor": "GitHub Actions",
+    "delivery": "Buffer",
+    "enabled": true
+  },
   "downloads": {
-    "720p": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/raw/refs/heads/codex/octopus-video-review-20261028/octopus-review-720p.mp4",
-    "1080p": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/raw/refs/heads/codex/octopus-video-review-20261028/octopus-review-1080p.mp4"
+    "720p": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/raw/refs/heads/codex/professional-video-40845210819/review-720p.mp4",
+    "1080p": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/raw/refs/heads/codex/professional-video-40845210819/review-1080p.mp4"
   }
 }
