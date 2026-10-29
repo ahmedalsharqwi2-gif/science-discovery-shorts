@@ -1,0 +1,17 @@
+{
+  "provider": "Gemini TTS",
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Charon",
+  "style": "Egyptian Arabic ar-EG, native conversational Cairo accent. Mature warm male documentary storyteller, low resonant register, clear exact articulation, measured pace around 140 words per minute. Say the year numbers naturally in Egyptian Arabic. Preserve every word and sentence of the transcript, finish the last sentence clearly. No music, no sound effects, no singing, no spoken instructions.\nEgyptian Arabic engaging science explanation. Start with curiosity, build momentum, thoughtful final payoff. No music or sound effects. Read only the supplied words. Finish the last sentence. Clear natural pace.",
+  "text": "الكسوف ده حدث سماوي بيغير شكل أكبر جسمين بنشوفهم في السما، وهما الشمس والقمر. الناس على الأرض بتعيش اللحظة دي لما الظاهرة بتحصل، عشان كدة هي بتلفت انتباه الكل وبتغير شكل السماء بشكل واضح ومميز قدامنا. في الفضاء الواسع، لما الأرض والقمر والشمس بينتظموا ويكونوا على خط واحد، نقدر نشوف الكسوف بوضوح. الانتظام ده هو اللي بيخلي الظاهرة تتكرر، ووكالة ناسا بتدرس الفترات دي عشان تفهم حركة الكواكب وتأثيراتها المختلفة على كوكبنا بشكل دقيق. العلاقة بين الأجرام السماوية بتحدد نوع الكسوف اللي بنشوفه. الكسوف الشمسي بيحصل بالتحديد خلال مرحلة القمر الجديد، بينما الكسوف القمري بيحصل في وقت تاني لما تكون الأرض في النص بين الشمس والقمر في مدارها الدائم. عادة مش بنقدر نشوف هالة الشمس عشان سطحها بيكون ساطع وقوي جدا بالنسبة لنا. النور الشديد ده بيخفي الغلاف الخارجي، لكن الظاهرة بتغير الوضع ده وبتسمح للباحثين برؤية أجزاء جديدة ومهمة من الشمس اللي مش بتظهر في الأوقات العادية. حركة الأجرام في مداراتها بتخلق مواسم محددة للكسوف كل سنة. المواسم دي بتتكرر بانتظام، وخلالها بتتحاذى الشمس والقمر والأرض بالشكل اللي بيسمح بوقوع الظاهرة، وده بيدل على دقة النظام الكوني اللي بيحكم حركة الكواكب والنجوم حولنا. فيه تفاصيل كتير لازم نعرفها عن أنواع الكسوف المختلفة. الكسوف الشمسي بيتقسم لأربعة أنواع رئيسية تشمل الكلي والجزئي والهجين والحلقي، والنوع اللي بنشوفه بيعتمد على مسافة القمر وطريقة اصطفافه مع الأرض والشمس بدقة. رغم جمال الظاهرة، إلا إن فيه حدود وقواعد لازم نحافظ عليها عشان سلامتنا. النظر المباشر للشمس مش مسموح بيه إلا في وقت الكلي بحذر شديد، وعشان كدة لازم نستخدم وسائل حماية مخصصة ومش النظارات العادية. في الختام، الظواهر دي مش بس منظر جميل بنشوفه في السما، دي كمان بتساعد العلماء في فهم أسرار الكون وتاريخ دوران الأرض عبر الزمن، عشان كدة ناسا لسه بتدرس الكسوف لحد النهاردة لاكتشاف معلومات جديدة.",
+  "interaction_id": "v1_ChdYd25qYXNPWUs2RHF6N0lQMDhyZGdBbxIXWHduamFzT1lLNkRxejdJUDA4cmRnQW8",
+  "duration": 135.52,
+  "sample_rate": 24000,
+  "channels": 1,
+  "sha256": "a131b67326a1c612a9f017e36d7c2584e1e9f5a0c26328873180b81f93d63f6c",
+  "newly_synthesized": true,
+  "original_video_audio_used": false,
+  "fallback_used": false,
+  "cache_hit": false,
+  "output_sha256": "a131b67326a1c612a9f017e36d7c2584e1e9f5a0c26328873180b81f93d63f6c"
+}

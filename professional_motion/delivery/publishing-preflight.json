@@ -1,0 +1,53 @@
+{
+  "buffer": {
+    "tiktok": "6a9edf14cd8b9c702c230272",
+    "youtube": "6a9edee8cd8b9c702c2301cb",
+    "facebook": "6a9edebbcd8b9c702c230128"
+  },
+  "direct_youtube": false,
+  "problems": [],
+  "credential_presence": {
+    "BUFFER_API_KEY": true,
+    "YT_CLIENT_ID": false,
+    "YT_CLIENT_SECRET": false,
+    "YT_REFRESH_TOKEN": false,
+    "YT_REFRESH_TOKEN_FALLBACK": false
+  },
+  "available_channels": [
+    {
+      "name": "pagesof_history",
+      "service": "tiktok",
+      "id": "6a9edf14cd8b9c702c230272",
+      "paused": false
+    },
+    {
+      "name": "Ahmed Alsharqwi",
+      "service": "youtube",
+      "id": "6a9edee8cd8b9c702c2301cb",
+      "paused": false
+    },
+    {
+      "name": "أسرار الكون  Cosmic Secrets",
+      "service": "facebook",
+      "id": "6a9edebbcd8b9c702c230128",
+      "paused": false
+    }
+  ],
+  "matched_channels": [
+    {
+      "name": "pagesof_history",
+      "service": "tiktok",
+      "id": "6a9edf14cd8b9c702c230272"
+    },
+    {
+      "name": "Ahmed Alsharqwi",
+      "service": "youtube",
+      "id": "6a9edee8cd8b9c702c2301cb"
+    },
+    {
+      "name": "أسرار الكون  Cosmic Secrets",
+      "service": "facebook",
+      "id": "6a9edebbcd8b9c702c230128"
+    }
+  ]
+}
