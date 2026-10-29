@@ -1,14 +1,6 @@
 {
   "name": "Professional daily factory — science",
   "on": {
-    "push": {
-      "branches": [
-        "codex/daily-professional-factory"
-      ],
-      "paths": [
-        ".github/workflows/professional-daily.yml"
-      ]
-    },
     "workflow_dispatch": {
       "inputs": {
         "mode": {
@@ -186,6 +178,11 @@
             "FINISH_OUTCOME": "${{ steps.finish.outcome }}"
           },
           "run": "python - <<'PY2'\nimport os,json\nfrom pathlib import Path\np=Path('professional_motion/delivery');p.mkdir(exist_ok=True)\n(p/'status.json').write_text(json.dumps({'run_id':os.environ['GITHUB_RUN_ID'],**{k.lower():os.getenv(k) for k in ('PREPARE_OUTCOME','VOICE_OUTCOME','RENDER_OUTCOME','FINISH_OUTCOME')}}))\nPY2\ngit config user.name content-review-bot\ngit config user.email bot@users.noreply.github.com\ngit add -f professional_motion/delivery/*.json\nif [ -f professional_motion/delivery/narration.wav ]; then git add -f professional_motion/delivery/narration.wav; fi\ngit commit -m 'Deliver professional review evidence [skip ci]'\ngit push origin HEAD:refs/heads/codex/professional-review-run-${{ github.run_id }}"
+        },
+        {
+          "name": "Deliver actual verified video download links",
+          "if": "always() && steps.finish.outcome == 'success'",
+          "run": "python -m professional_motion.deliver_media"
         }
       ]
     }

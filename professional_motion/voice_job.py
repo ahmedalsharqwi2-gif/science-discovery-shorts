@@ -33,6 +33,7 @@ def main():
         try:timing=measured_timing(story,duration,transcripts);break
         except ValueError:
             if name=='large-v3':raise
+    timing['story_sha256']=hashlib.sha256((root/'delivery/story.json').read_bytes()).hexdigest()
     timing['audio_sha256']=hashlib.sha256(wav.read_bytes()).hexdigest()
     (out/'timing.json').write_text(json.dumps(timing,ensure_ascii=False,indent=2))
     timing['profile']=story['profile'];timing['topic_key']=story['topic_key']

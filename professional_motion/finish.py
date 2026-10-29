@@ -18,7 +18,10 @@ def main():
     if story['topic_key']!=timing.get('topic_key'):raise ValueError('Story and measured timing belong to different topics')
     if timing.get('audio_sha256')!=hashlib.sha256((ROOT/'delivery/narration.wav').read_bytes()).hexdigest():
         raise ValueError('Measured timing belongs to a different audio file')
+    story_hash=hashlib.sha256((ROOT/'delivery/story.json').read_bytes()).hexdigest()
+    if timing.get('story_sha256')!=story_hash:raise ValueError('Story changed after voice timing')
     render=json.loads((out/'render.json').read_text())
+    if render.get('story_sha256')!=story_hash:raise ValueError('Story changed after rendering')
     if not render.get('originalVoice') or render.get('errors') or abs(render['duration']-duration)>.001:
         raise ValueError('Final visuals must use measured original voice timing')
     build(duration,[s['start'] for s in timing['scenes']],out,story['profile'])
@@ -38,7 +41,7 @@ def main():
     run(['-i',staging,'-f','null','-'])
     final=out/'professional-review.mp4';staging.replace(final)
     (out/'verification.json').write_text(json.dumps({'file':str(final.name),'width':1080,'height':1920,'fps':30,
-        'duration':duration,'voice':'original Gemini Charon','asr_model':timing.get('asr_model'),
+        'duration':duration,'story_sha256':story_hash,'voice':'original Gemini Charon','asr_model':timing.get('asr_model'),
         'independent_asr_word_coverage':timing['coverage'],'visual_gate':visuals,'audio_tail':audio,
         'music':'Original composed score','music_bpm':json.loads((out/'score.json').read_text())['bpm'],'source':story['source'],'topic_key':story['topic_key'],'profile':story['profile'],'editorial_review':story['editorial_review'],
         'render':'Three.js procedural geometry, physical lighting, custom skin shader, layered optical bloom',

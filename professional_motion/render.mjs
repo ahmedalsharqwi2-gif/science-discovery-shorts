@@ -1,3 +1,4 @@
+import {createHash} from 'node:crypto';
 import {chromium} from 'playwright-core';
 import {createServer} from 'node:http';
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
@@ -20,6 +21,8 @@ try{
  await page.waitForFunction(()=>window.ready===true,null,{timeout:60000});
  if(errors.length)throw Error('Renderer page errors');
  let timing;try{timing=JSON.parse(await readFile(path.join(root,'professional_motion/delivery/timing.json'),'utf8'));}catch{}
+ const storyHash=createHash('sha256').update(await readFile(path.join(root,'professional_motion/delivery/story.json'))).digest('hex');
+ if(timing&&timing.story_sha256!==storyHash)throw Error('Story changed after measured voice timing');
  const duration=timing?.duration||46.5;const fps=30;
  const flag=(key,fallback)=>{let i=process.argv.indexOf(key);return i<0?fallback:process.argv[i+1];};
  const from=Number(flag('--from',0)),to=Number(flag('--to',duration));
@@ -44,5 +47,5 @@ try{
   }
   ff.stdin.end();const [code]=await completed;if(code!==0)throw Error('FFmpeg failed');
  }
- await writeFile(path.join(output,partial?outputName+'.json':'render.json'),JSON.stringify({duration,from,to,fps,width:1080,height:1920,originalVoice:!!timing,errors},null,2));
+ await writeFile(path.join(output,partial?outputName+'.json':'render.json'),JSON.stringify({duration,from,to,fps,width:1080,height:1920,originalVoice:!!timing,story_sha256:storyHash,errors},null,2));
 }finally{await browser.close();server.close();}
