@@ -1,3 +1,4 @@
+import {createHash} from 'node:crypto';
 import {chromium} from 'playwright-core';
 import {createServer} from 'node:http';
 import {readFile,writeFile,mkdir} from 'node:fs/promises';
@@ -20,11 +21,18 @@ try{
  await page.waitForFunction(()=>window.ready===true,null,{timeout:60000});
  if(errors.length)throw Error('Renderer page errors');
  let timing;try{timing=JSON.parse(await readFile(path.join(root,'professional_motion/delivery/timing.json'),'utf8'));}catch{}
+ const storyHash=createHash('sha256').update(await readFile(path.join(root,'professional_motion/delivery/story.json'))).digest('hex');
+ if(timing&&timing.story_sha256!==storyHash)throw Error('Story changed after measured voice timing');
  const duration=timing?.duration||46.5;const fps=30;
  const flag=(key,fallback)=>{let i=process.argv.indexOf(key);return i<0?fallback:process.argv[i+1];};
- const from=Number(flag('--from',0)),to=Number(flag('--to',duration));
+ const splitting=process.argv.includes('--part'),part=Number(flag('--part',0)),parts=Number(flag('--parts',1));
+ if(!Number.isInteger(part)||!Number.isInteger(parts)||parts<1||part<0||part>=parts)throw Error('Invalid frame partition');
+ if(splitting&&(process.argv.includes('--from')||process.argv.includes('--to')))throw Error('Choose frame partitions or time intervals');
+ const totalFrames=Math.ceil(duration*fps);
+ const from=splitting?Math.floor(totalFrames*part/parts)/fps:Number(flag('--from',0)),to=splitting?Math.min(duration,Math.floor(totalFrames*(part+1)/parts)/fps):Number(flag('--to',duration));
+ const startFrame=splitting?Math.floor(totalFrames*part/parts):Math.ceil(from*fps),endFrame=splitting?Math.floor(totalFrames*(part+1)/parts):Math.ceil(to*fps);
  if(!Number.isFinite(from)||!Number.isFinite(to)||from<0||to<=from||to>duration+.001)throw Error('Invalid render interval');
- const outputName=path.basename(flag('--output','visuals.mp4'));const partial=from>0||to<duration;
+ const outputName=path.basename(flag('--output','visuals.mp4'));const partial=startFrame>0||endFrame<totalFrames;
  console.log(JSON.stringify({duration,originalVoice:!!timing,webgl:await page.evaluate(()=>document.querySelector('canvas:not(#text)').getContext('webgl2')?.getParameter(7937))}));
  const stills=process.argv.includes('--stills');
  if(stills){
@@ -35,7 +43,7 @@ try{
  }else{
   const ff=spawn('ffmpeg',['-y','-v','error','-f','image2pipe','-vcodec','mjpeg','-r',String(fps),'-i','-','-an','-c:v','libx264','-preset','medium','-crf','17','-pix_fmt','yuv420p','-movflags','+faststart',path.join(output,outputName)],{stdio:['pipe','inherit','inherit']});
   const completed=once(ff,'exit');ff.stdin.on('error',e=>console.error('Encoder input:',e.message));
-  for(let i=Math.ceil(from*fps);i<Math.ceil(to*fps);i++){
+  for(let i=startFrame;i<endFrame;i++){
    await page.evaluate(({t,d})=>window.renderAt(t,d),{t:i/fps,d:duration});
    const data=await page.evaluate(()=>window.captureFrame());
    if(!ff.stdin.write(Buffer.from(data,'base64')))await once(ff.stdin,'drain');
@@ -44,5 +52,5 @@ try{
   }
   ff.stdin.end();const [code]=await completed;if(code!==0)throw Error('FFmpeg failed');
  }
- await writeFile(path.join(output,partial?outputName+'.json':'render.json'),JSON.stringify({duration,from,to,fps,width:1080,height:1920,originalVoice:!!timing,errors},null,2));
+ await writeFile(path.join(output,partial?outputName+'.json':'render.json'),JSON.stringify({duration,from,to,start_frame:startFrame,end_frame:endFrame,total_frames:totalFrames,fps,width:1080,height:1920,originalVoice:!!timing,story_sha256:storyHash,errors},null,2));
 }finally{await browser.close();server.close();}

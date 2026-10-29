@@ -9,7 +9,7 @@ import numpy as np
 SR=48000
 
 
-def build(duration,starts,directory,profile="science"):
+def build(duration,starts,directory,profile="science",reveal_beats=None):
     out=Path(directory);n=math.ceil(duration*SR);music=np.zeros((n,2),np.float32);sfx=np.zeros_like(music)
     rng=np.random.default_rng(2197);bpm={'science':112,'history':104,'horror':94,'news':120}[profile];beat=60/bpm
     def midi(m):return 440*2**((m-69)/12)
@@ -82,6 +82,16 @@ def build(duration,starts,directory,profile="science"):
         at=starts[min(4,len(starts)-1)]+i*.42
         if at>=duration:break
         put(sfx,tone(midi(84+i%4*3),.35),at,.045,math.sin(i)*.7)
+    if profile=='horror':
+        # Controlled quiet gaps and brief original low impacts create contrast.
+        # Narration is never removed, stretched or padded.
+        for at in (reveal_beats or []):
+            lo=max(0,round((at-.65)*SR));hi=min(n,round((at+.12)*SR))
+            if hi>lo:music[lo:hi]*=.10
+            t=np.arange(round(.65*SR),dtype=np.float32)/SR
+            hit=(np.sin(2*np.pi*(39*t+9*(1-np.exp(-9*t))))+.18*np.sin(2*np.pi*147*t))*np.exp(-9*t)*np.minimum(1,t/.006)
+            put(sfx,hit,at,.13)
+            cues.append({'type':'measured_horror_reveal','at':at})
     # Smooth intro/outro; final cadence resolves rather than ending mid-beat.
     put(music,tone(midi(62),2.3,'pad'),max(0,duration-2.4),.13)
     ts=np.arange(n)/SR;fade=np.minimum(1,ts/.6)*np.minimum(1,np.maximum(0,duration-ts)/1.2)

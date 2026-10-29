@@ -99,17 +99,23 @@ def publish(profile,slot,due):
     if not approved():raise PermissionError('Publication awaits the user’s review of this channel sample')
     validate_slot(due)
     data=registry();episode=next(r for r in data['episodes'] if r['slot']==slot)
-    story=episode['story'];video=ROOT/'output/professional-review.mp4';report=json.loads((ROOT/'output/verification.json').read_text())
+    story=episode['story']
+    if profile=='news':
+        from .news_policy import require_fresh
+        require_fresh(story['source'],datetime.fromisoformat(due.replace('Z','+00:00')))
+    video=ROOT/'output/professional-review.mp4';report=json.loads((ROOT/'output/verification.json').read_text())
     if episode.get('status') not in ('rendered','publishing','scheduled'):raise ValueError('Only a rendered episode can be scheduled')
     if story['topic_key']!=report.get('topic_key') or report['audio_tail'].get('audio_tail_checked') is not True:raise ValueError('Final topic or speech verification missing')
     if hashlib.sha256(video.read_bytes()).hexdigest()!=episode.get('video_sha256'):raise ValueError('Rendered video changed after validation')
     destinations=preflight(profile,True)
     os.environ.update(PUBLISH_DUE_AT=due,PUBLISH_IMMEDIATE='false',PUBLICATION_RECEIPTS_ENABLED='true',BUFFER_SCHEDULE_MODE='customScheduled',PRODUCTION_MEDIA_ID=slot)
     out=Path('output');out.mkdir(exist_ok=True);Path('state').mkdir(exist_ok=True)
-    title=(BRANDS[profile]+' | '+story['title'])[:100]
-    tags={'science':['علوم','اكتشافات'],'history':['تاريخ','هندسة'],'horror':['غموض','وقائع_موثقة'],'news':['ذكاء_اصطناعي','اخبار_التقنية']}[profile]
-    caption=title+'\nرسوم ثلاثية الأبعاد لإعادة الشرح؛ ليست تسجيلًا للأحداث.\nالمصدر: '+story['source']['publisher']+'\n'+story['source']['url']+'\n'+' '.join('#'+x for x in tags)
-    metadata={**story,'title':title,'caption':caption,'tags':tags};Path('state/current_episode.json').write_text(json.dumps(metadata,ensure_ascii=False,indent=2));shutil.copy2(video,out/'final_video_full.mp4')
+    from .metadata import make
+    from .policy import require_duration
+    from film_factory.delivery import probe
+    require_duration(float(probe(video)['format']['duration']))
+    metadata=make(story,profile);title=metadata['title'];caption=metadata['caption'];tags=metadata['tags']
+    Path('state/current_episode.json').write_text(json.dumps({**story,**metadata},ensure_ascii=False,indent=2));shutil.copy2(video,out/'final_video_full.mp4')
     mapping=destinations['buffer'];required=set(mapping)|({'youtube'} if destinations['direct_youtube'] else set());require_services(required)
     episode['status']='publishing';save(data)
     errors=[]

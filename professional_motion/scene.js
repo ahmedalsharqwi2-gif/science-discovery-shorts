@@ -1,3 +1,4 @@
+import {hauntedStage} from './haunted.js';
 import {channelStage} from './channels.js';
 import * as THREE from 'three';
 import {EffectComposer} from 'three/addons/postprocessing/EffectComposer.js';
@@ -163,7 +164,9 @@ const overlay=document.querySelector('#text'),ctx=overlay.getContext('2d');
 const endCanvas=document.createElement('canvas');endCanvas.width=W;endCanvas.height=H;const endCtx=endCanvas.getContext('2d');
 const channel=channelStage(scene);
 const storyResponse=await fetch('./delivery/story.json');if(!storyResponse.ok)throw Error('Missing authored daily story');
-let config=await storyResponse.json();const useOctopus=config.visual_family==='octopus';
+let config=await storyResponse.json();const useOctopus=config.visual_family==='octopus',useHaunted=config.visual_family==='haunted_interior';
+const haunted=useHaunted?hauntedStage(scene):null;
+if(useHaunted){scene.fog.density=.043;renderer.toneMappingExposure=1.22;scene.traverse(o=>{if(o.isDirectionalLight)o.intensity*=.30;if(o.isHemisphereLight)o.intensity*=.55;});ambient.intensity=1.0;}
 const backdrop={science:0x030c14,horror:0x030b10,history:0x100d09,news:0x090713}[config.profile];
 renderer.setClearColor(backdrop);scene.fog.color.setHex(backdrop);
 let timing=null;const response=await fetch('./delivery/timing.json');if(response.ok)timing=await response.json();
@@ -211,12 +214,40 @@ function drawText(t,index,local,p){
  const flash=1-clamp(local/.28);if(index>0&&flash>0){ctx.fillStyle=`rgba(103,228,208,${flash*.13})`;ctx.fillRect(W*(1-flash),230,10+flash*26,1330);}
 }
 
+function drawMeme(t,index){
+ const s=config.scenes[index],measured=timing?.scenes[index];
+ if(!s.punchline||measured?.meme_beat===undefined)return;
+ const age=t-measured.meme_beat,span=Math.min(2.6,Math.max(1.6,(measured.meme_end??measured.meme_beat+1)-measured.meme_beat+.55));
+ if(age<0||age>span)return;
+ const enter=1-Math.pow(1-clamp(age/.18),3),exit=clamp((span-age)/.18),gain=enter*exit;
+ ctx.save();ctx.globalAlpha=gain;ctx.translate(860,1205+(1-enter)*70);ctx.rotate(Math.sin(age*15)*.045*Math.exp(-age*4));ctx.scale(.8+.2*enter,.8+.2*enter);
+ const face=ctx.createRadialGradient(-25,-35,8,0,0,100);face.addColorStop(0,'#ffe392');face.addColorStop(1,'#ec9c3c');
+ ctx.shadowColor='rgba(0,0,0,.45)';ctx.shadowBlur=22;ctx.fillStyle=face;ctx.beginPath();ctx.arc(0,0,86,0,Math.PI*2);ctx.fill();ctx.shadowBlur=0;
+ ctx.strokeStyle='#241c21';ctx.fillStyle='#241c21';ctx.lineWidth=8;ctx.lineCap='round';
+ const reaction=s.reaction;
+ if(reaction==='suspicious'){
+  for(const side of [-1,1]){ctx.beginPath();ctx.moveTo(side*53,-37);ctx.lineTo(side*18,-26);ctx.stroke();ctx.beginPath();ctx.ellipse(side*33,-14,10,6,0,0,Math.PI*2);ctx.fill();}
+  ctx.beginPath();ctx.moveTo(-30,38);ctx.lineTo(30,30);ctx.stroke();
+ }else if(reaction==='smug'){
+  for(const side of [-1,1]){ctx.beginPath();ctx.moveTo(side*50,-17);ctx.lineTo(side*18,-17);ctx.stroke();}
+  ctx.beginPath();ctx.arc(0,9,40,.1,Math.PI-.1);ctx.stroke();
+ }else{
+  for(const side of [-1,1]){ctx.beginPath();ctx.ellipse(side*32,-22,reaction==='loading'?7:12,reaction==='loading'?7:17,0,0,Math.PI*2);ctx.fill();}
+  ctx.beginPath();ctx.ellipse(0,36,16,reaction==='loading'?14:22,0,0,Math.PI*2);ctx.fill();
+  if(reaction==='loading')for(let i=0;i<5;i++){ctx.fillStyle=`rgba(255,245,195,${.3+.7*(.5+.5*Math.sin(age*8+i))})`;ctx.beginPath();ctx.arc(-38+i*19,-112,5,0,Math.PI*2);ctx.fill();}
+ }
+ ctx.restore();
+ ctx.save();ctx.globalAlpha=gain;ctx.fillStyle='#efbd65';ctx.beginPath();ctx.roundRect(88,1355,904,126,24);ctx.fill();
+ let size=42;ctx.font=`${size}px Noto`;while(ctx.measureText(s.punchline).width>840&&size>28){size-=2;ctx.font=`${size}px Noto`;}
+ type(s.punchline,540,1431,size,'#181727','center');ctx.restore();
+}
+
 function drawChannelText(t,index,local,p){
  ctx.clearRect(0,0,W,H);
  let g=ctx.createLinearGradient(0,0,0,650);g.addColorStop(0,'rgba(2,12,19,.97)');g.addColorStop(.7,'rgba(2,12,19,.6)');g.addColorStop(1,'rgba(2,12,19,0)');ctx.fillStyle=g;ctx.fillRect(0,0,W,650);
  g=ctx.createLinearGradient(0,1480,0,H);g.addColorStop(0,'rgba(2,12,19,0)');g.addColorStop(.45,'rgba(2,12,19,.7)');g.addColorStop(1,'rgba(2,12,19,.98)');ctx.fillStyle=g;ctx.fillRect(0,1480,W,440);
  const colors={science:'#87e7d8',history:'#efbb80',horror:'#a6cec9',news:'#b7a1ff'},accent=colors[config.profile];
- const names={science:'SCIENCE / FIELD NOTES',history:'HISTORY / STRUCTURES',horror:'DOCUMENTED / MYSTERIES',news:'AI / OFFICIAL SOURCE'};
+ const names={science:'SCIENCE / FIELD NOTES',history:'HISTORY / STRUCTURES',horror:config.fiction?'HORROR / AFTER DARK':'DOCUMENTED / MYSTERIES',news:'AI / OFFICIAL SOURCE'};
  mono(names[config.profile],75,100,21);type(config.series,1005,90,27,WHITE,'right');line(75,142,1005,142,accent,.25);mono('0'+(index+1)+' / 08',75,202,21);
  const s=config.scenes[index],a=ease(local/.65),y=335+(1-a)*30;
  const words=s.label.split(' ');let size=76;ctx.font=`${size}px Noto`;while(ctx.measureText(s.label).width>930&&size>46){size-=2;ctx.font=`${size}px Noto`;}
@@ -226,9 +257,11 @@ function drawChannelText(t,index,local,p){
  if(config.visual_family==='maritime'&&index===3){const dates=(config.milestones||[]).slice(0,3);dates.forEach((v,i)=>type(v,205+i*335,1110,32,accent));}
  
  const labels=s.labels||[];labels.slice(0,2).forEach((v,i)=>{if(local>.7+i*.5){label(v,i?820:260,i?1350:700,28);line(i?770:310,i?1300:750,i?670:420,i?1200:850,accent,.45);}});
+ if(config.profile==='news')drawMeme(t,index);
  caption(t);
+ if(config.profile==='news'&&config.source.published)type('تاريخ الخبر: '+config.source.published.slice(0,10),540,1772,21,MUTED,'center');
  mono(config.source.publisher.slice(0,48),540,1810,17,MUTED,'center');ctx.fillStyle='#183337';ctx.fillRect(75,1848,930,3);ctx.fillStyle=accent;ctx.fillRect(75,1848,930*clamp(t/D),3);
- type('رسوم توضيحية، مش تصوير للأحداث',540,1890,21,MUTED);
+ type(config.profile==='news'?'الخبر من المصدر • القفشات تعليق ساخر':config.fiction?'ملفات غامضة • رعب':'رسوم توضيحية، مش تصوير للأحداث',540,1890,21,MUTED);
  const flash=1-clamp(local/.28);if(index>0&&flash>0){ctx.fillStyle=`rgba(103,228,208,${flash*.12})`;ctx.fillRect(W*(1-flash),230,10+flash*26,1330);}
 }
 
@@ -237,8 +270,8 @@ window.renderAt=(time,duration=D)=>{
  let index=times.findLastIndex(s=>s<=u);index=Math.max(0,index);
  const sceneStart=times[index]*D,sceneEnd=(times[index+1]??1)*D,local=t-sceneStart,p=clamp(local/(sceneEnd-sceneStart));
  uniforms.clock.value=t;uniforms.morph.value=index===6?(.5-.5*Math.cos(p*Math.PI*2)):0;
- poseOctopus(t);
- octopus.visible=useOctopus&&[0,1,6,7].includes(index);macro.visible=useOctopus&&[2,3].includes(index);neural.visible=useOctopus&&index===4;layers.visible=useOctopus&&index===5;reef.visible=useOctopus&&index===6;channel.root.visible=!useOctopus;if(!useOctopus)channel.update(config,index,local,p,t);
+ if(useOctopus)poseOctopus(t);
+ octopus.visible=useOctopus&&[0,1,6,7].includes(index);macro.visible=useOctopus&&[2,3].includes(index);neural.visible=useOctopus&&index===4;layers.visible=useOctopus&&index===5;reef.visible=useOctopus&&index===6;channel.root.visible=!useOctopus&&!useHaunted;if(!useOctopus&&!useHaunted)channel.update(config,index,local,p,t);
  octopus.scale.setScalar(index===0?.78+.14*ease(p*2):index===6?.85:index===7?.9:.91);
  octopus.position.set(index===0?Math.sin(t*.3)*.08:0,index===0?-.4+.25*ease(p*2):-.25,0);
  octopus.rotation.set(.08*Math.sin(t*.3),index===0?-.45+.5*ease(p):.12*Math.sin(t*.2),index===0?-.18*(1-ease(p)):.035*Math.sin(t*.3));
@@ -252,6 +285,8 @@ window.renderAt=(time,duration=D)=>{
  hub.scale.setScalar(1+.1*Math.sin(local*5));
  layers.rotation.y=.12+Math.sin(local*.25)*.11;layers.position.y=-.3;layers.scale.setScalar(1.03);
  photons.forEach((m,i)=>{const q=(local*.35+i*.13)%1,travel=q<.5?q*2:2-q*2;m.position.set(-1.5+(i%4)+Math.max(0,q-.5)*.8,1.7-travel*2.5,Math.sin(i)*.8);m.material.color.setHex(q<.5?0xe2f6ff:0x87d5ff);});
+ if(useHaunted){const beat=timing?.scenes[index]?.scare_beat;const view=haunted.update(config,index,local,p,t,beat===undefined?-1:t-beat);camera.position.set(...view.position);camera.lookAt(...view.target);}
+ dust.visible=!useHaunted;shafts.forEach(o=>o.visible=!useHaunted);
  dust.rotation.y=t*.012;dust.position.y=Math.sin(t*.11)*.5;shafts.forEach((m,i)=>m.material.uniforms.opacity.value=.025+.015*(.5+.5*Math.sin(t*.2+i)));
  composer.render();if(useOctopus)drawText(t,index,local,p);else drawChannelText(t,index,local,p);
  return {scene:index+1,time:t,duration:D,originalVoice:!!timing};

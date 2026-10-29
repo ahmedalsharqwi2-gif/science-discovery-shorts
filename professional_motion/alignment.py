@@ -41,6 +41,20 @@ def measured_timing(story, duration, transcripts):
         scenes.append({**s,'start':0 if i==0 else min(candidates)})
         cursor+=len(s['narration'].split())
     for i,s in enumerate(scenes):s['end']=scenes[i+1]['start'] if i+1<len(scenes) else duration
+    # Graphic reveals and jokes use measured speech anchors, never guessed beats.
+    offset=0
+    for scene in scenes:
+        words=scene['narration'].split();tokens=[norm(w) for w in words]
+        for key,prefix in [('punchline','meme'),('scare_phrase','scare')]:
+            phrase=scene.get(key,'').strip()
+            if not phrase:continue
+            target=[norm(w) for w in phrase.split()]
+            matches=[i for i in range(len(tokens)-len(target)+1) if tokens[i:i+len(target)]==target]
+            if not matches:raise ValueError('Reaction phrase does not occur in the spoken scene')
+            first=offset+matches[0];points=[anchors[k] for k in range(first,first+len(target)) if k in anchors]
+            if len(points)<2:raise ValueError('A reveal needs at least two exact measured speech anchors')
+            scene[prefix+'_beat']=min(w['start'] for w in points);scene[prefix+'_end']=max(w['end'] for w in points)
+        offset+=len(words)
     captions=[]
     for start in range(0,len(expected),6):
         stop=min(start+6,len(expected));matches=[anchors[k] for k in range(start,stop) if k in anchors]

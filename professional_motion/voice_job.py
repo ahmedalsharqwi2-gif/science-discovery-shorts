@@ -18,10 +18,12 @@ def main():
         if not source.exists() or json.loads(source.read_text()).get('text')!=full:
             raise ValueError('Cached review voice does not match the complete current script')
     else:
-        generate(full,str(wav),{'science':'Egyptian Arabic engaging science explanation. ','history':'Egyptian Arabic cinematic historical explanation, clear grounded delivery. ','horror':'Egyptian Arabic restrained tense factual maritime documentary, no invented screams or voices. ','news':'Egyptian Arabic energetic technology explanation, natural conversational pace. '}[story['profile']]+
+        generate(full,str(wav),{'science':'Egyptian Arabic engaging science explanation. ','history':'Egyptian Arabic cinematic historical explanation, clear grounded delivery. ','horror':'Egyptian Arabic frightening cinematic documentary. Low intimate voice, controlled uneasy pauses, escalating urgency with clear words. Never scream or impersonate eyewitnesses; no invented voices. ','news':'Egyptian Arabic energetic AI-news storyteller with witty dry meme punchlines. Clear facts, natural comedic timing, never a solemn news bulletin. '}[story['profile']]+
                  'Start with curiosity, build momentum, thoughtful final payoff. No music or sound effects. '
                  'Read only the supplied words. Finish the last sentence. Clear natural pace.')
     duration=float(subprocess.check_output(['ffprobe','-v','error','-show_entries','format=duration','-of','csv=p=0',str(wav)]))
+    from .policy import require_duration
+    require_duration(duration)
     from faster_whisper import WhisperModel
     transcripts=[];timing=None
     for name in ('medium','small','large-v3'):
@@ -33,6 +35,7 @@ def main():
         try:timing=measured_timing(story,duration,transcripts);break
         except ValueError:
             if name=='large-v3':raise
+    timing['story_sha256']=hashlib.sha256((root/'delivery/story.json').read_bytes()).hexdigest()
     timing['audio_sha256']=hashlib.sha256(wav.read_bytes()).hexdigest()
     (out/'timing.json').write_text(json.dumps(timing,ensure_ascii=False,indent=2))
     timing['profile']=story['profile'];timing['topic_key']=story['topic_key']
