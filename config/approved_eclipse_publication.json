@@ -1,0 +1,9 @@
+{
+  "approved": true,
+  "profile": "science",
+  "authorization": "User explicitly requested: انشر فيديو الكسوف وخلص باقى الفيديوهات عشان هننشرها",
+  "media_commit": "829f153d4f360119ab7c64ab75cc4f77538eef07",
+  "evidence_commit": "1d484ec912d57ed64689d5124b988beb8132df03",
+  "video_sha256": "db425c0246c457281a9c0ddccf37fab507917d015c1648630f922fcf92ab3e76",
+  "daily_publication_enabled_by_this_grant": false
+}
