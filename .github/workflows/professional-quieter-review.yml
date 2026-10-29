@@ -1,0 +1,59 @@
+{
+  "name": "Quieter review music — preserve original voice and video",
+  "on": {
+    "push": {
+      "branches": [
+        "codex/daily-professional-factory"
+      ],
+      "paths": [
+        ".github/workflows/professional-quieter-review.yml"
+      ]
+    }
+  },
+  "permissions": {
+    "contents": "write"
+  },
+  "jobs": {
+    "remix": {
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 20,
+      "env": {
+        "PYTHONPATH": "${{ github.workspace }}",
+        "GITHUB_TOKEN": "${{ github.token }}"
+      },
+      "steps": [
+        {
+          "uses": "actions/checkout@v4",
+          "with": {
+            "fetch-depth": 0
+          }
+        },
+        {
+          "uses": "actions/setup-python@v5",
+          "with": {
+            "python-version": "3.11"
+          }
+        },
+        {
+          "run": "sudo apt-get update -qq\nsudo apt-get install -y ffmpeg\npython -m pip install numpy Pillow requests beautifulsoup4"
+        },
+        {
+          "name": "Lower music by 4 dB without changing a video frame or regenerating speech",
+          "run": "python -m professional_motion.review_remix"
+        },
+        {
+          "uses": "actions/upload-artifact@v4",
+          "with": {
+            "name": "science-professional-${{ github.run_id }}",
+            "path": "professional_motion/output/verification.json\nprofessional_motion/output/professional-review.mp4",
+            "retention-days": 30
+          }
+        },
+        {
+          "name": "Deliver real quieter review downloads",
+          "run": "python -m professional_motion.deliver_media"
+        }
+      ]
+    }
+  }
+}
