@@ -1,0 +1,42 @@
+{
+  "name": "Safe fixed-category failure diagnosis",
+  "on": {
+    "push": {
+      "branches": [
+        "codex/daily-professional-factory"
+      ],
+      "paths": [
+        ".github/workflows/professional-safe-failure-report.yml"
+      ]
+    }
+  },
+  "permissions": {
+    "contents": "write",
+    "actions": "read"
+  },
+  "jobs": {
+    "diagnose": {
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 5,
+      "env": {
+        "GITHUB_TOKEN": "${{ github.token }}",
+        "INSPECT_RUN": "40878052559"
+      },
+      "steps": [
+        {
+          "uses": "actions/checkout@v4"
+        },
+        {
+          "run": "python professional_motion/safe_run_diagnostic.py"
+        },
+        {
+          "name": "Save safe categories only",
+          "run": "python -m professional_motion.review_evidence",
+          "env": {
+            "REVIEW_STAGE": "failure-categories"
+          }
+        }
+      ]
+    }
+  }
+}
