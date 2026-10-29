@@ -46,7 +46,7 @@ export function hauntedStage(parent){
  lamp(mirror,0x819e93,32,-1.1,1.8,1.5,6);
  const stairs=group('stairs');box(stairs,4.3,12,.12,plaster,0,-3,-2.7);box(stairs,.15,12,5,plaster,-2.1,-3,0);box(stairs,.15,12,5,plaster,2.1,-3,0);
  for(let i=0;i<30;i++){const a=i*Math.PI/8,x=Math.cos(a)*1.25,z=Math.sin(a)*1.25,y=1.8-i*.3;const step=box(stairs,1.1,.11,.7,wood,x,y,z);step.rotation.y=-a;const rail=box(stairs,.025,.85,.025,metal,x*1.4,y+.42,z*1.4);}
- lamp(stairs,0x8f9c77,45,0,3,2,13);lamp(stairs,0x511c16,5,0,-5,0,8);
+ lamp(stairs,0x8f9c77,70,0,3,2,13);lamp(stairs,0x8b8263,20,1,0,1,10);lamp(stairs,0x511c16,5,0,-5,0,8);
  const lift=group('lift');box(lift,3,.1,3.4,metal,0,-1.6,-.8);box(lift,3,.1,3.4,metal,0,1.85,-.8);box(lift,.12,3.4,3.4,metal,-1.5,.1,-.8);box(lift,.12,3.4,3.4,metal,1.5,.1,-.8);box(lift,3,3.4,.12,black,0,.1,-2.5);
  const doors=[box(lift,1.32,3.15,.08,metal,-.66,0,-1.95),box(lift,1.32,3.15,.08,metal,.66,0,-1.94)];
  for(let i=0;i<2;i++){box(doors[i],.025,3.1,.018,black,i?-.64:.64,0,.052);for(let j=0;j<7;j++)box(doors[i],.006,2.95,.012,wood,-.5+j*.16,0,.05);}

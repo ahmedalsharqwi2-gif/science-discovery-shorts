@@ -96,7 +96,9 @@ def candidates(profile):
     if profile=='news':
         from news.editor import candidates as fresh
         from .news_policy import choose
-        return [dict(r,key=hashlib.sha256(canonical(r['url']).encode()).hexdigest()[:16],family='compute',variant='chip') for r in choose(fresh(),ask)]
+        raw=fresh();(ROOT/'delivery').mkdir(exist_ok=True)
+        (ROOT/'delivery/news-source-dates.json').write_text(json.dumps([{k:r.get(k) for k in ['title','url','publisher','published']} for r in raw],ensure_ascii=False,indent=2))
+        return [dict(r,key=hashlib.sha256(canonical(r['url']).encode()).hexdigest()[:16],family='compute',variant='chip') for r in choose(raw,ask)]
     rows=json.loads((ROOT/'catalog.json').read_text())[profile]
     # Feeds replenish supported subject families. The editor must reject topics
     # that cannot be explained by the concrete geometry in this family.
@@ -182,8 +184,13 @@ def prepare(profile,slot):
     previous=[{'title':r.get('title',''),'subject':r.get('canonical_subject',r.get('topic_key','')),'plot_signature':r.get('plot_signature','')} for r in old][-600:]
     # The approved octopus film is already produced, and cannot be a daily repeat.
     if profile=='science':seen_keys.add('octopus-colour-change')
-    errors=[]
-    for row in candidates(profile):
+    errors=[];problem_rows=[]
+    def problem(row,error):
+        problem_rows.append({'topic_key':row.get('key'),'error_class':type(error).__name__,'validation':str(error)[:260] if isinstance(error,(ValueError,KeyError)) else 'Source request failed'})
+        (delivery/'planning-errors.json').write_text(json.dumps(problem_rows,ensure_ascii=False,indent=2))
+    candidate_rows=candidates(profile)
+    (delivery/'candidate-status.json').write_text(json.dumps([{**{k:r.get(k) for k in ['key','title','url','family','variant','published']},'already_reserved':r['key'] in seen_keys or bool(r.get('url') and canonical(r['url']) in seen_urls)} for r in candidate_rows],ensure_ascii=False,indent=2))
+    for row in candidate_rows:
         if row.get('kind')=='original_fiction':
             if row['key'] in seen_keys:continue
             try:
@@ -193,7 +200,7 @@ def prepare(profile,slot):
                 data['episodes'].append({'slot':slot,'topic_key':row['key'],'canonical_subject':story['canonical_subject'],'title':story['title'],'plot_signature':story['plot_signature'],'fiction':True,'status':'reserved','story':story,'reserved_at':datetime.now(timezone.utc).isoformat()})
                 save(data);(delivery/'story.json').write_text(json.dumps(story,ensure_ascii=False,indent=2));return story
             except (ValueError,KeyError) as error:
-                errors.append(type(error).__name__)
+                errors.append(type(error).__name__);problem(row,error)
                 if len(errors)>=4:break
                 continue
         if row['key'] in seen_keys or canonical(row['url']) in {u.rstrip('/') for u in seen_urls}:continue
@@ -218,6 +225,7 @@ def prepare(profile,slot):
                 from .news_policy import schema as news_schema,PROMPT as NEWS_PROMPT
                 schema=news_schema(SCHEMA);prompt=NEWS_PROMPT+prompt
             draft=ask(prompt,schema)
+            (delivery/'last-draft.json').write_text(json.dumps(draft,ensure_ascii=False,indent=2))
             try:
                 story=validate(draft,profile,row);attach_evidence(story,text)
             except ValueError as error:
@@ -231,7 +239,8 @@ def prepare(profile,slot):
             story['editorial_review']=review
             record={'slot':slot,'topic_key':row['key'],'canonical_subject':story['canonical_subject'],'title':story['title'],'url':row['url'],'status':'reserved','story':story,'reserved_at':datetime.now(timezone.utc).isoformat()}
             data['episodes'].append(record);save(data);(delivery/'story.json').write_text(json.dumps(story,ensure_ascii=False,indent=2));return story
-        except (ValueError,requests.RequestException,KeyError) as e:errors.append(type(e).__name__)
+        except (ValueError,requests.RequestException,KeyError) as e:
+            errors.append(type(e).__name__);problem(row,e)
         if len(errors)>=4:break
     raise RuntimeError('No unused, evidence-backed topic fits the supported scene families; refusing a repeated or invented video')
 

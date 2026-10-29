@@ -1,5 +1,5 @@
 """Original horror plots, durable plot deduplication, internal genre provenance."""
-import copy,hashlib,itertools,json,random
+import copy,hashlib,itertools,json,random,re
 from datetime import datetime
 from zoneinfo import ZoneInfo
 SETTINGS={'apartment':'شقة قديمة في عمارة ساكتة','hallway':'ممر طويل في دور مقفول','stairwell':'سلم عمارة بيكرر نفس الدور','elevator':'أسانسير واقف بين أدوار فاضية'}
@@ -15,6 +15,9 @@ def candidates(now=None):
 
 def validate_scares(story):
     beats=[]
+    spoken=' '.join(x['narration'] for x in story['scenes'])
+    if len(re.findall(r'مرعب|مخيف|مذعور|جنوني|مفزع',spoken))>4:raise ValueError('Show concrete frightening events instead of repeating generic fear adjectives')
+    if any(x in spoken for x in ['الظهر المفرود','قاعدة الأمان طلعت','الجدران الشبيهة']):raise ValueError('Rewrite unnatural or planning-language phrases as believable spoken Egyptian action')
     for scene in story['scenes']:
         phrase=scene.get('scare_phrase','').strip()
         if not phrase:continue
@@ -31,7 +34,7 @@ def write(row,previous,ask,base_schema,validate):
     scene['properties']['scare_phrase']={'type':'STRING'};scene['required'].append('scare_phrase')
     schema['properties']['plot_signature']={'type':'STRING'};schema['required'].append('plot_signature')
     prompt=('Write an ORIGINAL deeply unsettling Egyptian Arabic horror story for adult entertainment, an immersive first-person narrative with a strong twist. Eight scenes, each 36–40 words; total 280–330 spoken words, naturally about two minutes. '
-            'Use the supplied setting and mechanism, but invent an original coherent plot. Never copy a known movie, creepypasta, character or previous plot. Quiet isolation, tangible sensory details, mounting contradictions, a false moment of safety and a disturbing callback to an early detail. '
+            'Use the supplied setting and mechanism, but invent an original coherent plot. Never copy a known movie, creepypasta, character or previous plot. Quiet isolation, tangible sensory details, mounting contradictions, a false moment of safety and a disturbing callback to an early detail. Every sentence advances a concrete event, observation or decision. Use simple everyday Egyptian words, not ornate literary language. Show fear through specific actions and sounds, never padding with مرعب ومخيف ومذعور وجنوني. Use at most four such adjectives across the whole film. Do not repeat seed/planning phrases like قاعدة الأمان طلعت فخ inside the narration. Avoid nonsense descriptions of body parts or walls. Available major props are a door, its handle, intercom, mirror, clock, stairs, elevator and shadow figure; keep key visual events representable with them. '
             'Do not explain the horror like a lecture. No greetings, subscribe appeals, repetitive adjectives, fake documentary claims or real-person allegations. No intrusive announcement about genre in the narration or headings. Dialogue may be short quoted lines within the single narrator performance. '
             'Use natural Egyptian ده ودي ومش واللي وإزاي. Public title and headings are short, Arabic and specific to this plot. hashtags: three to five relevant tags, at least two about the specific setting or central objects. facts=[] and milestones=[]. suitable=true only if these scenes fit authored indoor geometry. '
             'visual_mode for each scene is one of hall,door,phone,mirror,stairs,lift,clock,reveal. Use several different views tied to the spoken event. At least three scenes have a distinct scare_phrase: 4–8 consecutive words copied VERBATIM from a spoken reveal so picture and sound can be synchronized; other scenes use an empty scare_phrase. '
@@ -44,6 +47,6 @@ def write(row,previous,ask,base_schema,validate):
             if attempt:raise
             story=ask(prompt+'\nRepair this SAME draft, preserving the plot, to fix: '+str(error)+'\nDRAFT: '+json.dumps(story,ensure_ascii=False),schema)
     review_schema={'type':'OBJECT','properties':{'supported':{'type':'BOOLEAN'},'novel':{'type':'BOOLEAN'},'issues':{'type':'ARRAY','items':{'type':'STRING'}}},'required':['supported','novel','issues']}
-    review=ask('Review this ORIGINAL fictional horror narrative for internal coherence, escalating fear, a meaningful ending and novelty against every previous plot signature. supported=true means it is coherent and does not falsely assert external documentary evidence, not that events really happened. novel=false for the same underlying mechanism AND reveal/plot as a previous story, even with renamed characters. Do not demand source excerpts for invented story events. DATA:\n'+json.dumps({'story':story,'previous':previous},ensure_ascii=False),review_schema)
+    review=ask('Review this ORIGINAL horror narrative strictly for believable natural Egyptian speech, internal coherence, concrete escalating events, a meaningful callback ending and novelty against previous plot signatures. Reject awkward meaningless lines, adjective padding, repetitive panic, reciting story-planning language instead of events, and visual events unsupported by the supplied set inventory. A narrator repeatedly saying they are afraid is not enough. supported=true means it is coherent and does not falsely assert external documentary evidence, not that events really happened. novel=false for the same underlying mechanism AND reveal/plot as a previous story, even with renamed characters. Do not demand source excerpts for invented story events. DATA:\n'+json.dumps({'story':story,'previous':previous},ensure_ascii=False),review_schema)
     if review.get('supported') is not True or review.get('novel') is not True or review.get('issues'):raise ValueError('Original horror story failed narrative or originality review')
     story['editorial_review']={**review,'review_type':'original_narrative_and_plot_novelty'};return story
