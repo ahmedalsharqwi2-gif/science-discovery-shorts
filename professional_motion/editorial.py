@@ -215,7 +215,7 @@ def write_sourced(row,profile,previous):
         schema=news_schema(SCHEMA);prompt=NEWS_PROMPT+prompt
     draft=ask(prompt,schema)
     count=sum(len(x.get('narration','').split()) for x in draft.get('scenes',[]))
-    if draft.get('suitable') is True and (count<220 or count>360):
+    if draft.get('suitable') is True and (count<300 or count>350):
         direction='Expand with additional concrete source-backed detail and full connected Egyptian sentences' if count<220 else 'Condense repetitions while retaining the essential source-backed sequence'
         draft=ask(prompt+'\nEDITORIAL REVISION: '+direction+'. The current draft has '+str(count)+' spoken words; aim for about 320 natural spoken words in total. This is a content edit to support the requested 90–180 second original narration, never add silent padding or generic filler. Each paragraph should explain its specific factual point clearly, not tour unrelated buildings on the same page. Preserve the exact focal structure from visual_contract. DRAFT: '+json.dumps(draft,ensure_ascii=False),schema)
     (delivery/'last-draft.json').write_text(json.dumps(draft,ensure_ascii=False,indent=2))

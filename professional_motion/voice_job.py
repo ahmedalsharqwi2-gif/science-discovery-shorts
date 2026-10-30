@@ -1,5 +1,5 @@
 """Generate/reuse approved original voice and measure scene/phrase timing in Actions."""
-import hashlib
+import hashlib,os
 import json
 import subprocess
 from pathlib import Path
@@ -26,6 +26,7 @@ def main():
     duration=float(subprocess.check_output(['ffprobe','-v','error','-show_entries','format=duration','-of','csv=p=0',str(wav)]))
     from .policy import require_duration
     require_duration(duration)
+    if os.getenv('FACTORY_DAILY')=='true' and duration<120:raise ValueError('Daily narration must reach two minutes through substantive writing, never padding')
     from faster_whisper import WhisperModel
     transcripts=[];timing=None
     for name in ('medium','small','large-v3'):

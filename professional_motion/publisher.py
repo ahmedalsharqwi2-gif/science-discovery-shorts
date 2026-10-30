@@ -115,6 +115,7 @@ def publish(profile,slot,due):
     from film_factory.delivery import probe
     media=probe(video)
     require_duration(float(media['format']['duration']))
+    if float(media['format']['duration'])<120:raise ValueError('Daily film is shorter than the required two-minute target; revise the same reserved story')
     if not any(s.get('codec_type')=='video' and (s.get('width'),s.get('height'))==(1080,1920) for s in media.get('streams',[])) or not any(s.get('codec_type')=='audio' for s in media.get('streams',[])):raise ValueError('A real 1080x1920 video with narration audio is required')
     metadata=make(story,profile);title=metadata['title'];caption=metadata['caption'];tags=metadata['tags']
     Path('state/current_episode.json').write_text(json.dumps({**story,**metadata},ensure_ascii=False,indent=2));shutil.copy2(video,out/'final_video_full.mp4')

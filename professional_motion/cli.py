@@ -11,6 +11,7 @@ from scripts.daily_schedule import next_slot
 def decision(profile,mode,event,now=None):
     now=now or datetime.now(timezone.utc);local=now.astimezone(ZoneInfo('Africa/Cairo'))
     daily=mode=='daily' or event=='schedule'
+    if daily and os.getenv('GITHUB_ACTIONS')=='true' and os.getenv('GITHUB_REF_NAME')!='main':raise PermissionError('Daily production uses main durable state only')
     enabled=approved()
     from .schedule_window import daily_window
     from .editorial import registry

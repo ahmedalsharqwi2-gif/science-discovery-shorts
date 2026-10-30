@@ -59,7 +59,8 @@
         "BUFFER_FACEBOOK_CHANNEL_ID": "${{ secrets.BUFFER_FACEBOOK_CHANNEL_ID }}",
         "BUFFER_INSTAGRAM_CHANNEL_ID": "${{ secrets.BUFFER_INSTAGRAM_CHANNEL_ID }}",
         "BUFFER_TIKTOK_CHANNEL_ID": "${{ secrets.BUFFER_TIKTOK_CHANNEL_ID }}",
-        "HORROR_REVIEW_GENRE": "${{ inputs.horror_genre || '' }}"
+        "HORROR_REVIEW_GENRE": "${{ inputs.horror_genre || '' }}",
+        "FACTORY_DAILY": "${{ inputs.mode == 'daily' || github.event_name == 'schedule' }}"
       },
       "outputs": {
         "run": "${{ steps.decision.outputs.run }}",
