@@ -20,7 +20,11 @@ def main():
  for phrase in ['permeable shield','Magnetospheric Multiscale','power grids','four MMS spacecraft']:
   if phrase.casefold() not in text.casefold():raise ValueError('NASA source no longer supports the reviewed expansion')
  labels=['فقاعة بتحمي الأرض','الرياح الشمسية','ليه المريخ مختلف؟','تأثير على التكنولوجيا','درع مش مقفول','إعادة الاتصال','أربع مركبات بتقيس','فهم أفضل للطقس الفضائي']
- for i,scene in enumerate(story['scenes']):scene.update(narration=NARRATIONS[i],label=labels[i],evidence_excerpt_id=[0,1,4,8,10,12,16,20][i])
+ excerpts=e.excerpts(text)
+ terms=['magnetosphere','deflects','Mars','communications','permeable','reconfigure','spacecraft','forecasting']
+ for i,scene in enumerate(story['scenes']):
+  index=next(j for j,excerpt in enumerate(excerpts) if terms[i].casefold() in excerpt.casefold())
+  scene.update(narration=NARRATIONS[i],label=labels[i],evidence_excerpt_id=index)
  e.attach_evidence(story,text)
  story['editorial_review']={'supported':True,'novel':True,'issues':[],'review_type':'Codex source review of the same reserved NASA magnetosphere episode','checks':['Eight paragraphs checked against NASA article; no invented measurements','Distinguish atmosphere/UV shielding from magnetic deflection of charged particles','Mars atmospheric-loss explanation is attributed as a hypothesis','No claim of guaranteed forecasting or an impermeable shield'],'source_body_sha256':hashlib.sha256(text.encode()).hexdigest()}
  episode.update(story=story,title=story['title'],status='reserved',revision_reason='Original measured narration was 106.6 seconds; expanded substantive NASA explanation, no padding')
