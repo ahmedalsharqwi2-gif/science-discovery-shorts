@@ -286,7 +286,7 @@
       "canonical_subject": "earth-magnetosphere",
       "title": "درع الأرض المغناطيسي",
       "url": "https://science.nasa.gov/earth/earths-magnetosphere/",
-      "status": "reserved",
+      "status": "rendered",
       "story": {
         "title": "درع الأرض المغناطيسي",
         "canonical_subject": "earth-magnetosphere",
@@ -429,7 +429,8 @@
         "writer_model": "gemini-3.5-flash-lite"
       },
       "reserved_at": "2026-10-30T12:13:39.646414+00:00",
-      "revision_reason": "Original measured narration was 106.6 seconds; expanded substantive NASA explanation, no padding"
+      "revision_reason": "Original measured narration was 106.6 seconds; expanded substantive NASA explanation, no padding",
+      "video_sha256": "9ab745fc7ee29ae136ad9eead22f41d5ba87020bdc4af366797e323ff318cfc9"
     }
   ]
 }
