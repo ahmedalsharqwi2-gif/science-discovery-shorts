@@ -14,7 +14,7 @@ def next_slot(now=None):
     return due.astimezone(timezone.utc)
 
 def validate_slot(value,now=None):
-    due=datetime.fromisoformat(value.replace('Z','+00:00'))
+    due=datetime.fromisoformat(value.replace('t','T').replace('z','Z').replace('Z','+00:00'))
     if due.tzinfo is None:raise ValueError('Publication time requires a timezone')
     local=due.astimezone(CAIRO)
     if (local.hour,local.minute,local.second)!=(17,0,0):raise ValueError('Publication must be exactly 17:00 Cairo')

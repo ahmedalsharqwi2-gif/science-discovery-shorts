@@ -96,6 +96,8 @@ def preflight(profile,strict=False):
 
 
 def publish(profile,slot,due):
+    # Accept already-running jobs whose older output formatter lowercased ISO8601.
+    due=due.replace('t','T').replace('z','Z')
     if not approved():raise PermissionError('Publication awaits the user’s review of this channel sample')
     validate_slot(due)
     data=registry();episode=next(r for r in data['episodes'] if r['slot']==slot)

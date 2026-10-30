@@ -52,6 +52,16 @@ class FactoryReliabilityTests(unittest.TestCase):
     with self.assertRaises(ValueError):verify_scheduled(receipts,mapping,due)
   with patch('professional_motion.receipt_verification.query',side_effect=RuntimeError('credentials expired')):
    with self.assertRaisesRegex(RuntimeError,'expired'):verify_scheduled(receipts,mapping,due)
+ def test_iso_due_survives_workflow_output_and_legacy_lowercase_is_accepted(self):
+  from scripts.daily_schedule import validate_slot
+  from professional_motion import cli
+  import sys
+  with tempfile.TemporaryDirectory() as td:
+   out=Path(td)/'outputs'
+   result={'run':True,'publish':True,'reason':'eligible','due':'2026-12-01T15:00:00Z'}
+   with patch.object(sys,'argv',['cli','decision','science','--mode','daily']),patch.object(cli,'decision',return_value=result),patch.dict(os.environ,{'GITHUB_OUTPUT':str(out)},clear=False):cli.main()
+   self.assertIn('due=2026-12-01T15:00:00Z',out.read_text());self.assertIn('run=true',out.read_text())
+  self.assertEqual(validate_slot('2026-12-01t15:00:00z',datetime(2026,12,1,10,tzinfo=timezone.utc)).hour,15)
  def test_submission_without_receipt_blocks_ambiguous_retry(self):
   from scripts import publication_state as state
   with tempfile.TemporaryDirectory() as td,patch.object(state,'ROOT',Path(td)),patch.dict(os.environ,{'PUBLICATION_RECEIPTS_ENABLED':'true','PUBLISH_IMMEDIATE':'true','PRODUCTION_MEDIA_ID':'same-slot','GITHUB_ACTIONS':'false'}):

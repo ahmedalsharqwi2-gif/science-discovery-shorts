@@ -30,7 +30,7 @@ def main():
         d=decision(a.profile,a.mode,os.getenv('GITHUB_EVENT_NAME','workflow_dispatch'))
         if os.getenv('GITHUB_OUTPUT'):
             with open(os.environ['GITHUB_OUTPUT'],'a') as f:
-                for k,v in d.items():f.write(k+'='+str(v).lower()+'\n')
+                for k,v in d.items():f.write(k+'='+(str(v).lower() if isinstance(v,bool) else str(v))+'\n')
         print(json.dumps(d))
         if d['reason']=='window_closed' and (a.mode=='daily' or os.getenv('GITHUB_EVENT_NAME')=='schedule'):
             raise RuntimeError('Production window closed; no immediate posting or next-day rollover')
