@@ -1,5 +1,5 @@
 {
-  "name": "Expand the same short science episode and produce the full daily film",
+  "name": "Complete same science episode with source-reviewed full-length narration",
   "on": {
     "push": {
       "branches": [
