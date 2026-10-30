@@ -1,3 +1,4 @@
+import {loadBranding,drawBranding} from './branding.js';
 import {drawCaption} from './caption_layout.js';
 import {hauntedStage} from './haunted.js';
 import {channelStage} from './channels.js';
@@ -165,7 +166,7 @@ const overlay=document.querySelector('#text'),ctx=overlay.getContext('2d');
 const endCanvas=document.createElement('canvas');endCanvas.width=W;endCanvas.height=H;const endCtx=endCanvas.getContext('2d');
 const channel=channelStage(scene);
 const storyResponse=await fetch('./delivery/story.json');if(!storyResponse.ok)throw Error('Missing authored daily story');
-let config=await storyResponse.json();const useOctopus=config.visual_family==='octopus',useHaunted=config.visual_family==='haunted_interior';
+let config=await storyResponse.json();const brandMark=await loadBranding(config.profile);const headerLeft=brandMark?235:75,headerRuleY=brandMark?208:142,headerIndexY=brandMark?255:202;window.brandingStatus={profile:config.profile,logoApplied:!!brandMark};const useOctopus=config.visual_family==='octopus',useHaunted=config.visual_family==='haunted_interior';
 const haunted=useHaunted?hauntedStage(scene):null;
 if(useHaunted){scene.fog.density=.043;renderer.toneMappingExposure=1.22;scene.traverse(o=>{if(o.isDirectionalLight)o.intensity*=.30;if(o.isHemisphereLight)o.intensity*=.55;});ambient.intensity=1.0;}
 const backdrop={science:0x030c14,horror:0x030b10,history:0x100d09,news:0x090713}[config.profile];
@@ -194,8 +195,8 @@ function drawText(t,index,local,p){
  ctx.clearRect(0,0,W,H);
  let g=ctx.createLinearGradient(0,0,0,620);g.addColorStop(0,'rgba(2,12,19,.96)');g.addColorStop(.75,'rgba(2,12,19,.45)');g.addColorStop(1,'rgba(2,12,19,0)');ctx.fillStyle=g;ctx.fillRect(0,0,W,620);
  g=ctx.createLinearGradient(0,1470,0,H);g.addColorStop(0,'rgba(2,12,19,0)');g.addColorStop(.5,'rgba(2,12,19,.76)');g.addColorStop(1,'rgba(2,12,19,.98)');ctx.fillStyle=g;ctx.fillRect(0,1470,W,450);
- mono('OCEAN / FIELD NOTES',75,100,22);type('أسرار الكون',1005,90,27,WHITE,'right');
- line(75,142,1005,142,ACCENT,.18);mono('0'+(index+1)+' / 08',75,202,21);mono('CEPHALOPODA',1005,202,20,MUTED,'right');
+ mono('OCEAN / FIELD NOTES',headerLeft,100,22);type('أسرار الكون',1005,90,27,WHITE,'right');
+ line(75,headerRuleY,1005,headerRuleY,ACCENT,.18);mono('0'+(index+1)+' / 08',75,headerIndexY,21);mono('CEPHALOPODA',1005,headerIndexY,20,MUTED,'right');
  const a=ease(local/.7),yy=(1-a)*35;
  if(index===0){if(p<.64){type('ده مش',W/2,315+yy,101,WHITE,'center',a);type('مجرد لون.',W/2,445+yy,116,ORANGE,'center',a);}else{type('في لحظة.',W/2,325,104,WHITE);type('بس إزاي؟',W/2,455,100,ORANGE);}mono('A LIVING DISPLAY',W/2,555,24,ACCENT,'center');}
  if(index===1){type('السر تحت السطح',W/2,345+yy,81,WHITE,'center',a);type('خلايا صغيرة. تأثير مذهل.',W/2,455+yy,36,ACCENT,'center',a);const point=mantle.localToWorld(new THREE.Vector3(.35,.1,.8)).project(camera);const px=(point.x+1)*W/2,py=(1-point.y)*H/2;ring(px,py,105,t);line(px+90,py-50,850,750);label('كروماتوفورات',800,700);}
@@ -248,7 +249,7 @@ function drawChannelText(t,index,local,p){
  g=ctx.createLinearGradient(0,1480,0,H);g.addColorStop(0,'rgba(2,12,19,0)');g.addColorStop(.45,'rgba(2,12,19,.7)');g.addColorStop(1,'rgba(2,12,19,.98)');ctx.fillStyle=g;ctx.fillRect(0,1480,W,440);
  const colors={science:'#87e7d8',history:'#efbb80',horror:'#a6cec9',news:'#b7a1ff'},accent=colors[config.profile];
  const names={science:'SCIENCE / FIELD NOTES',history:'HISTORY / STRUCTURES',horror:config.fiction?'HORROR / AFTER DARK':'DOCUMENTED / MYSTERIES',news:'AI / OFFICIAL SOURCE'};
- mono(names[config.profile],75,100,21);type(config.series,1005,90,27,WHITE,'right');line(75,142,1005,142,accent,.25);mono('0'+(index+1)+' / 08',75,202,21);
+ mono(names[config.profile],headerLeft,100,21);type(config.series,1005,90,27,WHITE,'right');line(75,headerRuleY,1005,headerRuleY,accent,.25);mono('0'+(index+1)+' / 08',75,headerIndexY,21);
  const s=config.scenes[index],a=ease(local/.65),y=335+(1-a)*30;
  const words=s.label.split(' ');let size=76;ctx.font=`${size}px Noto`;while(ctx.measureText(s.label).width>930&&size>46){size-=2;ctx.font=`${size}px Noto`;}
  type(s.label,540,y,size,index===0||index===7?accent:WHITE,'center',a);
@@ -288,7 +289,7 @@ window.renderAt=(time,duration=D)=>{
  if(useHaunted){const beat=timing?.scenes[index]?.scare_beat;const view=haunted.update(config,index,local,p,t,beat===undefined?-1:t-beat);camera.position.set(...view.position);camera.lookAt(...view.target);}
  dust.visible=!useHaunted;shafts.forEach(o=>o.visible=!useHaunted);
  dust.rotation.y=t*.012;dust.position.y=Math.sin(t*.11)*.5;shafts.forEach((m,i)=>m.material.uniforms.opacity.value=.025+.015*(.5+.5*Math.sin(t*.2+i)));
- composer.render();if(useOctopus)drawText(t,index,local,p);else drawChannelText(t,index,local,p);
+ composer.render();if(useOctopus)drawText(t,index,local,p);else drawChannelText(t,index,local,p);drawBranding(ctx,brandMark);
  return {scene:index+1,time:t,duration:D,originalVoice:!!timing};
 };
 window.captureFrame=()=>{endCtx.drawImage(renderer.domElement,0,0);endCtx.drawImage(overlay,0,0);return endCanvas.toDataURL('image/jpeg',.96).split(',')[1];};

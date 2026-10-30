@@ -1,0 +1,9 @@
+{
+  "profile": "science",
+  "enabled": true,
+  "required": false,
+  "image": "./assets/brand/logo.png",
+  "placement": "top-left; 72,42 with 140px square in 1080x1920 output",
+  "original_logo_installed": false,
+  "source": "Awaiting the original PNG/JPG file for the logo shown inline by the user; no substitute logo is generated"
+}

@@ -9,7 +9,7 @@ import {existsSync} from 'node:fs';
 import {once} from 'node:events';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const output=path.join(root,'professional_motion/output');await mkdir(output,{recursive:true});
-const mime={'.html':'text/html','.js':'text/javascript','.mjs':'text/javascript','.json':'application/json','.ttf':'font/ttf'};
+const mime={'.html':'text/html','.js':'text/javascript','.mjs':'text/javascript','.json':'application/json','.ttf':'font/ttf','.png':'image/png','.jpg':'image/jpeg','.jpeg':'image/jpeg','.webp':'image/webp'};
 const server=createServer(async(req,res)=>{
  try{const p=path.resolve(root,'.'+decodeURIComponent(req.url.split('?')[0]));if(!p.startsWith(root+path.sep))throw Error('path');const b=await readFile(p);res.writeHead(200,{'Content-Type':mime[path.extname(p)]||'application/octet-stream','Cache-Control':'no-store'});res.end(b);}catch{res.writeHead(404);res.end('Not found');}
 });server.listen(0,'127.0.0.1');await once(server,'listening');
@@ -52,5 +52,5 @@ try{
   }
   ff.stdin.end();const [code]=await completed;if(code!==0)throw Error('FFmpeg failed');
  }
- await writeFile(path.join(output,partial?outputName+'.json':'render.json'),JSON.stringify({duration,from,to,start_frame:startFrame,end_frame:endFrame,total_frames:totalFrames,fps,width:1080,height:1920,originalVoice:!!timing,story_sha256:storyHash,errors},null,2));
+ await writeFile(path.join(output,partial?outputName+'.json':'render.json'),JSON.stringify({duration,from,to,start_frame:startFrame,end_frame:endFrame,total_frames:totalFrames,fps,width:1080,height:1920,originalVoice:!!timing,story_sha256:storyHash,branding:await page.evaluate(()=>window.brandingStatus),errors},null,2));
 }finally{await browser.close();server.close();}
