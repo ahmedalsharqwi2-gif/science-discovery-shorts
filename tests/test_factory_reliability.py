@@ -70,7 +70,7 @@ class FactoryReliabilityTests(unittest.TestCase):
   mapping={'youtube':'yt','facebook':'fb','instagram':'ig'};receipts={k:{'id':k} for k in mapping};due='2026-12-01T15:00:00Z'
   def response(query):
    service=next(k for k in mapping if '"'+k+'"' in query)
-   return {'post':{'id':service,'status':'scheduled','dueAt':due}}
+   return {'post':{'id':service,'channelId':mapping[service],'status':'scheduled','dueAt':due}}
   with patch('professional_motion.receipt_verification.query',side_effect=response):
    verified=verify_scheduled(receipts,mapping,due);self.assertEqual(verified['instagram']['channel_id'],'ig')
   for status,time in [('failed',due),('scheduled','2026-12-01T15:01:00Z')]:
