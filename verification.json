@@ -1,0 +1,186 @@
+{
+  "file": "professional-review.mp4",
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "duration": 162.36,
+  "story_sha256": "1d00de78e345e7fa9f6701fbde122dc2b89db371f5b50b5e564b8b295b75f80d",
+  "voice": "original Gemini Charon",
+  "asr_model": "medium",
+  "independent_asr_word_coverage": 0.9036144578313253,
+  "exact_token_coverage": 0.9036144578313253,
+  "speech_matching_method": "Exact-token ensemble anchors; supplied-script phrase captions; no active-word precision claim",
+  "known_name_normalization_applied": false,
+  "visual_gate": {
+    "passed": true,
+    "duration": 162.366667,
+    "resolution": [
+      1080,
+      1920
+    ],
+    "method": "within-scene diagram-region pixel changes",
+    "scenes": [
+      {
+        "scene": 1,
+        "diagram_spatial_std": [
+          42.93804935689819,
+          43.01846570863888,
+          42.88063927980342
+        ],
+        "changed_pixel_ratios": [
+          0.1544753086419753,
+          0.14772079772079771
+        ],
+        "passed": true
+      },
+      {
+        "scene": 2,
+        "diagram_spatial_std": [
+          42.732260083088775,
+          46.0851820241506,
+          42.63509974849426
+        ],
+        "changed_pixel_ratios": [
+          0.28558879392212727,
+          0.289957264957265
+        ],
+        "passed": true
+      },
+      {
+        "scene": 3,
+        "diagram_spatial_std": [
+          45.75925486331762,
+          45.58250034550889,
+          45.694208826558025
+        ],
+        "changed_pixel_ratios": [
+          0.13481718898385564,
+          0.16336657169990504
+        ],
+        "passed": true
+      },
+      {
+        "scene": 4,
+        "diagram_spatial_std": [
+          42.5446877194041,
+          42.573337426685626,
+          42.4306788664756
+        ],
+        "changed_pixel_ratios": [
+          0.14426638176638176,
+          0.14963200379867048
+        ],
+        "passed": true
+      },
+      {
+        "scene": 5,
+        "diagram_spatial_std": [
+          42.82653712362596,
+          42.520297130419394,
+          42.64386125649012
+        ],
+        "changed_pixel_ratios": [
+          0.13951804368471035,
+          0.13452041785375118
+        ],
+        "passed": true
+      },
+      {
+        "scene": 6,
+        "diagram_spatial_std": [
+          44.64357418418172,
+          44.256317591197934,
+          44.37862523719296
+        ],
+        "changed_pixel_ratios": [
+          0.17280389363722698,
+          0.1648741690408357
+        ],
+        "passed": true
+      },
+      {
+        "scene": 7,
+        "diagram_spatial_std": [
+          42.26639204468268,
+          42.21577683303447,
+          42.433883246566864
+        ],
+        "changed_pixel_ratios": [
+          0.1381172839506173,
+          0.13764245014245013
+        ],
+        "passed": true
+      },
+      {
+        "scene": 8,
+        "diagram_spatial_std": [
+          42.59883064936957,
+          42.677695313429965,
+          42.48246024666822
+        ],
+        "changed_pixel_ratios": [
+          0.14326923076923076,
+          0.1505579297245964
+        ],
+        "passed": true
+      }
+    ],
+    "note": "Technical blank/freeze detection only; not a judgement of artistic or factual quality."
+  },
+  "audio_tail": {
+    "audio_seconds": 162.36,
+    "video_seconds": 162.36,
+    "difference_seconds": 0.0,
+    "last_speech_window_correlation": 0.9836022853851318,
+    "audio_tail_checked": true,
+    "silence_padding_used_to_hide_lost_speech": false
+  },
+  "publication_metadata": {
+    "title": "اسرار الكون | درع الأرض المغناطيسي",
+    "caption": "رسوم توضيحية وإعادة تمثيل درامية؛ ليست تسجيلًا للأحداث.\nالمصدر: NASA Science\nhttps://science.nasa.gov/earth/earths-magnetosphere/\n#درع_الأرض_المغناطيسي #الرياح_الشمسية #الفضاء",
+    "description": "رسوم توضيحية وإعادة تمثيل درامية؛ ليست تسجيلًا للأحداث.\nالمصدر: NASA Science\nhttps://science.nasa.gov/earth/earths-magnetosphere/\n#درع_الأرض_المغناطيسي #الرياح_الشمسية #الفضاء",
+    "tags": [
+      "درع_الأرض_المغناطيسي",
+      "الرياح_الشمسية",
+      "الفضاء"
+    ],
+    "hashtags": [
+      "#درع_الأرض_المغناطيسي",
+      "#الرياح_الشمسية",
+      "#الفضاء"
+    ],
+    "source_url": "https://science.nasa.gov/earth/earths-magnetosphere/",
+    "containsSyntheticMedia": true
+  },
+  "duration_policy": {
+    "minimum_exclusive": 90,
+    "maximum_exclusive": 180
+  },
+  "music_target_lufs": -27,
+  "music": "Original composed score",
+  "music_bpm": 112,
+  "source": {
+    "url": "https://science.nasa.gov/earth/earths-magnetosphere/",
+    "publisher": "NASA Science",
+    "title": "درع الأرض المغناطيسي"
+  },
+  "topic_key": "earth-magnetosphere",
+  "profile": "science",
+  "editorial_review": {
+    "supported": true,
+    "novel": true,
+    "issues": [],
+    "review_type": "Codex source review of the same reserved NASA magnetosphere episode",
+    "checks": [
+      "Eight paragraphs checked against NASA article; no invented measurements",
+      "Distinguish atmosphere/UV shielding from magnetic deflection of charged particles",
+      "Mars atmospheric-loss explanation is attributed as a hypothesis",
+      "No claim of guaranteed forecasting or an impermeable shield"
+    ],
+    "source_body_sha256": "f0dd111b1d6177303dfeb1095d345259518ea5fedcae6756fe804fa676d11a20"
+  },
+  "render": "Three.js procedural geometry, physical lighting, custom skin shader, layered optical bloom",
+  "reference_audio_reused": false,
+  "automatically_published": false,
+  "status": "Technical checks passed; artistic judgement requires viewing the complete film."
+}
