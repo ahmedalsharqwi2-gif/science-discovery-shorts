@@ -1,0 +1,32 @@
+{
+  "profile": "science",
+  "slot": "daily-2026-10-30",
+  "checked_at": "2026-10-30T13:10:45.790304+00:00",
+  "video_sha256": "9ab745fc7ee29ae136ad9eead22f41d5ba87020bdc4af366797e323ff318cfc9",
+  "due_at": "2026-10-30T15:00:00+00:00",
+  "no_posts_created": true,
+  "verified": true,
+  "posts": {
+    "tiktok": {
+      "post_id": "6ae490454233ff6805bdc5b2",
+      "channel_id": "6a9edf14cd8b9c702c230272",
+      "scheduled_at": "2026-10-30T15:00:00.000Z",
+      "status": "scheduled",
+      "media_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/releases/download/auto-publish-daily-2026-10-30/science-video-daily-2026-10-30.mp4"
+    },
+    "youtube": {
+      "post_id": "6ae490476516a7746a2a59ac",
+      "channel_id": "6a9edee8cd8b9c702c2301cb",
+      "scheduled_at": "2026-10-30T15:00:00.000Z",
+      "status": "scheduled",
+      "media_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/releases/download/auto-publish-daily-2026-10-30/science-video-daily-2026-10-30.mp4"
+    },
+    "facebook": {
+      "post_id": "6ae4904a6516a7746a2a5a49",
+      "channel_id": "6a9edebbcd8b9c702c230128",
+      "scheduled_at": "2026-10-30T15:00:00.000Z",
+      "status": "scheduled",
+      "media_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/releases/download/auto-publish-daily-2026-10-30/science-video-daily-2026-10-30.mp4"
+    }
+  }
+}
