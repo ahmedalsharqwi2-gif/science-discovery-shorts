@@ -471,7 +471,7 @@
       "canonical_subject": "saturn-rings",
       "title": "حلقات زحل مش قرص واحد",
       "url": "https://science.nasa.gov/saturn/facts/",
-      "status": "reserved",
+      "status": "rendered",
       "story": {
         "title": "حلقات زحل مش قرص واحد",
         "canonical_subject": "saturn-rings",
@@ -609,7 +609,8 @@
         },
         "writer_model": "gemini-3.5-flash-lite"
       },
-      "reserved_at": "2026-10-30T20:48:27.424675+00:00"
+      "reserved_at": "2026-10-30T20:48:27.424675+00:00",
+      "video_sha256": "7b0fffc597b9d019578bffcbfaf4cbd13d76134430958381b865fde5b9c265f7"
     }
   ]
 }
