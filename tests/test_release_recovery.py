@@ -1,4 +1,4 @@
-import ast
+import ast,hashlib
 import importlib.util
 import os
 import math
@@ -24,7 +24,7 @@ class Repairs(unittest.TestCase):
                 publisher = module.ContentPublisher()
                 created = Mock(status_code=201)
                 created.json.return_value = {"assets": [{"name": "science-video-38358457130--.mp4",
-                                                         "browser_download_url": "https://example.test/video.mp4"}]}
+                                                         "digest": "sha256:"+hashlib.sha256(b"video").hexdigest(), "browser_download_url": "https://example.test/video.mp4"}]}
                 with patch.object(module.requests, "get", return_value=Mock(status_code=404)), patch.object(module.requests, "post", return_value=created) as post:
                     self.assertEqual(publisher._release_asset_url(video), "https://example.test/video.mp4")
                     payload = post.call_args.kwargs["json"]

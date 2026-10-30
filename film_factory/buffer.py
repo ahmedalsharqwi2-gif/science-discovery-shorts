@@ -101,6 +101,8 @@ class ContentPublisher:
         if not video_path.is_file() or video_path.stat().st_size <= 0:
             raise RuntimeError(f"ملف الفيديو غير موجود أو فارغ: {video_path}")
 
+        checksum=hashlib.sha256(video_path.read_bytes()).hexdigest()
+
         # Matrix inputs are empty for immediate runs. Keep a valid, stable ref
         # even if future callers supply punctuation or non-ASCII slot IDs.
         media_id = re.sub(r"[^A-Za-z0-9_-]+", "-", self.run_id).strip("-_") or "local"
@@ -134,6 +136,8 @@ class ContentPublisher:
         asset_name = f"science-video-{self.run_id}.mp4"
         existing = next((a for a in release.get("assets", []) if a.get("name") == asset_name), None)
         if existing and existing.get("browser_download_url"):
+            digest=existing.get("digest") or existing.get("label")
+            if digest!="sha256:"+checksum:raise RuntimeError("Existing release asset does not prove the same video checksum; refusing old or changed media")
             return existing["browser_download_url"]
 
         upload_url = release.get("upload_url", "").split("{", 1)[0]
@@ -142,7 +146,7 @@ class ContentPublisher:
         with video_path.open("rb") as media:
             upload = requests.post(
                 upload_url,
-                params={"name": asset_name},
+                params={"name": asset_name, "label": "sha256:"+checksum},
                 headers={**self._headers(self.github_token, "application/vnd.github+json"), "Content-Type": "video/mp4"},
                 data=media,
                 timeout=(30, 300),

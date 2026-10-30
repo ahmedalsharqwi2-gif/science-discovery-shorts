@@ -8,19 +8,19 @@ from professional_motion.publisher import approved
 
 class DailyProfessionalTests(unittest.TestCase):
  def test_review_never_publishes_even_when_release_is_approved(self):
-  with patch('professional_motion.cli.approved',return_value=True):
+  with patch('professional_motion.cli.approved',return_value=True),patch('professional_motion.editorial.registry',return_value={'episodes':[]}):
    d=decision('history','review','workflow_dispatch');self.assertTrue(d['run']);self.assertFalse(d['publish'])
  def test_no_input_bypasses_pending_human_review(self):
   with patch('professional_motion.cli.approved',return_value=False):
    for event in ('schedule','workflow_dispatch'):
     d=decision('horror','daily',event);self.assertFalse(d['run']);self.assertFalse(d['publish'])
  def test_cairo_nine_am_guard_selects_one_utc_cron_in_each_season(self):
-  with patch('professional_motion.cli.approved',return_value=True):
+  with patch('professional_motion.cli.approved',return_value=True),patch('professional_motion.editorial.registry',return_value={'episodes':[]}):
    for month,hour in ((7,6),(12,7)):
     d=decision('science','daily','schedule',datetime(2026,month,1,hour,tzinfo=timezone.utc));self.assertTrue(d['run'])
     wrong=decision('science','daily','schedule',datetime(2026,month,1,hour-1,tzinfo=timezone.utc));self.assertFalse(wrong['run'])
  def test_cairo_transition_day_has_exactly_one_nine_am_production(self):
-  with patch('professional_motion.cli.approved',return_value=True):
+  with patch('professional_motion.cli.approved',return_value=True),patch('professional_motion.editorial.registry',return_value={'episodes':[]}):
    for day in (29,30,31):
     decisions=[decision('science','daily','schedule',datetime(2026,10,day,h,tzinfo=timezone.utc)) for h in (6,7)]
     self.assertGreaterEqual(sum(d['run'] for d in decisions),1)
@@ -33,7 +33,7 @@ class DailyProfessionalTests(unittest.TestCase):
   self.assertTrue(all(r.get('kind')!='original_fiction' and r.get('url') for r in rows))
  def test_scheduled_due_is_exactly_five_cairo_including_dst_transition(self):
   from zoneinfo import ZoneInfo
-  with patch('professional_motion.cli.approved',return_value=True):
+  with patch('professional_motion.cli.approved',return_value=True),patch('professional_motion.editorial.registry',return_value={'episodes':[]}):
    for day in (28,29,30,31):
     d=decision('news','daily','schedule',datetime(2026,10,day,10,tzinfo=timezone.utc))
     due=datetime.fromisoformat(d['due'].replace('Z','+00:00')).astimezone(ZoneInfo('Africa/Cairo'))

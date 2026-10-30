@@ -124,6 +124,9 @@ def publish(profile,slot,due):
     mapping=destinations['buffer']
     if len(mapping)!=3 or destinations['direct_youtube']:raise ValueError('Exactly three verified Buffer destinations are required')
     required=set(mapping)|({'youtube'} if destinations['direct_youtube'] else set());require_services(required)
+    checksum=hashlib.sha256(video.read_bytes()).hexdigest()
+    if episode.get('publication_video_sha256') not in (None,checksum):raise ValueError('Film changed after publication submission; reconcile existing receipts instead of replacing media')
+    episode['publication_video_sha256']=checksum
     episode['status']='publishing';save(data)
     # Persist intent before external mutations; retries reconcile stable receipts.
     import subprocess,sys

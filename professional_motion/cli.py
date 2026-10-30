@@ -11,7 +11,6 @@ from scripts.daily_schedule import next_slot
 def decision(profile,mode,event,now=None):
     now=now or datetime.now(timezone.utc);local=now.astimezone(ZoneInfo('Africa/Cairo'))
     daily=mode=='daily' or event=='schedule'
-    if daily and os.getenv('GITHUB_ACTIONS')=='true' and os.getenv('GITHUB_REF_NAME')!='main':raise PermissionError('Daily production uses main durable state only')
     enabled=approved()
     from .schedule_window import daily_window
     from .editorial import registry
@@ -27,6 +26,7 @@ def decision(profile,mode,event,now=None):
 def main():
     p=argparse.ArgumentParser();p.add_argument('action',choices=['decision','prepare','preflight','rendered','publish']);p.add_argument('profile',choices=['science','horror','history','news']);p.add_argument('--mode',default='review');p.add_argument('--slot',default=os.getenv('EPISODE_SLOT'));p.add_argument('--due',default=os.getenv('PUBLISH_DUE_AT'));a=p.parse_args()
     if a.action=='decision':
+        if (a.mode=='daily' or os.getenv('GITHUB_EVENT_NAME')=='schedule') and os.getenv('GITHUB_ACTIONS')=='true' and os.getenv('GITHUB_REF_NAME')!='main':raise PermissionError('Daily production uses main durable state only')
         d=decision(a.profile,a.mode,os.getenv('GITHUB_EVENT_NAME','workflow_dispatch'))
         if os.getenv('GITHUB_OUTPUT'):
             with open(os.environ['GITHUB_OUTPUT'],'a') as f:

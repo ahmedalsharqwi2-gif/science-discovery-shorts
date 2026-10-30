@@ -158,6 +158,11 @@
           }
         },
         {
+          "name": "Persist same-episode narration feedback even when voice validation fails",
+          "if": "always() && steps.prepare.outcome == 'success'",
+          "run": "python -m professional_motion.persist_state"
+        },
+        {
           "name": "Deliver safe original narration evidence even when production stops",
           "if": "always() && steps.decision.outputs.run == 'true'",
           "env": {

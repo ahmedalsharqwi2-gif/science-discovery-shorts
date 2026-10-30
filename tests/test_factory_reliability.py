@@ -26,6 +26,32 @@ class FactoryReliabilityTests(unittest.TestCase):
  def test_partial_receipts_are_not_reported_as_completed(self):
   first=self.decide(12,7)
   self.assertTrue(self.decide(12,9,episodes=[{'slot':first['slot'],'status':'scheduled','receipts':{'youtube':{'id':'one'}}}])['run'])
+ def test_retry_revises_same_reserved_topic_once_after_measured_duration_failure(self):
+  with tempfile.TemporaryDirectory() as td:
+   root=Path(td);state=root/'registry.json';old={'topic_key':'same','title':'same','visual_family':'field','variant':'magnet','source':{'url':'https://science.nasa.gov/earth/earths-magnetosphere/','publisher':'NASA'}}
+   state.write_text(json.dumps({'episodes':[{'slot':'today','status':'reserved','story':old,'needs_narration_revision':True,'narration_feedback':{'measured_seconds':106,'target_seconds':150}}]}))
+   revised={**old,'title':'same expanded'}
+   with patch.object(editorial,'ROOT',root),patch.object(editorial,'STATE',state),patch.object(editorial,'write_sourced',return_value=revised) as write:
+    self.assertEqual(editorial.prepare('science','today')['topic_key'],'same');self.assertEqual(write.call_count,1)
+    data=json.loads(state.read_text());self.assertEqual(len(data['episodes']),1);self.assertEqual(data['episodes'][0]['narration_revision_attempts'],1)
+    data['episodes'][0]['needs_narration_revision']=True;state.write_text(json.dumps(data))
+    with self.assertRaisesRegex(RuntimeError,'manual review'):editorial.prepare('science','today')
+ def test_opening_proper_name_does_not_hide_real_measured_phrase_anchors(self):
+  from professional_motion.alignment import measured_timing
+  words=['أوبن','إيه','آي','أعلنت','تحديث']+['كلمة'+str(i) for i in range(60)]
+  story={'scenes':[{'narration':' '.join(words)}]}
+  actual=[{'text':w,'start':i*.4,'end':i*.4+.2} for i,w in enumerate(words) if i>=5]
+  result=measured_timing(story,40,[('test',actual)])
+  self.assertGreaterEqual(result['coverage'],.85);self.assertEqual(result['scenes'][0]['start'],0)
+ def test_existing_release_asset_with_other_bytes_is_never_reused(self):
+  from film_factory.buffer import ContentPublisher
+  from unittest.mock import Mock
+  with tempfile.TemporaryDirectory() as td,patch.dict(os.environ,{'GITHUB_TOKEN':'test','GITHUB_REPOSITORY':'owner/repo','PRODUCTION_MEDIA_ID':'same-day'},clear=True):
+   movie=Path(td)/'new.mp4';movie.write_bytes(b'new current film')
+   response=Mock(status_code=200);response.json.return_value={'assets':[{'name':'science-video-same-day.mp4','browser_download_url':'https://example.test/old.mp4','digest':'sha256:'+'0'*64}]}
+   with patch('film_factory.buffer.requests.get',return_value=response),patch('film_factory.buffer.requests.post') as post:
+    with self.assertRaisesRegex(RuntimeError,'checksum'):ContentPublisher()._release_asset_url(movie)
+    post.assert_not_called()
  def test_missing_mp4_cannot_be_marked_rendered(self):
   with patch.object(editorial,'registry',return_value={'episodes':[{'slot':'today','status':'reserved'}]}),patch.object(editorial,'save') as save:
    with self.assertRaises(FileNotFoundError):editorial.rendered('today',Path('/tmp/nonexistent-factory-movie.mp4'))
@@ -59,7 +85,7 @@ class FactoryReliabilityTests(unittest.TestCase):
   with tempfile.TemporaryDirectory() as td:
    out=Path(td)/'outputs'
    result={'run':True,'publish':True,'reason':'eligible','due':'2026-12-01T15:00:00Z'}
-   with patch.object(sys,'argv',['cli','decision','science','--mode','daily']),patch.object(cli,'decision',return_value=result),patch.dict(os.environ,{'GITHUB_OUTPUT':str(out)},clear=False):cli.main()
+   with patch.object(sys,'argv',['cli','decision','science','--mode','daily']),patch.object(cli,'decision',return_value=result),patch.dict(os.environ,{'GITHUB_OUTPUT':str(out),'GITHUB_REF_NAME':'main'},clear=False):cli.main()
    self.assertIn('due=2026-12-01T15:00:00Z',out.read_text());self.assertIn('run=true',out.read_text())
   self.assertEqual(validate_slot('2026-12-01t15:00:00z',datetime(2026,12,1,10,tzinfo=timezone.utc)).hour,15)
  def test_submission_without_receipt_blocks_ambiguous_retry(self):

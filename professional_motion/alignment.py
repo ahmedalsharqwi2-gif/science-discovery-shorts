@@ -62,7 +62,7 @@ def measured_timing(story, duration, transcripts):
     if coverage<.85:raise ValueError('Insufficient measured speech evidence for phrase timing')
     cursor=0;scenes=[]
     for i,s in enumerate(story['scenes']):
-        candidates=[anchors[k]['start'] for k in range(cursor,min(cursor+4,len(expected))) if k in anchors]
+        candidates=[anchors[k]['start'] for k in range(cursor,min(cursor+8,cursor+len(s['narration'].split()),len(expected))) if k in anchors]
         if not candidates:raise ValueError('Scene has no measured opening speech anchors')
         scenes.append({**s,'start':0 if i==0 else min(candidates)})
         cursor+=len(s['narration'].split())

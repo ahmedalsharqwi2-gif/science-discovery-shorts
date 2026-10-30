@@ -6,6 +6,7 @@ from professional_motion import editorial as e
 class EditorialPreferenceTests(unittest.TestCase):
     def draft(self,repeats=4):
         narration=' '.join(['ده القمر مش مجرد شكل عشان نفهم الحركة']*repeats)
+        if repeats==4:narration+=' وده شرح واضح ومبسط عشان نوصل للفكرة بسهولة'
         return {'suitable':True,'title':'حركة القمر في مداره','canonical_subject':'moon-orbit','facts':['القمر بيتحرك'],'milestones':[], 'hashtags':['القمر','الحركة','علوم'],'scenes':[{'id':str(i),'label':'حركة القمر','narration':narration,'labels':[],'visual_mode':'orbit','evidence_excerpt_id':0} for i in range(8)]}
     def run_story(self,review):
         row={'key':'moon-orbit','family':'space','variant':'moon','title':'Moon orbit','publisher':'NASA','url':'https://science.nasa.gov/moon/'}
