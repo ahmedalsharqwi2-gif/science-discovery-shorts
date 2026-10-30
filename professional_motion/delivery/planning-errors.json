@@ -1,0 +1,12 @@
+[
+  {
+    "topic_key": "saturn-rings",
+    "error_class": "HTTPError",
+    "validation": "Source request failed"
+  },
+  {
+    "topic_key": "sound-waves",
+    "error_class": "ValueError",
+    "validation": "Source does not contain sufficient evidence"
+  }
+]
