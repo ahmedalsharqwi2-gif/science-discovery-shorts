@@ -1,0 +1,17 @@
+{
+  "provider": "Gemini TTS",
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Charon",
+  "style": "Egyptian Arabic ar-EG, native conversational Cairo accent. Mature warm male documentary storyteller, low resonant register, clear exact articulation, measured pace around 140 words per minute. Say the year numbers naturally in Egyptian Arabic. Preserve every word and sentence of the transcript, finish the last sentence clearly. No music, no sound effects, no singing, no spoken instructions.\nEgyptian Arabic engaging science explanation. Start with curiosity, build momentum, thoughtful final payoff. No music or sound effects. Read only the supplied words. Finish the last sentence. Clear natural pace.",
+  "text": "حلقات زحل اللي بنشوفها في الصور مش قرص واحد صلب زي ما ناس كتير فاكرة. دي في الحقيقة نظام معقد بيتكون من مليارات القطع الصغيرة من الثلج والصخور اللي عليها طبقة من الغبار، وكل قطعة بتتحرك لوحدها وبسرعة مختلفة حوالين الكوكب. العلماء بيعتقدوا إن الحلقات دي عبارة عن بقايا مذنبات أو كويكبات أو حتى أقمار قديمة اتعرضت لقوة جاذبية زحل الهائلة واتفتت قبل ما تقدر تقرب أكتر من كده للكوكب، فتحولت للكتل اللي قدامنا دي. حجم الأجزاء اللي بتلف دي بيتنوع بشكل غريب جدا. فيه حبيبات ثلجية صغيرة قد التراب، وفيه قطع تانية بحجم البيت، وكمان فيه أجزاء ضخمة بتوصل لأحجام الجبال العالية وهيايمة في الفضاء حوالين الكوكب. نظام الحلقات ده بيمتد لمسافة بتصل لحد مائة خمسة وسبعين ألف ميل بعيد عن زحل. بس المدهش إن السمك الرأسي للحلقات الأساسية رفيع جدا، وبيتراوح غالبا حول تلاتين قدم بس. الحلقات دي متسمية بالحروف الأبجدية حسب ترتيب اكتشافها. الحلقات الأساسية هي إيه وبي وسي، وفيه حلقات تانية أضعف زي دي وإي وأف وجي، وكل مجموعة قريبة من بعضها بمسافات محسوبة. لو بصينا جوه الترتيب ده، هنلاقي فراغ كبير وفاصل واضح بيقسم الحلقات. الفجوة دي اسمها فجوة كاسيني، وعرضها بيبلغ حوالي ألفين وتسع ميكون ميل، وهي اللي بتفصل بين الحلقات إيه وبي بوضوح. معلوماتنا عن التفاصيل الدقيقة دي اتثبتت واتوثقت بفضل مركبة كاسيني الفضائية التابعة لوكالة ناسا. المركبة دي وصلت لزحل سنة ألفين وأربعة، وفضلت تصور وتدرس النظام ده لحد ما الرحلة انتهت في منتصف سبتمبر سنة ألفين وسبعتاشر. حتى بعد كل الصور والبيانات اللي جمعتها المركبات الفضائية، حلقات زحل لسه بتخبي تفاصيل كتيرة عن تكوين النظام الشمسي القديم. وكل دراسة جديدة بتأكد إننا لسه في أول الطريق عشان نفهم أسرار الكوكب العظيم ده.",
+  "interaction_id": "v1_ChduZ0xsYW9MZUk5TzYzOUlQNk9PNS1BTRIXbmdMbGFvTGVJOU82MzlJUDZPTzUtQU0",
+  "duration": 119.08,
+  "sample_rate": 24000,
+  "channels": 1,
+  "sha256": "e874fb568f66250fe6444372b3d55ca906ce95f1c0c9d73bb655af38e78baaa4",
+  "newly_synthesized": true,
+  "original_video_audio_used": false,
+  "fallback_used": false,
+  "cache_hit": false,
+  "output_sha256": "e874fb568f66250fe6444372b3d55ca906ce95f1c0c9d73bb655af38e78baaa4"
+}
