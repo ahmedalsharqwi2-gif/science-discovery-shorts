@@ -11,6 +11,15 @@
             "daily"
           ],
           "default": "review"
+        },
+        "review_style": {
+          "description": "Visual style for review films only; approved daily films keep their existing style",
+          "type": "choice",
+          "options": [
+            "reference",
+            "original"
+          ],
+          "default": "reference"
         }
       }
     },
@@ -24,6 +33,11 @@
         "mode": {
           "type": "string",
           "default": "review",
+          "required": false
+        },
+        "review_style": {
+          "type": "string",
+          "default": "reference",
           "required": false
         }
       }
@@ -220,7 +234,11 @@
         },
         {
           "name": "Render an exact quarter of the real-timing full-resolution frames",
-          "run": "node professional_motion/render.mjs --part ${{ matrix.part }} --parts 4 --output chunk-${{ matrix.part }}.mp4"
+          "run": "args=(--style \"$REVIEW_VISUAL_STYLE\")\nif [ \"$IS_REVIEW\" = \"true\" ]; then args+=(--review); fi\nnode professional_motion/render.mjs \"${args[@]}\" --part ${{ matrix.part }} --parts 4 --output chunk-${{ matrix.part }}.mp4",
+          "env": {
+            "REVIEW_VISUAL_STYLE": "${{ needs.produce.outputs.publish == 'true' && 'original' || inputs.review_style || 'reference' }}",
+            "IS_REVIEW": "${{ needs.produce.outputs.publish != 'true' }}"
+          }
         },
         {
           "uses": "actions/upload-artifact@v4",
