@@ -645,7 +645,15 @@
         "facebook",
         "tiktok",
         "youtube"
-      ]
+      ],
+      "submissions": {
+        "tiktok": {
+          "channel_id": "6a9edf14cd8b9c702c230272",
+          "scheduled_at": "2026-10-30T15:00:00Z",
+          "status": "submitting",
+          "created_at": "2026-10-30T12:40:35.444194+00:00"
+        }
+      }
     }
   }
 }
