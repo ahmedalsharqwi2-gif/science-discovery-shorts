@@ -1,0 +1,134 @@
+{
+  "title": "درع الأرض المغناطيسي",
+  "canonical_subject": "earth-magnetosphere",
+  "suitable": true,
+  "facts": [
+    "The magnetosphere is a giant bubble of magnetism enveloping our planet.",
+    "It deflects solar material sweeping towards us at one million miles per hour or more.",
+    "Mars lost its magnetic field and atmosphere, unlike Earth.",
+    "Solar wind periodically connects to the magnetosphere, creating rifts.",
+    "Magnetic reconnection triggers violent explosions and geomagnetic storms."
+  ],
+  "milestones": [
+    "March 2018",
+    "March 2015",
+    "Mars 4.2 billion years ago"
+  ],
+  "scenes": [
+    {
+      "id": "scene_1",
+      "label": "فقاعة مغناطيسية",
+      "narration": "تخيل كوكبنا جوه فقاعة عملاقة من المغناطيسية. الفقاعة دي بتحمينا كل يوم من غضب الشمس اللي بتبعت مواد شمسية بسرعة مليون ميل في الساعة أو إكتر، عشان تضمن إن الحياة تكمل على كوكبنا بأمان تام.",
+      "labels": [
+        "فقاعة عملاقة من المغناطيسية"
+      ],
+      "visual_mode": "field",
+      "evidence_excerpt_id": 1,
+      "evidence_quote": "planet and protecting us from the fury of the Sun is a giant bubble of"
+    },
+    {
+      "id": "scene_2",
+      "label": "مقارنة مع المريخ",
+      "narration": "الباحثين بصوا على كوكب المريخ اللي فقد مجاله المغناطيسي من أكتر من أربعة مليارات سنة. ده أدى لأن الرياح الشمسية جرفت معظم غلافه الجوي، وسبته عالم قاحل عكس الأرض تماماً.",
+      "labels": [
+        "فقد مجاله المغناطيسي"
+      ],
+      "visual_mode": "hero",
+      "evidence_excerpt_id": 7,
+      "evidence_quote": "that lost its magnetosphere about 4.2 billion years ago. The Solar wind is thought to"
+    },
+    {
+      "id": "scene_3",
+      "label": "خطوط القوة المغناطيسية",
+      "narration": "الدرع ده مش صلب بالكامل، دي فقاعة بتسمح بتفاعل مستمر. خطوط القوة المغناطيسية بتتقاطع وتتصل مع الرياح الشمسية القادمة، وده بيخلي المجال يعيد تشكيل نفسه وفتح ثغرات متكررة.",
+      "labels": [
+        "خطوط القوة المغناطيسية"
+      ],
+      "visual_mode": "field",
+      "evidence_excerpt_id": 16,
+      "evidence_quote": "solar wind will periodically connect to the magnetosphere forcing it to reconfigure. This can create"
+    },
+    {
+      "id": "scene_4",
+      "label": "تدفق الجسيمات",
+      "narration": "الثغرات دي ممكن تفتح وتقفل مرات كتيرة في اليوم الواحد. لما المجال المغناطيسي للشمس يتصل بالمجال الأرضي، بتبدأ العواصف والجسيمات المشحونة تتدفق بسرعة كبيرة جداً جوه الدرع.",
+      "labels": [
+        "جسيمات المشحونة"
+      ],
+      "visual_mode": "flow",
+      "evidence_excerpt_id": 18,
+      "evidence_quote": "many times daily or even many times hourly. Most of them are small and short-lived;"
+    },
+    {
+      "id": "scene_5",
+      "label": "إعادة الاتصال",
+      "narration": "العملية دي المعروفة بإعادة الاتصال المغناطيسي بتحرر طاقة هائلة. الارتباط ده بيخلي المجال بيمتص الطاقة الجاية من الرياح الشمسية ويطلقها بشكل متفجر في صورة عواصف جيومغناطيسية.",
+      "labels": [
+        "إعادة الاتصال المغناطيسي"
+      ],
+      "visual_mode": "flow",
+      "evidence_excerpt_id": 20,
+      "evidence_quote": "way, the fireworks start. Zesta says, “The Earth’s magnetosphere absorbs the incoming energy from the"
+    },
+    {
+      "id": "scene_6",
+      "label": "مهمة إم إم إس",
+      "narration": "عشان نفهم التفاصيل دي، وكالة ناسا أطلقت مهمة متعددة المقاييس في مارس ألفين وخمستاشر. المركبات الفضائية طارت بتشكيل قريب جداً لمنطقة حدوث إعادة الاتصال عشان ترصد فيزياء الإلكترونات.",
+      "labels": [
+        "فيزياء الإلكترونات"
+      ],
+      "visual_mode": "hero",
+      "evidence_excerpt_id": 26,
+      "evidence_quote": "March 2015 to observe the electron physics of magnetic reconnection for the first time. Bristling"
+    },
+    {
+      "id": "scene_7",
+      "label": "طقس الفضاء",
+      "narration": "دراسة الكحليات دي مش للعلوم البحتة وبس، دي بتساعدنا نتوقع طقس الفضاء اللي بيأثر على شبكات الاتصالات، ونظام الجي بي إس، وشبكات الطاقة الكهربائية هنا على الأرض.",
+      "labels": [
+        "طقس الفضاء"
+      ],
+      "visual_mode": "flow",
+      "evidence_excerpt_id": 14,
+      "evidence_quote": "someday forecast space weather that can affect Earth’s technology. Extreme space weather events can disrupt"
+    },
+    {
+      "id": "scene_8",
+      "label": "تكامل الأبحاث",
+      "narration": "البيانات اللي بتجمعها المهمة دي بتتكامل مع بعثات تانية زي كلستر وتيميس. كل ده بيدينا صورة أدق عن الغلاف المغناطيسي وبيساعدنا نفهم الفيزياء الأساسية للفضاء المحيط بينا.",
+      "labels": [
+        "الغلاف المغناطيسي"
+      ],
+      "visual_mode": "field",
+      "evidence_excerpt_id": 30,
+      "evidence_quote": "and partner agencies, such as THEMIS, Cluster, and Geotail, contributing critical new details to the"
+    }
+  ],
+  "hashtags": [
+    "درع_الأرض_المغناطيسي",
+    "الرياح_الشمسية",
+    "الفضاء"
+  ],
+  "editorial_warnings": [
+    "Write 260–330 spoken words for a natural film between 90 and 180 seconds"
+  ],
+  "profile": "science",
+  "series": "اسرار الكون",
+  "visual_family": "field",
+  "variant": "magnet",
+  "topic_key": "earth-magnetosphere",
+  "source": {
+    "url": "https://science.nasa.gov/earth/earths-magnetosphere/",
+    "publisher": "NASA Science",
+    "title": "درع الأرض المغناطيسي"
+  },
+  "fiction": false,
+  "documented": true,
+  "editorial_review": {
+    "supported": true,
+    "novel": true,
+    "issues": [],
+    "model": "gemini-3.5-flash-lite"
+  },
+  "writer_model": "gemini-3.5-flash-lite"
+}

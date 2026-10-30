@@ -1,0 +1,17 @@
+{
+  "provider": "Gemini TTS",
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Charon",
+  "style": "Egyptian Arabic ar-EG, native conversational Cairo accent. Mature warm male documentary storyteller, low resonant register, clear exact articulation, measured pace around 140 words per minute. Say the year numbers naturally in Egyptian Arabic. Preserve every word and sentence of the transcript, finish the last sentence clearly. No music, no sound effects, no singing, no spoken instructions.\nEgyptian Arabic engaging science explanation. Start with curiosity, build momentum, thoughtful final payoff. No music or sound effects. Read only the supplied words. Finish the last sentence. Clear natural pace.",
+  "text": "تخيل كوكبنا جوه فقاعة عملاقة من المغناطيسية. الفقاعة دي بتحمينا كل يوم من غضب الشمس اللي بتبعت مواد شمسية بسرعة مليون ميل في الساعة أو إكتر، عشان تضمن إن الحياة تكمل على كوكبنا بأمان تام. الباحثين بصوا على كوكب المريخ اللي فقد مجاله المغناطيسي من أكتر من أربعة مليارات سنة. ده أدى لأن الرياح الشمسية جرفت معظم غلافه الجوي، وسبته عالم قاحل عكس الأرض تماماً. الدرع ده مش صلب بالكامل، دي فقاعة بتسمح بتفاعل مستمر. خطوط القوة المغناطيسية بتتقاطع وتتصل مع الرياح الشمسية القادمة، وده بيخلي المجال يعيد تشكيل نفسه وفتح ثغرات متكررة. الثغرات دي ممكن تفتح وتقفل مرات كتيرة في اليوم الواحد. لما المجال المغناطيسي للشمس يتصل بالمجال الأرضي، بتبدأ العواصف والجسيمات المشحونة تتدفق بسرعة كبيرة جداً جوه الدرع. العملية دي المعروفة بإعادة الاتصال المغناطيسي بتحرر طاقة هائلة. الارتباط ده بيخلي المجال بيمتص الطاقة الجاية من الرياح الشمسية ويطلقها بشكل متفجر في صورة عواصف جيومغناطيسية. عشان نفهم التفاصيل دي، وكالة ناسا أطلقت مهمة متعددة المقاييس في مارس ألفين وخمستاشر. المركبات الفضائية طارت بتشكيل قريب جداً لمنطقة حدوث إعادة الاتصال عشان ترصد فيزياء الإلكترونات. دراسة الكحليات دي مش للعلوم البحتة وبس، دي بتساعدنا نتوقع طقس الفضاء اللي بيأثر على شبكات الاتصالات، ونظام الجي بي إس، وشبكات الطاقة الكهربائية هنا على الأرض. البيانات اللي بتجمعها المهمة دي بتتكامل مع بعثات تانية زي كلستر وتيميس. كل ده بيدينا صورة أدق عن الغلاف المغناطيسي وبيساعدنا نفهم الفيزياء الأساسية للفضاء المحيط بينا.",
+  "interaction_id": "v1_Chc5WW5rYW9EYU9PVGN5dE1QX0ttZnVRVRIXOVlua2FvRGFPT1RjeXRNUF9LbWZ1UVU",
+  "duration": 106.6,
+  "sample_rate": 24000,
+  "channels": 1,
+  "sha256": "de525c3511716d23a451c02f754a364c5b7dccce658ca129dde4e0dc1411f48a",
+  "newly_synthesized": true,
+  "original_video_audio_used": false,
+  "fallback_used": false,
+  "cache_hit": false,
+  "output_sha256": "de525c3511716d23a451c02f754a364c5b7dccce658ca129dde4e0dc1411f48a"
+}
