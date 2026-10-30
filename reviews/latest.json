@@ -1,21 +1,14 @@
 {
   "profile": "science",
-  "run_id": "40845210819",
-  "duration": 135.52,
-  "sha256": "db425c0246c457281a9c0ddccf37fab507917d015c1648630f922fcf92ab3e76",
-  "review_approved_by_user": true,
-  "publication_status": "sent",
-  "youtube_url": "https://www.youtube.com/shorts/w_TiO_SWZAI",
-  "daily_schedule": {
-    "timezone": "Africa/Cairo",
-    "production": "09:00",
-    "publication": "17:00",
-    "executor": "GitHub Actions",
-    "delivery": "Buffer",
-    "enabled": true
-  },
-  "downloads": {
-    "720p": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/raw/refs/heads/codex/professional-video-40845210819/review-720p.mp4",
-    "1080p": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/raw/refs/heads/codex/professional-video-40845210819/review-1080p.mp4"
-  }
+  "date": "2026-10-30",
+  "production_run": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/actions/runs/41055103244",
+  "duration": 162.366667,
+  "sha256": "9ab745fc7ee29ae136ad9eead22f41d5ba87020bdc4af366797e323ff318cfc9",
+  "download": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/releases/download/auto-publish-daily-2026-10-30/science-video-daily-2026-10-30.mp4",
+  "publication_status": "scheduled",
+  "publication_local_time": "17:00 Africa/Cairo",
+  "verified_destinations": 3,
+  "actual_provider_audit": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/raw/refs/heads/codex/professional-review-run-41061056104/professional_motion/delivery/daily-publication-audit.json",
+  "branding_applies_to_future_films": true,
+  "original_logo_installed": false
 }

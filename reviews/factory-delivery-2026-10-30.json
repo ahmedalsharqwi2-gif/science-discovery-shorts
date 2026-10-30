@@ -1,0 +1,285 @@
+{
+  "checked_at_cairo": "2026-10-30T15:48:04.304323+02:00",
+  "date": "2026-10-30",
+  "publication_time": "17:00 Africa/Cairo",
+  "new_validated_videos": 4,
+  "verified_scheduled_destinations": 12,
+  "all_post_ids_unique": true,
+  "all_video_hashes_unique": true,
+  "actual_publication_not_yet_due": true,
+  "records": [
+    {
+      "repo": "science-discovery-shorts",
+      "profile": "science",
+      "name": "العلوم",
+      "title": "درع الأرض المغناطيسي",
+      "qa": {
+        "repo": "science-discovery-shorts",
+        "profile": "science",
+        "run": 41055103244,
+        "sha256": "9ab745fc7ee29ae136ad9eead22f41d5ba87020bdc4af366797e323ff318cfc9",
+        "width": 1080,
+        "height": 1920,
+        "fps": "30/1",
+        "duration": 162.366667,
+        "audio_codec": "aac",
+        "audio_sample_rate": "48000",
+        "decode": "PASS",
+        "direct_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/releases/download/auto-publish-daily-2026-10-30/science-video-daily-2026-10-30.mp4",
+        "http_status": 200,
+        "release_digest_matches": true,
+        "different_from_previous_episodes": true
+      },
+      "provider": {
+        "profile": "science",
+        "slot": "daily-2026-10-30",
+        "checked_at": "2026-10-30T13:10:45.790304+00:00",
+        "video_sha256": "9ab745fc7ee29ae136ad9eead22f41d5ba87020bdc4af366797e323ff318cfc9",
+        "due_at": "2026-10-30T15:00:00+00:00",
+        "no_posts_created": true,
+        "verified": true,
+        "posts": {
+          "tiktok": {
+            "post_id": "6ae490454233ff6805bdc5b2",
+            "channel_id": "6a9edf14cd8b9c702c230272",
+            "scheduled_at": "2026-10-30T15:00:00.000Z",
+            "status": "scheduled",
+            "media_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/releases/download/auto-publish-daily-2026-10-30/science-video-daily-2026-10-30.mp4"
+          },
+          "youtube": {
+            "post_id": "6ae490476516a7746a2a59ac",
+            "channel_id": "6a9edee8cd8b9c702c2301cb",
+            "scheduled_at": "2026-10-30T15:00:00.000Z",
+            "status": "scheduled",
+            "media_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/releases/download/auto-publish-daily-2026-10-30/science-video-daily-2026-10-30.mp4"
+          },
+          "facebook": {
+            "post_id": "6ae4904a6516a7746a2a5a49",
+            "channel_id": "6a9edebbcd8b9c702c230128",
+            "scheduled_at": "2026-10-30T15:00:00.000Z",
+            "status": "scheduled",
+            "media_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/releases/download/auto-publish-daily-2026-10-30/science-video-daily-2026-10-30.mp4"
+          }
+        }
+      },
+      "production_run": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/actions/runs/41055103244",
+      "schedule_run": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/actions/runs/41055103244",
+      "audit_run": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/actions/runs/41061056104",
+      "audit_json": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/raw/refs/heads/codex/professional-review-run-41061056104/professional_motion/delivery/daily-publication-audit.json",
+      "commits": {
+        "safe_window": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/commit/314e879",
+        "iso_output": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/commit/27dca5c",
+        "durable_guard_and_media": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/commit/dba65ad"
+      },
+      "current_code_commit": "447308806c6610ba621f48458754f488c2353122",
+      "future_logo_installed": false
+    },
+    {
+      "repo": "arabic-horror-stories",
+      "profile": "horror",
+      "name": "الرعب",
+      "title": "بعثة فرانكلين",
+      "qa": {
+        "repo": "arabic-horror-stories",
+        "profile": "horror",
+        "run": 41055885506,
+        "sha256": "9fd01c8243a510deda3bd582c39418533494f9438cb50e0f43f279e92bde47dd",
+        "width": 1080,
+        "height": 1920,
+        "fps": "30/1",
+        "duration": 155.166667,
+        "audio_codec": "aac",
+        "audio_sample_rate": "48000",
+        "decode": "PASS",
+        "direct_url": "https://github.com/ahmedalsharqwi2-gif/arabic-horror-stories/releases/download/auto-publish-daily-2026-10-30/science-video-daily-2026-10-30.mp4",
+        "http_status": 200,
+        "release_digest_matches": true,
+        "different_from_previous_episodes": true
+      },
+      "provider": {
+        "profile": "horror",
+        "slot": "daily-2026-10-30",
+        "checked_at": "2026-10-30T13:10:46.161074+00:00",
+        "video_sha256": "9fd01c8243a510deda3bd582c39418533494f9438cb50e0f43f279e92bde47dd",
+        "due_at": "2026-10-30T15:00:00+00:00",
+        "no_posts_created": true,
+        "verified": true,
+        "posts": {
+          "youtube": {
+            "post_id": "6ae491663dc61ec0c2ffdd23",
+            "channel_id": "6aaa8778ea19ca0bde57da16",
+            "scheduled_at": "2026-10-30T15:00:00.000Z",
+            "status": "scheduled",
+            "media_url": "https://github.com/ahmedalsharqwi2-gif/arabic-horror-stories/releases/download/auto-publish-daily-2026-10-30/science-video-daily-2026-10-30.mp4"
+          },
+          "facebook": {
+            "post_id": "6ae491614233ff6805be1cb9",
+            "channel_id": "6aaa853fea19ca0bde57b5f7",
+            "scheduled_at": "2026-10-30T15:00:00.000Z",
+            "status": "scheduled",
+            "media_url": "https://github.com/ahmedalsharqwi2-gif/arabic-horror-stories/releases/download/auto-publish-daily-2026-10-30/science-video-daily-2026-10-30.mp4"
+          },
+          "instagram": {
+            "post_id": "6ae491644233ff6805be1d24",
+            "channel_id": "6aad267dea19ca0bde778d5e",
+            "scheduled_at": "2026-10-30T15:00:00.000Z",
+            "status": "scheduled",
+            "media_url": "https://github.com/ahmedalsharqwi2-gif/arabic-horror-stories/releases/download/auto-publish-daily-2026-10-30/science-video-daily-2026-10-30.mp4"
+          }
+        }
+      },
+      "production_run": "https://github.com/ahmedalsharqwi2-gif/arabic-horror-stories/actions/runs/41055885506",
+      "schedule_run": "https://github.com/ahmedalsharqwi2-gif/arabic-horror-stories/actions/runs/41055885506",
+      "audit_run": "https://github.com/ahmedalsharqwi2-gif/arabic-horror-stories/actions/runs/41061062315",
+      "audit_json": "https://github.com/ahmedalsharqwi2-gif/arabic-horror-stories/raw/refs/heads/codex/professional-review-run-41061062315/professional_motion/delivery/daily-publication-audit.json",
+      "commits": {
+        "safe_window": "https://github.com/ahmedalsharqwi2-gif/arabic-horror-stories/commit/ef514af",
+        "iso_output": "https://github.com/ahmedalsharqwi2-gif/arabic-horror-stories/commit/5b261ba",
+        "durable_guard_and_media": "https://github.com/ahmedalsharqwi2-gif/arabic-horror-stories/commit/01c7ea7"
+      },
+      "current_code_commit": "c99573533d85fc50f2c22a2281cd319b2071ee54",
+      "future_logo_installed": false
+    },
+    {
+      "repo": "documented-history-stories",
+      "profile": "history",
+      "name": "التاريخ",
+      "title": "قناطر سيغوفيا — النسخة المصححة",
+      "qa": {
+        "repo": "documented-history-stories",
+        "profile": "history",
+        "run": 41058540009,
+        "scheduling_run": 41063563019,
+        "sha256": "5e86d1838c39279eb97b8d99d9bf02ec023e3b74bef6b9c9171bcac36a21e267",
+        "width": 1080,
+        "height": 1920,
+        "fps": "30/1",
+        "duration": 153.366667,
+        "audio_codec": "aac",
+        "audio_sample_rate": "48000",
+        "decode": "PASS",
+        "direct_url": "https://github.com/ahmedalsharqwi2-gif/documented-history-stories/releases/download/auto-publish-daily-2026-10-30-corrected/science-video-daily-2026-10-30-corrected.mp4",
+        "http_status": 200,
+        "release_bytes_match": true,
+        "different_from_previous_episodes": true,
+        "corrected_before_publication": true,
+        "original_post_ids_retained": true
+      },
+      "provider": {
+        "profile": "history",
+        "slot": "daily-2026-10-30",
+        "checked_at": "2026-10-30T13:35:19.822674+00:00",
+        "video_sha256": "5e86d1838c39279eb97b8d99d9bf02ec023e3b74bef6b9c9171bcac36a21e267",
+        "due_at": "2026-10-30T15:00:00+00:00",
+        "no_posts_created": true,
+        "verified": true,
+        "posts": {
+          "youtube": {
+            "post_id": "6ae48f48abdb62a0e37cc839",
+            "channel_id": "6ab67b4fea19ca0bdee58218",
+            "scheduled_at": "2026-10-30T15:00:00.000Z",
+            "status": "scheduled",
+            "media_url": "https://github.com/ahmedalsharqwi2-gif/documented-history-stories/releases/download/auto-publish-daily-2026-10-30-corrected/science-video-daily-2026-10-30-corrected.mp4"
+          },
+          "facebook": {
+            "post_id": "6ae48f4ae560b6bf642a6b22",
+            "channel_id": "6ab67b0dea19ca0bdee58014",
+            "scheduled_at": "2026-10-30T15:00:00.000Z",
+            "status": "scheduled",
+            "media_url": "https://github.com/ahmedalsharqwi2-gif/documented-history-stories/releases/download/auto-publish-daily-2026-10-30-corrected/science-video-daily-2026-10-30-corrected.mp4"
+          },
+          "instagram": {
+            "post_id": "6ae48f4de560b6bf642a6bc5",
+            "channel_id": "6ab67accea19ca0bdee57e17",
+            "scheduled_at": "2026-10-30T15:00:00.000Z",
+            "status": "scheduled",
+            "media_url": "https://github.com/ahmedalsharqwi2-gif/documented-history-stories/releases/download/auto-publish-daily-2026-10-30-corrected/science-video-daily-2026-10-30-corrected.mp4"
+          }
+        }
+      },
+      "production_run": "https://github.com/ahmedalsharqwi2-gif/documented-history-stories/actions/runs/41058540009",
+      "schedule_run": "https://github.com/ahmedalsharqwi2-gif/documented-history-stories/actions/runs/41063563019",
+      "audit_run": "https://github.com/ahmedalsharqwi2-gif/documented-history-stories/actions/runs/41064476565",
+      "audit_json": "https://github.com/ahmedalsharqwi2-gif/documented-history-stories/raw/refs/heads/codex/professional-review-run-41064476565/professional_motion/delivery/daily-publication-audit.json",
+      "commits": {
+        "safe_window": "https://github.com/ahmedalsharqwi2-gif/documented-history-stories/commit/ac455ca",
+        "iso_output": "https://github.com/ahmedalsharqwi2-gif/documented-history-stories/commit/71f6ccc",
+        "durable_guard_and_media": "https://github.com/ahmedalsharqwi2-gif/documented-history-stories/commit/fd615c7"
+      },
+      "current_code_commit": "f8e6d7cf8a66c0a9f274533df5d3bf523a287fa3",
+      "future_logo_installed": false
+    },
+    {
+      "repo": "ai-news-daily",
+      "profile": "news",
+      "name": "أخبار الذكاء الاصطناعي",
+      "title": "تحديث دليل سلوك OpenAI مع تعليق ساخر",
+      "qa": {
+        "repo": "ai-news-daily",
+        "profile": "news",
+        "run": 41057377563,
+        "sha256": "c023c8543dc8f3eda4fdf3e1f087df3faaee292042b16db190b7c347699b0d22",
+        "width": 1080,
+        "height": 1920,
+        "fps": "30/1",
+        "duration": 148.366667,
+        "audio_codec": "aac",
+        "audio_sample_rate": "48000",
+        "decode": "PASS",
+        "direct_url": "https://github.com/ahmedalsharqwi2-gif/ai-news-daily/releases/download/auto-publish-daily-2026-10-30/science-video-daily-2026-10-30.mp4",
+        "http_status": 200,
+        "release_bytes_match": true,
+        "different_from_previous_episodes": true
+      },
+      "provider": {
+        "profile": "news",
+        "slot": "daily-2026-10-30",
+        "checked_at": "2026-10-30T13:10:50.393371+00:00",
+        "video_sha256": "c023c8543dc8f3eda4fdf3e1f087df3faaee292042b16db190b7c347699b0d22",
+        "due_at": "2026-10-30T15:00:00+00:00",
+        "no_posts_created": true,
+        "verified": true,
+        "posts": {
+          "youtube": {
+            "post_id": "6ae493f1f522e615d3a49b00",
+            "channel_id": "6ad3ef9d778b240e2f3fa5b9",
+            "scheduled_at": "2026-10-30T15:00:00.000Z",
+            "status": "scheduled",
+            "media_url": "https://github.com/ahmedalsharqwi2-gif/ai-news-daily/releases/download/auto-publish-daily-2026-10-30/science-video-daily-2026-10-30.mp4"
+          },
+          "facebook": {
+            "post_id": "6ae493f3e560b6bf642ba4ab",
+            "channel_id": "6ad3ef2c778b240e2f3fa387",
+            "scheduled_at": "2026-10-30T15:00:00.000Z",
+            "status": "scheduled",
+            "media_url": "https://github.com/ahmedalsharqwi2-gif/ai-news-daily/releases/download/auto-publish-daily-2026-10-30/science-video-daily-2026-10-30.mp4"
+          },
+          "instagram": {
+            "post_id": "6ae493f5f522e615d3a49bdd",
+            "channel_id": "6ad3eeea778b240e2f3fa23b",
+            "scheduled_at": "2026-10-30T15:00:00.000Z",
+            "status": "scheduled",
+            "media_url": "https://github.com/ahmedalsharqwi2-gif/ai-news-daily/releases/download/auto-publish-daily-2026-10-30/science-video-daily-2026-10-30.mp4"
+          }
+        }
+      },
+      "production_run": "https://github.com/ahmedalsharqwi2-gif/ai-news-daily/actions/runs/41057377563",
+      "schedule_run": "https://github.com/ahmedalsharqwi2-gif/ai-news-daily/actions/runs/41057377563",
+      "audit_run": "https://github.com/ahmedalsharqwi2-gif/ai-news-daily/actions/runs/41061069091",
+      "audit_json": "https://github.com/ahmedalsharqwi2-gif/ai-news-daily/raw/refs/heads/codex/professional-review-run-41061069091/professional_motion/delivery/daily-publication-audit.json",
+      "commits": {
+        "safe_window": "https://github.com/ahmedalsharqwi2-gif/ai-news-daily/commit/0b028b3",
+        "iso_output": "https://github.com/ahmedalsharqwi2-gif/ai-news-daily/commit/4c6c1d8",
+        "durable_guard_and_media": "https://github.com/ahmedalsharqwi2-gif/ai-news-daily/commit/33c0cf2"
+      },
+      "current_code_commit": "92c66157af32aa0608732cd517c8711ac50c9a1b",
+      "future_logo_installed": true
+    }
+  ],
+  "branding": {
+    "pipeline_installed_in_all_repositories": true,
+    "ai_news_original_logo_installed": true,
+    "other_original_logo_files_pending": true,
+    "today_scheduled_films_not_re_rendered_for_branding": true
+  }
+}
