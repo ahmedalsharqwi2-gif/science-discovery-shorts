@@ -1,0 +1,181 @@
+{
+  "file": "professional-review.mp4",
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "duration": 119.08,
+  "story_sha256": "2ec98df440b4f80d5eb2b3418fe119956222c6def84912c22f82cae2e7afc62c",
+  "voice": "original Gemini Charon",
+  "asr_model": "medium+small+large-v3",
+  "independent_asr_word_coverage": 0.8708487084870848,
+  "exact_token_coverage": 0.8708487084870848,
+  "speech_matching_method": "Exact-token ensemble anchors; supplied-script phrase captions; no active-word precision claim",
+  "known_name_normalization_applied": false,
+  "visual_gate": {
+    "passed": true,
+    "duration": 119.1,
+    "resolution": [
+      1080,
+      1920
+    ],
+    "method": "within-scene diagram-region pixel changes",
+    "scenes": [
+      {
+        "scene": 1,
+        "diagram_spatial_std": [
+          48.643210398961855,
+          47.94218782650077,
+          48.19045900690224
+        ],
+        "changed_pixel_ratios": [
+          0.0754985754985755,
+          0.0482312440645774
+        ],
+        "passed": true
+      },
+      {
+        "scene": 2,
+        "diagram_spatial_std": [
+          48.79197284765952,
+          53.90430932526459,
+          54.973149948654665
+        ],
+        "changed_pixel_ratios": [
+          0.2908000949667616,
+          0.2595679012345679
+        ],
+        "passed": true
+      },
+      {
+        "scene": 3,
+        "diagram_spatial_std": [
+          52.410809388893995,
+          51.76167067640393,
+          50.86411069901356
+        ],
+        "changed_pixel_ratios": [
+          0.07800332383665717,
+          0.05643399810066477
+        ],
+        "passed": true
+      },
+      {
+        "scene": 4,
+        "diagram_spatial_std": [
+          48.967575256222474,
+          47.70778399611859,
+          47.2674989541562
+        ],
+        "changed_pixel_ratios": [
+          0.07253086419753087,
+          0.057276828110161444
+        ],
+        "passed": true
+      },
+      {
+        "scene": 5,
+        "diagram_spatial_std": [
+          48.889132760123985,
+          47.91576718324111,
+          47.400997824792015
+        ],
+        "changed_pixel_ratios": [
+          0.06746201329534662,
+          0.046296296296296294
+        ],
+        "passed": true
+      },
+      {
+        "scene": 6,
+        "diagram_spatial_std": [
+          51.0427397584738,
+          50.57034088431706,
+          49.94753465999549
+        ],
+        "changed_pixel_ratios": [
+          0.07327872744539411,
+          0.05722934472934473
+        ],
+        "passed": true
+      },
+      {
+        "scene": 7,
+        "diagram_spatial_std": [
+          48.54792283651634,
+          47.7186301163588,
+          48.20233195483452
+        ],
+        "changed_pixel_ratios": [
+          0.07513057929724597,
+          0.040527065527065524
+        ],
+        "passed": true
+      },
+      {
+        "scene": 8,
+        "diagram_spatial_std": [
+          48.643686432467256,
+          48.13302318510797,
+          48.131597403276714
+        ],
+        "changed_pixel_ratios": [
+          0.06912393162393163,
+          0.0504392212725546
+        ],
+        "passed": true
+      }
+    ],
+    "note": "Technical blank/freeze detection only; not a judgement of artistic or factual quality."
+  },
+  "audio_tail": {
+    "audio_seconds": 119.08,
+    "video_seconds": 119.08,
+    "difference_seconds": 0.0,
+    "last_speech_window_correlation": 0.996738851070404,
+    "audio_tail_checked": true,
+    "silence_padding_used_to_hide_lost_speech": false
+  },
+  "publication_metadata": {
+    "title": "اسرار الكون | حلقات زحل مش قرص واحد",
+    "caption": "رسوم توضيحية وإعادة تمثيل درامية؛ ليست تسجيلًا للأحداث.\nالمصدر: NASA Science\nhttps://science.nasa.gov/saturn/facts/\n#حلقات_زحل #الفضاء #كاسيني",
+    "description": "رسوم توضيحية وإعادة تمثيل درامية؛ ليست تسجيلًا للأحداث.\nالمصدر: NASA Science\nhttps://science.nasa.gov/saturn/facts/\n#حلقات_زحل #الفضاء #كاسيني",
+    "tags": [
+      "حلقات_زحل",
+      "الفضاء",
+      "كاسيني"
+    ],
+    "hashtags": [
+      "#حلقات_زحل",
+      "#الفضاء",
+      "#كاسيني"
+    ],
+    "source_url": "https://science.nasa.gov/saturn/facts/",
+    "containsSyntheticMedia": true
+  },
+  "duration_policy": {
+    "minimum_exclusive": 90,
+    "maximum_exclusive": 180
+  },
+  "music_target_lufs": -27,
+  "music": "Original composed score",
+  "music_bpm": 112,
+  "source": {
+    "url": "https://science.nasa.gov/saturn/facts/",
+    "publisher": "NASA Science",
+    "title": "حلقات زحل مش قرص واحد"
+  },
+  "topic_key": "saturn-rings",
+  "profile": "science",
+  "editorial_review": {
+    "supported": true,
+    "novel": true,
+    "issues": [],
+    "model": "gemini-3.5-flash-lite"
+  },
+  "render": "Three.js geometry and lighting with reference editorial frame; bloom disabled",
+  "visual_style": "reference",
+  "review_watermark": true,
+  "reference_audio_reused": false,
+  "automatically_published": false,
+  "status": "Technical checks passed; artistic judgement requires viewing the complete film."
+}
