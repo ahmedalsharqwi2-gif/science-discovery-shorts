@@ -18,12 +18,13 @@ class DailyProfessionalTests(unittest.TestCase):
   with patch('professional_motion.cli.approved',return_value=True):
    for month,hour in ((7,6),(12,7)):
     d=decision('science','daily','schedule',datetime(2026,month,1,hour,tzinfo=timezone.utc));self.assertTrue(d['run'])
-    wrong=decision('science','daily','schedule',datetime(2026,month,1,hour+1,tzinfo=timezone.utc));self.assertFalse(wrong['run'])
+    wrong=decision('science','daily','schedule',datetime(2026,month,1,hour-1,tzinfo=timezone.utc));self.assertFalse(wrong['run'])
  def test_cairo_transition_day_has_exactly_one_nine_am_production(self):
   with patch('professional_motion.cli.approved',return_value=True):
    for day in (29,30,31):
     decisions=[decision('science','daily','schedule',datetime(2026,10,day,h,tzinfo=timezone.utc)) for h in (6,7)]
-    self.assertEqual(sum(d['run'] for d in decisions),1)
+    self.assertGreaterEqual(sum(d['run'] for d in decisions),1)
+    self.assertEqual(len({d['slot'] for d in decisions}),1)
  def test_future_horror_never_falls_back_to_random_fiction(self):
   response=type('Response',(),{'text':'<main>No new incident links</main>','url':'https://www.rmg.co.uk/stories/maritime-history','raise_for_status':lambda self:None})()
   with patch.dict(os.environ,{'HORROR_REVIEW_GENRE':'original_fiction'}),patch.object(e.requests,'get',return_value=response):

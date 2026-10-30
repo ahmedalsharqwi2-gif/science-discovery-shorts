@@ -243,7 +243,7 @@ class ContentPublisher:
             timeout=60,
         )
         if response.status_code != 200:
-            raise RuntimeError(f"Buffer HTTP {response.status_code}: {response.text[:300]}")
+            raise RuntimeError(f"Buffer HTTP {response.status_code}")
         payload = response.json()
         if payload.get("errors"):
             raise RuntimeError(f"Buffer GraphQL: {json.dumps(payload['errors'], ensure_ascii=False)[:500]}")
@@ -304,6 +304,9 @@ class ContentPublisher:
                         facebook_type = "post"
                         log.info("Trying Facebook standard video-post type for %.1fs vertical video", video_duration)
                 post_text = post_text_for_service(title, description, service)
+                if os.getenv('DURABLE_SUBMISSION_GUARD')=='true':
+                    from scripts.publication_state import submission_intent
+                    submission_intent(service,channel_id,due_at)
                 post = self._create_buffer_post(
                     channel_id, post_text, media_url, due_at, service, title, facebook_type
                 )

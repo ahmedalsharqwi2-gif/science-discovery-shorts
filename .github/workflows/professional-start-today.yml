@@ -1,0 +1,26 @@
+{
+  "name": "Start today factory with durable daily deduplication",
+  "on": {
+    "push": {
+      "branches": [
+        "main"
+      ],
+      "paths": [
+        ".github/workflows/professional-start-today.yml"
+      ]
+    }
+  },
+  "permissions": {
+    "contents": "write",
+    "actions": "read"
+  },
+  "jobs": {
+    "factory": {
+      "uses": "./.github/workflows/professional-daily.yml",
+      "with": {
+        "mode": "daily"
+      },
+      "secrets": "inherit"
+    }
+  }
+}

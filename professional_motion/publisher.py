@@ -113,10 +113,14 @@ def publish(profile,slot,due):
     from .metadata import make
     from .policy import require_duration
     from film_factory.delivery import probe
-    require_duration(float(probe(video)['format']['duration']))
+    media=probe(video)
+    require_duration(float(media['format']['duration']))
+    if not any(s.get('codec_type')=='video' and (s.get('width'),s.get('height'))==(1080,1920) for s in media.get('streams',[])) or not any(s.get('codec_type')=='audio' for s in media.get('streams',[])):raise ValueError('A real 1080x1920 video with narration audio is required')
     metadata=make(story,profile);title=metadata['title'];caption=metadata['caption'];tags=metadata['tags']
     Path('state/current_episode.json').write_text(json.dumps({**story,**metadata},ensure_ascii=False,indent=2));shutil.copy2(video,out/'final_video_full.mp4')
-    mapping=destinations['buffer'];required=set(mapping)|({'youtube'} if destinations['direct_youtube'] else set());require_services(required)
+    mapping=destinations['buffer']
+    if len(mapping)!=3 or destinations['direct_youtube']:raise ValueError('Exactly three verified Buffer destinations are required')
+    required=set(mapping)|({'youtube'} if destinations['direct_youtube'] else set());require_services(required)
     episode['status']='publishing';save(data)
     # Persist intent before external mutations; retries reconcile stable receipts.
     import subprocess,sys
@@ -129,7 +133,12 @@ def publish(profile,slot,due):
         from scripts.publish_youtube_direct import main as upload
         if upload()!=0:errors.append('YouTube did not confirm acceptance')
     if errors:raise RuntimeError('; '.join(errors))
+    from .receipt_verification import verify_scheduled
+    receipts=verify_scheduled({service:accepted_receipt(service) for service in required},mapping,due)
+    from scripts.publication_state import update_verified_receipts
+    update_verified_receipts(receipts)
     os.environ['BUFFER_OUTCOME']='success'
     if destinations['direct_youtube']:os.environ['YOUTUBE_OUTCOME']='success'
     confirm_stock();episode.update(status='scheduled',due_at=due,receipts={s:accepted_receipt(s) for s in required});save(data)
     (ROOT/'output/publication-result.json').write_text(json.dumps({'due_at':due,'scheduled':True,'receipts':episode['receipts']},indent=2))
+    shutil.copy2(ROOT/'output/publication-result.json',ROOT/'delivery/publication-result.json')

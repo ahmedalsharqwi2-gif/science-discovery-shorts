@@ -16,9 +16,18 @@
     },
     "schedule": [
       {
-        "cron": "0 6,7 * * *"
+        "cron": "0 6,7,10 * * *"
       }
-    ]
+    ],
+    "workflow_call": {
+      "inputs": {
+        "mode": {
+          "type": "string",
+          "default": "review",
+          "required": false
+        }
+      }
+    }
   },
   "permissions": {
     "contents": "write",
@@ -63,7 +72,8 @@
         {
           "uses": "actions/checkout@v4",
           "with": {
-            "fetch-depth": 0
+            "fetch-depth": 0,
+            "ref": "${{ github.ref_name }}"
           }
         },
         {
@@ -109,8 +119,7 @@
         {
           "name": "Verify the confirmed destination accounts without posting",
           "if": "steps.prepare.outcome == 'success'",
-          "continue-on-error": true,
-          "run": "python -m professional_motion.cli preflight science"
+          "run": "python - <<'PY2'\nfrom professional_motion.publisher import preflight\nr=preflight('science',True)\nassert len(r['buffer'])==3 and not r['direct_youtube'], 'Three verified destinations are required'\nPY2"
         },
         {
           "name": "Resume an interrupted exact original voice if available",
@@ -244,7 +253,8 @@
         "BUFFER_FACEBOOK_CHANNEL_ID": "${{ secrets.BUFFER_FACEBOOK_CHANNEL_ID }}",
         "BUFFER_INSTAGRAM_CHANNEL_ID": "${{ secrets.BUFFER_INSTAGRAM_CHANNEL_ID }}",
         "BUFFER_TIKTOK_CHANNEL_ID": "${{ secrets.BUFFER_TIKTOK_CHANNEL_ID }}",
-        "HORROR_REVIEW_GENRE": "${{ inputs.horror_genre || '' }}"
+        "HORROR_REVIEW_GENRE": "${{ inputs.horror_genre || '' }}",
+        "DURABLE_SUBMISSION_GUARD": "true"
       },
       "steps": [
         {
@@ -296,7 +306,8 @@
         {
           "name": "Schedule approved daily film for exactly 17:00 Cairo",
           "if": "steps.finish.outcome == 'success' && needs.produce.outputs.publish == 'true'",
-          "run": "python -m professional_motion.cli publish science --slot \"${{ needs.produce.outputs.slot }}\" --due \"${{ needs.produce.outputs.due }}\""
+          "run": "python -m professional_motion.cli publish science --slot \"${{ needs.produce.outputs.slot }}\" --due \"${{ needs.produce.outputs.due }}\"",
+          "id": "publication"
         },
         {
           "uses": "actions/upload-artifact@v4",

@@ -12,11 +12,15 @@ def decision(profile,mode,event,now=None):
     now=now or datetime.now(timezone.utc);local=now.astimezone(ZoneInfo('Africa/Cairo'))
     daily=mode=='daily' or event=='schedule'
     enabled=approved()
-    # Two UTC cron hours cover both Cairo offsets. The civil-time guard selects one.
-    run=not daily or (enabled and (event!='schedule' or local.hour==9))
-    due=next_slot(now).isoformat(timespec='seconds').replace('+00:00','Z')
-    slot=('daily-'+due[:10]) if daily else 'review-'+os.getenv('GITHUB_RUN_ID','local')
-    return {'run':run,'publish':daily and enabled,'due':due,'slot':slot,'profile':profile,'approval_pending':daily and not enabled}
+    from .schedule_window import daily_window
+    from .editorial import registry
+    reason,due_at,slot=daily_window(now)
+    due=due_at.isoformat(timespec='seconds').replace('+00:00','Z')
+    existing=next((r for r in registry()['episodes'] if r.get('slot')==slot),None) if daily else None
+    complete=bool(existing and existing.get('status') in ('scheduled','published') and len(existing.get('receipts',{}))==3 and all(r.get('id') for r in existing['receipts'].values()))
+    run=not daily or (enabled and reason=='eligible' and not complete)
+    if complete:reason='already_scheduled'
+    return {'run':run,'publish':daily and enabled and run,'due':due,'slot':slot if daily else 'review-'+os.getenv('GITHUB_RUN_ID','local'),'profile':profile,'approval_pending':daily and not enabled,'reason':reason}
 
 
 def main():
@@ -26,7 +30,10 @@ def main():
         if os.getenv('GITHUB_OUTPUT'):
             with open(os.environ['GITHUB_OUTPUT'],'a') as f:
                 for k,v in d.items():f.write(k+'='+str(v).lower()+'\n')
-        print(json.dumps(d));return
+        print(json.dumps(d))
+        if d['reason']=='window_closed' and (a.mode=='daily' or os.getenv('GITHUB_EVENT_NAME')=='schedule'):
+            raise RuntimeError('Production window closed; no immediate posting or next-day rollover')
+        return
     if a.action=='prepare':
         from .credentials import preflight as generation_credentials
         generation_credentials();prepare(a.profile,a.slot)

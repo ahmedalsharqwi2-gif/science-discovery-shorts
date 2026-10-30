@@ -92,3 +92,24 @@ if __name__ == "__main__":
     parser.add_argument("action", choices=["confirm"])
     parser.parse_args()
     confirm_stock()
+
+
+def submission_intent(service,channel_id,due_at):
+    """Persist a write-ahead marker; an ambiguous submission must be reconciled."""
+    path=ROOT/'state/publication_stock.json'
+    data=json.loads(path.read_text())
+    entry=data['slots'][stock_key()]
+    existing=entry.setdefault('submissions',{}).get(service)
+    if existing and not entry.get('receipts',{}).get(service,{}).get('id'):
+        raise RuntimeError('PublicationReconciliationRequired: a prior submission has no receipt; refusing a duplicate request')
+    entry['submissions'][service]={'channel_id':channel_id,'scheduled_at':due_at,'status':'submitting','created_at':datetime.now(timezone.utc).isoformat()}
+    temp=path.with_suffix('.tmp');temp.write_text(json.dumps(data,ensure_ascii=False,indent=2));temp.replace(path)
+    if os.getenv('GITHUB_ACTIONS')=='true':
+        import subprocess,sys
+        subprocess.run([sys.executable,'-m','professional_motion.persist_state'],check=True)
+
+
+def update_verified_receipts(receipts):
+    path=ROOT/'state/publication_stock.json';data=json.loads(path.read_text())
+    data['slots'][stock_key()]['receipts'].update(receipts)
+    temp=path.with_suffix('.tmp');temp.write_text(json.dumps(data,ensure_ascii=False,indent=2));temp.replace(path)
