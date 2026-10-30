@@ -464,6 +464,152 @@
           "verified_at": "2026-10-30T12:40:42.489061+00:00"
         }
       }
+    },
+    {
+      "slot": "review-41125779274",
+      "topic_key": "saturn-rings",
+      "canonical_subject": "saturn-rings",
+      "title": "حلقات زحل مش قرص واحد",
+      "url": "https://science.nasa.gov/saturn/facts/",
+      "status": "reserved",
+      "story": {
+        "title": "حلقات زحل مش قرص واحد",
+        "canonical_subject": "saturn-rings",
+        "suitable": true,
+        "facts": [
+          "Saturn rings are composed of billions of small chunks of ice and rock coated with dust.",
+          "The ring system extends up to 175000 miles from the planet while the main rings are about 30 feet thick.",
+          "A gap measuring 2920 miles called the Cassini Division separates rings A and B."
+        ],
+        "milestones": [
+          "2004",
+          "2016",
+          "2017"
+        ],
+        "scenes": [
+          {
+            "id": "scene_1",
+            "label": "حلقات زحل",
+            "narration": "حلقات زحل اللي بنشوفها في الصور مش قرص واحد صلب زي ما ناس كتير فاكرة. دي في الحقيقة نظام معقد بيتكون من مليارات القطع الصغيرة من الثلج والصخور اللي عليها طبقة من الغبار، وكل قطعة بتتحرك لوحدها وبسرعة مختلفة حوالين الكوكب.",
+            "labels": [
+              "حلقات زحل",
+              "الثلج والصخور"
+            ],
+            "visual_mode": "hero",
+            "evidence_excerpt_id": 39,
+            "evidence_quote": "Saturn's powerful gravity. They are made of billions of small chunks of ice and rock"
+          },
+          {
+            "id": "scene_2",
+            "label": "حطام فضي",
+            "narration": "العلماء بيعتقدوا إن الحلقات دي عبارة عن بقايا مذنبات أو كويكبات أو حتى أقمار قديمة اتعرضت لقوة جاذبية زحل الهائلة واتفتت قبل ما تقدر تقرب أكتر من كده للكوكب، فتحولت للكتل اللي قدامنا دي.",
+            "labels": [
+              "جاذبية زحل",
+              "بقايا مذنبات"
+            ],
+            "visual_mode": "orbit",
+            "evidence_excerpt_id": 37,
+            "evidence_quote": "Cassini spacecraft. NASA/JPL-Caltech/Space Science Institute Rings Saturn's rings are thought to be pieces of comets,"
+          },
+          {
+            "id": "scene_3",
+            "label": "أحجام مختلفة",
+            "narration": "حجم الأجزاء اللي بتلف دي بيتنوع بشكل غريب جدا. فيه حبيبات ثلجية صغيرة قد التراب، وفيه قطع تانية بحجم البيت، وكمان فيه أجزاء ضخمة بتوصل لأحجام الجبال العالية وهيايمة في الفضاء حوالين الكوكب.",
+            "labels": [
+              "حبيبات ثلجية",
+              "حجم البيت"
+            ],
+            "visual_mode": "detail",
+            "evidence_excerpt_id": 40,
+            "evidence_quote": "coated with other materials such as dust. The ring particles mostly range from tiny, dust-sized"
+          },
+          {
+            "id": "scene_4",
+            "label": "الأبعاد والسمك",
+            "narration": "نظام الحلقات ده بيمتد لمسافة بتصل لحد مائة خمسة وسبعين ألف ميل بعيد عن زحل. بس المدهش إن السمك الرأسي للحلقات الأساسية رفيع جدا، وبيتراوح غالبا حول تلاتين قدم بس.",
+            "labels": [
+              "مائة خمسة وسبعين ألف ميل",
+              "تلاتين قدم"
+            ],
+            "visual_mode": "light",
+            "evidence_excerpt_id": 44,
+            "evidence_quote": "planet. Saturn's ring system extends up to 175,000 miles (282,000 kilometers) from the planet, yet"
+          },
+          {
+            "id": "scene_5",
+            "label": "الترتيب والمسافات",
+            "narration": "الحلقات دي متسمية بالحروف الأبجدية حسب ترتيب اكتشافها. الحلقات الأساسية هي إيه وبي وسي، وفيه حلقات تانية أضعف زي دي وإي وأف وجي، وكل مجموعة قريبة من بعضها بمسافات محسوبة.",
+            "labels": [
+              "الحروف الأبجدية",
+              "الحلقات الأساسية"
+            ],
+            "visual_mode": "orbit",
+            "evidence_excerpt_id": 46,
+            "evidence_quote": "alphabetically in the order they were discovered, the rings are relatively close to each other,"
+          },
+          {
+            "id": "scene_6",
+            "label": "فجوة كاسيني",
+            "narration": "لو بصينا جوه الترتيب ده، هنلاقي فراغ كبير وفاصل واضح بيقسم الحلقات. الفجوة دي اسمها فجوة كاسيني، وعرضها بيبلغ حوالي ألفين وتسع ميكون ميل، وهي اللي بتفصل بين الحلقات إيه وبي بوضوح.",
+            "labels": [
+              "فجوة كاسيني",
+              "الحلقات إيه وبي"
+            ],
+            "visual_mode": "detail",
+            "evidence_excerpt_id": 47,
+            "evidence_quote": "with the exception of a gap measuring 2,920 miles (4,700 kilometers) in width called the"
+          },
+          {
+            "id": "scene_7",
+            "label": "رحلة كاسيني",
+            "narration": "معلوماتنا عن التفاصيل الدقيقة دي اتثبتت واتوثقت بفضل مركبة كاسيني الفضائية التابعة لوكالة ناسا. المركبة دي وصلت لزحل سنة ألفين وأربعة، وفضلت تصور وتدرس النظام ده لحد ما الرحلة انتهت في منتصف سبتمبر سنة ألفين وسبعتاشر.",
+            "labels": [
+              "مركبة كاسيني",
+              "ألفين وأربعة"
+            ],
+            "visual_mode": "hero",
+            "evidence_excerpt_id": 5,
+            "evidence_quote": "spacecraft arrived at Saturn in 2004, and the mission ended Sept.15, 2017. Credits: NASA/JPL-Caltech/Space Science"
+          },
+          {
+            "id": "scene_8",
+            "label": "أسرار مستمرة",
+            "narration": "حتى بعد كل الصور والبيانات اللي جمعتها المركبات الفضائية، حلقات زحل لسه بتخبي تفاصيل كتيرة عن تكوين النظام الشمسي القديم. وكل دراسة جديدة بتأكد إننا لسه في أول الطريق عشان نفهم أسرار الكوكب العظيم ده.",
+            "labels": [
+              "النظام الشمسي",
+              "أسرار الكوكب"
+            ],
+            "visual_mode": "orbit",
+            "evidence_excerpt_id": 10,
+            "evidence_quote": ", the Saturn system is a rich source of scientific discovery and still holds many"
+          }
+        ],
+        "hashtags": [
+          "حلقات_زحل",
+          "الفضاء",
+          "كاسيني"
+        ],
+        "profile": "science",
+        "series": "اسرار الكون",
+        "visual_family": "space",
+        "variant": "saturn",
+        "topic_key": "saturn-rings",
+        "source": {
+          "url": "https://science.nasa.gov/saturn/facts/",
+          "publisher": "NASA Science",
+          "title": "حلقات زحل مش قرص واحد"
+        },
+        "fiction": false,
+        "documented": true,
+        "editorial_review": {
+          "supported": true,
+          "novel": true,
+          "issues": [],
+          "model": "gemini-3.5-flash-lite"
+        },
+        "writer_model": "gemini-3.5-flash-lite"
+      },
+      "reserved_at": "2026-10-30T20:48:27.424675+00:00"
     }
   ]
 }
