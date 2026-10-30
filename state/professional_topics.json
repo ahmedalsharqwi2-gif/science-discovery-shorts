@@ -306,91 +306,91 @@
         "scenes": [
           {
             "id": "scene_1",
-            "label": "فقاعة مغناطيسية",
-            "narration": "تخيل كوكبنا جوه فقاعة عملاقة من المغناطيسية. الفقاعة دي بتحمينا كل يوم من غضب الشمس اللي بتبعت مواد شمسية بسرعة مليون ميل في الساعة أو إكتر، عشان تضمن إن الحياة تكمل على كوكبنا بأمان تام.",
+            "label": "فقاعة بتحمي الأرض",
+            "narration": "تخيل إن حوالين الأرض فقاعة ضخمة من المغناطيسية، وإحنا مش شايفينها. ناسا بتسمي المنطقة دي الغلاف المغناطيسي. الفقاعة بتحوّل مسار معظم الجسيمات اللي جاية من الشمس، ووجودها ساعد غلافنا الجوي يفضل محمي. بس الحماية دي مش معناها إن مفيش حاجة بتعدي.",
             "labels": [
               "فقاعة عملاقة من المغناطيسية"
             ],
             "visual_mode": "field",
-            "evidence_excerpt_id": 1,
-            "evidence_quote": "planet and protecting us from the fury of the Sun is a giant bubble of"
+            "evidence_excerpt_id": 0,
+            "evidence_quote": "3 min read Earth’s Magnetosphere NASA Science Editorial Team Mar 25, 2018 Article Enveloping our"
           },
           {
             "id": "scene_2",
-            "label": "مقارنة مع المريخ",
-            "narration": "الباحثين بصوا على كوكب المريخ اللي فقد مجاله المغناطيسي من أكتر من أربعة مليارات سنة. ده أدى لأن الرياح الشمسية جرفت معظم غلافه الجوي، وسبته عالم قاحل عكس الأرض تماماً.",
+            "label": "الرياح الشمسية",
+            "narration": "الشمس بتبعت باستمرار تيار من الجسيمات اسمه الرياح الشمسية. التيار ده بيقابل المجال المغناطيسي حوالين كوكبنا، فجزء كبير منه بيتحوّل بعيد. هنا لازم نفرق بين دور المجال ودور الغلاف الجوي: الغلاف الجوي نفسه بيساعد يحمينا من الأشعة فوق البنفسجية.",
             "labels": [
               "فقد مجاله المغناطيسي"
             ],
             "visual_mode": "hero",
-            "evidence_excerpt_id": 7,
-            "evidence_quote": "that lost its magnetosphere about 4.2 billion years ago. The Solar wind is thought to"
+            "evidence_excerpt_id": 1,
+            "evidence_quote": "planet and protecting us from the fury of the Sun is a giant bubble of"
           },
           {
             "id": "scene_3",
-            "label": "خطوط القوة المغناطيسية",
-            "narration": "الدرع ده مش صلب بالكامل، دي فقاعة بتسمح بتفاعل مستمر. خطوط القوة المغناطيسية بتتقاطع وتتصل مع الرياح الشمسية القادمة، وده بيخلي المجال يعيد تشكيل نفسه وفتح ثغرات متكررة.",
+            "label": "ليه المريخ مختلف؟",
+            "narration": "ناسا بتقارن الأرض بالمريخ عشان توضح أهمية الدرع ده. المريخ فقد غلافه المغناطيسي من زمن بعيد، والعلماء بيرجحوا إن الرياح الشمسية ساهمت في تجريد الكوكب من معظم غلافه الجوي. ده تفسير علمي محتمل، مش تجربة بتقول إن تاريخ الكوكبين كان واحد.",
             "labels": [
               "خطوط القوة المغناطيسية"
             ],
             "visual_mode": "field",
-            "evidence_excerpt_id": 16,
-            "evidence_quote": "solar wind will periodically connect to the magnetosphere forcing it to reconfigure. This can create"
+            "evidence_excerpt_id": 4,
+            "evidence_quote": "action of these solar particles could strip the Earth of its protective layers, which shield"
           },
           {
             "id": "scene_4",
-            "label": "تدفق الجسيمات",
-            "narration": "الثغرات دي ممكن تفتح وتقفل مرات كتيرة في اليوم الواحد. لما المجال المغناطيسي للشمس يتصل بالمجال الأرضي، بتبدأ العواصف والجسيمات المشحونة تتدفق بسرعة كبيرة جداً جوه الدرع.",
+            "label": "تأثير على التكنولوجيا",
+            "narration": "القصة مش بعيدة عن حياتنا اليومية. الطقس الفضائي الشديد ممكن يعطل شبكات الاتصالات، ويأثر على الملاحة بالأقمار الصناعية وشبكات الكهرباء. عشان كده دراسة المجال المغناطيسي مش مجرد رسم لخطوط حوالين كرة؛ دي محاولة نفهم خطر ممكن يوصل للتكنولوجيا اللي بنستخدمها.",
             "labels": [
               "جسيمات المشحونة"
             ],
             "visual_mode": "flow",
-            "evidence_excerpt_id": 18,
-            "evidence_quote": "many times daily or even many times hourly. Most of them are small and short-lived;"
+            "evidence_excerpt_id": 8,
+            "evidence_quote": "have stripped away most of Mars’ atmosphere, possibly after the red planet’s magnetic field dissipated."
           },
           {
             "id": "scene_5",
-            "label": "إعادة الاتصال",
-            "narration": "العملية دي المعروفة بإعادة الاتصال المغناطيسي بتحرر طاقة هائلة. الارتباط ده بيخلي المجال بيمتص الطاقة الجاية من الرياح الشمسية ويطلقها بشكل متفجر في صورة عواصف جيومغناطيسية.",
+            "label": "درع مش مقفول",
+            "narration": "الغلاف المغناطيسي درع قابل للنفاذ، مش حيطة مقفولة. أحيانًا المجال اللي مع الرياح الشمسية بيتصل بمجال الأرض، وبيجبر المنطقة تعيد ترتيب نفسها. العلماء بيوصفوا فتحات بتسمح بدخول الطاقة. الفتحات دي ممكن تظهر وتقفل أكتر من مرة، وبعضها صغير وقصير وبعضها أوسع.",
             "labels": [
               "إعادة الاتصال المغناطيسي"
             ],
             "visual_mode": "flow",
-            "evidence_excerpt_id": 20,
-            "evidence_quote": "way, the fireworks start. Zesta says, “The Earth’s magnetosphere absorbs the incoming energy from the"
+            "evidence_excerpt_id": 10,
+            "evidence_quote": "of NASA orbiters and rovers. By contrast, Earth’s magnetosphere seems to have kept our atmosphere"
           },
           {
             "id": "scene_6",
-            "label": "مهمة إم إم إس",
-            "narration": "عشان نفهم التفاصيل دي، وكالة ناسا أطلقت مهمة متعددة المقاييس في مارس ألفين وخمستاشر. المركبات الفضائية طارت بتشكيل قريب جداً لمنطقة حدوث إعادة الاتصال عشان ترصد فيزياء الإلكترونات.",
+            "label": "إعادة الاتصال",
+            "narration": "العملية اللي بتحصل لما خطوط المجال تتقابل وتعيد ترتيب نفسها اسمها إعادة الاتصال المغناطيسي. الطاقة المخزنة ممكن تتحرر بعنف، ومعاها جسيمات مشحونة بتتحرك بسرعة كبيرة. ناسا بتدرس إزاي دخول الطاقة وتحررها مرتبطين بالعواصف المغناطيسية، وليه التغيير ده ممكن يبقى قوي بالشكل ده.",
             "labels": [
               "فيزياء الإلكترونات"
             ],
             "visual_mode": "hero",
-            "evidence_excerpt_id": 26,
-            "evidence_quote": "March 2015 to observe the electron physics of magnetic reconnection for the first time. Bristling"
+            "evidence_excerpt_id": 12,
+            "evidence_quote": "“If there were no magnetic field, we might have a very different atmosphere left without"
           },
           {
             "id": "scene_7",
-            "label": "طقس الفضاء",
-            "narration": "دراسة الكحليات دي مش للعلوم البحتة وبس، دي بتساعدنا نتوقع طقس الفضاء اللي بيأثر على شبكات الاتصالات، ونظام الجي بي إس، وشبكات الطاقة الكهربائية هنا على الأرض.",
+            "label": "أربع مركبات بتقيس",
+            "narration": "عشان تشوف اللي بيحصل عن قرب، ناسا أطلقت مهمة مكوّنة من أربع مركبات فضائية بتطير في تشكيل قريب. المركبات شايلة حساسات للمجال المغناطيسي وكواشف للجسيمات، وبتقيس مناطق بتحصل فيها إعادة الاتصال. القياسات دي بتدرس حركة الإلكترونات نفسها، بدل ما نعتمد على شكل الرسمة بس.",
             "labels": [
               "طقس الفضاء"
             ],
             "visual_mode": "flow",
-            "evidence_excerpt_id": 14,
-            "evidence_quote": "someday forecast space weather that can affect Earth’s technology. Extreme space weather events can disrupt"
+            "evidence_excerpt_id": 16,
+            "evidence_quote": "solar wind will periodically connect to the magnetosphere forcing it to reconfigure. This can create"
           },
           {
             "id": "scene_8",
-            "label": "تكامل الأبحاث",
-            "narration": "البيانات اللي بتجمعها المهمة دي بتتكامل مع بعثات تانية زي كلستر وتيميس. كل ده بيدينا صورة أدق عن الغلاف المغناطيسي وبيساعدنا نفهم الفيزياء الأساسية للفضاء المحيط بينا.",
+            "label": "فهم أفضل للطقس الفضائي",
+            "narration": "المهمة دي بتكمل بيانات بعثات تانية، عشان العلماء يفهموا فيزياء الفضاء ويحسنوا توقعات الطقس الفضائي. الفكرة مش إن الدرع كامل، ولا إننا نقدر نتنبأ بكل عاصفة بدقة. الفكرة إن كوكبنا محمي بنظام متحرك بيتفاعل مع الشمس طول الوقت، وكل قياس جديد بيكشف جزء منه.",
             "labels": [
               "الغلاف المغناطيسي"
             ],
             "visual_mode": "field",
-            "evidence_excerpt_id": 30,
-            "evidence_quote": "and partner agencies, such as THEMIS, Cluster, and Geotail, contributing critical new details to the"
+            "evidence_excerpt_id": 20,
+            "evidence_quote": "way, the fireworks start. Zesta says, “The Earth’s magnetosphere absorbs the incoming energy from the"
           }
         ],
         "hashtags": [
@@ -417,11 +417,19 @@
           "supported": true,
           "novel": true,
           "issues": [],
-          "model": "gemini-3.5-flash-lite"
+          "review_type": "Codex source review of the same reserved NASA magnetosphere episode",
+          "checks": [
+            "Eight paragraphs checked against NASA article; no invented measurements",
+            "Distinguish atmosphere/UV shielding from magnetic deflection of charged particles",
+            "Mars atmospheric-loss explanation is attributed as a hypothesis",
+            "No claim of guaranteed forecasting or an impermeable shield"
+          ],
+          "source_body_sha256": "f0dd111b1d6177303dfeb1095d345259518ea5fedcae6756fe804fa676d11a20"
         },
         "writer_model": "gemini-3.5-flash-lite"
       },
-      "reserved_at": "2026-10-30T12:13:39.646414+00:00"
+      "reserved_at": "2026-10-30T12:13:39.646414+00:00",
+      "revision_reason": "Original measured narration was 106.6 seconds; expanded substantive NASA explanation, no padding"
     }
   ]
 }
