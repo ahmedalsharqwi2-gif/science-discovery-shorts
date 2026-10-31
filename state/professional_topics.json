@@ -759,7 +759,7 @@
       "canonical_subject": "jupiter-storms",
       "title": "المشتري: عاصفة أكبر من الأرض",
       "url": "https://science.nasa.gov/jupiter/",
-      "status": "rendered",
+      "status": "publishing",
       "story": {
         "title": "المشتري: عاصفة أكبر من الأرض",
         "canonical_subject": "jupiter-storms",
@@ -903,7 +903,8 @@
         "writer_model": "gemini-3.5-flash-lite"
       },
       "reserved_at": "2026-10-31T18:53:19.435958+00:00",
-      "video_sha256": "22fb8bcb74df522aababc52109b20589468b8c02ed17f5ac30a09c95e0de0a15"
+      "video_sha256": "22fb8bcb74df522aababc52109b20589468b8c02ed17f5ac30a09c95e0de0a15",
+      "publication_video_sha256": "22fb8bcb74df522aababc52109b20589468b8c02ed17f5ac30a09c95e0de0a15"
     }
   ]
 }
