@@ -1,6 +1,6 @@
 {
   "name": "Publish user-approved eclipse film only",
-  "on": {
+  "on": { "workflow_dispatch": null,
     "push": {
       "branches": [
         "codex/daily-professional-factory"
