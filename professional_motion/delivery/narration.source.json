@@ -1,0 +1,17 @@
+{
+  "provider": "Gemini TTS",
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Charon",
+  "style": "Egyptian Arabic ar-EG, native conversational Cairo accent. Mature warm male documentary storyteller, low resonant register, clear exact articulation, measured pace around 140 words per minute. Say the year numbers naturally in Egyptian Arabic. Preserve every word and sentence of the transcript, finish the last sentence clearly. No music, no sound effects, no singing, no spoken instructions.\nEgyptian Arabic engaging science explanation. Start with curiosity, build momentum, thoughtful final payoff. No music or sound effects. Read only the supplied words. Finish the last sentence. Clear natural pace.",
+  "text": "المشتري هو الكوكب الخامس من الشمس، وهو الأكبر حجماً في المجموعة الشمسية كلها، بكتلة أضخم من باقي الكواكب مجتمعة بأضعاف كثيرة. الكوكب ده بيمتلك خصائص ضخمة بتخليه فريد من نوعه مقارنة بباقي كواكب المجموعة الشمسية. لو اعتبرنا المشتري قوقعة فارغة، فهوا ممكن يستوعب ألف كوكب بحجم الأرض جوه منه. الحجم الهائل ده بيحيط بيه نظام معقد من الأقمار والحلقات وآلاف الأجسام الصغيرة اللي بتدور في مداره الفلكي بشكل دائم ومستمر. بيتبع الكوكب العملاق أكتر من مية قمر جرى التعرف عليها رسمياً. الصور المركبة بتوضح حافة الكوكب ومعاها أقماره الأربعة الكبرى اللي بتضم آيو ووروبا وجانيميد وكاليستو، ودي بتشكل جزء أساسي من النظام الجوفي المحيط بالمشتري. الملك بين الكواكب مش بطيء أبداً، بالعكس ده بيمتلك أسرع يوم في المجموعة الشمسية كلها. الدوران الكامل حوالين محوره بيستغرق حوالي تسع ساعات وتسع من عشرة من الساعة بس، وده سرعة دوران هائلة بالنسبة لحجمه الضخم. المجال ده اتدرس عبر رحلات فضائية كتير ومركبات عدت من جنبه وهي في طريقها لعوالم tانية بعيدة. مركبة جونو تابعة لوكالة ناسا بتدرس الكوكب ده حالياً مباشرة من مداره لتسجيل تفاصيل حركة الغلاف الجوي والعواصف. في تاريخ الثاني عشر من فبراير عام ألفين وتسعة عشر، قدرت مركبة جونو تصور البقعة الحمراء الكبرى بوضوح كبير. الصورة دي جرى تحسينها بناء على بيانات ومعلومات مقدمة من المؤسسات العلمية المختصة بدراسة الفضاء. التفاصيل الأولى والدقيقة عن المشتري اترصدت لأول مرة سنة ألف وستمائة وعشرة عن طريق العالم جاليليو جاليلي باستخدام تلسكوب صغير صنعه بنفسه، ومن الوقت ده وبدأت البشرية تفهم أسرار الكوكب التدريجية. الرحلات مستمرة لحد النهاردة، زي إطلاق مركبة يوروبا كليبر في الرابع عشر من أكتوبر عام ألفين وأربعة وعشرين من فلوريدا، عشان تتوجه لدراسة قمر أوروبا الجليدي التابع للمشتري وتفحص طبيعته عن قرب.",
+  "interaction_id": "v1_ChdJem5tYXR5a0ZMN1Utc0FQdllxZG1RdxIXSXpubWF0eWtGTDdVLXNBUHZZcWRtUXc",
+  "duration": 123.44,
+  "sample_rate": 24000,
+  "channels": 1,
+  "sha256": "5dda33fbc83c7aa32e056c3b38b3347f2c31b32ff2f9ec889def2371ddac956c",
+  "newly_synthesized": true,
+  "original_video_audio_used": false,
+  "fallback_used": false,
+  "cache_hit": false,
+  "output_sha256": "5dda33fbc83c7aa32e056c3b38b3347f2c31b32ff2f9ec889def2371ddac956c"
+}
