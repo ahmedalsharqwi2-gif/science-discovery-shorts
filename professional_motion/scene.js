@@ -1,3 +1,4 @@
+import {scienceCinema} from './cinema.js';
 import {drawReferenceLayout} from './reference_layout.js';
 import {loadBranding,drawBranding} from './branding.js';
 import {drawCaption} from './caption_layout.js';
@@ -267,6 +268,9 @@ function drawChannelText(t,index,local,p){
  const flash=1-clamp(local/.28);if(index>0&&flash>0){ctx.fillStyle=`rgba(103,228,208,${flash*.12})`;ctx.fillRect(W*(1-flash),230,10+flash*26,1330);}
 }
 
+const pipeline=new URLSearchParams(location.search).get('pipeline')||'legacy';
+if(!['legacy','v2'].includes(pipeline))throw Error('Unknown production pipeline');
+const cinema=pipeline==='v2'?scienceCinema({scene,camera,renderer}):null;
 window.renderAt=(time,duration=D)=>{
  D=duration;const t=Math.max(0,time),u=t/D;
  let index=times.findLastIndex(s=>s<=u);index=Math.max(0,index);
@@ -290,6 +294,7 @@ window.renderAt=(time,duration=D)=>{
  if(useHaunted){const beat=timing?.scenes[index]?.scare_beat;const view=haunted.update(config,index,local,p,t,beat===undefined?-1:t-beat);camera.position.set(...view.position);camera.lookAt(...view.target);}
  dust.visible=!useHaunted;shafts.forEach(o=>o.visible=!useHaunted);
  dust.rotation.y=t*.012;dust.position.y=Math.sin(t*.11)*.5;shafts.forEach((m,i)=>m.material.uniforms.opacity.value=.025+.015*(.5+.5*Math.sin(t*.2+i)));
+ if(cinema)window.cinematography=cinema.update(config,index,p,t);
  if(new URLSearchParams(location.search).get('style')==='reference')renderer.render(scene,camera);else composer.render();if(useOctopus)drawText(t,index,local,p);else drawChannelText(t,index,local,p);if(new URLSearchParams(location.search).get('style')==='reference')drawReferenceLayout(ctx,{story:config,timing,index,time:t,local,duration:D,review:new URLSearchParams(location.search).get('review')==='true',logo:!!brandMark});drawBranding(ctx,brandMark);
  return {scene:index+1,time:t,duration:D,originalVoice:!!timing};
 };
