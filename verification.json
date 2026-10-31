@@ -1,0 +1,181 @@
+{
+  "file": "professional-review.mp4",
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "duration": 117.08,
+  "story_sha256": "9595baf3bb58f34904af50cc8603502c5a013a637dd50b78eb26b87f522a0c8a",
+  "voice": "original Gemini Charon",
+  "asr_model": "medium+small+large-v3",
+  "independent_asr_word_coverage": 0.8928571428571429,
+  "exact_token_coverage": 0.8928571428571429,
+  "speech_matching_method": "Exact-token ensemble anchors; supplied-script phrase captions; no active-word precision claim",
+  "known_name_normalization_applied": false,
+  "visual_gate": {
+    "passed": true,
+    "duration": 117.1,
+    "resolution": [
+      1080,
+      1920
+    ],
+    "method": "within-scene diagram-region pixel changes",
+    "scenes": [
+      {
+        "scene": 1,
+        "diagram_spatial_std": [
+          34.40823677955488,
+          33.163861136334276,
+          34.19998450985765
+        ],
+        "changed_pixel_ratios": [
+          0.05880816714150047,
+          0.04211775878442545
+        ],
+        "passed": true
+      },
+      {
+        "scene": 2,
+        "diagram_spatial_std": [
+          34.613678970681796,
+          37.848692707984135,
+          42.691985694580616
+        ],
+        "changed_pixel_ratios": [
+          0.20854700854700856,
+          0.21074311490978156
+        ],
+        "passed": true
+      },
+      {
+        "scene": 3,
+        "diagram_spatial_std": [
+          37.669542075401544,
+          35.59270365347391,
+          35.37058615184549
+        ],
+        "changed_pixel_ratios": [
+          0.0600664767331434,
+          0.04685422602089269
+        ],
+        "passed": true
+      },
+      {
+        "scene": 4,
+        "diagram_spatial_std": [
+          34.530653227714744,
+          32.24436076722363,
+          32.42118729074706
+        ],
+        "changed_pixel_ratios": [
+          0.05732431149097816,
+          0.04620132953466287
+        ],
+        "passed": true
+      },
+      {
+        "scene": 5,
+        "diagram_spatial_std": [
+          34.587597941173854,
+          32.42324837969384,
+          32.527133873146276
+        ],
+        "changed_pixel_ratios": [
+          0.05714624881291548,
+          0.04570275403608737
+        ],
+        "passed": true
+      },
+      {
+        "scene": 6,
+        "diagram_spatial_std": [
+          36.29684977605562,
+          34.30420440023158,
+          35.28627759324996
+        ],
+        "changed_pixel_ratios": [
+          0.06359211775878443,
+          0.05334757834757835
+        ],
+        "passed": true
+      },
+      {
+        "scene": 7,
+        "diagram_spatial_std": [
+          34.612374025737665,
+          32.951826966928515,
+          34.223383181789885
+        ],
+        "changed_pixel_ratios": [
+          0.057680436847103514,
+          0.048005698005698004
+        ],
+        "passed": true
+      },
+      {
+        "scene": 8,
+        "diagram_spatial_std": [
+          34.66308154183455,
+          33.000352802262306,
+          34.14423162250231
+        ],
+        "changed_pixel_ratios": [
+          0.05732431149097816,
+          0.04770892687559354
+        ],
+        "passed": true
+      }
+    ],
+    "note": "Technical blank/freeze detection only; not a judgement of artistic or factual quality."
+  },
+  "audio_tail": {
+    "audio_seconds": 117.08,
+    "video_seconds": 117.08,
+    "difference_seconds": 0.0,
+    "last_speech_window_correlation": 0.9859257936477661,
+    "audio_tail_checked": true,
+    "silence_padding_used_to_hide_lost_speech": false
+  },
+  "publication_metadata": {
+    "title": "اسرار الكون | ليل على كوكب مخيف",
+    "caption": "رسوم توضيحية وإعادة تمثيل درامية؛ ليست تسجيلًا للأحداث.\nالمصدر: NASA\nhttps://science.nasa.gov/image-article/apod-2026-october-31-night-on-a-spooky-planet/\n#هفيرير #الشفق_القطبى #ناسا",
+    "description": "رسوم توضيحية وإعادة تمثيل درامية؛ ليست تسجيلًا للأحداث.\nالمصدر: NASA\nhttps://science.nasa.gov/image-article/apod-2026-october-31-night-on-a-spooky-planet/\n#هفيرير #الشفق_القطبى #ناسا",
+    "tags": [
+      "هفيرير",
+      "الشفق_القطبى",
+      "ناسا"
+    ],
+    "hashtags": [
+      "#هفيرير",
+      "#الشفق_القطبى",
+      "#ناسا"
+    ],
+    "source_url": "https://science.nasa.gov/image-article/apod-2026-october-31-night-on-a-spooky-planet/",
+    "containsSyntheticMedia": true
+  },
+  "duration_policy": {
+    "minimum_exclusive": 90,
+    "maximum_exclusive": 180
+  },
+  "music_target_lufs": -27,
+  "music": "Original composed score",
+  "music_bpm": 112,
+  "source": {
+    "url": "https://science.nasa.gov/image-article/apod-2026-october-31-night-on-a-spooky-planet/",
+    "publisher": "NASA",
+    "title": "APOD: 2026 October 31 – Night on a Spooky Planet"
+  },
+  "topic_key": "e6da576f1b1a6c97",
+  "profile": "science",
+  "editorial_review": {
+    "supported": true,
+    "novel": true,
+    "issues": [],
+    "model": "gemini-3.5-flash-lite"
+  },
+  "render": "Three.js geometry and lighting with reference editorial frame; bloom disabled",
+  "visual_style": "reference",
+  "review_watermark": true,
+  "reference_audio_reused": false,
+  "automatically_published": false,
+  "status": "Technical checks passed; artistic judgement requires viewing the complete film."
+}
