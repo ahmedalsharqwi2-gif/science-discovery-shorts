@@ -611,6 +611,146 @@
       },
       "reserved_at": "2026-10-30T20:48:27.424675+00:00",
       "video_sha256": "7b0fffc597b9d019578bffcbfaf4cbd13d76134430958381b865fde5b9c265f7"
+    },
+    {
+      "slot": "review-41198894793",
+      "topic_key": "e6da576f1b1a6c97",
+      "canonical_subject": "apod-2026-october-31-night-on-a-spooky-planet",
+      "title": "ليل على كوكب مخيف",
+      "url": "https://science.nasa.gov/image-article/apod-2026-october-31-night-on-a-spooky-planet/",
+      "status": "reserved",
+      "story": {
+        "title": "ليل على كوكب مخيف",
+        "canonical_subject": "apod-2026-october-31-night-on-a-spooky-planet",
+        "suitable": true,
+        "facts": [
+          "تم تصوير المشهد الشبحي في منطقة هفيرير البركانية بايسلندا على كوكب الأرض",
+          "العواصف المغناطيسية الأرضية نشأت بسبب النشاط الشمسي وإطلاق جسيمات طاقة محبوسة",
+          "الجسيمات النشطة دخلت الغلاف الجوي العلوي وكونت عروض الشفق القطبى الخضراء",
+          "أعمدة البخار والغاز بتطلع من الفتحات البركانية وسط الأجواء المظلمة"
+        ],
+        "milestones": [
+          "أكتوبر 2026",
+          "نشاط الشمس",
+          "العواصف المغناطيسية"
+        ],
+        "scenes": [
+          {
+            "id": "scene_1",
+            "label": "كوكب مخيف",
+            "narration": "إيه هو الكوكب المخيف ده؟ هو كوكب الأرض في ليلة ظلام وعاصفة، والصورة اتصورت في هفيرير بايسلندا عشان تعرض مشهد مش معتاد بيجمع بين الظواهر الطبيعية وعتمة الليل بشكل مرعب ومثير للاهتمام في نفس الوقت.",
+            "labels": [
+              "كوكب الأرض"
+            ],
+            "visual_mode": "hero",
+            "evidence_excerpt_id": 3,
+            "evidence_quote": "Earth on a dark and stormy night, of course. The ghostly scene was photographed at"
+          },
+          {
+            "id": "scene_2",
+            "label": "منطقة بركانية",
+            "narration": "المكان عبارة عن منطقة نشطة حرارياً وأرضيتها بركانية في شمال شرق أيسلندا، وبتظهر فيها مظاهر طبيعية مرعبة مع التضاريس الوعرة اللي بتخلي اللقطة كأنها جاية من عالم تاني خالص بعيد عن كوكبنا المعتاد.",
+            "labels": [],
+            "visual_mode": "orbit",
+            "evidence_excerpt_id": 4,
+            "evidence_quote": "Hverir , a geothermally active area found along northeastern Iceland's volcanic landscape . Triggered by"
+          },
+          {
+            "id": "scene_3",
+            "label": "عواصف شمسية",
+            "narration": "النشاط الشمسي هو اللي بيحفز عواصف مغناطيسية أرضية قوية تطلق جسيمات طاقة هائلة كانت محبوسة جوه المجال المغناطيسي لكوكبنا، وده بيمهد الطريق لظهور تأثيرات بصرية مذهلة في طبقات الجو العليا.",
+            "labels": [
+              "النشاط الشمسي"
+            ],
+            "visual_mode": "light",
+            "evidence_excerpt_id": 5,
+            "evidence_quote": "solar activity , geomagnetic storms have unleashed energetic particles trapped in Earth's magnetic field. Penetrating"
+          },
+          {
+            "id": "scene_4",
+            "label": "أضواء الشمال",
+            "narration": "الجسيمات لما بتخترق الغلاف الجوي العلوي عند خطوط العرض العالية، بتعمل عروض الشفق القطبى في السما المليانة نجوم، وبتلون الليل بألوان خضراء ساحرة بتغطي الأفق كله بطريقة فريدة ومخيفة.",
+            "labels": [
+              "الشفق القطبى"
+            ],
+            "visual_mode": "light",
+            "evidence_excerpt_id": 6,
+            "evidence_quote": "the planet's upper atmosphere at high latitudes, the particles create auroral displays in the starry"
+          },
+          {
+            "id": "scene_5",
+            "label": "أبخرة وغازات",
+            "narration": "أبخرة وغازات على شكل أبراج شبحية بتطلع من الفتحات المحلية عشان ترقص قصاد الأضواء الخضراء الغريبة في السما، وبتخلق لوحة بصرية متكاملة تحبس أنفاس أي حد يشوفها في الظلمة.",
+            "labels": [
+              "أبراج شبحية"
+            ],
+            "visual_mode": "orbit",
+            "evidence_excerpt_id": 7,
+            "evidence_quote": "night sky. Ghostly towers of steam and gas are venting from local fumaroles to dance"
+          },
+          {
+            "id": "scene_6",
+            "label": "نشاط عالي",
+            "narration": "النشاط الشفقي على الأرض لسه في حالة عالية عشان الشمس في المراحل الأولى من التراجع بعد ذروة دورتها النشطة، وده معناه إن الفرصة قائمة لتكرار الظاهرة دي بشكل مستمر الفترة الجاية.",
+            "labels": [
+              "حالة عالية"
+            ],
+            "visual_mode": "detail",
+            "evidence_excerpt_id": 9,
+            "evidence_quote": "a high state as the Sun is only in early phases of decline from the"
+          },
+          {
+            "id": "scene_7",
+            "label": "ظواهر تانية",
+            "narration": "قريب ممكن مظاهر شبحية تانية تظهر في منطقتك مع استمرار التقلبات دي، والصورة دي وثقها المصور ستيفان فيتر في أكتوبر سنة ألفين ستة وعشرين عشان تفضل توثيق مهم لجمال الكون وغموضه.",
+            "labels": [
+              "مظاهر شبحية"
+            ],
+            "visual_mode": "detail",
+            "evidence_excerpt_id": 10,
+            "evidence_quote": "peak of its solar activity cycle . And soon, other ghostly apparitions may dance in"
+          },
+          {
+            "id": "scene_8",
+            "label": "شرح الفلكيين",
+            "narration": "كل يوم في صورة جديدة للكون الفسيح مع شرح مختصر كاتبه عالم فلك محترف ضمن مشروع صورة اليوم الفلكية من ناسا، عشان نقرب دايمًا من أسرار الفضاء ونفهم كوكبنا والكون من حولنا بشكل أفضل.",
+            "labels": [
+              "صورة اليوم الفلكية"
+            ],
+            "visual_mode": "hero",
+            "evidence_excerpt_id": 1,
+            "evidence_quote": "or photograph of our fascinating universe is featured, along with a brief explanation written by"
+          }
+        ],
+        "hashtags": [
+          "هفيرير",
+          "الشفق_القطبى",
+          "ناسا"
+        ],
+        "editorial_warnings": [
+          "Write 260–330 spoken words for a natural film between 90 and 180 seconds"
+        ],
+        "profile": "science",
+        "series": "اسرار الكون",
+        "visual_family": "space",
+        "variant": "planet",
+        "topic_key": "e6da576f1b1a6c97",
+        "source": {
+          "url": "https://science.nasa.gov/image-article/apod-2026-october-31-night-on-a-spooky-planet/",
+          "publisher": "NASA",
+          "title": "APOD: 2026 October 31 – Night on a Spooky Planet"
+        },
+        "fiction": false,
+        "documented": true,
+        "editorial_review": {
+          "supported": true,
+          "novel": true,
+          "issues": [],
+          "model": "gemini-3.5-flash-lite"
+        },
+        "writer_model": "gemini-3.5-flash-lite"
+      },
+      "reserved_at": "2026-10-31T11:57:35.832325+00:00"
     }
   ]
 }
