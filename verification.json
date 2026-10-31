@@ -1,0 +1,183 @@
+{
+  "file": "professional-review.mp4",
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "duration": 123.44,
+  "story_sha256": "0911e08169bb0be33f54a286bd3fa85089a4c2bf2ec9ef711b57d8c518c8d50a",
+  "voice": "original Gemini Charon",
+  "asr_model": "medium+small+large-v3",
+  "independent_asr_word_coverage": 0.8864468864468864,
+  "exact_token_coverage": 0.8864468864468864,
+  "speech_matching_method": "Exact-token ensemble anchors; supplied-script phrase captions; no active-word precision claim",
+  "known_name_normalization_applied": false,
+  "visual_gate": {
+    "passed": true,
+    "duration": 123.466667,
+    "resolution": [
+      1080,
+      1920
+    ],
+    "method": "within-scene diagram-region pixel changes",
+    "scenes": [
+      {
+        "scene": 1,
+        "diagram_spatial_std": [
+          60.293542274969404,
+          57.75670027662494,
+          60.06262954686055
+        ],
+        "changed_pixel_ratios": [
+          0.09652184235517569,
+          0.05079534662867996
+        ],
+        "passed": true
+      },
+      {
+        "scene": 2,
+        "diagram_spatial_std": [
+          60.514191244353924,
+          65.29551418626576,
+          63.008724982810804
+        ],
+        "changed_pixel_ratios": [
+          0.31911206077872745,
+          0.25711063627730296
+        ],
+        "passed": true
+      },
+      {
+        "scene": 3,
+        "diagram_spatial_std": [
+          64.18716221810342,
+          60.94480251821721,
+          60.56270574318015
+        ],
+        "changed_pixel_ratios": [
+          0.09085944919278252,
+          0.06013770180436847
+        ],
+        "passed": true
+      },
+      {
+        "scene": 4,
+        "diagram_spatial_std": [
+          60.968204982344076,
+          59.89002348054782,
+          59.68283610595859
+        ],
+        "changed_pixel_ratios": [
+          0.0883309591642925,
+          0.06296296296296296
+        ],
+        "passed": true
+      },
+      {
+        "scene": 5,
+        "diagram_spatial_std": [
+          60.735951320888624,
+          59.68391817723438,
+          58.28688827287825
+        ],
+        "changed_pixel_ratios": [
+          0.0918684710351377,
+          0.05629154795821462
+        ],
+        "passed": true
+      },
+      {
+        "scene": 6,
+        "diagram_spatial_std": [
+          63.08848444632072,
+          61.90889866339748,
+          60.76863432010042
+        ],
+        "changed_pixel_ratios": [
+          0.09442070275403609,
+          0.06432811016144349
+        ],
+        "passed": true
+      },
+      {
+        "scene": 7,
+        "diagram_spatial_std": [
+          60.822570741585025,
+          59.64664870959897,
+          58.77341117710482
+        ],
+        "changed_pixel_ratios": [
+          0.08693019943019943,
+          0.06381766381766382
+        ],
+        "passed": true
+      },
+      {
+        "scene": 8,
+        "diagram_spatial_std": [
+          61.03590544324175,
+          59.62719781873801,
+          56.73830928029502
+        ],
+        "changed_pixel_ratios": [
+          0.09183285849952516,
+          0.05788224121557455
+        ],
+        "passed": true
+      }
+    ],
+    "note": "Technical blank/freeze detection only; not a judgement of artistic or factual quality."
+  },
+  "audio_tail": {
+    "audio_seconds": 123.44,
+    "video_seconds": 123.44,
+    "difference_seconds": 0.0,
+    "last_speech_window_correlation": 0.9951647520065308,
+    "audio_tail_checked": true,
+    "silence_padding_used_to_hide_lost_speech": false
+  },
+  "publication_metadata": {
+    "title": "اسرار الكون | المشتري: عاصفة أكبر من الأرض",
+    "caption": "رسوم توضيحية وإعادة تمثيل درامية؛ ليست تسجيلًا للأحداث.\nالمصدر: NASA Science\nhttps://science.nasa.gov/jupiter/\n#المشتري #فضاء #ناسا",
+    "description": "رسوم توضيحية وإعادة تمثيل درامية؛ ليست تسجيلًا للأحداث.\nالمصدر: NASA Science\nhttps://science.nasa.gov/jupiter/\n#المشتري #فضاء #ناسا",
+    "tags": [
+      "المشتري",
+      "فضاء",
+      "ناسا"
+    ],
+    "hashtags": [
+      "#المشتري",
+      "#فضاء",
+      "#ناسا"
+    ],
+    "source_url": "https://science.nasa.gov/jupiter/",
+    "containsSyntheticMedia": true
+  },
+  "duration_policy": {
+    "minimum_exclusive": 90,
+    "maximum_exclusive": 180
+  },
+  "music_target_lufs": -27,
+  "music": "Original composed score",
+  "music_bpm": 112,
+  "source": {
+    "url": "https://science.nasa.gov/jupiter/",
+    "publisher": "NASA Science",
+    "title": "المشتري: عاصفة أكبر من الأرض"
+  },
+  "topic_key": "jupiter-storms",
+  "profile": "science",
+  "editorial_review": {
+    "supported": true,
+    "novel": true,
+    "issues": [
+      "Variant mismatch: requested variant is 'saturn' while the visual family/story is about Jupiter."
+    ],
+    "model": "gemini-3.5-flash-lite"
+  },
+  "render": "Three.js procedural geometry, physical lighting, custom skin shader, layered optical bloom",
+  "visual_style": "original",
+  "review_watermark": false,
+  "reference_audio_reused": false,
+  "automatically_published": false,
+  "status": "Technical checks passed; artistic judgement requires viewing the complete film."
+}
