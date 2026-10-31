@@ -39,6 +39,14 @@
       "title": "الصوت بيعدي في الهوا إزاي؟",
       "publisher": "NASA Glenn",
       "url": "https://www.grc.nasa.gov/www/k-12/airplane/sound.html"
+    },
+    {
+      "key": "jupiter-storms",
+      "family": "space",
+      "variant": "saturn",
+      "title": "المشتري: عاصفة أكبر من الأرض",
+      "publisher": "NASA Science",
+      "url": "https://science.nasa.gov/jupiter/"
     }
   ],
   "horror": [
