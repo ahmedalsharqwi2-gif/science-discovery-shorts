@@ -1,0 +1,17 @@
+{
+  "provider": "Gemini TTS",
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Charon",
+  "style": "Egyptian Arabic ar-EG, native conversational Cairo accent. Mature warm male documentary storyteller, low resonant register, clear exact articulation, measured pace around 140 words per minute. Say the year numbers naturally in Egyptian Arabic. Preserve every word and sentence of the transcript, finish the last sentence clearly. No music, no sound effects, no singing, no spoken instructions.\nEgyptian Arabic engaging science explanation. Start with curiosity, build momentum, thoughtful final payoff. No music or sound effects. Read only the supplied words. Finish the last sentence. Clear natural pace.",
+  "text": "إيه هو الكوكب المخيف ده؟ هو كوكب الأرض في ليلة ظلام وعاصفة، والصورة اتصورت في هفيرير بايسلندا عشان تعرض مشهد مش معتاد بيجمع بين الظواهر الطبيعية وعتمة الليل بشكل مرعب ومثير للاهتمام في نفس الوقت. المكان عبارة عن منطقة نشطة حرارياً وأرضيتها بركانية في شمال شرق أيسلندا، وبتظهر فيها مظاهر طبيعية مرعبة مع التضاريس الوعرة اللي بتخلي اللقطة كأنها جاية من عالم تاني خالص بعيد عن كوكبنا المعتاد. النشاط الشمسي هو اللي بيحفز عواصف مغناطيسية أرضية قوية تطلق جسيمات طاقة هائلة كانت محبوسة جوه المجال المغناطيسي لكوكبنا، وده بيمهد الطريق لظهور تأثيرات بصرية مذهلة في طبقات الجو العليا. الجسيمات لما بتخترق الغلاف الجوي العلوي عند خطوط العرض العالية، بتعمل عروض الشفق القطبى في السما المليانة نجوم، وبتلون الليل بألوان خضراء ساحرة بتغطي الأفق كله بطريقة فريدة ومخيفة. أبخرة وغازات على شكل أبراج شبحية بتطلع من الفتحات المحلية عشان ترقص قصاد الأضواء الخضراء الغريبة في السما، وبتخلق لوحة بصرية متكاملة تحبس أنفاس أي حد يشوفها في الظلمة. النشاط الشفقي على الأرض لسه في حالة عالية عشان الشمس في المراحل الأولى من التراجع بعد ذروة دورتها النشطة، وده معناه إن الفرصة قائمة لتكرار الظاهرة دي بشكل مستمر الفترة الجاية. قريب ممكن مظاهر شبحية تانية تظهر في منطقتك مع استمرار التقلبات دي، والصورة دي وثقها المصور ستيفان فيتر في أكتوبر سنة ألفين ستة وعشرين عشان تفضل توثيق مهم لجمال الكون وغموضه. كل يوم في صورة جديدة للكون الفسيح مع شرح مختصر كاتبه عالم فلك محترف ضمن مشروع صورة اليوم الفلكية من ناسا، عشان نقرب دايمًا من أسرار الفضاء ونفهم كوكبنا والكون من حولنا بشكل أفضل.",
+  "interaction_id": "v1_ChdzdGZsYXJlVUNzZXJ1TVlQd296cy1RdxIXc3RmbGFyZVVDc2VydU1ZUHdvenMtUXc",
+  "duration": 117.08,
+  "sample_rate": 24000,
+  "channels": 1,
+  "sha256": "69d22fd8104478b85c93dff101473ba84f2832516e7a7bde5fb4ca1a6012c77b",
+  "newly_synthesized": true,
+  "original_video_audio_used": false,
+  "fallback_used": false,
+  "cache_hit": false,
+  "output_sha256": "69d22fd8104478b85c93dff101473ba84f2832516e7a7bde5fb4ca1a6012c77b"
+}
