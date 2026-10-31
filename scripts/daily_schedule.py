@@ -17,7 +17,7 @@ def validate_slot(value,now=None):
     due=datetime.fromisoformat(value.replace('t','T').replace('z','Z').replace('Z','+00:00'))
     if due.tzinfo is None:raise ValueError('Publication time requires a timezone')
     local=due.astimezone(CAIRO)
-    if (local.hour,local.minute,local.second)!=(17,0,0):raise ValueError('Publication must be exactly 17:00 Cairo')
+    if not (17,0,0)<=(local.hour,local.minute,local.second)<=(18,0,0):raise ValueError('Publication must be between 17:00 and 18:00 Cairo')
     if due<=(now or datetime.now(timezone.utc)):raise ValueError('Publication slot already passed; never publish immediately as a fallback')
     return due
 
