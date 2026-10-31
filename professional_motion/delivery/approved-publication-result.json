@@ -1,0 +1,27 @@
+{
+  "accepted_by_every_destination": true,
+  "receipts": {
+    "tiktok": {
+      "id": "6ae35c1c10365a6fbeedc352",
+      "due_at": "2026-10-29T14:47:48Z",
+      "run_id": "40894586107",
+      "accepted_at": "2026-10-29T14:45:49.133186+00:00"
+    },
+    "youtube": {
+      "id": "6ae35c1da87e7858ef13441e",
+      "due_at": "2026-10-29T14:47:48Z",
+      "run_id": "40894586107",
+      "accepted_at": "2026-10-29T14:45:50.112549+00:00"
+    },
+    "facebook": {
+      "id": "6ae35c1ee079e57982e090b4",
+      "due_at": "2026-10-29T14:47:48Z",
+      "run_id": "40894586107",
+      "accepted_at": "2026-10-29T14:45:50.775516+00:00"
+    }
+  },
+  "title": "الكسوف بيحصل إزاي؟ لما القمر يحجب الشمس",
+  "video_sha256": "db425c0246c457281a9c0ddccf37fab507917d015c1648630f922fcf92ab3e76",
+  "mode": "immediate",
+  "public_live_status_verified": false
+}
