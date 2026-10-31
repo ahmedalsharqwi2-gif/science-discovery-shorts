@@ -752,6 +752,157 @@
       },
       "reserved_at": "2026-10-31T11:57:35.832325+00:00",
       "video_sha256": "4b46bb7e6e416273f91b5c8ae316ad4c1dfc510cec350ff946fc28159d9f0149"
+    },
+    {
+      "slot": "daily-2026-10-31",
+      "topic_key": "jupiter-storms",
+      "canonical_subject": "jupiter-storms",
+      "title": "المشتري: عاصفة أكبر من الأرض",
+      "url": "https://science.nasa.gov/jupiter/",
+      "status": "reserved",
+      "story": {
+        "title": "المشتري: عاصفة أكبر من الأرض",
+        "canonical_subject": "jupiter-storms",
+        "suitable": true,
+        "facts": [
+          "المشتري هو الكوكب الخامس من الشمس والأكبر في المجموعة الشمسية.",
+          "كتلة المشتري أكبر من ضعف كتل باقي كواكب المجموعة الشمسية مجتمعة.",
+          "اليوم على المشتري هو الأقصر في المجموعة الشمسية حيث يستغرق نحو تسع ساعات ونصف.",
+          "التقطت مركبة جونو الفضائية صورة للبقعة الحمراء الكبرى عام ألفين وتسعة عشر."
+        ],
+        "milestones": [
+          "1610",
+          "2019",
+          "2024"
+        ],
+        "scenes": [
+          {
+            "id": "scene_1",
+            "label": "الكوكب العملاق",
+            "narration": "المشتري هو الكوكب الخامس من الشمس، وهو الأكبر حجماً في المجموعة الشمسية كلها، بكتلة أضخم من باقي الكواكب مجتمعة بأضعاف كثيرة. الكوكب ده بيمتلك خصائص ضخمة بتخليه فريد من نوعه مقارنة بباقي كواكب المجموعة الشمسية.",
+            "labels": [
+              "الكوكب الخامس",
+              "المجموعة الشمسية"
+            ],
+            "visual_mode": "hero",
+            "evidence_excerpt_id": 1,
+            "evidence_quote": "in the solar system, by far — more than twice as massive as the other"
+          },
+          {
+            "id": "scene_2",
+            "label": "الحجم والمدار",
+            "narration": "لو اعتبرنا المشتري قوقعة فارغة، فهوا ممكن يستوعب ألف كوكب بحجم الأرض جوه منه. الحجم الهائل ده بيحيط بيه نظام معقد من الأقمار والحلقات وآلاف الأجسام الصغيرة اللي بتدور في مداره الفلكي بشكل دائم ومستمر.",
+            "labels": [
+              "ألف كوكب",
+              "نظام معقد"
+            ],
+            "visual_mode": "orbit",
+            "evidence_excerpt_id": 3,
+            "evidence_quote": "planet in our solar system. If Jupiter was a hollow shell, 1,000 Earths could fit"
+          },
+          {
+            "id": "scene_3",
+            "label": "أكبر الأقمار",
+            "narration": "بيتبع الكوكب العملاق أكتر من مية قمر جرى التعرف عليها رسمياً. الصور المركبة بتوضح حافة الكوكب ومعاها أقماره الأربعة الكبرى اللي بتضم آيو ووروبا وجانيميد وكاليستو، ودي بتشكل جزء أساسي من النظام الجوفي المحيط بالمشتري.",
+            "labels": [
+              "النظام الجوفي"
+            ],
+            "visual_mode": "light",
+            "evidence_excerpt_id": 17,
+            "evidence_quote": "composite image shows the edge of Jupiter, and Jupiter's four largest moons. From top to"
+          },
+          {
+            "id": "scene_4",
+            "label": "دوران سريع",
+            "narration": "الملك بين الكواكب مش بطيء أبداً، بالعكس ده بيمتلك أسرع يوم في المجموعة الشمسية كلها. الدوران الكامل حوالين محوره بيستغرق حوالي تسع ساعات وتسع من عشرة من الساعة بس، وده سرعة دوران هائلة بالنسبة لحجمه الضخم.",
+            "labels": [
+              "أسرع يوم",
+              "حوالين محوره"
+            ],
+            "visual_mode": "light",
+            "evidence_excerpt_id": 5,
+            "evidence_quote": "day in the solar system, taking about 9.9 hours to spin around once on its"
+          },
+          {
+            "id": "scene_5",
+            "label": "حركة الفضاء",
+            "narration": "المجال ده اتدرس عبر رحلات فضائية كتير ومركبات عدت من جنبه وهي في طريقها لعوالم tانية بعيدة. مركبة جونو تابعة لوكالة ناسا بتدرس الكوكب ده حالياً مباشرة من مداره لتسجيل تفاصيل حركة الغلاف الجوي والعواصف.",
+            "labels": [
+              "مركبة جونو",
+              "من مداره"
+            ],
+            "visual_mode": "orbit",
+            "evidence_excerpt_id": 10,
+            "evidence_quote": "and spacecraft passing by on their way to other worlds. NASA’s Juno spacecraft currently is"
+          },
+          {
+            "id": "scene_6",
+            "label": "البقعة الحمراء",
+            "narration": "في تاريخ الثاني عشر من فبراير عام ألفين وتسعة عشر، قدرت مركبة جونو تصور البقعة الحمراء الكبرى بوضوح كبير. الصورة دي جرى تحسينها بناء على بيانات ومعلومات مقدمة من المؤسسات العلمية المختصة بدراسة الفضاء.",
+            "labels": [
+              "البقعة الحمراء",
+              "عام ألفين وتسعة عشر"
+            ],
+            "visual_mode": "detail",
+            "evidence_excerpt_id": 6,
+            "evidence_quote": "axis. Get the Facts NASA’s Juno spacecraft imaged Jupiter’s Great Red Spot on Feb. 12,"
+          },
+          {
+            "id": "scene_7",
+            "label": "رصد جاليليو",
+            "narration": "التفاصيل الأولى والدقيقة عن المشتري اترصدت لأول مرة سنة ألف وستمائة وعشرة عن طريق العالم جاليليو جاليلي باستخدام تلسكوب صغير صنعه بنفسه، ومن الوقت ده وبدأت البشرية تفهم أسرار الكوكب التدريجية.",
+            "labels": [
+              "جاليليو جاليلي",
+              "تلسكوب صغير"
+            ],
+            "visual_mode": "detail",
+            "evidence_excerpt_id": 8,
+            "evidence_quote": "Exploring Jupiter The first detailed observations of Jupiter were made by Galileo Galilei in 1610"
+          },
+          {
+            "id": "scene_8",
+            "label": "استكشاف أبعد",
+            "narration": "الرحلات مستمرة لحد النهاردة، زي إطلاق مركبة يوروبا كليبر في الرابع عشر من أكتوبر عام ألفين وأربعة وعشرين من فلوريدا، عشان تتوجه لدراسة قمر أوروبا الجليدي التابع للمشتري وتفحص طبيعته عن قرب.",
+            "labels": [
+              "يوروبا كليبر",
+              "قمر أوروبا"
+            ],
+            "visual_mode": "hero",
+            "evidence_excerpt_id": 12,
+            "evidence_quote": "Jupiter's icy moon, Europa. More About Jupiter Missions Europa Clipper spacecraft lifts off from Kennedy"
+          }
+        ],
+        "hashtags": [
+          "المشتري",
+          "فضاء",
+          "ناسا"
+        ],
+        "profile": "science",
+        "series": "اسرار الكون",
+        "visual_family": "space",
+        "variant": "saturn",
+        "topic_key": "jupiter-storms",
+        "source": {
+          "url": "https://science.nasa.gov/jupiter/",
+          "publisher": "NASA Science",
+          "title": "المشتري: عاصفة أكبر من الأرض"
+        },
+        "fiction": false,
+        "documented": true,
+        "editorial_warnings": [
+          "Variant mismatch: requested variant is 'saturn' while the visual family/story is about Jupiter."
+        ],
+        "editorial_review": {
+          "supported": true,
+          "novel": true,
+          "issues": [
+            "Variant mismatch: requested variant is 'saturn' while the visual family/story is about Jupiter."
+          ],
+          "model": "gemini-3.5-flash-lite"
+        },
+        "writer_model": "gemini-3.5-flash-lite"
+      },
+      "reserved_at": "2026-10-31T18:53:19.435958+00:00"
     }
   ]
 }
