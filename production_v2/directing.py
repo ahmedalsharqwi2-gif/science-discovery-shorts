@@ -51,7 +51,8 @@ def validate_plan(story,catalog):
         if row.get('id')!=scene.get('id'):raise ValueError('Directed shots must match authored scene identities')
         for field in FIELDS:
             if row.get(field) not in allowed[field]:raise ValueError('Unsupported executable '+field)
-        if compatible and not any(all(row.get(field)==beat.get(field) for field in ('setting','focal_object','action')) for beat in compatible):
+        if compatible and not any(all(row.get(field)==beat.get(field) for field in ('setting','focal_object','action')) and
+                                  ('shot' not in beat or row.get('shot')==beat['shot']) for beat in compatible):
             raise ValueError('Action/object does not belong to the selected physical setting')
         if not isinstance(row.get('state_change'),str) or not row['state_change'].strip():
             raise ValueError('Each scene needs a concrete visible event and consequence')
@@ -79,20 +80,34 @@ def require_novel_plan(plan, previous):
             raise ValueError('Visual sequence repeats an earlier film; changing text, palette or camera alone is insufficient')
     return signature(plan)
 
+def align_plan_ids(story):
+    """Reconcile metadata IDs only when scene/source correspondence is unambiguous."""
+    result=deepcopy(story)
+    scenes=result.get('scenes',[]);plan=result.get('visual_plan',{});rows=plan.get('scenes',[])
+    if len(scenes)!=8 or len(rows)!=8:return result
+    ids=[s.get('id') for s in scenes];row_ids=[r.get('id') for r in rows]
+    if len(set(ids))!=8 or len(set(row_ids))!=8:return result
+    if set(ids)==set(row_ids):
+        by_id={r['id']:r for r in rows};plan['scenes']=[by_id[i] for i in ids]
+    elif all(isinstance(s.get('evidence_excerpt_id'),int) and not isinstance(s.get('evidence_excerpt_id'),bool)
+             and r.get('source_excerpt_id')==s['evidence_excerpt_id'] for s,r in zip(scenes,rows)):
+        for scene,row in zip(scenes,rows):row['id']=scene['id']
+    return result
+
 def response_schema(base,catalog):
     schema=deepcopy(base);worlds=catalog['worlds']
     choices={field:sorted({value for spec in worlds.values() for value in spec.get(key,[])}) for field,key in
              [('setting','settings'),('focal_object','focal_objects'),('action','actions'),('shot','shots')]}
-    fields={key:{'type':'STRING','enum':value} for key,value in choices.items()}
+    fields={key:{'type':'STRING','description':'Executable asset ID; validated against the supplied catalog after generation.'} for key in choices}
     fields.update(id={'type':'STRING'},state_change={'type':'STRING'},source_excerpt_id={'type':'INTEGER'})
-    schema['properties']['visual_plan']={'type':'OBJECT','properties':{'version':{'type':'INTEGER'},'world':{'type':'STRING','enum':[*worlds,'unsupported']},
+    schema['properties']['visual_plan']={'type':'OBJECT','properties':{'version':{'type':'INTEGER'},'topic_key':{'type':'STRING'},'world':{'type':'STRING','description':'Implemented catalog world ID, or unsupported when no world fits the source.'},
         'scenes':{'type':'ARRAY','maxItems':8,'items':{'type':'OBJECT','properties':fields,'required':list(fields)}}},'required':['version','world','scenes']}
     schema['required']=[*schema['required'],'visual_plan']
     return schema
 
 def prompt_instructions(catalog):
     return ('\nDIRECT THIS SPECIFIC FILM, not a reusable slide/template sequence. Replace any earlier fixed scene-order instruction. '
-        'Choose an implemented visual world appropriate to the exact source and write visual_plan version1. '
+        'Copy each narration scene id EXACTLY to its matching visual row id; bind both rows to the same source excerpt. Choose an implemented visual world appropriate to the exact source and write visual_plan version1, with topic_key equal to the candidate key. '
         'Every scene selects real setting, focal_object, action and shot IDs from the supplied executable catalog, and states the visible state_change caused by that action. '
         'The source excerpt ID must match that scene narration evidence_excerpt_id. Select and order physical locations, props, actions and shots to tell THIS story: question/goal, obstacle or mechanism, revealing actions and concrete payoff. '
         'Do not follow the catalog listing order mechanically; it is an asset vocabulary, not the plot. '
@@ -117,6 +132,12 @@ def directing_editor(editorial,catalog,previous):
             prompt+='\nAlso independently review visual_plan: each physical setting, focal object, action and state change must explain that specific narration and source, not be decorative or randomly reordered. Reject an unsupported source-to-asset mapping or an incoherent causal sequence. Do not approve eight repetitions of one composition.'
         result=original_ask(prompt,schema,**kwargs)
         for attempt in range(2):
+            if directed:
+                if getattr(editorial,'ROOT',None) is not None:
+                    folder=Path(editorial.ROOT)/'delivery';folder.mkdir(parents=True,exist_ok=True)
+                    raw=json.dumps(result,ensure_ascii=False,indent=2)
+                    (folder/('director-draft-'+hashlib.sha256(raw.encode()).hexdigest()[:16]+'.json')).write_text(raw)
+                result=align_plan_ids(result)
             if not directed or result.get('suitable') is not True:break
             temporary={**result,'fiction':result.get('fiction',False)}
             world=result.get('visual_plan',{}).get('world')
