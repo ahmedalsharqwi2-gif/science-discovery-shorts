@@ -1,8 +1,9 @@
 {
   "profile": "science",
   "review_only": true,
-  "launch": "final-for-2026-11-02-nextday-tests-updated-1",
+  "launch": "retained-episode-completion-for-2026-11-02-1",
   "no_social_posts": true,
   "production_film": true,
-  "publication_date": "2026-11-02"
+  "publication_date": "2026-11-02",
+  "resume_planning_run": 41352828358
 }

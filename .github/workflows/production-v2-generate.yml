@@ -88,8 +88,8 @@
           }
         },
         {
-          "name": "Produce one fresh final film for the retained next-day publication target",
-          "run": "python -m production_v2.generate --profile science --run-dir \".candidate-v2/run-$CANDIDATE_RUN\" --ledger .candidate-v2/shared.sqlite3 --git-state --then-review --production"
+          "name": "Continue the same retained episode and create its first original narration",
+          "run": "python - <<'PY'\nimport json,os,sys\nfrom pathlib import Path\nfrom production_v2.planning_resume import planning_resume\nfrom production_v2.generate import main\nrequest=json.loads(Path('.github/production-v2-launch.json').read_text())\ntarget=int(request['resume_planning_run'])\nsys.argv=['production_v2.generate','--profile','science','--run-dir','.candidate-v2/run-'+os.environ['CANDIDATE_RUN'],'--ledger','.candidate-v2/shared.sqlite3','--git-state','--then-review','--production']\nwith planning_resume('science',target):main()\nPY"
         },
         {
           "name": "Retain narration budget and verified voice cache",

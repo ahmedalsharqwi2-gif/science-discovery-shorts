@@ -1,7 +1,7 @@
 /** Bounded declarative 3D story scenes. No generated JavaScript is executed. */
 import * as THREE from 'three';
-const ASSETS=new Set(['cell','leaf','heart','dna','molecule','crystal','rock_layers','volcano','tree','pendulum','gear','magnet','circuit','river','fossil','scroll','book','temple','house','ship','cart','person','stickman','door','clock','lantern','table','sphere','box','cylinder','cone','torus']);
-const MOTIONS=new Set(['none','spin','pulse','drift','orbit','grow','assemble','split','swing','flow']);
+const ASSETS=new Set(['cell','leaf','heart','dna','molecule','crystal','rock_layers','volcano','tree','pendulum','gear','magnet','circuit','river','fossil','scroll','book','temple','house','ship','cart','person','stickman','door','clock','lantern','table','sphere','box','cylinder','cone','torus','server','monitor','robot','satellite_dish','microphone','phone','chip','document','shield','network','waveform']);
+const MOTIONS=new Set(['none','spin','pulse','drift','orbit','grow','assemble','split','swing','flow','slam','open','close','shake','float','backward','head_turn']);
 function material(color,extra={}){return new THREE.MeshStandardMaterial({color,roughness:.58,metalness:.08,...extra});}
 function mesh(parent,geometry,mat,x=0,y=0,z=0){const o=new THREE.Mesh(geometry,mat);o.position.set(x,y,z);o.castShadow=true;o.receiveShadow=true;parent.add(o);return o;}
 function rod(parent,a,b,r,mat){const start=new THREE.Vector3(...a),end=new THREE.Vector3(...b),delta=end.clone().sub(start);const o=mesh(parent,new THREE.CylinderGeometry(r,r,delta.length(),10),mat);o.position.copy(start).add(end).multiplyScalar(.5);o.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),delta.normalize());return o;}
@@ -15,7 +15,38 @@ function shape(kind,color){
  else if(kind==='cylinder')tube(.8,1.8);
  else if(kind==='cone')mesh(g,new THREE.ConeGeometry(1,2,40),m);
  else if(kind==='torus')mesh(g,new THREE.TorusGeometry(.8,.2,12,40),m);
- else if(kind==='cell'){
+ else if(kind==='server'){
+  box(1.5,3,1,0,0,0,dark);
+  for(let i=0;i<6;i++){box(1.3,.3,.08,0,-1.15+i*.45,.55,m);for(let j=0;j<3;j++)ball(.035,.25+j*.16,-1.15+i*.45,.61,material(0x82d6b4));}
+ }else if(kind==='monitor'||kind==='phone'){
+  const phone=kind==='phone';box(phone?.8:2.6,phone?1.6:1.7,.15,0,.2,0,dark);box(phone?.66:2.35,phone?1.36:1.45,.03,0,.2,.1,m);
+  if(!phone){tube(.08,.7,0,-.95);box(1,.1,.6,0,-1.3);}
+  for(let i=0;i<4;i++)box(phone?.45:1.7,.035,.02,0,.65-i*.28,.14,light);
+ }else if(kind==='robot'){
+  box(.8,.9,.5,0,.1);box(.6,.5,.5,0,.9,0,dark);ball(.05,-.15,.93,.27,material(0x84dfdf));ball(.05,.15,.93,.27,material(0x84dfdf));
+  for(const side of [-1,1]){rod(g,[side*.4,.5,0],[side*.8,-.1,.1],.09,m);rod(g,[side*.8,-.1,.1],[side*.55,-.6,.25],.08,light);rod(g,[side*.2,-.3,0],[side*.3,-1.2,0],.13,dark);}
+ }else if(kind==='satellite_dish'){
+  tube(.12,1.7,0,-.6,0,dark);box(1.8,.12,1.6,0,-1.5,0,dark);
+  const points=[];for(let i=0;i<=24;i++){const r=i/24*1.25;points.push(new THREE.Vector2(r,r*r*.48));}
+  const dish=mesh(g,new THREE.LatheGeometry(points,48),material(color,{side:THREE.DoubleSide}),0,.1,0);dish.rotation.z=.35;
+  rod(g,[0,.1,0],[0,1.4,0],.035,dark);ball(.12,0,1.4,0,light);
+ }else if(kind==='microphone'){
+  tube(.24,.8,0,.45,0,m);ball(.24,0,.85,0,dark);tube(.05,1,0,-.5,0,dark);tube(.5,.08,0,-1,0,dark);
+ }else if(kind==='chip'){
+  box(1.6,.25,1.6,0,0,0,dark);box(1,.08,1,0,.18,0,m);
+  for(let i=0;i<7;i++)for(const side of [-1,1]){box(.1,.08,.3,-.65+i*.22,0,side*.9,light);box(.3,.08,.1,side*.9,0,-.65+i*.22,light);}
+ }else if(kind==='document'){
+  box(1.6,2.1,.08,0,0,0,light);for(let i=0;i<7;i++)box(1.1,.035,.02,0,.7-i*.22,.06,m);
+ }else if(kind==='shield'){
+  const s=new THREE.Shape();s.moveTo(0,-1.3);s.lineTo(-1,.1);s.lineTo(-1,1);s.lineTo(0,1.25);s.lineTo(1,1);s.lineTo(1,.1);s.closePath();
+  mesh(g,new THREE.ExtrudeGeometry(s,{depth:.14,bevelEnabled:true,bevelSize:.04,bevelThickness:.04,bevelSegments:2}),m);
+ }else if(kind==='network'){
+  ball(.3,0,0,0,m);
+  for(let i=0;i<8;i++){const a=i/8*Math.PI*2,p=[Math.cos(a)*1.4,Math.sin(a)*1.2,Math.sin(i*2)*.5];ball(.16,...p,i%2?m:light);rod(g,[0,0,0],p,.025,dark);}
+ }else if(kind==='waveform'){
+  const points=[];for(let i=0;i<80;i++)points.push(new THREE.Vector3(-2+i/20,Math.sin(i*.32)*.65,0));
+  mesh(g,new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points),100,.045,8,false),m);
+ }else if(kind==='cell'){
   ball(1.35,0,0,0,material(color,{transparent:true,opacity:.3,side:THREE.DoubleSide}));
   ball(.43,-.2,.1,.2,material(0x9568ad));ball(.16,-.15,.18,.55,material(0xd9acd6));
   for(let i=0;i<11;i++){const o=ball(.13,Math.sin(i*2.4)*.8,Math.cos(i*3.1)*.8,Math.sin(i*4.3)*.7,material(i%2?0xe8ad64:0x70b8a3));o.scale.set(1.7,.65,1);parts.push(o);}
@@ -94,7 +125,7 @@ function shape(kind,color){
  }else if(kind==='clock'){
   tube(1,.18).rotation.x=Math.PI/2;
   for(let i=0;i<12;i++){const a=i/12*Math.PI*2;ball(.04,Math.sin(a)*.8,Math.cos(a)*.8,.13,light);}
-  rod(g,[0,0,.18],[.45,.25,.18],.035,dark);rod(g,[0,0,.18],[0,.65,.18],.025,dark);
+  const hand=new THREE.Group();g.add(hand);rod(hand,[0,0,.18],[.45,.25,.18],.035,dark);rod(hand,[0,0,.18],[0,.65,.18],.025,dark);g.userData.clockHands=hand;
  }else if(kind==='lantern'){
   tube(.35,.1,0,-.4,0,dark);tube(.35,.1,0,.4,0,dark);
   ball(.22,0,0,0,material(0xffc56b,{emissive:0xffaf43,emissiveIntensity:1}));
@@ -120,7 +151,7 @@ export function proceduralDirector(scene,story){
  if(story.visual_plan?.world!=='procedural_story'||story.scenes?.length!==8)throw Error('An authored declarative eight-scene plan is required');
  const root=new THREE.Group();scene.add(root);
  const stages=story.scenes.map(s=>{
-  if(!Array.isArray(s.objects)||s.objects.length<3||s.objects.length>16)throw Error('Invalid object count');
+  if(!Array.isArray(s.objects)||s.objects.length<1||s.objects.length>16)throw Error('Invalid object count');
   const group=new THREE.Group();root.add(group);environment(group,s.environment);
   const objects=s.objects.map(spec=>{
    if(!ASSETS.has(spec.kind)||!MOTIONS.has(spec.motion)||!/^#[0-9a-fA-F]{6}$/.test(spec.color))throw Error('Unimplemented object or motion');
@@ -134,6 +165,11 @@ export function proceduralDirector(scene,story){
    o.position.set(...s.position);o.scale.set(...s.scale);o.rotation.set(...s.rotation);
    const phase=t*1.5+i*.8;
    if(s.motion==='spin')o.rotation.y+=q*Math.PI*1.4;
+   if(s.motion==='backward'){if(o.userData.clockHands)o.userData.clockHands.rotation.z=t*3;else o.rotation.z+=q*Math.PI*2;}
+   if(s.motion==='open'||s.motion==='close'||s.motion==='slam'){const part=o.userData.swingPart||o;part.rotation.y=(s.motion==='open'?q:1-Math.min(1,p*5))*1.3;}
+   if(s.motion==='shake'){o.rotation.z+=Math.sin(t*15)*.045;o.position.x+=Math.sin(t*12)*.04;}
+   if(s.motion==='float')o.position.y+=Math.sin(t*.8+i)*.25;
+   if(s.motion==='head_turn')o.rotation.y+=q*1.3;
    if(s.motion==='pulse')o.scale.multiplyScalar(1+.06*Math.sin(phase*2));
    if(s.motion==='drift')o.position.x+=(q-.5)*1.4;
    if(s.motion==='orbit'){o.position.x+=Math.cos(phase)*.55;o.position.z+=Math.sin(phase)*.55;}
