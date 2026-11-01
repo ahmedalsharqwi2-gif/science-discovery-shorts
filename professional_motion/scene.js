@@ -1,3 +1,4 @@
+import {proceduralDirector} from './procedural_story.js';
 import {acousticDirector} from './acoustic_director.js';
 import {scienceField} from './science_field.js';
 import {scienceCinema} from './cinema.js';
@@ -170,7 +171,7 @@ const overlay=document.querySelector('#text'),ctx=overlay.getContext('2d');
 const endCanvas=document.createElement('canvas');endCanvas.width=W;endCanvas.height=H;const endCtx=endCanvas.getContext('2d');
 const channel=channelStage(scene);
 const storyResponse=await fetch('./delivery/story.json');if(!storyResponse.ok)throw Error('Missing authored daily story');
-let config=await storyResponse.json();const brandMark=await loadBranding(config.profile);const headerLeft=brandMark?235:75,headerRuleY=brandMark?208:142,headerIndexY=brandMark?255:202;window.brandingStatus={profile:config.profile,logoApplied:!!brandMark};const useOctopus=config.visual_family==='octopus',useHaunted=config.visual_family==='haunted_interior';
+let config=await storyResponse.json();const useProcedural=config.visual_plan?.world==='procedural_story';const brandMark=await loadBranding(config.profile);const headerLeft=brandMark?235:75,headerRuleY=brandMark?208:142,headerIndexY=brandMark?255:202;window.brandingStatus={profile:config.profile,logoApplied:!!brandMark};const useOctopus=config.visual_family==='octopus',useHaunted=config.visual_family==='haunted_interior'&&!useProcedural;
 const haunted=useHaunted?hauntedStage(scene):null;
 if(useHaunted){scene.fog.density=.043;renderer.toneMappingExposure=1.22;scene.traverse(o=>{if(o.isDirectionalLight)o.intensity*=.30;if(o.isHemisphereLight)o.intensity*=.55;});ambient.intensity=1.0;}
 const backdrop={science:0x030c14,horror:0x030b10,history:0x100d09,news:0x090713}[config.profile];
@@ -275,13 +276,14 @@ if(!['legacy','v2'].includes(pipeline))throw Error('Unknown production pipeline'
 const cinema=pipeline==='v2'?scienceCinema({scene,camera,renderer}):null;
 const scientificField=pipeline==='v2'&&config.profile==='science'&&config.topic_key==='earth-magnetosphere'?scienceField(scene):null;
 const acoustic=pipeline==='v2'&&config.profile==='science'&&config.visual_plan?.world==='sound_wave_lab'?acousticDirector(scene,config):null;
+const procedural=useProcedural&&new URLSearchParams(location.search).get('pipeline')==='v2'?proceduralDirector(scene,config):null;
 window.renderAt=(time,duration=D)=>{
  D=duration;const t=Math.max(0,time),u=t/D;
  let index=times.findLastIndex(s=>s<=u);index=Math.max(0,index);
  const sceneStart=times[index]*D,sceneEnd=(times[index+1]??1)*D,local=t-sceneStart,p=clamp(local/(sceneEnd-sceneStart));
  uniforms.clock.value=t;uniforms.morph.value=index===6?(.5-.5*Math.cos(p*Math.PI*2)):0;
  if(useOctopus)poseOctopus(t);
- octopus.visible=useOctopus&&[0,1,6,7].includes(index);macro.visible=useOctopus&&[2,3].includes(index);neural.visible=useOctopus&&index===4;layers.visible=useOctopus&&index===5;reef.visible=useOctopus&&index===6;channel.root.visible=!useOctopus&&!useHaunted;if(!useOctopus&&!useHaunted)channel.update(config,index,local,p,t);
+ octopus.visible=useOctopus&&[0,1,6,7].includes(index);macro.visible=useOctopus&&[2,3].includes(index);neural.visible=useOctopus&&index===4;layers.visible=useOctopus&&index===5;reef.visible=useOctopus&&index===6;channel.root.visible=!useProcedural&&!useOctopus&&!useHaunted;if(!useProcedural&&!useOctopus&&!useHaunted)channel.update(config,index,local,p,t);
  octopus.scale.setScalar(index===0?.78+.14*ease(p*2):index===6?.85:index===7?.9:.91);
  octopus.position.set(index===0?Math.sin(t*.3)*.08:0,index===0?-.4+.25*ease(p*2):-.25,0);
  octopus.rotation.set(.08*Math.sin(t*.3),index===0?-.45+.5*ease(p):.12*Math.sin(t*.2),index===0?-.18*(1-ease(p)):.035*Math.sin(t*.3));
@@ -301,6 +303,7 @@ window.renderAt=(time,duration=D)=>{
  if(scientificField){channel.root.visible=false;window.scientificGeometry=scientificField.update(index,p,t);}
  if(cinema)window.cinematography=cinema.update(config,index,p,t);
  if(acoustic){channel.root.visible=false;dust.visible=false;shafts.forEach(o=>o.visible=false);const view=acoustic.update(index,p,t);camera.position.set(...view.position);camera.lookAt(...view.target);window.scientificGeometry=view;}
+ if(procedural){channel.root.visible=false;dust.visible=false;shafts.forEach(o=>o.visible=false);const view=procedural.update(index,p,t);camera.position.set(...view.position);camera.lookAt(...view.target);window.topicDirecting=view;}
  if(new URLSearchParams(location.search).get('style')==='reference')renderer.render(scene,camera);else composer.render();if(useOctopus)drawText(t,index,local,p);else drawChannelText(t,index,local,p);if(new URLSearchParams(location.search).get('style')==='reference')drawReferenceLayout(ctx,{story:config,timing,index,time:t,local,duration:D,review:new URLSearchParams(location.search).get('review')==='true',logo:!!brandMark});drawBranding(ctx,brandMark);
  return {scene:index+1,time:t,duration:D,originalVoice:!!timing};
 };
