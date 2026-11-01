@@ -1,0 +1,112 @@
+{
+  "profile": "science",
+  "repository": "ahmedalsharqwi2-gif/science-discovery-shorts",
+  "run_id": "41350315798",
+  "run_attempt": "1",
+  "source_commit": "cbb67f9a621f06fcce1cb95e5391b75253af792e",
+  "stage": "failure",
+  "requested_stage": "failure",
+  "observed_at": "2026-11-01T21:10:41.698336+00:00",
+  "review_only": true,
+  "automatically_published": false,
+  "cutover_eligible": false,
+  "complete_film_verified": false,
+  "media_url": null,
+  "credential_presence": {
+    "GEMINI_API_KEY": true,
+    "GEMINI_TEXT_API_KEY": true,
+    "GEMINI_TTS_API_KEY": true
+  },
+  "generation_failure": {
+    "slot": "candidate-science-f019988c198442beb5ca62518caf4019",
+    "profile": "science",
+    "error_class": "RuntimeError",
+    "reservation_retained": false,
+    "legacy_film_not_used_as_fallback": true,
+    "publishable": false,
+    "failed_phase": "story_or_reservation",
+    "measured_narration_seconds": null,
+    "timing_present": false
+  },
+  "planning_evidence": {
+    "planning-errors.json": [
+      {
+        "topic_key": "sound-waves",
+        "error_class": "ValueError",
+        "validation": "Action/object does not belong to the selected physical setting"
+      },
+      {
+        "topic_key": "7b620b8ee23e792e",
+        "error_class": "ValueError",
+        "validation": "Topic cannot be explained with supported visual geometry"
+      }
+    ],
+    "candidate-status.json": [
+      {
+        "key": "saturn-rings",
+        "title": "حلقات زحل مش قرص واحد",
+        "family": "space",
+        "variant": "saturn",
+        "published": null,
+        "already_reserved": true
+      },
+      {
+        "key": "moon-phases",
+        "title": "ليه شكل القمر بيتغير؟",
+        "family": "space",
+        "variant": "moon",
+        "published": null,
+        "already_reserved": true
+      },
+      {
+        "key": "solar-eclipse",
+        "title": "الكسوف بيحصل إزاي؟",
+        "family": "space",
+        "variant": "eclipse",
+        "published": null,
+        "already_reserved": true
+      },
+      {
+        "key": "earth-magnetosphere",
+        "title": "درع الأرض المغناطيسي",
+        "family": "field",
+        "variant": "magnet",
+        "published": null,
+        "already_reserved": true
+      },
+      {
+        "key": "sound-waves",
+        "title": "الصوت بيعدي في الهوا إزاي؟",
+        "family": "wave",
+        "variant": "sound",
+        "published": null,
+        "already_reserved": false
+      },
+      {
+        "key": "jupiter-storms",
+        "title": "المشتري: عاصفة أكبر من الأرض",
+        "family": "space",
+        "variant": "saturn",
+        "published": null,
+        "already_reserved": true
+      },
+      {
+        "key": "7b620b8ee23e792e",
+        "title": "APOD: 2026 November 1 – Colors of the Moon",
+        "family": "space",
+        "variant": "planet",
+        "published": null,
+        "already_reserved": false
+      },
+      {
+        "key": "e6da576f1b1a6c97",
+        "title": "APOD: 2026 October 31 – Night on a Spooky Planet",
+        "family": "space",
+        "variant": "planet",
+        "published": null,
+        "already_reserved": true
+      }
+    ]
+  },
+  "evidence_error_class": "ValueError"
+}
