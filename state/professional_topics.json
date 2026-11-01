@@ -1090,7 +1090,15 @@
         },
         "writer_model": "gemini-3.5-flash-lite"
       },
-      "reserved_at": "2026-11-01T23:29:09.817646+00:00"
+      "reserved_at": "2026-11-01T23:29:09.817646+00:00",
+      "needs_narration_revision": true,
+      "narration_feedback": {
+        "measured_seconds": 98.8,
+        "target_seconds": 150,
+        "action": "expand",
+        "no_silence_padding": true,
+        "no_speed_change": true
+      }
     }
   ]
 }
