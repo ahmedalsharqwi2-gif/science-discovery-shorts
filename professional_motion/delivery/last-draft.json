@@ -1,0 +1,110 @@
+{
+  "title": "ألوان القمر المتغيرة في السماء",
+  "canonical_subject": "apod-2026-november-1-colors-of-the-moon",
+  "suitable": true,
+  "facts": [
+    "The Moon appears as a brownish-gray object when viewed outside Earth's atmosphere.",
+    "An astrophotographer documented various full moon colors over a period of ten years across Italy.",
+    "Red or yellow hues usually appear when the Moon is near the horizon due to atmospheric scattering.",
+    "A total lunar eclipse in July 2018 made the Moon look faint red because of refracted light through Earth's atmosphere."
+  ],
+  "milestones": [
+    "2018 July",
+    "10 years"
+  ],
+  "scenes": [
+    {
+      "id": "scene_1",
+      "label": "ألوان القمر",
+      "narration": "إيه هو لون القمر الحقيقي؟ الموضوع بيعتمد بشكل أساسي على الليلة اللي بتشوفه فيها ووقت الرصد. بعيد عن الغلاف الجوي للأرض، بيبان القمر بلون رمادي مائل للبنفسجي أو البني بشكل مميز جدا.",
+      "labels": [
+        "ألوان القمر",
+        "الغلاف الجوي"
+      ],
+      "visual_mode": "hero",
+      "evidence_excerpt_id": 3
+    },
+    {
+      "id": "scene_2",
+      "label": "توثيق الصور",
+      "narration": "التصوير الفلكي قدر يجمع مجموعة من الألوان الظاهرة للبدر على مدار عشر سنين كاملة. المصور التقط الصور دي من أماكن مختلفة في إيطاليا عشان يوثق الاختلافات الواضحة دي.",
+      "labels": [
+        "عشر سنين",
+        "إيطاليا"
+      ],
+      "visual_mode": "orbit",
+      "evidence_excerpt_id": 6
+    },
+    {
+      "id": "scene_3",
+      "label": "علاقة الأجرام",
+      "narration": "القمر في الأساس بيلمع عن طريق انعكاس ضوء الشمس عليه. لما بنشوفه من على كوكب الأرض، الغلاف الجوي بتاعنا بيتدخل بشكل مباشر في تغيير الألوان اللي بتوصل لعنينا.",
+      "labels": [
+        "انعكاس ضوء الشمس",
+        "كوكب الأرض"
+      ],
+      "visual_mode": "detail",
+      "evidence_excerpt_id": 4
+    },
+    {
+      "id": "scene_4",
+      "label": "الضوء والغلاف الجوي",
+      "narration": "لما بيكون القمر قريب من الأفق، غالبا بنشوفه لونه أحمر أو أصفر. السبب في ده هو إن الضوء الأزرق بيحصل له تشتت بسبب المسافة الطويلة اللي بيقطعها جوه الغلاف الجوي.",
+      "labels": [
+        "قريب من الأفق",
+        "تشتت"
+      ],
+      "visual_mode": "light",
+      "evidence_excerpt_id": 7
+    },
+    {
+      "id": "scene_5",
+      "label": "الحركة والمسار",
+      "narration": "المسار الطويل للضوء جوه الغلاف الجوي ممكن يكون محمل بغبار دقيق بيأثر على اللون النهائي. الغبار ده هو اللي بيخلي الألوان تتدرج قدامنا بشكل مختلف من ليلة للثانية.",
+      "labels": [
+        "المسار الطويل",
+        "غبار دقيق"
+      ],
+      "visual_mode": "orbit",
+      "evidence_excerpt_id": 8
+    },
+    {
+      "id": "scene_6",
+      "label": "حالات نادرة",
+      "narration": "في حالات تانية بتكون نادرة شوية، ممكن الجو يشيل جزيئات غبار أكبر حجما وده بيؤدي لظهور قمر أزرق. أما ظهور القمر باللون البنفسجي فده لسه موضوع بيحتاج دراسة واسعة.",
+      "labels": [
+        "حالات نادرة",
+        "قمر أزرق"
+      ],
+      "visual_mode": "detail",
+      "evidence_excerpt_id": 9
+    },
+    {
+      "id": "scene_7",
+      "label": "الخسوف والظل",
+      "narration": "في شهر يوليو سنة ألف وثمنمائة وثمانية عشر حصل خسوف كلي للقمر. وقتها دخل القمر جوه ظل الأرض وظهر بلون أحمر خافت بسبب انكسار الضوء حوالين الغلاف الجوي.",
+      "labels": [
+        "خسوف كلي",
+        "ظل الأرض"
+      ],
+      "visual_mode": "light",
+      "evidence_excerpt_id": 12
+    },
+    {
+      "id": "scene_8",
+      "label": "الخلاصة",
+      "narration": "تغير ألوان القمر بيفضل دايم مرتبطة بطبيعة الغلاف الجوي للأرض وحركة الضوء جواه. كل ليلة بتجعلنا نشوف القمر بشكل فريد ومختلف عن اللي قبله.",
+      "labels": [
+        "الغلاف الجوي",
+        "حركة الضوء"
+      ],
+      "visual_mode": "hero",
+      "evidence_excerpt_id": 2
+    }
+  ],
+  "hashtags": [
+    "Colors of the Moon",
+    "APOD",
+    "NASA"
+  ]
+}

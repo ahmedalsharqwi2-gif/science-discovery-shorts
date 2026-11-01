@@ -1,0 +1,12 @@
+[
+  {
+    "topic_key": "sound-waves",
+    "error_class": "ValueError",
+    "validation": "Source does not contain sufficient evidence"
+  },
+  {
+    "topic_key": "7b620b8ee23e792e",
+    "error_class": "ValueError",
+    "validation": "Factual or semantic novelty review rejected the episode"
+  }
+]
