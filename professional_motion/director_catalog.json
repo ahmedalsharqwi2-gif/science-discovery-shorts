@@ -1,0 +1,112 @@
+{
+  "version": 1,
+  "profile": "science",
+  "worlds": {
+    "sound_wave_lab": {
+      "settings": [
+        "emitter_bench",
+        "air_chamber",
+        "comparison_bench",
+        "sensor_station",
+        "isolation_chamber",
+        "reflective_boundary"
+      ],
+      "focal_objects": [
+        "speaker_cone",
+        "air_parcels",
+        "pressure_front",
+        "paired_sources",
+        "receiver_membrane",
+        "vacuum_bell",
+        "rigid_wall",
+        "energy_path",
+        "paired_air_samples"
+      ],
+      "actions": [
+        "cone_pulse",
+        "parcel_compress",
+        "track_compression",
+        "frequency_compare",
+        "sensor_respond",
+        "medium_remove",
+        "boundary_reflect",
+        "energy_transfer",
+        "temperature_compare"
+      ],
+      "shots": [
+        "driver_close",
+        "section_macro",
+        "wave_track",
+        "compare_wide",
+        "receiver_close",
+        "chamber_wide",
+        "boundary_side",
+        "pullback"
+      ],
+      "minimum_distinct_settings": 4,
+      "compatible_beats": [
+        {
+          "setting": "emitter_bench",
+          "focal_object": "speaker_cone",
+          "action": "cone_pulse",
+          "shot": "driver_close"
+        },
+        {
+          "setting": "air_chamber",
+          "focal_object": "air_parcels",
+          "action": "parcel_compress",
+          "shot": "section_macro"
+        },
+        {
+          "setting": "air_chamber",
+          "focal_object": "pressure_front",
+          "action": "track_compression",
+          "shot": "wave_track"
+        },
+        {
+          "setting": "comparison_bench",
+          "focal_object": "paired_sources",
+          "action": "frequency_compare",
+          "shot": "compare_wide"
+        },
+        {
+          "setting": "sensor_station",
+          "focal_object": "receiver_membrane",
+          "action": "sensor_respond",
+          "shot": "receiver_close"
+        },
+        {
+          "setting": "isolation_chamber",
+          "focal_object": "vacuum_bell",
+          "action": "medium_remove",
+          "shot": "chamber_wide"
+        },
+        {
+          "setting": "reflective_boundary",
+          "focal_object": "rigid_wall",
+          "action": "boundary_reflect",
+          "shot": "boundary_side"
+        },
+        {
+          "setting": "air_chamber",
+          "focal_object": "energy_path",
+          "action": "energy_transfer",
+          "shot": "pullback"
+        },
+        {
+          "setting": "comparison_bench",
+          "focal_object": "paired_air_samples",
+          "action": "temperature_compare",
+          "shot": "compare_wide"
+        }
+      ],
+      "subject_contract": {
+        "supported_topic_keys": [
+          "sound-waves"
+        ],
+        "required_source_url_contains": "/beginners-guide-to-aeronautics/speed-of-sound-interactive"
+      },
+      "description": "A qualitative acoustic laboratory. Air parcels oscillate locally along propagation; they do not travel from speaker to listener. Separate source, compression, wavefront, frequency comparison, receiver, medium absence and reflection apparatus. No invented measurements or medical/hearing claims. Select only events explicitly supported by the source; suitable=false if evidence is insufficient. The verified NASA article may discuss gas temperature and speed; use paired air samples for a qualitative temperature comparison only when explicitly supported. Do not use a frequency change to stand for sound-speed change."
+    }
+  }
+}
