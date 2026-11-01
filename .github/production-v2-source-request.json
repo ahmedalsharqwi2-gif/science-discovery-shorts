@@ -1,7 +1,8 @@
 {
   "profile": "science",
-  "purpose": "Read the relocation link published on the deprecated NASA page",
+  "purpose": "Verify the exact official relocation target published by the deprecated NASA sound page",
   "urls": [
-    "https://www.grc.nasa.gov/www/k-12/airplane/sound.html"
-  ]
+    "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/speed-of-sound-interactive/"
+  ],
+  "launch": "official-relocation-verification-1"
 }
