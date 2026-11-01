@@ -72,7 +72,7 @@ class BufferAdapterTests(unittest.TestCase):
         self.client._create_buffer_post.assert_not_called()
     def test_late_or_nonabsolute_due_never_posts_immediately(self):
         self.activate_fixture();self.adapter.preflight(MAP)
-        for due in ('2026-12-01T09:00:00Z','2026-12-02T15:00:00Z','2026-12-01T15:00:00'):
+        for due in ('2026-12-01T09:00:00Z','2026-12-03T15:00:00Z','2026-12-01T15:00:00'):
             with self.assertRaises(ValueError):self.adapter.submit(channel_id='a',due_at=due,media_url=MEDIA)
         self.client._create_buffer_post.assert_not_called()
     def test_lookup_preserves_exact_provider_media_and_identity(self):
