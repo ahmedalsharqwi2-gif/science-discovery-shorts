@@ -1,3 +1,4 @@
+import {acousticDirector} from './acoustic_director.js';
 import {scienceField} from './science_field.js';
 import {scienceCinema} from './cinema.js';
 import {drawReferenceLayout} from './reference_layout.js';
@@ -273,6 +274,7 @@ const pipeline=new URLSearchParams(location.search).get('pipeline')||'legacy';
 if(!['legacy','v2'].includes(pipeline))throw Error('Unknown production pipeline');
 const cinema=pipeline==='v2'?scienceCinema({scene,camera,renderer}):null;
 const scientificField=pipeline==='v2'&&config.profile==='science'&&config.topic_key==='earth-magnetosphere'?scienceField(scene):null;
+const acoustic=pipeline==='v2'&&config.profile==='science'&&config.visual_plan?.world==='sound_wave_lab'?acousticDirector(scene,config):null;
 window.renderAt=(time,duration=D)=>{
  D=duration;const t=Math.max(0,time),u=t/D;
  let index=times.findLastIndex(s=>s<=u);index=Math.max(0,index);
@@ -298,6 +300,7 @@ window.renderAt=(time,duration=D)=>{
  dust.rotation.y=t*.012;dust.position.y=Math.sin(t*.11)*.5;shafts.forEach((m,i)=>m.material.uniforms.opacity.value=.025+.015*(.5+.5*Math.sin(t*.2+i)));
  if(scientificField){channel.root.visible=false;window.scientificGeometry=scientificField.update(index,p,t);}
  if(cinema)window.cinematography=cinema.update(config,index,p,t);
+ if(acoustic){channel.root.visible=false;dust.visible=false;shafts.forEach(o=>o.visible=false);const view=acoustic.update(index,p,t);camera.position.set(...view.position);camera.lookAt(...view.target);window.scientificGeometry=view;}
  if(new URLSearchParams(location.search).get('style')==='reference')renderer.render(scene,camera);else composer.render();if(useOctopus)drawText(t,index,local,p);else drawChannelText(t,index,local,p);if(new URLSearchParams(location.search).get('style')==='reference')drawReferenceLayout(ctx,{story:config,timing,index,time:t,local,duration:D,review:new URLSearchParams(location.search).get('review')==='true',logo:!!brandMark});drawBranding(ctx,brandMark);
  return {scene:index+1,time:t,duration:D,originalVoice:!!timing};
 };
