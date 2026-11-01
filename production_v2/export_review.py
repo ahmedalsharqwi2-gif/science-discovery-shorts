@@ -20,7 +20,7 @@ REPOSITORIES = {
     'stickman': 'stickman-what-if-shorts',
 }
 STATUS_BRANCH = 'codex/production-v2-status'
-STATUS_BRANCHES = {STATUS_BRANCH, 'codex/production-v2-audit-status'}
+STATUS_BRANCHES = {STATUS_BRANCH, 'codex/production-v2-audit-status', 'codex/production-v2-diagnostics', 'codex/production-v2-sources'}
 AUDIT_KEYS = {'checked_at', 'profile', 'read_only', 'live_access_available', 'episodes', 'slot',
     'video_sha256', 'retained_status', 'due_at', 'live_verified', 'posts', 'no_posts_created',
     'problem', 'retained_post_id', 'expected_channel_id', 'live_checked', 'observed_post_id',
@@ -151,6 +151,27 @@ def _safe_audit(path, profile):
     return clean(report)
 
 
+
+def _planning_evidence(run_dir):
+    allowed={'topic_key','error_class','validation','provider_http_status','key','title','family','variant',
+             'published','already_reserved','failed_phase','measured_narration_seconds','timing_present'}
+    def clean(value):
+        if isinstance(value,dict):return {k:clean(v) for k,v in value.items() if k in allowed}
+        if isinstance(value,list):return [clean(row) for row in value[:80]]
+        if isinstance(value,str):
+            for name,secret in os.environ.items():
+                if re.search('KEY|TOKEN|SECRET',name,re.I) and secret and len(secret)>=4:value=value.replace(secret,'[REDACTED]')
+            return value[:400]
+        return value if value is None or isinstance(value,(bool,int,float)) else None
+    result={}
+    for name in ('planning-errors.json','candidate-status.json','news-source-dates.json'):
+        path=Path(run_dir)/'professional_motion/delivery'/name
+        if path.is_file() and path.stat().st_size<=512*1024:
+            try:result[name]=clean(json.loads(path.read_text()))
+            except (OSError,ValueError):result[name]={'error_class':'UnreadablePlanningEvidence'}
+    return result
+
+
 def export_review(profile, run_dir, stage, *, root='.', uploader_factory=None, store=None,
                   audit_report=None, status_branch=STATUS_BRANCH):
     if stage not in ('started', 'success', 'failure', 'cancelled'):
@@ -177,6 +198,7 @@ def export_review(profile, run_dir, stage, *, root='.', uploader_factory=None, s
                            'legacy_film_not_used_as_fallback', 'failed_phase', 'measured_narration_seconds', 'timing_present'}
                 status[label] = {key: value for key, value in data.items() if key in allowed}
     if stage != 'started':
+        if audit_report is None:status['planning_evidence']=_planning_evidence(run_dir)
         try:
             if audit_report is not None:
                 status['buffer_audit'] = _safe_audit(audit_report, profile)
