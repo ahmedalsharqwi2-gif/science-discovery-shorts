@@ -45,7 +45,10 @@ def main():
         actual=[{'text':w.word.strip(),'start':float(w.start),'end':float(w.end)} for s in segments for w in s.words or []]
         transcripts.append((name,actual));(out/('asr-'+name+'.json')).write_text(json.dumps({'recognized_words':actual},ensure_ascii=False,indent=2))
         del model
-        try:timing=measured_timing(story,duration,transcripts);break
+        try:
+            timing=measured_timing(story,duration,transcripts)
+            if timing['coverage']<.9:raise ValueError('Measured narration coverage below90percent; trying another local ASR model')
+            break
         except ValueError:
             if name=='large-v3':raise
     timing['story_sha256']=hashlib.sha256((root/'delivery/story.json').read_bytes()).hexdigest()
