@@ -1,0 +1,20 @@
+{
+  "profile": "science",
+  "repository": "ahmedalsharqwi2-gif/science-discovery-shorts",
+  "run_id": "41350316006",
+  "run_attempt": "1",
+  "source_commit": "cbb67f9a621f06fcce1cb95e5391b75253af792e",
+  "stage": "started",
+  "requested_stage": "started",
+  "observed_at": "2026-11-01T21:07:09.879032+00:00",
+  "review_only": true,
+  "automatically_published": false,
+  "cutover_eligible": false,
+  "complete_film_verified": false,
+  "media_url": null,
+  "credential_presence": {
+    "GEMINI_API_KEY": false,
+    "GEMINI_TEXT_API_KEY": false,
+    "GEMINI_TTS_API_KEY": false
+  }
+}
