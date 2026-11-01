@@ -1,0 +1,1143 @@
+{
+  "title": "إزاي الصابون بيشيل الزيت؟",
+  "canonical_subject": "soap-amphiphilic-micelles-oil-rinsing",
+  "suitable": true,
+  "facts": [],
+  "milestones": [],
+  "hashtags": [
+    "#كيمياء",
+    "#علوم",
+    "#الصابون"
+  ],
+  "knowledge_category": "chemistry",
+  "scenes": [
+    {
+      "id": "scene_1",
+      "label": "ليه الميه مش كفاية؟",
+      "narration": "ليه الميه لوحدها ساعات ما بتشيلش الزيت من إيدك، لكن نقطة صابون بتغير النتيجة؟ المشكلة مش إن الزيت لازق وخلاص. جزيئات الميه بتنجذب لبعض، والزيت مش بيختلط بيها بسهولة، فالغسيل محتاج وسيط يربط بين العالمين بدل ما يحاول يخلطهم بالعافية.",
+      "labels": [],
+      "visual_mode": "hero",
+      "environment": "laboratory",
+      "objects": [
+        {
+          "kind": "sphere",
+          "position": [
+            -1.8,
+            0.6,
+            0
+          ],
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "color": "#33bfff",
+          "motion": "drift",
+          "rotation": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "sphere",
+          "position": [
+            -1.2,
+            -0.4,
+            0
+          ],
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "color": "#33bfff",
+          "motion": "drift",
+          "rotation": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "sphere",
+          "position": [
+            -2.2,
+            -1,
+            0
+          ],
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "color": "#33bfff",
+          "motion": "drift",
+          "rotation": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "sphere",
+          "position": [
+            1,
+            0,
+            0
+          ],
+          "scale": [
+            1.2,
+            1.2,
+            1.2
+          ],
+          "color": "#d58c32",
+          "motion": "none",
+          "rotation": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "box",
+          "position": [
+            0,
+            -1.9,
+            -0.2
+          ],
+          "scale": [
+            3,
+            0.2,
+            1.8
+          ],
+          "color": "#dba890",
+          "motion": "none",
+          "rotation": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "camera_start": [
+        0,
+        0.4,
+        11.5
+      ],
+      "camera_end": [
+        -0.5,
+        0,
+        10
+      ],
+      "visual_change": "Separate water and oil remain on skin surface"
+    },
+    {
+      "id": "scene_2",
+      "label": "جزيء بطرفين",
+      "narration": "تخيل جزيء الصابون كأنه دبوس صغير بطرفين مختلفين. رأسه بينجذب للميه، وذيله بيختلط بالدهون أفضل. الطرفين في نفس الجزيء، وده اللي بيديله دور الوسيط. الرسم اللي قدامك مبسط علشان نشوف الفكرة، مش شكل الجزيء بحجمه الحقيقي أو أبعاده الدقيقة.",
+      "labels": [],
+      "visual_mode": "hero",
+      "environment": "laboratory",
+      "objects": [
+        {
+          "kind": "sphere",
+          "position": [
+            -1.3,
+            0,
+            0
+          ],
+          "scale": [
+            0.45,
+            0.45,
+            0.45
+          ],
+          "color": "#33bfff",
+          "motion": "none",
+          "rotation": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "cylinder",
+          "position": [
+            -0.1299999999999999,
+            0,
+            0
+          ],
+          "scale": [
+            0.162,
+            1.26,
+            0.162
+          ],
+          "color": "#d58c32",
+          "motion": "none",
+          "rotation": [
+            0,
+            0,
+            -1.5707963267948966
+          ]
+        }
+      ],
+      "camera_start": [
+        0,
+        0.4,
+        8
+      ],
+      "camera_end": [
+        0.5,
+        0,
+        7
+      ],
+      "visual_change": "Blue hydrophilic head attached to amber hydrophobic tail in close schematic view"
+    },
+    {
+      "id": "scene_3",
+      "label": "الوصول لحافة الزيت",
+      "narration": "أول ما الصابون يلمس بقعة الزيت، أجزاء من ذيوله بتتجه ناحية الدهون، بينما الرؤوس بتفضل ناحية الميه. كده الحد الفاصل بين الزيت والميه بيتغير. الصابون مش بيخلي الزيت يختفي، لكنه بيساعد الميه تنتشر على السطح وتوصل لحواف البقعة بسهولة أكبر.",
+      "labels": [],
+      "visual_mode": "hero",
+      "environment": "laboratory",
+      "objects": [
+        {
+          "kind": "sphere",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1.05,
+            1.05,
+            1.05
+          ],
+          "color": "#d58c32",
+          "motion": "none",
+          "rotation": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "sphere",
+          "position": [
+            -1.7,
+            0,
+            0
+          ],
+          "scale": [
+            0.1625,
+            0.1625,
+            0.1625
+          ],
+          "color": "#33bfff",
+          "motion": "none",
+          "rotation": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "cylinder",
+          "position": [
+            -1.2774999999999999,
+            0,
+            0
+          ],
+          "scale": [
+            0.08,
+            0.45499999999999996,
+            0.08
+          ],
+          "color": "#d58c32",
+          "motion": "none",
+          "rotation": [
+            0,
+            0,
+            -1.5707963267948966
+          ]
+        },
+        {
+          "kind": "sphere",
+          "position": [
+            1.7,
+            0,
+            0
+          ],
+          "scale": [
+            0.1625,
+            0.1625,
+            0.1625
+          ],
+          "color": "#33bfff",
+          "motion": "none",
+          "rotation": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "cylinder",
+          "position": [
+            1.2774999999999999,
+            5.174132726397568e-17,
+            0
+          ],
+          "scale": [
+            0.08,
+            0.45499999999999996,
+            0.08
+          ],
+          "color": "#d58c32",
+          "motion": "none",
+          "rotation": [
+            0,
+            0,
+            1.5707963267948966
+          ]
+        },
+        {
+          "kind": "sphere",
+          "position": [
+            0,
+            1.7,
+            0
+          ],
+          "scale": [
+            0.1625,
+            0.1625,
+            0.1625
+          ],
+          "color": "#33bfff",
+          "motion": "none",
+          "rotation": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "cylinder",
+          "position": [
+            2.587066363198784e-17,
+            1.2774999999999999,
+            0
+          ],
+          "scale": [
+            0.08,
+            0.45499999999999996,
+            0.08
+          ],
+          "color": "#d58c32",
+          "motion": "none",
+          "rotation": [
+            0,
+            0,
+            -3.141592653589793
+          ]
+        }
+      ],
+      "camera_start": [
+        0,
+        0.4,
+        11.5
+      ],
+      "camera_end": [
+        -0.5,
+        0,
+        10
+      ],
+      "visual_change": "Soap tails face inward toward oil, heads face outward"
+    },
+    {
+      "id": "scene_4",
+      "label": "الفرك يفصل البقعة",
+      "narration": "لما تفرك إيدك، الحركة بتساعد على تفكيك البقعة لقطرات أصغر وفصلها عن السطح. شوف الفرق بين الكتلة الكبيرة والقطرات الصغيرة: مساحة التلامس زادت، والصابون بقى يقدر يحيط بأجزاء أكتر. علشان كده وجوده لوحده مش بديل عن الفرك والوصول لكل الأماكن.",
+      "labels": [],
+      "visual_mode": "hero",
+      "environment": "laboratory",
+      "objects": [
+        {
+          "kind": "sphere",
+          "position": [
+            -1.5,
+            0.6,
+            0
+          ],
+          "scale": [
+            0.55,
+            0.55,
+            0.55
+          ],
+          "color": "#d58c32",
+          "motion": "split",
+          "rotation": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "sphere",
+          "position": [
+            1.4,
+            0.6,
+            0
+          ],
+          "scale": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "color": "#d58c32",
+          "motion": "split",
+          "rotation": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "sphere",
+          "position": [
+            0,
+            -1,
+            0
+          ],
+          "scale": [
+            0.45,
+            0.45,
+            0.45
+          ],
+          "color": "#d58c32",
+          "motion": "split",
+          "rotation": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "sphere",
+          "position": [
+            -2.3,
+            0.6,
+            0
+          ],
+          "scale": [
+            0.1625,
+            0.1625,
+            0.1625
+          ],
+          "color": "#33bfff",
+          "motion": "none",
+          "rotation": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "cylinder",
+          "position": [
+            -1.8774999999999997,
+            0.6,
+            0
+          ],
+          "scale": [
+            0.08,
+            0.45499999999999996,
+            0.08
+          ],
+          "color": "#d58c32",
+          "motion": "none",
+          "rotation": [
+            0,
+            0,
+            -1.5707963267948966
+          ]
+        },
+        {
+          "kind": "sphere",
+          "position": [
+            0.6,
+            -1,
+            0
+          ],
+          "scale": [
+            0.1625,
+            0.1625,
+            0.1625
+          ],
+          "color": "#33bfff",
+          "motion": "none",
+          "rotation": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "cylinder",
+          "position": [
+            1.0225,
+            -1,
+            0
+          ],
+          "scale": [
+            0.08,
+            0.45499999999999996,
+            0.08
+          ],
+          "color": "#d58c32",
+          "motion": "none",
+          "rotation": [
+            0,
+            0,
+            -1.5707963267948966
+          ]
+        },
+        {
+          "kind": "sphere",
+          "position": [
+            2.2,
+            0.6,
+            0
+          ],
+          "scale": [
+            0.1625,
+            0.1625,
+            0.1625
+          ],
+          "color": "#33bfff",
+          "motion": "none",
+          "rotation": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "cylinder",
+          "position": [
+            1.7775,
+            0.6,
+            0
+          ],
+          "scale": [
+            0.08,
+            0.45499999999999996,
+            0.08
+          ],
+          "color": "#d58c32",
+          "motion": "none",
+          "rotation": [
+            0,
+            0,
+            1.5707963267948966
+          ]
+        }
+      ],
+      "camera_start": [
+        0,
+        0.4,
+        11.5
+      ],
+      "camera_end": [
+        0.5,
+        0,
+        10
+      ],
+      "visual_change": "Large oil deposit is represented as separated smaller droplets"
+    },
+    {
+      "id": "scene_5",
+      "label": "الدهون وسط الصابون",
+      "narration": "جزيئات الصابون ممكن تتجمع حوالين الدهون، ذيولها لجوه ورؤوسها ناحية الميه. التجمعات دي بتساعد على إبقاء الدهون موزعة بدل ما ترجع تتجمع بسرعة على إيدك. مش كل تجمع لازم يبقى كرة مثالية، لكن الرسم الدائري بيوضح ترتيب الطرفين بشكل سهل.",
+      "labels": [],
+      "visual_mode": "hero",
+      "environment": "laboratory",
+      "objects": [
+        {
+          "kind": "sphere",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            0.75,
+            0.75,
+            0.75
+          ],
+          "color": "#d58c32",
+          "motion": "none",
+          "rotation": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "sphere",
+          "position": [
+            1.6,
+            0,
+            0
+          ],
+          "scale": [
+            0.2,
+            0.2,
+            0.2
+          ],
+          "color": "#33bfff",
+          "motion": "none",
+          "rotation": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "cylinder",
+          "position": [
+            1.08,
+            6.368163355566237e-17,
+            0
+          ],
+          "scale": [
+            0.08,
+            0.5599999999999999,
+            0.08
+          ],
+          "color": "#d58c32",
+          "motion": "none",
+          "rotation": [
+            0,
+            0,
+            1.5707963267948966
+          ]
+        },
+        {
+          "kind": "sphere",
+          "position": [
+            0.8000000000000003,
+            1.3856406460551018,
+            0
+          ],
+          "scale": [
+            0.2,
+            0.2,
+            0.2
+          ],
+          "color": "#33bfff",
+          "motion": "none",
+          "rotation": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "cylinder",
+          "position": [
+            0.54,
+            0.9353074360871938,
+            0
+          ],
+          "scale": [
+            0.08,
+            0.5599999999999999,
+            0.08
+          ],
+          "color": "#d58c32",
+          "motion": "none",
+          "rotation": [
+            0,
+            0,
+            2.617993877991494
+          ]
+        },
+        {
+          "kind": "sphere",
+          "position": [
+            -0.7999999999999997,
+            1.385640646055102,
+            0
+          ],
+          "scale": [
+            0.2,
+            0.2,
+            0.2
+          ],
+          "color": "#33bfff",
+          "motion": "none",
+          "rotation": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "cylinder",
+          "position": [
+            -0.54,
+            0.9353074360871938,
+            0
+          ],
+          "scale": [
+            0.08,
+            0.5599999999999999,
+            0.08
+          ],
+          "color": "#d58c32",
+          "motion": "none",
+          "rotation": [
+            0,
+            0,
+            3.6651914291880914
+          ]
+        },
+        {
+          "kind": "sphere",
+          "position": [
+            -1.6,
+            1.9594348786357652e-16,
+            0
+          ],
+          "scale": [
+            0.2,
+            0.2,
+            0.2
+          ],
+          "color": "#33bfff",
+          "motion": "none",
+          "rotation": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "cylinder",
+          "position": [
+            -1.08,
+            6.858022075225178e-17,
+            0
+          ],
+          "scale": [
+            0.08,
+            0.5599999999999999,
+            0.08
+          ],
+          "color": "#d58c32",
+          "motion": "none",
+          "rotation": [
+            0,
+            0,
+            4.71238898038469
+          ]
+        },
+        {
+          "kind": "sphere",
+          "position": [
+            -0.8000000000000007,
+            -1.3856406460551014,
+            0
+          ],
+          "scale": [
+            0.2,
+            0.2,
+            0.2
+          ],
+          "color": "#33bfff",
+          "motion": "none",
+          "rotation": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "cylinder",
+          "position": [
+            -0.5400000000000005,
+            -0.9353074360871934,
+            0
+          ],
+          "scale": [
+            0.08,
+            0.5599999999999999,
+            0.08
+          ],
+          "color": "#d58c32",
+          "motion": "none",
+          "rotation": [
+            0,
+            0,
+            5.759586531581287
+          ]
+        },
+        {
+          "kind": "sphere",
+          "position": [
+            0.8000000000000003,
+            -1.3856406460551018,
+            0
+          ],
+          "scale": [
+            0.2,
+            0.2,
+            0.2
+          ],
+          "color": "#33bfff",
+          "motion": "none",
+          "rotation": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "cylinder",
+          "position": [
+            0.5399999999999998,
+            -0.9353074360871938,
+            0
+          ],
+          "scale": [
+            0.08,
+            0.5599999999999999,
+            0.08
+          ],
+          "color": "#d58c32",
+          "motion": "none",
+          "rotation": [
+            0,
+            0,
+            6.806784082777886
+          ]
+        }
+      ],
+      "camera_start": [
+        0,
+        0.4,
+        11.5
+      ],
+      "camera_end": [
+        -0.5,
+        0,
+        10
+      ],
+      "visual_change": "Six schematic soap heads encircle the oil with inward-pointing tails"
+    },
+    {
+      "id": "scene_6",
+      "label": "الشطف يحمل الأوساخ",
+      "narration": "دلوقتي ييجي دور الشطف. الميه المتحركة بتاخد معاها الصابون وما حمله من دهون وأوساخ بعيد عن الجلد. الزيت ما اتحولش لميه وما اتبخرش؛ هو اتنقل مع الغسيل. لو اكتفيت بالفرك من غير شطف، هتفضل أجزاء من الخليط موجودة على السطح.",
+      "labels": [],
+      "visual_mode": "hero",
+      "environment": "laboratory",
+      "objects": [
+        {
+          "kind": "sphere",
+          "position": [
+            -1.4,
+            0.4,
+            0
+          ],
+          "scale": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "color": "#d58c32",
+          "motion": "drift",
+          "rotation": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "sphere",
+          "position": [
+            0.5,
+            1,
+            0
+          ],
+          "scale": [
+            0.4,
+            0.4,
+            0.4
+          ],
+          "color": "#d58c32",
+          "motion": "drift",
+          "rotation": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "sphere",
+          "position": [
+            1.5,
+            -0.3,
+            0
+          ],
+          "scale": [
+            0.35,
+            0.35,
+            0.35
+          ],
+          "color": "#d58c32",
+          "motion": "drift",
+          "rotation": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "river",
+          "position": [
+            0,
+            -1.2,
+            -1
+          ],
+          "scale": [
+            1.8,
+            0.45,
+            1
+          ],
+          "color": "#33bfff",
+          "motion": "flow",
+          "rotation": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "camera_start": [
+        0,
+        0.4,
+        11.5
+      ],
+      "camera_end": [
+        0.5,
+        0,
+        10
+      ],
+      "visual_change": "Blue stream and oil droplets move laterally off the surface"
+    },
+    {
+      "id": "scene_7",
+      "label": "الرغوة مش مقياس",
+      "narration": "طب والرغوة الكبيرة، هي دليل إن التنظيف أقوى؟ مش بالضرورة. الفقاقيع أساسها هوا محبوس في غشاء رفيع، وكمية الرغوة بتتأثر بتركيب المنتج وظروف الميه. تقدر تشوف رغوة كتير وتنظيف ضعيف، أو رغوة أقل وتنظيف كويس، فعدد الفقاقيع مش مقياس كفاية لوحده.",
+      "labels": [],
+      "visual_mode": "hero",
+      "environment": "workshop",
+      "objects": [
+        {
+          "kind": "sphere",
+          "position": [
+            -1.5,
+            0,
+            0
+          ],
+          "scale": [
+            0.65,
+            0.65,
+            0.65
+          ],
+          "color": "#33bfff",
+          "motion": "float",
+          "rotation": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "sphere",
+          "position": [
+            0,
+            0.6,
+            0
+          ],
+          "scale": [
+            0.45,
+            0.45,
+            0.45
+          ],
+          "color": "#33bfff",
+          "motion": "float",
+          "rotation": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "sphere",
+          "position": [
+            1.2,
+            -0.5,
+            0
+          ],
+          "scale": [
+            0.8,
+            0.8,
+            0.8
+          ],
+          "color": "#33bfff",
+          "motion": "float",
+          "rotation": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "sphere",
+          "position": [
+            1.4,
+            1.1,
+            0
+          ],
+          "scale": [
+            0.35,
+            0.35,
+            0.35
+          ],
+          "color": "#33bfff",
+          "motion": "float",
+          "rotation": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "camera_start": [
+        0,
+        0.4,
+        11.5
+      ],
+      "camera_end": [
+        -0.5,
+        0,
+        10
+      ],
+      "visual_change": "Bubbles of varied sizes float without implying greater cleaning power"
+    },
+    {
+      "id": "scene_8",
+      "label": "كيمياء عند الحوض",
+      "narration": "الفكرة كلها إن التنظيف تعاون بين تركيب الجزيء والحركة والشطف. رأس يتعامل مع الميه، وذيل يتعامل مع الدهون، وفرك يفصل البقعة، وميه تشيلها بعيد. الحاجة العادية اللي جنب الحوض بتعمل مهمة كيميائية دقيقة، كل مرة بتغسل فيها إيدك بعد أكلة دسمة.",
+      "labels": [],
+      "visual_mode": "hero",
+      "environment": "laboratory",
+      "objects": [
+        {
+          "kind": "sphere",
+          "position": [
+            -1.2,
+            0.7,
+            0
+          ],
+          "scale": [
+            0.25,
+            0.25,
+            0.25
+          ],
+          "color": "#33bfff",
+          "motion": "none",
+          "rotation": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "cylinder",
+          "position": [
+            -0.5499999999999999,
+            0.7,
+            0
+          ],
+          "scale": [
+            0.09,
+            0.7,
+            0.09
+          ],
+          "color": "#d58c32",
+          "motion": "none",
+          "rotation": [
+            0,
+            0,
+            -1.5707963267948966
+          ]
+        },
+        {
+          "kind": "sphere",
+          "position": [
+            1.2,
+            -0.6,
+            0
+          ],
+          "scale": [
+            0.65,
+            0.65,
+            0.65
+          ],
+          "color": "#d58c32",
+          "motion": "drift",
+          "rotation": [
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "kind": "river",
+          "position": [
+            0,
+            -1.8,
+            -1
+          ],
+          "scale": [
+            2,
+            0.3,
+            1
+          ],
+          "color": "#33bfff",
+          "motion": "flow",
+          "rotation": [
+            0,
+            0,
+            0
+          ]
+        }
+      ],
+      "camera_start": [
+        0,
+        0.4,
+        11.5
+      ],
+      "camera_end": [
+        0.5,
+        0,
+        10
+      ],
+      "visual_change": "Head-and-tail schematic and departing oil recap the mechanism"
+    }
+  ]
+}

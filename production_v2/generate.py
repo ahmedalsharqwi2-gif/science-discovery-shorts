@@ -32,6 +32,9 @@ def _write(path, data):
 @contextmanager
 def isolated_editor(editorial, run_dir, repository):
     """Restore cwd, provider budgets/cache environment and mutable editor globals on error."""
+    import sys
+    old_sys_path=list(sys.path)
+    sys.path.insert(0,str(repository))
     previous_cwd, previous_root, previous_state = Path.cwd(), editorial.ROOT, editorial.STATE
     names = ('API_BUDGET_PATH', 'VOICE_CACHE_DIR', 'FACTORY_DAILY')
     previous_env = {name: os.environ.get(name) for name in names}
@@ -50,6 +53,7 @@ def isolated_editor(editorial, run_dir, repository):
     finally:
         editorial.ROOT, editorial.STATE = previous_root, previous_state
         os.chdir(previous_cwd)
+        sys.path[:]=old_sys_path
         for name, value in previous_env.items():
             if value is None:
                 os.environ.pop(name, None)

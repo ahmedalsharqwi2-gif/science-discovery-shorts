@@ -89,8 +89,8 @@
           }
         },
         {
-          "name": "Continue the same retained episode and create its first original narration",
-          "run": "python - <<'PY'\nimport json,os,sys\nfrom pathlib import Path\nfrom production_v2.planning_resume import planning_resume\nfrom production_v2.generate import main\nrequest=json.loads(Path('.github/production-v2-launch.json').read_text())\ntarget=int(request['resume_planning_run'])\nsys.argv=['production_v2.generate','--profile','science','--run-dir','.candidate-v2/run-'+os.environ['CANDIDATE_RUN'],'--ledger','.candidate-v2/shared.sqlite3','--git-state','--then-review','--production']\nwith planning_resume('science',target):main()\nPY"
+          "name": "Produce retained chemistry draft once; no writing-provider request",
+          "run": "python - <<'PY'\nimport os,sys\nfrom pathlib import Path\nfrom production_v2.seeded_editor import seeded_editor\nfrom production_v2.generate import main\nsys.argv=['production_v2.generate','--profile','science','--run-dir','.candidate-v2/run-'+os.environ['CANDIDATE_RUN'],'--ledger','.candidate-v2/shared.sqlite3','--git-state','--then-review','--production']\nwith seeded_editor('science',Path('reviews/production-v2/soap-retained-draft.json').resolve()):main()\nPY"
         },
         {
           "name": "Retain narration budget and verified voice cache",
@@ -107,7 +107,7 @@
           "uses": "actions/upload-artifact@v4",
           "with": {
             "name": "science-v2-fresh-candidate-${{ github.run_id }}",
-            "path": ".candidate-v2/run-*/output/candidate-review.mp4\n.candidate-v2/run-*/output/candidate-verification.json\n.candidate-v2/run-*/generation-verification.json\n.candidate-v2/run-*/source-snapshot.json\n.candidate-v2/run-*/professional_motion/delivery/*.json\n.candidate-v2/run-*/generation-failure.json",
+            "path": ".candidate-v2/run-*/output/candidate-review.mp4\n.candidate-v2/run-*/output/candidate-verification.json\n.candidate-v2/run-*/generation-verification.json\n.candidate-v2/run-*/source-snapshot.json\n.candidate-v2/run-*/professional_motion/delivery/*.json\n.candidate-v2/run-*/generation-failure.json\n.candidate-v2/run-*/professional_motion/delivery/narration.wav\n.candidate-v2/run-*/output/render.json",
             "if-no-files-found": "warn",
             "retention-days": 7,
             "include-hidden-files": true
