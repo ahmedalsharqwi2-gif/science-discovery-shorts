@@ -4,9 +4,9 @@
   "run_id": "41354538213",
   "run_attempt": "1",
   "source_commit": "cba733f7b2d9af06726b5258636628e462a04e7c",
-  "stage": "started",
-  "requested_stage": "started",
-  "observed_at": "2026-11-01T21:56:35.554395+00:00",
+  "stage": "failure",
+  "requested_stage": "failure",
+  "observed_at": "2026-11-01T21:59:25.491388+00:00",
   "review_only": true,
   "automatically_published": false,
   "cutover_eligible": false,
@@ -16,5 +16,7 @@
     "GEMINI_API_KEY": true,
     "GEMINI_TEXT_API_KEY": true,
     "GEMINI_TTS_API_KEY": true
-  }
+  },
+  "planning_evidence": {},
+  "evidence_error_class": "ValueError"
 }
