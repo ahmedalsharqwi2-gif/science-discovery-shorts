@@ -76,3 +76,11 @@ class OfficialSourceProbeTests(unittest.TestCase):
    self.assertNotIn('secret-not-for-source',json.dumps(report));store.save.assert_called_once()
 
 if __name__=='__main__':unittest.main()
+
+class RelocationEvidenceTests(unittest.TestCase):
+    def test_published_official_relocation_link_is_retained_without_inventing_content(self):
+        from production_v2.source_probe import extract_page
+        data=extract_page(b'<html><title>This site has moved</title><body><a href="https://www.nasa.gov/new-sound/">New location</a><a href="https://evil.test/">Other</a></body></html>','https://www.grc.nasa.gov/old.html')
+        self.assertEqual(data['official_links'],['https://www.nasa.gov/new-sound/'])
+        self.assertIsNone(data['geometry_inference'])
+        self.assertLess(data['body_word_count'],50)

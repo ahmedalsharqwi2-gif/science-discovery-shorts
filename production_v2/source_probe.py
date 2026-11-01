@@ -66,7 +66,16 @@ def extract_page(raw, url):
     body = soup.find('article') or soup.find('main') or soup.body or soup
     text = ' '.join(body.stripped_strings)
     excerpts = quotations(text)
-    return {'title': title[:300], 'canonical_url': canonical, 'body_word_count': len(text.split()),
+    links=[]
+    if len(text.split())<100 or 'moved' in title.casefold():
+        link_soup=BeautifulSoup(raw,'html.parser')
+        for anchor in link_soup.select('a[href]'):
+            target=urljoin(url,anchor['href']).split('#',1)[0]
+            try: accepted=scope(target)==scope(url)
+            except ValueError: accepted=False
+            if accepted and target!=url and target not in links:links.append(target)
+            if len(links)==8:break
+    return {'official_links':links, 'title': title[:300], 'canonical_url': canonical, 'body_word_count': len(text.split()),
             'evidence_sha256': hashlib.sha256(text.encode('utf-8')).hexdigest(),
             'excerpts': excerpts, 'quoted_words': sum(len(row.split()) for row in excerpts),
             'geometry_inference': None,
