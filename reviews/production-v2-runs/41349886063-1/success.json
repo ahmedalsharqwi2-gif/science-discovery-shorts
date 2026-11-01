@@ -1,0 +1,44 @@
+{
+  "profile": "science",
+  "repository": "ahmedalsharqwi2-gif/science-discovery-shorts",
+  "run_id": "41349886063",
+  "run_attempt": "1",
+  "source_commit": "ff93426c6a66713519732ac5aeb38324257d4464",
+  "kind": "official_source_probe",
+  "stage": "success",
+  "observed_at": "2026-11-01T21:02:26.374606+00:00",
+  "read_only": true,
+  "no_provider_calls": true,
+  "no_posts_created": true,
+  "sources": [
+    {
+      "requested_url": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/sound-waves/",
+      "authority": "nasa.gov",
+      "verified": false,
+      "tls_verification": true,
+      "keyless_get_only": true,
+      "final_url": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/sound-waves/",
+      "http_status": 404,
+      "problem": "Official page did not return HTTP200; no substitute facts were generated"
+    },
+    {
+      "requested_url": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/speed-of-sound-interactive/",
+      "authority": "nasa.gov",
+      "verified": true,
+      "tls_verification": true,
+      "keyless_get_only": true,
+      "final_url": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/speed-of-sound-interactive/",
+      "http_status": 200,
+      "official_links": [],
+      "title": "Speed of Sound Interactive | Glenn Research Center | NASA",
+      "canonical_url": null,
+      "body_word_count": 896,
+      "evidence_sha256": "e934cc2c27c3b67b48c8fb2652e216bdca15dadff9005a795d4ad1c7a7f08847",
+      "excerpts": [],
+      "quoted_words": 0,
+      "geometry_inference": null,
+      "geometry_note": "No tier count or geometry is inferred. Any contract must cite an explicit source statement."
+    }
+  ],
+  "all_requested_pages_verified": false
+}
