@@ -21,7 +21,8 @@
     }
   },
   "permissions": {
-    "contents": "write"
+    "contents": "write",
+    "actions": "read"
   },
   "concurrency": {
     "group": "${{ inputs.caller_serialized && format('v2-child-{0}', github.run_id) || 'professional-daily-science' }}",
