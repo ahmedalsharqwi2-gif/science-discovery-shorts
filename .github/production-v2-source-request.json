@@ -1,8 +1,9 @@
 {
   "profile": "science",
-  "purpose": "Verify the exact official relocation target published by the deprecated NASA sound page",
+  "purpose": "Read official acoustic evidence for the implemented longitudinal-wave laboratory; never infer facts from a relocation page",
   "urls": [
+    "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/sound-waves/",
     "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/speed-of-sound-interactive/"
   ],
-  "launch": "official-relocation-verification-1"
+  "launch": "verify-acoustic-source-2026-11-01-1"
 }
