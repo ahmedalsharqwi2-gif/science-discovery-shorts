@@ -102,17 +102,28 @@ def prior():
     return rows
 
 
+def _manual_candidates(profile):
+    path=Path('config/daily_topic_candidates.json')
+    if not path.is_file(): return []
+    try:
+        data=json.loads(path.read_text())
+        return [dict(row) for row in data.get('rows',[]) if isinstance(row,dict)]
+    except (OSError,ValueError,TypeError):
+        return []
+
 def candidates(profile):
+    manual=_manual_candidates(profile)
     if profile=='history':
         from .historical_sources import candidates as official
-        return official()
+        return manual + official()
     if profile=='news':
         from news.editor import candidates as fresh
         from .news_policy import choose
-        raw=fresh();(ROOT/'delivery').mkdir(exist_ok=True)
+        raw=fresh(); raw = manual + raw
+        (ROOT/'delivery').mkdir(exist_ok=True)
         (ROOT/'delivery/news-source-dates.json').write_text(json.dumps([{k:r.get(k) for k in ['title','url','publisher','published']} for r in raw],ensure_ascii=False,indent=2))
         return [dict(r,key=hashlib.sha256(canonical(r['url']).encode()).hexdigest()[:16],family='compute',variant='chip') for r in choose(raw,lambda p,s:ask(p,s,review=True))]
-    rows=json.loads((ROOT/'catalog.json').read_text())[profile]
+    rows=manual + json.loads((ROOT/'catalog.json').read_text())[profile]
     # Feeds replenish supported subject families. The editor must reject topics
     # that cannot be explained by the concrete geometry in this family.
     feeds={'science':[('NASA','https://www.nasa.gov/feed/')],'history':[('Smarthistory','https://smarthistory.org/feed/')],'horror':[('Royal Museums Greenwich','https://www.rmg.co.uk/stories/maritime-history')]}
@@ -197,14 +208,15 @@ def write_sourced(row,profile,previous):
            'compute':'chip hero; information flow; model/network; comparison of source-supported concepts; deployment/network; processing flow; limitations; conclusion',
            'space':'celestial hero; orbit; relationship of bodies; light/geometry; orbital motion; detail; limits/uncertainty; conclusion',
            'field':'field hero; source; field lines; particle flow; interaction; protection; limitations; conclusion',
-           'wave':'wave hero; source oscillation; particles; propagation; frequency; interference; limits; conclusion'}[row['family']]
+           'wave':'wave hero; source oscillation; particles; propagation; frequency; interference; limits; conclusion',
+           'haunted_interior':'site and landscape; documented discovery; evidence; timeline; competing explanations; environmental change; what remains uncertain; documented aftermath'}[row['family']]
     allowed_modes=sorted(set(MODES[row['family']]) & set(row['visual_contract']['allowed_modes'])) if row.get('visual_contract') else sorted(MODES[row['family']])
     if row.get('visual_contract'):
         order='Introduce the stated focal structure; explain its source-backed structural system; show its actual repeated units; explain function and material; illustrate construction only where supported; show documented changes or limits; finish with a concrete payoff. Never force an arch, dome, water channel or oculus absent from the supplied visual contract.'
     prompt=('Create a sourced conversational EGYPTIAN Arabic motion documentary, eight scenes, naturally varied 30–50 word paragraphs, total 300–350 spoken words. Shorter hooks and reveals, longer clear explanations; no padding to make every scene the same length. Aim for naturally narrated 120–175 seconds, strictly longer than 90 seconds and shorter than 180 seconds. Develop a coherent complete story in full paragraphs. Use correct numeral years such as 1845; never malformed colloquial expansions that change a year. If measured_narration_feedback exists, revise the SAME topic to target_seconds using substantive supported details or concise editing, never padding. The public title and scene headings MUST be Arabic and topic-specific, never numbered slides. '
             'Each scene label is a short Egyptian Arabic topic-specific heading. labels are optional short ARABIC phrases copied VERBATIM from that scene narration; never put rendering directions like chip hero on screen. Numbers in narration are written out as pronounceable Arabic words. '
             'Approved STYLE ONLY, do not copy its facts: الأخطبوط ده مش بيلبس لون تاني. هو بيغير شكل جلده قدامك، في لحظة. بس إزاي؟ Use ده، دي، مش، اللي، عشان، إزاي naturally. Avoid في الختام، يسعى النموذج، بكفاءة عالية، الشريحة الأولى. Every paragraph must add a concrete source-backed mechanism, event or implication. No generic awe, repetitive summaries, vague claims about helping scientists, filler or invented precision. Use clear natural Egyptian speech, not ornamental formal phrases. No greetings or subscribe requests. Only supplied evidence; do not invent prices, dates, casualties, eyewitness speech, precise geometry or performance. '
-            'For horror create a frightening suspense narrative from this documented maritime event. Start with a disturbing source-backed hook, isolate the crew, escalate the documented physical danger, hold an unanswered question, reveal evidence late, then give the actual documented outcome. Use vivid Egyptian storytelling, restrained dread and controlled pauses, rather than a classroom explainer. Distinguish facts from hypotheses and never invent ghosts, deaths, dialogue or eyewitness sounds. Hypothetical viewer reactions are clearly hypothetical. Never promise a medical effect on viewers. '
+            'For horror create a frightening suspense narrative from this documented event or mystery. Use the source's actual setting; do not force a maritime setting when the candidate is archaeological, environmental or scientific. Start with a disturbing source-backed hook, isolate the crew, escalate the documented physical danger, hold an unanswered question, reveal evidence late, then give the actual documented outcome. Use vivid Egyptian storytelling, restrained dread and controlled pauses, rather than a classroom explainer. Distinguish facts from hypotheses and never invent ghosts, deaths, dialogue or eyewitness sounds. Hypothetical viewer reactions are clearly hypothetical. Never promise a medical effect on viewers. '
             'suitable=false if the source is an index page, repeats ANY previous subject, or cannot be explained faithfully with the given visual family/variant. '
             'A different title or angle on a previous topic is still a repeat. canonical_subject is a stable short English subject slug. '
             'milestones are up to three SHORT source-backed dates or terms, no fabricated numbers. '

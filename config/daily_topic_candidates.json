@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "profile": "science-discovery-shorts",
+  "rows": [
+    {
+      "key": "sargassum-belt-daily-risk-2026",
+      "family": "wave",
+      "variant": "ocean",
+      "title": "حزام السرجسوم الأطلسي ومسار الطحالب العائمة",
+      "publisher": "NOAA",
+      "url": "https://research.noaa.gov/noaa-sargassum-tool-now-provides-daily-update-of-risk-of-seaweed-washing-up-on-beaches/"
+    }
+  ]
+}
