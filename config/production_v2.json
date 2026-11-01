@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "profile": "science",
+  "active_pipeline": "legacy",
+  "candidate_pipeline": "production_v2",
+  "automatic_cutover": false,
+  "acceptance_profiles": [
+    "science",
+    "horror",
+    "history",
+    "news",
+    "stickman"
+  ],
+  "reason": "Full fresh narrated video acceptance is outstanding. Candidate review never publishes."
+}

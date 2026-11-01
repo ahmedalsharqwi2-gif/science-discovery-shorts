@@ -1,0 +1,124 @@
+{
+  "name": "Production v2 fresh full-film candidate (never publishes)",
+  "on": {
+    "workflow_dispatch": {},
+    "workflow_call": {
+      "inputs": {
+        "caller_serialized": {
+          "type": "boolean",
+          "default": false,
+          "required": false
+        }
+      }
+    },
+    "push": {
+      "branches": [
+        "codex/rebuild-production-v2"
+      ],
+      "paths": [
+        ".github/production-v2-launch.json"
+      ]
+    }
+  },
+  "permissions": {
+    "contents": "write"
+  },
+  "concurrency": {
+    "group": "${{ inputs.caller_serialized && format('v2-child-{0}', github.run_id) || 'professional-daily-science' }}",
+    "cancel-in-progress": false
+  },
+  "jobs": {
+    "candidate": {
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 120,
+      "env": {
+        "PYTHONUNBUFFERED": "1",
+        "GEMINI_API_KEY": "${{ secrets.GEMINI_API_KEY }}",
+        "GEMINI_TEXT_API_KEY": "${{ secrets.GEMINI_TEXT_API_KEY || secrets.GEMINI_API_KEY }}",
+        "GEMINI_TTS_API_KEY": "${{ secrets.GEMINI_TTS_API_KEY || secrets.GEMINI_API_KEY }}",
+        "CANDIDATE_RUN": "${{ github.run_id }}-${{ github.run_attempt }}",
+        "GITHUB_TOKEN": "${{ github.token }}"
+      },
+      "steps": [
+        {
+          "uses": "actions/checkout@v4",
+          "with": {
+            "fetch-depth": 0
+          }
+        },
+        {
+          "name": "Require explicit review-only launch",
+          "run": "python -c \"import json; d=json.load(open('.github/production-v2-launch.json')); assert d['profile']=='science' and d['review_only'] is True and d['no_social_posts'] is True\""
+        },
+        {
+          "name": "Retain review start evidence on isolated status branch",
+          "run": "python -m production_v2.export_review --profile science --run-dir \".candidate-v2/run-$CANDIDATE_RUN\" --stage started"
+        },
+        {
+          "uses": "actions/setup-python@v5",
+          "with": {
+            "python-version": "3.11"
+          }
+        },
+        {
+          "uses": "actions/setup-node@v4",
+          "with": {
+            "node-version": "22"
+          }
+        },
+        {
+          "name": "Install rendering and original narration dependencies",
+          "run": "sudo apt-get update -qq\nsudo apt-get install -y ffmpeg\npython -m pip install numpy Pillow requests beautifulsoup4 faster-whisper==1.2.1 google-api-python-client google-auth-oauthlib pytest PyYAML\ncd professional_motion\nnpm ci\nnpx playwright-core install --with-deps chromium"
+        },
+        {
+          "name": "Check provider credentials without printing values",
+          "run": "python -c \"from professional_motion.credentials import preflight; preflight()\""
+        },
+        {
+          "name": "Test candidate isolation and persistence",
+          "run": "python -m pytest -q tests/test_production_v2.py tests/test_v2_*.py"
+        },
+        {
+          "uses": "actions/cache/restore@v4",
+          "with": {
+            "path": ".voice_cache\nstate/api_budget.sqlite3\n~/.cache/huggingface",
+            "key": "professional-v3-${{ github.repository_id }}-${{ github.run_id }}-${{ github.run_attempt }}",
+            "restore-keys": "professional-v3-${{ github.repository_id }}-"
+          }
+        },
+        {
+          "name": "Generate a new reserved source-backed story and full Charon film in isolation",
+          "run": "python -m production_v2.generate --profile science --run-dir \".candidate-v2/run-$CANDIDATE_RUN\" --ledger .candidate-v2/shared.sqlite3 --git-state --then-review"
+        },
+        {
+          "name": "Retain narration budget and verified voice cache",
+          "if": "always()",
+          "uses": "actions/cache/save@v4",
+          "with": {
+            "path": ".voice_cache\nstate/api_budget.sqlite3\n~/.cache/huggingface",
+            "key": "professional-v3-${{ github.repository_id }}-${{ github.run_id }}-${{ github.run_attempt }}"
+          }
+        },
+        {
+          "name": "Upload candidate films and failure evidence; no social publishing",
+          "if": "always()",
+          "uses": "actions/upload-artifact@v4",
+          "with": {
+            "name": "science-v2-fresh-candidate-${{ github.run_id }}",
+            "path": ".candidate-v2/run-*/output/candidate-review.mp4\n.candidate-v2/run-*/output/candidate-verification.json\n.candidate-v2/run-*/generation-verification.json\n.candidate-v2/run-*/source-snapshot.json\n.candidate-v2/run-*/professional_motion/delivery/*.json\n.candidate-v2/run-*/generation-failure.json",
+            "if-no-files-found": "warn",
+            "retention-days": 7
+          }
+        },
+        {
+          "name": "Retain final review status and verified movie Release",
+          "if": "always()",
+          "env": {
+            "JOB_STATUS": "${{ job.status }}"
+          },
+          "run": "python -m production_v2.export_review --profile science --run-dir \".candidate-v2/run-$CANDIDATE_RUN\" --stage \"$JOB_STATUS\""
+        }
+      ]
+    }
+  }
+}

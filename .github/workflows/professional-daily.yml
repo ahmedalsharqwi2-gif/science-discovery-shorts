@@ -2,6 +2,13 @@ name: Professional full-length daily film — science
 'on':
   workflow_dispatch:
     inputs:
+      pipeline:
+        description: Explicit v2 candidate review never publishes; legacy remains default
+        type: choice
+        options:
+        - legacy
+        - v2
+        default: legacy
       mode:
         description: Review never publishes; daily requires the approved release
         type: choice
@@ -20,6 +27,10 @@ name: Professional full-length daily film — science
   - cron: 55 17 * * *
   workflow_call:
     inputs:
+      pipeline:
+        type: string
+        default: legacy
+        required: false
       mode:
         type: string
         default: review
@@ -35,7 +46,14 @@ concurrency:
   group: professional-daily-science
   cancel-in-progress: false
 jobs:
+  v2-candidate-review:
+    if: ${{ inputs.pipeline == 'v2' }}
+    uses: ./.github/workflows/production-v2-generate.yml
+    with:
+      caller_serialized: true
+    secrets: inherit
   produce:
+    if: ${{ inputs.pipeline != 'v2' }}
     runs-on: ubuntu-24.04
     timeout-minutes: 60
     env:
@@ -299,7 +317,7 @@ jobs:
     - produce
     - render
     - finish
-    if: ${{ always() && (failure() || cancelled()) }}
+    if: ${{ inputs.pipeline != 'v2' && always() && (failure() || cancelled()) }}
     runs-on: ubuntu-latest
     permissions:
       issues: write

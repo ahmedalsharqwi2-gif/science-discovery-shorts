@@ -1,0 +1,36 @@
+{
+  "profile": "science",
+  "base_commit": "74712aa3d928b29e83d31e1f879acb14aabde2dd",
+  "files": [
+    {
+      "path": "state/cinematic_budget.json",
+      "sha256": "0efdbd38629a4043589a3e5593cb89219344e552d3633656df1394603c0a813f"
+    },
+    {
+      "path": "state/film_topics.json",
+      "sha256": "429c56dc0942a8a2888711ce29a1cab2eb181d946487d621818915bd44cfdfa4"
+    },
+    {
+      "path": "state/professional_topics.json",
+      "sha256": "04bcd0d84a5961bd0e1138f3378808d92bcb639f6b5af28697ab2d92ed9b96b7"
+    },
+    {
+      "path": "state/publication_stock.json",
+      "sha256": "d7eec563fafd7798d1c36a1c5970364298e0e0ae7c678fc65ba115f7a668d37b"
+    },
+    {
+      "path": "state/science_visual_history.json",
+      "sha256": "95bc6ec7115c4a8bc0323fa2535dccbe03588dac1957c1bcd6f6b2d513908e56"
+    },
+    {
+      "path": "state/voice_rotation.json",
+      "sha256": "ef24a36f254bf033325993df43876158e8f2feeb986bdb7b80cdef9d5757c912"
+    },
+    {
+      "path": "topic_history.json",
+      "sha256": "a8cf21b1cd90d0039bd99823eb69c082a2e0f422379e2c57a5858bfcd8fe7d93"
+    }
+  ],
+  "state_modified": false,
+  "legacy_workflow_semantic_sha256": "199590fef53b2a76d21e7b6da8a92a20215118241a66a61e52be6913df54a5e3"
+}

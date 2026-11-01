@@ -35,3 +35,8 @@ professional_motion/output/
 /review_download/
 
 professional_motion/node_modules
+
+# Isolated candidate renders; durable publishing storage is not yet activated
+/.candidate-v2/
+/.work/
+state/production-v2.sqlite3*

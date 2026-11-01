@@ -1,0 +1,65 @@
+{
+  "name": "Read-only retained Buffer receipt audit (repository key only)",
+  "on": {
+    "workflow_dispatch": {},
+    "push": {
+      "branches": [
+        "codex/rebuild-production-v2"
+      ],
+      "paths": [
+        ".github/production-v2-launch.json"
+      ]
+    }
+  },
+  "permissions": {
+    "contents": "write"
+  },
+  "jobs": {
+    "audit": {
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 10,
+      "steps": [
+        {
+          "uses": "actions/checkout@v4"
+        },
+        {
+          "name": "Retain read-only audit start evidence",
+          "run": "python -m production_v2.export_review --profile science --run-dir .candidate-v2 --stage started --status-branch codex/production-v2-audit-status"
+        },
+        {
+          "uses": "actions/setup-python@v5",
+          "with": {
+            "python-version": "3.11"
+          }
+        },
+        {
+          "run": "python -m pip install requests"
+        },
+        {
+          "name": "Query existing posts without creating or changing posts",
+          "env": {
+            "BUFFER_API_KEY": "${{ secrets.BUFFER_API_KEY }}"
+          },
+          "run": "python -m production_v2.audit --live --root . --output .candidate-v2/retained-buffer-audit.json"
+        },
+        {
+          "uses": "actions/upload-artifact@v4",
+          "with": {
+            "name": "science-retained-buffer-audit-${{ github.run_id }}",
+            "path": ".candidate-v2/retained-buffer-audit.json",
+            "if-no-files-found": "error",
+            "retention-days": 7
+          }
+        },
+        {
+          "name": "Retain observed provider evidence without posting",
+          "if": "always()",
+          "env": {
+            "JOB_STATUS": "${{ job.status }}"
+          },
+          "run": "python -m production_v2.export_review --profile science --run-dir .candidate-v2 --stage \"$JOB_STATUS\" --audit-report .candidate-v2/retained-buffer-audit.json --status-branch codex/production-v2-audit-status"
+        }
+      ]
+    }
+  }
+}
