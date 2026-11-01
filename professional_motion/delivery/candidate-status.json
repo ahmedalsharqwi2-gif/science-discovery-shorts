@@ -1,0 +1,74 @@
+[
+  {
+    "key": "saturn-rings",
+    "title": "حلقات زحل مش قرص واحد",
+    "url": "https://science.nasa.gov/saturn/facts/",
+    "family": "space",
+    "variant": "saturn",
+    "published": null,
+    "already_reserved": true
+  },
+  {
+    "key": "moon-phases",
+    "title": "ليه شكل القمر بيتغير؟",
+    "url": "https://science.nasa.gov/moon/moon-phases/",
+    "family": "space",
+    "variant": "moon",
+    "published": null,
+    "already_reserved": true
+  },
+  {
+    "key": "solar-eclipse",
+    "title": "الكسوف بيحصل إزاي؟",
+    "url": "https://science.nasa.gov/eclipses/",
+    "family": "space",
+    "variant": "eclipse",
+    "published": null,
+    "already_reserved": true
+  },
+  {
+    "key": "earth-magnetosphere",
+    "title": "درع الأرض المغناطيسي",
+    "url": "https://science.nasa.gov/earth/earths-magnetosphere/",
+    "family": "field",
+    "variant": "magnet",
+    "published": null,
+    "already_reserved": true
+  },
+  {
+    "key": "sound-waves",
+    "title": "الصوت بيعدي في الهوا إزاي؟",
+    "url": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/speed-of-sound-interactive/",
+    "family": "wave",
+    "variant": "sound",
+    "published": null,
+    "already_reserved": false
+  },
+  {
+    "key": "jupiter-storms",
+    "title": "المشتري: عاصفة أكبر من الأرض",
+    "url": "https://science.nasa.gov/jupiter/",
+    "family": "space",
+    "variant": "saturn",
+    "published": null,
+    "already_reserved": true
+  },
+  {
+    "key": "7b620b8ee23e792e",
+    "title": "APOD: 2026 November 1 – Colors of the Moon",
+    "url": "https://science.nasa.gov/image-article/apod-2026-november-1-colors-of-the-moon/",
+    "family": "space",
+    "variant": "planet",
+    "published": null,
+    "already_reserved": false
+  },
+  {
+    "key": "e6da576f1b1a6c97",
+    "title": "APOD: 2026 October 31 – Night on a Spooky Planet",
+    "url": "https://science.nasa.gov/image-article/apod-2026-october-31-night-on-a-spooky-planet/",
+    "family": "space",
+    "variant": "planet",
+    "published": null,
+    "already_reserved": true
+  }
+]

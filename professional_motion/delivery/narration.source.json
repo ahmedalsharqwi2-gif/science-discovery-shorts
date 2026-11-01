@@ -1,0 +1,17 @@
+{
+  "provider": "Gemini TTS",
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Charon",
+  "style": "Egyptian Arabic ar-EG, native conversational Cairo accent. Mature warm male documentary storyteller, low resonant register, clear exact articulation, measured pace around 140 words per minute. Say the year numbers naturally in Egyptian Arabic. Preserve every word and sentence of the transcript, finish the last sentence clearly. No music, no sound effects, no singing, no spoken instructions.\nEgyptian Arabic engaging science explanation. Start with curiosity, build momentum, thoughtful final payoff. No music or sound effects. Read only the supplied words. Finish the last sentence. Clear natural pace.",
+  "text": "الهوا عبارة عن غاز، وخاصية أي غاز المهمة هي سرعة الصوت جواه. سرعة الصوت بتعبر عن سرعة انتقال اضطراب صغير عبر وسط مادي، وده بيحصل لما الطاقة بتتحرك من نقطة للثانية جوه الوسط ده. الاضطرابات دي بتنتقل جوه الغاز نتيجة التصادمات المستمرة بين الجزيئات اللي بتحرك بعشوائية تامة. لما جزيء بيخبط في جزيء تاني، الحركة بتتنقل بينهم بسرعة. بما إن الانتقال ده بيعتمد على التصادمات بين الجزيئات، فسرعة الصوت بتتحدد حسب حالة الغاز ودرجة حرارته، لأن الجزيئات الأسرع بتنقل الصوت بطريقة مختلفة عن البطيئة. انتقال الاضطراب الصغير جوه الغاز بيعتبر عملية آزنتيروبية، يعني الشروط والظروف في الغاز بتفضل ثابتة قبل وبعد مرور الاضطراب ده من غير ما تفقد طاقة في النص. التحليل القائم على حفظ الكتلة وزخم الحركة بيوضح إن سرعة الصوت بتتوقف على نسبة الحرارة النوعية وثابت الغاز ودرجة الحرارة، ودي معادلة رياضية دقيقة بيستخدمها المهندسون. عشان نحسب الحسبة دي مظبوط، لازم درجة الحرارة تتحدد على مقياس مطلق زي الكلفن، عشان النتيجة تطلع سليمة تماماً وتتناسب مع القوانين الفيزيائية للغازات. على كوكب الأرض، الغلاف الجوي متكون غالباً من نيتروجين وأكسجين ثنائي الذرة، ودرجة الحرارة بتتغير حسب الارتفاع بصورة معقدة بتأثر على حركة الموجات دي. العلماء عملوا نماذج رياضية للجو عشان يقدروا يحسبوا تأثير تغير الحرارة مع الارتفاع، وده بينطبق على كوكب المريخ برضه اللي جوه مليان غاز ثاني أكسيد الكربون.",
+  "interaction_id": "v1_ChdTY3ZuYXRMWUFvM25xdHNQX05LS3lBbxIXU2N2bmF0TFlBbzNucXRzUF9OS0t5QW8",
+  "duration": 98.8,
+  "sample_rate": 24000,
+  "channels": 1,
+  "sha256": "bab087cf91742bdfaf682065a8c5be13709138fc185819b277ac1609519ab6ff",
+  "newly_synthesized": true,
+  "original_video_audio_used": false,
+  "fallback_used": false,
+  "cache_hit": false,
+  "output_sha256": "bab087cf91742bdfaf682065a8c5be13709138fc185819b277ac1609519ab6ff"
+}

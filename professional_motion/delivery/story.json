@@ -1,0 +1,144 @@
+{
+  "title": "الصوت بيعدي في الهوا إزاي؟",
+  "canonical_subject": "sound-waves",
+  "suitable": true,
+  "facts": [
+    "سرعة الصوت هي سرعة انتقال اضطراب صغير خلال وسط مادي.",
+    "تنتقل الاضطرابات في الغاز نتيجة التصادمات بين الجزيئات المتحركة عشوائياً.",
+    "تعتمد سرعة الصوت على نوع الغاز ودرجة حرارته المطلقة."
+  ],
+  "milestones": [
+    "سرعة الصوت",
+    "تصادم الجزيئات",
+    "معادلة الحرارة"
+  ],
+  "scenes": [
+    {
+      "id": "scene_1",
+      "label": "سرعة الصوت في الهوا",
+      "narration": "الهوا عبارة عن غاز، وخاصية أي غاز المهمة هي سرعة الصوت جواه. سرعة الصوت بتعبر عن سرعة انتقال اضطراب صغير عبر وسط مادي، وده بيحصل لما الطاقة بتتحرك من نقطة للثانية جوه الوسط ده.",
+      "labels": [
+        "سرعة الصوت",
+        "وسط مادي"
+      ],
+      "visual_mode": "wave",
+      "evidence_excerpt_id": 2,
+      "evidence_quote": "we interested in the speed of sound? The speed of “sound” is the speed of"
+    },
+    {
+      "id": "scene_2",
+      "label": "حركة وتصادم الجزيئات",
+      "narration": "الاضطرابات دي بتنتقل جوه الغاز نتيجة التصادمات المستمرة بين الجزيئات اللي بتحرك بعشوائية تامة. لما جزيء بيخبط في جزيء تاني، الحركة بتتنقل بينهم بسرعة.",
+      "labels": [
+        "التصادمات المستمرة",
+        "عشوائية تامة"
+      ],
+      "visual_mode": "detail",
+      "evidence_excerpt_id": 6,
+      "evidence_quote": "a gas as a result of collisions between the randomly moving molecules in the gas."
+    },
+    {
+      "id": "scene_3",
+      "label": "حالة الغاز والحرارة",
+      "narration": "بما إن الانتقال ده بيعتمد على التصادمات بين الجزيئات، فسرعة الصوت بتتحدد حسب حالة الغاز ودرجة حرارته، لأن الجزيئات الأسرع بتنقل الصوت بطريقة مختلفة عن البطيئة.",
+      "labels": [
+        "حالة الغاز",
+        "درجة حرارته"
+      ],
+      "visual_mode": "detail",
+      "evidence_excerpt_id": 9,
+      "evidence_quote": "speed of transmission depends on molecular collisions, the speed of sound depends on the state"
+    },
+    {
+      "id": "scene_4",
+      "label": "العملية الآزنتيروبية",
+      "narration": "انتقال الاضطراب الصغير جوه الغاز بيعتبر عملية آزنتيروبية، يعني الشروط والظروف في الغاز بتفضل ثابتة قبل وبعد مرور الاضطراب ده من غير ما تفقد طاقة في النص.",
+      "labels": [
+        "عملية آزنتيروبية",
+        "شروط والظروف"
+      ],
+      "visual_mode": "wave",
+      "evidence_excerpt_id": 7,
+      "evidence_quote": "The transmission of a small disturbance through a gas is an isentropic process. The conditions"
+    },
+    {
+      "id": "scene_5",
+      "label": "حساب السرعة والثوابت",
+      "narration": "التحليل القائم على حفظ الكتلة وزخم الحركة بيوضح إن سرعة الصوت بتتوقف على نسبة الحرارة النوعية وثابت الغاز ودرجة الحرارة، ودي معادلة رياضية دقيقة بيستخدمها المهندسون.",
+      "labels": [
+        "حفظ الكتلة",
+        "درجة الحرارة"
+      ],
+      "visual_mode": "detail",
+      "evidence_excerpt_id": 12,
+      "evidence_quote": "dioxide, etc.) and the temperature of the gas. An analysis based on conservation of mass"
+    },
+    {
+      "id": "scene_6",
+      "label": "درجة الحرارة المطلقة",
+      "narration": "عشان نحسب الحسبة دي مظبوط، لازم درجة الحرارة تتحدد على مقياس مطلق زي الكلفن، عشان النتيجة تطلع سليمة تماماً وتتناسب مع القوانين الفيزيائية للغازات.",
+      "labels": [
+        "مقياس مطلق",
+        "الكلفن"
+      ],
+      "visual_mode": "detail",
+      "evidence_excerpt_id": 15,
+      "evidence_quote": "times the temperature T . \\(\\LARGE a=\\sqrt{\\gamma RT}\\) Temperature Notice that the temperature must be"
+    },
+    {
+      "id": "scene_7",
+      "label": "تركيب الغلاف الجوي",
+      "narration": "على كوكب الأرض، الغلاف الجوي متكون غالباً من نيتروجين وأكسجين ثنائي الذرة، ودرجة الحرارة بتتغير حسب الارتفاع بصورة معقدة بتأثر على حركة الموجات دي.",
+      "labels": [
+        "الغلاف الجوي",
+        "حسب الارتفاع"
+      ],
+      "visual_mode": "wave",
+      "evidence_excerpt_id": 20,
+      "evidence_quote": "gas. On Earth, the atmosphere is composed of mostly diatomic nitrogen and oxygen, and the"
+    },
+    {
+      "id": "scene_8",
+      "label": "نماذج الكواكب المختلفة",
+      "narration": "العلماء عملوا نماذج رياضية للجو عشان يقدروا يحسبوا تأثير تغير الحرارة مع الارتفاع، وده بينطبق على كوكب المريخ برضه اللي جوه مليان غاز ثاني أكسيد الكربون.",
+      "labels": [
+        "نماذج رياضية",
+        "كوكب المريخ"
+      ],
+      "visual_mode": "hero",
+      "evidence_excerpt_id": 22,
+      "evidence_quote": "a mathematical model of the atmosphere to help them account for the changing effects of"
+    }
+  ],
+  "hashtags": [
+    "سرعة_الصوت",
+    "فيزياء",
+    "الهوا",
+    "ناسا"
+  ],
+  "editorial_warnings": [
+    "Write 260–330 spoken words for a natural film between 90 and 180 seconds",
+    "Word count is below the recommended editorial range of 260-330 words."
+  ],
+  "profile": "science",
+  "series": "اسرار الكون",
+  "visual_family": "wave",
+  "variant": "sound",
+  "topic_key": "sound-waves",
+  "source": {
+    "url": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/speed-of-sound-interactive/",
+    "publisher": "NASA Glenn",
+    "title": "الصوت بيعدي في الهوا إزاي؟"
+  },
+  "fiction": false,
+  "documented": true,
+  "editorial_review": {
+    "supported": true,
+    "novel": true,
+    "issues": [
+      "Word count is below the recommended editorial range of 260-330 words."
+    ],
+    "model": "gemini-3.5-flash-lite"
+  },
+  "writer_model": "gemini-3.5-flash-lite"
+}
