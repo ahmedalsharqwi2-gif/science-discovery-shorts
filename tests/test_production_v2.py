@@ -20,22 +20,22 @@ MAP = {'youtube': 'a', 'facebook': 'b', 'instagram': 'c'}
 
 
 class ScheduleTests(unittest.TestCase):
-    def test_cairo_summer_and_winter_same_day(self):
+    def test_cairo_summer_and_winter_next_day(self):
         for month, hour, due_hour in [(7, 6, 14), (12, 7, 15)]:
             now = datetime(2026, month, 1, hour, tzinfo=timezone.utc)
             result = window(now)
             self.assertEqual(result['reason'], 'eligible')
             self.assertEqual(datetime.fromisoformat(result['due_at'].replace('Z', '+00:00')).hour, due_hour)
-            self.assertEqual(result['slot'], f'daily-2026-{month:02d}-01')
+            self.assertEqual(result['slot'], f'daily-2026-{month:02d}-02')
             self.assertEqual(window(now.replace(hour=hour-1))['reason'], 'too_early')
             # Late Actions dispatch within the window remains valid.
             self.assertTrue(window(now.replace(hour=hour+4))['run'])
-            closed = window(now.replace(hour=hour+6))
+            closed = window(now.replace(day=2,hour=hour+6), result['publication_date'])
             self.assertEqual(closed['reason'], 'missed')
             self.assertEqual(closed['due_at'][:10], result['due_at'][:10])
 
     def test_late_slot_never_posts_immediately_or_rolls(self):
-        for due in ('2026-12-01T10:00:00Z', '2026-12-02T15:00:00Z'):
+        for due in ('2026-12-01T10:00:00Z', '2026-12-03T15:00:00Z'):
             with self.assertRaises(ValueError):
                 require_future_due(due, NOW)
         self.assertEqual(require_future_due(DUE, NOW).hour, 15)
