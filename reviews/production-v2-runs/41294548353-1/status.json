@@ -1,0 +1,37 @@
+{
+  "profile": "science",
+  "repository": "ahmedalsharqwi2-gif/science-discovery-shorts",
+  "run_id": "41294548353",
+  "run_attempt": "1",
+  "source_commit": "a00aa6c2ed6de1e2662386c0de29e04890304326",
+  "kind": "official_source_probe",
+  "stage": "success",
+  "observed_at": "2026-11-01T09:46:27.487697+00:00",
+  "read_only": true,
+  "no_provider_calls": true,
+  "no_posts_created": true,
+  "sources": [
+    {
+      "requested_url": "https://www.grc.nasa.gov/www/k-12/airplane/sound.html",
+      "authority": "nasa.gov",
+      "verified": false,
+      "tls_verification": true,
+      "keyless_get_only": true,
+      "final_url": "https://www.grc.nasa.gov/www/k-12/airplane/sound.html",
+      "http_status": 200,
+      "official_links": [
+        "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/speed-of-sound-interactive/"
+      ],
+      "title": "This site has moved to a new URL",
+      "canonical_url": null,
+      "body_word_count": 20,
+      "evidence_sha256": "4dcd28e9ef547a21d05731b484ff4d5d6ee1587ac2e2ac6a7d04a4da0110fe16",
+      "excerpts": [],
+      "quoted_words": 0,
+      "geometry_inference": null,
+      "geometry_note": "No tier count or geometry is inferred. Any contract must cite an explicit source statement.",
+      "problem": "Official response lacks sufficient readable article text"
+    }
+  ],
+  "all_requested_pages_verified": false
+}
