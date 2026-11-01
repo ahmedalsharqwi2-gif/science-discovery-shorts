@@ -20,7 +20,7 @@ REPOSITORIES = {
     'stickman': 'stickman-what-if-shorts',
 }
 STATUS_BRANCH = 'codex/production-v2-status'
-STATUS_BRANCHES = {STATUS_BRANCH, 'codex/production-v2-audit-status', 'codex/production-v2-diagnostics', 'codex/production-v2-sources'}
+STATUS_BRANCHES = {STATUS_BRANCH, 'codex/production-v2-audit-status', 'codex/production-v2-diagnostics', 'codex/production-v2-sources', 'codex/production-v2-news-sources'}
 AUDIT_KEYS = {'checked_at', 'profile', 'read_only', 'live_access_available', 'episodes', 'slot',
     'video_sha256', 'retained_status', 'due_at', 'live_verified', 'posts', 'no_posts_created',
     'problem', 'retained_post_id', 'expected_channel_id', 'live_checked', 'observed_post_id',

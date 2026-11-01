@@ -142,3 +142,16 @@ class StatusRaceTests(unittest.TestCase):
             self.assertEqual(run('git','branch','--show-current',cwd=repo),'main')
 
 if __name__=='__main__':unittest.main()
+
+class PlanningEvidenceTests(unittest.TestCase):
+    def test_failed_hidden_run_retains_sanitized_planning_details(self):
+        from production_v2.export_review import _planning_evidence
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder);delivery=root/'professional_motion/delivery';delivery.mkdir(parents=True)
+            (delivery/'planning-errors.json').write_text(json.dumps([{'topic_key':'unused-source','error_class':'ValueError','validation':'unsupported scene; test-secret-7','authorization':'test-secret-7'}]))
+            with patch.dict(os.environ,{'GEMINI_API_KEY':'test-secret-7'}):
+                result=_planning_evidence(root)
+            data=result['planning-errors.json'][0]
+            self.assertEqual(data['error_class'],'ValueError')
+            self.assertIn('[REDACTED]',data['validation'])
+            self.assertNotIn('authorization',data)

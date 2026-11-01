@@ -64,7 +64,8 @@ def _copy_inputs(repository, run_dir):
     candidates.extend(repository / name for name in (
         'topic_history.json', 'film_topics.json', 'professional_topics.json',
         'publication_receipts.json', 'professional_motion/catalog.json',
-        'config/accepted_voice.json', 'config/professional_models.json'))
+        'config/accepted_voice.json', 'config/professional_models.json',
+        'professional_motion/director_catalog.json'))
     for source in sorted(set(candidates)):
         if not source.is_file():
             continue
@@ -115,6 +116,8 @@ def generate(profile, run_dir, ledger_path, *, repository=None, then_review=Fals
         raise ValueError('Use a durable candidate .sqlite3 ledger outside the run directory')
     if run_dir.exists() and any(run_dir.iterdir()):
         raise FileExistsError('Existing candidate files are retained; choose a fresh run directory')
+    from .directing import load_catalog, directing_editor, validate_plan, require_novel_plan
+    catalog = load_catalog(repository, profile)
     editorial = importlib.import_module('professional_motion.editorial')
     voice_job = importlib.import_module('professional_motion.voice_job')
     run_dir.mkdir(parents=True, exist_ok=True)
@@ -126,15 +129,21 @@ def generate(profile, run_dir, ledger_path, *, repository=None, then_review=Fals
         inputs = _copy_inputs(repository, run_dir)
         _merge_candidate_history(ledger, run_dir)
         _write(run_dir / 'source-snapshot.json', {'repository': str(repository), 'inputs': inputs})
+        previous_plans = []
+        for (payload,) in ledger.db.execute("SELECT payload FROM events WHERE kind='candidate_story'"):
+            plan = json.loads(payload).get('story', {}).get('visual_plan')
+            if plan: previous_plans.append(plan)
         reserved = False
         try:
-            with isolated_editor(editorial, run_dir, repository):
+            with isolated_editor(editorial, run_dir, repository), directing_editor(editorial, catalog, previous_plans):
                 story = editorial.prepare(profile, slot)
                 story_file = run_dir / 'professional_motion/delivery/story.json'
                 if not story.get('topic_key') or story.get('profile') != profile:
                     raise ValueError('Prepared story identity does not match the channel')
                 if json.loads(story_file.read_text()) != story:
                     raise ValueError('Prepared story and retained delivery bytes differ')
+                plan = validate_plan(story, catalog)
+                plan_signature = require_novel_plan(plan, previous_plans)
                 # Transactional conflict check MUST happen before TTS or ASR.
                 ledger.reserve(slot, story['topic_key'], due, story)
                 reserved = True
@@ -149,6 +158,7 @@ def generate(profile, run_dir, ledger_path, *, repository=None, then_review=Fals
                 result = {'slot': slot, 'profile': profile, 'topic_key': checked_story['topic_key'],
                     'duration': timing['duration'], 'story_sha256': _digest(story_file),
                     'audio_sha256': _digest(run_dir / 'professional_motion/delivery/narration.wav'),
+                    'visual_plan_signature': plan_signature, 'topic_director_world': plan['world'],
                     'generated_in_isolation': True, 'review_only': True, 'publishable': False,
                     'fresh_topic_verified': True, 'legacy_state_unchanged': True,
                     'ledger': str(ledger_path),

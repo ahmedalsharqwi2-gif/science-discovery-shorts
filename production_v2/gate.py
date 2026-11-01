@@ -10,6 +10,7 @@ from pathlib import Path
 import subprocess
 from .ledger import tokens
 from .media import verify
+from .directing import load_catalog, validate_plan
 
 PROFILES = ('science', 'horror', 'history', 'news', 'stickman')
 CANDIDATE_CONFIG = {'version': 2, 'active_pipeline': 'legacy',
@@ -51,6 +52,7 @@ def check_profile(profile, evidence):
         raise ValueError('Exact authored story topic identity required')
     if ({token for token in tokens(story) if token[0] in ('topic', 'source')} | {('topic', topic)}) & old_tokens:
         raise ValueError('Topic was already reserved/produced in legacy history')
+    plan = validate_plan(story, load_catalog(root, profile))
     voice = evidence.get('narration', {})
     if voice.get('provider') != 'gemini' or voice.get('voice') != 'Charon' or voice.get('story_sha256') != story_hash:
         raise ValueError('New Charon narration must be bound to the exact new story')
@@ -65,6 +67,10 @@ def check_profile(profile, evidence):
         source = (root / relative).resolve()
         if not source.is_relative_to(root) or not source.is_file() or sha256(source) != expected:
             raise ValueError('Renderer source changed after full-film acceptance')
+    render_report = json.loads(Path(renderer['report_path']).read_text())
+    director = render_report.get('topic_director', {})
+    if director.get('active') is not True or director.get('world') != plan['world'] or director.get('scene_count') != 8 or render_report.get('story_sha256') != story_hash:
+        raise ValueError('The full film must execute its topic-specific scene plan; a generic template is insufficient')
     video = verify(evidence['video_path'])
     if video['sha256'] != evidence.get('video_sha256'):
         raise ValueError('Acceptance video changed after review')
