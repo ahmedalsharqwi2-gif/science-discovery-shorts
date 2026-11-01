@@ -118,14 +118,14 @@ def generate(profile, run_dir, ledger_path, *, repository=None, then_review=Fals
         raise FileExistsError('Existing candidate files are retained; choose a fresh run directory')
     from .directing import load_catalog, directing_editor, validate_plan, require_novel_plan
     from .general_editorial import enabled as general_enabled, editor as general_editor, validate as validate_general
-    use_general=general_enabled(profile)
+    use_general=general_enabled(profile,repository)
     catalog = None if use_general else load_catalog(repository, profile)
     editorial = importlib.import_module('professional_motion.editorial')
     voice_job = importlib.import_module('professional_motion.voice_job')
     run_dir.mkdir(parents=True, exist_ok=True)
     (run_dir / 'professional_motion').mkdir(exist_ok=True)
     slot = 'candidate-' + profile + '-' + uuid.uuid4().hex
-    due = window(datetime.now(timezone.utc))['due_at']
+    due = window(datetime.now(timezone.utc),os.getenv('PRODUCTION_PUBLICATION_DATE'))['due_at']
     with Ledger(ledger_path) as ledger:
         ledger.import_legacy(repository)
         inputs = _copy_inputs(repository, run_dir)

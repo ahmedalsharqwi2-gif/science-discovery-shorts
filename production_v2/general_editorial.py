@@ -11,9 +11,11 @@ ASSETS=('cell','leaf','heart','dna','molecule','crystal','rock_layers','volcano'
 MOTIONS=('none','spin','pulse','drift','orbit','grow','assemble','split','swing','flow')
 ENVIRONMENTS=('laboratory','body_section','landscape','geology_section','workshop','ancient_city','harbor','dark_interior','forest','ocean')
 
-def enabled(profile):
-    path=Path('config/editorial_policy.json')
-    return profile in CATEGORIES and path.is_file() and json.loads(path.read_text()).get('external_sources_required') is False
+def enabled(profile,root='.'):
+    path=Path(root)/'config/editorial_policy.json'
+    if profile not in CATEGORIES or not path.is_file():return False
+    policy=json.loads(path.read_text())
+    return policy.get('profile')==profile and policy.get('external_sources_required') is False
 
 def validate(story,profile):
     if story.get('profile')!=profile or not story.get('topic_key') or len(story.get('scenes',[]))!=8:
