@@ -1,0 +1,165 @@
+{
+  "profile": "science",
+  "repository": "ahmedalsharqwi2-gif/science-discovery-shorts",
+  "run_id": "41353854075",
+  "run_attempt": "1",
+  "source_commit": "5c5230499d00d70be7108140e5b90075c70daff8",
+  "stage": "success",
+  "requested_stage": "success",
+  "observed_at": "2026-11-01T21:48:17.327488+00:00",
+  "review_only": true,
+  "automatically_published": false,
+  "cutover_eligible": false,
+  "complete_film_verified": false,
+  "media_url": null,
+  "kind": "buffer_audit",
+  "buffer_audit": {
+    "checked_at": "2026-11-01T21:48:15.021394+00:00",
+    "profile": "science",
+    "read_only": true,
+    "live_access_available": true,
+    "episodes": [
+      {
+        "slot": "daily-2026-10-30",
+        "video_sha256": "9ab745fc7ee29ae136ad9eead22f41d5ba87020bdc4af366797e323ff318cfc9",
+        "retained_status": "scheduled",
+        "due_at": "2026-10-30T15:00:00Z",
+        "live_verified": false,
+        "posts": {
+          "tiktok": {
+            "retained_post_id": "6ae490454233ff6805bdc5b2",
+            "expected_channel_id": "6a9edf14cd8b9c702c230272",
+            "retained_status": "scheduled",
+            "live_checked": true,
+            "observed_post_id": "6ae490454233ff6805bdc5b2",
+            "channel_id": "6a9edf14cd8b9c702c230272",
+            "status": "sent",
+            "scheduled_at": "2026-10-30T15:00:00.000Z",
+            "sent_at": "2026-10-30T15:03:27.389Z",
+            "external_link": "https://www.tiktok.com/@cosmic_secrets0/video/7702476110411566357?utm_campaign=tt4d_open_api&utm_source=7103819247981182978",
+            "media_urls": [
+              "https://buffer-updates-media-backfill-bucket.s3.amazonaws.com/69bc1c2a6eab87741a4a280d/6a9edf14cd8b9c702c230272/6ae490454233ff6805bdc5b2_video.mp4"
+            ],
+            "post_and_channel_match": true,
+            "due_matches": true,
+            "media_matches": null,
+            "verified": false,
+            "problem": "Expected media URL not retained; identity/time observed, media not independently matched"
+          },
+          "youtube": {
+            "retained_post_id": "6ae490476516a7746a2a59ac",
+            "expected_channel_id": "6a9edee8cd8b9c702c2301cb",
+            "retained_status": "scheduled",
+            "live_checked": true,
+            "observed_post_id": "6ae490476516a7746a2a59ac",
+            "channel_id": "6a9edee8cd8b9c702c2301cb",
+            "status": "sent",
+            "scheduled_at": "2026-10-30T15:00:00.000Z",
+            "sent_at": "2026-10-30T15:00:55.262Z",
+            "external_link": "https://www.youtube.com/shorts/FVzpYEeMCrs",
+            "media_urls": [
+              "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/releases/download/auto-publish-daily-2026-10-30/science-video-daily-2026-10-30.mp4"
+            ],
+            "post_and_channel_match": true,
+            "due_matches": true,
+            "media_matches": null,
+            "verified": false,
+            "problem": "Expected media URL not retained; identity/time observed, media not independently matched"
+          },
+          "facebook": {
+            "retained_post_id": "6ae4904a6516a7746a2a5a49",
+            "expected_channel_id": "6a9edebbcd8b9c702c230128",
+            "retained_status": "scheduled",
+            "live_checked": true,
+            "observed_post_id": "6ae4904a6516a7746a2a5a49",
+            "channel_id": "6a9edebbcd8b9c702c230128",
+            "status": "sent",
+            "scheduled_at": "2026-10-30T15:00:00.000Z",
+            "sent_at": "2026-10-30T15:01:04.923Z",
+            "external_link": "https://www.facebook.com/reel/1432560985697109/",
+            "media_urls": [
+              "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/releases/download/auto-publish-daily-2026-10-30/science-video-daily-2026-10-30.mp4"
+            ],
+            "post_and_channel_match": true,
+            "due_matches": true,
+            "media_matches": null,
+            "verified": false,
+            "problem": "Expected media URL not retained; identity/time observed, media not independently matched"
+          }
+        },
+        "no_posts_created": true
+      },
+      {
+        "slot": "daily-2026-10-31",
+        "video_sha256": "22fb8bcb74df522aababc52109b20589468b8c02ed17f5ac30a09c95e0de0a15",
+        "retained_status": "scheduled",
+        "due_at": "2026-11-01T15:00:00Z",
+        "live_verified": false,
+        "posts": {
+          "tiktok": {
+            "retained_post_id": "6ae63c981ee172cd6dbaeedd",
+            "expected_channel_id": "6a9edf14cd8b9c702c230272",
+            "retained_status": "scheduled",
+            "live_checked": true,
+            "observed_post_id": "6ae63c981ee172cd6dbaeedd",
+            "channel_id": "6a9edf14cd8b9c702c230272",
+            "status": "sent",
+            "scheduled_at": "2026-11-01T15:00:00.000Z",
+            "sent_at": "2026-11-01T15:06:04.188Z",
+            "external_link": "https://tiktok.com/@pagesof_history/video/7703218313513422081",
+            "media_urls": [
+              "https://buffer-updates-media-backfill-bucket.s3.amazonaws.com/69bc1c2a6eab87741a4a280d/6a9edf14cd8b9c702c230272/6ae63c981ee172cd6dbaeedd_video.mp4"
+            ],
+            "post_and_channel_match": true,
+            "due_matches": true,
+            "media_matches": null,
+            "verified": false,
+            "problem": "Expected media URL not retained; identity/time observed, media not independently matched"
+          },
+          "youtube": {
+            "retained_post_id": "6ae63c9a21c807e9d57e5492",
+            "expected_channel_id": "6a9edee8cd8b9c702c2301cb",
+            "retained_status": "scheduled",
+            "live_checked": true,
+            "observed_post_id": "6ae63c9a21c807e9d57e5492",
+            "channel_id": "6a9edee8cd8b9c702c2301cb",
+            "status": "sent",
+            "scheduled_at": "2026-11-01T15:00:00.000Z",
+            "sent_at": "2026-11-01T15:01:10.334Z",
+            "external_link": "https://www.youtube.com/shorts/LgKkiml1jQo",
+            "media_urls": [
+              "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/releases/download/auto-publish-daily-2026-10-31/science-video-daily-2026-10-31.mp4"
+            ],
+            "post_and_channel_match": true,
+            "due_matches": true,
+            "media_matches": null,
+            "verified": false,
+            "problem": "Expected media URL not retained; identity/time observed, media not independently matched"
+          },
+          "facebook": {
+            "retained_post_id": "6ae63c9c21c807e9d57e5532",
+            "expected_channel_id": "6a9edebbcd8b9c702c230128",
+            "retained_status": "scheduled",
+            "live_checked": true,
+            "observed_post_id": "6ae63c9c21c807e9d57e5532",
+            "channel_id": "6a9edebbcd8b9c702c230128",
+            "status": "sent",
+            "scheduled_at": "2026-11-01T15:00:00.000Z",
+            "sent_at": "2026-11-01T15:01:25.378Z",
+            "external_link": "https://www.facebook.com/reel/1909503466697433/",
+            "media_urls": [
+              "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/releases/download/auto-publish-daily-2026-10-31/science-video-daily-2026-10-31.mp4"
+            ],
+            "post_and_channel_match": true,
+            "due_matches": true,
+            "media_matches": null,
+            "verified": false,
+            "problem": "Expected media URL not retained; identity/time observed, media not independently matched"
+          }
+        },
+        "no_posts_created": true
+      }
+    ]
+  },
+  "audit_report_sha256": "f0e2327b6ab98ddd6e53393099ed7a49d59a54c6d6797368600d766ac2368879"
+}
