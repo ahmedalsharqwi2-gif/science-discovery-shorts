@@ -1,0 +1,33 @@
+{
+  "profile": "science",
+  "repository": "ahmedalsharqwi2-gif/science-discovery-shorts",
+  "run_id": "41352828358",
+  "run_attempt": "1",
+  "source_commit": "cdcd3cb398dcb3320524b5eb6159ce2db6470aeb",
+  "stage": "failure",
+  "requested_stage": "failure",
+  "observed_at": "2026-11-01T21:38:13.478940+00:00",
+  "review_only": true,
+  "automatically_published": false,
+  "cutover_eligible": false,
+  "complete_film_verified": false,
+  "media_url": null,
+  "credential_presence": {
+    "GEMINI_API_KEY": true,
+    "GEMINI_TEXT_API_KEY": true,
+    "GEMINI_TTS_API_KEY": true
+  },
+  "generation_failure": {
+    "slot": "candidate-science-43d395b11b8d4c87a6ee4bf00d664306",
+    "profile": "science",
+    "error_class": "ValueError",
+    "reservation_retained": false,
+    "legacy_film_not_used_as_fallback": true,
+    "publishable": false,
+    "failed_phase": "story_or_reservation",
+    "measured_narration_seconds": null,
+    "timing_present": false
+  },
+  "planning_evidence": {},
+  "evidence_error_class": "ValueError"
+}
