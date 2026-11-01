@@ -37,7 +37,8 @@
         "GEMINI_TEXT_API_KEY": "${{ secrets.GEMINI_TEXT_API_KEY || secrets.GEMINI_API_KEY }}",
         "GEMINI_TTS_API_KEY": "${{ secrets.GEMINI_TTS_API_KEY || secrets.GEMINI_API_KEY }}",
         "CANDIDATE_RUN": "${{ github.run_id }}-${{ github.run_attempt }}",
-        "GITHUB_TOKEN": "${{ github.token }}"
+        "GITHUB_TOKEN": "${{ github.token }}",
+        "PRODUCTION_PUBLICATION_DATE": "2026-11-02"
       },
       "steps": [
         {
@@ -87,8 +88,8 @@
           }
         },
         {
-          "name": "Generate a new reserved source-backed story and full Charon film in isolation",
-          "run": "python -m production_v2.generate --profile science --run-dir \".candidate-v2/run-$CANDIDATE_RUN\" --ledger .candidate-v2/shared.sqlite3 --git-state --then-review"
+          "name": "Produce one fresh final film for the retained next-day publication target",
+          "run": "python -m production_v2.generate --profile science --run-dir \".candidate-v2/run-$CANDIDATE_RUN\" --ledger .candidate-v2/shared.sqlite3 --git-state --then-review --production"
         },
         {
           "name": "Retain narration budget and verified voice cache",

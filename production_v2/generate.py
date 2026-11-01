@@ -94,7 +94,7 @@ def _merge_candidate_history(ledger, run_dir):
     _write(state, data)
 
 
-def generate(profile, run_dir, ledger_path, *, repository=None, then_review=False, persist=None):
+def generate(profile, run_dir, ledger_path, *, repository=None, then_review=False, persist=None, production=False):
     if profile not in ('science', 'horror', 'history', 'news'):
         raise ValueError('Unknown channel profile')
     repository = Path(repository or Path.cwd()).resolve()
@@ -164,7 +164,7 @@ def generate(profile, run_dir, ledger_path, *, repository=None, then_review=Fals
                     'duration': timing['duration'], 'story_sha256': _digest(story_file),
                     'audio_sha256': _digest(run_dir / 'professional_motion/delivery/narration.wav'),
                     'visual_plan_signature': plan_signature, 'topic_director_world': plan['world'],
-                    'generated_in_isolation': True, 'review_only': True, 'publishable': False,
+                    'generated_in_isolation': True, 'review_only': not production, 'publishable': False,
                     'fresh_topic_verified': True, 'legacy_state_unchanged': True,
                     'ledger': str(ledger_path),
                     'ledger_persistence_requirement': 'Persist the shared ledger, legacy state and API budget between all runs before enabling any active workflow.'}
@@ -207,6 +207,7 @@ def generate(profile, run_dir, ledger_path, *, repository=None, then_review=Fals
             sys.argv = ['production_v2.review', '--profile', profile,
                 '--delivery-dir', str(run_dir / 'professional_motion/delivery'),
                 '--output-dir', str(run_dir / 'output')]
+            if production:sys.argv.append('--production')
             review_main()
         finally:
             sys.argv = old_argv
@@ -219,6 +220,7 @@ def main():
     parser.add_argument('--run-dir', type=Path, required=True)
     parser.add_argument('--ledger', type=Path, required=True)
     parser.add_argument('--then-review', action='store_true')
+    parser.add_argument('--production', action='store_true', help='Render a final film without review-sample labeling; never posts by itself')
     parser.add_argument('--git-state', action='store_true', help='Restore and checkpoint the candidate ledger on its separate Git state branch')
     args = parser.parse_args()
     persist = None
@@ -230,7 +232,7 @@ def main():
             pass
         persist = store.checkpoint
     print(json.dumps(generate(args.profile, args.run_dir, args.ledger,
-                             then_review=args.then_review, persist=persist), ensure_ascii=False, indent=2))
+                             then_review=args.then_review, persist=persist, production=args.production), ensure_ascii=False, indent=2))
 
 
 if __name__ == '__main__':

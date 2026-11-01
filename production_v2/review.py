@@ -57,7 +57,7 @@ def ffmpeg(*args):
     subprocess.run(['ffmpeg', '-v', 'error', '-xerror', '-nostdin', '-y', *map(str, args)], check=True)
 
 
-def finish(delivery, output, profile):
+def finish(delivery, output, profile, *, production=False):
     from professional_motion.score import build
     from production_v2.media import verify
     delivery, output = Path(delivery).resolve(), Path(output).resolve()
@@ -66,6 +66,8 @@ def finish(delivery, output, profile):
     render = json.loads((output / 'render.json').read_text())
     if render.get('pipeline') != 'v2' or not render.get('originalVoice') or render.get('errors'):
         raise ValueError('Opt-in v2 visuals with measured original voice are required')
+    if production and render.get('review') is not False:
+        raise ValueError('A review-labeled sample cannot become a production film')
     if render.get('story_sha256') != digest(delivery / 'story.json'):
         raise ValueError('Rendered visuals belong to another story')
     if (render.get('start_frame'), render.get('end_frame')) != (0, math.ceil(duration * 30)):
@@ -89,7 +91,7 @@ def finish(delivery, output, profile):
     evidence.update(profile=profile, topic_key=story['topic_key'], pipeline='v2',
                     story_sha256=digest(delivery / 'story.json'),
                     narration_sha256=digest(delivery / 'narration.wav'),
-                    review_only=True, publishable=False, fresh_topic_verified=False, generation_origin='supplied_delivery_not_new_generation_verified',
+                    review_only=not production, publishable=False, fresh_topic_verified=False, generation_origin='supplied_delivery_not_new_generation_verified',
                     narration_provenance='Supplied aligned original; see delivery source evidence',
                     automatic_publication=False, music_target_lufs=-29,
                     artistic_review='Requires human viewing and listening; technical validation only')
@@ -103,6 +105,7 @@ def main():
     parser.add_argument('--output-dir', type=Path, required=True)
     parser.add_argument('--profile', choices=['science', 'horror', 'history', 'news'], required=True)
     parser.add_argument('--finish-only', action='store_true')
+    parser.add_argument('--production', action='store_true')
     args = parser.parse_args()
     bundle(args.delivery_dir, args.profile)
     output = args.output_dir.resolve()
@@ -111,9 +114,9 @@ def main():
             raise FileExistsError('Use a fresh candidate output directory; existing evidence is retained')
         output.mkdir(parents=True, exist_ok=True)
         subprocess.run(['node', 'professional_motion/render.mjs', '--pipeline', 'v2', '--style', 'reference',
-                        '--review', '--delivery-dir', str(args.delivery_dir.resolve()),
+                        *(() if args.production else ('--review',)), '--delivery-dir', str(args.delivery_dir.resolve()),
                         '--output-dir', str(output)], check=True)
-    print(json.dumps(finish(args.delivery_dir, output, args.profile), ensure_ascii=False, indent=2))
+    print(json.dumps(finish(args.delivery_dir, output, args.profile, production=args.production), ensure_ascii=False, indent=2))
 
 
 if __name__ == '__main__':

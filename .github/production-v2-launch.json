@@ -1,6 +1,8 @@
 {
   "profile": "science",
   "review_only": true,
-  "launch": "verified-nasa-acoustic-lab-full-film-2026-11-01-1",
-  "no_social_posts": true
+  "launch": "final-film-for-2026-11-02-at-17-cairo",
+  "no_social_posts": true,
+  "production_film": true,
+  "publication_date": "2026-11-02"
 }
