@@ -4,9 +4,9 @@
   "run_id": "41356184134",
   "run_attempt": "1",
   "source_commit": "dc147942589161d1940db3aa5cd933e992621d48",
-  "stage": "started",
-  "requested_stage": "started",
-  "observed_at": "2026-11-01T22:15:20.518881+00:00",
+  "stage": "failure",
+  "requested_stage": "failure",
+  "observed_at": "2026-11-01T22:17:14.965453+00:00",
   "review_only": true,
   "automatically_published": false,
   "cutover_eligible": false,
@@ -16,5 +16,18 @@
     "GEMINI_API_KEY": true,
     "GEMINI_TEXT_API_KEY": true,
     "GEMINI_TTS_API_KEY": true
-  }
+  },
+  "generation_failure": {
+    "slot": "candidate-science-7ac495a0b0f44c90a51fb69765e5cc33",
+    "profile": "science",
+    "error_class": "ValueError",
+    "reservation_retained": false,
+    "legacy_film_not_used_as_fallback": true,
+    "publishable": false,
+    "failed_phase": "story_or_reservation",
+    "measured_narration_seconds": null,
+    "timing_present": false
+  },
+  "planning_evidence": {},
+  "evidence_error_class": "ValueError"
 }
