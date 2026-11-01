@@ -109,7 +109,8 @@
             "name": "science-v2-fresh-candidate-${{ github.run_id }}",
             "path": ".candidate-v2/run-*/output/candidate-review.mp4\n.candidate-v2/run-*/output/candidate-verification.json\n.candidate-v2/run-*/generation-verification.json\n.candidate-v2/run-*/source-snapshot.json\n.candidate-v2/run-*/professional_motion/delivery/*.json\n.candidate-v2/run-*/generation-failure.json",
             "if-no-files-found": "warn",
-            "retention-days": 7
+            "retention-days": 7,
+            "include-hidden-files": true
           }
         },
         {
