@@ -1,7 +1,32 @@
 {
-  "head": "3137b3f642739fe7fe07e65f55f37963d587ce33",
-  "run_id": "41540183965",
-  "disabled": [],
+  "head": "8aff622e917c5d57f45331c0f0d2f69be1c9a490",
+  "run_id": "41540590794",
+  "disabled": [
+    {
+      "id": 382968882,
+      "name": "Verify immediate publication delivery",
+      "path": ".github/workflows/verify_immediate_delivery.yml",
+      "state": "disabled_manually"
+    },
+    {
+      "id": 386884151,
+      "name": "Shared motion renderer checks",
+      "path": ".github/workflows/motion_engine.yml",
+      "state": "disabled_manually"
+    },
+    {
+      "id": 391112157,
+      "name": "Daily Egyptian AI News",
+      "path": ".github/workflows/daily-ai-news.yml",
+      "state": "disabled_manually"
+    },
+    {
+      "id": 399835527,
+      "name": "Professional octopus proof — original Charon narration",
+      "path": ".github/workflows/professional-octopus-proof.yml",
+      "state": "disabled_manually"
+    }
+  ],
   "active": [
     {
       "id": 370389243,
@@ -40,32 +65,7 @@
       "state": "active"
     }
   ],
-  "unknown_preserved": [
-    {
-      "id": 382968882,
-      "name": "Verify immediate publication delivery",
-      "path": ".github/workflows/verify_immediate_delivery.yml",
-      "state": "active"
-    },
-    {
-      "id": 386884151,
-      "name": "Shared motion renderer checks",
-      "path": ".github/workflows/motion_engine.yml",
-      "state": "active"
-    },
-    {
-      "id": 391112157,
-      "name": "Daily Egyptian AI News",
-      "path": ".github/workflows/daily-ai-news.yml",
-      "state": "active"
-    },
-    {
-      "id": 399835527,
-      "name": "Professional octopus proof — original Charon narration",
-      "path": ".github/workflows/professional-octopus-proof.yml",
-      "state": "active"
-    }
-  ],
+  "unknown_preserved": [],
   "errors": [],
   "run_deletions": 0,
   "artifact_deletions": 0,
