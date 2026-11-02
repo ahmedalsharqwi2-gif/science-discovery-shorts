@@ -6,5 +6,10 @@
   "due_at": "2026-11-02T15:00:00Z",
   "preserve_tomorrow_posts": true,
   "new_topic_required": true,
-  "no_source_requirement": true
+  "duration_policy_owner_confirmed": "news>60; every other channel>90",
+  "retained_draft": {
+    "path": "reviews/requested/science-2026-11-02-retained.json",
+    "source_run": 41422326592,
+    "sha256": "c26993f563a1a6d1482a021332ca074e7b3b620f04da9e0d0bf9a5f9c3b8b157"
+  }
 }

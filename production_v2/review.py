@@ -28,8 +28,8 @@ def bundle(delivery, profile):
     if story.get('profile') != profile:
         raise ValueError('Delivery belongs to another channel')
     duration = float(timing['duration'])
-    if not math.isfinite(duration) or not 120 <= duration < 180:
-        raise ValueError('A complete 120 to under 180 second narrated film is required')
+    if not math.isfinite(duration) or not ((60 < duration < 180) if profile=='news' else (90 < duration < 180)):
+        raise ValueError('News must exceed60seconds; all other channels must exceed90seconds; maximum under180seconds')
     if timing.get('story_sha256') != digest(story_path) or timing.get('audio_sha256') != digest(audio_path):
         raise ValueError('Story or original narration changed after measured alignment')
     if not story.get('topic_key') or timing.get('topic_key') != story['topic_key']:
@@ -87,7 +87,7 @@ def finish(delivery, output, profile, *, production=False):
            '-i', output / 'sfx.wav', '-filter_complex', graph,
            '-map', '0:v:0', '-map', '[mix]', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k',
            '-t', duration, '-movflags', '+faststart', film)
-    evidence = verify(film)
+    evidence = verify(film, profile=profile)
     evidence.update(profile=profile, topic_key=story['topic_key'], pipeline='v2',
                     story_sha256=digest(delivery / 'story.json'),
                     narration_sha256=digest(delivery / 'narration.wav'),

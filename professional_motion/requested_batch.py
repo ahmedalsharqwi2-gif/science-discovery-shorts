@@ -35,14 +35,28 @@ def prepare(profile,slot):
     history=copy.deepcopy([r.get('story',{}) for r in data['episodes'] if r['slot']!=slot])
     attempts=data.setdefault('requested_production',{})
     prior=attempts.get(slot)
-    if prior and prior.get('phase')=='writing' and not (existing and existing.get('story')):
+    retained=request.get('retained_draft')
+    if prior and prior.get('phase')=='writing' and not (existing and existing.get('story')) and not retained:
         raise RuntimeError('Earlier writing attempt retained; resume its saved draft instead of generating again')
     if not existing:
-        attempts[slot]={'phase':'writing','request_id':request['request_id'],'due_at':request['due_at'],'started_at':datetime.now(timezone.utc).isoformat()}
+        attempts.setdefault(slot,{'started_at':datetime.now(timezone.utc).isoformat()}).update(phase='writing',request_id=request['request_id'],due_at=request['due_at'])
+        if retained:attempts[slot]['retained_draft_source_run']=retained['source_run']
         editorial.save(data);checkpoint()
     from .requested_editorial import editor,validate,require_novel_story
-    with editor(editorial,profile):
-        story=editorial.prepare(profile,slot)
+    original_ask=editorial.ask
+    if retained:
+        draftpath=Path(retained['path']).resolve()
+        if not draftpath.is_relative_to(Path('reviews/requested').resolve()) or hashlib.sha256(draftpath.read_bytes()).hexdigest()!=retained['sha256']:
+            raise ValueError('Exact retained draft proof required')
+        draft=json.loads(draftpath.read_text());used=False
+        def use_retained(*args,**kwargs):
+            nonlocal used
+            if used:raise RuntimeError('No repeated writing-provider request allowed during saved-draft recovery')
+            used=True;return copy.deepcopy(draft)
+        editorial.ask=use_retained
+    try:
+        with editor(editorial,profile):story=editorial.prepare(profile,slot)
+    finally:editorial.ask=original_ask
     validate(story,profile);require_novel_story(story,history)
     if profile!='news':
         story['editorial_review']={'performed':False,'required':False,'reason':'Owner permits general knowledge and original fiction without mandatory external sources or independent fact-check'}

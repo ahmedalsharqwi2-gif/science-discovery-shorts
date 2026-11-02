@@ -1,0 +1,8 @@
+{
+  "profile": "science",
+  "minimum_seconds_exclusive": 90,
+  "maximum_seconds_exclusive": 180,
+  "owner_confirmation": "الأخبار فوق 60، والباقي فوق 90",
+  "confirmed_date": "2026-11-02",
+  "no_padding_or_speed_change": true
+}

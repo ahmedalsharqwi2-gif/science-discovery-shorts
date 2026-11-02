@@ -21,11 +21,10 @@ def window(now:datetime,publication_date=None)->dict:
             'preparation_date':preparation_day.isoformat(),'publication_date':target.isoformat(),
             'due_at':due.astimezone(timezone.utc).isoformat().replace('+00:00','Z')}
 
-def require_duration(seconds:float)->float:
-    value=float(seconds)
-    if not math.isfinite(value) or not 120<=value<180:
-        raise ValueError('Daily films must be at least 120 and less than 180 seconds')
-    return value
+def require_duration(seconds:float,profile=None)->float:
+    from professional_motion.duration_rules import require_duration as apply_policy
+    from professional_motion.policy import PROFILE
+    return apply_policy(seconds,profile or PROFILE)
 
 def require_future_due(due:str,now:datetime)->datetime:
     value=datetime.fromisoformat(due.replace('Z','+00:00'))

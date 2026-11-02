@@ -23,7 +23,7 @@ def main():
     delivery=args.delivery_dir;out=args.output_dir
     timing=json.loads((delivery/'timing.json').read_text());duration=timing['duration']
     requested_story=json.loads((delivery/'story.json').read_text())
-    if not ((60<float(duration)<180) if requested_story['profile']=='news' else (90<=float(duration)<180)):
+    if not ((60<float(duration)<180) if requested_story['profile']=='news' else (90<float(duration)<180)):
         raise ValueError('Requested news must exceed60seconds; other full films require90seconds; all must stay under180seconds')
     from .policy import require_duration
     require_duration(duration)
@@ -58,7 +58,7 @@ def main():
     (out/'verification.json').write_text(json.dumps({'file':str(final.name),'width':1080,'height':1920,'fps':30,
         'duration':duration,'story_sha256':story_hash,'voice':'original Gemini Charon','asr_model':timing.get('asr_model'),
         'independent_asr_word_coverage':timing['coverage'],'exact_token_coverage':timing.get('exact_token_coverage',timing['coverage']),'speech_matching_method':timing.get('timing_method'),'known_name_normalization_applied':timing.get('known_name_and_egyptian_normalization_applied',False),'visual_gate':visuals,'audio_tail':audio,
-        'publication_metadata':__import__('professional_motion.metadata',fromlist=['make']).make(story,story['profile']),'duration_policy':({'minimum_exclusive':60,'maximum_exclusive':180} if story['profile']=='news' else {'minimum_inclusive':90,'maximum_exclusive':180}),'pipeline':args.pipeline,'validation_kind':args.validation_kind,'music_target_lufs':-27,'music':'Original composed score','music_bpm':json.loads((out/'score.json').read_text())['bpm'],'source':story['source'],'topic_key':story['topic_key'],'profile':story['profile'],'editorial_review':story['editorial_review'],
+        'publication_metadata':__import__('professional_motion.metadata',fromlist=['make']).make(story,story['profile']),'duration_policy':({'minimum_exclusive':60,'maximum_exclusive':180} if story['profile']=='news' else {'minimum_exclusive':90,'maximum_exclusive':180}),'pipeline':args.pipeline,'validation_kind':args.validation_kind,'music_target_lufs':-27,'music':'Original composed score','music_bpm':json.loads((out/'score.json').read_text())['bpm'],'source':story['source'],'topic_key':story['topic_key'],'profile':story['profile'],'editorial_review':story['editorial_review'],
         'render':('Three.js geometry and lighting with reference editorial frame; bloom disabled' if render.get('visual_style')=='reference' else 'Three.js procedural geometry, physical lighting, custom skin shader, layered optical bloom'),
         'visual_style':render.get('visual_style','original'),'review_watermark':bool(render.get('review',False)),
         'reference_audio_reused':args.validation_kind=='archived-topic','automatically_published':False,

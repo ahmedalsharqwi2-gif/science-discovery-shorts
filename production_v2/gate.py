@@ -71,7 +71,7 @@ def check_profile(profile, evidence):
     director = render_report.get('topic_director', {})
     if director.get('active') is not True or director.get('world') != plan['world'] or director.get('scene_count') != 8 or render_report.get('story_sha256') != story_hash:
         raise ValueError('The full film must execute its topic-specific scene plan; a generic template is insufficient')
-    video = verify(evidence['video_path'])
+    video = verify(evidence['video_path'],profile=profile)
     if video['sha256'] != evidence.get('video_sha256'):
         raise ValueError('Acceptance video changed after review')
     if ('video', video['sha256']) in old_tokens:

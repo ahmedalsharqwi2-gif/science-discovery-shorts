@@ -1,10 +1,9 @@
-"""User-requested length: strictly longer than 90s and shorter than 180s."""
-MIN_SECONDS=30.0
+"""Permanent owner-confirmed duration policy; never pad or speed-change narration."""
+from .duration_rules import require_duration as _require
+PROFILE="science"
+MIN_SECONDS=90.0
 MAX_SECONDS=180.0
 MIN_WORDS=260
 MAX_WORDS=330
-
 def require_duration(seconds):
-    if not MIN_SECONDS<=float(seconds)<MAX_SECONDS:
-        raise ValueError('The complete film must be longer than 90 seconds and shorter than 180 seconds')
-    return float(seconds)
+    return _require(seconds,PROFILE)

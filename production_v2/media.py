@@ -8,14 +8,14 @@ import subprocess
 from .schedule import require_duration
 
 
-def verify(path):
+def verify(path, *, profile=None):
     video = Path(path).resolve()
     if not video.is_file() or video.stat().st_size == 0:
         raise ValueError('Missing or empty MP4')
     probe = subprocess.run(['ffprobe', '-v', 'error', '-show_streams', '-show_format', '-count_frames',
                             '-of', 'json', str(video)], check=True, capture_output=True, text=True)
     data = json.loads(probe.stdout)
-    duration = require_duration(data['format']['duration'])
+    duration = require_duration(data['format']['duration'],profile=profile)
     streams = data.get('streams', [])
     visual = [s for s in streams if s.get('codec_type') == 'video']
     audio = [s for s in streams if s.get('codec_type') == 'audio']

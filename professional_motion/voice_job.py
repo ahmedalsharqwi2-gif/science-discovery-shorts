@@ -24,7 +24,7 @@ def main():
                  ending+'No music or sound effects. '
                  'Read only the supplied words. Finish the last sentence. Clear natural pace.')
     duration=float(subprocess.check_output(['ffprobe','-v','error','-show_entries','format=duration','-of','csv=p=0',str(wav)]))
-    from .policy import require_duration
+    from .policy import require_duration,MIN_SECONDS,MAX_SECONDS
     if os.getenv('FACTORY_DAILY')=='true' and not 30<=duration<180:
         from . import editorial
         from datetime import datetime
@@ -32,7 +32,7 @@ def main():
         slot='daily-'+datetime.now(ZoneInfo('Africa/Cairo')).date().isoformat()
         data=editorial.registry()
         episode=next(r for r in data['episodes'] if r.get('slot')==slot and r.get('story',{}).get('topic_key')==story['topic_key'])
-        feedback={'measured_seconds':duration,'target_seconds':90,'action':'expand' if duration<30 else 'condense','no_silence_padding':True,'no_speed_change':True}
+        feedback={'measured_seconds':duration,'target_seconds':90,'action':'expand' if duration<MIN_SECONDS else 'condense','no_silence_padding':True,'no_speed_change':True}
         episode.update(needs_narration_revision=True,narration_feedback=feedback)
         editorial.save(data);(out/'duration-feedback.json').write_text(json.dumps(feedback,indent=2))
         print('Duration warning recorded; continuing with the same voice and script', flush=True)

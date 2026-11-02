@@ -1,0 +1,503 @@
+{
+  "title": "رحلة جو جوه جسم الإنسان",
+  "canonical_subject": "human-respiratory-system",
+  "suitable": true,
+  "facts": [],
+  "milestones": [],
+  "scenes": [
+    {
+      "id": "scene_1",
+      "label": "دخول الهواء",
+      "narration": "إزاي الهوا اللي داخل مناخيرك دلوقتي بيوصل تأثيره لخلايا رجلك؟ الهواء بيدخل من الأنف ويعدي في القصبة الهوائية عشان يبدأ طريقه للرئتين. هنمشي معاه خطوة خطوة لحد ما نعرف الأكسجين بيروح فين، وليه الزفير مهم زي الشهيق.",
+      "labels": [],
+      "visual_mode": "hero",
+      "environment": "body_section",
+      "objects": [
+        {
+          "kind": "cylinder",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1.5,
+            3,
+            1.5
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "color": "#ffb6c1",
+          "motion": "none"
+        },
+        {
+          "kind": "sphere",
+          "position": [
+            0,
+            3,
+            0
+          ],
+          "scale": [
+            0.8,
+            0.8,
+            0.8
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "color": "#ffffff",
+          "motion": "drift"
+        }
+      ],
+      "camera_start": [
+        0,
+        0,
+        12
+      ],
+      "camera_end": [
+        0,
+        0,
+        10
+      ],
+      "visual_change": "An air particle sphere moves downward into the pink cylinder representing the trachea."
+    },
+    {
+      "id": "scene_2",
+      "label": "الشعب الهوائية",
+      "narration": "الهواء بينقسم جوانا وبيدخل جوه الرئتين عبر شعب هوائية بتصغر تدريجياً زي فروع الشجر بالضبط، وبتفضل تصغر وتتفرع لحد ما توصل بدقة شديدة لكل الحويصلات الهوائية الصغيرة المسؤولة عن تبادل الهواء.",
+      "labels": [],
+      "visual_mode": "hero",
+      "environment": "body_section",
+      "objects": [
+        {
+          "kind": "tree",
+          "position": [
+            0,
+            -1,
+            0
+          ],
+          "scale": [
+            2,
+            2,
+            2
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "color": "#ff69b4",
+          "motion": "grow"
+        },
+        {
+          "kind": "sphere",
+          "position": [
+            -1,
+            2,
+            0
+          ],
+          "scale": [
+            0.5,
+            0.5,
+            0.5
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "color": "#add8e6",
+          "motion": "flow"
+        }
+      ],
+      "camera_start": [
+        0,
+        0,
+        14
+      ],
+      "camera_end": [
+        0,
+        0,
+        11
+      ],
+      "visual_change": "The pink tree structure grows outward, guiding smaller light blue spheres along its branches."
+    },
+    {
+      "id": "scene_3",
+      "label": "الحويصلات الهوائية",
+      "narration": "إحنا كده وصلنا خلاص للأكياس الصغيرة اللي اسمها الحويصلات الهوائية. وهنا بالظبط بيحصل السحر الحقيقي وعملية تبادل الغازات المستمرة بين الهوا النقي وبين الدم اللي ماشي جوه الأوعية الدموية.",
+      "labels": [],
+      "visual_mode": "hero",
+      "environment": "body_section",
+      "objects": [
+        {
+          "kind": "sphere",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1.4,
+            1.4,
+            0.65
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "color": "#ffc0cb",
+          "motion": "pulse"
+        },
+        {
+          "kind": "molecule",
+          "position": [
+            -1,
+            1,
+            1.5
+          ],
+          "scale": [
+            1,
+            1,
+            1
+          ],
+          "rotation": [
+            1,
+            1,
+            0
+          ],
+          "color": "#ff0000",
+          "motion": "spin"
+        }
+      ],
+      "camera_start": [
+        0,
+        0,
+        13
+      ],
+      "camera_end": [
+        0,
+        0,
+        9
+      ],
+      "visual_change": "The pink sphere pulses outward while a red molecule spins at its core to show activity."
+    },
+    {
+      "id": "scene_4",
+      "label": "امتصاص الأكسجين",
+      "narration": "الأكسجين النقي بيعدي بكل سهولة من جدران الحويصلات اللي بتكون رقيقة جداً عشان يقدر يدخل جوه مجرى الدم مباشرة ويبدأ رحلته الطويلة عشان يلف في كل أجزاء الجسم المختلفة.",
+      "labels": [],
+      "visual_mode": "hero",
+      "environment": "body_section",
+      "objects": [
+        {
+          "kind": "cell",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            2,
+            2,
+            2
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "color": "#ff4500",
+          "motion": "assemble"
+        },
+        {
+          "kind": "sphere",
+          "position": [
+            -2,
+            0,
+            0
+          ],
+          "scale": [
+            0.6,
+            0.6,
+            0.6
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "color": "#00ffff",
+          "motion": "drift"
+        }
+      ],
+      "camera_start": [
+        0,
+        0,
+        12
+      ],
+      "camera_end": [
+        0,
+        0,
+        10
+      ],
+      "visual_change": "A cyan oxygen sphere drifts directly into the red cell, merging with it."
+    },
+    {
+      "id": "scene_5",
+      "label": "ضخ القلب",
+      "narration": "القلب هنا بيشتغل كمضخة قوية جداً ونشيطة، بياخد الدم المحمل بالأكسجين الجديد ده ويضخه بقوة لكل خلايا الجسم بلا توقف ولا راحة عشان يفضل جسمنا كله شغال بكفاءة عالية طول الوقت.",
+      "labels": [],
+      "visual_mode": "hero",
+      "environment": "body_section",
+      "objects": [
+        {
+          "kind": "heart",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            2.2,
+            2.2,
+            2.2
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "color": "#dc143c",
+          "motion": "pulse"
+        },
+        {
+          "kind": "network",
+          "position": [
+            0,
+            -3,
+            0
+          ],
+          "scale": [
+            1.5,
+            1.5,
+            1.5
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "color": "#ff8c00",
+          "motion": "pulse"
+        }
+      ],
+      "camera_start": [
+        0,
+        0,
+        15
+      ],
+      "camera_end": [
+        0,
+        0,
+        12
+      ],
+      "visual_change": "The red heart schematic pulses rhythmically, sending energy waves down to the network below."
+    },
+    {
+      "id": "scene_6",
+      "label": "طاقة الخلايا",
+      "narration": "الدم بيوصل خلاص للخلايا اللي بتكون محتاجة الأكسجين ده بشدة عشان تقدر تنتج الطاقة الحيوية اللازمة اللي بتخلينا نقدر نتحرك ونشتغل ونمارس حياتنا اليومية بكل نشاط وحيوية وصحة ممتازة.",
+      "labels": [],
+      "visual_mode": "hero",
+      "environment": "body_section",
+      "objects": [
+        {
+          "kind": "cell",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            2.5,
+            2.5,
+            2.5
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "color": "#9370db",
+          "motion": "none"
+        },
+        {
+          "kind": "molecule",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1.2,
+            1.2,
+            1.2
+          ],
+          "rotation": [
+            0,
+            2,
+            1
+          ],
+          "color": "#ffd700",
+          "motion": "spin"
+        }
+      ],
+      "camera_start": [
+        0,
+        0,
+        14
+      ],
+      "camera_end": [
+        0,
+        0,
+        10
+      ],
+      "visual_change": "Inside the purple cell, a gold molecule spins rapidly to represent energy creation."
+    },
+    {
+      "id": "scene_7",
+      "label": "إخراج ثاني أكسيد الكربون",
+      "narration": "وفي نفس اللحظة دي بالضبط، الخلايا بترمي الفضلات وثاني أكسيد الكربون بره جدرانها عشان يرجع تاني مع الدم المار في الأوعية لحد ما يوصل للرئتين عشان نتخلص منه نهائياً.",
+      "labels": [],
+      "visual_mode": "hero",
+      "environment": "body_section",
+      "objects": [
+        {
+          "kind": "cell",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            2,
+            2,
+            2
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "color": "#4682b4",
+          "motion": "split"
+        },
+        {
+          "kind": "sphere",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            0.7,
+            0.7,
+            0.7
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "color": "#808080",
+          "motion": "drift"
+        }
+      ],
+      "camera_start": [
+        0,
+        0,
+        12
+      ],
+      "camera_end": [
+        0,
+        0,
+        9
+      ],
+      "visual_change": "The blue cell splits slightly and releases a grey waste sphere outward."
+    },
+    {
+      "id": "scene_8",
+      "label": "الزفير",
+      "narration": "الغازات الضارة وثاني أكسيد الكربون بتطلع بره الجسم في عملية الزفير السريعة، وبكده بتكتمل دورة التنفس العظيمة اللي بتحافظ على حياتنا وصحتنا واستمرارنا كل ثانية من عميق عمرنا.",
+      "labels": [],
+      "visual_mode": "hero",
+      "environment": "body_section",
+      "objects": [
+        {
+          "kind": "cylinder",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "scale": [
+            1.5,
+            3,
+            1.5
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "color": "#dda0dd",
+          "motion": "none"
+        },
+        {
+          "kind": "sphere",
+          "position": [
+            0,
+            -3,
+            0
+          ],
+          "scale": [
+            0.9,
+            0.9,
+            0.9
+          ],
+          "rotation": [
+            0,
+            0,
+            0
+          ],
+          "color": "#708090",
+          "motion": "drift"
+        }
+      ],
+      "camera_start": [
+        0,
+        0,
+        11
+      ],
+      "camera_end": [
+        0,
+        0,
+        15
+      ],
+      "visual_change": "A dark sphere drifts upward through the cylinder and exits the frame as the camera pulls back."
+    }
+  ],
+  "hashtags": [
+    "#احياء",
+    "#جسم_الانسان",
+    "#علوم",
+    "#تنفس"
+  ]
+}

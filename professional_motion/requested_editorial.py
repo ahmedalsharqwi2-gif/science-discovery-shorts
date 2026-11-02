@@ -59,10 +59,10 @@ def validate(story,profile):
 def complete_narration(editorial,draft,profile):
     """One targeted continuation of the retained narration; visual plans stay unchanged."""
     count=sum(len(s.get('narration','').split()) for s in draft.get('scenes',[]))
-    if (180 if profile=='stickman' else 280)<=count<=380:return draft
+    if (180 if profile=='stickman' else 220)<=count<=380:return draft
     schema={'type':'OBJECT','properties':{'narrations':{'type':'ARRAY','minItems':8,'maxItems':8,'items':{'type':'OBJECT','properties':{'id':{'type':'STRING'},'narration':{'type':'STRING'}},'required':['id','narration']}}},'required':['narrations']}
     brief={'title':draft.get('title'),'canonical_subject':draft.get('canonical_subject'),'scenes':[{'id':s['id'],'label':s['label'],'current_narration':s.get('narration',''),'visible_event':s.get('visual_change',''),'objects':[o.get('kind') for o in s.get('objects',[])]} for s in draft['scenes']]}
-    result=editorial.ask('Continue this EXACT retained episode, not a new topic. Return only eight replacement narration paragraphs with the exact supplied IDs. Each paragraph MUST contain 24 to44 space-separated Egyptian Arabic words, total180 to352 for stickman or280 to380 for other profiles. Count before returning. Preserve the same subjects, plot, ending, scene order and visible props. Expand concrete actions, decisions and explanations with connected natural Egyptian speech; no generic padding, source requests, new unrelated props or invented documentary claims. This is a targeted narration-length edit before the first TTS request. DATA:\\n'+json.dumps(brief,ensure_ascii=False),schema,creative=profile in ('horror','stickman'))
+    result=editorial.ask('Continue this EXACT retained episode, not a new topic. Return only eight replacement narration paragraphs with the exact supplied IDs. Each paragraph MUST contain 24 to44 space-separated Egyptian Arabic words, total180 to352 for stickman or280 to380 for other profiles, retaining a natural complete narration above90seconds. Count before returning. Preserve the same subjects, plot, ending, scene order and visible props. Expand concrete actions, decisions and explanations with connected natural Egyptian speech; no generic padding, source requests, new unrelated props or invented documentary claims. This is a targeted narration-length edit before the first TTS request. DATA:\\n'+json.dumps(brief,ensure_ascii=False),schema,creative=profile in ('horror','stickman'))
     (editorial.ROOT/'delivery/narration-continuation.json').write_text(json.dumps(result,ensure_ascii=False,indent=2))
     rows=result.get('narrations',[])
     if len(rows)!=8 or len({r.get('id') for r in rows})!=8 or {r.get('id') for r in rows}!={s['id'] for s in draft['scenes']}:
@@ -73,7 +73,7 @@ def complete_narration(editorial,draft,profile):
         scene['narration']=by_id[scene['id']]
         scene['labels']=[x for x in scene.get('labels',[]) if x in scene['narration']]
     total=sum(len(s['narration'].split()) for s in updated['scenes'])
-    minimum=180 if profile=='stickman' else 280
+    minimum=180 if profile=='stickman' else 220
     if not minimum<=total<=380:raise ValueError('Retained narration continuation is still outside the full-film word budget')
     return updated
 

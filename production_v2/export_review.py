@@ -111,7 +111,7 @@ def _read_evidence(run_dir):
     report = json.loads(verification.read_text())
     duration = float(report.get('duration', float('nan')))
     if report.get('validated') is not True or report.get('decode') != 'PASS' or \
-            not math.isfinite(duration) or not 120 <= duration < 180 or \
+            not math.isfinite(duration) or not ((60 < duration < 180) if report.get('profile')=='news' else (90 < duration < 180)) or \
             (report.get('width'), report.get('height')) != (1080, 1920):
         raise ValueError('Complete decoded 1080x1920 review evidence is required')
     checksum = digest(film)
