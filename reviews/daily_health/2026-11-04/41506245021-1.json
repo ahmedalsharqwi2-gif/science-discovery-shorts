@@ -1,0 +1,65 @@
+{
+  "date": "2026-11-04",
+  "profile": "science",
+  "phase": "prepublish",
+  "checked_at": "2026-11-02T19:03:14.434144+00:00",
+  "run_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/actions/runs/41506245021",
+  "report_path": "reviews/daily_health/2026-11-04/41506245021-1.json",
+  "publication_due_utc": "2026-11-04T15:00:00+00:00",
+  "errors": [],
+  "passed": true,
+  "generation_calls": 0,
+  "publication_mutations": 0,
+  "preview": true,
+  "scheduler": {
+    "observed": false,
+    "reason": "Future date preview; actual9am clock event not due yet"
+  },
+  "receipts": {
+    "tiktok": {
+      "id": "6ae8d34987c5ea7cde5404e5",
+      "channelId": "6a9edf14cd8b9c702c230272",
+      "status": "scheduled",
+      "dueAt": "2026-11-04T15:00:00.000Z",
+      "sentAt": null,
+      "externalLink": null
+    },
+    "youtube": {
+      "id": "6ae8d34fc1e1a07104365865",
+      "channelId": "6a9edee8cd8b9c702c2301cb",
+      "status": "scheduled",
+      "dueAt": "2026-11-04T15:00:00.000Z",
+      "sentAt": null,
+      "externalLink": null
+    },
+    "facebook": {
+      "id": "6ae8d3544e55e02608791d97",
+      "channelId": "6a9edebbcd8b9c702c230128",
+      "status": "scheduled",
+      "dueAt": "2026-11-04T15:00:00.000Z",
+      "sentAt": null,
+      "externalLink": null
+    }
+  },
+  "episode": {
+    "slot": "remotion-2026-11-04-science",
+    "title": "الصابون بيمسك الدهون إزاي؟",
+    "pipeline": "remotion",
+    "expected_sha256": "cf402a47b65b9a7a9c30c7f53e805cb542baf8a1aed2bc8aef6392208d566ba9"
+  },
+  "technical": {
+    "passed": true,
+    "sha256": "cf402a47b65b9a7a9c30c7f53e805cb542baf8a1aed2bc8aef6392208d566ba9",
+    "full_decode": true,
+    "duration": 134.1,
+    "width": 1080,
+    "height": 1920,
+    "audio_mean_db": -19.2,
+    "actual_visual_samples": 12,
+    "unique_visual_samples": 12,
+    "checked_at": "2026-11-02T19:03:25.907179+00:00",
+    "scope": "Independent technical media check; no claim of human narrative or scientific review",
+    "reused_immutable_media_check": false,
+    "live_asset_metadata_verified": true
+  }
+}
