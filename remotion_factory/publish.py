@@ -95,7 +95,9 @@ def main():
  url=entry.get('media_url') or release_asset(movie,req['slot'],profile)
  def media(data):data['episodes'][req['slot']].update(media_url=url,status='publishing')
  mutate(media)
- source=report['source'];story_path=next(iter(root.glob('**/story.json')),None);story=json.loads(story_path.read_text()) if story_path else {};title=report.get('title') or story.get('title') or entry['title'];caption=title
+ source=report['source'];story_path=next((p for p in root.glob('**/story.json') if hashlib.sha256(p.read_bytes()).hexdigest()==report.get('story_sha256')),None);story=json.loads(story_path.read_text()) if story_path else {};title=report.get('title') or story.get('title') or entry['title'];caption=title
+ tags=['#'+str(t).lstrip('#').strip().replace(' ','_') for t in story.get('hashtags',[])[:5]]
+ if tags:caption+='\n'+' '.join(tags)
  if source.get('url'):caption+='\nالمصدر: '+source['url']
  credits=report.get('licensed_assets',{}).get('assets',[])
  if credits:caption+='\nصور ورسومات أرشيفية: '+', '.join(sorted({str(a.get('artist') or 'Public domain').strip() for a in credits}))

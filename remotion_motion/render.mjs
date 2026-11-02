@@ -17,7 +17,7 @@ const kinds=new Set(['photo','map','science','timeline','metric','stability','te
 const overrides=JSON.parse(await fs.readFile(path.join(project,'visual-overrides.json'),'utf8').catch(()=> '{}'));
 const scenes=timing.scenes.map((s,i)=>{const base=story.scenes[i].visual;const override=overrides[story.profile]?.[s.id]||{};if(Object.keys(override).some(k=>!['kind','asset','asset_label','detail'].includes(k)))throw Error('Visual overrides cannot rewrite narration');const visual={...base,...override};if(!kinds.has(visual.kind)||s.id!==story.scenes[i].id||!(s.end>s.start))throw Error('Unimplemented or inconsistent authored shot');return {...s,...visual};});
 await fs.copyFile(path.join(delivery,'narration.wav'),path.join(project,'public/narration.wav'));
-const episode={profile:story.profile,series:story.series,title:story.title,duration:timing.duration,scenes,caption_groups:timing.caption_groups,audio:'narration.wav',review_only:false,source_date:story.source?.published?.slice(0,10)};
+const episode={profile:story.profile,series:story.series,title:story.title,duration:timing.duration,scenes,caption_groups:timing.caption_groups,audio:'narration.wav',review_only:false,hashtags:(story.hashtags||[]).slice(0,5),source_date:story.source?.published?.slice(0,10)};
 await fs.writeFile(path.join(output,'remotion-props.json'),JSON.stringify({episode},null,2));
 const serveUrl=await bundle({entryPoint:path.join(project,'src/index.ts'),publicDir:path.join(project,'public'),onProgress:()=>{}});
 const inputProps={episode};const puppeteerOptions={gl:'swangle'};
