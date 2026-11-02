@@ -12,6 +12,8 @@ def instant(value):
 def unchanged(post):
     return {'channelId':post['channelId'],'text':post.get('text'),'assets':post.get('assets',[]),'shareMode':post.get('shareMode'),'schedulingType':post.get('schedulingType')}
 
+class EditRejected(RuntimeError):pass
+
 def retime(item,old_due,new_due,progress,lookup,edit,checkpoint):
     before=lookup(item['id'])
     if before.get('id')!=item['id'] or before.get('channelId')!=item['channel_id']:
@@ -31,6 +33,8 @@ def retime(item,old_due,new_due,progress,lookup,edit,checkpoint):
             result=edit(item['id'],new_due)
             if result.get('id')!=item['id']:raise ValueError('Provider did not acknowledge the same post ID')
             progress.update(phase='acknowledged',ack=copy.deepcopy(result));checkpoint()
+        except EditRejected as error:
+            progress.update(phase='rejected',provider_message=str(error));checkpoint();raise
         except Exception:
             progress.update(phase='uncertain');checkpoint();raise
     after=lookup(item['id'])
@@ -53,8 +57,10 @@ FIELDS='id channelId status dueAt text shareMode schedulingType assets { source 
 def lookup(identifier):
     return query('query { post(input: {id: '+json.dumps(identifier)+'}) { '+FIELDS+' } }')['post']
 def edit(identifier,due):
-    result=query('mutation { editPost(input: {id: '+json.dumps(identifier)+', dueAt: '+json.dumps(due)+'}) { ... on PostActionSuccess { post {id dueAt} } ... on MutationError {message} } }')['editPost']
-    if not result.get('post'):raise RuntimeError('Buffer did not accept the same-post date edit')
+    result=query('mutation { editPost(input: {id: '+json.dumps(identifier)+', dueAt: '+json.dumps(due)+', mode: customScheduled}) { ... on PostActionSuccess { post {id dueAt} } ... on MutationError {message} } }')['editPost']
+    if not result.get('post'):
+        message=str(result.get('message','Buffer rejected the date edit')).replace(os.environ.get('BUFFER_API_KEY','<missing>'),'[REDACTED]')[:800]
+        raise EditRejected(message)
     return result['post']
 
 def check_queue(items,due):
@@ -97,6 +103,12 @@ def main():
         subprocess.run(['python','-m','professional_motion.persist_state'],check=True,stdout=subprocess.DEVNULL)
     for service,item in request['posts'].items():
         progress=audit['posts'].setdefault(service,{})
+        if request.get('reconcile_same_id_edit') and progress.get('phase')=='uncertain':
+            current=lookup(item['id'])
+            if current.get('status')!='scheduled' or unchanged(current)!=unchanged(progress['before']):raise ValueError('Pending edit state changed; no retry')
+            if instant(current['dueAt'])==instant(request['old_due_at']):
+                audit.setdefault('reconciled_attempts',[]).append({'service':service,'prior':copy.deepcopy(progress),'observed':copy.deepcopy(current)})
+                progress['phase']='reconciled_no_schedule_change';checkpoint()
         actual=retime(item,request['old_due_at'],due,progress,lookup,edit,checkpoint)
         episode['receipts'][service].update(previous_due_at=request['old_due_at'],due_at=due,scheduled_at=actual['dueAt'],status=actual['status'],verified_at=progress['verified_at'],reschedule_request=request['request_id'])
         checkpoint()
