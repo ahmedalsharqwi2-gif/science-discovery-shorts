@@ -74,7 +74,7 @@ def read_source(row):
   text=' '.join((soup.find('article') or soup.find('main') or soup).stripped_strings)
  if len(text)<700:raise ValueError('Source does not contain sufficient actual article text')
  return (row.get('brief','')+'\n'+text)[:22000]
-SCHEMA={'type':'OBJECT','properties':{'title':{'type':'STRING'},'canonical_subject':{'type':'STRING'},'hashtags':{'type':'ARRAY','items':{'type':'STRING'}},'scenes':{'type':'ARRAY','minItems':8,'maxItems':8,'items':{'type':'OBJECT','properties':{'label':{'type':'STRING'},'narration':{'type':'STRING'},'evidence_quote':{'type':'STRING'},'diagram':{'type':'STRING','enum':list(MODES)},'labels':{'type':'ARRAY','minItems':2,'maxItems':4,'items':{'type':'STRING'}}},'required':['label','narration','evidence_quote','diagram','labels']}}},'required':['title','canonical_subject','hashtags','scenes']}
+SCHEMA={'type':'OBJECT','properties':{'title':{'type':'STRING'},'canonical_subject':{'type':'STRING'},'hashtags':{'type':'ARRAY','minItems':3,'maxItems':5,'items':{'type':'STRING'}},'scenes':{'type':'ARRAY','minItems':8,'maxItems':8,'items':{'type':'OBJECT','properties':{'label':{'type':'STRING'},'narration':{'type':'STRING'},'evidence_quote':{'type':'STRING'},'diagram':{'type':'STRING','enum':list(MODES)},'labels':{'type':'ARRAY','minItems':2,'maxItems':4,'items':{'type':'STRING'}}},'required':['label','narration','evidence_quote','diagram','labels']}}},'required':['title','canonical_subject','hashtags','scenes']}
 REVIEW={'type':'OBJECT','properties':{'supported':{'type':'BOOLEAN'},'engaging':{'type':'BOOLEAN'},'novel':{'type':'BOOLEAN'},'visuals_match':{'type':'BOOLEAN'},'issues':{'type':'ARRAY','items':{'type':'STRING'}}},'required':['supported','engaging','novel','visuals_match','issues']}
 def model(review):
  cfg=json.loads(Path('config/professional_models.json').read_text());return cfg['reviewer' if review else 'writer']
@@ -90,6 +90,7 @@ def ask_once(prompt,schema,review=False):
  if candidate.get('finishReason')!='STOP':raise ValueError('Editorial output incomplete; retained response must be inspected')
  return json.loads(''.join(p.get('text','') for p in candidate.get('content',{}).get('parts',[]) if not p.get('thought')))
 def validate(story,profile,source):
+ if not 3<=len(story.get('hashtags',[]))<=5:raise ValueError('Three to five topical on-screen hashtags required before synthesis')
  if len(story.get('scenes',[]))!=8:raise ValueError('Exactly eight narrative scenes required')
  words=sum(len(s['narration'].split()) for s in story['scenes']);low,high=(160,270) if profile=='news' else (240,370)
  if not low<=words<=high:raise ValueError('Draft word budget fails natural-duration preflight; no TTS requested')
@@ -110,6 +111,9 @@ def author(req,entry):
   draft=current.get('raw_draft') or document_read(current['draft_document']);row=current['source_selection'];source=current.get('source_text') or document_read(current['source_document'])['text']
  else:
   rows=[r for r in candidates(profile) if (not r.get('url') or r['url'] not in seen_urls) and r.get('canonical_subject') not in seen_topics]
+  if profile=='news':
+   due=datetime.fromisoformat(req['due_at'].replace('Z','+00:00'))
+   rows=[r for r in rows if r.get('published') and timedelta(0)<=due-datetime.fromisoformat(r['published'].replace('Z','+00:00'))<=timedelta(hours=72)]
   if profile=='stickman':rows=[r for r in rows if r['canonical_subject'] not in seen_topics]
   source=None;row=None;errors=[]
   for candidate in rows[:12]:
