@@ -26,7 +26,8 @@ class ReferenceStyleTests(unittest.TestCase):
             check_styles([])
 
     def test_new_template_is_review_default_and_daily_keeps_approved_style(self):
-        workflow=json.loads(Path('.github/workflows/professional-daily.yml').read_text())
+        import yaml
+        workflow=yaml.safe_load(Path('.github/workflows/professional-daily.yml').read_text())
         option=workflow['on']['workflow_dispatch']['inputs']['review_style']
         self.assertEqual(option['default'], 'reference')
         render=next(s for s in workflow['jobs']['render']['steps'] if 'REVIEW_VISUAL_STYLE' in s.get('env',{}))

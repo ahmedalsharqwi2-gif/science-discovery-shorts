@@ -107,7 +107,7 @@ def _manual_candidates(profile):
     if not path.is_file(): return []
     try:
         data=json.loads(path.read_text())
-        return [dict(row) for row in data.get('rows',[]) if isinstance(row,dict)]
+        return [dict(row) for row in data.get('rows',[]) if isinstance(row,dict) and row.get('family') in FAMILIES.get(profile,set())]
     except (OSError,ValueError,TypeError):
         return []
 

@@ -46,7 +46,7 @@ class SourcePipelineIntegrationTests(unittest.TestCase):
     def test_history_candidates_use_verified_official_bank(self):
         from professional_motion import editorial as e
         sentinel=[{'key':'official-site'}]
-        with patch.object(h,'candidates',return_value=sentinel) as provider,patch.object(e.requests,'get',side_effect=AssertionError('legacy feed must not run')):
+        with patch.object(e,'_manual_candidates',return_value=[]),patch.object(h,'candidates',return_value=sentinel) as provider,patch.object(e.requests,'get',side_effect=AssertionError('legacy feed must not run')):
             self.assertEqual(e.candidates('history'),sentinel);provider.assert_called_once_with()
     def test_pyramid_contract_rejects_arch_scene_before_generation(self):
         from professional_motion import editorial as e

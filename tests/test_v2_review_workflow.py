@@ -35,15 +35,9 @@ class ExistingDispatcherTests(unittest.TestCase):
         self.assertIn("format('v2-child-{0}'",candidate['concurrency']['group'])
         self.assertEqual(candidate['jobs']['candidate']['env']['GEMINI_API_KEY'],'${{ secrets.GEMINI_API_KEY }}')
         self.assertNotIn('BUFFER_API_KEY',json.dumps(candidate))
-    def test_all_existing_schedule_and_job_behavior_is_preserved(self):
-        import hashlib
+    def test_legacy_behavior_is_archived_and_only_its_clock_is_retired(self):
         import yaml
-        baseline=json.loads(Path('reviews/production-v2-legacy-snapshot.json').read_text())
+        baseline=yaml.safe_load(Path('reviews/factory-legacy-workflow-before-cutover.yml').read_text())
         current=yaml.safe_load(Path('.github/workflows/professional-daily.yml').read_text())
-        current['on']['workflow_dispatch']['inputs'].pop('pipeline')
-        current['on']['workflow_call']['inputs'].pop('pipeline')
-        current['jobs'].pop('v2-candidate-review')
-        current['jobs']['produce'].pop('if')
-        current['jobs']['failure-alert']['if']=current['jobs']['failure-alert']['if'].replace("inputs.pipeline != 'v2' && ","")
-        digest=hashlib.sha256(json.dumps(current,sort_keys=True,separators=(',',':'),ensure_ascii=False).encode()).hexdigest()
-        self.assertEqual(digest,baseline['legacy_workflow_semantic_sha256'])
+        baseline['on'].pop('schedule',None);current['on'].pop('schedule',None)
+        self.assertEqual(current,baseline)

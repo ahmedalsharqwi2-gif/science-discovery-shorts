@@ -41,10 +41,11 @@ class ScheduleTests(unittest.TestCase):
         self.assertEqual(require_future_due(DUE, NOW).hour, 15)
 
     def test_duration_contract(self):
-        for value in (0, 119.99, 180, 181, float('nan'), float('inf')):
+        from professional_motion.policy import MIN_SECONDS
+        for value in (0, MIN_SECONDS-.01, MIN_SECONDS, 180, 181, float('nan'), float('inf')):
             with self.assertRaises(ValueError):
                 require_duration(value)
-        self.assertEqual(require_duration(120), 120)
+        self.assertEqual(require_duration(MIN_SECONDS+.01), MIN_SECONDS+.01)
         self.assertEqual(require_duration(179.99), 179.99)
 
     def test_naive_clock_rejected(self):

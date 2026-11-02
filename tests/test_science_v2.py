@@ -34,8 +34,8 @@ class IsolatedScienceV2Tests(unittest.TestCase):
 
     def test_v2_rejects_short_voice_before_any_audio_mix(self):
         with tempfile.TemporaryDirectory() as folder:
-            delivery,output=self.fixture(Path(folder),119.99)
-            with self.assertRaisesRegex(ValueError,'120 seconds'):
+            delivery,output=self.fixture(Path(folder),90)
+            with self.assertRaisesRegex(ValueError,'90'):
                 self.invoke(delivery,output)
             self.assertFalse((output/'professional-review.mp4').exists())
 

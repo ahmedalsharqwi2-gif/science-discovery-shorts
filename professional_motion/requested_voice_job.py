@@ -46,9 +46,9 @@ def main():
         transcripts.append((name,actual));(out/('asr-'+name+'.json')).write_text(json.dumps({'recognized_words':actual},ensure_ascii=False,indent=2))
         del model
         try:
-            candidate=measured_timing(story,duration,transcripts)
+            candidate=measured_timing(story,duration,transcripts,allow_low_coverage=True)
             best_exact=max(best_exact,candidate.get('exact_token_coverage',candidate['coverage']))
-            if candidate['coverage']>=.9:
+            if candidate['coverage']>=.9 and not candidate.get('diagnostic_only'):
                 timing=candidate;break
         except ValueError:
             pass

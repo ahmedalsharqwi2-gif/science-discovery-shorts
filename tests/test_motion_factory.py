@@ -54,7 +54,7 @@ class MotionFactoryTests(unittest.TestCase):
         import yaml
         root=Path(__file__).resolve().parents[1]
         doc=yaml.safe_load((root/'.github/workflows/professional-daily.yml').read_text())
-        steps=[s for job in doc['jobs'].values() for s in job['steps']]
+        steps=[s for job in doc['jobs'].values() for s in job.get('steps',[])]
         publish=next(s for s in steps if s.get('name')=='Schedule approved daily film for exactly 17:00 Cairo')
         self.assertIn("needs.produce.outputs.publish == 'true'",publish['if'])
         self.assertIn('professional_motion.cli publish',publish['run'])
