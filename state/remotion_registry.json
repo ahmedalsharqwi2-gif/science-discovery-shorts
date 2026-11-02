@@ -33,13 +33,16 @@
           "verified_at": "2026-11-02T18:15:39.347571+00:00"
         },
         "youtube": {
-          "phase": "acknowledged",
+          "phase": "verified",
           "channel_id": "6a9edee8cd8b9c702c2301cb",
           "due_at": "2026-11-04T15:00:00Z",
           "media_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/releases/download/production-remotion-2026-11-04-science/science-remotion-2026-11-04-science.mp4",
           "created_at": "2026-11-02T18:15:40.930705+00:00",
           "id": "6ae8d34fc1e1a07104365865",
-          "accepted_at": "2026-11-02T18:15:43.234544+00:00"
+          "accepted_at": "2026-11-02T18:15:43.234544+00:00",
+          "status": "scheduled",
+          "scheduled_at": "2026-11-04T15:00:00.000Z",
+          "verified_at": "2026-11-02T18:15:44.823191+00:00"
         }
       }
     }
