@@ -829,6 +829,12 @@
           "due_at": "2026-11-02T15:00:00Z",
           "run_id": "41424261375",
           "accepted_at": "2026-11-02T10:14:43.253089+00:00"
+        },
+        "youtube": {
+          "id": "6ae862954a24ce7f36351999",
+          "due_at": "2026-11-02T15:00:00Z",
+          "run_id": "41424261375",
+          "accepted_at": "2026-11-02T10:14:45.489456+00:00"
         }
       },
       "required_services": [
@@ -848,6 +854,12 @@
           "scheduled_at": "2026-11-02T15:00:00Z",
           "status": "submitting",
           "created_at": "2026-11-02T10:14:43.254839+00:00"
+        },
+        "facebook": {
+          "channel_id": "6a9edebbcd8b9c702c230128",
+          "scheduled_at": "2026-11-02T15:00:00Z",
+          "status": "submitting",
+          "created_at": "2026-11-02T10:14:45.549204+00:00"
         }
       }
     }
