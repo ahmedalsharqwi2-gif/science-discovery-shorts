@@ -12,7 +12,13 @@
       "file": "media/history-lift.jpg",
       "sha256": "b7ea1a846f2c1a8e255806b5ab06fc2dbf43423011e9bd11fd893455e0789824",
       "original_sha256": "870c914993af15e29c8a9f5fd4f82aa1974d595ba4c206d532bd5bcb06cdb446",
-      "alterations": "Resized, JPEG converted; video may crop, colour-grade and animate camera; no new event imagery generated"
+      "alterations": "Resized, JPEG converted; video may crop, colour-grade and animate camera; no new event imagery generated",
+      "cache_sha256": "b7aaca093644916bb87dc85d741fc3d41c7d52d403ba336151a4fd47245bfff5",
+      "cache_origin": "Previously retrieved and source-hash-verified archival asset; encoded WebP for repeatable offline rendering",
+      "cache_parts": [
+        "archive-cache/history-lift.part00.b64",
+        "archive-cache/history-lift.part01.b64"
+      ]
     },
     {
       "title": "File:Nubia, Temples of Abu Simbel, Pictures, photo 4 of 7 - Archivio fotografico Museo Egizio, Turin Album2 092.jpg",
@@ -26,7 +32,14 @@
       "file": "media/history-old.jpg",
       "sha256": "3a2186a83222d2e48385e5eebaa138961fd8e28f08db6303fe57fab55472764a",
       "original_sha256": "76cdb6a6cc2712aac5861fb365a9d1ddfa29ae12ad53debf498edfd30618d52f",
-      "alterations": "Resized, JPEG converted; video may crop, colour-grade and animate camera; no new event imagery generated"
+      "alterations": "Resized, JPEG converted; video may crop, colour-grade and animate camera; no new event imagery generated",
+      "cache_sha256": "d08fb58da5c3c807bcee7d545954c769457d5e86c0384274049efb54dafd88a6",
+      "cache_origin": "Previously retrieved and source-hash-verified archival asset; encoded WebP for repeatable offline rendering",
+      "cache_parts": [
+        "archive-cache/history-old.part00.b64",
+        "archive-cache/history-old.part01.b64",
+        "archive-cache/history-old.part02.b64"
+      ]
     },
     {
       "title": "File:Abu Simbel in the 1961 UNESCO Courier - UNESCO documents regarding the International Campaign to Save the Monuments of Nubia.png",
@@ -40,7 +53,14 @@
       "file": "media/history-document.jpg",
       "sha256": "d9af4675ccd80ec12849ee9e6bfec30461d8778149ee8e4e347730970a3ec079",
       "original_sha256": "48d50872c7023a65dcb87bda5783d898a84478ae43e12592c96ca6b7ec24299a",
-      "alterations": "Resized, JPEG converted; video may crop, colour-grade and animate camera; no new event imagery generated"
+      "alterations": "Resized, JPEG converted; video may crop, colour-grade and animate camera; no new event imagery generated",
+      "cache_sha256": "5566d1d869f313fd24c39a515e0aa55c87b732f7735baf76ef45043e172a3e19",
+      "cache_origin": "Previously retrieved and source-hash-verified archival asset; encoded WebP for repeatable offline rendering",
+      "cache_parts": [
+        "archive-cache/history-document.part00.b64",
+        "archive-cache/history-document.part01.b64",
+        "archive-cache/history-document.part02.b64"
+      ]
     },
     {
       "title": "File:HMS Captain 5.jpg",
@@ -54,7 +74,12 @@
       "file": "media/horror-ship.jpg",
       "sha256": "f25a7664ea3dde63a7e8db2766e22b4be0b3f103c3d7ca8df0b33ca977ebb881",
       "original_sha256": "c6dfae063584bd50b3b628958d724b831a0373c7b8480d9055513551d06478b4",
-      "alterations": "Resized, JPEG converted; video may crop, colour-grade and animate camera; no new event imagery generated"
+      "alterations": "Resized, JPEG converted; video may crop, colour-grade and animate camera; no new event imagery generated",
+      "cache_sha256": "ca27d949787ba92243704d757a5ce6422ea15db77c723361f9a58ef886070d0d",
+      "cache_origin": "Previously retrieved and source-hash-verified archival asset; encoded WebP for repeatable offline rendering",
+      "cache_parts": [
+        "archive-cache/horror-ship.part00.b64"
+      ]
     },
     {
       "title": "File:HMS Captain 1869 in heavy seas.jpg",
@@ -68,7 +93,17 @@
       "file": "media/horror-storm.jpg",
       "sha256": "4723cf445f75e708e5837988773262b6ba93e902378d08dec073a1e201b05db7",
       "original_sha256": "40241bae75e313f297464181a723d6b2560dbf311c638a6b3df932c85f48b73c",
-      "alterations": "Resized, JPEG converted; video may crop, colour-grade and animate camera; no new event imagery generated"
+      "alterations": "Resized, JPEG converted; video may crop, colour-grade and animate camera; no new event imagery generated",
+      "cache_sha256": "4fc98429af8e6e9aa9054c7009f9f952d6ed4629d33e76c69de5e12fa6c17f5b",
+      "cache_origin": "Previously retrieved and source-hash-verified archival asset; encoded WebP for repeatable offline rendering",
+      "cache_parts": [
+        "archive-cache/horror-storm.part00.b64",
+        "archive-cache/horror-storm.part01.b64",
+        "archive-cache/horror-storm.part02.b64",
+        "archive-cache/horror-storm.part03.b64",
+        "archive-cache/horror-storm.part04.b64",
+        "archive-cache/horror-storm.part05.b64"
+      ]
     },
     {
       "title": "File:HMS Captain Drawing.JPG",
@@ -82,7 +117,12 @@
       "file": "media/horror-plan.jpg",
       "sha256": "44c579a52735afa9d218cdf3dd3a8d85e732e9653f5c18b89e9a897a8f97ffad",
       "original_sha256": "0c4727950957f8975f54c45d6d44c8e8aa37cf795239d7330b099138d52db618",
-      "alterations": "Resized, JPEG converted; video may crop, colour-grade and animate camera; no new event imagery generated"
+      "alterations": "Resized, JPEG converted; video may crop, colour-grade and animate camera; no new event imagery generated",
+      "cache_sha256": "81ba448d546b83ba8d453aaf0e82aa28e482b1d26e0315df293c96656b022f1f",
+      "cache_origin": "Previously retrieved and source-hash-verified archival asset; encoded WebP for repeatable offline rendering",
+      "cache_parts": [
+        "archive-cache/horror-plan.part00.b64"
+      ]
     },
     {
       "title": "File:HMS Captain 1869 on deck.jpg",
@@ -96,7 +136,12 @@
       "file": "media/horror-deck.jpg",
       "sha256": "36c12bcd6164753a2d65655489be3119af68f49336476965c8216896c90802f5",
       "original_sha256": "103ae7e8eb79edbe6d3c7da472cb361ac0dd4ff7f7b26d2f03de6f976f413b9d",
-      "alterations": "Resized, JPEG converted; video may crop, colour-grade and animate camera; no new event imagery generated"
+      "alterations": "Resized, JPEG converted; video may crop, colour-grade and animate camera; no new event imagery generated",
+      "cache_sha256": "30d215c285ecd5167d02cab3fcae54f7e13d235ec434e1ac4990130175bb3939",
+      "cache_origin": "Previously retrieved and source-hash-verified archival asset; encoded WebP for repeatable offline rendering",
+      "cache_parts": [
+        "archive-cache/horror-deck.part00.b64"
+      ]
     },
     {
       "title": "File:HMS Captain 1869 Survivors 1870 (cropped).jpg",
@@ -110,7 +155,12 @@
       "file": "media/horror-survivors.jpg",
       "sha256": "33a977473e0d6aae49d81f49b8b4cfa79f437c09fec172dc4f3d3eb78d566e92",
       "original_sha256": "9be0e807427a81063f9e92587cebf4f88d26ce9ef71040ded8850d468ccb22e2",
-      "alterations": "Resized, JPEG converted; video may crop, colour-grade and animate camera; no new event imagery generated"
+      "alterations": "Resized, JPEG converted; video may crop, colour-grade and animate camera; no new event imagery generated",
+      "cache_sha256": "6948145200e8e27eef0b9835a40190b550723c5d1737eaf5f466856267d0749b",
+      "cache_origin": "Previously retrieved and source-hash-verified archival asset; encoded WebP for repeatable offline rendering",
+      "cache_parts": [
+        "archive-cache/horror-survivors.part00.b64"
+      ]
     }
   ],
   "world": {

@@ -1,0 +1,14 @@
+{
+  "style_authorized": true,
+  "authorized_profiles": [
+    "science",
+    "horror",
+    "history",
+    "news",
+    "stickman"
+  ],
+  "approved_sample_video_sha256": "4a0d2d2f22aed4fa9a53189337f85773a817b877fd5b1f760191e864509df504",
+  "owner_instruction": "Approved the29secondRemotion sample; requested more motion/effects and application to every repository",
+  "full_film_checks_required": true,
+  "do_not_modify_existing_posts": true
+}

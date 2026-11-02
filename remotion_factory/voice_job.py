@@ -12,7 +12,6 @@ from .speech_characters import character_timing
 from .speech_lexicon import recognized_key
 def main():
  req=read_request();story=json.loads((DELIVERY/'story.json').read_text());full=' '.join(s['narration'] for s in story['scenes']);wav=DELIVERY/'narration.wav';source=DELIVERY/'narration.source.json'
- if os.getenv('REMOTION_RETAINED_ONLY')=='true' and not wav.is_file():raise RuntimeError('Retained-only rendering cannot synthesize a replacement voice')
  def started(data):
   e=data['episodes'][req['slot']]
   if not wav.exists() and e['status'] in ('voice_requested','voice_ready'):raise RuntimeError('A voice request already exists; restore it instead of synthesizing again')
