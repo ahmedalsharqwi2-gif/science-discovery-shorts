@@ -51,6 +51,11 @@ def candidates(profile):
     if not re.search(r'shipwreck|disaster|mystery|lost|Franklin|Terror|Captain|Endurance|Celeste|Freshfield',title,re.I) or not url.startswith('https://www.rmg.co.uk/stories/maritime-history/'):continue
     rows.append({'title':title,'url':url,'publisher':'Royal Museums Greenwich','canonical_subject':'maritime-'+hashlib.sha256(url.encode()).hexdigest()[:20]})
   except requests.RequestException:pass
+ if profile=='stickman':
+  # The seed episodes are examples, not a finite eight-day publishing queue.
+  # New stories must pass independent novelty review against retained topics.
+  worlds={'phone':'شاشة هاتف، إشعارات وصور وشبكة وبطارية وشاحن وزر طاقة','sleep':'غرفة، سرير، ساعة ومكتب وشاشة وشخصية تجرّب وتتعب وتتعافى','gravity':'شخصية تطفو مع كتل وقطرات في غرفة، والكتلة محفوظة','tiny':'شخصية صغيرة مع كوب وقطرة ودرجات سلم كبيرة','giant':'شخصية عملاقة ومبانٍ وكوب، مع قيود قوانين الحجم','freeze':'شخصية وكرات وساعة متوقفة، والضوء والتنفس مستثنيان صراحة','ocean':'شخصية وقاع بحر وسفينة وأسماك ومؤشر مستوى الماء','earth-stop':'شخصية وكرات وخطوط حركة قصور ذاتي وساعة'}
+  for scenario,world in worlds.items():rows.append({'title':'ابتكر فرضية ماذا لو جديدة بالكامل داخل عالم '+scenario,'canonical_subject':'creative-environment-'+scenario,'scenario':scenario,'publisher':'افترض كده','brief':'ابتكر فرضية أصلية محددة مختلفة جوهريًا عن كل الموضوعات السابقة، وليست إعادة عنوان الحلقة الأولى. البيئة والأشياء التي يستطيع الرسام إظهارها فقط: '+world+'. التزم بالمراحل الثمانية impact/experiment/escalation/fail/discovery/adapt/solution/twist، واستعمل الحركة والأشياء المرسومة فعليًا. الخيال معلن، لا تقلد شخصية أو حبكة من قناة أخرى. لا تفرض غرفة هروب على كل قصة.'})
  return list({r.get('url') or r['canonical_subject']:r for r in rows}.values())
 def read_source(row):
  if not row.get('url'):return row['brief']

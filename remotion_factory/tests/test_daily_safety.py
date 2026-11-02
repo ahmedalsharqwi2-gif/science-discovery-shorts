@@ -4,9 +4,9 @@ from unittest.mock import patch
 from remotion_factory.daily import slot_for
 from remotion_factory.publish import submit_one
 class CivilTime(unittest.TestCase):
- def test_winter_next_day17(self):
+ def test_winter_same_day17(self):
   now=datetime(2026,11,3,7,tzinfo=timezone.utc)
-  self.assertEqual(slot_for(now,'schedule','0 7 * * *',now=now).isoformat(),'2026-11-04T15:00:00+00:00')
+  self.assertEqual(slot_for(now,'schedule','0 7 * * *',now=now).isoformat(),'2026-11-03T15:00:00+00:00')
  def test_summer_and_second_cron_skip(self):
   now=datetime(2026,7,3,6,tzinfo=timezone.utc)
   self.assertEqual(slot_for(now,'schedule','0 6 * * *',now=now).hour,14)

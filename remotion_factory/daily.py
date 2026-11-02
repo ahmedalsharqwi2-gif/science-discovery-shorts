@@ -14,7 +14,7 @@ def slot_for(created,event,schedule='',target=None,now=None):
  if event=='schedule':
   expected='0 '+str(9-int(local.utcoffset().total_seconds()/3600))+' * * *'
   if schedule!=expected or not 9<=local.hour<13:return None
- day=datetime.fromisoformat(target).date() if target else local.date()+timedelta(days=1)
+ day=datetime.fromisoformat(target).date() if target else local.date()
  due=datetime.combine(day,time(17),CAIRO).astimezone(timezone.utc)
  if due<=now:raise ValueError('Original publication time expired; no automatic rollover')
  return due
