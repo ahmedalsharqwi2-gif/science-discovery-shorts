@@ -6,7 +6,7 @@ import {bundle} from '@remotion/bundler';
 import {selectComposition,renderMedia,renderStill} from '@remotion/renderer';
 const project=path.dirname(fileURLToPath(import.meta.url));
 const option=(name,fallback)=>{const i=process.argv.indexOf(name);return i<0?fallback:process.argv[i+1];};
-const delivery=path.resolve(option('--delivery','../professional_motion/delivery'));const output=path.resolve(option('--output-dir','../professional_motion/output'));await fs.mkdir(output,{recursive:true});
+const delivery=path.resolve(option('--delivery',path.join(project,'../professional_motion/delivery')));const output=path.resolve(option('--output-dir',path.join(project,'../professional_motion/output')));await fs.mkdir(output,{recursive:true});
 const hash=data=>createHash('sha256').update(data).digest('hex');
 const storyBytes=await fs.readFile(path.join(delivery,'story.json'));const story=JSON.parse(storyBytes);const timing=JSON.parse(await fs.readFile(path.join(delivery,'timing.json')));const voiceBytes=await fs.readFile(path.join(delivery,'narration.wav'));
 if(hash(storyBytes)!==timing.story_sha256||hash(voiceBytes)!==timing.audio_sha256)throw Error('Original voice/story timing binding changed');

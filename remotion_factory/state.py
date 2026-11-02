@@ -17,7 +17,10 @@ def mutate(update):
   response=requests.get(url,params={'ref':'main'},headers=headers,timeout=30)
   if response.status_code==404:data={'version':1,'episodes':{}};sha=None
   else:
-   response.raise_for_status();body=response.json();data=json.loads(base64.b64decode(body['content']));sha=body['sha']
+   response.raise_for_status();body=response.json();sha=body['sha']
+   if body.get('content'):data=json.loads(base64.b64decode(body['content']))
+   else:
+    raw=requests.get(url,params={'ref':'main'},headers={**headers,'Accept':'application/vnd.github.raw+json'},timeout=45);raw.raise_for_status();data=raw.json()
   candidate=copy.deepcopy(data);update(candidate)
   if any(k not in candidate['episodes'] for k in data['episodes']):raise ValueError('Episode history cannot be deleted')
   content=json.dumps(candidate,ensure_ascii=False,indent=2)+'\n'
