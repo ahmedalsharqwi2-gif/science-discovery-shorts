@@ -1,0 +1,20 @@
+{
+  "date": "2026-11-02",
+  "profile": "science",
+  "phase": "postpublish",
+  "checked_at": "2026-11-02T21:38:10.192632+00:00",
+  "run_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/actions/runs/41530073498",
+  "report_path": "reviews/daily_health/2026-11-02/41530073498-1.json",
+  "publication_due_utc": "2026-11-02T15:00:00+00:00",
+  "errors": [
+    "Three own destinations must reference the same film"
+  ],
+  "passed": false,
+  "generation_calls": 0,
+  "publication_mutations": 0,
+  "preview": false,
+  "scheduler": {
+    "observed": false,
+    "reason": "Monitoring was activated after this date morning; no historical9am success claimed"
+  }
+}
