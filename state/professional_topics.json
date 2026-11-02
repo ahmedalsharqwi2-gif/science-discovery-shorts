@@ -1130,7 +1130,7 @@
       "canonical_subject": "human-respiratory-system",
       "title": "رحلة جو جوه جسم الإنسان",
       "knowledge_category": "biology",
-      "status": "rendered",
+      "status": "publishing",
       "story": {
         "title": "رحلة جو جوه جسم الإنسان",
         "canonical_subject": "human-respiratory-system",
@@ -1628,10 +1628,10 @@
           }
         ],
         "hashtags": [
-          "#احياء",
-          "#جسم_الانسان",
-          "#علوم",
-          "#تنفس"
+          "احياء",
+          "جسم_الانسان",
+          "علوم",
+          "تنفس"
         ],
         "profile": "science",
         "series": "اسرار الكون",
@@ -1729,7 +1729,8 @@
         }
       },
       "requested_due_at": "2026-11-02T15:00:00Z",
-      "video_sha256": "c74687f5fad09e3e50bebb14fc48f6db4b2b3e4c740f1eb854820a8f3fa1267d"
+      "video_sha256": "c74687f5fad09e3e50bebb14fc48f6db4b2b3e4c740f1eb854820a8f3fa1267d",
+      "publication_video_sha256": "c74687f5fad09e3e50bebb14fc48f6db4b2b3e4c740f1eb854820a8f3fa1267d"
     }
   ],
   "rescheduling_history": {
