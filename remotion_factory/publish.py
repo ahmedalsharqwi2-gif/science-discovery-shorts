@@ -14,6 +14,7 @@ def query(text,variables=None):
  if data.get('errors'):raise RuntimeError('Buffer query rejected; provider details and credentials omitted')
  return data['data']
 FIELDS='id channelId status dueAt assets {source}'
+class DestinationUnavailable(ValueError):pass
 def lookup(identifier):return query('query {post(input:{id:'+json.dumps(identifier)+'}) {'+FIELDS+'}}')['post']
 def matches(post,channel,due,url):return post.get('channelId')==channel and post.get('status')=='scheduled' and instant(post['dueAt'])==instant(due) and url in [a.get('source') for a in post.get('assets',[])]
 def destinations(profile):
@@ -21,19 +22,21 @@ def destinations(profile):
  if cfg.get('profile')!=profile or cfg.get('existing_bindings_confirmed_by_user') is not True or len(mapping)!=3 or len(set(mapping.values()))!=3:raise ValueError('Exactly three confirmed own-repository destinations required')
  selected={}
  for org in query('query {account {organizations {id}}}')['account']['organizations']:
-  rows=query('query {channels(input:{organizationId:'+json.dumps(org['id'])+'}) {id service isQueuePaused}}')['channels']
+  rows=query('query {channels(input:{organizationId:'+json.dumps(org['id'])+'}) {id service isQueuePaused isDisconnected}}')['channels']
   for row in rows:
    service=row['service'].lower()
    if mapping.get(service)==row['id']:
-    if row.get('isQueuePaused') is not False:raise ValueError('A confirmed destination queue is paused')
+    if row.get('isQueuePaused') is not False:raise DestinationUnavailable(service+': confirmed destination queue is paused')
+    if row.get('isDisconnected') is not False:raise DestinationUnavailable(service+': Buffer channel connection is unavailable; refresh this channel in Buffer before production')
     selected[service]={'channel':row['id'],'organization':org['id']}
  if set(selected)!=set(mapping):raise ValueError('A confirmed repository destination is missing or has another service')
  return selected
-def queued(destination,due):
+def queued(destination,due,include_errors=False):
  start=(instant(due)-timedelta(seconds=1)).isoformat();end=(instant(due)+timedelta(seconds=1)).isoformat();rows=[];cursor=None
  for _ in range(20):
   after=',after:'+json.dumps(cursor) if cursor else ''
-  data=query('query {posts(first:100'+after+',input:{organizationId:'+json.dumps(destination['organization'])+',filter:{channelIds:['+json.dumps(destination['channel'])+'],dueAt:{start:'+json.dumps(start)+',end:'+json.dumps(end)+'},status:[scheduled,sending,sent]}}){edges{node{'+FIELDS+'}} pageInfo{hasNextPage endCursor}}}')['posts']
+  statuses='scheduled,sending,sent,error' if include_errors else 'scheduled,sending,sent'
+  data=query('query {posts(first:100'+after+',input:{organizationId:'+json.dumps(destination['organization'])+',filter:{channelIds:['+json.dumps(destination['channel'])+'],dueAt:{start:'+json.dumps(start)+',end:'+json.dumps(end)+'},status:['+statuses+']}}){edges{node{'+FIELDS+'}} pageInfo{hasNextPage endCursor}}}')['posts']
   rows.extend(e['node'] for e in data.get('edges') or [])
   if not data['pageInfo']['hasNextPage']:return rows
   cursor=data['pageInfo']['endCursor']

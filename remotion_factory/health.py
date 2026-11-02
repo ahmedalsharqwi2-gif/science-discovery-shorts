@@ -6,7 +6,7 @@ from urllib.parse import unquote,urlparse
 from zoneinfo import ZoneInfo
 import requests
 from .state import identity
-from .publish import destinations,queued,query,instant
+from .publish import destinations,queued,query,instant,DestinationUnavailable
 CAIRO=ZoneInfo('Africa/Cairo')
 CHECKPOINTS=((11,30),(15,0),(16,15),(17,30))
 MARKER='<!-- remotion-daily-health -->'
@@ -50,6 +50,9 @@ def check_posts(mapping,rows,due,phase):
   posts=rows.get(service,[])
   if len(posts)!=1:raise AuditFailure(service+': missing post or duplicate posts at17Cairo')
   post=posts[0]
+  if post.get('status')=='error':
+   reason=re.sub(r'https?://\S+','[provider URL omitted]',str((post.get('error') or {}).get('message') or 'Provider did not supply an error message'))[:500]
+   raise AuditFailure(service+': provider publication error: '+reason)
   if not post.get('id') or post['id'] in ids or post.get('channelId')!=destination['channel']:raise AuditFailure(service+': post identity/channel mismatch')
   ids.add(post['id'])
   if not post.get('dueAt') or abs((instant(post['dueAt'])-due).total_seconds())>1:raise AuditFailure(service+': publication time differs from17Cairo')
@@ -201,16 +204,16 @@ def main():
  try:
   mapping=destinations(profile);rows={}
   for service,destination in mapping.items():
-   discovered=queued(destination,due.isoformat());rows[service]=[]
+   discovered=queued(destination,due.isoformat(),include_errors=True);rows[service]=[]
    for post in discovered:
-    actual=query('query {post(input:{id:'+json.dumps(post['id'])+'}){id channelId status dueAt sentAt externalLink assets{source}}}')['post']
+    actual=query('query {post(input:{id:'+json.dumps(post['id'])+'}){id channelId status dueAt sentAt externalLink error{message} assets{source}}}')['post']
     rows[service].append(actual)
   report['observed_receipts']={s:[{k:p.get(k) for k in ('id','channelId','status','dueAt','sentAt','externalLink')} for p in posts] for s,posts in rows.items()}
   report['receipts'],url=check_posts(mapping,rows,due,phase);episode=episode_for(day,url,report['receipts'] if phase=='postpublish' else None)
   if phase=='postpublish':url=original_release_url(episode)
   report['episode']={k:episode.get(k) for k in ('slot','title','pipeline','expected_sha256')};report['technical']=verify_media(url,episode,profile)
   report['media_binding']='Same live scheduled source URL and independently hashed original' if phase!='postpublish' else 'Three live sent post IDs match retained original submission receipts; original release SHA independently verified. Platform-transcoded bytes are not claimed identical.'
- except Exception as exc:report['errors'].append(str(exc) if isinstance(exc,AuditFailure) else 'Live media/provider verification unavailable: '+type(exc).__name__)
+ except Exception as exc:report['errors'].append(str(exc) if isinstance(exc,(AuditFailure,DestinationUnavailable)) else 'Live media/provider verification unavailable: '+type(exc).__name__)
  if os.getenv('GITHUB_EVENT_NAME')=='workflow_run' and event.get('workflow_run',{}).get('conclusion') not in ('success','skipped'):report['errors'].append('Production workflow failed/cancelled; inspect its retained evidence')
  report['passed']=not report['errors']
  try:write_json(path,report);write_json('reviews/daily_health/latest.json',report)
