@@ -1,0 +1,50 @@
+{
+  "head": "e100a0a61e91d1d7cd3a61c0e0b0f285019c142f",
+  "run_id": "41543130644",
+  "disabled": [],
+  "active": [
+    {
+      "id": 370389243,
+      "name": "Arabic Guard CI",
+      "path": ".github/workflows/arabic_guard.yml",
+      "state": "active"
+    },
+    {
+      "id": 375572845,
+      "name": "Repository validation",
+      "path": ".github/workflows/validation.yml",
+      "state": "active"
+    },
+    {
+      "id": 404841720,
+      "name": "Automatic Remotion —9am Cairo produce; same day5pm publish",
+      "path": ".github/workflows/remotion-daily.yml",
+      "state": "active"
+    },
+    {
+      "id": 404885662,
+      "name": "Independent daily video health — production, media and publication",
+      "path": ".github/workflows/remotion-health.yml",
+      "state": "active"
+    },
+    {
+      "id": 405042019,
+      "name": "Conservative repository cleanup — recoverable branches and generated caches",
+      "path": ".github/workflows/remotion-cleanup.yml",
+      "state": "active"
+    },
+    {
+      "id": 405076471,
+      "name": "Quality checks — Python, scene engines and Remotion",
+      "path": ".github/workflows/checks.yml",
+      "state": "active"
+    }
+  ],
+  "unknown_preserved": [],
+  "errors": [],
+  "run_deletions": 0,
+  "artifact_deletions": 0,
+  "social_mutations": 0,
+  "generation_calls": 0,
+  "passed": true
+}
