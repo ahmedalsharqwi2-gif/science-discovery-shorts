@@ -1,0 +1,3 @@
+export type Profile='science'|'history'|'horror'|'news'|'stickman';
+export type Scene={id:string;label:string;narration:string;start:number;end:number;kind:string;asset?:string;asset_label?:string;kicker?:string;headline?:string;number?:string;detail?:string;latitude?:number;longitude?:number;zoom?:number;labels?:string[];timeline?:{year:string;text:string}[];};
+export type Episode={profile:Profile;series:string;title:string;duration:number;scenes:Scene[];caption_groups:{text:string;start:number;end:number}[];audio?:string;review_only?:boolean;source_date?:string;};

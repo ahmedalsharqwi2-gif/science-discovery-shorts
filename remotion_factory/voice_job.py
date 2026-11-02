@@ -12,6 +12,7 @@ from .speech_characters import character_timing
 from .speech_lexicon import recognized_key
 def main():
  req=read_request();story=json.loads((DELIVERY/'story.json').read_text());full=' '.join(s['narration'] for s in story['scenes']);wav=DELIVERY/'narration.wav';source=DELIVERY/'narration.source.json'
+ if os.getenv('REMOTION_RETAINED_ONLY')=='true' and not wav.is_file():raise RuntimeError('Retained-only rendering cannot synthesize a replacement voice')
  def started(data):
   e=data['episodes'][req['slot']]
   if not wav.exists() and e['status'] in ('voice_requested','voice_ready'):raise RuntimeError('A voice request already exists; restore it instead of synthesizing again')
@@ -19,6 +20,8 @@ def main():
  mutate(started)
  if wav.exists():
   if not source.exists() or json.loads(source.read_text()).get('text')!=full:raise ValueError('Retained voice text differs')
+  proof=json.loads(source.read_text())
+  if (proof.get('output_sha256') or proof.get('sha256'))!=hashlib.sha256(wav.read_bytes()).hexdigest():raise ValueError('Retained voice provenance hash differs')
  else:
   style={'science':'Clear engaging Egyptian Arabic science explanation.','history':'Natural Egyptian Arabic true historical storytelling; grounded, curious, cinematic, never grandiose.','horror':'Clear resonant Egyptian Arabic true-disaster storytelling, restrained dread and narrative tension; no whispering, screams, fake dialogue or swallowed words.','news':'Quick Egyptian Arabic technology news with light dry humor, clear facts and natural conversational delivery.','stickman':'Playful Egyptian Arabic what-if story with character actions, setbacks and a comic payoff.'}[story['profile']]
   generate(full,str(wav),style+' Read only the supplied words. Finish the final sentence. No music or sound effects. Natural clear pace without stretching.')

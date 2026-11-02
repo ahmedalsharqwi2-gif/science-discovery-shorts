@@ -1,0 +1,115 @@
+{
+  "name": "Complete new Remotion film from retained original voice",
+  "on": {
+    "push": {
+      "branches": [
+        "main"
+      ],
+      "paths": [
+        ".github/remotion-render-request.json"
+      ]
+    }
+  },
+  "permissions": {
+    "contents": "write",
+    "actions": "read"
+  },
+  "concurrency": {
+    "group": "professional-daily-science",
+    "cancel-in-progress": false
+  },
+  "jobs": {
+    "render": {
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 75,
+      "env": {
+        "PYTHONPATH": "${{ github.workspace }}",
+        "PYTHONUNBUFFERED": "1",
+        "GITHUB_TOKEN": "${{ github.token }}",
+        "NODE_USE_ENV_PROXY": "1",
+        "REMOTION_RETAINED_ONLY": "true"
+      },
+      "steps": [
+        {
+          "uses": "actions/checkout@v4",
+          "with": {
+            "fetch-depth": 0
+          }
+        },
+        {
+          "uses": "actions/setup-python@v5",
+          "with": {
+            "python-version": "3.11"
+          }
+        },
+        {
+          "uses": "actions/setup-node@v4",
+          "with": {
+            "node-version": "24"
+          }
+        },
+        {
+          "name": "Install deterministic rendering and audio finishing prerequisites",
+          "run": "sudo apt-get update -qq\nsudo apt-get install -y ffmpeg fonts-noto-core libnss3 libgbm1 libasound2t64\npython -m pip install requests Pillow numpy beautifulsoup4"
+        },
+        {
+          "uses": "actions/download-artifact@v4",
+          "with": {
+            "name": "remotion-voice-41483253905-1",
+            "path": "retained/",
+            "github-token": "${{ github.token }}",
+            "run-id": "41483253905"
+          }
+        },
+        {
+          "name": "Restore exact retained script and original audio without provider calls",
+          "run": "python -m remotion_factory.restore_delivery retained/"
+        },
+        {
+          "name": "Install the pinned Remotion engine and bundled browser",
+          "run": "cd remotion_motion\nnpm ci --no-audit --no-fund\nnpx remotion browser ensure\nnpm run check"
+        },
+        {
+          "name": "Verify measured phrase edge cases",
+          "run": "python -m unittest discover -s remotion_factory/tests -q"
+        },
+        {
+          "name": "Prepare only licensed subject assets and local Arabic fonts",
+          "run": "python -m remotion_factory.assets"
+        },
+        {
+          "name": "Render and retain eight actual-speech-timed scene images",
+          "run": "cd remotion_motion\nnode render.mjs --stills"
+        },
+        {
+          "uses": "actions/upload-artifact@v4",
+          "if": "always()",
+          "with": {
+            "name": "remotion-scene-images-${{ github.run_id }}",
+            "path": "professional_motion/output/remotion-shot-*.png\nprofessional_motion/output/remotion-stills.json",
+            "retention-days": 30,
+            "if-no-files-found": "warn"
+          }
+        },
+        {
+          "name": "Render every full-resolution original-voice frame",
+          "run": "cd remotion_motion\nnode render.mjs"
+        },
+        {
+          "name": "Compose quieter music; verify full decode, original speech tail and duration",
+          "run": "python -m remotion_factory.finish"
+        },
+        {
+          "uses": "actions/upload-artifact@v4",
+          "if": "always()",
+          "with": {
+            "name": "remotion-complete-science-${{ github.run_id }}",
+            "path": "professional_motion/output/\nprofessional_motion/delivery/\nstate/remotion_registry.json\nremotion_motion/public/assets-evidence.json",
+            "retention-days": 30,
+            "if-no-files-found": "warn"
+          }
+        }
+      ]
+    }
+  }
+}

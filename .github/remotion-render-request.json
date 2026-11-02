@@ -1,0 +1,10 @@
+{
+  "profile": "science",
+  "slot": "remotion-2026-11-04-science",
+  "due_at": "2026-11-04T15:00:00Z",
+  "original_voice_run": 41483253905,
+  "original_voice_artifact": "remotion-voice-41483253905-1",
+  "render_revision": "remotion-first-complete-1",
+  "no_new_text_or_tts": true,
+  "no_posts_until_full_visual_review": true
+}

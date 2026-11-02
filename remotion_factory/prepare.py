@@ -19,7 +19,11 @@ def restore(entry,story_hash):
  a=max(matches,key=lambda x:x['id']);r=requests.get(a['archive_download_url'],headers=h,timeout=90);r.raise_for_status()
  if len(r.content)>150_000_000:raise ValueError('Retained voice artifact exceeds bounds')
  with zipfile.ZipFile(io.BytesIO(r.content)) as z:
-  files={i.filename:z.read(i) for i in z.infolist() if not i.is_dir() and len(Path(i.filename).parts)==1 and Path(i.filename).suffix in ('.json','.wav')}
+  files={}
+  for i in z.infolist():
+   part=Path(i.filename)
+   if part.is_absolute() or '..' in part.parts or i.file_size>150_000_000:raise ValueError('Unsafe retained archive path or size')
+   if not i.is_dir() and (len(part.parts)==1 or part.parts[:2]==('professional_motion','delivery')) and part.suffix in ('.json','.wav'):files[part.name]=z.read(i)
  if hashlib.sha256(files.get('story.json',b'')).hexdigest()!=story_hash or 'narration.wav' not in files:raise ValueError('Prior voice artifact does not contain this exact story and voice')
  for name,content in files.items():(DELIVERY/name).write_bytes(content)
 def main():
