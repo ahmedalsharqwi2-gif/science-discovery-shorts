@@ -25,7 +25,7 @@ def main():
                  'Read only the supplied words. Finish the last sentence. Clear natural pace.')
     duration=float(subprocess.check_output(['ffprobe','-v','error','-show_entries','format=duration','-of','csv=p=0',str(wav)]))
     from .policy import require_duration
-    if os.getenv('FACTORY_DAILY')=='true' and not 120<=duration<180:
+    if os.getenv('FACTORY_DAILY')=='true' and not ((30 if story['profile']=='news' else 90)<=duration<180):
         from . import editorial
         from datetime import datetime
         from zoneinfo import ZoneInfo
