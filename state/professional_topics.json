@@ -1130,7 +1130,7 @@
       "canonical_subject": "human-respiratory-system",
       "title": "رحلة جو جوه جسم الإنسان",
       "knowledge_category": "biology",
-      "status": "publishing",
+      "status": "scheduled",
       "story": {
         "title": "رحلة جو جوه جسم الإنسان",
         "canonical_subject": "human-respiratory-system",
@@ -1730,7 +1730,40 @@
       },
       "requested_due_at": "2026-11-02T15:00:00Z",
       "video_sha256": "c74687f5fad09e3e50bebb14fc48f6db4b2b3e4c740f1eb854820a8f3fa1267d",
-      "publication_video_sha256": "c74687f5fad09e3e50bebb14fc48f6db4b2b3e4c740f1eb854820a8f3fa1267d"
+      "publication_video_sha256": "c74687f5fad09e3e50bebb14fc48f6db4b2b3e4c740f1eb854820a8f3fa1267d",
+      "due_at": "2026-11-02T15:00:00Z",
+      "receipts": {
+        "facebook": {
+          "id": "6ae86297c100ba337af30909",
+          "due_at": "2026-11-02T15:00:00Z",
+          "run_id": "41424261375",
+          "accepted_at": "2026-11-02T10:14:47.774305+00:00",
+          "channel_id": "6a9edebbcd8b9c702c230128",
+          "scheduled_at": "2026-11-02T15:00:00+00:00",
+          "status": "scheduled",
+          "verified_at": "2026-11-02T10:14:48.180599+00:00"
+        },
+        "tiktok": {
+          "id": "6ae86293796ca84be0ce2d3b",
+          "due_at": "2026-11-02T15:00:00Z",
+          "run_id": "41424261375",
+          "accepted_at": "2026-11-02T10:14:43.253089+00:00",
+          "channel_id": "6a9edf14cd8b9c702c230272",
+          "scheduled_at": "2026-11-02T15:00:00+00:00",
+          "status": "scheduled",
+          "verified_at": "2026-11-02T10:14:47.930829+00:00"
+        },
+        "youtube": {
+          "id": "6ae862954a24ce7f36351999",
+          "due_at": "2026-11-02T15:00:00Z",
+          "run_id": "41424261375",
+          "accepted_at": "2026-11-02T10:14:45.489456+00:00",
+          "channel_id": "6a9edee8cd8b9c702c2301cb",
+          "scheduled_at": "2026-11-02T15:00:00+00:00",
+          "status": "scheduled",
+          "verified_at": "2026-11-02T10:14:48.066832+00:00"
+        }
+      }
     }
   ],
   "rescheduling_history": {
