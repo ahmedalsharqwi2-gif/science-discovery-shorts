@@ -57,11 +57,13 @@ def check_posts(mapping,rows,due,phase):
    if post.get('status')!='sent' or not post.get('sentAt') or not post.get('externalLink'):raise AuditFailure(service+': Buffer has not confirmed sent publication with an external link')
   elif post.get('status')!='scheduled':raise AuditFailure(service+': post is not scheduled')
   urls=[a.get('source') for a in post.get('assets',[]) if a.get('source')]
-  if len(urls)!=1:raise AuditFailure(service+': exactly one complete video source required')
-  media.add(urls[0]);selected[service]={k:post.get(k) for k in ('id','channelId','status','dueAt','sentAt','externalLink')}
- if len(selected)!=3 or len(media)!=1:raise AuditFailure('Three own destinations must reference the same film')
+  if phase!='postpublish' and len(urls)!=1:raise AuditFailure(service+': exactly one complete video source required')
+  media.update(urls);selected[service]={k:post.get(k) for k in ('id','channelId','status','dueAt','sentAt','externalLink')}
+ if len(selected)!=3:raise AuditFailure('Three own destination receipts required')
+ if phase=='postpublish':return selected,None  # Platforms may replace source URLs after sending; bind the retained IDs below.
+ if len(media)!=1:raise AuditFailure('Three own destinations must reference the same film')
  return selected,media.pop()
-def episode_for(day,url):
+def episode_for(day,url,live_receipts=None):
  candidates=[]
  remotion=read_json('state/remotion_registry.json',{'episodes':{}})
  for slot,e in remotion.get('episodes',{}).items():candidates.append(dict(e,slot=slot,pipeline='remotion'))
@@ -70,7 +72,7 @@ def episode_for(day,url):
  if isinstance(rows,dict):rows=list(rows.values())
  candidates.extend(dict(e,pipeline='legacy') for e in rows)
  stickman=read_json('state/stickman_publications.json',{})
- for key in ('publications','episodes'):
+ for key in ('publications','episodes','slots'):
   values=stickman.get(key,{})
   if isinstance(values,dict):candidates.extend(dict(e,slot=slot,pipeline='legacy-stickman') for slot,e in values.items())
   elif isinstance(values,list):candidates.extend(dict(e,pipeline='legacy-stickman') for e in values)
@@ -79,15 +81,33 @@ def episode_for(day,url):
   if e.get('creative_rejected'):continue
   due=e.get('due_at')
   if not due or instant(due).astimezone(CAIRO).date()!=day:continue
+  if live_receipts:
+   pinned=e.get('receipts') or e.get('posts') or {}
+   if any(not isinstance(pinned.get(service),dict) or pinned[service].get('id')!=receipt['id'] for service,receipt in live_receipts.items()):continue
   urls={e.get('media_url')}
   for r in (e.get('receipts') or e.get('posts') or {}).values():
    if isinstance(r,dict):urls.add(r.get('media_url'))
   # Older ledgers omit media_url. The immutable release digest must then prove the binding.
-  if url not in urls and any(u for u in urls):continue
+  if not live_receipts and url not in urls and any(u for u in urls):continue
   digest=e.get('publication_video_sha256') or e.get('video_sha256')
   if digest:result.append(dict(e,expected_sha256=digest))
  if len(result)!=1:raise AuditFailure('No unique retained episode/media fingerprint for this date and actual post video')
  return result[0]
+def original_release_url(episode):
+ repo,_=identity();prefix='https://github.com/'+repo+'/releases/download/';expected='sha256:'+episode['expected_sha256'];options=[episode.get('media_url')]
+ for item in (episode.get('receipts') or episode.get('posts') or {}).values():
+  if isinstance(item,dict):options.append(item.get('media_url'))
+ for url in options:
+  if url and url.startswith(prefix):return url
+ for page in range(1,4):
+  releases=gh(f'/releases?per_page=100&page={page}') or [];matches=[]
+  for release in releases:
+   if release.get('draft'):continue
+   for asset in release.get('assets',[]):
+    if asset.get('digest')==expected and asset.get('state')=='uploaded' and asset.get('name','').endswith('.mp4') and asset.get('browser_download_url','').startswith(prefix):matches.append(asset['browser_download_url'])
+  if matches:return matches[0]
+  if len(releases)<100:break
+ raise AuditFailure('Original release fingerprint cannot be recovered from retained post IDs')
 def release_for(url):
  repo,_=identity();prefix='https://github.com/'+repo+'/releases/download/'
  if not url.startswith(prefix):raise AuditFailure('Video is not an immutable release of this own repository')
@@ -185,7 +205,11 @@ def main():
    for post in discovered:
     actual=query('query {post(input:{id:'+json.dumps(post['id'])+'}){id channelId status dueAt sentAt externalLink assets{source}}}')['post']
     rows[service].append(actual)
-  report['receipts'],url=check_posts(mapping,rows,due,phase);episode=episode_for(day,url);report['episode']={k:episode.get(k) for k in ('slot','title','pipeline','expected_sha256')};report['technical']=verify_media(url,episode,profile)
+  report['observed_receipts']={s:[{k:p.get(k) for k in ('id','channelId','status','dueAt','sentAt','externalLink')} for p in posts] for s,posts in rows.items()}
+  report['receipts'],url=check_posts(mapping,rows,due,phase);episode=episode_for(day,url,report['receipts'] if phase=='postpublish' else None)
+  if phase=='postpublish':url=original_release_url(episode)
+  report['episode']={k:episode.get(k) for k in ('slot','title','pipeline','expected_sha256')};report['technical']=verify_media(url,episode,profile)
+  report['media_binding']='Same live scheduled source URL and independently hashed original' if phase!='postpublish' else 'Three live sent post IDs match retained original submission receipts; original release SHA independently verified. Platform-transcoded bytes are not claimed identical.'
  except Exception as exc:report['errors'].append(str(exc) if isinstance(exc,AuditFailure) else 'Live media/provider verification unavailable: '+type(exc).__name__)
  if os.getenv('GITHUB_EVENT_NAME')=='workflow_run' and event.get('workflow_run',{}).get('conclusion') not in ('success','skipped'):report['errors'].append('Production workflow failed/cancelled; inspect its retained evidence')
  report['passed']=not report['errors']

@@ -1,7 +1,7 @@
 import copy,unittest
 from datetime import datetime,timezone
 from unittest.mock import patch
-from remotion_factory.health import check_posts,schedule_allowed,target_due,AuditFailure,alert
+from remotion_factory.health import check_posts,schedule_allowed,target_due,AuditFailure,alert,episode_for
 class AuditTests(unittest.TestCase):
  def setUp(self):
   self.due=target_due(datetime(2026,11,4).date());self.mapping={s:{'channel':s} for s in ('youtube','facebook','instagram')};self.rows={s:[{'id':s+'-post','channelId':s,'dueAt':'2026-11-04T15:00:00Z','status':'scheduled','assets':[{'source':'https://github.com/owner/repo/releases/download/production/video.mp4'}]}] for s in self.mapping}
@@ -24,6 +24,14 @@ class AuditTests(unittest.TestCase):
   self.assertEqual(len(check_posts(self.mapping,self.rows,self.due,'postpublish')[0]),3)
   self.rows['youtube'][0]['externalLink']=None
   with self.assertRaises(AuditFailure):check_posts(self.mapping,self.rows,self.due,'postpublish')
+ def test_platform_copies_after_publication_are_bound_to_original_post_ids(self):
+  for s in self.rows:self.rows[s][0].update(status='sent',sentAt='2026-11-04T15:00:10Z',externalLink='https://example.org/'+s,assets=[{'source':'https://media.example.org/'+s+'.mp4'}])
+  receipts,url=check_posts(self.mapping,self.rows,self.due,'postpublish');self.assertIsNone(url)
+  episode={'due_at':'2026-11-04T15:00:00Z','video_sha256':'a'*64,'receipts':{s:{'id':r['id']} for s,r in receipts.items()}}
+  with patch('remotion_factory.health.read_json',side_effect=lambda path,default=None:{'episodes':{'slot':episode}} if 'remotion_registry' in path else default):
+   self.assertEqual(episode_for(self.due.date(),None,receipts)['expected_sha256'],'a'*64)
+   changed=copy.deepcopy(receipts);changed['youtube']['id']='another-post'
+   with self.assertRaises(AuditFailure):episode_for(self.due.date(),None,changed)
  def test_cairo_winter_checkpoint_and_wrong_dst_trigger(self):
   now=datetime(2026,11,4,9,35,tzinfo=timezone.utc)
   self.assertTrue(schedule_allowed(now,'30 9 * * *'));self.assertFalse(schedule_allowed(now,'30 8 * * *'))
