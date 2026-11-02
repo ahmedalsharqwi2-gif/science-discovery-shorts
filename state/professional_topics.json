@@ -951,23 +951,23 @@
         "canonical_subject": "sound-waves",
         "suitable": true,
         "facts": [
-          "سرعة الصوت هي سرعة انتقال اضطراب صغير خلال وسط مادي.",
+          "الصوت هو سرعة انتقال اضطراب صغير خلال وسط مادي.",
           "تنتقل الاضطرابات في الغاز نتيجة التصادمات بين الجزيئات المتحركة عشوائياً.",
-          "تعتمد سرعة الصوت على نوع الغاز ودرجة حرارته المطلقة."
+          "سرعة الصوت تعتمد على نوع الغاز ودرجة حرارته المطلقة.",
+          "في الغلاف الجوي للأرض، تتغير درجة الحرارة مع الارتفاع بطريقة معقدة."
         ],
         "milestones": [
           "سرعة الصوت",
-          "تصادم الجزيئات",
+          "التصادمات الجزيئية",
           "معادلة الحرارة"
         ],
         "scenes": [
           {
             "id": "scene_1",
-            "label": "سرعة الصوت في الهوا",
-            "narration": "الهوا عبارة عن غاز، وخاصية أي غاز المهمة هي سرعة الصوت جواه. سرعة الصوت بتعبر عن سرعة انتقال اضطراب صغير عبر وسط مادي، وده بيحصل لما الطاقة بتتحرك من نقطة للثانية جوه الوسط ده.",
+            "label": "حركة الاضطراب",
+            "narration": "الصوت مش بس ضجة بنسمعها، ده سرعة انتقال اضطراب صغير في وسط مادي. لما أي حاجة تتحرك، بتخلق نبضة بتنتشر قدامها عبر الهوا بسرعة محدودة وثابتة علشان توصل لأذن الإنسان.",
             "labels": [
-              "سرعة الصوت",
-              "وسط مادي"
+              "الصوت مش بس ضجة بنسمعها"
             ],
             "visual_mode": "wave",
             "evidence_excerpt_id": 2,
@@ -975,11 +975,10 @@
           },
           {
             "id": "scene_2",
-            "label": "حركة وتصادم الجزيئات",
-            "narration": "الاضطرابات دي بتنتقل جوه الغاز نتيجة التصادمات المستمرة بين الجزيئات اللي بتحرك بعشوائية تامة. لما جزيء بيخبط في جزيء تاني، الحركة بتتنقل بينهم بسرعة.",
+            "label": "اصطدام الجزيئات",
+            "narration": "الهوا عبارة عن غاز مليان جزيئات متحركة عشوائياً في كل اتجاه ومكان. الاضطرابات دي بتنتقل جوه الغاز نتيجة التصادمات المستمرة والسريعة بين الجزيئات دي وبعضها البعض بشكل دائم.",
             "labels": [
-              "التصادمات المستمرة",
-              "عشوائية تامة"
+              "جزيئات متحركة عشوائياً"
             ],
             "visual_mode": "detail",
             "evidence_excerpt_id": 6,
@@ -987,86 +986,77 @@
           },
           {
             "id": "scene_3",
-            "label": "حالة الغاز والحرارة",
-            "narration": "بما إن الانتقال ده بيعتمد على التصادمات بين الجزيئات، فسرعة الصوت بتتحدد حسب حالة الغاز ودرجة حرارته، لأن الجزيئات الأسرع بتنقل الصوت بطريقة مختلفة عن البطيئة.",
+            "label": "عملية متساوية",
+            "narration": "انتقال الاضطراب الصغير ده بيعتبر عملية متساوية الخصائص حرارياً، يعني الشروط جوه الغاز بتبقى نفسها تماماً قبل وبعد مرور الموجة الصوتية من غير أي تغير يذكر في الطاقة الكلية.",
             "labels": [
-              "حالة الغاز",
-              "درجة حرارته"
+              "عملية متساوية الخصائص حرارياً"
             ],
             "visual_mode": "detail",
-            "evidence_excerpt_id": 9,
-            "evidence_quote": "speed of transmission depends on molecular collisions, the speed of sound depends on the state"
-          },
-          {
-            "id": "scene_4",
-            "label": "العملية الآزنتيروبية",
-            "narration": "انتقال الاضطراب الصغير جوه الغاز بيعتبر عملية آزنتيروبية، يعني الشروط والظروف في الغاز بتفضل ثابتة قبل وبعد مرور الاضطراب ده من غير ما تفقد طاقة في النص.",
-            "labels": [
-              "عملية آزنتيروبية",
-              "شروط والظروف"
-            ],
-            "visual_mode": "wave",
             "evidence_excerpt_id": 7,
             "evidence_quote": "The transmission of a small disturbance through a gas is an isentropic process. The conditions"
           },
           {
-            "id": "scene_5",
-            "label": "حساب السرعة والثوابت",
-            "narration": "التحليل القائم على حفظ الكتلة وزخم الحركة بيوضح إن سرعة الصوت بتتوقف على نسبة الحرارة النوعية وثابت الغاز ودرجة الحرارة، ودي معادلة رياضية دقيقة بيستخدمها المهندسون.",
+            "id": "scene_4",
+            "label": "طبيعة الغاز",
+            "narration": "علشان الانتقال بيعتمد بشكل أساسي على التصادمات، سرعة الصوت بترتبط ارتباط وثيق بحالة الغاز نفسه. القيمة دي ثابتة لكل غاز، بس بتختلف تماماً من الهوا للأكسجين أو ثاني أكسيد الكربون.",
             "labels": [
-              "حفظ الكتلة",
-              "درجة الحرارة"
+              "سرعة الصوت بترتبط ارتباط وثيق بحالة الغاز"
             ],
-            "visual_mode": "detail",
-            "evidence_excerpt_id": 12,
-            "evidence_quote": "dioxide, etc.) and the temperature of the gas. An analysis based on conservation of mass"
+            "visual_mode": "hero",
+            "evidence_excerpt_id": 9,
+            "evidence_quote": "speed of transmission depends on molecular collisions, the speed of sound depends on the state"
           },
           {
-            "id": "scene_6",
-            "label": "درجة الحرارة المطلقة",
-            "narration": "عشان نحسب الحسبة دي مظبوط، لازم درجة الحرارة تتحدد على مقياس مطلق زي الكلفن، عشان النتيجة تطلع سليمة تماماً وتتناسب مع القوانين الفيزيائية للغازات.",
+            "id": "scene_5",
+            "label": "عامل الحرارة",
+            "narration": "التحليل الرياضي الدقيق بيوضح إن السرعة دي بتساوي الجذر التربيعي لنسبة السعات الحرارية مضروبة في ثابت الغاز ودرجة الحرارة المطلقة، واللي لازم تتحدد بدقة على مقياس كلفن أو رانكن.",
             "labels": [
-              "مقياس مطلق",
-              "الكلفن"
+              "الجذر التربيعي لنسبة السعات الحرارية"
             ],
             "visual_mode": "detail",
             "evidence_excerpt_id": 15,
             "evidence_quote": "times the temperature T . \\(\\LARGE a=\\sqrt{\\gamma RT}\\) Temperature Notice that the temperature must be"
           },
           {
-            "id": "scene_7",
-            "label": "تركيب الغلاف الجوي",
-            "narration": "على كوكب الأرض، الغلاف الجوي متكون غالباً من نيتروجين وأكسجين ثنائي الذرة، ودرجة الحرارة بتتغير حسب الارتفاع بصورة معقدة بتأثر على حركة الموجات دي.",
-            "labels": [
-              "الغلاف الجوي",
-              "حسب الارتفاع"
-            ],
-            "visual_mode": "wave",
+            "id": "scene_6",
+            "label": "الجو والأرض",
+            "narration": "على كوكب الأرض، الغلاف الجوي مكون أساساً من النيتروجين والأكسجين ثنائي الذرة. درجة الحرارة هنا بتتغير بناء على الارتفاع عن سطح الأرض بطريقة مركبة ومش بسيطة خالص بالنسبة للدارسين.",
+            "labels": [],
+            "visual_mode": "hero",
             "evidence_excerpt_id": 20,
             "evidence_quote": "gas. On Earth, the atmosphere is composed of mostly diatomic nitrogen and oxygen, and the"
           },
           {
-            "id": "scene_8",
-            "label": "نماذج الكواكب المختلفة",
-            "narration": "العلماء عملوا نماذج رياضية للجو عشان يقدروا يحسبوا تأثير تغير الحرارة مع الارتفاع، وده بينطبق على كوكب المريخ برضه اللي جوه مليان غاز ثاني أكسيد الكربون.",
+            "id": "scene_7",
+            "label": "نماذج الكواكب",
+            "narration": "العلماء والمهندسون عملوا نموذج رياضي للغلاف الجوي عشان يقدروا يحسب بدقة تأثيرات تغير الحرارة مع الارتفاع. والمريخ كمان ليه جو تاني خالص مكون من ثاني أكسيد الكربون وليه نموذج مشابه.",
             "labels": [
-              "نماذج رياضية",
-              "كوكب المريخ"
+              "نموذج رياضي للغلاف الجوي"
             ],
-            "visual_mode": "hero",
+            "visual_mode": "detail",
             "evidence_excerpt_id": 22,
             "evidence_quote": "a mathematical model of the atmosphere to help them account for the changing effects of"
+          },
+          {
+            "id": "scene_8",
+            "label": "مستوى سطح البحر",
+            "narration": "في ظروف الغلاف الجوي العادية عند مستوى سطح البحر، سرعة الصوت بتوصل حوالي سبع مية واحد وستين ميل في الساعة، وهي القاعدة الأساسية اللي بتحدد بيها حسابات الطيران والسرعات المختلفة.",
+            "labels": [
+              "سرعة الصوت بتوصل حوالي سبع مية واحد وستين ميل في الساعة"
+            ],
+            "visual_mode": "wave",
+            "evidence_excerpt_id": 39,
+            "evidence_quote": "static conditions, the speed of sound is about 761 mph or 1100 feet/second . We"
           }
         ],
         "hashtags": [
-          "سرعة_الصوت",
-          "فيزياء",
+          "الصوت",
           "الهوا",
-          "ناسا"
+          "السرعة",
+          "الفيزياء"
         ],
         "editorial_warnings": [
-          "Write 260–330 spoken words for a natural film between 90 and 180 seconds",
-          "Word count is below the recommended editorial range of 260-330 words."
+          "Write 260–330 spoken words for a natural film between 90 and 180 seconds"
         ],
         "profile": "science",
         "series": "اسرار الكون",
@@ -1083,22 +1073,21 @@
         "editorial_review": {
           "supported": true,
           "novel": true,
-          "issues": [
-            "Word count is below the recommended editorial range of 260-330 words."
-          ],
+          "issues": [],
           "model": "gemini-3.5-flash-lite"
         },
         "writer_model": "gemini-3.5-flash-lite"
       },
       "reserved_at": "2026-11-01T23:29:09.817646+00:00",
-      "needs_narration_revision": true,
+      "needs_narration_revision": false,
       "narration_feedback": {
         "measured_seconds": 98.8,
         "target_seconds": 150,
         "action": "expand",
         "no_silence_padding": true,
         "no_speed_change": true
-      }
+      },
+      "narration_revision_attempts": 1
     }
   ]
 }
