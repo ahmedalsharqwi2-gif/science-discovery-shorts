@@ -1,0 +1,185 @@
+{
+  "file": "professional-review.mp4",
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "duration": 108.56,
+  "story_sha256": "e32409a87bfa91f86c06489d33dd4c9f773c7a9c80c9519fcc48748ddf0e7e6d",
+  "voice": "original Gemini Charon",
+  "asr_model": "medium",
+  "independent_asr_word_coverage": 0.825531914893617,
+  "exact_token_coverage": 0.825531914893617,
+  "speech_matching_method": "Exact-token ensemble anchors; supplied-script phrase captions; no active-word precision claim",
+  "known_name_normalization_applied": false,
+  "visual_gate": {
+    "passed": true,
+    "duration": 108.566667,
+    "resolution": [
+      1080,
+      1920
+    ],
+    "method": "within-scene diagram-region pixel changes",
+    "scenes": [
+      {
+        "scene": 1,
+        "diagram_spatial_std": [
+          28.372651169265474,
+          28.365156753595702,
+          28.537415880224685
+        ],
+        "changed_pixel_ratios": [
+          0.08245489078822413,
+          0.07581908831908832
+        ],
+        "passed": true
+      },
+      {
+        "scene": 2,
+        "diagram_spatial_std": [
+          28.39896716897846,
+          30.167274601846202,
+          30.51838239201444
+        ],
+        "changed_pixel_ratios": [
+          0.11188271604938271,
+          0.11727207977207978
+        ],
+        "passed": true
+      },
+      {
+        "scene": 3,
+        "diagram_spatial_std": [
+          29.997835986893744,
+          29.675912528803448,
+          29.695197065873483
+        ],
+        "changed_pixel_ratios": [
+          0.0710232668566002,
+          0.043827160493827164
+        ],
+        "passed": true
+      },
+      {
+        "scene": 4,
+        "diagram_spatial_std": [
+          28.927437487720184,
+          28.390075947787206,
+          28.43033695727835
+        ],
+        "changed_pixel_ratios": [
+          0.06975308641975309,
+          0.04861111111111111
+        ],
+        "passed": true
+      },
+      {
+        "scene": 5,
+        "diagram_spatial_std": [
+          28.8271122005057,
+          28.089811826339414,
+          28.496449993013258
+        ],
+        "changed_pixel_ratios": [
+          0.07172364672364673,
+          0.07180674264007597
+        ],
+        "passed": true
+      },
+      {
+        "scene": 6,
+        "diagram_spatial_std": [
+          27.92774792940569,
+          28.147591940325928,
+          28.109456555676882
+        ],
+        "changed_pixel_ratios": [
+          0.0754392212725546,
+          0.07856125356125356
+        ],
+        "passed": true
+      },
+      {
+        "scene": 7,
+        "diagram_spatial_std": [
+          28.14540495501552,
+          28.538181481802788,
+          28.336610786152104
+        ],
+        "changed_pixel_ratios": [
+          0.07420465337132004,
+          0.07513057929724597
+        ],
+        "passed": true
+      },
+      {
+        "scene": 8,
+        "diagram_spatial_std": [
+          29.383395991248843,
+          29.201564591331927,
+          29.26206962999745
+        ],
+        "changed_pixel_ratios": [
+          0.07236467236467237,
+          0.07518993352326686
+        ],
+        "passed": true
+      }
+    ],
+    "note": "Technical blank/freeze detection only; not a judgement of artistic or factual quality."
+  },
+  "audio_tail": {
+    "audio_seconds": 108.56,
+    "video_seconds": 108.56,
+    "difference_seconds": 0.0,
+    "last_speech_window_correlation": 0.9933441281318665,
+    "audio_tail_checked": true,
+    "silence_padding_used_to_hide_lost_speech": false
+  },
+  "publication_metadata": {
+    "title": "اسرار الكون | الصوت بيعدي في الهوا إزاي؟",
+    "caption": "رسوم توضيحية وإعادة تمثيل درامية؛ ليست تسجيلًا للأحداث.\nالمصدر: NASA Glenn\nhttps://www1.grc.nasa.gov/beginners-guide-to-aeronautics/speed-of-sound-interactive/\n#الصوت #الهوا #السرعة #الفيزياء",
+    "description": "رسوم توضيحية وإعادة تمثيل درامية؛ ليست تسجيلًا للأحداث.\nالمصدر: NASA Glenn\nhttps://www1.grc.nasa.gov/beginners-guide-to-aeronautics/speed-of-sound-interactive/\n#الصوت #الهوا #السرعة #الفيزياء",
+    "tags": [
+      "الصوت",
+      "الهوا",
+      "السرعة",
+      "الفيزياء"
+    ],
+    "hashtags": [
+      "#الصوت",
+      "#الهوا",
+      "#السرعة",
+      "#الفيزياء"
+    ],
+    "source_url": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/speed-of-sound-interactive/",
+    "containsSyntheticMedia": true
+  },
+  "duration_policy": {
+    "minimum_exclusive": 90,
+    "maximum_exclusive": 180
+  },
+  "pipeline": "legacy",
+  "validation_kind": "fresh",
+  "music_target_lufs": -27,
+  "music": "Original composed score",
+  "music_bpm": 112,
+  "source": {
+    "url": "https://www1.grc.nasa.gov/beginners-guide-to-aeronautics/speed-of-sound-interactive/",
+    "publisher": "NASA Glenn",
+    "title": "الصوت بيعدي في الهوا إزاي؟"
+  },
+  "topic_key": "sound-waves",
+  "profile": "science",
+  "editorial_review": {
+    "supported": true,
+    "novel": true,
+    "issues": [],
+    "model": "gemini-3.5-flash-lite"
+  },
+  "render": "Three.js procedural geometry, physical lighting, custom skin shader, layered optical bloom",
+  "visual_style": "original",
+  "review_watermark": false,
+  "reference_audio_reused": false,
+  "automatically_published": false,
+  "status": "Technical checks passed; artistic judgement requires viewing the complete film."
+}
