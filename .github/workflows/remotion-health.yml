@@ -1,0 +1,127 @@
+{
+  "name": "Independent daily video health — production, media and publication",
+  "on": {
+    "schedule": [
+      {
+        "cron": "30 8 * * *"
+      },
+      {
+        "cron": "30 9 * * *"
+      },
+      {
+        "cron": "0 12 * * *"
+      },
+      {
+        "cron": "0 13 * * *"
+      },
+      {
+        "cron": "15 13 * * *"
+      },
+      {
+        "cron": "15 14 * * *"
+      },
+      {
+        "cron": "30 14 * * *"
+      },
+      {
+        "cron": "30 15 * * *"
+      }
+    ],
+    "workflow_run": {
+      "workflows": [
+        "Automatic Remotion —9am Cairo produce; same day5pm publish"
+      ],
+      "types": [
+        "completed"
+      ],
+      "branches": [
+        "main"
+      ]
+    },
+    "workflow_dispatch": {
+      "inputs": {
+        "date": {
+          "description": "Optional audit date YYYY-MM-DD; empty means today in Cairo",
+          "type": "string",
+          "required": false
+        },
+        "phase": {
+          "description": "Check scheduling before17 or actual sent publication afterwards",
+          "type": "choice",
+          "options": [
+            "auto",
+            "prepublish",
+            "postpublish"
+          ],
+          "default": "auto"
+        }
+      }
+    },
+    "push": {
+      "branches": [
+        "main"
+      ],
+      "paths": [
+        ".github/remotion-health-request.json"
+      ]
+    }
+  },
+  "permissions": {
+    "contents": "write",
+    "actions": "read",
+    "issues": "write"
+  },
+  "concurrency": {
+    "group": "independent-daily-health-science",
+    "cancel-in-progress": false
+  },
+  "jobs": {
+    "audit": {
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 25,
+      "env": {
+        "PYTHONPATH": "${{ github.workspace }}",
+        "PYTHONUNBUFFERED": "1",
+        "GITHUB_TOKEN": "${{ github.token }}",
+        "BUFFER_API_KEY": "${{ secrets.BUFFER_API_KEY }}"
+      },
+      "steps": [
+        {
+          "uses": "actions/checkout@v4",
+          "with": {
+            "ref": "main",
+            "fetch-depth": 1
+          }
+        },
+        {
+          "uses": "actions/setup-python@v5",
+          "with": {
+            "python-version": "3.11"
+          }
+        },
+        {
+          "name": "Install read-only audit prerequisites",
+          "run": "python -m pip install requests beautifulsoup4\nif ! command -v ffmpeg >/dev/null; then sudo apt-get update -qq; sudo apt-get install -y ffmpeg; fi"
+        },
+        {
+          "name": "Verify missing-video, duplicate-post, wrong-time and DST regressions",
+          "run": "python -m unittest discover -s remotion_factory/tests -q"
+        },
+        {
+          "name": "Independently verify scheduler, actual movie and three live destination receipts",
+          "run": "python -m remotion_factory.health"
+        },
+        {
+          "uses": "actions/upload-artifact@v4",
+          "if": "always()",
+          "with": {
+            "name": "daily-health-science-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "health-output/",
+            "retention-days": 90,
+            "if-no-files-found": "warn"
+          }
+        }
+      ]
+    }
+  }
+}

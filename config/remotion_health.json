@@ -1,0 +1,15 @@
+{
+  "enabled": true,
+  "activated_at_utc": "2026-11-02T19:00:30Z",
+  "timezone": "Africa/Cairo",
+  "checkpoints_local": [
+    "11:30",
+    "15:00",
+    "16:15",
+    "17:30"
+  ],
+  "observe_completed_production": true,
+  "read_only_social_verification": true,
+  "never_regenerate_or_resubmit": true,
+  "alert": "one GitHub Issue per date in this own repository; close on recovery"
+}
