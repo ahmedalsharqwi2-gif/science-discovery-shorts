@@ -35,7 +35,7 @@ def decide(args):
  repo,profile=identity();event=json.loads(Path(os.environ['GITHUB_EVENT_PATH']).read_text());created=instant(api('/actions/runs/'+os.environ['GITHUB_RUN_ID'])['created_at'])
  target=args.date or event.get('inputs',{}).get('publish_date') or None
  request=Path('.github/remotion-daily-request.json')
- if os.environ['GITHUB_EVENT_NAME']=='push' and request.exists():
+ if os.environ['GITHUB_EVENT_NAME']=='push' and request.exists() and not target:
   change=json.loads(request.read_text());target=change.get('publish_date') or target
  due=slot_for(created,os.environ['GITHUB_EVENT_NAME'],event.get('schedule',''),target)
  if due is None:return {'run':False,'reason':'other DST trigger'}
