@@ -1130,7 +1130,7 @@
       "canonical_subject": "human-respiratory-system",
       "title": "رحلة جو جوه جسم الإنسان",
       "knowledge_category": "biology",
-      "status": "reserved",
+      "status": "rendered",
       "story": {
         "title": "رحلة جو جوه جسم الإنسان",
         "canonical_subject": "human-respiratory-system",
@@ -1728,7 +1728,8 @@
           "reason": "Owner permits general knowledge and original fiction without mandatory external sources or independent fact-check"
         }
       },
-      "requested_due_at": "2026-11-02T15:00:00Z"
+      "requested_due_at": "2026-11-02T15:00:00Z",
+      "video_sha256": "c74687f5fad09e3e50bebb14fc48f6db4b2b3e4c740f1eb854820a8f3fa1267d"
     }
   ],
   "rescheduling_history": {
