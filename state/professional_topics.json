@@ -1228,5 +1228,13 @@
         }
       ]
     }
+  },
+  "requested_production": {
+    "requested-2026-11-02-science": {
+      "phase": "writing",
+      "request_id": "owner-new-today-2026-11-02",
+      "due_at": "2026-11-02T15:00:00Z",
+      "started_at": "2026-11-02T09:39:26.549368+00:00"
+    }
   }
 }
