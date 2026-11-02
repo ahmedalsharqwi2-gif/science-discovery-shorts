@@ -1124,5 +1124,67 @@
         }
       }
     }
-  ]
+  ],
+  "rescheduling_history": {
+    "owner-retime-2026-11-02-1700": {
+      "old_due_at": "2026-11-03T15:00:00Z",
+      "requested_due_at": "2026-11-02T15:00:00Z",
+      "posts": {
+        "tiktok": {
+          "phase": "intent",
+          "before": {
+            "id": "6ae84ea6c8c477a933a147d2",
+            "channelId": "6a9edf14cd8b9c702c230272",
+            "status": "scheduled",
+            "dueAt": "2026-11-03T15:00:00.000Z",
+            "text": "اسرار الكون | الصوت بيعدي في الهوا إزاي؟\n\nرسوم توضيحية وإعادة تمثيل درامية؛ ليست تسجيلًا للأحداث.\nالمصدر: NASA Glenn\nhttps://www1.grc.nasa.gov/beginners-guide-to-aeronautics/speed-of-sound-interactive/\n#الصوت #الهوا #السرعة #الفيزياء",
+            "shareMode": "customScheduled",
+            "schedulingType": "automatic",
+            "assets": [
+              {
+                "source": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/releases/download/auto-publish-daily-2026-11-02/science-video-daily-2026-11-02.mp4"
+              }
+            ]
+          },
+          "old_receipt": {
+            "id": "6ae84ea6c8c477a933a147d2",
+            "channel_id": "6a9edf14cd8b9c702c230272"
+          },
+          "requested_due_at": "2026-11-02T15:00:00Z"
+        }
+      },
+      "original_episode_receipts": {
+        "tiktok": {
+          "id": "6ae84ea6c8c477a933a147d2",
+          "due_at": "2026-11-03T15:00:00Z",
+          "run_id": "41414318950",
+          "accepted_at": "2026-11-02T08:49:42.561840+00:00",
+          "channel_id": "6a9edf14cd8b9c702c230272",
+          "scheduled_at": "2026-11-03T15:00:00+00:00",
+          "status": "scheduled",
+          "verified_at": "2026-11-02T08:49:47.422898+00:00"
+        },
+        "facebook": {
+          "id": "6ae84eab4af9a19eb717241c",
+          "due_at": "2026-11-03T15:00:00Z",
+          "run_id": "41414318950",
+          "accepted_at": "2026-11-02T08:49:47.246913+00:00",
+          "channel_id": "6a9edebbcd8b9c702c230128",
+          "scheduled_at": "2026-11-03T15:00:00+00:00",
+          "status": "scheduled",
+          "verified_at": "2026-11-02T08:49:47.776820+00:00"
+        },
+        "youtube": {
+          "id": "6ae84ea81057bd49b78d37ef",
+          "due_at": "2026-11-03T15:00:00Z",
+          "run_id": "41414318950",
+          "accepted_at": "2026-11-02T08:49:44.958970+00:00",
+          "channel_id": "6a9edee8cd8b9c702c2301cb",
+          "scheduled_at": "2026-11-03T15:00:00+00:00",
+          "status": "scheduled",
+          "verified_at": "2026-11-02T08:49:47.597619+00:00"
+        }
+      }
+    }
+  }
 }
