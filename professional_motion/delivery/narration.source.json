@@ -1,0 +1,17 @@
+{
+  "provider": "Gemini TTS",
+  "model": "gemini-3.8-flash-tts",
+  "voice": "Charon",
+  "style": "Egyptian Arabic ar-EG, native conversational Cairo accent. Mature warm male documentary storyteller, low resonant register, clear exact articulation, measured pace around 140 words per minute. Say the year numbers naturally in Egyptian Arabic. Preserve every word and sentence of the transcript, finish the last sentence clearly. No music, no sound effects, no singing, no spoken instructions.\nEgyptian Arabic engaging science explanation. Start with curiosity, build momentum, thoughtful final payoff. No music or sound effects. Read only the supplied words. Finish the last sentence. Clear natural pace.",
+  "text": "الصوت مش بس ضجة بنسمعها، ده سرعة انتقال اضطراب صغير في وسط مادي. لما أي حاجة تتحرك، بتخلق نبضة بتنتشر قدامها عبر الهوا بسرعة محدودة وثابتة علشان توصل لأذن الإنسان. الهوا عبارة عن غاز مليان جزيئات متحركة عشوائياً في كل اتجاه ومكان. الاضطرابات دي بتنتقل جوه الغاز نتيجة التصادمات المستمرة والسريعة بين الجزيئات دي وبعضها البعض بشكل دائم. انتقال الاضطراب الصغير ده بيعتبر عملية متساوية الخصائص حرارياً، يعني الشروط جوه الغاز بتبقى نفسها تماماً قبل وبعد مرور الموجة الصوتية من غير أي تغير يذكر في الطاقة الكلية. علشان الانتقال بيعتمد بشكل أساسي على التصادمات، سرعة الصوت بترتبط ارتباط وثيق بحالة الغاز نفسه. القيمة دي ثابتة لكل غاز، بس بتختلف تماماً من الهوا للأكسجين أو ثاني أكسيد الكربون. التحليل الرياضي الدقيق بيوضح إن السرعة دي بتساوي الجذر التربيعي لنسبة السعات الحرارية مضروبة في ثابت الغاز ودرجة الحرارة المطلقة، واللي لازم تتحدد بدقة على مقياس كلفن أو رانكن. على كوكب الأرض، الغلاف الجوي مكون أساساً من النيتروجين والأكسجين ثنائي الذرة. درجة الحرارة هنا بتتغير بناء على الارتفاع عن سطح الأرض بطريقة مركبة ومش بسيطة خالص بالنسبة للدارسين. العلماء والمهندسون عملوا نموذج رياضي للغلاف الجوي عشان يقدروا يحسب بدقة تأثيرات تغير الحرارة مع الارتفاع. والمريخ كمان ليه جو تاني خالص مكون من ثاني أكسيد الكربون وليه نموذج مشابه. في ظروف الغلاف الجوي العادية عند مستوى سطح البحر، سرعة الصوت بتوصل حوالي سبع مية واحد وستين ميل في الساعة، وهي القاعدة الأساسية اللي بتحدد بيها حسابات الطيران والسرعات المختلفة.",
+  "interaction_id": "v1_ChdJdVhuYXFtLUc2eVUzOUlQc05hZDBROBIXSXVYbmFxbS1HNnlVMzlJUHNOYWQwUTg",
+  "duration": 108.56,
+  "sample_rate": 24000,
+  "channels": 1,
+  "sha256": "101cb3323e6ac3d11ee89aa9f9ef359db112c175b34047df8764220d8447d5b6",
+  "newly_synthesized": true,
+  "original_video_audio_used": false,
+  "fallback_used": false,
+  "cache_hit": false,
+  "output_sha256": "101cb3323e6ac3d11ee89aa9f9ef359db112c175b34047df8764220d8447d5b6"
+}
