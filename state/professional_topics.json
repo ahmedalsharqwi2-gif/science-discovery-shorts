@@ -1131,7 +1131,7 @@
       "requested_due_at": "2026-11-02T15:00:00Z",
       "posts": {
         "tiktok": {
-          "phase": "intent",
+          "phase": "uncertain",
           "before": {
             "id": "6ae84ea6c8c477a933a147d2",
             "channelId": "6a9edf14cd8b9c702c230272",
