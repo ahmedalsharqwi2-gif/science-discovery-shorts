@@ -13,7 +13,7 @@ if(hash(storyBytes)!==timing.story_sha256||hash(voiceBytes)!==timing.audio_sha25
 const minimum=story.profile==='news'?60:90;
 if(!(Number.isFinite(timing.duration)&&timing.duration>minimum&&timing.duration<180)||timing.coverage<.9||timing.diagnostic_only)throw Error('Measured duration or speech evidence is insufficient');
 if(['history','horror'].includes(story.profile)&&(story.fiction||!story.documented||!story.source?.url))throw Error('History/horror require documented real events');
-const kinds=new Set(['photo','map','science','timeline','metric','stability','temple','platform','stickman']);
+const kinds=new Set(['photo','map','science','timeline','metric','stability','temple','platform','stickman','explainer','adventure','whatif']);
 const overrides=JSON.parse(await fs.readFile(path.join(project,'visual-overrides.json'),'utf8').catch(()=> '{}'));
 const scenes=timing.scenes.map((s,i)=>{const base=story.scenes[i].visual;const override=overrides[story.profile]?.[s.id]||{};if(Object.keys(override).some(k=>!['kind','asset','asset_label','detail'].includes(k)))throw Error('Visual overrides cannot rewrite narration');const visual={...base,...override};if(!kinds.has(visual.kind)||s.id!==story.scenes[i].id||!(s.end>s.start))throw Error('Unimplemented or inconsistent authored shot');return {...s,...visual};});
 await fs.copyFile(path.join(delivery,'narration.wav'),path.join(project,'public/narration.wav'));

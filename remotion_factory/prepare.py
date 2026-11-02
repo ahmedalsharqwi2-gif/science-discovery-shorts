@@ -6,7 +6,7 @@ import requests
 from .state import identity,mutate
 DELIVERY=Path('professional_motion/delivery')
 def read_request():
- req=json.loads(Path('.github/remotion-request.json').read_text());_,profile=identity()
+ req=json.loads(Path(os.getenv('FACTORY_REQUEST_PATH','.github/remotion-request.json')).read_text());_,profile=identity()
  if req['profile']!=profile:raise ValueError('Request belongs to a different channel')
  due=datetime.fromisoformat(req['due_at'].replace('Z','+00:00'))
  if due<=datetime.now(timezone.utc) or due.astimezone(ZoneInfo('Africa/Cairo')).strftime('%H:%M:%S')!='17:00:00':raise ValueError('Publication slot invalid or expired; never roll it forward')
@@ -27,7 +27,7 @@ def restore(entry,story_hash):
  if hashlib.sha256(files.get('story.json',b'')).hexdigest()!=story_hash or 'narration.wav' not in files:raise ValueError('Prior voice artifact does not contain this exact story and voice')
  for name,content in files.items():(DELIVERY/name).write_bytes(content)
 def main():
- req=read_request();story=json.loads(Path('config/remotion_episode.json').read_text());_,profile=identity()
+ req=read_request();story=json.loads(Path(os.getenv('REMOTION_EPISODE_PATH','config/remotion_episode.json')).read_text());_,profile=identity()
  if story['profile']!=profile or len(story['scenes'])!=8:raise ValueError('Eight authored scenes for this profile required')
  if profile in ('history','horror') and (story.get('fiction') or not story.get('documented') or not story.get('source',{}).get('url')):raise ValueError('History and horror must be sourced true events; invented stories are forbidden')
  raw=(json.dumps(story,ensure_ascii=False,indent=2)+'\n').encode();digest=hashlib.sha256(raw).hexdigest();old=None
@@ -35,10 +35,11 @@ def main():
   nonlocal old
   episodes=data['episodes'];old=episodes.get(req['slot'])
   if old:
-   if old['story_sha256']!=digest:raise ValueError('Reserved narration cannot silently change')
+   if old.get('story_sha256') not in (None,digest):raise ValueError('Reserved narration cannot silently change')
+   old.update(story_sha256=digest,canonical_subject=story['canonical_subject'],title=story['title'])
    if old['status']=='scheduled':raise RuntimeError('Slot already scheduled; no duplicate generation or sending')
    return
-  if any(e['canonical_subject']==story['canonical_subject'] for e in episodes.values()):raise ValueError('Underlying subject already reserved')
+  if any(e.get('canonical_subject')==story['canonical_subject'] for e in episodes.values()):raise ValueError('Underlying subject already reserved')
   for name in ('state/professional_topics.json','state/film_topics.json','state/topic_history.json'):
    path=Path(name)
    if not path.exists():continue

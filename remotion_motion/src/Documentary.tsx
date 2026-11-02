@@ -8,6 +8,9 @@ import {SciencePlate} from './SciencePlate';
 import {StickmanPlate} from './StickmanPlate';
 import {LearningDevice} from './LearningDevice';
 import {MotionFinish,KineticTitle} from './MotionFinish';
+import {ExplainerPlate} from './ExplainerPlate';
+import {AdventurePlate} from './AdventurePlate';
+import {WhatIfPlate} from './WhatIfPlate';
 loadFont({family:'Arabic',url:staticFile('fonts/Arabic-Regular.ttf'),weight:'400'});
 loadFont({family:'Arabic',url:staticFile('fonts/Arabic-Bold.ttf'),weight:'700'});
 const palettes={history:{accent:'#e8bd78',background:'#171b21',eyebrow:'قصة حقيقية • من ذاكرة التاريخ'},horror:{accent:'#d07a61',background:'#10171e',eyebrow:'حدث حقيقي • بلا حكايات مختلقة'},science:{accent:'#76dfd1',background:'#081c2a',eyebrow:'اكتشف العلم في حياتك'},news:{accent:'#f7ba64',background:'#101e30',eyebrow:'الذكاء الاصطناعي • خبر في السريع'},stickman:{accent:'#c05a43',background:'#f7f1e7',eyebrow:'افترض كده • حكاية خيالية'}};
@@ -29,6 +32,9 @@ const SceneView=({scene,episode,index}:{scene:Scene;episode:Episode;index:number
  {scene.kind==='temple'?<Temple color={palette.accent}/>:null}
  {scene.kind==='platform'?<NewsPlatform scene={scene} color={palette.accent}/>:null}
  {scene.kind==='stickman'?<StickmanPlate action={scene.kicker||'discover'} duration={scene.end-scene.start}/>:null}
+ {scene.kind==='explainer'?<ExplainerPlate scene={scene} color={palette.accent}/>:null}
+ {scene.kind==='adventure'?<AdventurePlate action={scene.kicker||'danger'} scenario={scene.scenario||'flood'} duration={scene.end-scene.start}/>:null}
+ {scene.kind==='whatif'?<WhatIfPlate stage={scene.kicker||'impact'} scenario={scene.scenario||'sleep'} duration={scene.end-scene.start} labels={scene.labels||[]}/>:null}
  <AbsoluteFill style={{background:episode.profile==='stickman'?'linear-gradient(180deg,#f7f1e7 3%,transparent 42%)':'linear-gradient(180deg,#071019d9 0%,#07101966 18%,transparent 39%,transparent 65%,#071019eb 86%,#071019 100%)'}}/>
  <div style={{position:'absolute',top:90,left:68,right:68,display:'flex',justifyContent:'space-between',alignItems:'center',fontSize:27,color:episode.profile==='stickman'?'#141d35':'#d7dfdc'}}><span>{episode.series}</span><span style={{fontFamily:'Arial',fontSize:20,color:palette.accent}}>{episode.source_date||({history:'حكاية من التاريخ',horror:'واقعة حقيقية',science:'علم في حياتك',news:'أخبار التقنية',stickman:'ماذا لو؟'})[episode.profile]}</span></div>
  <div style={{position:'absolute',top:180,right:68,left:68,color:palette.accent,fontSize:27,opacity:interpolate(f,[0,12],[0,1],motion)}}>{palette.eyebrow}</div>

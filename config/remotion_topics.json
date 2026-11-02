@@ -1,0 +1,276 @@
+{
+  "science": [
+    {
+      "title": "لماذا نرى البرق قبل سماع الرعد؟",
+      "url": "https://www.weather.gov/safety/lightning-science-overview",
+      "publisher": "National Weather Service",
+      "canonical_subject": "lightning-thunder-light-sound-speed"
+    },
+    {
+      "title": "كيف تقاوم البكتيريا المضادات الحيوية؟",
+      "url": "https://www.who.int/news-room/fact-sheets/detail/antimicrobial-resistance",
+      "publisher": "WHO",
+      "canonical_subject": "antimicrobial-resistance-bacteria"
+    },
+    {
+      "title": "كيف يتكون الزلزال؟",
+      "url": "https://www.usgs.gov/programs/earthquake-hazards/science/science-earthquakes",
+      "publisher": "USGS",
+      "canonical_subject": "earthquake-fault-slip"
+    },
+    {
+      "title": "لماذا يطفو الجليد؟",
+      "url": "https://www.usgs.gov/special-topics/water-science-school/science/ice-snow-and-glaciers-and-water-cycle",
+      "publisher": "USGS",
+      "canonical_subject": "ice-water-density-floating"
+    },
+    {
+      "title": "كيف تتحول الطاقة في البناء الضوئي؟",
+      "url": "https://education.nationalgeographic.org/resource/photosynthesis/",
+      "publisher": "National Geographic",
+      "canonical_subject": "photosynthesis-light-sugar"
+    },
+    {
+      "title": "ماذا يحدث أثناء النوم؟",
+      "url": "https://www.ninds.nih.gov/health-information/public-education/brain-basics/brain-basics-understanding-sleep",
+      "publisher": "NINDS",
+      "canonical_subject": "sleep-brain-memory-cycles"
+    },
+    {
+      "title": "الصدأ: ماذا يفعل الأكسجين بالحديد؟",
+      "url": "https://www.britannica.com/science/corrosion",
+      "publisher": "Britannica",
+      "canonical_subject": "iron-rust-oxidation"
+    },
+    {
+      "title": "كيف تحفظ اللقاحات ذاكرة المناعة؟",
+      "url": "https://www.who.int/news-room/feature-stories/detail/how-do-vaccines-work",
+      "publisher": "WHO",
+      "canonical_subject": "vaccination-immune-memory"
+    },
+    {
+      "title": "كيف تتكون ألوان قوس قزح؟",
+      "url": "https://www.metoffice.gov.uk/weather/learn-about/weather/optical-effects/rainbows",
+      "publisher": "Met Office",
+      "canonical_subject": "rainbow-refraction-dispersion"
+    },
+    {
+      "title": "كيف يعمل البنكرياس؟",
+      "url": "https://www.niddk.nih.gov/health-information/diabetes/overview/what-is-diabetes",
+      "publisher": "NIDDK",
+      "canonical_subject": "pancreas-insulin-blood-glucose"
+    },
+    {
+      "title": "لماذا الملح يذيب الثلج؟",
+      "url": "https://www.acs.org/education/whatischemistry/adventures-in-chemistry/experiments/ice-melting.html",
+      "publisher": "American Chemical Society",
+      "canonical_subject": "salt-ice-freezing-point"
+    }
+  ],
+  "history": [
+    {
+      "title": "هرم الجيزة: إيه المعروف وإيه المختلف عليه؟",
+      "url": "https://whc.unesco.org/en/list/86/",
+      "publisher": "UNESCO World Heritage Centre",
+      "canonical_subject": "great-pyramid-giza-unesco"
+    },
+    {
+      "title": "قناطر سيغوفيا: الميه فوق المدينة",
+      "url": "https://whc.unesco.org/en/list/311/",
+      "publisher": "UNESCO World Heritage Centre",
+      "canonical_subject": "segovia-aqueduct-unesco"
+    },
+    {
+      "title": "ساحة آرل: مبنى روماني اتغير دوره",
+      "url": "https://whc.unesco.org/en/list/164/",
+      "publisher": "UNESCO World Heritage Centre",
+      "canonical_subject": "arles-amphitheatre-unesco"
+    },
+    {
+      "title": "جسر بيشيل الميه: بون دو جار",
+      "url": "https://whc.unesco.org/en/list/344/",
+      "publisher": "UNESCO World Heritage Centre",
+      "canonical_subject": "pont-du-gard-aqueduct"
+    },
+    {
+      "title": "بومبي: المدينة التي حفظها الرماد",
+      "url": "https://whc.unesco.org/en/list/829/",
+      "publisher": "UNESCO",
+      "canonical_subject": "unesco-site-829",
+      "latitude": 40.75,
+      "longitude": 14.48
+    },
+    {
+      "title": "البندقية: مدينة نشأت فوق الماء",
+      "url": "https://whc.unesco.org/en/list/438/",
+      "publisher": "UNESCO",
+      "canonical_subject": "unesco-site-438",
+      "latitude": 45.44,
+      "longitude": 12.33
+    },
+    {
+      "title": "جيش التيراكوتا: آلاف الجنود المدفونين",
+      "url": "https://whc.unesco.org/en/list/252/",
+      "publisher": "UNESCO",
+      "canonical_subject": "unesco-site-252",
+      "latitude": 34.38,
+      "longitude": 109.27
+    },
+    {
+      "title": "الحائط العظيم: دفاع امتد عبر قرون",
+      "url": "https://whc.unesco.org/en/list/483/",
+      "publisher": "UNESCO",
+      "canonical_subject": "unesco-site-483",
+      "latitude": 40.43,
+      "longitude": 116.57
+    },
+    {
+      "title": "البتراء: مدينة نحتت في الصخر",
+      "url": "https://whc.unesco.org/en/list/326/",
+      "publisher": "UNESCO",
+      "canonical_subject": "unesco-site-326",
+      "latitude": 30.33,
+      "longitude": 35.44
+    },
+    {
+      "title": "أوشفيتز: حفظ دليل جريمة تاريخية",
+      "url": "https://whc.unesco.org/en/list/114/",
+      "publisher": "UNESCO",
+      "canonical_subject": "unesco-site-114",
+      "latitude": 50.03,
+      "longitude": 19.2
+    },
+    {
+      "title": "منجم الملح في فيليتشكا",
+      "url": "https://whc.unesco.org/en/list/121/",
+      "publisher": "UNESCO",
+      "canonical_subject": "unesco-site-121",
+      "latitude": 49.98,
+      "longitude": 20.06
+    },
+    {
+      "title": "قرطاج: مدينة دمرت ثم بنيت",
+      "url": "https://whc.unesco.org/en/list/39/",
+      "publisher": "UNESCO",
+      "canonical_subject": "unesco-site-39",
+      "latitude": 36.85,
+      "longitude": 10.32
+    }
+  ],
+  "horror": [
+    {
+      "title": "سفن فرانكلين: اختفاء في الجليد",
+      "url": "https://www.rmg.co.uk/stories/maritime-history/what-happened-to-erebus-terror-crew-true-story",
+      "publisher": "Royal Museums Greenwich",
+      "canonical_subject": "franklin-expedition-1845"
+    },
+    {
+      "title": "ماري سيليست: سفينة من غير طاقم",
+      "url": "https://www.rmg.co.uk/stories/maritime-history/mystery-mary-celeste",
+      "publisher": "Royal Museums Greenwich",
+      "canonical_subject": "mary-celeste-1872"
+    },
+    {
+      "title": "إنديورانس: الجليد حاصر السفينة",
+      "url": "https://www.rmg.co.uk/stories/maritime-history/sir-ernest-shackleton",
+      "publisher": "Royal Museums Greenwich",
+      "canonical_subject": "endurance-1915"
+    },
+    {
+      "title": "إتش إم إس كابتن: الكارثة اللي ابتلعت السفينة",
+      "url": "https://www.rmg.co.uk/stories/maritime-history/hms-captain-britains-forgotten-maritime-disaster",
+      "publisher": "Royal Museums Greenwich",
+      "canonical_subject": "hms-captain-1870"
+    },
+    {
+      "title": "فريشفيلد: آخر رحلة للسفينة",
+      "url": "https://www.rmg.co.uk/stories/maritime-history/library-archive/loss-ss-freshfield",
+      "publisher": "Royal Museums Greenwich",
+      "canonical_subject": "ss-freshfield-loss"
+    }
+  ],
+  "stickman": [
+    {
+      "title": "ماذا لو النوم اختفى من حياتك؟",
+      "publisher": "NINDS",
+      "canonical_subject": "stickman-whatif-sleep-consequences",
+      "scenario": "sleep",
+      "brief": "فرضية عدم القدرة على النوم: بداية النشاط المزيف ثم النعاس وضعف التركيز ورد الفعل وخطر القيادة ثم الفرق بين النوم والراحة. لا تحدد موعد وفاة أو تقدم تجربة يحاولها المشاهد. تسلسل المشاهد: impact ثم experiment ثم escalation ثم fail ثم discovery ثم adapt ثم solution ثم twist. لكل مشهد تحرك الشخصية وتتفاعل مع2–4 أشياء أو مفاهيم تُكتب في labels. كوميديا بصرية وتعليق مصري. لا تحول كل فرضية إلى غرفة هروب أو مفتاح، لا تستخدم أمثلة طبية كتعليمات.",
+      "url": "https://www.ninds.nih.gov/health-information/public-education/brain-basics/brain-basics-understanding-sleep"
+    },
+    {
+      "title": "ماذا لو صحيت جوه موبايلك؟",
+      "publisher": "افترض كده",
+      "canonical_subject": "stickman-whatif-phone-consequences",
+      "scenario": "phone",
+      "brief": "خيال تقني: الشخصية تنتقل بين الإشعارات والصور والتطبيقات، انخفاض البطارية يقلب الهدف، تتعاون مع وضع توفير الطاقة للوصول للشاحن. لا تنسخ عالم لعبة أو شخصية مشهورة. تسلسل المشاهد: impact ثم experiment ثم escalation ثم fail ثم discovery ثم adapt ثم solution ثم twist. لكل مشهد تحرك الشخصية وتتفاعل مع2–4 أشياء أو مفاهيم تُكتب في labels. كوميديا بصرية وتعليق مصري. لا تحول كل فرضية إلى غرفة هروب أو مفتاح، لا تستخدم أمثلة طبية كتعليمات."
+    },
+    {
+      "title": "ماذا لو مياه المحيطات اختفت؟",
+      "publisher": "NOAA",
+      "canonical_subject": "stickman-whatif-ocean-consequences",
+      "scenario": "ocean",
+      "brief": "اختفاء الماء نفسه افتراض خيالي وليس تجفيفًا فوريًا حقيقيًا؛ وضح أثره على دورة المياه والمناخ والكائنات دون اختلاق مواعيد دقيقة. تسلسل المشاهد: impact ثم experiment ثم escalation ثم fail ثم discovery ثم adapt ثم solution ثم twist. لكل مشهد تحرك الشخصية وتتفاعل مع2–4 أشياء أو مفاهيم تُكتب في labels. كوميديا بصرية وتعليق مصري. لا تحول كل فرضية إلى غرفة هروب أو مفتاح، لا تستخدم أمثلة طبية كتعليمات.",
+      "url": "https://oceanservice.noaa.gov/facts/why-care-about-ocean.html"
+    },
+    {
+      "title": "ماذا لو حجمك بقى زي النملة؟",
+      "publisher": "افترض كده",
+      "canonical_subject": "stickman-whatif-tiny-consequences",
+      "scenario": "tiny",
+      "brief": "فرضية خيالية مع أمثلة للقوة النسبية والتوتر السطحي. كوب ماء وسلم وقطرة تصبح عقبات. لا تعرض المعادلات كقياسات فعلية. تسلسل المشاهد: impact ثم experiment ثم escalation ثم fail ثم discovery ثم adapt ثم solution ثم twist. لكل مشهد تحرك الشخصية وتتفاعل مع2–4 أشياء أو مفاهيم تُكتب في labels. كوميديا بصرية وتعليق مصري. لا تحول كل فرضية إلى غرفة هروب أو مفتاح، لا تستخدم أمثلة طبية كتعليمات."
+    },
+    {
+      "title": "ماذا لو بقيت أطول من العمارات؟",
+      "publisher": "افترض كده",
+      "canonical_subject": "stickman-whatif-giant-consequences",
+      "scenario": "giant",
+      "brief": "فرضية تغيير الحجم خيالية؛ الوزن يزداد أسرع من مساحة مقطع العظام، وحركة القدم تتطلب مساحة. تعامل مع السيارات الصغيرة والنوافذ، لا انتصار عنيف. تسلسل المشاهد: impact ثم experiment ثم escalation ثم fail ثم discovery ثم adapt ثم solution ثم twist. لكل مشهد تحرك الشخصية وتتفاعل مع2–4 أشياء أو مفاهيم تُكتب في labels. كوميديا بصرية وتعليق مصري. لا تحول كل فرضية إلى غرفة هروب أو مفتاح، لا تستخدم أمثلة طبية كتعليمات."
+    },
+    {
+      "title": "ماذا لو الزمن وقف وإنت الوحيد اللي بيتحرك؟",
+      "publisher": "افترض كده",
+      "canonical_subject": "stickman-whatif-freeze-consequences",
+      "scenario": "freeze",
+      "brief": "خيال صريح: ثبّت قاعدة أن الضوء والتنفس مستثنيان في عالم القصة لتجنب تناقض الرؤية. الشخصية تجرب حركة ساعة وكرات ثم تكتشف أثر العودة. لا تسوقه كعلم حقيقي. تسلسل المشاهد: impact ثم experiment ثم escalation ثم fail ثم discovery ثم adapt ثم solution ثم twist. لكل مشهد تحرك الشخصية وتتفاعل مع2–4 أشياء أو مفاهيم تُكتب في labels. كوميديا بصرية وتعليق مصري. لا تحول كل فرضية إلى غرفة هروب أو مفتاح، لا تستخدم أمثلة طبية كتعليمات."
+    },
+    {
+      "title": "ماذا لو الجاذبية اختفت فجأة؟",
+      "publisher": "ESA",
+      "canonical_subject": "stickman-whatif-gravity-consequences",
+      "scenario": "gravity",
+      "brief": "افتراض الجاذبية غير الواقع: اربط التعويم بفقد الوزن لا اختفاء الكتلة. لا تكرر موضوع صندوق الجاذبية أو خروجه من الغرفة، بل أثر الحركة والارتداد ومحاولة شرب الماء. تسلسل المشاهد: impact ثم experiment ثم escalation ثم fail ثم discovery ثم adapt ثم solution ثم twist. لكل مشهد تحرك الشخصية وتتفاعل مع2–4 أشياء أو مفاهيم تُكتب في labels. كوميديا بصرية وتعليق مصري. لا تحول كل فرضية إلى غرفة هروب أو مفتاح، لا تستخدم أمثلة طبية كتعليمات.",
+      "url": "https://www.esa.int/Science_Exploration/Human_and_Robotic_Exploration/What_is_weightlessness"
+    },
+    {
+      "title": "ماذا لو الأرض وقفت دوران فجأة؟",
+      "publisher": "افترض كده",
+      "canonical_subject": "stickman-whatif-earth-stop-consequences",
+      "scenario": "earth-stop",
+      "brief": "افتراض كارثي خيالي وغير واقعي فجأة: وضح القصور الذاتي والهواء والماء وانقطاع تعاقب الليل والنهار المعتاد. لا تزعم اختفاء الجاذبية ولا أرقام ضحايا أو جدول زمني مخترع. تسلسل المشاهد: impact ثم experiment ثم escalation ثم fail ثم discovery ثم adapt ثم solution ثم twist. لكل مشهد تحرك الشخصية وتتفاعل مع2–4 أشياء أو مفاهيم تُكتب في labels. كوميديا بصرية وتعليق مصري. لا تحول كل فرضية إلى غرفة هروب أو مفتاح، لا تستخدم أمثلة طبية كتعليمات."
+    }
+  ],
+  "allowed_hosts": [
+    "blog.google",
+    "blogs.nvidia.com",
+    "deepmind.google",
+    "education.nationalgeographic.org",
+    "huggingface.co",
+    "oceanservice.noaa.gov",
+    "openai.com",
+    "phys.org",
+    "whc.unesco.org",
+    "www.acs.org",
+    "www.britannica.com",
+    "www.esa.int",
+    "www.metoffice.gov.uk",
+    "www.niddk.nih.gov",
+    "www.ninds.nih.gov",
+    "www.openai.com",
+    "www.rmg.co.uk",
+    "www.sciencedaily.com",
+    "www.usgs.gov",
+    "www.weather.gov",
+    "www.who.int"
+  ]
+}

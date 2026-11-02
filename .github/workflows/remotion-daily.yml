@@ -1,0 +1,135 @@
+{
+  "name": "Automatic Remotion —9am Cairo produce; next day5pm publish",
+  "on": {
+    "schedule": [
+      {
+        "cron": "0 6 * * *"
+      },
+      {
+        "cron": "0 7 * * *"
+      }
+    ],
+    "workflow_dispatch": {
+      "inputs": {
+        "publish_date": {
+          "description": "Optional explicit future publication date YYYY-MM-DD; never roll expired slots",
+          "type": "string",
+          "required": false
+        },
+        "dry_run": {
+          "description": "Queue/time checks only; no generation or posting",
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
+    "push": {
+      "branches": [
+        "main"
+      ],
+      "paths": [
+        ".github/remotion-daily-request.json"
+      ]
+    }
+  },
+  "permissions": {
+    "contents": "write",
+    "actions": "read"
+  },
+  "concurrency": {
+    "group": "professional-daily-science",
+    "cancel-in-progress": false
+  },
+  "jobs": {
+    "daily": {
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 100,
+      "env": {
+        "PYTHONPATH": "${{ github.workspace }}",
+        "PYTHONUNBUFFERED": "1",
+        "GITHUB_TOKEN": "${{ github.token }}",
+        "BUFFER_API_KEY": "${{ secrets.BUFFER_API_KEY }}",
+        "GEMINI_API_KEY": "${{ secrets.GEMINI_API_KEY }}",
+        "GEMINI_TEXT_API_KEY": "${{ secrets.GEMINI_TEXT_API_KEY || secrets.GEMINI_API_KEY }}",
+        "GEMINI_TTS_API_KEY": "${{ secrets.GEMINI_TTS_API_KEY || secrets.GEMINI_API_KEY }}",
+        "NODE_USE_ENV_PROXY": "1",
+        "GEMINI_TTS_VOICE": "Charon",
+        "REMOTION_PROFILE": "science"
+      },
+      "steps": [
+        {
+          "uses": "actions/checkout@v4",
+          "with": {
+            "ref": "main",
+            "fetch-depth": 0
+          }
+        },
+        {
+          "uses": "actions/setup-python@v5",
+          "with": {
+            "python-version": "3.11"
+          }
+        },
+        {
+          "name": "Install planning prerequisites",
+          "run": "python -m pip install requests beautifulsoup4 Pillow numpy pyyaml"
+        },
+        {
+          "name": "Freeze original date; verify Cairo9 guard and all existing queues",
+          "id": "decision",
+          "run": "python -m remotion_factory.daily --decide-only ${{ inputs.dry_run && '--dry-run' || '' }}"
+        },
+        {
+          "uses": "actions/setup-node@v4",
+          "if": "steps.decision.outputs.run == 'true'",
+          "with": {
+            "node-version": "24"
+          }
+        },
+        {
+          "name": "Install exact renderer, measured speech and audio prerequisites",
+          "if": "steps.decision.outputs.run == 'true'",
+          "run": "sudo apt-get update -qq\nsudo apt-get install -y ffmpeg fonts-noto-core libnss3 libgbm1 libasound2t64\npython -m pip install faster-whisper==1.2.1 google-genai google-auth num2words\ncd remotion_motion\nnpm ci --no-audit --no-fund\nnpx remotion browser ensure\nnpm run check"
+        },
+        {
+          "uses": "actions/cache@v4",
+          "if": "steps.decision.outputs.run == 'true'",
+          "with": {
+            "path": "~/.cache/huggingface\n.voice_cache\nstate/api_budget.sqlite3",
+            "key": "remotion-daily-science-${{ github.run_id }}-${{ github.run_attempt }}",
+            "restore-keys": "remotion-daily-science-\nprofessional-v3-${{ github.repository_id }}-"
+          }
+        },
+        {
+          "name": "Verify date, deduplication and uncertain-send safety regressions",
+          "run": "python -m unittest discover -s remotion_factory/tests -q"
+        },
+        {
+          "name": "New topic → retained draft/voice → Remotion → full decode → verified next-day17 scheduling",
+          "if": "steps.decision.outputs.run == 'true'",
+          "run": "python -m remotion_factory.daily"
+        },
+        {
+          "uses": "actions/upload-artifact@v4",
+          "if": "always()",
+          "with": {
+            "name": "remotion-voice-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "professional_motion/delivery/\nstate/remotion_registry.json",
+            "retention-days": 90,
+            "if-no-files-found": "warn"
+          }
+        },
+        {
+          "uses": "actions/upload-artifact@v4",
+          "if": "always()",
+          "with": {
+            "name": "remotion-complete-science-${{ github.run_id }}",
+            "path": "professional_motion/output/\nprofessional_motion/delivery/\nstate/remotion_registry.json",
+            "retention-days": 90,
+            "if-no-files-found": "warn"
+          }
+        }
+      ]
+    }
+  }
+}
