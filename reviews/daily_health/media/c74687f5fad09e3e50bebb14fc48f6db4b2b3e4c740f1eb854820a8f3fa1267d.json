@@ -1,0 +1,21 @@
+{
+  "asset": {
+    "id": 701325712,
+    "size": 29004326,
+    "updated_at": "2026-11-02T10:14:40Z",
+    "digest": "sha256:c74687f5fad09e3e50bebb14fc48f6db4b2b3e4c740f1eb854820a8f3fa1267d"
+  },
+  "technical": {
+    "passed": true,
+    "sha256": "c74687f5fad09e3e50bebb14fc48f6db4b2b3e4c740f1eb854820a8f3fa1267d",
+    "full_decode": true,
+    "duration": 119.3,
+    "width": 1080,
+    "height": 1920,
+    "audio_mean_db": -18.1,
+    "actual_visual_samples": 12,
+    "unique_visual_samples": 12,
+    "checked_at": "2026-11-02T21:54:15.678190+00:00",
+    "scope": "Independent technical media check; no claim of human narrative or scientific review"
+  }
+}
