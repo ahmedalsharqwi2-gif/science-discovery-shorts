@@ -18,7 +18,16 @@
       "video_sha256": "cf402a47b65b9a7a9c30c7f53e805cb542baf8a1aed2bc8aef6392208d566ba9",
       "render_run": 41491355804,
       "source_evidence_file": "professional_motion/output/remotion-validation.json",
-      "media_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/releases/download/production-remotion-2026-11-04-science/science-remotion-2026-11-04-science.mp4"
+      "media_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/releases/download/production-remotion-2026-11-04-science/science-remotion-2026-11-04-science.mp4",
+      "receipts": {
+        "tiktok": {
+          "phase": "intent",
+          "channel_id": "6a9edf14cd8b9c702c230272",
+          "due_at": "2026-11-04T15:00:00Z",
+          "media_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/releases/download/production-remotion-2026-11-04-science/science-remotion-2026-11-04-science.mp4",
+          "created_at": "2026-11-02T18:15:35.437416+00:00"
+        }
+      }
     }
   }
 }
