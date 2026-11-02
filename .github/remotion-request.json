@@ -1,0 +1,9 @@
+{
+  "profile": "science",
+  "slot": "remotion-2026-11-04-science",
+  "due_at": "2026-11-04T15:00:00Z",
+  "request_id": "owner-remotion-first-2026-11-02",
+  "publish_only_after_full_visual_and_technical_review": true,
+  "no_change_to_existing_posts": true,
+  "genre": "factual_explainer"
+}

@@ -1,0 +1,121 @@
+{
+  "profile": "science",
+  "series": "اسرار الكون",
+  "title": "الصابون بيمسك الدهون إزاي؟",
+  "canonical_subject": "soap-surfactants-micelles-and-rinsing",
+  "topic_key": "remotion-soap-surfactants-micelles-and-rinsing",
+  "source": {
+    "url": "https://www.cdc.gov/clean-hands/about/index.html",
+    "publisher": "CDC; general chemistry explanation",
+    "title": "About Handwashing and surfactant chemistry"
+  },
+  "scenes": [
+    {
+      "label": "المياه لوحدها مش كفاية",
+      "narration": "إيدك عليها دهون، فتفتح الحنفية وتغسلها، لكن الإحساس الدهني لسه موجود. أول ما الصابون يدخل، الوضع بيتغيّر. السر مش إن الرغوة بتاكل الأوساخ؛ السر في تركيب جزيئات صغيرة، كل واحدة فيها طرفين بيحبوا حاجتين مختلفتين.",
+      "visual": {
+        "kind": "science",
+        "kicker": "bubble"
+      },
+      "id": "scene_1",
+      "labels": [],
+      "visual_mode": "hero"
+    },
+    {
+      "label": "الماء والزيت ما بيختلطوش بسهولة",
+      "narration": "الماء والدهون ما بيتخلطوش بسهولة، وده يخلي المياه لوحدها أضعف في إزالة طبقة دهنية. الرسم بيوضح الفكرة بشكل مبسط، مش منظر مجهري مصور. عشان نفهم الصابون، لازم نشوف إزاي يقدر يقرب بين وسطين مختلفين بالشكل ده.",
+      "visual": {
+        "kind": "science",
+        "kicker": "water-oil"
+      },
+      "id": "scene_2",
+      "labels": [],
+      "visual_mode": "hero"
+    },
+    {
+      "label": "جزيء له طرفين مختلفين",
+      "narration": "الجزيء الفعّال في الصابون فيه جزء بيتفاعل كويس مع المياه، وجزء تاني ينجذب للدهون. تخيلها وظيفة مزدوجة، مش مغناطيس حرفي. الطرف اللي يحب الدهون يدخل ناحية الطبقة الدهنية، والرأس اللي يحب الماء يفضل متجه للوسط المائي.",
+      "visual": {
+        "kind": "science",
+        "kicker": "molecule"
+      },
+      "id": "scene_3",
+      "labels": [],
+      "visual_mode": "hero"
+    },
+    {
+      "label": "الدهون تدخل جوه تجمعات",
+      "narration": "مع الفرك ووجود الماء، جزيئات الصابون تساعد تفصل الدهون عن السطح. وممكن تتجمع حوالين أجزاء منها، والذيول تبقى للداخل والرؤوس للخارج. التجمعات دي اسمها مذيلات، وبتساعد الدهون تفضل منتشرة في المياه بدل ما ترجع بسهولة على السطح.",
+      "visual": {
+        "kind": "science",
+        "kicker": "micelle"
+      },
+      "id": "scene_4",
+      "labels": [],
+      "visual_mode": "hero"
+    },
+    {
+      "label": "الشطف يشيل اللي اتفك",
+      "narration": "الفرك بيساعد يفك الأوساخ من السطح، لكن لازم الشطف كمان. المياه الجارية بتاخد معاها الصابون والأوساخ اللي اتحررت. يعني مش كفاية تحط صابون وتسيبه؛ خطوات الغسيل بتكمّل بعض، والإزالة هنا جزء مهم من اللي بيحصل فعلًا.",
+      "visual": {
+        "kind": "science",
+        "kicker": "rinse"
+      },
+      "id": "scene_5",
+      "labels": [],
+      "visual_mode": "hero"
+    },
+    {
+      "label": "الرغوة مش ساعة القياس",
+      "narration": "كمية الرغوة لوحدها مش مقياس كافي لجودة غسل إيدك. الأهم توصل لكل المناطق: ظهر الإيد، وبين الصوابع، وتحت الأظافر. إرشادات غسل اليدين بتنصح بفرك الإيدين بالصابون لمدة عشرين ثانية على الأقل، وبعدها شطف وتجفيف مناسبين.",
+      "visual": {
+        "kind": "science",
+        "kicker": "timer"
+      },
+      "id": "scene_6",
+      "labels": [],
+      "visual_mode": "hero"
+    },
+    {
+      "label": "التنظيف مش تعقيم كامل",
+      "narration": "الصابون والغسيل بيساعدوا في إزالة أوساخ وميكروبات، لكن كلمة تنظيف مش معناها إن كل شيء اتعقّم بالكامل. ومش كل منظف مناسب لكل سطح. عشان كده اتبع تعليمات المنتج، وما تخلطش مواد تنظيف مع بعض لمجرد إنك عايز نتيجة أقوى.",
+      "visual": {
+        "kind": "science",
+        "kicker": "comparison"
+      },
+      "id": "scene_7",
+      "labels": [],
+      "visual_mode": "hero"
+    },
+    {
+      "label": "حاجز الدهون اتفك",
+      "narration": "المرة الجاية اللي الصابون يزيل فيها أثر دهني، افتكر إن اللي حصل مش سحر، ولا محتاج فقاقيع ضخمة. تركيب الجزيئات، والفرك، والمياه الجارية، اشتغلوا مع بعض. حاجة يومية صغيرة، وراها كيمياء بتشرح ليه الغسيل بالطريقة المناسبة بيفرق.",
+      "visual": {
+        "kind": "science",
+        "kicker": "finish"
+      },
+      "id": "scene_8",
+      "labels": [],
+      "visual_mode": "hero"
+    }
+  ],
+  "fiction": false,
+  "documented": false,
+  "facts": [],
+  "milestones": [],
+  "suitable": true,
+  "hashtags": [
+    "الصابون",
+    "كيمياء",
+    "الدهون"
+  ],
+  "editorial_review": {
+    "performed_by": "source-grounded authored script",
+    "supported": true,
+    "novel": true,
+    "fiction_disclosed": false,
+    "no_invented_witness_dialogue": true
+  },
+  "visual_family": "remotion_documentary",
+  "variant": "science"
+}
