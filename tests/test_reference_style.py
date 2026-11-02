@@ -1,3 +1,4 @@
+"""Archived recovery contracts; active workflow layout is tested separately."""
 import json
 import unittest
 from pathlib import Path
@@ -27,7 +28,7 @@ class ReferenceStyleTests(unittest.TestCase):
 
     def test_new_template_is_review_default_and_daily_keeps_approved_style(self):
         import yaml
-        workflow=yaml.safe_load(Path('.github/workflows/professional-daily.yml').read_text())
+        workflow=yaml.safe_load(Path('tests/fixtures/retired_workflows/professional-daily.yml').read_text())
         option=workflow['on']['workflow_dispatch']['inputs']['review_style']
         self.assertEqual(option['default'], 'reference')
         render=next(s for s in workflow['jobs']['render']['steps'] if 'REVIEW_VISUAL_STYLE' in s.get('env',{}))

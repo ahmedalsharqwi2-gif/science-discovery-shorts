@@ -1,0 +1,81 @@
+{
+  "name": "Production v2 isolated full-film review (never publishes)",
+  "on": {
+    "workflow_dispatch": {
+      "inputs": {
+        "delivery_commit": {
+          "description": "Full40hex Git commit containing matching archived delivery/story.json, timing.json, narration.wav. Archived tests do not approve new-topic cutover.",
+          "required": true,
+          "type": "string"
+        }
+      }
+    }
+  },
+  "permissions": {
+    "contents": "read"
+  },
+  "concurrency": {
+    "group": "professional-daily-science",
+    "cancel-in-progress": false
+  },
+  "jobs": {
+    "candidate": {
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 90,
+      "steps": [
+        {
+          "uses": "actions/checkout@v4",
+          "with": {
+            "fetch-depth": 1
+          }
+        },
+        {
+          "uses": "actions/setup-python@v5",
+          "with": {
+            "python-version": "3.11"
+          }
+        },
+        {
+          "uses": "actions/setup-node@v4",
+          "with": {
+            "node-version": "22"
+          }
+        },
+        {
+          "name": "Install local review dependencies",
+          "run": "sudo apt-get update -qq\nsudo apt-get install -y ffmpeg\npython -m pip install numpy Pillow requests beautifulsoup4 pytest\ncd professional_motion\nnpm ci\nnpx playwright-core install --with-deps chromium"
+        },
+        {
+          "name": "Test candidate safety and media input validation",
+          "run": "python -m pytest -q tests/test_production_v2.py tests/test_v2_review_bundle.py"
+        },
+        {
+          "name": "Restore a pinned complete delivery without touching legacy outputs",
+          "env": {
+            "DELIVERY_COMMIT": "${{ inputs.delivery_commit }}"
+          },
+          "run": "python - <<'PIN'\nimport os,re\nif not re.fullmatch(r'[0-9a-f]{40}',os.environ['DELIVERY_COMMIT']): raise SystemExit('A full immutable Git commit is required')\nPIN\ngit fetch --no-tags origin \"$DELIVERY_COMMIT\"\npython - <<'RESTORE'\nimport os,subprocess\nfrom pathlib import Path\nout=Path('.candidate-v2/delivery');out.mkdir(parents=True,exist_ok=False)\nfor name in ['story.json','timing.json','narration.wav']:\n data=subprocess.check_output(['git','show',os.environ['DELIVERY_COMMIT']+':professional_motion/delivery/'+name])\n (out/name).write_bytes(data)\noptional=subprocess.run(['git','show',os.environ['DELIVERY_COMMIT']+':professional_motion/delivery/narration.source.json'],capture_output=True)\nif optional.returncode == 0: (out/'narration.source.json').write_bytes(optional.stdout)\n(out/'input-provenance.json').write_text(__import__('json').dumps({'commit':os.environ['DELIVERY_COMMIT'],'archived_input':True,'new_topic_approved':False},indent=2))\nRESTORE"
+        },
+        {
+          "name": "Snapshot existing history into a separate additive ledger",
+          "run": "python -m production_v2 snapshot --root . --ledger .candidate-v2/migration.sqlite3"
+        },
+        {
+          "name": "Render and fully decode complete review film with original narration",
+          "run": "python -m production_v2.review --profile science --delivery-dir .candidate-v2/delivery --output-dir .candidate-v2/output"
+        },
+        {
+          "name": "Upload review media and safe evidence",
+          "if": "always()",
+          "uses": "actions/upload-artifact@v4",
+          "with": {
+            "name": "science-production-v2-review-${{ github.run_id }}",
+            "path": ".candidate-v2/output/candidate-review.mp4\n.candidate-v2/output/candidate-verification.json\n.candidate-v2/output/render.json\n.candidate-v2/delivery/input-provenance.json",
+            "if-no-files-found": "error",
+            "retention-days": 7
+          }
+        }
+      ]
+    }
+  }
+}

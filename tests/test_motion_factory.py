@@ -1,3 +1,4 @@
+"""Archived recovery contracts; active workflow layout is tested separately."""
 import json
 import os
 import subprocess
@@ -53,7 +54,7 @@ class MotionFactoryTests(unittest.TestCase):
     def test_daily_workflow_only_publishes_after_release_gate(self):
         import yaml
         root=Path(__file__).resolve().parents[1]
-        doc=yaml.safe_load((root/'.github/workflows/professional-daily.yml').read_text())
+        doc=yaml.safe_load((root/'tests/fixtures/retired_workflows/professional-daily.yml').read_text())
         steps=[s for job in doc['jobs'].values() for s in job.get('steps',[])]
         publish=next(s for s in steps if s.get('name')=='Schedule approved daily film for exactly 17:00 Cairo')
         self.assertIn("needs.produce.outputs.publish == 'true'",publish['if'])
