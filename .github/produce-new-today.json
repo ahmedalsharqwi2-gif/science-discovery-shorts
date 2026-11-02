@@ -1,0 +1,10 @@
+{
+  "request_id": "owner-new-today-2026-11-02",
+  "repository": "science-discovery-shorts",
+  "profile": "science",
+  "slot": "requested-2026-11-02-science",
+  "due_at": "2026-11-02T15:00:00Z",
+  "preserve_tomorrow_posts": true,
+  "new_topic_required": true,
+  "no_source_requirement": true
+}

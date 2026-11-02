@@ -1,3 +1,4 @@
+import {loopPhase} from './animation_time.mjs';
 import {proceduralDirector} from './procedural_story.js';
 import {acousticDirector} from './acoustic_director.js';
 import {scienceField} from './science_field.js';
@@ -280,7 +281,7 @@ const procedural=useProcedural&&new URLSearchParams(location.search).get('pipeli
 window.renderAt=(time,duration=D)=>{
  D=duration;const t=Math.max(0,time),u=t/D;
  let index=times.findLastIndex(s=>s<=u);index=Math.max(0,index);
- const sceneStart=times[index]*D,sceneEnd=(times[index+1]??1)*D,local=t-sceneStart,p=clamp(local/(sceneEnd-sceneStart));
+ const sceneStart=times[index]*D,sceneEnd=(times[index+1]??1)*D,local=Math.max(0,t-sceneStart),p=clamp(local/(sceneEnd-sceneStart));
  uniforms.clock.value=t;uniforms.morph.value=index===6?(.5-.5*Math.cos(p*Math.PI*2)):0;
  if(useOctopus)poseOctopus(t);
  octopus.visible=useOctopus&&[0,1,6,7].includes(index);macro.visible=useOctopus&&[2,3].includes(index);neural.visible=useOctopus&&index===4;layers.visible=useOctopus&&index===5;reef.visible=useOctopus&&index===6;channel.root.visible=!useProcedural&&!useOctopus&&!useHaunted;if(!useProcedural&&!useOctopus&&!useHaunted)channel.update(config,index,local,p,t);
@@ -293,7 +294,7 @@ window.renderAt=(time,duration=D)=>{
  macro.rotation.set(index===3?.24:.08,.08*Math.sin(local*.4),.025*Math.sin(local*.6));macro.scale.setScalar(index===2?1.26:1.1);macro.position.y=-.25;
  for(const f of fibers){const pos=f.line.geometry.attributes.position;pos.setXYZ(0,Math.cos(f.a)*expansion,Math.sin(f.a)*expansion,0);pos.setXYZ(1,Math.cos(f.a)*2.05,Math.sin(f.a)*2.05,.02);pos.needsUpdate=true;}
  neural.rotation.y=.12*Math.sin(local*.22);neural.position.y=-.25;neural.scale.setScalar(.92);
- impulses.forEach((m,i)=>m.position.copy(curves[i].getPoint((local*.36+i*.13)%1)));
+ if(useOctopus&&neural.visible)impulses.forEach((m,i)=>m.position.copy(curves[i].getPoint(loopPhase(local*.36+i*.13))));
  hub.scale.setScalar(1+.1*Math.sin(local*5));
  layers.rotation.y=.12+Math.sin(local*.25)*.11;layers.position.y=-.3;layers.scale.setScalar(1.03);
  photons.forEach((m,i)=>{const q=(local*.35+i*.13)%1,travel=q<.5?q*2:2-q*2;m.position.set(-1.5+(i%4)+Math.max(0,q-.5)*.8,1.7-travel*2.5,Math.sin(i)*.8);m.material.color.setHex(q<.5?0xe2f6ff:0x87d5ff);});
