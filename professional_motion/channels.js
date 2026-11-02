@@ -185,7 +185,7 @@ export function channelStage(scene){
    archStones.forEach((o,i)=>o.position.z=.15+(mode==='assembly'?(1-p)*i*.08:0));archPulse.position.set(Math.cos(local*.8)*1.26,Math.abs(Math.sin(local*.8))*1.26-.3,.24);
    stream.forEach((o,i)=>{const z=2-((local*.9+i*.3)%4);o.position.set((i%2?1:-1)*(.7+.3*Math.exp(-z*z)), -1.1,z);});
    dome.visible=!(index===2&&p>.35);cylinder.material.transparent=true;cylinder.material.opacity=index===2?.42:1;
-   loads.forEach((o,i)=>o.position.copy(ribs[i].curve.getPoint((local*.3+i*.1)%1)));
+   loads.forEach((o,i)=>{const rib=ribs.length?ribs[i%ribs.length]:null;if(rib?.curve)o.position.copy(rib.curve.getPoint((local*.3+i*.1)%1));});
    if(index===3)g.rotation.x=.35*Math.sin(p*Math.PI);
    if(index===6)g.position.y=-.25+(1-Math.min(1,local/2))*.7;
    if(g===aquaBridge)g.scale.setScalar(index===1?.64:.78);
