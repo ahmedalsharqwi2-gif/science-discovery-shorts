@@ -58,5 +58,11 @@
         }
       }
     }
+  },
+  "cutover_evidence": {
+    "slot": "remotion-2026-11-04-science",
+    "video_sha256": "cf402a47b65b9a7a9c30c7f53e805cb542baf8a1aed2bc8aef6392208d566ba9",
+    "run": 41491355804,
+    "ready": true
   }
 }
