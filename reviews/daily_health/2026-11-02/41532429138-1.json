@@ -1,0 +1,98 @@
+{
+  "date": "2026-11-02",
+  "profile": "science",
+  "phase": "postpublish",
+  "checked_at": "2026-11-02T21:53:57.000440+00:00",
+  "run_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/actions/runs/41532429138",
+  "report_path": "reviews/daily_health/2026-11-02/41532429138-1.json",
+  "publication_due_utc": "2026-11-02T15:00:00+00:00",
+  "errors": [],
+  "passed": true,
+  "generation_calls": 0,
+  "publication_mutations": 0,
+  "preview": false,
+  "scheduler": {
+    "observed": false,
+    "reason": "Monitoring was activated after this date morning; no historical9am success claimed"
+  },
+  "observed_receipts": {
+    "tiktok": [
+      {
+        "id": "6ae86293796ca84be0ce2d3b",
+        "channelId": "6a9edf14cd8b9c702c230272",
+        "status": "sent",
+        "dueAt": "2026-11-02T15:00:00.000Z",
+        "sentAt": "2026-11-02T15:12:27.265Z",
+        "externalLink": "https://tiktok.com/@pagesof_history/video/7703590546853596437"
+      }
+    ],
+    "youtube": [
+      {
+        "id": "6ae862954a24ce7f36351999",
+        "channelId": "6a9edee8cd8b9c702c2301cb",
+        "status": "sent",
+        "dueAt": "2026-11-02T15:00:00.000Z",
+        "sentAt": "2026-11-02T15:02:50.984Z",
+        "externalLink": "https://www.youtube.com/shorts/4E0TP1oq0dk"
+      }
+    ],
+    "facebook": [
+      {
+        "id": "6ae86297c100ba337af30909",
+        "channelId": "6a9edebbcd8b9c702c230128",
+        "status": "sent",
+        "dueAt": "2026-11-02T15:00:00.000Z",
+        "sentAt": "2026-11-02T15:02:38.781Z",
+        "externalLink": "https://www.facebook.com/reel/1828665641785941/"
+      }
+    ]
+  },
+  "receipts": {
+    "tiktok": {
+      "id": "6ae86293796ca84be0ce2d3b",
+      "channelId": "6a9edf14cd8b9c702c230272",
+      "status": "sent",
+      "dueAt": "2026-11-02T15:00:00.000Z",
+      "sentAt": "2026-11-02T15:12:27.265Z",
+      "externalLink": "https://tiktok.com/@pagesof_history/video/7703590546853596437"
+    },
+    "youtube": {
+      "id": "6ae862954a24ce7f36351999",
+      "channelId": "6a9edee8cd8b9c702c2301cb",
+      "status": "sent",
+      "dueAt": "2026-11-02T15:00:00.000Z",
+      "sentAt": "2026-11-02T15:02:50.984Z",
+      "externalLink": "https://www.youtube.com/shorts/4E0TP1oq0dk"
+    },
+    "facebook": {
+      "id": "6ae86297c100ba337af30909",
+      "channelId": "6a9edebbcd8b9c702c230128",
+      "status": "sent",
+      "dueAt": "2026-11-02T15:00:00.000Z",
+      "sentAt": "2026-11-02T15:02:38.781Z",
+      "externalLink": "https://www.facebook.com/reel/1828665641785941/"
+    }
+  },
+  "episode": {
+    "slot": "requested-2026-11-02-science",
+    "title": "رحلة جو جوه جسم الإنسان",
+    "pipeline": "legacy",
+    "expected_sha256": "c74687f5fad09e3e50bebb14fc48f6db4b2b3e4c740f1eb854820a8f3fa1267d"
+  },
+  "technical": {
+    "passed": true,
+    "sha256": "c74687f5fad09e3e50bebb14fc48f6db4b2b3e4c740f1eb854820a8f3fa1267d",
+    "full_decode": true,
+    "duration": 119.3,
+    "width": 1080,
+    "height": 1920,
+    "audio_mean_db": -18.1,
+    "actual_visual_samples": 12,
+    "unique_visual_samples": 12,
+    "checked_at": "2026-11-02T21:54:15.678190+00:00",
+    "scope": "Independent technical media check; no claim of human narrative or scientific review",
+    "reused_immutable_media_check": false,
+    "live_asset_metadata_verified": true
+  },
+  "media_binding": "Three live sent post IDs match retained original submission receipts; original release SHA independently verified. Platform-transcoded bytes are not claimed identical."
+}
