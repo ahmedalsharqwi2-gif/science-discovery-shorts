@@ -36,13 +36,20 @@ def prepare(profile,slot):
     attempts=data.setdefault('requested_production',{})
     prior=attempts.get(slot)
     retained=request.get('retained_draft')
-    if prior and prior.get('phase')=='writing' and not (existing and existing.get('story')) and not retained:
+    if prior and prior.get('phase')=='writing' and not (existing and existing.get('story')) and not retained and not (profile=='news' and request.get('news_source')):
         raise RuntimeError('Earlier writing attempt retained; resume its saved draft instead of generating again')
     if not existing:
         attempts.setdefault(slot,{'started_at':datetime.now(timezone.utc).isoformat()}).update(phase='writing',request_id=request['request_id'],due_at=request['due_at'])
         if retained:attempts[slot]['retained_draft_source_run']=retained['source_run']
         editorial.save(data);checkpoint()
     from .requested_editorial import editor,validate,require_novel_story
+    original_candidates=editorial.candidates
+    if profile=='news' and request.get('news_source'):
+        source=copy.deepcopy(request['news_source'])
+        from .news_policy import require_fresh
+        require_fresh(source)
+        source.update(key=hashlib.sha256(editorial.canonical(source['url']).encode()).hexdigest()[:16],family='compute',variant='chip')
+        editorial.candidates=lambda actual:[copy.deepcopy(source)] if actual=='news' else original_candidates(actual)
     original_ask=editorial.ask
     if retained:
         draftpath=Path(retained['path']).resolve()
@@ -56,7 +63,7 @@ def prepare(profile,slot):
         editorial.ask=use_retained
     try:
         with editor(editorial,profile):story=editorial.prepare(profile,slot)
-    finally:editorial.ask=original_ask
+    finally:editorial.ask=original_ask;editorial.candidates=original_candidates
     validate(story,profile);require_novel_story(story,history)
     if profile!='news':
         story['editorial_review']={'performed':False,'required':False,'reason':'Owner permits general knowledge and original fiction without mandatory external sources or independent fact-check'}
