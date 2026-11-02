@@ -1,0 +1,36 @@
+{
+  "removed_default_branch_definitions": [
+    ".github/workflows/verify_immediate_delivery.yml",
+    ".github/workflows/motion_engine.yml",
+    ".github/workflows/daily-ai-news.yml",
+    ".github/workflows/professional-octopus-proof.yml"
+  ],
+  "prior_disabled_workflow_ids": [
+    {
+      "id": 382968882,
+      "name": "Verify immediate publication delivery",
+      "path": ".github/workflows/verify_immediate_delivery.yml"
+    },
+    {
+      "id": 386884151,
+      "name": "Shared motion renderer checks",
+      "path": ".github/workflows/motion_engine.yml"
+    },
+    {
+      "id": 391112157,
+      "name": "Daily Egyptian AI News",
+      "path": ".github/workflows/daily-ai-news.yml"
+    },
+    {
+      "id": 399835527,
+      "name": "Professional octopus proof — original Charon narration",
+      "path": ".github/workflows/professional-octopus-proof.yml"
+    }
+  ],
+  "inert_registration_commit": "162b3a488fc33950e7f0f8ef81c7061c6400890e",
+  "historical_run_deletions": 0,
+  "artifact_deletions": 0,
+  "social_mutations": 0,
+  "generation_calls": 0,
+  "note": "Registered inert manual-only permanently false jobs, then removed them from default branch so GitHub can retire their catalog definitions without deleting historical runs."
+}

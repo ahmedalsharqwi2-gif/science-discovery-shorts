@@ -1,7 +1,7 @@
 {
   "workflow_catalog": true,
   "apply": true,
-  "revision": 11,
+  "revision": 12,
   "keep_paths": [
     ".github/workflows/remotion-daily.yml",
     ".github/workflows/remotion-health.yml",
@@ -42,5 +42,6 @@
     ".github/workflows/daily-ai-news.yml",
     ".github/workflows/professional-octopus-proof.yml"
   ],
-  "recovery_ref": "archive/housekeeping-41535654634-1/main-before-cleanup"
+  "recovery_ref": "archive/housekeeping-41535654634-1/main-before-cleanup",
+  "catalog_removal_validation": true
 }
