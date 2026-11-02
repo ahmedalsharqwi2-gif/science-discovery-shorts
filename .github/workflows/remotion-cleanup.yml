@@ -1,0 +1,79 @@
+{
+  "name": "Conservative repository cleanup — recoverable branches and generated caches",
+  "on": {
+    "push": {
+      "branches": [
+        "main"
+      ],
+      "paths": [
+        ".github/remotion-cleanup-request.json"
+      ]
+    },
+    "workflow_dispatch": {
+      "inputs": {
+        "apply": {
+          "description": "Apply only the guarded plan; archive every deleted branch first",
+          "type": "boolean",
+          "default": false
+        }
+      }
+    }
+  },
+  "permissions": {
+    "contents": "write",
+    "actions": "read",
+    "pull-requests": "read"
+  },
+  "concurrency": {
+    "group": "repository-housekeeping-science",
+    "cancel-in-progress": false
+  },
+  "jobs": {
+    "cleanup": {
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 35,
+      "env": {
+        "PYTHONPATH": "${{ github.workspace }}",
+        "PYTHONUNBUFFERED": "1",
+        "GITHUB_TOKEN": "${{ github.token }}"
+      },
+      "steps": [
+        {
+          "uses": "actions/checkout@v4",
+          "with": {
+            "ref": "main",
+            "fetch-depth": 1
+          }
+        },
+        {
+          "uses": "actions/setup-python@v5",
+          "with": {
+            "python-version": "3.11"
+          }
+        },
+        {
+          "name": "Install inventory and regression prerequisites",
+          "run": "python -m pip install requests beautifulsoup4"
+        },
+        {
+          "name": "Verify protected refs, active work and cache-only deletion guards",
+          "run": "python -m unittest discover -s remotion_factory/tests -q"
+        },
+        {
+          "name": "Inventory or apply the guarded recovery-backed cleanup",
+          "run": "python -m remotion_factory.housekeeping"
+        },
+        {
+          "uses": "actions/upload-artifact@v4",
+          "if": "always()",
+          "with": {
+            "name": "repository-cleanup-science-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "cleanup-output/",
+            "retention-days": 90,
+            "if-no-files-found": "warn"
+          }
+        }
+      ]
+    }
+  }
+}
