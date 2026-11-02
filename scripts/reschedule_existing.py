@@ -10,7 +10,7 @@ def instant(value):
     return result.astimezone(timezone.utc)
 
 def unchanged(post):
-    return {'channelId':post['channelId'],'text':post.get('text'),'assets':post.get('assets',[]),'shareMode':post.get('shareMode'),'schedulingType':post.get('schedulingType')}
+    return {'channelId':post['channelId'],'text':post.get('text'),'assets':post.get('assets',[]),'shareMode':post.get('shareMode'),'schedulingType':post.get('schedulingType'),**({'metadata':post['metadata']} if 'metadata' in post else {})}
 
 class EditRejected(RuntimeError):pass
 
@@ -22,7 +22,8 @@ def retime(item,old_due,new_due,progress,lookup,edit,checkpoint):
         raise ValueError('Only an existing scheduled video can move')
     current=instant(before['dueAt'])
     if current not in (instant(old_due),instant(new_due)):raise ValueError('Unexpected current time; reconcile instead of overwriting')
-    baseline=progress.get('before',before)
+    baseline=copy.deepcopy(progress.get('before',before))
+    if 'metadata' not in baseline and 'metadata' in before:baseline['metadata']=copy.deepcopy(before['metadata'])
     if unchanged(before)!=unchanged(baseline):raise ValueError('Existing video/text changed; no edit')
     if current!=instant(new_due):
         if progress.get('phase') in ('intent','uncertain','acknowledged'):
@@ -44,20 +45,39 @@ def retime(item,old_due,new_due,progress,lookup,edit,checkpoint):
     checkpoint()
     return after
 
-def query(text):
+def query(text,variables=None):
     import requests
     key=os.environ['BUFFER_API_KEY'].strip()
     if not key:raise ValueError('Missing this repository Buffer key')
-    r=requests.post('https://api.buffer.com',headers={'Authorization':'Bearer '+key},json={'query':text},timeout=45)
+    r=requests.post('https://api.buffer.com',headers={'Authorization':'Bearer '+key},json={'query':text,**({'variables':variables} if variables is not None else {})},timeout=45)
     r.raise_for_status();data=r.json()
     if data.get('errors'):raise RuntimeError('Buffer query rejected; response body omitted')
     return data['data']
 
-FIELDS='id channelId status dueAt text shareMode schedulingType assets { source }'
+FIELDS="id channelId channelService status dueAt text shareMode schedulingType assets { source } metadata { __typename ... on YoutubePostMetadata { title category {id} privacy license embeddable madeForKids notifySubscribers isAiGenerated annotations { __typename } } ... on FacebookPostMetadata {type title firstComment annotations {__typename} linkAttachment {__typename}} ... on InstagramPostMetadata {type shouldShareToFeed isAiGenerated link firstComment annotations {__typename} geolocation {__typename} stickerFields {__typename}} ... on TiktokPostMetadata {title isAiGenerated annotations {__typename}} }"
 def lookup(identifier):
     return query('query { post(input: {id: '+json.dumps(identifier)+'}) { '+FIELDS+' } }')['post']
+def edit_input(post,due):
+    service=post['channelService'].lower();metadata=copy.deepcopy(post.get('metadata') or {})
+    if metadata.get('annotations') or metadata.get('geolocation') or metadata.get('stickerFields') or metadata.get('linkAttachment'):
+        raise EditRejected('Complex existing metadata requires explicit preservation; no partial edit')
+    if service=='youtube':
+        keys=('title','privacy','license','embeddable','madeForKids','notifySubscribers','isAiGenerated')
+        values={k:metadata[k] for k in keys if metadata.get(k) is not None}
+        if not metadata.get('category',{}).get('id'):raise EditRejected('Existing YouTube category is missing')
+        values['categoryId']=str(metadata['category']['id'])
+    elif service=='facebook':
+        values={k:metadata[k] for k in ('type','firstComment') if metadata.get(k) is not None}
+    elif service=='instagram':
+        values={k:metadata[k] for k in ('type','shouldShareToFeed','isAiGenerated','link','firstComment') if metadata.get(k) is not None}
+    elif service=='tiktok':
+        values={k:metadata[k] for k in ('title','isAiGenerated') if metadata.get(k) is not None}
+    else:raise EditRejected('Unsupported existing service; no edit')
+    return {'id':post['id'],'dueAt':due,'mode':'customScheduled','schedulingType':post['schedulingType'],'text':post['text'],'assets':[{'video':{'url':asset['source']}} for asset in post['assets']],'metadata':{service:values}}
 def edit(identifier,due):
-    result=query('mutation { editPost(input: {id: '+json.dumps(identifier)+', dueAt: '+json.dumps(due)+', mode: customScheduled}) { ... on PostActionSuccess { post {id dueAt} } ... on MutationError {message} } }')['editPost']
+    current=lookup(identifier)
+    payload=edit_input(current,due)
+    result=query('mutation RetimeExisting($input:EditPostInput!){ editPost(input:$input) { ... on PostActionSuccess { post {id dueAt} } ... on MutationError {message} } }',{'input':payload})['editPost']
     if not result.get('post'):
         message=str(result.get('message','Buffer rejected the date edit')).replace(os.environ.get('BUFFER_API_KEY','<missing>'),'[REDACTED]')[:800]
         raise EditRejected(message)
@@ -105,7 +125,7 @@ def main():
         progress=audit['posts'].setdefault(service,{})
         if request.get('reconcile_same_id_edit') and progress.get('phase')=='uncertain':
             current=lookup(item['id'])
-            if current.get('status')!='scheduled' or unchanged(current)!=unchanged(progress['before']):raise ValueError('Pending edit state changed; no retry')
+            if current.get('status')!='scheduled' or {k:v for k,v in unchanged(current).items() if k!='metadata'}!={k:v for k,v in unchanged(progress['before']).items() if k!='metadata'}:raise ValueError('Pending edit state changed; no retry')
             if instant(current['dueAt'])==instant(request['old_due_at']):
                 audit.setdefault('reconciled_attempts',[]).append({'service':service,'prior':copy.deepcopy(progress),'observed':copy.deepcopy(current)})
                 progress['phase']='reconciled_no_schedule_change';checkpoint()

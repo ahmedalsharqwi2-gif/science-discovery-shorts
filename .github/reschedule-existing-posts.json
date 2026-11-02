@@ -20,5 +20,5 @@
     }
   },
   "reconcile_same_id_edit": true,
-  "repair_revision": "explicit-customScheduled-share-mode"
+  "repair_revision": "preserve-entire-current-post-while-editing-due"
 }
