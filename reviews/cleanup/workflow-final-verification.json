@@ -1,0 +1,43 @@
+{
+  "passed": true,
+  "active_workflow_count": 6,
+  "active_workflows": [
+    "remotion-daily.yml",
+    "remotion-health.yml",
+    "remotion-cleanup.yml",
+    "arabic_guard.yml",
+    "validation.yml",
+    "checks.yml"
+  ],
+  "retired_definitions": 24,
+  "retirement_manifest": "reviews/cleanup/workflow-simplification.json",
+  "inactive_catalog_evidence": "reviews/cleanup/workflow-catalog-latest.json",
+  "current_day_read_only_controller_preflight": {
+    "run": false,
+    "reason": "all three existing destination slots occupied; preserve them",
+    "due_at": "2026-11-03T15:00:00Z",
+    "occupied_slot_proof": {
+      "retained_post_ids_verified": true,
+      "original_release_verified": true,
+      "video_sha256": "a7861d4462e10dbb252e2f293cb011feee20272a34ca1282fdfaeffb7c7643a8",
+      "duration": 108.566667,
+      "technical_passed": true
+    },
+    "dry_run": true,
+    "generation_calls": 0,
+    "publication_mutations": 0
+  },
+  "future_scheduling_audit": {
+    "date": "2026-11-04",
+    "preview": true,
+    "run": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/actions/runs/41542344035",
+    "three_live_receipts_verified": true,
+    "full_media_sha256": "cf402a47b65b9a7a9c30c7f53e805cb542baf8a1aed2bc8aef6392208d566ba9"
+  },
+  "actual_09_clock_run_observed": false,
+  "clock_evidence": "First09Cairo event on2026-11-03 is still upcoming; preflight is not claimed as that event",
+  "guide": "WORKFLOWS.md",
+  "historical_run_deletions": 0,
+  "publication_mutations": 0,
+  "generation_calls": 0
+}
