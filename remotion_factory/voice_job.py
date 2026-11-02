@@ -15,7 +15,7 @@ def main():
  def started(data):
   e=data['episodes'][req['slot']]
   if not wav.exists() and e['status'] in ('voice_requested','voice_ready'):raise RuntimeError('A voice request already exists; restore it instead of synthesizing again')
-  if not wav.exists():e.update(status='voice_requested',voice_request_run=int(os.environ['GITHUB_RUN_ID']))
+  if not wav.exists():e.update(status='voice_requested',voice_request_run=int(os.environ['GITHUB_RUN_ID']),source_run=int(os.environ['GITHUB_RUN_ID']))
  mutate(started)
  if wav.exists():
   if not source.exists() or json.loads(source.read_text()).get('text')!=full:raise ValueError('Retained voice text differs')
