@@ -21,7 +21,10 @@ def main():
   if path in keep:
    if row['state']!='active':report['errors'].append('Required workflow is not active: '+path)
    report['active'].append({k:row[k] for k in ('id','name','path','state')});continue
-  if path not in retired:report['unknown_preserved'].append({k:row[k] for k in ('id','name','path','state')});continue
+  if path not in retired:
+   report['unknown_preserved'].append({k:row[k] for k in ('id','name','path','state')})
+   if row['state']=='active':report['errors'].append('Unexpected active workflow outside current plan: '+path)
+   continue
   if row['state']=='active':gh('/actions/workflows/'+str(row['id'])+'/disable','PUT')
   actual=gh('/actions/workflows/'+str(row['id']))
   if actual['state']=='active':report['errors'].append('Retired workflow remains active: '+path)

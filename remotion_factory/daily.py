@@ -42,7 +42,9 @@ def decide(args):
  due=due.isoformat().replace('+00:00','Z');mapping=destinations(profile);queues={k:queued(v,due) for k,v in mapping.items()}
  if any(queues.values()):
   if not all(len(rows)==1 for rows in queues.values()):raise ValueError('Partial or ambiguous occupied slot; reconcile existing receipts, never submit duplicates')
-  return {'run':False,'reason':'all three existing destination slots occupied; preserve them','due_at':due}
+  from .stock import verify_occupied
+  proof=verify_occupied(profile,mapping,queues,due)
+  return {'run':False,'reason':'all three existing destination slots occupied; preserve them','due_at':due,'occupied_slot_proof':proof}
  selected=None
  def choose(data):
   nonlocal selected
