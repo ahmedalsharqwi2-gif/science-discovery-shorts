@@ -1,0 +1,49 @@
+{
+  "name": "Move exact existing posts to owner-requested time; no new posts",
+  "on": {
+    "push": {
+      "branches": [
+        "main"
+      ],
+      "paths": [
+        ".github/reschedule-existing-posts.json"
+      ]
+    }
+  },
+  "permissions": {
+    "contents": "write"
+  },
+  "concurrency": {
+    "group": "professional-daily-science",
+    "cancel-in-progress": false
+  },
+  "jobs": {
+    "retime": {
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 15,
+      "env": {
+        "BUFFER_API_KEY": "${{ secrets.BUFFER_API_KEY }}"
+      },
+      "steps": [
+        {
+          "uses": "actions/checkout@v4",
+          "with": {
+            "fetch-depth": 0
+          }
+        },
+        {
+          "run": "python -m pip install requests\npython -m unittest discover -s tests -p test_reschedule_existing.py -v\npython -m scripts.reschedule_existing"
+        },
+        {
+          "if": "always()",
+          "uses": "actions/upload-artifact@v4",
+          "with": {
+            "name": "same-post-rescheduling-${{ github.run_id }}",
+            "path": "work/reschedule-result.json\nstate/professional_topics.json\nstate/publication_stock.json",
+            "retention-days": 30
+          }
+        }
+      ]
+    }
+  }
+}

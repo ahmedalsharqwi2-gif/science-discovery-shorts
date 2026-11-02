@@ -1,0 +1,22 @@
+{
+  "request_id": "owner-retime-2026-11-02-1700",
+  "repository": "ahmedalsharqwi2-gif/science-discovery-shorts",
+  "slot": "daily-2026-11-02",
+  "video_sha256": "a7861d4462e10dbb252e2f293cb011feee20272a34ca1282fdfaeffb7c7643a8",
+  "old_due_at": "2026-11-03T15:00:00Z",
+  "new_due_at": "2026-11-02T15:00:00Z",
+  "posts": {
+    "tiktok": {
+      "id": "6ae84ea6c8c477a933a147d2",
+      "channel_id": "6a9edf14cd8b9c702c230272"
+    },
+    "facebook": {
+      "id": "6ae84eab4af9a19eb717241c",
+      "channel_id": "6a9edebbcd8b9c702c230128"
+    },
+    "youtube": {
+      "id": "6ae84ea81057bd49b78d37ef",
+      "channel_id": "6a9edee8cd8b9c702c2301cb"
+    }
+  }
+}
