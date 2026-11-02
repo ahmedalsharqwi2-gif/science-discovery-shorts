@@ -281,6 +281,7 @@ const acoustic=pipeline==='v2'&&config.profile==='science'&&config.visual_plan?.
 const svgScenes=await createSvgScenes(config);
 const procedural=useProcedural&&new URLSearchParams(location.search).get('pipeline')==='v2'?proceduralDirector(scene,config):null;
 window.renderAt=(time,duration=D)=>{
+ window.__fxTime=time;
  D=duration;const t=Math.max(0,time),u=t/D;
  let index=times.findLastIndex(s=>s<=u);index=Math.max(0,index);
  const sceneStart=times[index]*D,sceneEnd=(times[index+1]??1)*D,local=Math.max(0,t-sceneStart),p=clamp(local/(sceneEnd-sceneStart));
@@ -311,5 +312,5 @@ window.renderAt=(time,duration=D)=>{
  svgScenes.draw(ctx,index,p);
  return {scene:index+1,time:t,duration:D,originalVoice:!!timing};
 };
-window.captureFrame=()=>{endCtx.drawImage(renderer.domElement,0,0);endCtx.drawImage(overlay,0,0);return endCanvas.toDataURL('image/jpeg',.96).split(',')[1];};
+window.captureFrame=()=>{endCtx.drawImage(renderer.domElement,0,0);endCtx.drawImage(overlay,0,0);if(window.applyVisualFX)window.applyVisualFX(endCtx,renderer.domElement,overlay,window.__fxTime||0,D);return endCanvas.toDataURL('image/jpeg',.96).split(',')[1];};
 await document.fonts.load('700 96px Noto');await document.fonts.load('24px Plex');window.renderAt(0);window.ready=true;
