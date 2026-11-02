@@ -41,6 +41,10 @@
         },
         {
           "run": "python -m unittest discover -s tests -p test_daily_professional.py -q\npython -m compileall -q professional_motion\nnode --check professional_motion/channels.js\nnode --check professional_motion/scene.js\nnode --check professional_motion/render.mjs\npython -m unittest discover -s tests -p test_professional_policy.py -q\nnode --check professional_motion/haunted.js\npython -m unittest discover -s tests -p test_factory_reliability.py -q"
+        },
+        {
+          "name": "Verify new duration, next-day target and executable scene contracts",
+          "run": "python -m unittest discover -s tests -p test_duration_rule.py -q\npython -m unittest discover -s tests -p test_daily_request.py -q\npython -m unittest discover -s tests -p test_renderer_contract.py -q\npython -m unittest discover -s tests -p test_speech_characters.py -q\nnode --test professional_motion/svg_story.test.mjs"
         }
       ]
     }

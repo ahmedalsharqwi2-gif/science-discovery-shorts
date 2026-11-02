@@ -2,7 +2,7 @@ import json,os,tempfile,unittest
 from datetime import datetime,timedelta,timezone
 from pathlib import Path
 from unittest.mock import patch
-from professional_motion.policy import require_duration
+from professional_motion.policy import require_duration,MIN_SECONDS
 from professional_motion.news_policy import require_fresh,choose,validate_memes
 from professional_motion.metadata import make
 from professional_motion.merge_chunks import check_intervals
@@ -11,9 +11,9 @@ from professional_motion.fiction import validate_scares
 
 class LengthAndMetadataTests(unittest.TestCase):
  def test_exact_boundary_durations_are_rejected(self):
-  for n in (0,89.9,90,180,181,float('nan')):
+  for n in (0,MIN_SECONDS-.1,MIN_SECONDS,180,181,float('nan')):
    with self.assertRaises(ValueError):require_duration(n)
-  for n in (90.01,120,179.99):self.assertEqual(require_duration(n),n)
+  for n in (MIN_SECONDS+.01,120,179.99):self.assertEqual(require_duration(n),n)
  def test_title_and_hashtags_describe_the_actual_subject(self):
   s={'title':'جسر الرومان فوق النهر','canonical_subject':'roman-bridge','scenes':[{'narration':'الجسر ده بناه الرومان فوق النهر'}],'hashtags':['الرومان','النهر','تاريخ'],'source':{'publisher':'UNESCO','url':'https://whc.unesco.org/en/list/344/'}}
   m=make(s,'history');self.assertIn('جسر الرومان',m['title']);self.assertIn('#الرومان',m['caption']);self.assertLessEqual(len(m['title']),100)

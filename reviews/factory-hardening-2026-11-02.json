@@ -1,0 +1,15 @@
+{
+  "scope": "four active channels; no stickman work",
+  "status": "staged; old scheduling retained pending verified full-video evidence",
+  "owner_duration_rule": "news>60seconds; others>90seconds; maximum<180",
+  "target_policy": "09Africa/Cairo production for nextday17Africa/Cairo; original run timestamp anchors retries; no expired-slot rollover",
+  "pre_narration_test": "Actual browser evaluates8scenes x5poses without provider calls",
+  "same_audio_recovery": "Raw ASR retained; finite monotonic measured character anchors, explicit numeric/name spelling normalization; reject insufficientcoverage",
+  "engines": {
+    "three_js": "daily",
+    "svg": "daily when explicitly authored; browser-tested flow and comparison",
+    "ffmpeg": "daily composition",
+    "blender": "optional preview adapter only; CPUCycles640portraitpreview succeeded locally, not qualified for full daily animation"
+  },
+  "no_review_publication": true
+}

@@ -38,7 +38,7 @@ def main():
         print('Duration warning recorded; continuing with the same voice and script', flush=True)
     require_duration(duration)
     from faster_whisper import WhisperModel
-    transcripts=[];timing=None
+    transcripts=[];timing=None;best_exact=0
     for name in ('medium','small','large-v3'):
         model=WhisperModel(name,device='cpu',compute_type='int8',cpu_threads=2)
         segments,_=model.transcribe(str(wav),language='ar',word_timestamps=True,beam_size=5,vad_filter=False)
@@ -46,11 +46,16 @@ def main():
         transcripts.append((name,actual));(out/('asr-'+name+'.json')).write_text(json.dumps({'recognized_words':actual},ensure_ascii=False,indent=2))
         del model
         try:
-            timing=measured_timing(story,duration,transcripts)
-            if timing['coverage']<.9:raise ValueError('Try another local ASR model against the same audio; do not synthesize again')
-            break
+            candidate=measured_timing(story,duration,transcripts)
+            best_exact=max(best_exact,candidate.get('exact_token_coverage',candidate['coverage']))
+            if candidate['coverage']>=.9:
+                timing=candidate;break
         except ValueError:
-            if name=='large-v3':raise
+            pass
+    if timing is None:
+        from .speech_characters import character_timing
+        from .speech_lexicon import recognized_key
+        timing=character_timing(story,duration,transcripts,recognized_key,best_exact)
     timing['story_sha256']=hashlib.sha256((root/'delivery/story.json').read_bytes()).hexdigest()
     timing['audio_sha256']=hashlib.sha256(wav.read_bytes()).hexdigest()
     (out/'timing.json').write_text(json.dumps(timing,ensure_ascii=False,indent=2))

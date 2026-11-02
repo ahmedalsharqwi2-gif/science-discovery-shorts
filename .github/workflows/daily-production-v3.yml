@@ -1,0 +1,342 @@
+{
+  "name": "Daily production at09Cairo for tomorrow17Cairo",
+  "on": {
+    "workflow_dispatch": {
+      "inputs": {
+        "mode": {
+          "description": "Review exports never publish; daily produces for next day17Cairo",
+          "type": "choice",
+          "options": [
+            "review",
+            "daily"
+          ],
+          "default": "review"
+        }
+      }
+    }
+  },
+  "permissions": {
+    "contents": "write",
+    "actions": "read"
+  },
+  "concurrency": {
+    "group": "professional-daily-science",
+    "cancel-in-progress": false
+  },
+  "jobs": {
+    "produce": {
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 60,
+      "env": {
+        "PYTHONPATH": "${{ github.workspace }}",
+        "PYTHONUNBUFFERED": "1",
+        "GEMINI_API_KEY": "${{ secrets.GEMINI_API_KEY }}",
+        "GEMINI_TEXT_API_KEY": "${{ secrets.GEMINI_TEXT_API_KEY || secrets.GEMINI_API_KEY }}",
+        "GEMINI_TTS_API_KEY": "${{ secrets.GEMINI_TTS_API_KEY || secrets.GEMINI_API_KEY }}",
+        "GITHUB_TOKEN": "${{ github.token }}",
+        "GH_RELEASE_TOKEN": "${{ github.token }}",
+        "BUFFER_API_KEY": "${{ secrets.BUFFER_API_KEY }}",
+        "BUFFER_CHANNEL_IDS": "${{ secrets.BUFFER_CHANNEL_IDS || vars.BUFFER_CHANNEL_IDS }}",
+        "YT_CLIENT_ID": "${{ secrets.YT_CLIENT_ID }}",
+        "YT_CLIENT_SECRET": "${{ secrets.YT_CLIENT_SECRET }}",
+        "YT_REFRESH_TOKEN": "${{ secrets.YT_REFRESH_TOKEN }}",
+        "YT_REFRESH_TOKEN_FALLBACK": "${{ secrets.YT_REFRESH_TOKEN_FALLBACK }}",
+        "BUFFER_YOUTUBE_CHANNEL_ID": "${{ secrets.BUFFER_YOUTUBE_CHANNEL_ID }}",
+        "BUFFER_FACEBOOK_CHANNEL_ID": "${{ secrets.BUFFER_FACEBOOK_CHANNEL_ID }}",
+        "BUFFER_INSTAGRAM_CHANNEL_ID": "${{ secrets.BUFFER_INSTAGRAM_CHANNEL_ID }}",
+        "BUFFER_TIKTOK_CHANNEL_ID": "${{ secrets.BUFFER_TIKTOK_CHANNEL_ID }}",
+        "HORROR_REVIEW_GENRE": "${{ inputs.horror_genre || '' }}",
+        "FACTORY_DAILY": "false",
+        "NEWS_DIGEST_MAX_AGE_HOURS": "168",
+        "FACTORY_REQUEST_PATH": ".work/daily-request.json"
+      },
+      "outputs": {
+        "run": "${{ steps.decision.outputs.run }}",
+        "publish": "${{ steps.decision.outputs.publish }}",
+        "due": "${{ steps.decision.outputs.due }}",
+        "slot": "${{ steps.decision.outputs.slot }}",
+        "sha": "${{ steps.source.outputs.sha }}",
+        "voice_artifact": "original-voice-${{ github.run_id }}-${{ github.run_attempt }}"
+      },
+      "steps": [
+        {
+          "uses": "actions/checkout@v4",
+          "with": {
+            "fetch-depth": 0,
+            "ref": "${{ github.ref_name }}"
+          }
+        },
+        {
+          "uses": "actions/setup-python@v5",
+          "with": {
+            "python-version": "3.11"
+          }
+        },
+        {
+          "name": "Install planning prerequisites",
+          "run": "python -m pip install requests beautifulsoup4"
+        },
+        {
+          "name": "Freeze original run target and respect Cairo civil-time/DST",
+          "id": "target",
+          "run": "python -m professional_motion.daily_request science"
+        },
+        {
+          "name": "Honor explicit requested publication date without changing tomorrow posts",
+          "id": "decision",
+          "run": "python -m professional_motion.requested_batch decision science",
+          "if": "steps.target.outputs.eligible == 'true'"
+        },
+        {
+          "name": "Install narration and alignment dependencies",
+          "if": "steps.decision.outputs.run == 'true'",
+          "run": "sudo apt-get update -qq\nsudo apt-get install -y ffmpeg\npython -m pip install numpy Pillow faster-whisper==1.2.1 google-api-python-client google-auth-oauthlib"
+        },
+        {
+          "uses": "actions/cache/restore@v4",
+          "if": "steps.decision.outputs.run == 'true'",
+          "with": {
+            "path": ".voice_cache\nstate/api_budget.sqlite3\n~/.cache/huggingface",
+            "key": "professional-v3-${{ github.repository_id }}-${{ github.run_id }}-${{ github.run_attempt }}",
+            "restore-keys": "professional-v3-${{ github.repository_id }}-\nprofessional-v2-${{ github.repository_id }}-\noctopus-proof-"
+          }
+        },
+        {
+          "name": "Restore the retained same-episode delivery before provider requests",
+          "if": "steps.decision.outputs.run == 'true'",
+          "run": "python -m professional_motion.restore_retained"
+        },
+        {
+          "name": "Write one new topic with distinct staged scenes; original fiction for horror",
+          "id": "prepare",
+          "if": "steps.decision.outputs.run == 'true'",
+          "run": "python -m professional_motion.requested_batch prepare science --slot \"${{ steps.decision.outputs.slot }}\""
+        },
+        {
+          "name": "Persist the reserved plot before any synthesis",
+          "if": "steps.prepare.outcome == 'success'",
+          "run": "python -m professional_motion.persist_state"
+        },
+        {
+          "name": "Verify the confirmed destination accounts without posting",
+          "if": "steps.prepare.outcome == 'success'",
+          "run": "python - <<'PY2'\nfrom professional_motion.publisher import preflight\nr=preflight('science',True)\nassert len(r['buffer'])==3 and not r['direct_youtube'], 'Three verified destinations are required'\nPY2"
+        },
+        {
+          "uses": "actions/setup-node@v4",
+          "if": "steps.prepare.outcome == 'success'",
+          "with": {
+            "node-version": "22"
+          }
+        },
+        {
+          "name": "Install tested visual engine and browser before narration",
+          "if": "steps.prepare.outcome == 'success'",
+          "run": "cd professional_motion\nnpm ci\nnpx playwright-core install --with-deps chromium"
+        },
+        {
+          "name": "Check all eight actual scene poses before paid narration",
+          "if": "steps.prepare.outcome == 'success'",
+          "run": "node professional_motion/renderer_preflight.mjs"
+        },
+        {
+          "name": "Generate the complete original voice and measure speech/reveal timing",
+          "id": "voice",
+          "if": "steps.prepare.outcome == 'success'",
+          "run": "python -m professional_motion.requested_voice_job"
+        },
+        {
+          "name": "Record the exact source revision used for narration",
+          "id": "source",
+          "if": "steps.voice.outcome == 'success'",
+          "run": "echo \"sha=$(git rev-parse HEAD)\" >> \"$GITHUB_OUTPUT\""
+        },
+        {
+          "uses": "actions/upload-artifact@v4",
+          "if": "always()",
+          "with": {
+            "name": "original-voice-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "professional_motion/delivery/\nprofessional_motion/delivery/*.json",
+            "retention-days": 30,
+            "if-no-files-found": "error",
+            "include-hidden-files": true
+          }
+        },
+        {
+          "uses": "actions/cache/save@v4",
+          "if": "always() && steps.decision.outputs.run == 'true'",
+          "with": {
+            "path": ".voice_cache\nstate/api_budget.sqlite3\n~/.cache/huggingface",
+            "key": "professional-v3-${{ github.repository_id }}-${{ github.run_id }}-${{ github.run_attempt }}"
+          }
+        },
+        {
+          "name": "Persist same-episode narration feedback even when voice validation fails",
+          "if": "always() && steps.prepare.outcome == 'success'",
+          "run": "python -m professional_motion.persist_state"
+        }
+      ]
+    },
+    "render": {
+      "needs": "produce",
+      "if": "needs.produce.outputs.run == 'true'",
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 60,
+      "permissions": {
+        "contents": "read",
+        "actions": "read"
+      },
+      "strategy": {
+        "fail-fast": false,
+        "max-parallel": 4,
+        "matrix": {
+          "part": [
+            0,
+            1,
+            2,
+            3
+          ]
+        }
+      },
+      "steps": [
+        {
+          "uses": "actions/checkout@v4",
+          "with": {
+            "ref": "${{ needs.produce.outputs.sha }}"
+          }
+        },
+        {
+          "uses": "actions/download-artifact@v4",
+          "with": {
+            "name": "${{ needs.produce.outputs.voice_artifact }}",
+            "path": "professional_motion/delivery/"
+          }
+        },
+        {
+          "uses": "actions/setup-node@v4",
+          "with": {
+            "node-version": "22"
+          }
+        },
+        {
+          "name": "Install exact renderer and browser",
+          "run": "sudo apt-get update -qq\nsudo apt-get install -y ffmpeg\ncd professional_motion\nnpm ci\nnpx playwright-core install --with-deps chromium"
+        },
+        {
+          "name": "Render an exact quarter of the real-timing full-resolution frames",
+          "run": "node professional_motion/renderer_preflight.mjs --measured\nargs=(--style \"$REVIEW_VISUAL_STYLE\")\nif [ \"$IS_REVIEW\" = \"true\" ]; then args+=(--review); fi\nnode professional_motion/render.mjs --pipeline v2 --output-dir professional_motion/output \"${args[@]}\" --part ${{ matrix.part }} --parts 4 --output chunk-${{ matrix.part }}.mp4",
+          "env": {
+            "REVIEW_VISUAL_STYLE": "${{ needs.produce.outputs.publish == 'true' && 'original' || inputs.review_style || 'reference' }}",
+            "IS_REVIEW": "${{ needs.produce.outputs.publish != 'true' }}"
+          }
+        },
+        {
+          "uses": "actions/upload-artifact@v4",
+          "with": {
+            "name": "frames-${{ github.run_attempt }}-${{ matrix.part }}",
+            "path": "professional_motion/output/chunk-${{ matrix.part }}.mp4\nprofessional_motion/output/chunk-${{ matrix.part }}.mp4.json",
+            "retention-days": 7,
+            "if-no-files-found": "error"
+          }
+        }
+      ]
+    },
+    "finish": {
+      "needs": [
+        "produce",
+        "render"
+      ],
+      "if": "needs.produce.outputs.run == 'true' && needs.render.result == 'success'",
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 35,
+      "env": {
+        "PYTHONPATH": "${{ github.workspace }}",
+        "PYTHONUNBUFFERED": "1",
+        "GITHUB_TOKEN": "${{ github.token }}",
+        "GH_RELEASE_TOKEN": "${{ github.token }}",
+        "BUFFER_API_KEY": "${{ secrets.BUFFER_API_KEY }}",
+        "BUFFER_CHANNEL_IDS": "${{ secrets.BUFFER_CHANNEL_IDS || vars.BUFFER_CHANNEL_IDS }}",
+        "YT_CLIENT_ID": "${{ secrets.YT_CLIENT_ID }}",
+        "YT_CLIENT_SECRET": "${{ secrets.YT_CLIENT_SECRET }}",
+        "YT_REFRESH_TOKEN": "${{ secrets.YT_REFRESH_TOKEN }}",
+        "YT_REFRESH_TOKEN_FALLBACK": "${{ secrets.YT_REFRESH_TOKEN_FALLBACK }}",
+        "BUFFER_YOUTUBE_CHANNEL_ID": "${{ secrets.BUFFER_YOUTUBE_CHANNEL_ID }}",
+        "BUFFER_FACEBOOK_CHANNEL_ID": "${{ secrets.BUFFER_FACEBOOK_CHANNEL_ID }}",
+        "BUFFER_INSTAGRAM_CHANNEL_ID": "${{ secrets.BUFFER_INSTAGRAM_CHANNEL_ID }}",
+        "BUFFER_TIKTOK_CHANNEL_ID": "${{ secrets.BUFFER_TIKTOK_CHANNEL_ID }}",
+        "HORROR_REVIEW_GENRE": "${{ inputs.horror_genre || '' }}",
+        "DURABLE_SUBMISSION_GUARD": "true",
+        "NEWS_DIGEST_MAX_AGE_HOURS": "168"
+      },
+      "steps": [
+        {
+          "uses": "actions/checkout@v4",
+          "with": {
+            "ref": "${{ needs.produce.outputs.sha }}",
+            "fetch-depth": 0
+          }
+        },
+        {
+          "uses": "actions/setup-python@v5",
+          "with": {
+            "python-version": "3.11"
+          }
+        },
+        {
+          "name": "Install media finishing dependencies",
+          "run": "sudo apt-get update -qq\nsudo apt-get install -y ffmpeg\npython -m pip install numpy Pillow requests beautifulsoup4 google-api-python-client google-auth-oauthlib"
+        },
+        {
+          "uses": "actions/download-artifact@v4",
+          "with": {
+            "name": "${{ needs.produce.outputs.voice_artifact }}",
+            "path": "professional_motion/delivery/"
+          }
+        },
+        {
+          "uses": "actions/download-artifact@v4",
+          "with": {
+            "pattern": "frames-${{ github.run_attempt }}-*",
+            "path": "professional_motion/chunks/",
+            "merge-multiple": true
+          }
+        },
+        {
+          "name": "Join every original frame without gaps or repetition",
+          "run": "python -m professional_motion.requested_merge"
+        },
+        {
+          "name": "Mix quieter music and verify the actual 90–180 second movie",
+          "id": "finish",
+          "run": "python -m professional_motion.requested_finish --pipeline v2\npython -m professional_motion.cli rendered science --slot \"${{ needs.produce.outputs.slot }}\""
+        },
+        {
+          "name": "Persist the completed episode and its exact video checksum",
+          "if": "steps.finish.outcome == 'success'",
+          "run": "python -m professional_motion.persist_state"
+        },
+        {
+          "name": "Schedule approved daily film for exactly 17:00 Cairo",
+          "if": "steps.finish.outcome == 'success' && needs.produce.outputs.publish == 'true'",
+          "run": "python -m professional_motion.requested_publish science --slot \"${{ needs.produce.outputs.slot }}\" --due \"${{ needs.produce.outputs.due }}\"",
+          "id": "publication"
+        },
+        {
+          "uses": "actions/upload-artifact@v4",
+          "if": "always()",
+          "with": {
+            "name": "science-daily-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "professional_motion/output/\nprofessional_motion/delivery/\nstate/professional_topics.json",
+            "retention-days": 30,
+            "if-no-files-found": "warn"
+          }
+        },
+        {
+          "name": "Preserve partial provider acceptance receipts on any failure",
+          "if": "always()",
+          "run": "python -m professional_motion.persist_state"
+        }
+      ]
+    }
+  }
+}

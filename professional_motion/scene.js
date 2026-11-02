@@ -1,3 +1,4 @@
+import {createSvgScenes} from './svg_story.js';
 import {loopPhase} from './animation_time.mjs';
 import {proceduralDirector} from './procedural_story.js';
 import {acousticDirector} from './acoustic_director.js';
@@ -277,6 +278,7 @@ if(!['legacy','v2'].includes(pipeline))throw Error('Unknown production pipeline'
 const cinema=pipeline==='v2'?scienceCinema({scene,camera,renderer}):null;
 const scientificField=pipeline==='v2'&&config.profile==='science'&&config.topic_key==='earth-magnetosphere'?scienceField(scene):null;
 const acoustic=pipeline==='v2'&&config.profile==='science'&&config.visual_plan?.world==='sound_wave_lab'?acousticDirector(scene,config):null;
+const svgScenes=await createSvgScenes(config);
 const procedural=useProcedural&&new URLSearchParams(location.search).get('pipeline')==='v2'?proceduralDirector(scene,config):null;
 window.renderAt=(time,duration=D)=>{
  D=duration;const t=Math.max(0,time),u=t/D;
@@ -306,6 +308,7 @@ window.renderAt=(time,duration=D)=>{
  if(acoustic){channel.root.visible=false;dust.visible=false;shafts.forEach(o=>o.visible=false);const view=acoustic.update(index,p,t);camera.position.set(...view.position);camera.lookAt(...view.target);window.scientificGeometry=view;}
  if(procedural){channel.root.visible=false;dust.visible=false;shafts.forEach(o=>o.visible=false);const view=procedural.update(index,p,t);camera.position.set(...view.position);camera.lookAt(...view.target);window.topicDirecting=view;}
  if(new URLSearchParams(location.search).get('style')==='reference')renderer.render(scene,camera);else composer.render();if(useOctopus)drawText(t,index,local,p);else drawChannelText(t,index,local,p);if(new URLSearchParams(location.search).get('style')==='reference')drawReferenceLayout(ctx,{story:config,timing,index,time:t,local,duration:D,review:new URLSearchParams(location.search).get('review')==='true',logo:!!brandMark});drawBranding(ctx,brandMark);
+ svgScenes.draw(ctx,index,p);
  return {scene:index+1,time:t,duration:D,originalVoice:!!timing};
 };
 window.captureFrame=()=>{endCtx.drawImage(renderer.domElement,0,0);endCtx.drawImage(overlay,0,0);return endCanvas.toDataURL('image/jpeg',.96).split(',')[1];};

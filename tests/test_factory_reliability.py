@@ -15,10 +15,10 @@ class FactoryReliabilityTests(unittest.TestCase):
   for month,hour in ((7,8),(12,9)):
    result=self.decide(month,hour,45);self.assertTrue(result['run'])
    self.assertEqual(datetime.fromisoformat(result['due'].replace('Z','+00:00')).astimezone(ZoneInfo('Africa/Cairo')).hour,17)
- def test_late_start_is_blocked_and_does_not_roll_to_tomorrow(self):
-  r=self.decide(12,15);self.assertFalse(r['run']);self.assertFalse(r['publish']);self.assertEqual(r['due'][:10],'2026-12-01')
- def test_production_cutoff_leaves_two_hours_for_delivery(self):
-  self.assertTrue(self.decide(12,12,59)['run']);self.assertFalse(self.decide(12,13)['run'])
+ def test_late_scheduled_start_is_blocked_for_the_original_next_day_target(self):
+  r=self.decide(12,15);self.assertFalse(r['run']);self.assertFalse(r['publish']);self.assertEqual(r['due'][:10],'2026-12-02')
+ def test_nine_am_start_allows_bounded_queue_delay(self):
+  self.assertTrue(self.decide(12,9,59)['run']);self.assertFalse(self.decide(12,10)['run'])
  def test_second_daily_run_skips_three_confirmed_receipts(self):
   first=self.decide(12,7)
   existing={'slot':first['slot'],'status':'scheduled','receipts':{k:{'id':k} for k in ('youtube','facebook','instagram')}}

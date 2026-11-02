@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "daily_engines": {
+    "three_js": {
+      "enabled": true,
+      "purpose": "Authored animated3D worlds and subjects"
+    },
+    "svg": {
+      "enabled": true,
+      "purpose": "Optional source-narration-addressed flows, comparisons and timelines; at most2of8scenes"
+    },
+    "ffmpeg": {
+      "enabled": true,
+      "purpose": "Exact frame assembly, sound mixing and final validation"
+    }
+  },
+  "blender": {
+    "enabled_for_daily": false,
+    "preview_adapter_available": true,
+    "purpose": "Optional lighting/material preview of exact implemented geometry via GLB; no separate guessed asset catalog",
+    "reason": "Full-resolution daily video cost and captions integration have not been qualified"
+  },
+  "no_silent_engine_fallback": true
+}

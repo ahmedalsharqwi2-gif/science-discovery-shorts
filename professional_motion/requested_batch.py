@@ -6,7 +6,7 @@ from zoneinfo import ZoneInfo
 from professional_motion import editorial
 
 def request_for(profile):
-    request=json.loads(Path('.github/produce-new-today.json').read_text())
+    request=json.loads(Path(os.getenv('FACTORY_REQUEST_PATH','.github/produce-new-today.json')).read_text())
     if request['profile']!=profile or os.environ.get('GITHUB_REPOSITORY')!='ahmedalsharqwi2-gif/'+request['repository']:
         raise ValueError('Request must match this repository and profile')
     due=datetime.fromisoformat(request['due_at'].replace('Z','+00:00'))
@@ -22,7 +22,7 @@ def decide(profile):
     request=request_for(profile);data=editorial.registry()
     existing=next((r for r in data['episodes'] if r['slot']==request['slot']),None)
     complete=bool(existing and existing.get('status') in ('scheduled','published') and len(existing.get('receipts',{}))==3)
-    result={'run':not complete,'publish':not complete,'due':request['due_at'],'slot':request['slot'],'profile':profile}
+    result={'run':not complete,'publish':not complete and not request.get('review_only',False),'due':request['due_at'],'slot':request['slot'],'profile':profile}
     if os.getenv('GITHUB_OUTPUT'):
         with open(os.environ['GITHUB_OUTPUT'],'a') as output:
             for k,v in result.items():output.write(k+'='+(str(v).lower() if isinstance(v,bool) else str(v))+'\n')
@@ -39,7 +39,7 @@ def prepare(profile,slot):
     if prior and prior.get('phase')=='writing' and not (existing and existing.get('story')) and not retained and not (profile=='news' and request.get('news_source')):
         raise RuntimeError('Earlier writing attempt retained; resume its saved draft instead of generating again')
     if not existing:
-        attempts.setdefault(slot,{'started_at':datetime.now(timezone.utc).isoformat()}).update(phase='writing',request_id=request['request_id'],due_at=request['due_at'])
+        attempts.setdefault(slot,{'started_at':datetime.now(timezone.utc).isoformat(),'source_run':int(os.getenv('GITHUB_RUN_ID','0'))}).update(phase='writing',request_id=request['request_id'],due_at=request['due_at'])
         if retained:attempts[slot]['retained_draft_source_run']=retained['source_run']
         editorial.save(data);checkpoint()
     from .requested_editorial import editor,validate,require_novel_story
@@ -58,6 +58,7 @@ def prepare(profile,slot):
         draft=json.loads(draftpath.read_text());used=False
         def use_retained(*args,**kwargs):
             nonlocal used
+            if kwargs.get('review'):return original_ask(*args,**kwargs)
             if used:raise RuntimeError('No repeated writing-provider request allowed during saved-draft recovery')
             used=True;return copy.deepcopy(draft)
         editorial.ask=use_retained

@@ -17,8 +17,8 @@ def enabled(profile,root='.'):
     policy=json.loads(path.read_text())
     return policy.get('profile')==profile and (policy.get('external_sources_required') is False or profile=='news' and policy.get('editorial_mode')=='sourced_procedural')
 
-ASSET_ALIASES={'sun':'sphere','earth':'sphere','solar_flare':'sphere','solar_corona':'sphere','magnetic_field':'wave','gps':'phone','power_grid':'circuit','satellite':'satellite_dish','grid':'circuit'}
-MOTION_ALIASES={'radiate':'pulse','emit':'pulse','flicker':'pulse','magnetic':'flow','orbiting':'orbit','explode':'split','collapse':'slam','bounce':'swing','move':'drift'}
+ASSET_ALIASES={'cube':'box','sun':'sphere','earth':'sphere','solar_flare':'sphere','solar_corona':'sphere','magnetic_field':'wave','gps':'phone','power_grid':'circuit','satellite':'satellite_dish','grid':'circuit'}
+MOTION_ALIASES={'stack':'assemble','glow':'pulse','radiate':'pulse','emit':'pulse','flicker':'pulse','magnetic':'flow','orbiting':'orbit','explode':'split','collapse':'slam','bounce':'swing','move':'drift'}
 
 def _normalize_visual_aliases(story, profile='stickman'):
     for scene in story.get('scenes',[]):
@@ -41,6 +41,10 @@ def validate(story,profile):
         if not scene.get('narration') or not scene.get('label') or not scene.get('visual_change'):
             raise ValueError('Narration, heading and visible causal change required')
         if scene.get('environment') not in ENVIRONMENTS:raise ValueError('Unsupported environment')
+        diagram=scene.get('diagram')
+        if diagram is not None:
+            if diagram.get('kind') not in ('flow','timeline','comparison') or not 2<=len(diagram.get('nodes',[]))<=5:raise ValueError('Unsupported SVG diagram')
+            if any(not isinstance(n.get('label'),str) or len(n['label'])>42 or n['label'] not in scene['narration'] for n in diagram['nodes']):raise ValueError('SVG nodes must quote short phrases from this narration')
         objects=scene.get('objects',[])
         if not 1<=len(objects)<=16:raise ValueError('At least one authored composite subject is required per scene')
         for obj in objects:
@@ -93,6 +97,7 @@ def prepare(editorial,profile,slot):
     vector={'type':'ARRAY','items':{'type':'NUMBER'},'minItems':3,'maxItems':3}
     obj={'type':'OBJECT','properties':{'kind':{'type':'STRING'},'position':deepcopy(vector),'scale':deepcopy(vector),'rotation':deepcopy(vector),'color':{'type':'STRING'},'motion':{'type':'STRING'}},'required':['kind','position','scale','rotation','color','motion']}
     scene['properties'].update(environment={'type':'STRING'},objects={'type':'ARRAY','items':obj},camera_start=deepcopy(vector),camera_end=deepcopy(vector),visual_change={'type':'STRING'})
+    scene['properties']['diagram']={'type':'OBJECT','properties':{'kind':{'type':'STRING','enum':['flow','timeline','comparison']},'nodes':{'type':'ARRAY','minItems':2,'maxItems':5,'items':{'type':'OBJECT','properties':{'label':{'type':'STRING'}},'required':['label']}}},'required':['kind','nodes']}
     scene['required']+=['environment','objects','camera_start','camera_end','visual_change']
     old=[{'title':r.get('title',''),'subject':r.get('canonical_subject',r.get('topic_key','')),'plot':r.get('plot_signature','')} for r in previous if isinstance(r,dict)][-600:]
     prompt=('Author one NEW full Egyptian Arabic film for '+profile+', category '+category+'. '
@@ -103,6 +108,7 @@ def prepare(editorial,profile,slot):
      'Avoid every previous underlying topic or plot, not merely their titles. canonical_subject is a stable specific English slug without a date or random suffix. '
      'Write eight connected scenes totaling 300 to 340 spoken Egyptian Arabic words, naturally varied, with a direct hook and concrete payoff. No greetings, generic padding or subscribe appeals. '
      'Titles and headings are short Arabic. Three to five topical hashtags. Numbers in narration are pronounceable Arabic words. suitable=true. '
+     'Use an optional SVG diagram on at most two scenes when a flow, comparison or timeline clarifies this topic; omit it for suspense scenes. diagram={kind:flow|comparison|timeline,nodes:[{label:short exact Arabic phrase copied from this scene narration}]}, with two to five nodes. Never invent dates, measurements or facts. Other scenes remain full 3D. '
      'Compose DISTINCT 3D staged scenes, not eight copies of one object on black. The first object is the main subject and should occupy a substantial part of the frame. '
      'Each scene has 3 to 10 objects, with positions [-6,6], positive scales [0.08,5], rotations in radians [-6.3,6.3], hex colors, and an implemented motion. '
      'Camera start/end are [x,y,z], z between 7 and 19, looking toward the center [0,0,0]. Keep main subjects near the center and leave top/bottom caption areas clear. '
@@ -155,10 +161,11 @@ def sourced_news_editor(editorial):
     vector={'type':'ARRAY','items':{'type':'NUMBER'},'minItems':3,'maxItems':3}
     obj={'type':'OBJECT','properties':{'kind':{'type':'STRING'},'position':deepcopy(vector),'scale':deepcopy(vector),'rotation':deepcopy(vector),'color':{'type':'STRING'},'motion':{'type':'STRING'}},'required':['kind','position','scale','rotation','color','motion']}
     scene['properties'].update(environment={'type':'STRING'},objects={'type':'ARRAY','items':obj},camera_start=deepcopy(vector),camera_end=deepcopy(vector),visual_change={'type':'STRING'})
+    scene['properties']['diagram']={'type':'OBJECT','properties':{'kind':{'type':'STRING','enum':['flow','timeline','comparison']},'nodes':{'type':'ARRAY','minItems':2,'maxItems':5,'items':{'type':'OBJECT','properties':{'label':{'type':'STRING'}},'required':['label']}}},'required':['kind','nodes']}
     scene['required']+=['environment','objects','camera_start','camera_end','visual_change']
     def ask(prompt,response_schema,**kwargs):
         if not kwargs.get('review') and 'scenes' in response_schema.get('properties',{}):
-            prompt+='\nVISUAL AUTHORING: create eight distinct source-relevant 3D staged scenes. Each scene contains 3 to 10 objects, kind chosen from '+json.dumps(ASSETS)+', motion from '+json.dumps(MOTIONS)+', environment from '+json.dumps(ENVIRONMENTS)+'. Positions [-6,6], positive scale [0.08,5], rotation radians [-6.3,6.3], hex colors. camera_start and camera_end are [x,y,z], z between 7 and19, looking at the origin. Objects explain this specific dated announcement, not a generic chip loop. Provide a concrete visible visual_change. Diagrams are illustrative, never a fabricated exact product screen or claimed benchmark. Keep exact source excerpt IDs and factual narration. This is a dated recent-news digest; preserve the source date and never call an older announcement breaking news today.'
+            prompt+='\nVISUAL AUTHORING: create eight distinct source-relevant 3D staged scenes. Each scene contains 3 to 10 objects, kind chosen from '+json.dumps(ASSETS)+', motion from '+json.dumps(MOTIONS)+', environment from '+json.dumps(ENVIRONMENTS)+'. Positions [-6,6], positive scale [0.08,5], rotation radians [-6.3,6.3], hex colors. camera_start and camera_end are [x,y,z], z between 7 and19, looking at the origin. Objects explain this specific dated announcement, not a generic chip loop. Provide a concrete visible visual_change. Use optional diagram={kind:flow|comparison|timeline,nodes:[{label:short exact Arabic phrase copied from narration}]} on at most two scenes, two to five nodes, when useful. Diagrams are illustrative, never a fabricated exact product screen or claimed benchmark. Keep exact source excerpt IDs and factual narration. This is a dated recent-news digest; preserve the source date and never call an older announcement breaking news today.'
         return original_ask(prompt,response_schema,**kwargs)
     def prepare(actual,slot):
         story=original_prepare(actual,slot);story['knowledge_category']='ai_news'

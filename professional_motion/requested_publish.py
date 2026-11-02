@@ -4,8 +4,8 @@ from pathlib import Path
 from . import metadata
 from .publisher import publish
 def main():
- p=argparse.ArgumentParser();p.add_argument('profile');p.add_argument('--slot',required=True);p.add_argument('--due',required=True);p.add_argument('--request',default='.github/produce-new-today.json');a=p.parse_args()
- request=json.loads(Path(a.request).read_text());original=metadata.make
+ p=argparse.ArgumentParser();p.add_argument('profile');p.add_argument('--slot',required=True);p.add_argument('--due',required=True);p.add_argument('--request');a=p.parse_args()
+ request=json.loads(Path(a.request).read_text()) if a.request else {};original=metadata.make
  def make(story,profile):
   revised=copy.deepcopy(story)
   if request.get('publication_title'):revised['title']=request['publication_title']
