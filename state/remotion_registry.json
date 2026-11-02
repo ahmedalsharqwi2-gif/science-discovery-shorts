@@ -2,7 +2,7 @@
   "version": 1,
   "episodes": {
     "remotion-2026-11-04-science": {
-      "status": "rendered",
+      "status": "publishing",
       "canonical_subject": "soap-surfactants-micelles-and-rinsing",
       "title": "الصابون بيمسك الدهون إزاي؟",
       "story_sha256": "c80d36f884dc87103e7e29be8e6d189ec7e4d22271fd94ddab5e6de4438f834d",
@@ -17,7 +17,8 @@
       "coverage": 0.9037800687285223,
       "video_sha256": "cf402a47b65b9a7a9c30c7f53e805cb542baf8a1aed2bc8aef6392208d566ba9",
       "render_run": 41491355804,
-      "source_evidence_file": "professional_motion/output/remotion-validation.json"
+      "source_evidence_file": "professional_motion/output/remotion-validation.json",
+      "media_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/releases/download/production-remotion-2026-11-04-science/science-remotion-2026-11-04-science.mp4"
     }
   }
 }
