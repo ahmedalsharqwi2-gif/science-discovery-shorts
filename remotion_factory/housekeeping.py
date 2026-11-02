@@ -1,5 +1,5 @@
 """One-off conservative cleanup, with verified recovery refs and atomic delete leases."""
-import base64,json,os,re,subprocess,sys
+import base64,json,os,re,subprocess,sys,time
 from datetime import datetime,timedelta,timezone
 from pathlib import Path
 from urllib.parse import quote
@@ -29,8 +29,15 @@ def archive(tag,sha):
  if existing:
   if existing['object']['sha']!=sha:raise AuditFailure('Archive tag already points elsewhere; never overwrite it')
  else:gh('/git/refs','POST',{'ref':'refs/tags/'+tag,'sha':sha})
- proof=gh(path)
- if not proof or proof['object']['sha']!=sha:raise AuditFailure('Recovery ref not independently confirmed')
+ # A newly created ref can briefly return404. Retry only verification, never deletion or creation.
+ proof=None
+ for attempt in range(6):
+  proof=gh(path+'?verify_attempt='+str(attempt))
+  if proof:
+   if proof['object']['sha']!=sha:raise AuditFailure('Recovery ref points elsewhere; preserve the branch')
+   break
+  if attempt<5:time.sleep(1)
+ if not proof:raise AuditFailure('Recovery ref not independently confirmed; branch preserved')
  return tag
 def remove_cache(paths):
  if not paths:return None
