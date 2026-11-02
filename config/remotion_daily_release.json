@@ -1,0 +1,16 @@
+{
+  "enabled": true,
+  "timezone": "Africa/Cairo",
+  "production_local_hour": 9,
+  "publication_local_hour": 17,
+  "publication_day_offset": 1,
+  "minimum_duration_seconds": 90,
+  "minimum_is_strict": true,
+  "cutover_evidence": {
+    "slot": "remotion-2026-11-04-science",
+    "video_sha256": "cf402a47b65b9a7a9c30c7f53e805cb542baf8a1aed2bc8aef6392208d566ba9",
+    "run": 41491355804,
+    "ready": true
+  },
+  "existing_posts_preserved": true
+}
