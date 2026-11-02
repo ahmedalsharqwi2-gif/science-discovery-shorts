@@ -177,7 +177,7 @@ def main():
  if not report['preview'] and day>=first_day:
   try:report['scheduler']=scheduler(day)
   except Exception as exc:report['errors'].append(str(exc) if isinstance(exc,AuditFailure) else 'Scheduler verification unavailable: '+type(exc).__name__)
- else:report['scheduler']={'observed':False,'reason':'Future date preview; actual9am clock event not due yet'}
+ else:report['scheduler']={'observed':False,'reason':'Future date preview; actual9am clock event not due yet' if report['preview'] else 'Monitoring was activated after this date morning; no historical9am success claimed'}
  try:
   mapping=destinations(profile);rows={}
   for service,destination in mapping.items():
