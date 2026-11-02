@@ -1,0 +1,15 @@
+{
+  "run": false,
+  "reason": "all three existing destination slots occupied; preserve them",
+  "due_at": "2026-11-03T15:00:00Z",
+  "occupied_slot_proof": {
+    "retained_post_ids_verified": true,
+    "original_release_verified": true,
+    "video_sha256": "a7861d4462e10dbb252e2f293cb011feee20272a34ca1282fdfaeffb7c7643a8",
+    "duration": 108.566667,
+    "technical_passed": true
+  },
+  "dry_run": true,
+  "generation_calls": 0,
+  "publication_mutations": 0
+}
