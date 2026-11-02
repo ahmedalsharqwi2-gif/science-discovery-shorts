@@ -1,0 +1,216 @@
+{
+  "name": "Quality checks — Python, scene engines and Remotion",
+  "on": {
+    "push": {
+      "paths": [
+        ".github/workflows/checks.yml",
+        ".github/workflows/image-fallback-ci.yml",
+        ".github/workflows/motion-kit-validation.yml",
+        ".github/workflows/professional-pipeline-validation.yml",
+        ".github/workflows/scene-director-ci.yml",
+        ".github/workflows/visual-quality-gate.yml",
+        "config/remotion_*.json",
+        "film_factory/camera.py",
+        "film_factory/cinematic_overlay.py",
+        "film_factory/image_fallback.py",
+        "film_factory/images.py",
+        "film_factory/motion_kit_timeline.py",
+        "film_factory/produce.py",
+        "film_factory/scene_director.py",
+        "film_factory/sound.py",
+        "news/images.py",
+        "news/photo_render.py",
+        "news/produce.py",
+        "professional_motion/**",
+        "remotion_factory/**",
+        "remotion_motion/**",
+        "tests/test_cinematic_overlay.py",
+        "tests/test_daily_professional.py",
+        "tests/test_image_fallback.py",
+        "tests/test_motion_kit_*.py",
+        "tests/test_professional_motion.py",
+        "tests/test_professional_policy.py",
+        "tests/test_scene_director.py",
+        "visual_quality_gate.py",
+        "voice_provider/**"
+      ]
+    },
+    "pull_request": {
+      "paths": [
+        ".github/workflows/checks.yml",
+        ".github/workflows/image-fallback-ci.yml",
+        ".github/workflows/motion-kit-validation.yml",
+        ".github/workflows/professional-pipeline-validation.yml",
+        ".github/workflows/scene-director-ci.yml",
+        ".github/workflows/visual-quality-gate.yml",
+        "config/remotion_*.json",
+        "film_factory/camera.py",
+        "film_factory/cinematic_overlay.py",
+        "film_factory/image_fallback.py",
+        "film_factory/images.py",
+        "film_factory/motion_kit_timeline.py",
+        "film_factory/produce.py",
+        "film_factory/scene_director.py",
+        "film_factory/sound.py",
+        "news/images.py",
+        "news/photo_render.py",
+        "news/produce.py",
+        "professional_motion/**",
+        "remotion_factory/**",
+        "remotion_motion/**",
+        "tests/test_cinematic_overlay.py",
+        "tests/test_daily_professional.py",
+        "tests/test_image_fallback.py",
+        "tests/test_motion_kit_*.py",
+        "tests/test_professional_motion.py",
+        "tests/test_professional_policy.py",
+        "tests/test_scene_director.py",
+        "visual_quality_gate.py",
+        "voice_provider/**"
+      ]
+    },
+    "workflow_dispatch": {}
+  },
+  "permissions": {
+    "contents": "read"
+  },
+  "concurrency": {
+    "group": "quality-${{ github.ref }}",
+    "cancel-in-progress": true
+  },
+  "jobs": {
+    "test": {
+      "runs-on": "ubuntu-24.04",
+      "steps": [
+        {
+          "uses": "actions/checkout@v4"
+        },
+        {
+          "uses": "actions/setup-python@v5",
+          "with": {
+            "python-version": "3.11"
+          }
+        },
+        {
+          "run": "python -m pip install numpy Pillow requests beautifulsoup4"
+        },
+        {
+          "run": "python -m unittest discover -s tests -p test_daily_professional.py -q\npython -m compileall -q professional_motion\nnode --check professional_motion/channels.js\nnode --check professional_motion/scene.js\nnode --check professional_motion/render.mjs\npython -m unittest discover -s tests -p test_professional_policy.py -q\nnode --check professional_motion/haunted.js\npython -m unittest discover -s tests -p test_factory_reliability.py -q"
+        },
+        {
+          "name": "Verify new duration, next-day target and executable scene contracts",
+          "run": "python -m unittest discover -s tests -p test_duration_rule.py -q\npython -m unittest discover -s tests -p test_daily_request.py -q\npython -m unittest discover -s tests -p test_renderer_contract.py -q\npython -m unittest discover -s tests -p test_speech_characters.py -q\nnode --test professional_motion/svg_story.test.mjs"
+        }
+      ]
+    },
+    "image_fallback": {
+      "runs-on": "ubuntu-latest",
+      "steps": [
+        {
+          "uses": "actions/checkout@v4"
+        },
+        {
+          "uses": "actions/setup-python@v5",
+          "with": {
+            "python-version": "3.11"
+          }
+        },
+        {
+          "run": "python -m pip install pillow requests"
+        },
+        {
+          "run": "python -m unittest discover -s tests -p 'test_image_fallback.py' -v"
+        }
+      ]
+    },
+    "motion-kit-tests": {
+      "runs-on": "ubuntu-latest",
+      "timeout-minutes": 10,
+      "steps": [
+        {
+          "uses": "actions/checkout@v4"
+        },
+        {
+          "uses": "actions/setup-python@v5",
+          "with": {
+            "python-version": "3.11"
+          }
+        },
+        {
+          "name": "Install local rendering test dependencies",
+          "run": "python -m pip install pillow numpy"
+        },
+        {
+          "name": "Compile and test scene cues, SFX and frame overlays",
+          "run": "python -m py_compile film_factory/motion_kit_timeline.py film_factory/cinematic_overlay.py film_factory/sound.py\npython -m unittest discover -s tests -p 'test_motion_kit_*.py' -v\npython -m unittest discover -s tests -p 'test_cinematic_overlay.py' -v\n"
+        }
+      ]
+    },
+    "scene_director": {
+      "runs-on": "ubuntu-latest",
+      "steps": [
+        {
+          "uses": "actions/checkout@v4"
+        },
+        {
+          "uses": "actions/setup-python@v5",
+          "with": {
+            "python-version": "3.11"
+          }
+        },
+        {
+          "run": "python -m unittest discover -s tests -p 'test_scene_director.py' -v"
+        }
+      ]
+    },
+    "validation": {
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 15,
+      "steps": [
+        {
+          "uses": "actions/checkout@v4"
+        },
+        {
+          "name": "Install video probe tools",
+          "run": "sudo apt-get update -qq && sudo apt-get install -y ffmpeg"
+        },
+        {
+          "name": "Exercise rejection of solid red, accept moving valid footage",
+          "run": "mkdir -p /tmp/quality-check\nffmpeg -y -v error -f lavfi -i color=c=red:s=1080x1920:r=30:d=10 -c:v libx264 -preset ultrafast -pix_fmt yuv420p /tmp/quality-check/red.mp4\nffmpeg -y -v error -f lavfi -i testsrc2=s=1080x1920:r=30:d=10 -c:v libx264 -preset ultrafast -pix_fmt yuv420p /tmp/quality-check/moving.mp4\npython - <<'PY'\nfrom visual_quality_gate import audit\nfailed = False\ntry:\n    audit('/tmp/quality-check/red.mp4','/tmp/quality-check/red.json')\nexcept ValueError as exc:\n    print('Correctly rejected red:',exc)\n    failed = True\nassert failed, 'Safety gate incorrectly accepted all-red output'\nresult = audit('/tmp/quality-check/moving.mp4','/tmp/quality-check/moving.json')\nassert result['passed'],result\nprint('Accepted moving frames, sampled:',result['samples'])\nPY\n"
+        }
+      ]
+    },
+    "remotion": {
+      "name": "Remotion production regressions",
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 15,
+      "steps": [
+        {
+          "uses": "actions/checkout@v4"
+        },
+        {
+          "uses": "actions/setup-python@v5",
+          "with": {
+            "python-version": "3.11"
+          }
+        },
+        {
+          "uses": "actions/setup-node@v4",
+          "with": {
+            "node-version": "24"
+          }
+        },
+        {
+          "run": "python -m pip install requests beautifulsoup4 numpy Pillow pytest pyyaml"
+        },
+        {
+          "run": "python -m unittest discover -s remotion_factory/tests -q"
+        },
+        {
+          "run": "npm ci --no-audit --no-fund\nnpm run check",
+          "working-directory": "remotion_motion"
+        }
+      ]
+    }
+  }
+}

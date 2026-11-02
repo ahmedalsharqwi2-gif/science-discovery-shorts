@@ -21,7 +21,7 @@
   },
   "permissions": {
     "contents": "write",
-    "actions": "read",
+    "actions": "write",
     "pull-requests": "read"
   },
   "concurrency": {
@@ -61,7 +61,7 @@
         },
         {
           "name": "Inventory or apply the guarded recovery-backed cleanup",
-          "run": "python -m remotion_factory.housekeeping"
+          "run": "python - <<'PY'\nimport json,subprocess\nfrom pathlib import Path\nr=json.loads(Path('.github/remotion-cleanup-request.json').read_text())\nmodule='remotion_factory.workflow_catalog' if r.get('workflow_catalog') else 'remotion_factory.housekeeping'\nsubprocess.run(['python','-m',module],check=True)\nPY"
         },
         {
           "uses": "actions/upload-artifact@v4",
