@@ -72,6 +72,17 @@ try {
   if (existing && !existing.bindings?.some(binding => binding.name === 'FACTORY_OWNER' && binding.text === marker)) throw new Error('Existing Worker does not have this project ownership marker; refusing overwrite');
   const day = local(Date.now()).day;
   if (local(Date.now()).hour >= 16) throw new Error('Too late to safely verify same-day production dry runs; no deployment performed');
+  let accountSubdomain = await cf('/workers/subdomain');
+  if (!accountSubdomain?.subdomain) {
+    accountSubdomain = await cf('/workers/subdomain', {
+      method: 'PUT',
+      headers: {Authorization: 'Bearer ' + process.env.CLOUDFLARE_API_TOKEN, 'Content-Type': 'application/json'},
+      body: JSON.stringify({subdomain: 'ahmed-video-factory-21724b'})
+    });
+    if (!accountSubdomain?.subdomain) throw new Error('Cloudflare did not confirm the workers.dev account subdomain');
+    report.checks.push('Initialized missing workers.dev account subdomain without changing an existing one');
+    await persist();
+  }
   const before = {};
   for (const repo of REPOS) {
     const definition = await gh(repo, '/actions/workflows/remotion-daily.yml');
