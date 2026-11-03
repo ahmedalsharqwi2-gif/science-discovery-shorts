@@ -247,9 +247,9 @@
     }
   },
   "cutover_evidence": {
-    "slot": "remotion-2026-11-04-science",
-    "video_sha256": "cf402a47b65b9a7a9c30c7f53e805cb542baf8a1aed2bc8aef6392208d566ba9",
-    "run": 41491355804,
+    "slot": "daily-remotion-2026-11-04-science",
+    "video_sha256": "913d8acd4bca95bf0065f2357e4f82b62d7b98e9106d16d7ed05bf49d1967dee",
+    "run": 41710502224,
     "ready": true
   }
 }
