@@ -116,11 +116,13 @@ def main():
     repo,profile=identity()
     entry=local()['episodes'][req['slot']]
     validate_request(req,repo,profile,entry)
-    mapping,observations=preflight(req,entry,profile)
     if req.get('inspect_only'):
+        mapping=destinations(profile)
+        observations={service:read_post(req['post_ids'][service]) for service in mapping}
         write_json('reviews/schedule_changes/'+req['request_id']+'-inspection.json',{'request':req,'observed':observations,'publication_mutations':0})
         print('Read-only inspection complete; no Buffer mutation attempted')
         return
+    mapping,observations=preflight(req,entry,profile)
     proof_path='reviews/schedule_changes/'+req['request_id']+'.json'
     saved=Path(proof_path)
     if not saved.exists():
