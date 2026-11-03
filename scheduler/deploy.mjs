@@ -10,7 +10,8 @@ const marker = 'ahmedalsharqwi2-gif-five-repositories-v1';
 const required = ['CLOUDFLARE_ACCOUNT_ID', 'CLOUDFLARE_API_TOKEN', 'FACTORY_DISPATCH_TOKEN'];
 const missing = required.filter(key => !process.env[key]);
 if (missing.length) { console.error('Missing secure environment bindings: ' + missing.join(', ')); process.exit(2); }
-const account = process.env.CLOUDFLARE_ACCOUNT_ID;
+const account = process.env.CLOUDFLARE_ACCOUNT_ID.trim();
+if (process.env.EXPECTED_CLOUDFLARE_ACCOUNT_ID && account !== process.env.EXPECTED_CLOUDFLARE_ACCOUNT_ID.trim()) { console.error('Existing account credential does not match the explicitly selected Cloudflare account; no deployment performed'); process.exit(2); }
 const config = JSON.parse(await readFile(new URL('./wrangler.json', import.meta.url), 'utf8'));
 const deployment = randomBytes(12).toString('hex'), ops = randomBytes(32).toString('hex');
 const localConfig = new URL('./wrangler.deploy.json', import.meta.url);

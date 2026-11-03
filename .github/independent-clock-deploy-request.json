@@ -1,5 +1,10 @@
 {
-  "operation": "none",
-  "revision": 0,
-  "note": "Deployment requires an explicit manual selection or an authorized main-branch commit tagged [deploy-independent-clock]. This marker alone performs no deployment."
+  "operation": "deploy-independent-clock",
+  "revision": 1,
+  "request_id": "cloudflare-connect-2026-11-03",
+  "expected_account": "21724b6755b7d103dfdfe6d9a6e5e399",
+  "verify_actual_cloudflare_tick": true,
+  "github_controller_tests": "dry_run_only_for_all_five",
+  "activate_only_after_verified": true,
+  "preserve_existing_video_and_post_ids": true
 }
