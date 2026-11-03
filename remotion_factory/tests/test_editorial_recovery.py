@@ -1,3 +1,4 @@
+"""Exercise durable correction and its mandatory independent-review handoff."""
 import copy
 import unittest
 from unittest.mock import Mock
@@ -12,7 +13,8 @@ class DraftRecovery(unittest.TestCase):
         self.ask = Mock(return_value=self.fixed)
         self.write = Mock(return_value={'path': 'retained-correction', 'sha256': 'hash'})
 
-    def validate(self, draft, profile, source):
+    @staticmethod
+    def validate(draft, profile, source):
         if not 240 <= draft['words'] <= 370:
             raise ValueError('Draft word budget fails')
 

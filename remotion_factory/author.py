@@ -102,13 +102,9 @@ def validate(story,profile,source):
   if s['diagram'] not in MODES:raise ValueError('Unsupported visual plan')
   if any(len(x)>35 for x in s['labels']):raise ValueError('Diagram label too long')
   if profile in ('history','horror','news') and (' '.join(s['evidence_quote'].split()) not in ' '.join(source.split()) or not 4<=len(s['evidence_quote'].split())<=18):raise ValueError('Actual supporting excerpt required for each documented scene')
-def author(req,entry):
- slot=req['slot'];profile=req['profile'];current=local()['episodes'][slot]
- if current.get('authored_story') or current.get('story_document'):
-  if not current.get('editorial_review',{}).get('passed'):raise ValueError('Retained draft awaits its original review; never regenerate')
-  return current.get('authored_story') or document_read(current['story_document'])
- if current.get('status')=='author_requested':raise ValueError('Previous writing request unacknowledged; recover it, never rewrite')
- prior=used();seen_urls={r.get('source',{}).get('url') for r in prior};seen_topics={r.get('canonical_subject') for r in prior}
+def retained_draft(req,current,seen_urls,seen_topics):
+ """Load an acknowledged draft or retain one original writing response."""
+ slot=req['slot'];profile=req['profile']
  if current.get('raw_draft') or current.get('draft_document'):
   draft=current.get('raw_draft') or document_read(current['draft_document']);row=current['source_selection'];source=current.get('source_text') or document_read(current['source_document'])['text']
  else:
@@ -137,6 +133,16 @@ def author(req,entry):
   draft_document=document_write(slot,'draft',draft)
   def retain(data):data['episodes'][slot].update(status='draft_retained',draft_document=draft_document)
   mutate(retain)
+ return draft,row,source
+def author(req,entry):
+ """Validate, correct once and independently review the retained episode."""
+ slot=req['slot'];profile=req['profile'];current=local()['episodes'][slot]
+ if current.get('authored_story') or current.get('story_document'):
+  if not current.get('editorial_review',{}).get('passed'):raise ValueError('Retained draft awaits its original review; never regenerate')
+  return current.get('authored_story') or document_read(current['story_document'])
+ if current.get('status')=='author_requested':raise ValueError('Previous writing request unacknowledged; recover it, never rewrite')
+ prior=used();seen_urls={r.get('source',{}).get('url') for r in prior};seen_topics={r.get('canonical_subject') for r in prior}
+ draft,row,source=retained_draft(req,current,seen_urls,seen_topics)
  from .editorial_recovery import checked_draft
  draft=checked_draft(slot,draft,profile,source,row,validate,ask_once,SCHEMA,local()['episodes'][slot],mutate,document_write)
  Path('professional_motion/delivery').mkdir(parents=True,exist_ok=True);Path('professional_motion/delivery/editorial-draft.json').write_text(json_text(draft))
