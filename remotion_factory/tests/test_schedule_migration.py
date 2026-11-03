@@ -5,7 +5,8 @@ from remotion_factory.schedule_migration import move_one
 
 class ScheduleChanges(unittest.TestCase):
     """Exercise exact-ID edits, readback and uncertain-response recovery."""
-    def call(self, before=None, record=None, error=None):
+    @staticmethod
+    def call(before=None, record=None, error=None):
         """Run a schedule edit with independently mocked reads and mutation."""
         old={'id':'p','channelId':'c','status':'scheduled','dueAt':'2026-11-04T15:00:00Z','text':'keep','assets':[{'source':'original'}]}
         new={**old,'dueAt':'2026-11-04T10:00:00Z'}

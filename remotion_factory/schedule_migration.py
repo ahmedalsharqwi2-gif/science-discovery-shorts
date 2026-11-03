@@ -42,7 +42,7 @@ def move_one(service, destination, identifier, request, entry, record, persist):
     original=record.get('before',before)
     if actual.get('text')!=original.get('text') or actual.get('assets')!=original.get('assets'):
         raise ValueError('Schedule edit changed text or media; inspect exact post before further actions')
-    record.update(phase='verified',post_id=identifier,due_at=actual['dueAt'],verified_at=datetime.now(timezone.utc).isoformat())
+    record.update(service=service,phase='verified',post_id=identifier,due_at=actual['dueAt'],verified_at=datetime.now(timezone.utc).isoformat())
     persist()
     return actual
 
