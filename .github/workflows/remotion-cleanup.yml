@@ -53,7 +53,7 @@
         },
         {
           "name": "Install inventory and regression prerequisites",
-          "run": "python -m pip install requests beautifulsoup4"
+          "run": "python -m pip install requests beautifulsoup4 Pillow"
         },
         {
           "name": "Verify protected refs, active work and cache-only deletion guards",
