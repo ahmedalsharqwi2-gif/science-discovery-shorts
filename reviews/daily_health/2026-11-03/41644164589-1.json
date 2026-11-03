@@ -1,0 +1,96 @@
+{
+  "date": "2026-11-03",
+  "profile": "science",
+  "phase": "prepublish",
+  "checked_at": "2026-11-03T13:25:40.008491+00:00",
+  "run_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/actions/runs/41644164589",
+  "report_path": "reviews/daily_health/2026-11-03/41644164589-1.json",
+  "publication_due_utc": "2026-11-03T15:00:00+00:00",
+  "errors": [
+    "No successful clock-triggered daily run for this date; manual recovery and dry-run tests do not count as the automatic clock"
+  ],
+  "passed": false,
+  "generation_calls": 0,
+  "publication_mutations": 0,
+  "preview": false,
+  "observed_receipts": {
+    "tiktok": [
+      {
+        "id": "6ae84ea6c8c477a933a147d2",
+        "channelId": "6a9edf14cd8b9c702c230272",
+        "status": "scheduled",
+        "dueAt": "2026-11-03T15:00:00.000Z",
+        "sentAt": null,
+        "externalLink": null
+      }
+    ],
+    "youtube": [
+      {
+        "id": "6ae84ea81057bd49b78d37ef",
+        "channelId": "6a9edee8cd8b9c702c2301cb",
+        "status": "scheduled",
+        "dueAt": "2026-11-03T15:00:00.000Z",
+        "sentAt": null,
+        "externalLink": null
+      }
+    ],
+    "facebook": [
+      {
+        "id": "6ae84eab4af9a19eb717241c",
+        "channelId": "6a9edebbcd8b9c702c230128",
+        "status": "scheduled",
+        "dueAt": "2026-11-03T15:00:00.000Z",
+        "sentAt": null,
+        "externalLink": null
+      }
+    ]
+  },
+  "receipts": {
+    "tiktok": {
+      "id": "6ae84ea6c8c477a933a147d2",
+      "channelId": "6a9edf14cd8b9c702c230272",
+      "status": "scheduled",
+      "dueAt": "2026-11-03T15:00:00.000Z",
+      "sentAt": null,
+      "externalLink": null
+    },
+    "youtube": {
+      "id": "6ae84ea81057bd49b78d37ef",
+      "channelId": "6a9edee8cd8b9c702c2301cb",
+      "status": "scheduled",
+      "dueAt": "2026-11-03T15:00:00.000Z",
+      "sentAt": null,
+      "externalLink": null
+    },
+    "facebook": {
+      "id": "6ae84eab4af9a19eb717241c",
+      "channelId": "6a9edebbcd8b9c702c230128",
+      "status": "scheduled",
+      "dueAt": "2026-11-03T15:00:00.000Z",
+      "sentAt": null,
+      "externalLink": null
+    }
+  },
+  "episode": {
+    "slot": "daily-2026-11-02",
+    "title": "الصوت بيعدي في الهوا إزاي؟",
+    "pipeline": "legacy",
+    "expected_sha256": "a7861d4462e10dbb252e2f293cb011feee20272a34ca1282fdfaeffb7c7643a8"
+  },
+  "technical": {
+    "passed": true,
+    "sha256": "a7861d4462e10dbb252e2f293cb011feee20272a34ca1282fdfaeffb7c7643a8",
+    "full_decode": true,
+    "duration": 108.566667,
+    "width": 1080,
+    "height": 1920,
+    "audio_mean_db": -18.6,
+    "actual_visual_samples": 12,
+    "unique_visual_samples": 12,
+    "checked_at": "2026-11-02T23:04:09.333056+00:00",
+    "scope": "Independent technical media check; no claim of human narrative or scientific review",
+    "reused_immutable_media_check": true,
+    "live_asset_metadata_verified": true
+  },
+  "media_binding": "Same live scheduled source URL and independently hashed original"
+}
