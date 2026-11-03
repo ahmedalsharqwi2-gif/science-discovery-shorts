@@ -10,5 +10,94 @@
   "new_workflow_definitions": 0,
   "source": "scheduler/",
   "existing_video_provider_keys_unchanged": true,
-  "source_review_notes": "Completed-run decisions are inspected; DST no-ops and read-only tests do not suppress production. Pending runs are observed without latching an unproven success. Partial deployment failures disable the temporary probe clock."
+  "source_review_notes": "Completed-run decisions are inspected; DST no-ops and read-only tests do not suppress production. Pending runs are observed without latching an unproven success. Partial deployment failures disable the temporary probe clock.",
+  "github_ci": {
+    "science-discovery-shorts": [
+      {
+        "id": 41622989981,
+        "path": ".github/workflows/checks.yml",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 41622989975,
+        "path": ".github/workflows/arabic_guard.yml",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 41622989963,
+        "path": ".github/workflows/validation.yml",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ],
+    "arabic-horror-stories": [
+      {
+        "id": 41621200993,
+        "path": ".github/workflows/validation.yml",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 41621200980,
+        "path": ".github/workflows/arabic_guard.yml",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 41621200967,
+        "path": ".github/workflows/checks.yml",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ],
+    "documented-history-stories": [
+      {
+        "id": 41621185107,
+        "path": ".github/workflows/checks.yml",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 41621185075,
+        "path": ".github/workflows/arabic_guard.yml",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 41621185037,
+        "path": ".github/workflows/validation.yml",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ],
+    "ai-news-daily": [
+      {
+        "id": 41621524894,
+        "path": ".github/workflows/checks.yml",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ],
+    "stickman-what-if-shorts": [
+      {
+        "id": 41621516729,
+        "path": ".github/workflows/checks.yml",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "github_ci_passed": true,
+  "live_deployment_attempt": {
+    "result": "blocked-before-any-provider-deployment",
+    "exit_code": 2,
+    "missing_bindings": [
+      "CLOUDFLARE_API_TOKEN",
+      "GITHUB_DISPATCH_TOKEN"
+    ],
+    "secret_values_requested_in_chat": false
+  },
+  "existing_repository_workflow_counts_unchanged": true
 }
