@@ -31,3 +31,11 @@
 
 
 تم تفعيل مشغّل Cloudflare يوم ٣ نوفمبر ٢٠٢٦ بعد نبضة فعلية وخمسة اختبارات GitHub ناجحة للقراءة فقط. يعمل مستقلاً عن المحادثة: إنتاج/فحص الفيلم المحجوز ٩ صباحًا، احتياطي ٩:١٧، ونشر ٥ مساءً في نفس اليوم؛ وفحص نشر مستقل ٥:٣٥. أول موعد صباحي تالٍ: ٤ نوفمبر ٢٠٢٦. [إيصال التفعيل](reviews/independent-clock-live-verification-2026-11-03.json). لم يُدّعَ بعد رصد تشغيل الإنتاج عند ذلك الموعد المستقبلي.
+
+## Owner-approved noon trial: November 4–17, 2026
+
+During these publication dates, prepare at **19:00 Cairo the previous day** and publish at **12:00 Cairo**. Preserve the date across retries and Cairo daylight-saving offsets. A 19:17 backup trigger must reuse existing reservations and post IDs. November 4 uses existing completed inventory, rescheduled in place; the first new evening production is November 4 for November 5. After November 17 the configured baseline resumes unless the owner changes it.
+
+Health reports check tomorrow at 21:30, today at 09:30 and 11:15, and actual publication at 12:30. Reports retain preparation/publication instants, readiness, immutable media proof, destination receipts and errors. A green workflow alone is never proof of actual publication.
+
+The one-time `[schedule-migration]` push runs only the exact existing-post time-change job. It changes dueAt in place and retains a before snapshot and independently read-back IDs. It never creates posts, renders videos or invokes voice generation. Uncertain writes require reconciliation rather than blind retry.

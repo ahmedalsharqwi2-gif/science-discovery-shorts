@@ -4,9 +4,35 @@
   "main": "worker.mjs",
   "compatibility_date": "2025-05-01",
   "workers_dev": true,
-  "vars": {"FACTORY_OWNER": "ahmedalsharqwi2-gif-five-repositories-v1", "DISPATCH_ENABLED": "false", "PROBE_ONLY": "true", "DEPLOYMENT_ID": "unconfigured"},
-  "durable_objects": {"bindings": [{"name": "DAILY_GATE", "class_name": "DailyGate"}]},
-  "migrations": [{"tag": "v1", "new_sqlite_classes": ["DailyGate"]}],
-  "triggers": {"crons": ["0,17 6,7 * * *", "35 14,15 * * *"]},
-  "observability": {"enabled": true}
+  "vars": {
+    "FACTORY_OWNER": "ahmedalsharqwi2-gif-five-repositories-v1",
+    "DISPATCH_ENABLED": "false",
+    "PROBE_ONLY": "true",
+    "DEPLOYMENT_ID": "unconfigured"
+  },
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "DAILY_GATE",
+        "class_name": "DailyGate"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": [
+        "DailyGate"
+      ]
+    }
+  ],
+  "triggers": {
+    "crons": [
+      "0,17 6,7,16,17 * * *",
+      "35 9,10,14,15 * * *"
+    ]
+  },
+  "observability": {
+    "enabled": true
+  }
 }

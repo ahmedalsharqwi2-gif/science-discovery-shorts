@@ -1,22 +1,24 @@
 """Cairo civil-time daily controller. Each run keeps its original publication date."""
 import argparse,hashlib,io,json,os,subprocess,sys,zipfile
-from datetime import datetime,timedelta,time,timezone
+from datetime import datetime,timezone
 from pathlib import Path
-from zoneinfo import ZoneInfo
 import requests
 from .state import identity,mutate
 from .publish import destinations,queued,instant
-CAIRO=ZoneInfo('Africa/Cairo')
+from .schedule import CAIRO,hours,due_for,clock_target,production_at
 ROOT=Path('professional_motion/delivery')
 def command(*args):subprocess.run(list(args),check=True)
 def slot_for(created,event,schedule='',target=None,now=None):
  now=now or datetime.now(timezone.utc);local=created.astimezone(CAIRO)
+ day=datetime.fromisoformat(target).date() if target else clock_target(local)
+ if day is None:return None
+ production_hour,_=hours(day)
  if event=='schedule':
-  expected='0 '+str(9-int(local.utcoffset().total_seconds()/3600))+' * * *'
-  backup='17 '+str(9-int(local.utcoffset().total_seconds()/3600))+' * * *'
-  if schedule not in (expected,backup) or not 9<=local.hour<13:return None
- day=datetime.fromisoformat(target).date() if target else local.date()
- due=datetime.combine(day,time(17),CAIRO).astimezone(timezone.utc)
+  offset=int(local.utcoffset().total_seconds()/3600)
+  expected='0 '+str(production_hour-offset)+' * * *'
+  backup='17 '+str(production_hour-offset)+' * * *'
+  if schedule not in (expected,backup) or local.date()!=production_at(day).date() or not production_hour<=local.hour<production_hour+4:return None
+ due=due_for(day)
  if due<=now:raise ValueError('Original publication time expired; no automatic rollover')
  return due
 def api(path):

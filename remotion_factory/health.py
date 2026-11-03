@@ -1,14 +1,12 @@
 """Read-only production/social audit. Never writes topics, synthesizes or publishes."""
 import argparse,base64,hashlib,json,math,os,re,statistics,subprocess,sys,tempfile
-from datetime import datetime,time,timedelta,timezone
+from datetime import datetime,timedelta,timezone
 from pathlib import Path
 from urllib.parse import unquote,urlparse
-from zoneinfo import ZoneInfo
 import requests
 from .state import identity
 from .publish import destinations,queued,query,instant,DestinationUnavailable
-CAIRO=ZoneInfo('Africa/Cairo')
-CHECKPOINTS=((11,30),(15,0),(16,15),(17,30))
+from .schedule import CAIRO,hours,due_for,checkpoints,production_at,production_day,audit_day,automatic_expected
 MARKER='<!-- remotion-daily-health -->'
 class AuditFailure(Exception):pass
 def sha(path):
@@ -18,7 +16,7 @@ def sha(path):
  return h.hexdigest()
 def schedule_allowed(created,cron):
  local=created.astimezone(CAIRO);offset=int(local.utcoffset().total_seconds()/3600)
- for hour,minute in CHECKPOINTS:
+ for hour,minute in checkpoints(local.date()):
   nominal=local.replace(hour=hour,minute=minute,second=0,microsecond=0)
   if cron==f'{minute} {hour-offset} * * *' and nominal<=local<=nominal+timedelta(minutes=90):return True
  return False
@@ -43,19 +41,19 @@ def write_json(path,data):
    except AuditFailure:
     if attempt==2:raise
  p=Path(path);p.parent.mkdir(parents=True,exist_ok=True);p.write_text(content)
-def target_due(day):return datetime.combine(day,time(17),CAIRO).astimezone(timezone.utc)
+def target_due(day):return due_for(day)
 def check_posts(mapping,rows,due,phase):
  selected={};media=set();ids=set()
  for service,destination in mapping.items():
   posts=rows.get(service,[])
-  if len(posts)!=1:raise AuditFailure(service+': missing post or duplicate posts at17Cairo')
+  if len(posts)!=1:raise AuditFailure(service+': missing post or duplicate posts at the configured Cairo slot')
   post=posts[0]
   if post.get('status')=='error':
    reason=re.sub(r'https?://\S+','[provider URL omitted]',str((post.get('error') or {}).get('message') or 'Provider did not supply an error message'))[:500]
    raise AuditFailure(service+': provider publication error: '+reason)
   if not post.get('id') or post['id'] in ids or post.get('channelId')!=destination['channel']:raise AuditFailure(service+': post identity/channel mismatch')
   ids.add(post['id'])
-  if not post.get('dueAt') or abs((instant(post['dueAt'])-due).total_seconds())>1:raise AuditFailure(service+': publication time differs from17Cairo')
+  if not post.get('dueAt') or abs((instant(post['dueAt'])-due).total_seconds())>1:raise AuditFailure(service+': publication time differs from the configured Cairo slot')
   if phase=='postpublish':
    if post.get('status')!='sent' or not post.get('sentAt') or not post.get('externalLink'):raise AuditFailure(service+': Buffer has not confirmed sent publication with an external link')
   elif post.get('status')!='scheduled':raise AuditFailure(service+': post is not scheduled')
@@ -161,16 +159,16 @@ def clock_source(run,decision,day):
  if run.get('status')!='completed' or run.get('conclusion')!='success' or not isinstance(decision,dict):return None
  try:
   created=instant(run['created_at']).astimezone(CAIRO)
-  if created.date()!=day or not 9<=created.hour<13:return None
+  if created.date()!=production_day(day) or not hours(day)[0]<=created.hour<hours(day)[0]+4:return None
   if not decision.get('due_at') or instant(decision['due_at'])!=target_due(day) or decision.get('reason')=='other DST trigger':return None
  except (ValueError,TypeError,KeyError,AttributeError):return None
  if run.get('event')=='schedule':return 'github-schedule'
- if run.get('event')=='workflow_dispatch' and created.hour==9 and decision.get('trigger_source')=='cloudflare-clock' and decision.get('dry_run') is False:return 'cloudflare-clock'
+ if run.get('event')=='workflow_dispatch' and created.hour==hours(day)[0] and decision.get('trigger_source')=='cloudflare-clock' and decision.get('dry_run') is False:return 'cloudflare-clock'
  return None
 
 def scheduler(day):
- data=gh('/actions/workflows/remotion-daily.yml/runs?per_page=100&created='+day.isoformat()) or {}
- rows=[r for r in data.get('workflow_runs',[]) if r.get('event') in ('schedule','workflow_dispatch') and instant(r['created_at']).astimezone(CAIRO).date()==day and 9<=instant(r['created_at']).astimezone(CAIRO).hour<13]
+ data=gh('/actions/workflows/remotion-daily.yml/runs?per_page=100&created='+production_day(day).isoformat()) or {}
+ rows=[r for r in data.get('workflow_runs',[]) if r.get('event') in ('schedule','workflow_dispatch') and instant(r['created_at']).astimezone(CAIRO).date()==production_day(day) and hours(day)[0]<=instant(r['created_at']).astimezone(CAIRO).hour<hours(day)[0]+4]
  for run in rows:
   if run['status']!='completed' or run.get('conclusion')!='success':continue
   jobs=(gh('/actions/runs/'+str(run['id'])+'/jobs') or {}).get('jobs',[])
@@ -182,7 +180,7 @@ def scheduler(day):
     try:decision=json.loads(line[i:])
     except ValueError:continue
     source=clock_source(run,decision,day)
-    if source:return {'observed':True,'run_id':run['id'],'run_url':run['html_url'],'conclusion':'success','decision_reason':decision.get('reason'),'clock_source':source,'event':run['event'],'run_created_at_cairo':instant(run['created_at']).astimezone(CAIRO).isoformat(),'job_started_at':job.get('started_at'),'nominal_production_local':'09:00'}
+    if source:return {'observed':True,'run_id':run['id'],'run_url':run['html_url'],'conclusion':'success','decision_reason':decision.get('reason'),'clock_source':source,'event':run['event'],'run_created_at_cairo':instant(run['created_at']).astimezone(CAIRO).isoformat(),'job_started_at':job.get('started_at'),'nominal_production_local':f'{hours(day)[0]:02d}:00'}
  raise AuditFailure('No successful clock-triggered daily run for this date; manual recovery and dry-run tests do not count as the automatic clock')
 
 def alert(report):
@@ -203,16 +201,16 @@ def main():
  if os.getenv('GITHUB_EVENT_NAME')=='schedule' and not schedule_allowed(created,event.get('schedule','')):print('Other DST checkpoint; no duplicate audit');return
  inputs=event.get('inputs',{})
  if os.getenv('GITHUB_EVENT_NAME')=='push':inputs=read_json('.github/remotion-health-request.json',{}) or {}
- raw_date=args.date or inputs.get('date');day=datetime.fromisoformat(raw_date).date() if raw_date else created.astimezone(CAIRO).date();due=target_due(day);phase=args.phase if args.phase!='auto' else inputs.get('phase','auto')
+ raw_date=args.date or inputs.get('date');day=datetime.fromisoformat(raw_date).date() if raw_date else audit_day(created.astimezone(CAIRO));due=target_due(day);phase=args.phase if args.phase!='auto' else inputs.get('phase','auto')
  if phase=='auto':phase='postpublish' if now>=due+timedelta(minutes=20) else 'prepublish'
  activation=instant(policy['activated_at_utc']);first_day=activation.astimezone(CAIRO).date()+timedelta(days=1)
- if not raw_date and (day<first_day or created.astimezone(CAIRO).hour<9):print('Monitoring starts at first morning after activation; no false historical alert');return
+ if not raw_date and (day<first_day or now<production_at(day)):print('Monitoring starts at first morning after activation; no false historical alert');return
  run_url='https://github.com/'+repo+'/actions/runs/'+os.environ['GITHUB_RUN_ID'];path='reviews/daily_health/'+day.isoformat()+'/'+os.environ['GITHUB_RUN_ID']+'-'+os.environ.get('GITHUB_RUN_ATTEMPT','1')+'.json'
  report={'date':day.isoformat(),'profile':profile,'phase':phase,'checked_at':now.isoformat(),'run_url':run_url,'report_path':path,'publication_due_utc':due.isoformat(),'errors':[],'passed':False,'generation_calls':0,'publication_mutations':0,'preview':day>now.astimezone(CAIRO).date()}
- if not report['preview'] and day>=first_day:
+ if day>=first_day and automatic_expected(day) and now>=production_at(day)+timedelta(minutes=20):
   try:report['scheduler']=scheduler(day)
   except Exception as exc:report['errors'].append(str(exc) if isinstance(exc,AuditFailure) else 'Scheduler verification unavailable: '+type(exc).__name__)
- else:report['scheduler']={'observed':False,'reason':'Future date preview; actual9am clock event not due yet' if report['preview'] else 'Monitoring was activated after this date morning; no historical9am success claimed'}
+ else:report['scheduler']={'observed':False,'reason':'Transition inventory retained; first automatic evening run targets November 5' if not automatic_expected(day) else 'Configured production clock not due yet; no automatic success claimed'}
  try:
   mapping=destinations(profile);rows={}
   for service,destination in mapping.items():
@@ -227,12 +225,16 @@ def main():
   report['media_binding']='Same live scheduled source URL and independently hashed original' if phase!='postpublish' else 'Three live sent post IDs match retained original submission receipts; original release SHA independently verified. Platform-transcoded bytes are not claimed identical.'
  except Exception as exc:report['errors'].append(str(exc) if isinstance(exc,(AuditFailure,DestinationUnavailable)) else 'Live media/provider verification unavailable: '+type(exc).__name__)
  if os.getenv('GITHUB_EVENT_NAME')=='workflow_run' and event.get('workflow_run',{}).get('conclusion') not in ('success','skipped'):report['errors'].append('Production workflow failed/cancelled; inspect its retained evidence')
+ report['production_at_cairo']=production_at(day).isoformat()
+ report['publication_at_cairo']=due.astimezone(CAIRO).isoformat()
+ report['hours_until_publication']=round((due-now).total_seconds()/3600,2)
+ report['readiness']='verified' if report.get('technical',{}).get('passed') and len(report.get('receipts',{}))==3 else 'needs_attention'
  report['passed']=not report['errors']
  try:write_json(path,report);write_json('reviews/daily_health/latest.json',report)
  except Exception as exc:report['passed']=False;report['errors'].append('Audit persistence failed: '+type(exc).__name__)
  Path('health-output').mkdir(exist_ok=True);Path('health-output/report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
  if os.getenv('GITHUB_STEP_SUMMARY'):
-  with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:f.write(('✅' if report['passed'] else '🚨')+' '+profile+' '+day.isoformat()+' '+phase+'\n\n'+('\n'.join('- '+e for e in report['errors']) or 'Full video and three live destination receipts verified.')+'\n')
+  with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:f.write(('✅' if report['passed'] else '🚨')+' '+profile+' '+day.isoformat()+' '+phase+'\n\nPreparation: '+report['production_at_cairo']+'\nPublication: '+report['publication_at_cairo']+'\nReadiness: '+report['readiness']+'\n\n'+('\n'.join('- '+e for e in report['errors']) or 'Full video and three live destination receipts verified.')+'\n')
  try:alert(report)
  except Exception as exc:
   report['errors'].append('GitHub issue alert unavailable: '+type(exc).__name__);report['passed']=False;Path('health-output/report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')

@@ -149,3 +149,16 @@ test('live-clock probe stores only a tick and never calls GitHub', async () => {
   assert.equal((await response.json()).deployment_id, env.DEPLOYMENT_ID);
   assert.equal(await store.get('receipt'), undefined);
 });
+
+test('noon trial starts production on the previous evening and preserves target date', async () => {
+  const evening=Date.parse('2026-11-04T17:00:00Z');
+  assert.deepEqual(clockOperation(evening,evening),{kind:'production',day:'2026-11-05'});
+  assert.equal(clockOperation(Date.parse('2026-11-05T07:00:00Z'),Date.parse('2026-11-05T07:00:00Z')),null);
+  const mock=apiMock();
+  const result=await dispatchOnce(new Store(),env,{repo:REPOS[0],kind:'production',day:'2026-11-05'},mock.http,evening);
+  assert.equal(result.phase,'dispatch_accepted');
+  assert.equal(JSON.parse(mock.posts()[0].body).inputs.publish_date,'2026-11-05');
+  assert.ok(mock.calls[0].url.includes('created=2026-11-04'));
+  const audit=Date.parse('2026-11-05T10:35:00Z');
+  assert.deepEqual(clockOperation(audit,audit),{kind:'publication-audit',day:'2026-11-05'});
+});
