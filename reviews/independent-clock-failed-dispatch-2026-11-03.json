@@ -1,0 +1,61 @@
+{
+  "deployment_id": "861ee757e38b5fde43b2361a",
+  "started_at": "2026-11-03T12:19:08.887Z",
+  "live": false,
+  "checks": [
+    "Five active production workflows accept explicit independent clock/test inputs",
+    "An actual Cloudflare cron tick reached the Durable Object while production was disabled"
+  ],
+  "generation_calls_added": 0,
+  "publication_calls_added": 0,
+  "source_sha256": "0b272307df9afecc1d95e10db2ee4c6444b9caf57fae8d5bcbd98df227165009",
+  "clock_probe": {
+    "scheduled_time": "2026-11-03T12:19:40.493Z",
+    "observed_at": "2026-11-03T12:19:41.205Z",
+    "deployment_id": "861ee757e38b5fde43b2361a"
+  },
+  "test_dispatches": [
+    {
+      "phase": "dispatch_rejected",
+      "repo": "science-discovery-shorts",
+      "day": "2026-11-03",
+      "kind": "test",
+      "http_status": 403,
+      "automatic_retry": false
+    },
+    {
+      "phase": "dispatch_rejected",
+      "repo": "arabic-horror-stories",
+      "day": "2026-11-03",
+      "kind": "test",
+      "http_status": 403,
+      "automatic_retry": false
+    },
+    {
+      "phase": "dispatch_rejected",
+      "repo": "documented-history-stories",
+      "day": "2026-11-03",
+      "kind": "test",
+      "http_status": 403,
+      "automatic_retry": false
+    },
+    {
+      "phase": "dispatch_rejected",
+      "repo": "ai-news-daily",
+      "day": "2026-11-03",
+      "kind": "test",
+      "http_status": 403,
+      "automatic_retry": false
+    },
+    {
+      "phase": "dispatch_rejected",
+      "repo": "stickman-what-if-shorts",
+      "day": "2026-11-03",
+      "kind": "test",
+      "http_status": 403,
+      "automatic_retry": false
+    }
+  ],
+  "worker_left_disabled_after_failure": true,
+  "error": "Five read-only dispatch acknowledgements were not confirmed"
+}
