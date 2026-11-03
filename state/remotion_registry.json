@@ -86,6 +86,32 @@
             "service": "tiktok",
             "due_at": "2026-11-06T10:00:00.000Z",
             "verified_at": "2026-11-03T20:08:33.646344+00:00"
+          },
+          "youtube": {
+            "phase": "intent",
+            "post_id": "6ae8d34fc1e1a07104365865",
+            "before": {
+              "id": "6ae8d34fc1e1a07104365865",
+              "channelId": "6a9edee8cd8b9c702c2301cb",
+              "status": "scheduled",
+              "dueAt": "2026-11-06T15:00:00.000Z",
+              "text": "الصابون بيمسك الدهون إزاي؟\nالمصدر: https://www.cdc.gov/clean-hands/about/index.html",
+              "assets": [
+                {
+                  "source": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/releases/download/production-remotion-2026-11-04-science/science-remotion-2026-11-04-science.mp4"
+                }
+              ],
+              "metadata": {
+                "__typename": "YoutubePostMetadata",
+                "title": "الصابون بيمسك الدهون إزاي؟",
+                "category": {
+                  "categoryId": "27"
+                },
+                "privacy": "public",
+                "madeForKids": false,
+                "notifySubscribers": false
+              }
+            }
           }
         }
       }
