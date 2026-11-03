@@ -12,6 +12,8 @@ def verify(movie,report,profile):
  if profile in ('horror','history') and (report.get('fiction') or not report.get('source',{}).get('url')):raise ValueError('True story evidence required')
  shots=sorted(movie.parent.glob('remotion-shot-*.png'))
  if len(shots)!=8:raise ValueError('Eight actual-timing visual inspections required')
+ from .packaging import verify as verify_publication
+ verify_publication(movie.parent,report)
  hashes=set()
  for shot in shots:
   im=Image.open(shot).convert('RGB');im.thumbnail((270,480))
