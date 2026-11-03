@@ -21,10 +21,22 @@ function headers(env) {
   if (!env.GITHUB_DISPATCH_TOKEN) throw new Error('GitHub dispatch credential is not configured');
   return {'Authorization': `Bearer ${env.GITHUB_DISPATCH_TOKEN}`, 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28', 'User-Agent': 'video-factory-independent-clock/1', 'Content-Type': 'application/json'};
 }
-async function api(env, path, method = 'GET', payload, http = fetch) {
+async function api(env, path, method = 'GET', payload, http = fetch, raw = false) {
   const response = await http('https://api.github.com' + path, {method, headers: headers(env), ...(payload ? {body: JSON.stringify(payload)} : {}), signal: AbortSignal.timeout(30000)});
   if (!response.ok) { const error = new Error('GitHub HTTP ' + response.status); error.httpStatus = response.status; throw error; }
-  return response.status === 204 ? null : response.json();
+  return response.status === 204 ? null : raw ? response.text() : response.json();
+}
+async function recordedDecision(env, repo, run, http) {
+  const root = `/repos/${OWNER}/${repo}/actions`;
+  const data = await api(env, `${root}/runs/${run.id}/jobs`, 'GET', undefined, http);
+  for (const job of data.jobs || []) {
+    const logs = await api(env, `${root}/jobs/${job.id}/logs`, 'GET', undefined, http, true);
+    for (const line of logs.split('\n')) {
+      const start = line.indexOf('{"run":'); if (start < 0) continue;
+      try { return JSON.parse(line.slice(start)); } catch { /* A malformed log line proves nothing. */ }
+    }
+  }
+  return null;
 }
 export async function dispatchOnce(store, env, input, http = fetch, now = Date.now()) {
   if (!REPOS.includes(input.repo) || !['production', 'publication-audit', 'test'].includes(input.kind)) throw new Error('Unapproved operation/repository');
@@ -45,12 +57,23 @@ export async function dispatchOnce(store, env, input, http = fetch, now = Date.n
       if (data.workflow_runs.length < 100) break;
       if (page === 5) throw new Error('Incomplete run inventory; no dispatch');
     }
-    const existing = found.find(r => {
+    const candidates = found.filter(r => {
       const p = local(r.created_at);
       return p.day === input.day && (input.kind === 'production' ? p.hour >= 9 : p.hour >= 17 && ['queued', 'in_progress', 'waiting', 'pending', 'requested'].includes(r.status));
     });
-    if (existing) {
-      const receipt = {phase: existing.conclusion === 'failure' ? 'existing_failure_needs_attention' : 'existing_run_preserved', run_id: existing.id, run_status: existing.status, run_conclusion: existing.conclusion, repo: input.repo, day: input.day};
+    for (const existing of candidates) {
+      if (['queued','in_progress','waiting','pending','requested'].includes(existing.status)) {
+        const observation = {phase: 'existing_run_in_progress_preserved', run_id: existing.id, run_status: existing.status, repo: input.repo, day: input.day};
+        await store.put('observation', observation); // Backup may inspect its final result; no new dispatch now.
+        return observation;
+      }
+      const decision = await recordedDecision(env, input.repo, existing, http);
+      // A delayed opposite-DST no-op or an explicit dry test must not suppress real production.
+      if (decision?.reason === 'other DST trigger' || decision?.dry_run === true) continue;
+      let correctTarget = false;
+      try { const p = local(decision?.due_at); correctTarget = p.day === input.day && p.hour === 17 && p.minute === 0 && new Date(decision.due_at).getUTCSeconds() === 0; } catch {}
+      const valid = existing.conclusion === 'success' && correctTarget && decision?.dry_run === false;
+      const receipt = {phase: valid ? 'existing_run_preserved' : 'existing_run_needs_attention', run_id: existing.id, run_status: existing.status, run_conclusion: existing.conclusion, repo: input.repo, day: input.day};
       await store.transaction(async tx => { if (!(await tx.get('receipt'))) await tx.put('receipt', receipt); });
       return receipt;
     }

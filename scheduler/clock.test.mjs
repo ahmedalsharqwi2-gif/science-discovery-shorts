@@ -9,7 +9,7 @@ class Store {
   async put(k, v) { this.values.set(k, structuredClone(v)); }
   transaction(fn) { const next = this.lock.then(() => fn(this)); this.lock = next.catch(() => {}); return next; }
 }
-function apiMock({rows = [], failedRead, failedPost, networkUnknown = false, paginated = false} = {}) {
+function apiMock({rows = [], decision = null, failedRead, failedPost, networkUnknown = false, paginated = false} = {}) {
   const calls = [];
   const http = async (url, options) => {
     calls.push({url, ...options});
@@ -17,6 +17,8 @@ function apiMock({rows = [], failedRead, failedPost, networkUnknown = false, pag
       if (networkUnknown) throw new Error('connection reset after sending');
       return new Response(null, {status: failedPost || 204});
     }
+    if (/\/jobs\//.test(url)) return new Response(decision ? JSON.stringify(decision) : 'No retained decision');
+    if (/\/jobs$/.test(url)) return Response.json({jobs: [{id: 99}]});
     return Response.json({workflow_runs: paginated ? Array.from({length: 100}, (_, n) => ({id: n, created_at: '2030-01-03T06:00:00Z'})) : rows}, {status: failedRead || 200});
   };
   return {http, calls, posts: () => calls.filter(c => c.method === 'POST')};
@@ -73,6 +75,30 @@ test('existing queued/in-progress/success/failed current-day runs are preserved'
 test('the opposite-DST no-op before9 does not suppress the real clock', async () => {
   const api = apiMock({rows: [{id: 1, status: 'completed', conclusion: 'success', created_at: '2030-01-03T06:00:00Z'}]});
   await dispatchOnce(new Store(), env, operation, api.http, winter);
+  assert.equal(api.posts().length, 1);
+});
+test('a delayed DST no-op created after9 does not suppress production', async () => {
+  const api = apiMock({rows: [{id: 1, status: 'completed', conclusion: 'success', created_at: '2030-01-03T07:00:00Z'}], decision: {run: false, reason: 'other DST trigger', dry_run: false}});
+  await dispatchOnce(new Store(), env, operation, api.http, winter);
+  assert.equal(api.posts().length, 1);
+});
+test('a completed read-only dry-run test is not a completed production clock', async () => {
+  const api = apiMock({rows: [{id: 1, status: 'completed', conclusion: 'success', created_at: '2030-01-03T07:00:00Z'}], decision: {run: false, dry_run: true, due_at: '2030-01-03T15:00:00Z'}});
+  await dispatchOnce(new Store(), env, operation, api.http, winter);
+  assert.equal(api.posts().length, 1);
+});
+test('a completed genuine same-day production run suppresses duplicate dispatch', async () => {
+  const api = apiMock({rows: [{id: 1, status: 'completed', conclusion: 'success', created_at: '2030-01-03T07:00:00Z'}], decision: {run: false, reason: 'all slots occupied', dry_run: false, due_at: '2030-01-03T15:00:00Z'}});
+  assert.equal((await dispatchOnce(new Store(), env, operation, api.http, winter)).phase, 'existing_run_preserved');
+  assert.equal(api.posts().length, 0);
+});
+test('backup rechecks a previously running job rather than latching an unproven success', async () => {
+  const rows = [{id: 1, status: 'in_progress', conclusion: null, created_at: '2030-01-03T07:00:00Z'}];
+  const api = apiMock({rows, decision: {run: false, reason: 'other DST trigger', dry_run: false}}), store = new Store();
+  await dispatchOnce(store, env, operation, api.http, winter);
+  assert.equal(await store.get('receipt'), undefined); assert.equal(api.posts().length, 0);
+  rows[0].status = 'completed'; rows[0].conclusion = 'success';
+  await dispatchOnce(store, env, operation, api.http, winter + 17 * 60000);
   assert.equal(api.posts().length, 1);
 });
 test('failed/incomplete discovery never starts production', async () => {

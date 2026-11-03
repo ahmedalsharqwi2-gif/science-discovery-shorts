@@ -17,6 +17,14 @@ const localConfig = new URL('./wrangler.deploy.json', import.meta.url);
 const report = {deployment_id: deployment, started_at: new Date().toISOString(), live: false, checks: [], generation_calls_added: 0, publication_calls_added: 0};
 const reportFile = new URL('./live-verification.json', import.meta.url);
 let activationAttempted = false;
+let workerModified = false;
+async function sourceDigest() {
+  const digest = createHash('sha256');
+  for (const name of ['worker.mjs','core.mjs','deploy.mjs','wrangler.json','package-lock.json']) digest.update(name + '\0').update(await readFile(new URL('./' + name, import.meta.url)));
+  return digest.digest('hex');
+}
+const expectedSource = await sourceDigest();
+report.source_sha256 = expectedSource;
 const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
 async function cf(path, options = {}) {
   const response = await fetch('https://api.cloudflare.com/client/v4/accounts/' + account + path, {headers: {Authorization: 'Bearer ' + process.env.CLOUDFLARE_API_TOKEN}, ...options, signal: AbortSignal.timeout(30000)});
@@ -69,6 +77,7 @@ try {
   report.checks.push('Five active production workflows accept explicit independent clock/test inputs');
   await saveConfig(true);
   await wrangler(['deploy']);
+  workerModified = true;
   await wrangler(['secret', 'put', 'GITHUB_DISPATCH_TOKEN'], process.env.GITHUB_DISPATCH_TOKEN);
   await wrangler(['secret', 'put', 'OPS_TOKEN'], ops);
   const subdomain = await cf('/workers/subdomain');
@@ -117,6 +126,7 @@ try {
   }
   if (Object.keys(verified).length !== 5) throw new Error('Read-only integration verification timed out; production remains disabled');
   report.github_tests = verified; report.checks.push('All five actual GitHub dispatch tests completed with run=false, dry_run=true and same-day17 target'); await persist();
+  if (await sourceDigest() !== expectedSource) throw new Error('Local deployment source changed after verification; refusing activation');
   activationAttempted = true;
   await saveConfig(false); await wrangler(['deploy']);
   const schedules = await cf('/workers/scripts/' + config.name + '/schedules');
@@ -126,11 +136,11 @@ try {
   report.worker_sha256 = createHash('sha256').update(await readFile(new URL('./worker.mjs', import.meta.url))).digest('hex');
   await persist(); console.log(JSON.stringify({live: true, report: 'live-verification.json', clock_probe: tick.scheduled_time, verified_repositories: Object.keys(verified), origin}));
 } catch (error) {
-  if (activationAttempted) {
+  if (activationAttempted || workerModified) {
     try {
       const disabled = {...config, account_id: account, vars: {...config.vars, DEPLOYMENT_ID: deployment, PROBE_ONLY: 'false', DISPATCH_ENABLED: 'false'}, triggers: {crons: []}};
       await writeFile(localConfig, JSON.stringify(disabled, null, 2) + '\n');
-      await wrangler(['deploy']); report.failed_activation_disabled_again = true;
+      await wrangler(['deploy']); report.worker_left_disabled_after_failure = true;
     } catch { report.activation_state_uncertain_requires_attention = true; }
   }
   report.error = error.message; await persist(); console.error(error.message); process.exitCode = 1;

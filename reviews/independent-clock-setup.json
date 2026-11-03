@@ -3,11 +3,12 @@
   "cloudflare_live": false,
   "dispatch_enabled": false,
   "blocker": "Secure environment bindings CLOUDFLARE_API_TOKEN and GITHUB_DISPATCH_TOKEN are missing",
-  "core_tests_passed": 16,
+  "core_tests_passed": 20,
   "actual_local_cloudflare_runtime_tests_passed": 1,
   "github_clock_provenance_tests_passed": 8,
   "provider_authentication_or_live_clock_claimed": false,
   "new_workflow_definitions": 0,
   "source": "scheduler/",
-  "existing_video_provider_keys_unchanged": true
+  "existing_video_provider_keys_unchanged": true,
+  "source_review_notes": "Completed-run decisions are inspected; DST no-ops and read-only tests do not suppress production. Pending runs are observed without latching an unproven success. Partial deployment failures disable the temporary probe clock."
 }
