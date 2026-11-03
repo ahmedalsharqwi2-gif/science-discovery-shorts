@@ -1,12 +1,12 @@
 {
-  "status": "ready-for-existing-repository-credential-probe-not-deployed",
+  "status": "cloudflare-cron-proven-github-dispatch-403-blocked",
   "cloudflare_live": false,
   "dispatch_enabled": false,
-  "blocker": "Cloudflare repository credentials already exist; their current API access and FACTORY_DISPATCH_TOKEN presence are awaiting the explicit read-only probe.",
+  "blocker": "Five active workflows can be read, but all five read-only workflow_dispatch POST requests returned HTTP 403. Check the fine-grained GitHub token's Actions write permission and selected repositories. No production activation performed.",
   "core_tests_passed": 20,
   "actual_local_cloudflare_runtime_tests_passed": 1,
   "github_clock_provenance_tests_passed": 8,
-  "provider_authentication_or_live_clock_claimed": false,
+  "provider_authentication_or_live_clock_claimed": true,
   "new_workflow_definitions": 0,
   "source": "scheduler/",
   "existing_video_provider_keys_unchanged": true,
@@ -91,13 +91,65 @@
   },
   "github_ci_passed": true,
   "live_deployment_attempt": {
-    "result": "blocked-before-any-provider-deployment",
-    "exit_code": 2,
-    "missing_bindings": [
-      "CLOUDFLARE_API_TOKEN",
-      "GITHUB_DISPATCH_TOKEN"
+    "deployment_id": "861ee757e38b5fde43b2361a",
+    "started_at": "2026-11-03T12:19:08.887Z",
+    "live": false,
+    "checks": [
+      "Five active production workflows accept explicit independent clock/test inputs",
+      "An actual Cloudflare cron tick reached the Durable Object while production was disabled"
     ],
-    "secret_values_requested_in_chat": false
+    "generation_calls_added": 0,
+    "publication_calls_added": 0,
+    "source_sha256": "0b272307df9afecc1d95e10db2ee4c6444b9caf57fae8d5bcbd98df227165009",
+    "clock_probe": {
+      "scheduled_time": "2026-11-03T12:19:40.493Z",
+      "observed_at": "2026-11-03T12:19:41.205Z",
+      "deployment_id": "861ee757e38b5fde43b2361a"
+    },
+    "test_dispatches": [
+      {
+        "phase": "dispatch_rejected",
+        "repo": "science-discovery-shorts",
+        "day": "2026-11-03",
+        "kind": "test",
+        "http_status": 403,
+        "automatic_retry": false
+      },
+      {
+        "phase": "dispatch_rejected",
+        "repo": "arabic-horror-stories",
+        "day": "2026-11-03",
+        "kind": "test",
+        "http_status": 403,
+        "automatic_retry": false
+      },
+      {
+        "phase": "dispatch_rejected",
+        "repo": "documented-history-stories",
+        "day": "2026-11-03",
+        "kind": "test",
+        "http_status": 403,
+        "automatic_retry": false
+      },
+      {
+        "phase": "dispatch_rejected",
+        "repo": "ai-news-daily",
+        "day": "2026-11-03",
+        "kind": "test",
+        "http_status": 403,
+        "automatic_retry": false
+      },
+      {
+        "phase": "dispatch_rejected",
+        "repo": "stickman-what-if-shorts",
+        "day": "2026-11-03",
+        "kind": "test",
+        "http_status": 403,
+        "automatic_retry": false
+      }
+    ],
+    "worker_left_disabled_after_failure": true,
+    "error": "Five read-only dispatch acknowledgements were not confirmed"
   },
   "existing_repository_workflow_counts_unchanged": true,
   "current_required_repository_secrets": [
@@ -106,5 +158,13 @@
     "FACTORY_DISPATCH_TOKEN"
   ],
   "deployment_credential_source": "science-discovery-shorts repository Actions secrets; no local credential export",
-  "secret_name_correction": "GITHUB_ is a GitHub-reserved repository-secret prefix. Use FACTORY_DISPATCH_TOKEN with the same existing fine-grained token value."
+  "secret_name_correction": "GITHUB_ is a GitHub-reserved repository-secret prefix. Use FACTORY_DISPATCH_TOKEN with the same existing fine-grained token value.",
+  "provider_evidence_scope": "Actual Cloudflare scheduled probe only; production activation and successful GitHub dispatch are not claimed.",
+  "verification_run": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/actions/runs/41634596101",
+  "read_only_credential_probe": {
+    "run_id": 41634270245,
+    "account_settings_http_status": 200,
+    "workers_scripts_http_status": 200,
+    "workers_subdomain_configured": true
+  }
 }
