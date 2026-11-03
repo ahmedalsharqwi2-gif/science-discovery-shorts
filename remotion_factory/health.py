@@ -157,10 +157,20 @@ def verify_media(url,episode,profile):
   result=technical(movie,expected,profile)
  write_json(cache_path,{'asset':signature,'technical':result})
  return {**result,'reused_immutable_media_check':False,'live_asset_metadata_verified':True}
+def clock_source(run,decision,day):
+ if run.get('status')!='completed' or run.get('conclusion')!='success' or not isinstance(decision,dict):return None
+ try:
+  created=instant(run['created_at']).astimezone(CAIRO)
+  if created.date()!=day or not 9<=created.hour<13:return None
+  if not decision.get('due_at') or instant(decision['due_at'])!=target_due(day) or decision.get('reason')=='other DST trigger':return None
+ except (ValueError,TypeError,KeyError,AttributeError):return None
+ if run.get('event')=='schedule':return 'github-schedule'
+ if run.get('event')=='workflow_dispatch' and created.hour==9 and decision.get('trigger_source')=='cloudflare-clock' and decision.get('dry_run') is False:return 'cloudflare-clock'
+ return None
+
 def scheduler(day):
- data=gh('/actions/workflows/remotion-daily.yml/runs?event=schedule&per_page=100&created='+day.isoformat()) or {}
- rows=[r for r in data.get('workflow_runs',[]) if instant(r['created_at']).astimezone(CAIRO).date()==day and 9<=instant(r['created_at']).astimezone(CAIRO).hour<13]
- expected=target_due(day)
+ data=gh('/actions/workflows/remotion-daily.yml/runs?per_page=100&created='+day.isoformat()) or {}
+ rows=[r for r in data.get('workflow_runs',[]) if r.get('event') in ('schedule','workflow_dispatch') and instant(r['created_at']).astimezone(CAIRO).date()==day and 9<=instant(r['created_at']).astimezone(CAIRO).hour<13]
  for run in rows:
   if run['status']!='completed' or run.get('conclusion')!='success':continue
   jobs=(gh('/actions/runs/'+str(run['id'])+'/jobs') or {}).get('jobs',[])
@@ -171,8 +181,10 @@ def scheduler(day):
     if i<0:continue
     try:decision=json.loads(line[i:])
     except ValueError:continue
-    if decision.get('due_at') and instant(decision['due_at'])==expected and decision.get('reason')!='other DST trigger':return {'observed':True,'run_id':run['id'],'run_url':run['html_url'],'conclusion':'success','decision_reason':decision.get('reason')}
- raise AuditFailure('No successful actual9am daily run for this date; production may not have started or completed')
+    source=clock_source(run,decision,day)
+    if source:return {'observed':True,'run_id':run['id'],'run_url':run['html_url'],'conclusion':'success','decision_reason':decision.get('reason'),'clock_source':source,'event':run['event'],'run_created_at_cairo':instant(run['created_at']).astimezone(CAIRO).isoformat(),'job_started_at':job.get('started_at'),'nominal_production_local':'09:00'}
+ raise AuditFailure('No successful clock-triggered daily run for this date; manual recovery and dry-run tests do not count as the automatic clock')
+
 def alert(report):
  title='Daily video health — '+report['date'];existing=None
  for page in range(1,4):

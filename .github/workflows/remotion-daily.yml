@@ -26,6 +26,17 @@
           "description": "Queue/time checks only; no generation or posting",
           "type": "boolean",
           "default": false
+        },
+        "trigger_source": {
+          "description": "Declared initiating service; tests/manual actions are never treated as an actual automatic clock",
+          "type": "choice",
+          "options": [
+            "manual",
+            "cloudflare-clock",
+            "cloudflare-clock-test"
+          ],
+          "default": "manual",
+          "required": false
         }
       }
     },

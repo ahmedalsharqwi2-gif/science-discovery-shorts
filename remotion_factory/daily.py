@@ -61,6 +61,9 @@ def decide(args):
  return {'run':not args.dry_run,'reason':'eligible' if not args.dry_run else 'dry run; no provider mutation','profile':profile,'due_at':due,'entry':selected}
 def main():
  parser=argparse.ArgumentParser();parser.add_argument('--dry-run',action='store_true');parser.add_argument('--date');parser.add_argument('--decide-only',action='store_true');args=parser.parse_args();decision=decide(args)
+ source_event=json.loads(Path(os.environ['GITHUB_EVENT_PATH']).read_text())
+ decision['trigger_source']=source_event.get('inputs',{}).get('trigger_source','manual') if os.getenv('GITHUB_EVENT_NAME')=='workflow_dispatch' else os.getenv('GITHUB_EVENT_NAME','unknown')
+ decision['dry_run']=bool(args.dry_run)
  Path('professional_motion/output').mkdir(parents=True,exist_ok=True);Path('professional_motion/output/daily-decision.json').write_text(json.dumps(decision,ensure_ascii=False,indent=2))
  print(json.dumps(decision,ensure_ascii=False))
  if os.getenv('GITHUB_OUTPUT'):

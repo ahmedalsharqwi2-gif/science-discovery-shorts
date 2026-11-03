@@ -32,7 +32,8 @@
         "tests/test_professional_policy.py",
         "tests/test_scene_director.py",
         "visual_quality_gate.py",
-        "voice_provider/**"
+        "voice_provider/**",
+        "scheduler/**"
       ]
     },
     "pull_request": {
@@ -66,7 +67,8 @@
         "tests/test_professional_policy.py",
         "tests/test_scene_director.py",
         "visual_quality_gate.py",
-        "voice_provider/**"
+        "voice_provider/**",
+        "scheduler/**"
       ]
     },
     "workflow_dispatch": {}
@@ -209,6 +211,35 @@
         {
           "run": "npm ci --no-audit --no-fund\nnpm run check",
           "working-directory": "remotion_motion"
+        }
+      ]
+    },
+    "independent-clock": {
+      "name": "Independent clock — no secrets, no live generation",
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 15,
+      "env": {
+        "WRANGLER_SEND_METRICS": "false"
+      },
+      "steps": [
+        {
+          "uses": "actions/checkout@v4"
+        },
+        {
+          "uses": "actions/setup-node@v4",
+          "with": {
+            "node-version": "24",
+            "cache": "npm",
+            "cache-dependency-path": "scheduler/package-lock.json"
+          }
+        },
+        {
+          "run": "npm ci --no-audit --no-fund",
+          "working-directory": "scheduler"
+        },
+        {
+          "run": "npm run check\nnpm run bundle\nnpm run test:runtime",
+          "working-directory": "scheduler"
         }
       ]
     }
