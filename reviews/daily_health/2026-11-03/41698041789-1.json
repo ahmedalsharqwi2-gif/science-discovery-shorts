@@ -1,0 +1,96 @@
+{
+  "date": "2026-11-03",
+  "profile": "science",
+  "phase": "postpublish",
+  "checked_at": "2026-11-03T18:53:57.064656+00:00",
+  "run_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/actions/runs/41698041789",
+  "report_path": "reviews/daily_health/2026-11-03/41698041789-1.json",
+  "publication_due_utc": "2026-11-03T15:00:00+00:00",
+  "errors": [
+    "No successful clock-triggered daily run for this date; manual recovery and dry-run tests do not count as the automatic clock"
+  ],
+  "passed": false,
+  "generation_calls": 0,
+  "publication_mutations": 0,
+  "preview": false,
+  "observed_receipts": {
+    "tiktok": [
+      {
+        "id": "6ae84ea6c8c477a933a147d2",
+        "channelId": "6a9edf14cd8b9c702c230272",
+        "status": "sent",
+        "dueAt": "2026-11-03T15:00:00.000Z",
+        "sentAt": "2026-11-03T15:07:48.963Z",
+        "externalLink": "https://tiktok.com/@pagesof_history/video/7703961757940763924"
+      }
+    ],
+    "youtube": [
+      {
+        "id": "6ae84ea81057bd49b78d37ef",
+        "channelId": "6a9edee8cd8b9c702c2301cb",
+        "status": "sent",
+        "dueAt": "2026-11-03T15:00:00.000Z",
+        "sentAt": "2026-11-03T15:03:47.964Z",
+        "externalLink": "https://www.youtube.com/shorts/mBCBw9kItWs"
+      }
+    ],
+    "facebook": [
+      {
+        "id": "6ae84eab4af9a19eb717241c",
+        "channelId": "6a9edebbcd8b9c702c230128",
+        "status": "sent",
+        "dueAt": "2026-11-03T15:00:00.000Z",
+        "sentAt": "2026-11-03T15:03:55.415Z",
+        "externalLink": "https://www.facebook.com/reel/1866677741323032/"
+      }
+    ]
+  },
+  "receipts": {
+    "tiktok": {
+      "id": "6ae84ea6c8c477a933a147d2",
+      "channelId": "6a9edf14cd8b9c702c230272",
+      "status": "sent",
+      "dueAt": "2026-11-03T15:00:00.000Z",
+      "sentAt": "2026-11-03T15:07:48.963Z",
+      "externalLink": "https://tiktok.com/@pagesof_history/video/7703961757940763924"
+    },
+    "youtube": {
+      "id": "6ae84ea81057bd49b78d37ef",
+      "channelId": "6a9edee8cd8b9c702c2301cb",
+      "status": "sent",
+      "dueAt": "2026-11-03T15:00:00.000Z",
+      "sentAt": "2026-11-03T15:03:47.964Z",
+      "externalLink": "https://www.youtube.com/shorts/mBCBw9kItWs"
+    },
+    "facebook": {
+      "id": "6ae84eab4af9a19eb717241c",
+      "channelId": "6a9edebbcd8b9c702c230128",
+      "status": "sent",
+      "dueAt": "2026-11-03T15:00:00.000Z",
+      "sentAt": "2026-11-03T15:03:55.415Z",
+      "externalLink": "https://www.facebook.com/reel/1866677741323032/"
+    }
+  },
+  "episode": {
+    "slot": "daily-2026-11-02",
+    "title": "الصوت بيعدي في الهوا إزاي؟",
+    "pipeline": "legacy",
+    "expected_sha256": "a7861d4462e10dbb252e2f293cb011feee20272a34ca1282fdfaeffb7c7643a8"
+  },
+  "technical": {
+    "passed": true,
+    "sha256": "a7861d4462e10dbb252e2f293cb011feee20272a34ca1282fdfaeffb7c7643a8",
+    "full_decode": true,
+    "duration": 108.566667,
+    "width": 1080,
+    "height": 1920,
+    "audio_mean_db": -18.6,
+    "actual_visual_samples": 12,
+    "unique_visual_samples": 12,
+    "checked_at": "2026-11-02T23:04:09.333056+00:00",
+    "scope": "Independent technical media check; no claim of human narrative or scientific review",
+    "reused_immutable_media_check": true,
+    "live_asset_metadata_verified": true
+  },
+  "media_binding": "Three live sent post IDs match retained original submission receipts; original release SHA independently verified. Platform-transcoded bytes are not claimed identical."
+}
