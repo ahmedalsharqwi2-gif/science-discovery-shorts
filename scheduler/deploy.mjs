@@ -117,6 +117,8 @@ try {
   if (!tick?.scheduled_time || tick.deployment_id !== deployment) throw new Error('No actual Cloudflare cron tick observed; production remains disabled');
   report.clock_probe = tick; report.checks.push('An actual Cloudflare cron tick reached the Durable Object while production was disabled'); await persist();
   const dispatched = await endpoint('/_ops/test-dispatch', 'POST');
+  report.test_dispatches = dispatched.results; await persist();
+  console.log(JSON.stringify({read_only_dispatch_results: dispatched.results}));
   if (!dispatched.dry_run || dispatched.results.length !== 5 || dispatched.results.some(result => result.phase !== 'dispatch_accepted' || !result.dry_run)) throw new Error('Five read-only dispatch acknowledgements were not confirmed');
   report.test_dispatches = dispatched.results; await persist();
   const verified = {};
