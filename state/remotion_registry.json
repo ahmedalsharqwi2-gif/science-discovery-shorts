@@ -62,6 +62,29 @@
         "provider_due_at": "2026-11-06T15:00:00Z",
         "evidence": "reviews/schedule_changes/noon-trial-2026-11-04-inspection.json",
         "reason": "The three original IDs independently report November 6; retain that live publication date."
+      },
+      "time_change_receipts": {
+        "noon-trial-2026-11-06": {
+          "tiktok": {
+            "phase": "intent",
+            "post_id": "6ae8d34987c5ea7cde5404e5",
+            "before": {
+              "id": "6ae8d34987c5ea7cde5404e5",
+              "channelId": "6a9edf14cd8b9c702c230272",
+              "status": "scheduled",
+              "dueAt": "2026-11-06T15:00:00.000Z",
+              "text": "الصابون بيمسك الدهون إزاي؟\nالمصدر: https://www.cdc.gov/clean-hands/about/index.html",
+              "assets": [
+                {
+                  "source": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/releases/download/production-remotion-2026-11-04-science/science-remotion-2026-11-04-science.mp4"
+                }
+              ],
+              "metadata": {
+                "__typename": "TiktokPostMetadata"
+              }
+            }
+          }
+        }
       }
     }
   },
