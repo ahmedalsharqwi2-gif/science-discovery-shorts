@@ -49,7 +49,14 @@ function wrangler(args, stdin) {
     child.on('error', reject);
     child.on('close', code => {
       // Deliberately omit raw CLI output: authentication diagnostics can contain secrets.
-      if (code) reject(new Error('Wrangler command failed: ' + args.slice(0, 2).join(' ') + ', exit=' + code));
+      if (code) {
+        let safe = output.replace(/\x1b\[[0-9;]*m/g, '');
+        for (const value of [process.env.CLOUDFLARE_API_TOKEN, process.env.FACTORY_DISPATCH_TOKEN, ops, account].filter(Boolean)) safe = safe.split(value).join('[REDACTED]');
+        safe = safe.replace(/(Bearer|token|authorization|api[_ -]?key)([\\s:="']+)[^\\s"'<>]+/gi, '$1$2[REDACTED]');
+        const lines = safe.split('\\n'); const index = lines.findIndex(line => /ERROR|Error:|error:/i.test(line));
+        console.error(index >= 0 ? lines.slice(index, index + 9).join('\\n') : 'Wrangler failed without a recognized error block');
+        reject(new Error('Wrangler command failed: ' + args.slice(0, 2).join(' ') + ', exit=' + code));
+      }
       else resolve(output);
     });
   });
