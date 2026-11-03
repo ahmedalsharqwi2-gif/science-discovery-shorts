@@ -88,7 +88,7 @@
             "verified_at": "2026-11-03T20:08:33.646344+00:00"
           },
           "youtube": {
-            "phase": "acknowledged",
+            "phase": "verified",
             "post_id": "6ae8d34fc1e1a07104365865",
             "before": {
               "id": "6ae8d34fc1e1a07104365865",
@@ -111,7 +111,10 @@
                 "madeForKids": false,
                 "notifySubscribers": false
               }
-            }
+            },
+            "service": "youtube",
+            "due_at": "2026-11-06T10:00:00.000Z",
+            "verified_at": "2026-11-03T20:08:37.906350+00:00"
           }
         }
       }
