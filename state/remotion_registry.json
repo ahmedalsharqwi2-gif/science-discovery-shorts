@@ -66,7 +66,7 @@
       "time_change_receipts": {
         "noon-trial-2026-11-06": {
           "tiktok": {
-            "phase": "acknowledged",
+            "phase": "verified",
             "post_id": "6ae8d34987c5ea7cde5404e5",
             "before": {
               "id": "6ae8d34987c5ea7cde5404e5",
@@ -82,7 +82,10 @@
               "metadata": {
                 "__typename": "TiktokPostMetadata"
               }
-            }
+            },
+            "service": "tiktok",
+            "due_at": "2026-11-06T10:00:00.000Z",
+            "verified_at": "2026-11-03T20:08:33.646344+00:00"
           }
         }
       }
