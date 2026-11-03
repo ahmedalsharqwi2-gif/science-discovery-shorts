@@ -119,7 +119,13 @@ def main():
     if req.get('inspect_only'):
         mapping=destinations(profile)
         observations={service:read_post(req['post_ids'][service]) for service in mapping}
-        write_json('reviews/schedule_changes/'+req['request_id']+'-inspection.json',{'request':req,'observed':observations,'publication_mutations':0})
+        inventory={}
+        for service,destination in mapping.items():
+            text='query {posts(first:100,input:{organizationId:'+json.dumps(destination['organization'])+',filter:{channelIds:['+json.dumps(destination['channel'])+'],dueAt:{start:"2026-11-03T22:00:00Z",end:"2026-11-18T00:00:00Z"},status:[scheduled,sending,error]}}){edges{node{'+FIELDS+'}} pageInfo{hasNextPage endCursor}}}'
+            result=query(text)['posts']
+            if result['pageInfo']['hasNextPage']:raise ValueError('Inventory exceeds review bound')
+            inventory[service]=[edge['node'] for edge in result['edges']]
+        write_json('reviews/schedule_changes/'+req['request_id']+'-inspection.json',{'request':req,'observed':observations,'inventory':inventory,'publication_mutations':0})
         print('Read-only inspection complete; no Buffer mutation attempted')
         return
     mapping,observations=preflight(req,entry,profile)
