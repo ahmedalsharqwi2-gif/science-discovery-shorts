@@ -152,9 +152,23 @@
     "daily-remotion-2026-11-04-science": {
       "profile": "science",
       "due_at": "2026-11-04T10:00:00Z",
-      "status": "author_pending",
+      "status": "author_requested",
       "source_run": 41709884423,
-      "created_at": "2026-11-03T20:10:21.030392+00:00"
+      "created_at": "2026-11-03T20:10:21.030392+00:00",
+      "source_selection": {
+        "title": "لماذا نرى البرق قبل سماع الرعد؟",
+        "url": "https://www.weather.gov/safety/lightning-science-overview",
+        "publisher": "National Weather Service",
+        "canonical_subject": "lightning-thunder-light-sound-speed"
+      },
+      "source": {
+        "url": "https://www.weather.gov/safety/lightning-science-overview"
+      },
+      "source_document": {
+        "path": "state/remotion_documents/daily-remotion-2026-11-04-science-source-8f83ed475a7ec88e.json",
+        "sha256": "8f83ed475a7ec88e17e7a9f19925e0aca708d4aab5115c56c16fe799d9b094c6"
+      },
+      "writer_run": 41709884423
     }
   },
   "cutover_evidence": {
