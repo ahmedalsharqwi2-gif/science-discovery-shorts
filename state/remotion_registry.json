@@ -6,7 +6,7 @@
       "canonical_subject": "soap-surfactants-micelles-and-rinsing",
       "title": "الصابون بيمسك الدهون إزاي؟",
       "story_sha256": "c80d36f884dc87103e7e29be8e6d189ec7e4d22271fd94ddab5e6de4438f834d",
-      "due_at": "2026-11-04T15:00:00Z",
+      "due_at": "2026-11-06T15:00:00Z",
       "profile": "science",
       "source_run": 41483253905,
       "created_at": "2026-11-02T16:40:21.767904+00:00",
@@ -23,39 +23,45 @@
         "tiktok": {
           "phase": "verified",
           "channel_id": "6a9edf14cd8b9c702c230272",
-          "due_at": "2026-11-04T15:00:00Z",
+          "due_at": "2026-11-06T15:00:00.000Z",
           "media_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/releases/download/production-remotion-2026-11-04-science/science-remotion-2026-11-04-science.mp4",
           "created_at": "2026-11-02T18:15:35.437416+00:00",
           "id": "6ae8d34987c5ea7cde5404e5",
           "accepted_at": "2026-11-02T18:15:37.792478+00:00",
           "status": "scheduled",
-          "scheduled_at": "2026-11-04T15:00:00.000Z",
+          "scheduled_at": "2026-11-06T15:00:00.000Z",
           "verified_at": "2026-11-02T18:15:39.347571+00:00"
         },
         "youtube": {
           "phase": "verified",
           "channel_id": "6a9edee8cd8b9c702c2301cb",
-          "due_at": "2026-11-04T15:00:00Z",
+          "due_at": "2026-11-06T15:00:00.000Z",
           "media_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/releases/download/production-remotion-2026-11-04-science/science-remotion-2026-11-04-science.mp4",
           "created_at": "2026-11-02T18:15:40.930705+00:00",
           "id": "6ae8d34fc1e1a07104365865",
           "accepted_at": "2026-11-02T18:15:43.234544+00:00",
           "status": "scheduled",
-          "scheduled_at": "2026-11-04T15:00:00.000Z",
+          "scheduled_at": "2026-11-06T15:00:00.000Z",
           "verified_at": "2026-11-02T18:15:44.823191+00:00"
         },
         "facebook": {
           "phase": "verified",
           "channel_id": "6a9edebbcd8b9c702c230128",
-          "due_at": "2026-11-04T15:00:00Z",
+          "due_at": "2026-11-06T15:00:00.000Z",
           "media_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/releases/download/production-remotion-2026-11-04-science/science-remotion-2026-11-04-science.mp4",
           "created_at": "2026-11-02T18:15:46.441778+00:00",
           "id": "6ae8d3544e55e02608791d97",
           "accepted_at": "2026-11-02T18:15:48.536712+00:00",
           "status": "scheduled",
-          "scheduled_at": "2026-11-04T15:00:00.000Z",
+          "scheduled_at": "2026-11-06T15:00:00.000Z",
           "verified_at": "2026-11-02T18:15:49.989736+00:00"
         }
+      },
+      "ledger_reconciliation": {
+        "previous_due_at": "2026-11-04T15:00:00Z",
+        "provider_due_at": "2026-11-06T15:00:00Z",
+        "evidence": "reviews/schedule_changes/noon-trial-2026-11-04-inspection.json",
+        "reason": "The three original IDs independently report November 6; retain that live publication date."
       }
     }
   },
