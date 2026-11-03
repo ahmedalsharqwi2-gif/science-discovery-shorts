@@ -2,9 +2,9 @@
   "date": "2026-11-04",
   "profile": "science",
   "phase": "prepublish",
-  "checked_at": "2026-11-03T19:57:47.288186+00:00",
-  "run_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/actions/runs/41708011054",
-  "report_path": "reviews/daily_health/2026-11-04/41708011054-1.json",
+  "checked_at": "2026-11-03T20:00:04.439644+00:00",
+  "run_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/actions/runs/41708347068",
+  "report_path": "reviews/daily_health/2026-11-04/41708347068-1.json",
   "publication_due_utc": "2026-11-04T10:00:00+00:00",
   "errors": [
     "tiktok: missing post or duplicate posts at the configured Cairo slot"
@@ -24,6 +24,6 @@
   },
   "production_at_cairo": "2026-11-03T19:00:00+02:00",
   "publication_at_cairo": "2026-11-04T12:00:00+02:00",
-  "hours_until_publication": 14.04,
+  "hours_until_publication": 14.0,
   "readiness": "needs_attention"
 }
