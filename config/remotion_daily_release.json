@@ -12,5 +12,18 @@
     "run": 41491355804,
     "ready": true
   },
-  "existing_posts_preserved": true
+  "existing_posts_preserved": true,
+  "publication_time_trial": {
+    "enabled": true,
+    "start_date": "2026-11-04",
+    "end_date_exclusive": "2026-11-18",
+    "production_local_hour": 19,
+    "publication_local_hour": 12,
+    "timezone": "Africa/Cairo",
+    "approval": "Owner explicitly requested noon publishing for all five channels and their existing destinations; two-week trial.",
+    "after_trial": "Return to baseline hours unless owner changes the plan.",
+    "production_day_offset": -1,
+    "first_automatic_publication_date": "2026-11-05",
+    "transition": "November 4 uses the already completed retained films; move the same existing Buffer IDs in place."
+  }
 }

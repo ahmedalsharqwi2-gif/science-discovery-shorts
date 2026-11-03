@@ -9,11 +9,16 @@ export function local(value) {
   const p = Object.fromEntries(formatter.formatToParts(date).map(x => [x.type, x.value]));
   return {day: `${p.year}-${p.month}-${p.day}`, hour: +p.hour, minute: +p.minute};
 }
+function nextDay(day) { return new Date(Date.parse(day+'T12:00:00Z')+86400000).toISOString().slice(0,10); }
+function trial(day) { return day >= '2026-11-04' && day < '2026-11-18'; }
+function plan(day) { return trial(day) ? {preparationDay:new Date(Date.parse(day+'T12:00:00Z')-86400000).toISOString().slice(0,10),productionHour:19,publicationHour:12} : {preparationDay:day,productionHour:9,publicationHour:17}; }
 export function clockOperation(scheduled, now) {
   const s = local(scheduled), n = local(now);
   if (s.day !== n.day) return null; // Never move a missed trigger into another day.
-  if (s.hour === 9 && [0, 17].includes(s.minute) && n.hour === 9) return {kind: 'production', day: s.day};
-  if (s.hour === 17 && s.minute === 35 && n.hour >= 17 && n.hour < 20) return {kind: 'publication-audit', day: s.day};
+  const tomorrow=nextDay(s.day);
+  if (trial(tomorrow) && s.hour===19 && [0,17].includes(s.minute) && n.hour===19) return {kind:'production',day:tomorrow};
+  if (!trial(s.day) && s.hour === 9 && [0, 17].includes(s.minute) && n.hour === 9) return {kind: 'production', day: s.day};
+  if (s.hour === plan(s.day).publicationHour && s.minute === 35 && n.hour >= s.hour && n.hour < s.hour+3) return {kind: 'publication-audit', day: s.day};
   return null;
 }
 function workflow(kind) { return kind === 'publication-audit' ? 'remotion-health.yml' : 'remotion-daily.yml'; }
@@ -42,8 +47,9 @@ export async function dispatchOnce(store, env, input, http = fetch, now = Date.n
   if (!REPOS.includes(input.repo) || !['production', 'publication-audit', 'test'].includes(input.kind)) throw new Error('Unapproved operation/repository');
   if (!env.FACTORY_DISPATCH_TOKEN) throw new Error('GitHub dispatch credential is not configured');
   const today = local(now);
-  if (input.day !== today.day) throw new Error('Cross-day dispatch refused');
-  if (input.kind === 'production' && today.hour !== 9) throw new Error('Production dispatch outside the Cairo9 window');
+  const timing=plan(input.day);
+  if ((input.kind==='production' ? timing.preparationDay : input.day) !== today.day) throw new Error('Cross-day dispatch refused');
+  if (input.kind === 'production' && today.hour !== timing.productionHour) throw new Error('Production dispatch outside the configured Cairo window');
   if (input.kind === 'test' && today.hour >= 16) throw new Error('Late dry-run test refused');
   const prior = await store.get('receipt');
   if (prior) return {...prior, reused: true};
@@ -51,7 +57,7 @@ export async function dispatchOnce(store, env, input, http = fetch, now = Date.n
   if (input.kind !== 'test') {
     const found = [];
     for (let page = 1; page <= 5; page++) {
-      const data = await api(env, `${root}/runs?created=${input.day}&per_page=100&page=${page}`, 'GET', undefined, http);
+      const data = await api(env, `${root}/runs?created=${input.kind==='production'?timing.preparationDay:input.day}&per_page=100&page=${page}`, 'GET', undefined, http);
       if (!Array.isArray(data.workflow_runs)) throw new Error('Invalid GitHub run inventory');
       found.push(...data.workflow_runs);
       if (data.workflow_runs.length < 100) break;
@@ -59,7 +65,7 @@ export async function dispatchOnce(store, env, input, http = fetch, now = Date.n
     }
     const candidates = found.filter(r => {
       const p = local(r.created_at);
-      return p.day === input.day && (input.kind === 'production' ? p.hour >= 9 : p.hour >= 17 && ['queued', 'in_progress', 'waiting', 'pending', 'requested'].includes(r.status));
+      return p.day === (input.kind==='production'?timing.preparationDay:input.day) && (input.kind === 'production' ? p.hour >= timing.productionHour : p.hour >= timing.publicationHour && ['queued', 'in_progress', 'waiting', 'pending', 'requested'].includes(r.status));
     });
     for (const existing of candidates) {
       if (['queued','in_progress','waiting','pending','requested'].includes(existing.status)) {
@@ -71,7 +77,7 @@ export async function dispatchOnce(store, env, input, http = fetch, now = Date.n
       // A delayed opposite-DST no-op or an explicit dry test must not suppress real production.
       if (decision?.reason === 'other DST trigger' || decision?.dry_run === true) continue;
       let correctTarget = false;
-      try { const p = local(decision?.due_at); correctTarget = p.day === input.day && p.hour === 17 && p.minute === 0 && new Date(decision.due_at).getUTCSeconds() === 0; } catch {}
+      try { const p = local(decision?.due_at); correctTarget = p.day === input.day && p.hour === timing.publicationHour && p.minute === 0 && new Date(decision.due_at).getUTCSeconds() === 0; } catch {}
       const valid = existing.conclusion === 'success' && correctTarget && decision?.dry_run === false;
       const receipt = {phase: valid ? 'existing_run_preserved' : 'existing_run_needs_attention', run_id: existing.id, run_status: existing.status, run_conclusion: existing.conclusion, repo: input.repo, day: input.day};
       await store.transaction(async tx => { if (!(await tx.get('receipt'))) await tx.put('receipt', receipt); });

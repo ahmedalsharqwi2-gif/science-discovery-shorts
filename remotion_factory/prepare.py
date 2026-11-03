@@ -4,12 +4,13 @@ from pathlib import Path
 from zoneinfo import ZoneInfo
 import requests
 from .state import identity,mutate
+from .schedule import due_for
 DELIVERY=Path('professional_motion/delivery')
 def read_request():
  req=json.loads(Path(os.getenv('FACTORY_REQUEST_PATH','.github/remotion-request.json')).read_text());_,profile=identity()
  if req['profile']!=profile:raise ValueError('Request belongs to a different channel')
  due=datetime.fromisoformat(req['due_at'].replace('Z','+00:00'))
- if due<=datetime.now(timezone.utc) or due.astimezone(ZoneInfo('Africa/Cairo')).strftime('%H:%M:%S')!='17:00:00':raise ValueError('Publication slot invalid or expired; never roll it forward')
+ if due<=datetime.now(timezone.utc) or due!=due_for(due.astimezone(ZoneInfo('Africa/Cairo')).date()):raise ValueError('Publication slot invalid or expired; never roll it forward')
  return req
 def restore(entry,story_hash):
  run=entry['source_run'];repo,_=identity();h={'Authorization':'Bearer '+os.environ['GITHUB_TOKEN'],'Accept':'application/vnd.github+json'}

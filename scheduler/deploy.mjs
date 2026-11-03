@@ -146,7 +146,7 @@ try {
     if (Object.keys(verified).length < 5) { console.log('Waiting for five read-only GitHub tests; production remains disabled'); await pause(30000); }
   }
   if (Object.keys(verified).length !== 5) throw new Error('Read-only integration verification timed out; production remains disabled');
-  report.github_tests = verified; report.checks.push('All five actual GitHub dispatch tests completed with run=false, dry_run=true and same-day17 target'); await persist();
+  report.github_tests = verified; report.checks.push('All five actual GitHub dispatch tests completed with run=false, dry_run=true and configured publication-date target'); await persist();
   if (await sourceDigest() !== expectedSource) throw new Error('Local deployment source changed after verification; refusing activation');
   activationAttempted = true;
   await saveConfig(false); await wrangler(['deploy']);

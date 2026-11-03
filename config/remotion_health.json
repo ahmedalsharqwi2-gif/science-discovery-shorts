@@ -11,5 +11,21 @@
   "observe_completed_production": true,
   "read_only_social_verification": true,
   "never_regenerate_or_resubmit": true,
-  "alert": "one GitHub Issue per date in this own repository; close on recovery"
+  "alert": "one GitHub Issue per date in this own repository; close on recovery",
+  "trial_checkpoints_local": [
+    "21:30 previous day",
+    "09:30",
+    "11:15",
+    "12:30"
+  ],
+  "report_fields": [
+    "production_at_cairo",
+    "publication_at_cairo",
+    "readiness",
+    "hours_until_publication",
+    "scheduler",
+    "technical",
+    "receipts",
+    "errors"
+  ]
 }

@@ -1,18 +1,30 @@
 {
-  "name": "Automatic Remotion —9am Cairo produce; same day5pm publish",
+  "name": "Automatic Remotion — configured Cairo production and publication",
   "on": {
     "schedule": [
       {
         "cron": "0 6 * * *"
       },
       {
-        "cron": "0 7 * * *"
-      },
-      {
         "cron": "17 6 * * *"
       },
       {
+        "cron": "0 7 * * *"
+      },
+      {
         "cron": "17 7 * * *"
+      },
+      {
+        "cron": "0 16 * * *"
+      },
+      {
+        "cron": "17 16 * * *"
+      },
+      {
+        "cron": "0 17 * * *"
+      },
+      {
+        "cron": "17 17 * * *"
       }
     ],
     "workflow_dispatch": {
@@ -45,7 +57,8 @@
         "main"
       ],
       "paths": [
-        ".github/remotion-daily-request.json"
+        ".github/remotion-daily-request.json",
+        ".github/remotion-time-change.json"
       ]
     }
   },
@@ -92,7 +105,7 @@
           "run": "python -m pip install requests beautifulsoup4 Pillow numpy pyyaml\nif ! command -v ffmpeg >/dev/null; then sudo apt-get update -qq; sudo apt-get install -y ffmpeg; fi"
         },
         {
-          "name": "Freeze original date; verify Cairo9 guard and all existing queues",
+          "name": "Freeze original date; verify configured Cairo clock and existing queues",
           "id": "decision",
           "run": "python -m remotion_factory.daily --decide-only ${{ inputs.dry_run && '--dry-run' || '' }}"
         },
@@ -122,7 +135,7 @@
           "run": "python -m unittest discover -s remotion_factory/tests -q"
         },
         {
-          "name": "New topic → retained draft/voice → Remotion → full decode → verified same-day17 scheduling",
+          "name": "New topic → retained voice → Remotion → full decode → verified configured-time scheduling",
           "if": "steps.decision.outputs.run == 'true'",
           "run": "python -m remotion_factory.daily"
         },
@@ -144,6 +157,53 @@
             "path": "professional_motion/output/\nprofessional_motion/delivery/\nstate/remotion_registry.json",
             "retention-days": 90,
             "if-no-files-found": "warn"
+          }
+        }
+      ],
+      "if": "github.event_name != 'push' || !contains(github.event.head_commit.message, '[schedule-migration]')"
+    },
+    "adjust_time": {
+      "if": "github.event_name == 'push' && contains(github.event.head_commit.message, '[schedule-migration]')",
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 15,
+      "env": {
+        "GITHUB_TOKEN": "${{ github.token }}",
+        "BUFFER_API_KEY": "${{ secrets.BUFFER_API_KEY }}",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "steps": [
+        {
+          "uses": "actions/checkout@v4",
+          "with": {
+            "ref": "main",
+            "fetch-depth": 1
+          }
+        },
+        {
+          "uses": "actions/setup-python@v5",
+          "with": {
+            "python-version": "3.11"
+          }
+        },
+        {
+          "name": "Install schedule-only prerequisites",
+          "run": "python -m pip install requests beautifulsoup4 Pillow"
+        },
+        {
+          "name": "Verify civil-time and retained-ID safety regressions",
+          "run": "python -m unittest discover -s remotion_factory/tests -q"
+        },
+        {
+          "name": "Move exact approved existing post IDs to noon; no new media or posts",
+          "run": "python -m remotion_factory.schedule_migration"
+        },
+        {
+          "uses": "actions/upload-artifact@v4",
+          "if": "always()",
+          "with": {
+            "name": "schedule-change-${{ github.run_id }}",
+            "path": "reviews/schedule_changes/",
+            "retention-days": 90
           }
         }
       ]
