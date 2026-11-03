@@ -10,10 +10,19 @@ if (token && report.account_id_format_valid) {
       const body = await response.json();
       const result = {http_status: response.status, authenticated_read_succeeded: response.ok && body.success === true};
       if (name === 'workers_scripts' && result.authenticated_read_succeeded && Array.isArray(body.result)) result.clock_worker_already_exists = body.result.some(worker => worker.id === 'video-factory-cairo-clock');
+      if (name === 'clock_settings' && result.authenticated_read_succeeded) {
+        result.probe_only = body.result?.bindings?.find(b => b.name === 'PROBE_ONLY')?.text;
+        result.dispatch_enabled = body.result?.bindings?.find(b => b.name === 'DISPATCH_ENABLED')?.text;
+      }
+      if (name === 'clock_schedules' && result.authenticated_read_succeeded) {
+        const schedules = body.result?.schedules || body.result || [];
+        result.registered_crons = Array.isArray(schedules) ? schedules.map(s => s.cron) : null;
+      }
+      if (name === 'workers_subdomain' && result.authenticated_read_succeeded) result.configured = Boolean(body.result?.subdomain);
       return [name, result];
     } catch { return [name, {authenticated_read_succeeded: false, transport_unavailable: true}]; }
   };
-  Object.assign(report, Object.fromEntries(await Promise.all([check('account_settings', ''), check('workers_scripts', '/workers/scripts')])));
+  Object.assign(report, Object.fromEntries(await Promise.all([check('account_settings', ''), check('workers_scripts', '/workers/scripts'), check('clock_settings', '/workers/scripts/video-factory-cairo-clock/settings'), check('clock_schedules', '/workers/scripts/video-factory-cairo-clock/schedules'), check('workers_subdomain', '/workers/subdomain')])));
 }
 report.passed = report.account_settings?.authenticated_read_succeeded === true && report.workers_scripts?.authenticated_read_succeeded === true;
 report.workers_write_permission_claimed = false;
