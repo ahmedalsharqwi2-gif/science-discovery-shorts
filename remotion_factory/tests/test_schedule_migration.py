@@ -1,7 +1,7 @@
 """No provider mutation may create a replacement or repeat an uncertain schedule edit."""
 import unittest
 from unittest.mock import patch
-from remotion_factory.schedule_migration import move_one
+from remotion_factory.schedule_migration import move_one,edit_input
 
 class ScheduleChanges(unittest.TestCase):
     """Exercise exact-ID edits, readback and uncertain-response recovery."""
@@ -32,3 +32,10 @@ class ScheduleChanges(unittest.TestCase):
         post={'id':'p','channelId':'c','status':'scheduled','dueAt':'2026-11-04T10:00:00Z','text':'keep','assets':[{'source':'original'}]}
         _,calls=self.call(before=post,record={'phase':'uncertain'})
         self.assertEqual(calls,[])
+
+    def test_youtube_edit_keeps_the_existing_required_title_and_settings(self):
+        """Preserve required metadata while changing only the scheduled instant."""
+        metadata={'title':'existing title','privacy':'public','madeForKids':False,'notifySubscribers':False,'category':{'categoryId':'27'}}
+        result=edit_input('youtube','p',{'target_due_at':'2026-11-04T10:00:00Z'},{'metadata':metadata})
+        self.assertEqual(result['metadata']['youtube'],{'title':'existing title','privacy':'public','madeForKids':False,'notifySubscribers':False,'categoryId':'27'})
+        self.assertNotIn('text',result);self.assertNotIn('assets',result)

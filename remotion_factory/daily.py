@@ -5,11 +5,12 @@ from pathlib import Path
 import requests
 from .state import identity,mutate
 from .publish import destinations,queued,instant
-from .schedule import CAIRO,hours,due_for,clock_target,production_at
+from .schedule import CAIRO,hours,due_for,clock_target,production_at,trial
 ROOT=Path('professional_motion/delivery')
 def command(*args):subprocess.run(list(args),check=True)
 def slot_for(created,event,schedule='',target=None,now=None):
  now=now or datetime.now(timezone.utc);local=created.astimezone(CAIRO)
+ if event=='workflow_dispatch' and target is None and trial(local.date()) and not 19<=local.hour<23:raise ValueError('Explicit publication date required for a manual run outside evening preparation')
  day=datetime.fromisoformat(target).date() if target else clock_target(local)
  if day is None:return None
  production_hour,_=hours(day)

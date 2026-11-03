@@ -39,3 +39,9 @@ class NoonTrial(unittest.TestCase):
         """Verify baseline dst is preserved."""
         self.assertEqual(due_for(date(2030,1,3)).hour,15)
         self.assertEqual(due_for(date(2030,7,3)).hour,14)
+
+    def test_manual_trial_run_needs_explicit_date_outside_evening(self):
+        """An accidental morning manual dispatch cannot start tomorrow's production."""
+        now=datetime(2026,11,5,7,tzinfo=timezone.utc)
+        with self.assertRaisesRegex(ValueError,'Explicit publication date'):
+            slot_for(now,'workflow_dispatch',now=now)
