@@ -5,3 +5,4 @@ dist/
 .dev.vars
 wrangler.deploy.json
 live-verification.json
+credential-probe.json

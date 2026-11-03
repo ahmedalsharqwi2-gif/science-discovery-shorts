@@ -14,18 +14,22 @@
 
 ## الوصول المطلوب مرة واحدة
 
-أضف إلى **Secrets في بيئة التنفيذ**، وليس في الملفات أو المحادثة:
+الطريقة الأسهل: أضف المفتاحين إلى **GitHub → science-discovery-shorts → Settings → Secrets and variables → Actions → New repository secret**، وليس في الملفات أو المحادثة. [رابط إضافة Secret](https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/settings/secrets/actions/new).
 
 1. `CLOUDFLARE_API_TOKEN`: لحساب Cloudflare المقصود، بصلاحية **Workers Scripts: Edit** و**Account Settings: Read**. لا يلزم الوصول إلى DNS أو كل الحسابات.
-2. `GITHUB_DISPATCH_TOKEN`: **Fine-grained personal access token** من [GitHub](https://github.com/settings/personal-access-tokens/new)، مقيّد بالمستودعات الخمسة فقط، بصلاحية **Actions: Read and write**. لا يحتاج صلاحيات حذف المستودعات أو تعديل الكود أو قراءة أسرارها.
+2. `FACTORY_DISPATCH_TOKEN`: **Fine-grained personal access token** من [GitHub](https://github.com/settings/personal-access-tokens/new)، مقيّد بالمستودعات الخمسة فقط، بصلاحية **Actions: Read and write**. لا يحتاج صلاحيات حذف المستودعات أو تعديل الكود أو قراءة أسرارها.
 
-`CLOUDFLARE_ACCOUNT_ID` موجود بالفعل في البيئة. صلاحية اتصال GitHub داخل ChatGPT لا تُصدّر كمفتاح دائم إلى Cloudflare؛ لذلك يحتاج المشغّل تفويضه المحدود الخاص.
+يُقرأ رقم الحساب من Secret المستودع `CLOUDFLARE_ACCOUNT_ID` الموجود، ويُستخدم المدخل اليدوي كبديل فقط. لا تضع مفتاح API داخل مدخل رقم الحساب. صلاحية اتصال GitHub داخل ChatGPT لا تُصدّر كمفتاح دائم إلى Cloudflare؛ لذلك يحتاج المشغّل تفويضه المحدود الخاص.
 
 احتفظ بمدة صلاحية المفاتيح وسجّل موعد تجديدها؛ إلغاؤها أو انتهاء صلاحيتها يوقف الاستدعاء. لا تُنسخ مفاتيح Gemini أو Buffer إلى Cloudflare. يحتاج النشر نقل مفتاح GitHub إلى Secret خاص داخل Worker، وليس إلى ملفات المشروع.
 
 المستودعات: `science-discovery-shorts` و`arabic-horror-stories` و`documented-history-stories` و`ai-news-daily` و`stickman-what-if-shorts`، تحت `ahmedalsharqwi2-gif`.
 
 ## الاختبار والتفعيل
+
+بعد إضافة المفتاحين افتح **Actions → Quality checks — Python, scene engines and Remotion → Run workflow**، وحدد `operation=deploy-independent-clock` والفرع `main`، واترك رقم حسابك المضبوط. هذا مسار نشر صريح داخل ملف الجودة الحالي، ولا يضيف workflow جديدًا. ويمكن للمساعد أيضًا طلب نفس النشر بتغيير ملف الطلب `.github/independent-clock-deploy-request.json` في main مع وسم الالتزام `[deploy-independent-clock]` بعد التأكد من جاهزية الأسرار. يعمل بعد اجتياز اختبارات الجودة فقط، ولا يعمل تلقائيًا مع push أو Pull Request. نتيجة التحقق الآمنة تُحفظ في artifact بنفس التشغيل.
+
+يمكن أيضًا تشغيله من بيئة محلية موصولة بنفس الأسرار باستخدام الأوامر التالية:
 
 ```sh
 npm ci

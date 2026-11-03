@@ -7,7 +7,7 @@ import {join} from 'node:path';
 import {REPOS, OWNER, local} from './core.mjs';
 
 const marker = 'ahmedalsharqwi2-gif-five-repositories-v1';
-const required = ['CLOUDFLARE_ACCOUNT_ID', 'CLOUDFLARE_API_TOKEN', 'GITHUB_DISPATCH_TOKEN'];
+const required = ['CLOUDFLARE_ACCOUNT_ID', 'CLOUDFLARE_API_TOKEN', 'FACTORY_DISPATCH_TOKEN'];
 const missing = required.filter(key => !process.env[key]);
 if (missing.length) { console.error('Missing secure environment bindings: ' + missing.join(', ')); process.exit(2); }
 const account = process.env.CLOUDFLARE_ACCOUNT_ID;
@@ -35,7 +35,7 @@ async function cf(path, options = {}) {
   return body.result;
 }
 async function gh(repo, path) {
-  const response = await fetch(`https://api.github.com/repos/${OWNER}/${repo}${path}`, {headers: {Authorization: 'Bearer ' + process.env.GITHUB_DISPATCH_TOKEN, Accept: 'application/vnd.github+json', 'User-Agent': 'video-factory-clock-deploy/1'}, signal: AbortSignal.timeout(30000)});
+  const response = await fetch(`https://api.github.com/repos/${OWNER}/${repo}${path}`, {headers: {Authorization: 'Bearer ' + process.env.FACTORY_DISPATCH_TOKEN, Accept: 'application/vnd.github+json', 'User-Agent': 'video-factory-clock-deploy/1'}, signal: AbortSignal.timeout(30000)});
   if (!response.ok) throw new Error('GitHub preflight HTTP ' + response.status + ': ' + repo);
   return response.json();
 }
@@ -78,7 +78,7 @@ try {
   await saveConfig(true);
   await wrangler(['deploy']);
   workerModified = true;
-  await wrangler(['secret', 'put', 'GITHUB_DISPATCH_TOKEN'], process.env.GITHUB_DISPATCH_TOKEN);
+  await wrangler(['secret', 'put', 'FACTORY_DISPATCH_TOKEN'], process.env.FACTORY_DISPATCH_TOKEN);
   await wrangler(['secret', 'put', 'OPS_TOKEN'], ops);
   const subdomain = await cf('/workers/subdomain');
   if (!subdomain?.subdomain) throw new Error('Cloudflare workers.dev subdomain is unavailable; Worker remains probe-only');
@@ -112,7 +112,7 @@ try {
       const jobs = await gh(repo, '/actions/runs/' + run.id + '/jobs');
       let proof;
       for (const job of jobs.jobs) {
-        const response = await fetch(`https://api.github.com/repos/${OWNER}/${repo}/actions/jobs/${job.id}/logs`, {headers: {Authorization: 'Bearer ' + process.env.GITHUB_DISPATCH_TOKEN}, signal: AbortSignal.timeout(30000)});
+        const response = await fetch(`https://api.github.com/repos/${OWNER}/${repo}/actions/jobs/${job.id}/logs`, {headers: {Authorization: 'Bearer ' + process.env.FACTORY_DISPATCH_TOKEN}, signal: AbortSignal.timeout(30000)});
         if (!response.ok) continue;
         for (const line of (await response.text()).split('\n')) {
           const i = line.indexOf('{"run":'); if (i < 0) continue;

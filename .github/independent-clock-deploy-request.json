@@ -1,0 +1,5 @@
+{
+  "operation": "none",
+  "revision": 0,
+  "note": "Deployment requires an explicit manual selection or an authorized main-branch commit tagged [deploy-independent-clock]. This marker alone performs no deployment."
+}

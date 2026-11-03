@@ -12,7 +12,7 @@ test('real Cloudflare runtime: SQLite Durable Objects, authenticated dry dispatc
     name: 'clock-runtime-test',
     modules: true, script: `Date.now = () => ${fixedTime};\n${bundle}`,
     compatibilityDate: '2025-05-01',
-    bindings: {GITHUB_DISPATCH_TOKEN: 'local-test-only', OPS_TOKEN: 'local-ops-only', DEPLOYMENT_ID: 'runtime-test', PROBE_ONLY: 'true', DISPATCH_ENABLED: 'false'},
+    bindings: {FACTORY_DISPATCH_TOKEN: 'local-test-only', OPS_TOKEN: 'local-ops-only', DEPLOYMENT_ID: 'runtime-test', PROBE_ONLY: 'true', DISPATCH_ENABLED: 'false'},
     durableObjects: {DAILY_GATE: {className: 'DailyGate', useSQLite: true}},
     outboundService: async request => {
       assert.ok(request.url.startsWith('https://api.github.com/'));

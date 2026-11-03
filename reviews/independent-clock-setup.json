@@ -1,8 +1,8 @@
 {
-  "status": "implementation-tested-not-deployed",
+  "status": "ready-for-existing-repository-credential-probe-not-deployed",
   "cloudflare_live": false,
   "dispatch_enabled": false,
-  "blocker": "Secure environment bindings CLOUDFLARE_API_TOKEN and GITHUB_DISPATCH_TOKEN are missing",
+  "blocker": "Cloudflare repository credentials already exist; their current API access and FACTORY_DISPATCH_TOKEN presence are awaiting the explicit read-only probe.",
   "core_tests_passed": 20,
   "actual_local_cloudflare_runtime_tests_passed": 1,
   "github_clock_provenance_tests_passed": 8,
@@ -99,5 +99,12 @@
     ],
     "secret_values_requested_in_chat": false
   },
-  "existing_repository_workflow_counts_unchanged": true
+  "existing_repository_workflow_counts_unchanged": true,
+  "current_required_repository_secrets": [
+    "CLOUDFLARE_ACCOUNT_ID",
+    "CLOUDFLARE_API_TOKEN",
+    "FACTORY_DISPATCH_TOKEN"
+  ],
+  "deployment_credential_source": "science-discovery-shorts repository Actions secrets; no local credential export",
+  "secret_name_correction": "GITHUB_ is a GitHub-reserved repository-secret prefix. Use FACTORY_DISPATCH_TOKEN with the same existing fine-grained token value."
 }

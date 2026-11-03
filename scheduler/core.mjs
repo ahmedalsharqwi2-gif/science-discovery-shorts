@@ -18,8 +18,8 @@ export function clockOperation(scheduled, now) {
 }
 function workflow(kind) { return kind === 'publication-audit' ? 'remotion-health.yml' : 'remotion-daily.yml'; }
 function headers(env) {
-  if (!env.GITHUB_DISPATCH_TOKEN) throw new Error('GitHub dispatch credential is not configured');
-  return {'Authorization': `Bearer ${env.GITHUB_DISPATCH_TOKEN}`, 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28', 'User-Agent': 'video-factory-independent-clock/1', 'Content-Type': 'application/json'};
+  if (!env.FACTORY_DISPATCH_TOKEN) throw new Error('GitHub dispatch credential is not configured');
+  return {'Authorization': `Bearer ${env.FACTORY_DISPATCH_TOKEN}`, 'Accept': 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28', 'User-Agent': 'video-factory-independent-clock/1', 'Content-Type': 'application/json'};
 }
 async function api(env, path, method = 'GET', payload, http = fetch, raw = false) {
   const response = await http('https://api.github.com' + path, {method, headers: headers(env), ...(payload ? {body: JSON.stringify(payload)} : {}), signal: AbortSignal.timeout(30000)});
@@ -40,7 +40,7 @@ async function recordedDecision(env, repo, run, http) {
 }
 export async function dispatchOnce(store, env, input, http = fetch, now = Date.now()) {
   if (!REPOS.includes(input.repo) || !['production', 'publication-audit', 'test'].includes(input.kind)) throw new Error('Unapproved operation/repository');
-  if (!env.GITHUB_DISPATCH_TOKEN) throw new Error('GitHub dispatch credential is not configured');
+  if (!env.FACTORY_DISPATCH_TOKEN) throw new Error('GitHub dispatch credential is not configured');
   const today = local(now);
   if (input.day !== today.day) throw new Error('Cross-day dispatch refused');
   if (input.kind === 'production' && today.hour !== 9) throw new Error('Production dispatch outside the Cairo9 window');

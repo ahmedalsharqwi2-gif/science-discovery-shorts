@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {handleGate, handleRequest, REPOS, local, clockOperation, dispatchOnce, scheduledTick} from './core.mjs';
 const winter = Date.parse('2030-01-03T07:00:00Z');
-const env = {GITHUB_DISPATCH_TOKEN: 'test-only-credential', OPS_TOKEN: 'test-only-ops', DEPLOYMENT_ID: 'tests'};
+const env = {FACTORY_DISPATCH_TOKEN: 'test-only-credential', OPS_TOKEN: 'test-only-ops', DEPLOYMENT_ID: 'tests'};
 class Store {
   constructor() { this.values = new Map(); this.lock = Promise.resolve(); }
   async get(k) { return this.values.get(k); }
@@ -137,7 +137,7 @@ test('public HTTP cannot trigger, read state, or leak a secret', async () => {
   for (const path of ['/', '/_ops/test-dispatch', '/_ops/clock-probe']) {
     const response = await handleRequest(new Request('https://clock.example' + path), env);
     assert.equal(response.status, 404);
-    assert.ok(!(await response.text()).includes(env.GITHUB_DISPATCH_TOKEN));
+    assert.ok(!(await response.text()).includes(env.FACTORY_DISPATCH_TOKEN));
   }
 });
 test('live-clock probe stores only a tick and never calls GitHub', async () => {

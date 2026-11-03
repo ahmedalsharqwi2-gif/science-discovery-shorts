@@ -33,7 +33,8 @@
         "tests/test_scene_director.py",
         "visual_quality_gate.py",
         "voice_provider/**",
-        "scheduler/**"
+        "scheduler/**",
+        ".github/independent-clock-deploy-request.json"
       ]
     },
     "pull_request": {
@@ -71,14 +72,33 @@
         "scheduler/**"
       ]
     },
-    "workflow_dispatch": {}
+    "workflow_dispatch": {
+      "inputs": {
+        "operation": {
+          "description": "checks runs tests only; deploy-independent-clock explicitly deploys and verifies Cloudflare",
+          "type": "choice",
+          "options": [
+            "checks",
+            "deploy-independent-clock"
+          ],
+          "default": "checks",
+          "required": true
+        },
+        "cloudflare_account_id": {
+          "description": "Optional account ID override if no repository CLOUDFLARE_ACCOUNT_ID secret exists",
+          "type": "string",
+          "required": false,
+          "default": "21724b6755b7d103dfdfe6d9a6e5e399"
+        }
+      }
+    }
   },
   "permissions": {
     "contents": "read"
   },
   "concurrency": {
-    "group": "quality-${{ github.ref }}",
-    "cancel-in-progress": true
+    "group": "${{ ((github.event_name == 'workflow_dispatch' && inputs.operation == 'deploy-independent-clock') || (github.event_name == 'push' && contains(github.event.head_commit.message, '[deploy-independent-clock]'))) && 'independent-clock-deployment' || format('quality-{0}-{1}', github.ref, inputs.operation || 'checks') }}",
+    "cancel-in-progress": "${{ !((github.event_name == 'workflow_dispatch' && inputs.operation == 'deploy-independent-clock') || (github.event_name == 'push' && contains(github.event.head_commit.message, '[deploy-independent-clock]'))) }}"
   },
   "jobs": {
     "test": {
@@ -240,6 +260,112 @@
         {
           "run": "npm run check\nnpm run bundle\nnpm run test:runtime",
           "working-directory": "scheduler"
+        }
+      ]
+    },
+    "deploy-independent-clock": {
+      "name": "Deploy verified independent clock — manual only",
+      "if": "github.ref == 'refs/heads/main' && ((github.event_name == 'workflow_dispatch' && inputs.operation == 'deploy-independent-clock') || (github.event_name == 'push' && contains(github.event.head_commit.message, '[deploy-independent-clock]')))",
+      "needs": [
+        "test",
+        "image_fallback",
+        "motion-kit-tests",
+        "scene_director",
+        "validation",
+        "remotion",
+        "independent-clock"
+      ],
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 60,
+      "permissions": {
+        "contents": "read"
+      },
+      "steps": [
+        {
+          "uses": "actions/checkout@v4",
+          "with": {
+            "ref": "${{ github.sha }}"
+          }
+        },
+        {
+          "uses": "actions/setup-node@v4",
+          "with": {
+            "node-version": "24",
+            "cache": "npm",
+            "cache-dependency-path": "scheduler/package-lock.json"
+          }
+        },
+        {
+          "name": "Install pinned deployment tools without provider credentials",
+          "run": "npm ci --no-audit --no-fund",
+          "working-directory": "scheduler"
+        },
+        {
+          "name": "Probe real Cloudflare cron; verify five dry dispatches; activate only after success",
+          "run": "npm run deploy:verified",
+          "working-directory": "scheduler",
+          "env": {
+            "CLOUDFLARE_ACCOUNT_ID": "${{ secrets.CLOUDFLARE_ACCOUNT_ID || inputs.cloudflare_account_id }}",
+            "CLOUDFLARE_API_TOKEN": "${{ secrets.CLOUDFLARE_API_TOKEN }}",
+            "FACTORY_DISPATCH_TOKEN": "${{ secrets.FACTORY_DISPATCH_TOKEN }}",
+            "WRANGLER_SEND_METRICS": "false"
+          }
+        },
+        {
+          "uses": "actions/upload-artifact@v4",
+          "if": "always()",
+          "with": {
+            "name": "independent-clock-verification-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "scheduler/live-verification.json",
+            "retention-days": 90,
+            "if-no-files-found": "warn"
+          }
+        }
+      ]
+    },
+    "clock-access-probe": {
+      "name": "Read-only check of existing Cloudflare repository credentials",
+      "if": "github.event_name == 'push' && github.ref == 'refs/heads/main' && contains(github.event.head_commit.message, '[probe-cloudflare-access]')",
+      "needs": [
+        "independent-clock"
+      ],
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 5,
+      "permissions": {
+        "contents": "read"
+      },
+      "steps": [
+        {
+          "uses": "actions/checkout@v4",
+          "with": {
+            "ref": "${{ github.sha }}"
+          }
+        },
+        {
+          "uses": "actions/setup-node@v4",
+          "with": {
+            "node-version": "24"
+          }
+        },
+        {
+          "name": "Read account and Workers access; do not deploy or publish",
+          "run": "node --use-env-proxy probe-access.mjs",
+          "working-directory": "scheduler",
+          "env": {
+            "CLOUDFLARE_ACCOUNT_ID": "${{ secrets.CLOUDFLARE_ACCOUNT_ID }}",
+            "CLOUDFLARE_API_TOKEN": "${{ secrets.CLOUDFLARE_API_TOKEN }}",
+            "HAS_FACTORY_DISPATCH_TOKEN": "${{ secrets.FACTORY_DISPATCH_TOKEN != '' }}"
+          }
+        },
+        {
+          "uses": "actions/upload-artifact@v4",
+          "if": "always()",
+          "with": {
+            "name": "independent-clock-access-${{ github.run_id }}",
+            "path": "scheduler/credential-probe.json",
+            "retention-days": 30,
+            "if-no-files-found": "warn"
+          }
         }
       ]
     }
