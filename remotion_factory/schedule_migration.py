@@ -24,8 +24,8 @@ def validate(post, identifier, channel, old_due, new_due, media):
         raise ValueError('Retained media no longer matches the exact scheduled post')
 
 def edit_input(service,identifier,request,before):
-    """Preserve required network metadata exactly when the editor revalidates it."""
-    payload={'id':identifier,'mode':'customScheduled','dueAt':request['target_due_at']}
+    """Round-trip the exact retained content required by Buffer edit validation."""
+    payload={'id':identifier,'mode':'customScheduled','dueAt':request['target_due_at'],'text':before.get('text',''),'assets':[{'video':{'url':asset['source']}} for asset in before['assets']]}
     metadata=before.get('metadata') or {}
     keys={'youtube':('title','privacy','madeForKids','notifySubscribers'),'facebook':('type',),'instagram':('type','shouldShareToFeed')}.get(service,())
     retained={key:metadata[key] for key in keys if key in metadata and metadata[key] is not None}

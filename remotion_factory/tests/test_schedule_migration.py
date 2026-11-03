@@ -14,10 +14,10 @@ class ScheduleChanges(unittest.TestCase):
         with patch('remotion_factory.schedule_migration.read_post',side_effect=[before or old,new]),patch('remotion_factory.schedule_migration.query',side_effect=error,return_value={'editPost':{'post':{'id':'p'}}}) as api:
             result=move_one('youtube',{'channel':'c'},'p',{'source_due_at':old['dueAt'],'target_due_at':new['dueAt']},{'media_url':'original'},record,lambda:None)
             return result,api.call_args_list
-    def test_only_schedule_fields_are_sent_for_the_same_id(self):
-        """Preserve text/media by never including them in the mutation."""
+    def test_same_id_uses_identical_retained_text_and_media(self):
+        """Resubmit the exact retained content required by edit validation."""
         _,calls=self.call()
-        self.assertEqual(calls[0].args[1]['input'],{'id':'p','mode':'customScheduled','dueAt':'2026-11-04T10:00:00Z'})
+        self.assertEqual(calls[0].args[1]['input'],{'id':'p','mode':'customScheduled','dueAt':'2026-11-04T10:00:00Z','text':'keep','assets':[{'video':{'url':'original'}}]})
     def test_sent_or_wrong_owner_cannot_move(self):
         """Reject sent or foreign posts before a mutation is attempted."""
         for status in ('sent','sending','error'):
@@ -36,6 +36,6 @@ class ScheduleChanges(unittest.TestCase):
     def test_youtube_edit_keeps_the_existing_required_title_and_settings(self):
         """Preserve required metadata while changing only the scheduled instant."""
         metadata={'title':'existing title','privacy':'public','madeForKids':False,'notifySubscribers':False,'category':{'categoryId':'27'}}
-        result=edit_input('youtube','p',{'target_due_at':'2026-11-04T10:00:00Z'},{'metadata':metadata})
+        result=edit_input('youtube','p',{'target_due_at':'2026-11-04T10:00:00Z'},{'metadata':metadata,'text':'unchanged','assets':[{'source':'original'}]})
         self.assertEqual(result['metadata']['youtube'],{'title':'existing title','privacy':'public','madeForKids':False,'notifySubscribers':False,'categoryId':'27'})
-        self.assertNotIn('text',result);self.assertNotIn('assets',result)
+        self.assertEqual(result['text'],'unchanged');self.assertEqual(result['assets'],[{'video':{'url':'original'}}])
