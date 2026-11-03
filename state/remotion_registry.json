@@ -170,9 +170,18 @@
       },
       "writer_run": 41709884423,
       "draft_document": {
-        "path": "state/remotion_documents/daily-remotion-2026-11-04-science-draft-b627dc0847769fc0.json",
-        "sha256": "b627dc0847769fc0b48bd652ce937496a9a74edb44d43ec7d9e68f13e56c8dc1"
-      }
+        "path": "state/remotion_documents/daily-remotion-2026-11-04-science-draft-93f97d2b7792f1af.json",
+        "sha256": "93f97d2b7792f1af651d0ba2e8e259321ae1f0c8f53e1b3b717f660893cbf2ba"
+      },
+      "draft_revision_history": [
+        {
+          "previous_document": {
+            "path": "state/remotion_documents/daily-remotion-2026-11-04-science-draft-b627dc0847769fc0.json",
+            "sha256": "b627dc0847769fc0b48bd652ce937496a9a74edb44d43ec7d9e68f13e56c8dc1"
+          },
+          "reason": "Owner-authorized catch-up: manually remove filler and invalid phrase, fit 289-word budget before original independent review; no repeat writer or voice request."
+        }
+      ]
     }
   },
   "cutover_evidence": {
