@@ -23,6 +23,10 @@ def main():
  tail=verify_tail(movie,voice,duration)
  evidence=json.loads(Path('remotion_motion/public/assets-evidence.json').read_text())
  validation={'profile':story['profile'],'topic_key':story['topic_key'],'title':story['title'],'duration':actual,'width':1080,'height':1920,'fps':30,'video_sha256':sha(movie),'story_sha256':sha(DELIVERY/'story.json'),'original_audio_sha256':sha(DELIVERY/'narration.wav'),'speech_coverage':timing['coverage'],'exact_token_coverage':timing.get('exact_token_coverage',timing['coverage']),'audio_tail':tail,'fully_decoded':True,'renderer':render,'licensed_assets':evidence,'true_story_required':story['profile'] in ('history','horror'),'fiction':story.get('fiction',False),'source':story['source'],'review_sample':False,'publication_state':'not_submitted; full visual review still required'}
+ if render.get('publication_sha256'):
+  validation['publication']=json.loads((OUT/'publication.json').read_text())
+  from .packaging import verify as verify_publication
+  verify_publication(OUT,validation)
  (OUT/'remotion-validation.json').write_text(json.dumps(validation,ensure_ascii=False,indent=2)+'\n')
  (OUT/'credits.json').write_text(json.dumps({'sources':story['source'],'assets':evidence,'music':'Original score composed for this episode','voice':'Original Gemini Charon; current repository credentials'},ensure_ascii=False,indent=2)+'\n')
  def ready(data):data['episodes'][req['slot']].update(status='rendered',video_sha256=validation['video_sha256'],duration=actual,render_run=int(__import__('os').environ['GITHUB_RUN_ID']),source_evidence_file='professional_motion/output/remotion-validation.json')

@@ -31,6 +31,8 @@ def main():
  if story['profile']!=profile or len(story['scenes'])!=8:raise ValueError('Eight authored scenes for this profile required')
  if profile in ('history','horror') and (story.get('fiction') or not story.get('documented') or not story.get('source',{}).get('url')):raise ValueError('History and horror must be sourced true events; invented stories are forbidden')
  raw=(json.dumps(story,ensure_ascii=False,indent=2)+'\n').encode();digest=hashlib.sha256(raw).hexdigest();old=None
+ from .packaging import metadata
+ publication=metadata(story,digest)
  def reserve(data):
   nonlocal old
   episodes=data['episodes'];old=episodes.get(req['slot'])
@@ -49,5 +51,6 @@ def main():
  mutate(reserve);DELIVERY.mkdir(parents=True,exist_ok=True)
  if old and old['status'] in ('voice_requested','voice_ready','rendered','approved'):restore(old,digest)
  (DELIVERY/'story.json').write_bytes(raw)
+ (DELIVERY/'publication.json').write_text(json.dumps(publication,ensure_ascii=False,indent=2)+'\n')
  print(json.dumps({'profile':profile,'slot':req['slot'],'retained_voice_restored':bool(old),'spoken_words':sum(len(s['narration'].split()) for s in story['scenes'])}))
 if __name__=='__main__':main()
