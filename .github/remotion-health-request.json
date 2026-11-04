@@ -2,6 +2,6 @@
   "date": "2026-11-04",
   "phase": "postpublish",
   "legacy_diagnostic": false,
-  "revision": 12,
-  "reason": "Owner reports missing science video: verify actual current statuses, sent links and provider errors for today's retained post IDs; read-only, no generation, rescheduling or resubmission"
+  "revision": 13,
+  "reason": "Read-only direct lookup of immutable accepted post IDs; provider time-filter inventory returned no rows. Never regenerate or resubmit."
 }

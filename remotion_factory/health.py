@@ -42,6 +42,22 @@ def write_json(path,data):
     if attempt==2:raise
  p=Path(path);p.parent.mkdir(parents=True,exist_ok=True);p.write_text(content)
 def target_due(day):return due_for(day)
+def live_posts(mapping,due):
+ # Provider due-time listings may omit sent/error posts or change their dueAt.
+ # Always reconcile the immutable accepted IDs as well as checking for duplicates.
+ day=due.astimezone(CAIRO).date();ledger=read_json('state/remotion_registry.json',{'episodes':{}})
+ rows={}
+ for service,destination in mapping.items():
+  ids={p['id'] for p in queued(destination,due.isoformat(),include_errors=True) if p.get('id')}
+  for episode in ledger.get('episodes',{}).values():
+   if not episode.get('due_at') or instant(episode['due_at']).astimezone(CAIRO).date()!=day:continue
+   receipt=episode.get('receipts',{}).get(service,{})
+   if receipt.get('id') and receipt.get('channel_id')==destination['channel']:ids.add(receipt['id'])
+  rows[service]=[]
+  for identifier in sorted(ids):
+   post=query('query {post(input:{id:'+json.dumps(identifier)+'}){id channelId status dueAt sentAt externalLink error{message} assets{source}}}')['post']
+   if post:rows[service].append(post)
+ return rows
 def check_posts(mapping,rows,due,phase):
  selected={};media=set();ids=set()
  for service,destination in mapping.items():
@@ -212,13 +228,8 @@ def main():
   except Exception as exc:report['errors'].append(str(exc) if isinstance(exc,AuditFailure) else 'Scheduler verification unavailable: '+type(exc).__name__)
  else:report['scheduler']={'observed':False,'reason':'Transition inventory retained; first automatic evening run targets November 5' if not automatic_expected(day) else 'Configured production clock not due yet; no automatic success claimed'}
  try:
-  mapping=destinations(profile);rows={}
-  for service,destination in mapping.items():
-   discovered=queued(destination,due.isoformat(),include_errors=True);rows[service]=[]
-   for post in discovered:
-    actual=query('query {post(input:{id:'+json.dumps(post['id'])+'}){id channelId status dueAt sentAt externalLink error{message} assets{source}}}')['post']
-    rows[service].append(actual)
-  report['observed_receipts']={s:[{k:p.get(k) for k in ('id','channelId','status','dueAt','sentAt','externalLink')} for p in posts] for s,posts in rows.items()}
+  mapping=destinations(profile);rows=live_posts(mapping,due)
+  report['observed_receipts']={s:[{k:p.get(k) for k in ('id','channelId','status','dueAt','sentAt','externalLink')} | ({'provider_error':re.sub(r'https?://\\S+','[provider URL omitted]',str(p['error'].get('message') or ''))[:500]} if p.get('error') else {}) for p in posts] for s,posts in rows.items()}
   report['receipts'],url=check_posts(mapping,rows,due,phase);episode=episode_for(day,url,report['receipts'] if phase=='postpublish' else None)
   if phase=='postpublish':url=original_release_url(episode)
   report['episode']={k:episode.get(k) for k in ('slot','title','pipeline','expected_sha256')};report['technical']=verify_media(url,episode,profile)
