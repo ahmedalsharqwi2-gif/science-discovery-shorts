@@ -243,6 +243,29 @@
           "scheduled_at": "2026-11-04T10:00:00.000Z",
           "verified_at": "2026-11-03T20:24:00.549219+00:00"
         }
+      },
+      "time_change_receipts": {
+        "owner-science-2026-11-04-1445": {
+          "tiktok": {
+            "phase": "intent",
+            "post_id": "6aea42d25a7c19a37cd2d0a9",
+            "before": {
+              "id": "6aea42d25a7c19a37cd2d0a9",
+              "channelId": "6a9edf14cd8b9c702c230272",
+              "status": "scheduled",
+              "dueAt": "2026-11-09T15:00:00.000Z",
+              "text": "ليه بنشوف البرق الأول وبعدين بنسمع صوت الرعد؟\n#البرق_والرعد #سرعة_الضوء #علوم_الطقس\nالمصدر: https://www.weather.gov/safety/lightning-science-overview",
+              "assets": [
+                {
+                  "source": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/releases/download/production-daily-remotion-2026-11-04-science/science-daily-remotion-2026-11-04-science.mp4"
+                }
+              ],
+              "metadata": {
+                "__typename": "TiktokPostMetadata"
+              }
+            }
+          }
+        }
       }
     }
   },
