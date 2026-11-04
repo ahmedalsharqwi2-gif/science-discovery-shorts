@@ -1,0 +1,29 @@
+{
+  "date": "2026-11-04",
+  "profile": "science",
+  "phase": "postpublish",
+  "checked_at": "2026-11-04T12:16:50.135475+00:00",
+  "run_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/actions/runs/41827825300",
+  "report_path": "reviews/daily_health/2026-11-04/41827825300-1.json",
+  "publication_due_utc": "2026-11-04T10:00:00+00:00",
+  "errors": [
+    "tiktok: missing post or duplicate posts at the configured Cairo slot"
+  ],
+  "passed": false,
+  "generation_calls": 0,
+  "publication_mutations": 0,
+  "preview": false,
+  "scheduler": {
+    "observed": false,
+    "reason": "Transition inventory retained; first automatic evening run targets November 5"
+  },
+  "observed_receipts": {
+    "tiktok": [],
+    "youtube": [],
+    "facebook": []
+  },
+  "production_at_cairo": "2026-11-03T19:00:00+02:00",
+  "publication_at_cairo": "2026-11-04T12:00:00+02:00",
+  "hours_until_publication": -2.28,
+  "readiness": "needs_attention"
+}
