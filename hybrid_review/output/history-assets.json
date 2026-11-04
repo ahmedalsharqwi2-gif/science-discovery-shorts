@@ -1,0 +1,66 @@
+[
+  {
+    "title": "File:Abusimbel.jpg",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/f/fb/Abusimbel.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "page": "https://commons.wikimedia.org/wiki/File:Abusimbel.jpg",
+    "license": "Public domain",
+    "artist": "\"Per-Olow\" - Per-Olow Anderson (1921-1989)",
+    "description": "Ramses's face to the \"number two\" colossal statue is lifted into place, since the great temple is built on the above-lying plateau. Face weighs 19.6 tonnes and concrete reinforcement in the back of 4.58 tons. Between corners, the distance 108 cm. The temple's facade is 33 meters high and 38 m wide. The temple is hewn from the rock.",
+    "id": "history-lift",
+    "file": "media/history-lift.jpg",
+    "sha256": "b7ea1a846f2c1a8e255806b5ab06fc2dbf43423011e9bd11fd893455e0789824",
+    "original_sha256": "870c914993af15e29c8a9f5fd4f82aa1974d595ba4c206d532bd5bcb06cdb446",
+    "alterations": "Resized, JPEG converted; video may crop, colour-grade and animate camera; no new event imagery generated",
+    "cache_sha256": "b7aaca093644916bb87dc85d741fc3d41c7d52d403ba336151a4fd47245bfff5",
+    "cache_origin": "Previously retrieved and source-hash-verified archival asset; encoded WebP for repeatable offline rendering",
+    "cache_parts": [
+      "archive-cache/history-lift.part00.b64",
+      "archive-cache/history-lift.part01.b64"
+    ],
+    "actual_sha256": "b7ea1a846f2c1a8e255806b5ab06fc2dbf43423011e9bd11fd893455e0789824"
+  },
+  {
+    "title": "File:Nubia, Temples of Abu Simbel, Pictures, photo 4 of 7 - Archivio fotografico Museo Egizio, Turin Album2 092.jpg",
+    "url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bb/Nubia%2C_Temples_of_Abu_Simbel%2C_Pictures%2C_photo_4_of_7_-_Archivio_fotografico_Museo_Egizio%2C_Turin_Album2_092.jpg/1920px-Nubia%2C_Temples_of_Abu_Simbel%2C_Pictures%2C_photo_4_of_7_-_Archivio_fotografico_Museo_Egizio%2C_Turin_Album2_092.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "original_url": "https://upload.wikimedia.org/wikipedia/commons/b/bb/Nubia%2C_Temples_of_Abu_Simbel%2C_Pictures%2C_photo_4_of_7_-_Archivio_fotografico_Museo_Egizio%2C_Turin_Album2_092.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "page": "https://commons.wikimedia.org/wiki/File:Nubia,_Temples_of_Abu_Simbel,_Pictures,_photo_4_of_7_-_Archivio_fotografico_Museo_Egizio,_Turin_Album2_092.jpg",
+    "license": "CC0",
+    "artist": "",
+    "description": "Modern, colour image of the Great Temple of Abu Simbel, shortly before work began on moving it to a nearby higher ground.",
+    "id": "history-old",
+    "file": "media/history-old.jpg",
+    "sha256": "3a2186a83222d2e48385e5eebaa138961fd8e28f08db6303fe57fab55472764a",
+    "original_sha256": "76cdb6a6cc2712aac5861fb365a9d1ddfa29ae12ad53debf498edfd30618d52f",
+    "alterations": "Resized, JPEG converted; video may crop, colour-grade and animate camera; no new event imagery generated",
+    "cache_sha256": "d08fb58da5c3c807bcee7d545954c769457d5e86c0384274049efb54dafd88a6",
+    "cache_origin": "Previously retrieved and source-hash-verified archival asset; encoded WebP for repeatable offline rendering",
+    "cache_parts": [
+      "archive-cache/history-old.part00.b64",
+      "archive-cache/history-old.part01.b64",
+      "archive-cache/history-old.part02.b64"
+    ],
+    "actual_sha256": "3a2186a83222d2e48385e5eebaa138961fd8e28f08db6303fe57fab55472764a"
+  },
+  {
+    "title": "File:Abu Simbel in the 1961 UNESCO Courier - UNESCO documents regarding the International Campaign to Save the Monuments of Nubia.png",
+    "url": "https://upload.wikimedia.org/wikipedia/commons/c/cb/Abu_Simbel_in_the_1961_UNESCO_Courier_-_UNESCO_documents_regarding_the_International_Campaign_to_Save_the_Monuments_of_Nubia.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "original_url": "https://upload.wikimedia.org/wikipedia/commons/c/cb/Abu_Simbel_in_the_1961_UNESCO_Courier_-_UNESCO_documents_regarding_the_International_Campaign_to_Save_the_Monuments_of_Nubia.png?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+    "page": "https://commons.wikimedia.org/wiki/File:Abu_Simbel_in_the_1961_UNESCO_Courier_-_UNESCO_documents_regarding_the_International_Campaign_to_Save_the_Monuments_of_Nubia.png",
+    "license": "Public domain",
+    "artist": "UNESCO",
+    "description": "UNESCO documents regarding the International Campaign to Save the Monuments of Nubia",
+    "id": "history-document",
+    "file": "media/history-document.jpg",
+    "sha256": "d9af4675ccd80ec12849ee9e6bfec30461d8778149ee8e4e347730970a3ec079",
+    "original_sha256": "48d50872c7023a65dcb87bda5783d898a84478ae43e12592c96ca6b7ec24299a",
+    "alterations": "Resized, JPEG converted; video may crop, colour-grade and animate camera; no new event imagery generated",
+    "cache_sha256": "5566d1d869f313fd24c39a515e0aa55c87b732f7735baf76ef45043e172a3e19",
+    "cache_origin": "Previously retrieved and source-hash-verified archival asset; encoded WebP for repeatable offline rendering",
+    "cache_parts": [
+      "archive-cache/history-document.part00.b64",
+      "archive-cache/history-document.part01.b64",
+      "archive-cache/history-document.part02.b64"
+    ],
+    "actual_sha256": "d9af4675ccd80ec12849ee9e6bfec30461d8778149ee8e4e347730970a3ec079"
+  }
+]

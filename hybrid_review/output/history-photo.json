@@ -1,0 +1,101 @@
+{
+  "review_only": true,
+  "publishable": false,
+  "engine": "photo_motion.engine.Renderer.shot",
+  "shots": [
+    {
+      "start": 0,
+      "end": 5.5,
+      "background": "history-lift.jpg",
+      "camera_start": [
+        1.22,
+        -115,
+        -80
+      ],
+      "camera_end": [
+        1.12,
+        -70,
+        -40
+      ]
+    },
+    {
+      "start": 5.5,
+      "end": 10,
+      "background": "history-lift.jpg",
+      "camera_start": [
+        1.03,
+        0,
+        0
+      ],
+      "camera_end": [
+        1.08,
+        50,
+        20
+      ]
+    },
+    {
+      "start": 10,
+      "end": 15.14,
+      "background": "history-old.jpg",
+      "camera_start": [
+        1.15,
+        -80,
+        -80
+      ],
+      "camera_end": [
+        1.07,
+        25,
+        0
+      ]
+    },
+    {
+      "start": 15.14,
+      "end": 21.5,
+      "background": "history-old.jpg",
+      "camera_start": [
+        1.03,
+        0,
+        0
+      ],
+      "camera_end": [
+        1.14,
+        -100,
+        25
+      ]
+    },
+    {
+      "start": 21.5,
+      "end": 25,
+      "background": "history-document.jpg",
+      "camera_start": [
+        1.2,
+        70,
+        -80
+      ],
+      "camera_end": [
+        1.08,
+        20,
+        0
+      ]
+    },
+    {
+      "start": 25,
+      "end": 29.02,
+      "background": "history-lift.jpg",
+      "camera_start": [
+        1.1,
+        90,
+        0
+      ],
+      "camera_end": [
+        1.02,
+        0,
+        0
+      ]
+    }
+  ],
+  "frames": 871,
+  "width": 1080,
+  "height": 1920,
+  "assets_verified": true
+}

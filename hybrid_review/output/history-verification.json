@@ -1,0 +1,106 @@
+{
+  "profile": "history",
+  "review_only": true,
+  "publishable": false,
+  "production_schedule_changed": false,
+  "provider_generation_calls": 0,
+  "publication_calls": 0,
+  "engines": [
+    "photo_motion.engine.Renderer.shot",
+    "Remotion"
+  ],
+  "title": "إزاي أنقذوا أبو سمبل من الغرق؟",
+  "movie_sha256": "cd1c8438c4bafb356a6b5c2c0b74118165f2b083916957308cafcd43064c5253",
+  "duration": 29.033333,
+  "width": 1080,
+  "height": 1920,
+  "full_decode_passed": true,
+  "source": {
+    "url": "https://whc.unesco.org/en/activities/1296",
+    "publisher": "UNESCO World Heritage Centre",
+    "title": "Working Together: Abu Simbel"
+  },
+  "source_audio_sha256": "bb13dd19c06141b454a7f25f1e083015ecd538ce573d4a54cddd49a2ca9dd312",
+  "source_story_sha256": "725613425b7004e122cbaf47c0f845d084ae6071f3f4cd06b3f25f3e61b79f16",
+  "source_interval": [
+    0,
+    29.02
+  ],
+  "excerpt_audio_sha256": "367fc23f5c2c0979037440510d37fd034ec53a10b2461ea0fce5c885cd00b487",
+  "raw_voice_sample_count_verified": true,
+  "captions_within_excerpt": true,
+  "visual_samples": [
+    {
+      "second": 2,
+      "mean": 91.31,
+      "std": 53.07
+    },
+    {
+      "second": 8,
+      "mean": 93.9,
+      "std": 54.34
+    },
+    {
+      "second": 18,
+      "mean": 75.93,
+      "std": 39.21
+    },
+    {
+      "second": 26,
+      "mean": 95.4,
+      "std": 53.58
+    }
+  ],
+  "encoded_mix_correlation": 0.99975,
+  "audio_levels": [
+    "mean_volume: -20.0 dB",
+    "max_volume: -4.6 dB"
+  ],
+  "sound_design": {
+    "profile": "history",
+    "bpm": 66,
+    "instrumentation": [
+      "slow bowed strings",
+      "breathy sine flute",
+      "muted frame drum",
+      "paper rustle"
+    ],
+    "seed": 2671,
+    "cues": [
+      {
+        "at": 0,
+        "type": "muted_frame_drum"
+      },
+      {
+        "at": 10,
+        "type": "muted_frame_drum"
+      },
+      {
+        "at": 15.14,
+        "type": "muted_frame_drum"
+      },
+      {
+        "at": 25,
+        "type": "muted_frame_drum"
+      },
+      {
+        "at": 5.4,
+        "type": "archival_paper_change"
+      },
+      {
+        "at": 21.4,
+        "type": "archival_paper_change"
+      }
+    ],
+    "original_synthetic_music": true,
+    "reference_recording_sampled": false,
+    "normalized_voice_frames": 1392960,
+    "final_mix_frames": 1392960,
+    "master_gain": 1,
+    "ducking": "10ms RMS envelope, 15ms attack, 260ms release; no sample deletion, lookahead or time shift",
+    "duration": 29.02,
+    "voice_reused": true,
+    "mix_sha256": "d8bf68db0a6cb9cc91e127516062ff8cfa700b5ebbbe7f8aad47e76ad1c42b1b"
+  },
+  "artistic_approval": "awaiting owner review"
+}

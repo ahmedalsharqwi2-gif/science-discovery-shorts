@@ -1,0 +1,111 @@
+{
+  "profile": "history",
+  "duration": 29.02,
+  "title": "إزاي أنقذوا أبو سمبل من الغرق؟",
+  "review_only": true,
+  "publishable": false,
+  "voice_generated": false,
+  "source_audio_sha256": "bb13dd19c06141b454a7f25f1e083015ecd538ce573d4a54cddd49a2ca9dd312",
+  "source_story_sha256": "725613425b7004e122cbaf47c0f845d084ae6071f3f4cd06b3f25f3e61b79f16",
+  "source_interval": [
+    0,
+    29.02
+  ],
+  "excerpt_audio_sha256": "367fc23f5c2c0979037440510d37fd034ec53a10b2461ea0fce5c885cd00b487",
+  "captions": [
+    {
+      "text": "الوش الحجري اللي قدامك مش قطعة",
+      "startMs": 0,
+      "endMs": 2060,
+      "timestampMs": null,
+      "confidence": null
+    },
+    {
+      "text": "ديكور بتترفع. دي صورة من إنقاذ",
+      "startMs": 2620,
+      "endMs": 4740,
+      "timestampMs": null,
+      "confidence": null
+    },
+    {
+      "text": "أبو سمبل، لما معبد منحوت في",
+      "startMs": 4740,
+      "endMs": 6720,
+      "timestampMs": null,
+      "confidence": null
+    },
+    {
+      "text": "الصخر كان لازم يتفك ويتنقل. السؤال",
+      "startMs": 6720,
+      "endMs": 10040,
+      "timestampMs": null,
+      "confidence": null
+    },
+    {
+      "text": "المرعب وقتها: إزاي تنقذ أثر ضخم،",
+      "startMs": 10040,
+      "endMs": 13340,
+      "timestampMs": null,
+      "confidence": null
+    },
+    {
+      "text": "من غير ما تضيع ملامحه؟ مع",
+      "startMs": 13340,
+      "endMs": 15520,
+      "timestampMs": null,
+      "confidence": null
+    },
+    {
+      "text": "بناء السد العالي، خزان المياه الجديد",
+      "startMs": 15520,
+      "endMs": 18040,
+      "timestampMs": null,
+      "confidence": null
+    },
+    {
+      "text": "كان هيغطي مواقع أثرية في النوبة.",
+      "startMs": 18040,
+      "endMs": 20340,
+      "timestampMs": null,
+      "confidence": null
+    },
+    {
+      "text": "مصر والسودان طلبوا مساعدة اليونسكو، لأن",
+      "startMs": 20340,
+      "endMs": 22920,
+      "timestampMs": null,
+      "confidence": null
+    },
+    {
+      "text": "التحدي ماكانش نقل تمثال صغير. كان",
+      "startMs": 22920,
+      "endMs": 25300,
+      "timestampMs": null,
+      "confidence": null
+    },
+    {
+      "text": "إنقاذ معابد كاملة، قبل ما المياه",
+      "startMs": 25300,
+      "endMs": 27600,
+      "timestampMs": null,
+      "confidence": null
+    },
+    {
+      "text": "توصل لمكانها.",
+      "startMs": 27600,
+      "endMs": 28540,
+      "timestampMs": null,
+      "confidence": null
+    }
+  ],
+  "source": {
+    "url": "https://whc.unesco.org/en/activities/1296",
+    "publisher": "UNESCO World Heritage Centre",
+    "title": "Working Together: Abu Simbel"
+  },
+  "engines": [
+    "photo_motion.engine.Renderer.shot",
+    "Remotion"
+  ],
+  "caption_boundary_review": "Corrected retained scene-group bleed at exact measured spoken word boundaries; no ASR or voice regeneration"
+}

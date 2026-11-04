@@ -1,0 +1,54 @@
+{
+  "profile": "science",
+  "bpm": 98,
+  "instrumentation": [
+    "FM glass mallet",
+    "warm low strings",
+    "water pops",
+    "assembly sweep"
+  ],
+  "seed": 784,
+  "cues": [
+    {
+      "at": 0,
+      "type": "molecular_water_pop"
+    },
+    {
+      "at": 4.8,
+      "type": "molecular_water_pop"
+    },
+    {
+      "at": 11,
+      "type": "molecular_water_pop"
+    },
+    {
+      "at": 17.28,
+      "type": "molecular_water_pop"
+    },
+    {
+      "at": 21.8,
+      "type": "molecular_water_pop"
+    },
+    {
+      "at": 27.6,
+      "type": "molecular_water_pop"
+    },
+    {
+      "at": 32,
+      "type": "molecular_water_pop"
+    },
+    {
+      "at": 17.01,
+      "type": "micelle_assembly_sweep"
+    }
+  ],
+  "original_synthetic_music": true,
+  "reference_recording_sampled": false,
+  "normalized_voice_frames": 1658880,
+  "final_mix_frames": 1658880,
+  "master_gain": 1,
+  "ducking": "10ms RMS envelope, 15ms attack, 260ms release; no sample deletion, lookahead or time shift",
+  "duration": 34.56,
+  "voice_reused": true,
+  "mix_sha256": "0ec93304c59101944b396c9e2a09f14db0d4d14096cfc663ec6674449a24f7f4"
+}

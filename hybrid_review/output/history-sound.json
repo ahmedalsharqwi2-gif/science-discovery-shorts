@@ -1,0 +1,46 @@
+{
+  "profile": "history",
+  "bpm": 66,
+  "instrumentation": [
+    "slow bowed strings",
+    "breathy sine flute",
+    "muted frame drum",
+    "paper rustle"
+  ],
+  "seed": 2671,
+  "cues": [
+    {
+      "at": 0,
+      "type": "muted_frame_drum"
+    },
+    {
+      "at": 10,
+      "type": "muted_frame_drum"
+    },
+    {
+      "at": 15.14,
+      "type": "muted_frame_drum"
+    },
+    {
+      "at": 25,
+      "type": "muted_frame_drum"
+    },
+    {
+      "at": 5.4,
+      "type": "archival_paper_change"
+    },
+    {
+      "at": 21.4,
+      "type": "archival_paper_change"
+    }
+  ],
+  "original_synthetic_music": true,
+  "reference_recording_sampled": false,
+  "normalized_voice_frames": 1392960,
+  "final_mix_frames": 1392960,
+  "master_gain": 1,
+  "ducking": "10ms RMS envelope, 15ms attack, 260ms release; no sample deletion, lookahead or time shift",
+  "duration": 29.02,
+  "voice_reused": true,
+  "mix_sha256": "d8bf68db0a6cb9cc91e127516062ff8cfa700b5ebbbe7f8aad47e76ad1c42b1b"
+}

@@ -1,0 +1,111 @@
+{
+  "profile": "science",
+  "duration": 34.56,
+  "title": "الصابون بيمسك الدهون إزاي؟",
+  "review_only": true,
+  "publishable": false,
+  "voice_generated": false,
+  "source_audio_sha256": "06acaeb8aa52a0802ee2506e87a4433353d1e9ab9f1ef6023dd19a8717e8173c",
+  "source_story_sha256": "c80d36f884dc87103e7e29be8e6d189ec7e4d22271fd94ddab5e6de4438f834d",
+  "source_interval": [
+    34.3,
+    68.86
+  ],
+  "excerpt_audio_sha256": "8fcd5345af7ec2a44def7ebe9c865a621705840cac33ef09cce69a6bf3d52694",
+  "captions": [
+    {
+      "text": "الجزيء الفعّال في الصابون فيه جزء بيتفاعل",
+      "startMs": 40,
+      "endMs": 2880,
+      "timestampMs": null,
+      "confidence": null
+    },
+    {
+      "text": "كويس مع المياه، وجزء تاني ينجذب",
+      "startMs": 2880,
+      "endMs": 5500,
+      "timestampMs": null,
+      "confidence": null
+    },
+    {
+      "text": "للدهون. تخيلها وظيفة مزدوجة، مش مغناطيس",
+      "startMs": 5500,
+      "endMs": 9340,
+      "timestampMs": null,
+      "confidence": null
+    },
+    {
+      "text": "حرفي. الطرف اللي يحب الدهون يدخل",
+      "startMs": 9340,
+      "endMs": 12320,
+      "timestampMs": null,
+      "confidence": null
+    },
+    {
+      "text": "ناحية الطبقة الدهنية، والرأس اللي يحب",
+      "startMs": 12320,
+      "endMs": 14560,
+      "timestampMs": null,
+      "confidence": null
+    },
+    {
+      "text": "الماء يفضل متجه للوسط المائي. مع",
+      "startMs": 14560,
+      "endMs": 17580,
+      "timestampMs": null,
+      "confidence": null
+    },
+    {
+      "text": "الفرك ووجود الماء، جزيئات الصابون تساعد",
+      "startMs": 18120,
+      "endMs": 20620,
+      "timestampMs": null,
+      "confidence": null
+    },
+    {
+      "text": "تفصل الدهون عن السطح. وممكن تتجمع",
+      "startMs": 20620,
+      "endMs": 23480,
+      "timestampMs": null,
+      "confidence": null
+    },
+    {
+      "text": "حوالين أجزاء منها، والذيول تبقى للداخل",
+      "startMs": 23480,
+      "endMs": 25960,
+      "timestampMs": null,
+      "confidence": null
+    },
+    {
+      "text": "والرؤوس للخارج. التجمعات دي اسمها مذيلات،",
+      "startMs": 26420,
+      "endMs": 28920,
+      "timestampMs": null,
+      "confidence": null
+    },
+    {
+      "text": "وبتساعد الدهون تفضل منتشرة في المياه",
+      "startMs": 29820,
+      "endMs": 32480,
+      "timestampMs": null,
+      "confidence": null
+    },
+    {
+      "text": "بدل ما ترجع بسهولة على السطح.",
+      "startMs": 32480,
+      "endMs": 34560,
+      "timestampMs": null,
+      "confidence": null
+    }
+  ],
+  "source": {
+    "url": "https://www.cdc.gov/clean-hands/about/index.html",
+    "publisher": "CDC; general chemistry explanation",
+    "title": "About Handwashing and surfactant chemistry"
+  },
+  "engines": [
+    "professional_motion.proceduralDirector + scienceCinema",
+    "Remotion"
+  ],
+  "caption_boundary_review": "Corrected retained scene-group bleed at exact measured spoken word boundaries; no ASR or voice regeneration"
+}

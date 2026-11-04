@@ -1,0 +1,31 @@
+{
+  "date_cairo": "2026-11-05",
+  "profile": "science",
+  "branch": "codex/hybrid-samples-2026-11-05",
+  "base_sha": "b0a5e0a7a295eb883034c89d743bbb2c61c01aa0",
+  "review_only": true,
+  "publication_enabled": false,
+  "artistic_approval": "pending_owner_review",
+  "active_daily_configuration_changed": false,
+  "sample": {
+    "url": "https://drive.google.com/file/d/1vvz3MIoB82iBoavyYFpi4IFjGSeGwTLC/view?usp=drivesdk",
+    "id": "1vvz3MIoB82iBoavyYFpi4IFjGSeGwTLC",
+    "size": 10450989,
+    "private": true,
+    "sha256": "373d8996cbf87b374b4e2651b8a25c8803b1b03ef45e91c8f547c2ba017c98c2",
+    "duration": 34.566667
+  },
+  "actual_integration": [
+    "professional_motion.proceduralDirector + scienceCinema",
+    "Remotion"
+  ],
+  "technical_validation": "hybrid_review/output/science-verification.json",
+  "tests": {
+    "typescript_passed": true,
+    "python_compile_passed": true,
+    "micelle_geometry_direction_passed": true,
+    "full_video_decode_passed": true,
+    "final_mix_correlation": 0.999751
+  },
+  "generalization": "Only after owner reviews the two distinct samples"
+}

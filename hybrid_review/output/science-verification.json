@@ -1,0 +1,114 @@
+{
+  "profile": "science",
+  "review_only": true,
+  "publishable": false,
+  "production_schedule_changed": false,
+  "provider_generation_calls": 0,
+  "publication_calls": 0,
+  "engines": [
+    "professional_motion.proceduralDirector + scienceCinema",
+    "Remotion"
+  ],
+  "title": "الصابون بيمسك الدهون إزاي؟",
+  "movie_sha256": "373d8996cbf87b374b4e2651b8a25c8803b1b03ef45e91c8f547c2ba017c98c2",
+  "duration": 34.566667,
+  "width": 1080,
+  "height": 1920,
+  "full_decode_passed": true,
+  "source": {
+    "url": "https://www.cdc.gov/clean-hands/about/index.html",
+    "publisher": "CDC; general chemistry explanation",
+    "title": "About Handwashing and surfactant chemistry"
+  },
+  "source_audio_sha256": "06acaeb8aa52a0802ee2506e87a4433353d1e9ab9f1ef6023dd19a8717e8173c",
+  "source_story_sha256": "c80d36f884dc87103e7e29be8e6d189ec7e4d22271fd94ddab5e6de4438f834d",
+  "source_interval": [
+    34.3,
+    68.86
+  ],
+  "excerpt_audio_sha256": "8fcd5345af7ec2a44def7ebe9c865a621705840cac33ef09cce69a6bf3d52694",
+  "raw_voice_sample_count_verified": true,
+  "captions_within_excerpt": true,
+  "visual_samples": [
+    {
+      "second": 2,
+      "mean": 231.56,
+      "std": 23.87
+    },
+    {
+      "second": 12,
+      "mean": 231.75,
+      "std": 23.62
+    },
+    {
+      "second": 23,
+      "mean": 219.35,
+      "std": 41.63
+    },
+    {
+      "second": 31,
+      "mean": 217.12,
+      "std": 43.75
+    }
+  ],
+  "encoded_mix_correlation": 0.999751,
+  "audio_levels": [
+    "mean_volume: -19.3 dB",
+    "max_volume: -4.8 dB"
+  ],
+  "sound_design": {
+    "profile": "science",
+    "bpm": 98,
+    "instrumentation": [
+      "FM glass mallet",
+      "warm low strings",
+      "water pops",
+      "assembly sweep"
+    ],
+    "seed": 784,
+    "cues": [
+      {
+        "at": 0,
+        "type": "molecular_water_pop"
+      },
+      {
+        "at": 4.8,
+        "type": "molecular_water_pop"
+      },
+      {
+        "at": 11,
+        "type": "molecular_water_pop"
+      },
+      {
+        "at": 17.28,
+        "type": "molecular_water_pop"
+      },
+      {
+        "at": 21.8,
+        "type": "molecular_water_pop"
+      },
+      {
+        "at": 27.6,
+        "type": "molecular_water_pop"
+      },
+      {
+        "at": 32,
+        "type": "molecular_water_pop"
+      },
+      {
+        "at": 17.01,
+        "type": "micelle_assembly_sweep"
+      }
+    ],
+    "original_synthetic_music": true,
+    "reference_recording_sampled": false,
+    "normalized_voice_frames": 1658880,
+    "final_mix_frames": 1658880,
+    "master_gain": 1,
+    "ducking": "10ms RMS envelope, 15ms attack, 260ms release; no sample deletion, lookahead or time shift",
+    "duration": 34.56,
+    "voice_reused": true,
+    "mix_sha256": "0ec93304c59101944b396c9e2a09f14db0d4d14096cfc663ec6674449a24f7f4"
+  },
+  "artistic_approval": "awaiting owner review"
+}
