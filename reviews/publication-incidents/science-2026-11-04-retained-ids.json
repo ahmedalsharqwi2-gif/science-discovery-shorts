@@ -1,0 +1,45 @@
+{
+  "date": "2026-11-04",
+  "status": "provider_schedule_differs_from_ledger",
+  "expected_due_at": "2026-11-04T10:00:00+00:00",
+  "observed_receipts": {
+    "tiktok": [
+      {
+        "id": "6aea42d25a7c19a37cd2d0a9",
+        "channelId": "6a9edf14cd8b9c702c230272",
+        "status": "scheduled",
+        "dueAt": "2026-11-09T15:00:00.000Z",
+        "sentAt": null,
+        "externalLink": null
+      }
+    ],
+    "youtube": [
+      {
+        "id": "6aea42d8b3ec15847387bb2c",
+        "channelId": "6a9edee8cd8b9c702c2301cb",
+        "status": "scheduled",
+        "dueAt": "2026-11-09T15:00:00.000Z",
+        "sentAt": null,
+        "externalLink": null
+      }
+    ],
+    "facebook": [
+      {
+        "id": "6aea42de343beca74f0c20f3",
+        "channelId": "6a9edebbcd8b9c702c230128",
+        "status": "scheduled",
+        "dueAt": "2026-11-09T15:00:00.000Z",
+        "sentAt": null,
+        "externalLink": null
+      }
+    ]
+  },
+  "source_report": "reviews/daily_health/2026-11-04/41828122191-1.json",
+  "live_audit_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/actions/runs/41828122191",
+  "video_unchanged": true,
+  "generation_calls": 0,
+  "publication_mutations": 0,
+  "provider_change_actor": "unknown; no attribution inferred",
+  "automatic_rescheduling_performed": false,
+  "health_fix": "Audit queries retained post IDs in addition to due-time inventory, preserving duplicate detection. New regression tests passed in live audit."
+}
