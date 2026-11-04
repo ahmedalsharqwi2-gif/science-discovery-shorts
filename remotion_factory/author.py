@@ -6,6 +6,7 @@ from datetime import datetime,timezone,timedelta
 import requests
 from bs4 import BeautifulSoup
 from .state import mutate,local
+from .evidence_excerpt import narrow_excerpts
 from .documents import write as document_write,read as document_read
 SERIES={'science':'اسرار الكون','horror':'ملفات غامضه','history':'نقص ونروى','news':'ai على السريع','stickman':'افترض كده'}
 MODES=('flow','compare','cycle','layers')
@@ -104,7 +105,7 @@ def validate(story,profile,source):
  if not 3<=len(story.get('hashtags',[]))<=5:raise ValueError('Three to five topical on-screen hashtags required before synthesis')
  if len(story.get('scenes',[]))!=8:raise ValueError('Exactly eight narrative scenes required')
  words=sum(len(s['narration'].split()) for s in story['scenes']);low,high=(160,270) if profile=='news' else (240,370)
- if not low<=words<=high:raise ValueError('Draft word budget fails natural-duration preflight; no TTS requested')
+ if not low<=words<=high:raise ValueError(f'Draft word budget fails natural-duration preflight: actual {words}, required {low}-{high}; no TTS requested')
  if not re.fullmatch('[a-z0-9][a-z0-9-]{8,110}',story['canonical_subject']):raise ValueError('Stable concrete canonical topic required')
  for s in story['scenes']:
   if not s['label'] or len(s['label'])>55 or not 2<=len(s['labels'])<=4:raise ValueError('Readable topical scene labels required')
@@ -153,7 +154,7 @@ def author(req,entry):
  prior=used();seen_urls,seen_topics=prior_identifiers(prior)
  draft,row,source=retained_draft(req,current,seen_urls,seen_topics)
  from .editorial_recovery import checked_draft
- draft=checked_draft(slot,draft,profile,source,row,validate,ask_once,SCHEMA,local()['episodes'][slot],mutate,document_write)
+ draft=checked_draft(slot,draft,profile,source,row,validate,ask_once,SCHEMA,local()['episodes'][slot],mutate,document_write,lambda value:narrow_excerpts(value,source))
  Path('professional_motion/delivery').mkdir(parents=True,exist_ok=True);Path('professional_motion/delivery/editorial-draft.json').write_text(json_text(draft))
  if draft['canonical_subject'] in seen_topics:raise ValueError('Underlying topic already produced')
  story={**draft,'profile':profile,'series':SERIES[profile],'fiction':profile=='stickman','documented':profile!='stickman','topic_key':'remotion-'+draft['canonical_subject'],'source':{k:row[k] for k in ('url','title','publisher','published') if k in row}}
