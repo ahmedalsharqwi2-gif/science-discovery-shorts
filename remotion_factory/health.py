@@ -41,7 +41,13 @@ def write_json(path,data):
    except AuditFailure:
     if attempt==2:raise
  p=Path(path);p.parent.mkdir(parents=True,exist_ok=True);p.write_text(content)
-def target_due(day):return due_for(day)
+def target_due(day):
+ override=read_json('config/remotion_daily_release.json',{}).get('audit_publication_overrides',{}).get(day.isoformat())
+ if not override:return due_for(day)
+ due=instant(override['due_at'])
+ if override.get('approved_by_owner') is not True or due.astimezone(CAIRO).date()!=day:
+  raise AuditFailure('Invalid explicit publication audit override')
+ return due
 def live_posts(mapping,due):
  # Provider due-time listings may omit sent/error posts or change their dueAt.
  # Always reconcile the immutable accepted IDs as well as checking for duplicates.

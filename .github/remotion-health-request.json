@@ -1,7 +1,6 @@
 {
   "date": "2026-11-04",
-  "phase": "postpublish",
-  "legacy_diagnostic": false,
-  "revision": 13,
-  "reason": "Read-only direct lookup of immutable accepted post IDs; provider time-filter inventory returned no rows. Never regenerate or resubmit."
+  "phase": "auto",
+  "revision": 14,
+  "reason": "Read-only verification of exact owner-approved 14:45 Cairo existing-post move"
 }
