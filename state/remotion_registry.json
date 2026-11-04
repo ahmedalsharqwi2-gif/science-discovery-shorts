@@ -329,6 +329,13 @@
           "to": "2026-11-04T12:45:00Z"
         }
       ]
+    },
+    "daily-remotion-2026-11-05-science": {
+      "profile": "science",
+      "due_at": "2026-11-05T10:00:00Z",
+      "status": "author_pending",
+      "source_run": 41904494022,
+      "created_at": "2026-11-04T20:13:59.001029+00:00"
     }
   },
   "cutover_evidence": {
