@@ -1,3 +1,4 @@
+import {DEFAULT_POLICY, releasePlan, shiftDay, policyFromEnv} from './schedule-policy.mjs';
 // Only starts existing GitHub workflows. No Gemini, Buffer or publication keys.
 export const OWNER = 'ahmedalsharqwi2-gif';
 export const REPOS = Object.freeze(['science-discovery-shorts', 'arabic-horror-stories', 'documented-history-stories', 'ai-news-daily', 'stickman-what-if-shorts']);
@@ -9,16 +10,19 @@ export function local(value) {
   const p = Object.fromEntries(formatter.formatToParts(date).map(x => [x.type, x.value]));
   return {day: `${p.year}-${p.month}-${p.day}`, hour: +p.hour, minute: +p.minute};
 }
-function nextDay(day) { return new Date(Date.parse(day+'T12:00:00Z')+86400000).toISOString().slice(0,10); }
-function trial(day) { return day >= '2026-11-04' && day < '2026-11-18'; }
-function plan(day) { return trial(day) ? {preparationDay:new Date(Date.parse(day+'T12:00:00Z')-86400000).toISOString().slice(0,10),productionHour:19,publicationHour:12} : {preparationDay:day,productionHour:9,publicationHour:17}; }
-export function clockOperation(scheduled, now) {
+export function verificationDay(now, policy = DEFAULT_POLICY) {
+  const n = local(now);
+  return n.hour < releasePlan(n.day, policy).publicationHour ? n.day : shiftDay(n.day, 1);
+}
+export function clockOperation(scheduled, now, policy = DEFAULT_POLICY) {
   const s = local(scheduled), n = local(now);
-  if (s.day !== n.day) return null; // Never move a missed trigger into another day.
-  const tomorrow=nextDay(s.day);
-  if (trial(tomorrow) && s.hour===19 && [0,17].includes(s.minute) && n.hour===19) return {kind:'production',day:tomorrow};
-  if (!trial(s.day) && s.hour === 9 && [0, 17].includes(s.minute) && n.hour === 9) return {kind: 'production', day: s.day};
-  if (s.hour === plan(s.day).publicationHour && s.minute === 35 && n.hour >= s.hour && n.hour < s.hour+3) return {kind: 'publication-audit', day: s.day};
+  if (s.day !== n.day) return null;
+  for (const day of [shiftDay(s.day, 1), s.day]) {
+    const timing = releasePlan(day, policy);
+    if (timing.preparationDay === s.day && s.hour === timing.productionHour && [0,17].includes(s.minute) && n.hour === s.hour) return {kind:'production',day};
+  }
+  const publicationHour = releasePlan(s.day, policy).publicationHour;
+  if (s.hour === publicationHour && s.minute === 35 && n.hour >= s.hour && n.hour < s.hour + 3) return {kind:'publication-audit',day:s.day};
   return null;
 }
 function workflow(kind) { return kind === 'publication-audit' ? 'remotion-health.yml' : 'remotion-daily.yml'; }
@@ -47,10 +51,11 @@ export async function dispatchOnce(store, env, input, http = fetch, now = Date.n
   if (!REPOS.includes(input.repo) || !['production', 'publication-audit', 'test'].includes(input.kind)) throw new Error('Unapproved operation/repository');
   if (!env.FACTORY_DISPATCH_TOKEN) throw new Error('GitHub dispatch credential is not configured');
   const today = local(now);
-  const timing=plan(input.day);
-  if ((input.kind==='production' ? timing.preparationDay : input.day) !== today.day) throw new Error('Cross-day dispatch refused');
+  const policy = policyFromEnv(env);
+  const timing=releasePlan(input.day, policy);
+  if (input.kind !== 'test' && (input.kind==='production' ? timing.preparationDay : input.day) !== today.day) throw new Error('Cross-day dispatch refused');
   if (input.kind === 'production' && today.hour !== timing.productionHour) throw new Error('Production dispatch outside the configured Cairo window');
-  if (input.kind === 'test' && today.hour >= 16) throw new Error('Late dry-run test refused');
+  if (input.kind === 'test' && input.day !== verificationDay(now, policy)) throw new Error('Dry-run must target the next unexpired configured publication date');
   const prior = await store.get('receipt');
   if (prior) return {...prior, reused: true};
   const root = `/repos/${OWNER}/${input.repo}/actions/workflows/${workflow(input.kind)}`;
@@ -128,7 +133,7 @@ async function send(env, key, payload) { return (await gate(env, key).fetch('htt
 export async function scheduledTick(controller, env, now = Date.now()) {
   if (env.PROBE_ONLY === 'true') return send(env, 'probe:' + env.DEPLOYMENT_ID, {kind: 'probe', scheduled_time: new Date(controller.scheduledTime).toISOString(), deployment_id: env.DEPLOYMENT_ID});
   if (env.DISPATCH_ENABLED !== 'true') return {status: 'disabled'};
-  const operation = clockOperation(controller.scheduledTime, now);
+  const operation = clockOperation(controller.scheduledTime, now, policyFromEnv(env));
   if (!operation) return {status: 'wrong_timezone_or_expired_trigger'};
   const results = [];
   for (const repo of REPOS) {
@@ -145,9 +150,10 @@ export async function handleRequest(request, env) {
       return gate(env, 'probe:' + env.DEPLOYMENT_ID).fetch('https://internal/probe');
     }
     if (request.method === 'POST' && path === '/_ops/test-dispatch') {
-      const day = local(Date.now()).day, results = [];
+      const day = verificationDay(Date.now(), policyFromEnv(env)), results = [];
       for (const repo of REPOS) results.push(await send(env, `test:${env.DEPLOYMENT_ID}:${day}:${repo}`, {repo, day, kind: 'test'}));
       return json({dry_run: true, results});
     }
     return new Response('Not found', {status: 404});
 }
+

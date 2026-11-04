@@ -4,7 +4,9 @@ import {spawn} from 'node:child_process';
 import {randomBytes, createHash} from 'node:crypto';
 import {tmpdir} from 'node:os';
 import {join} from 'node:path';
-import {REPOS, OWNER, local} from './core.mjs';
+import {REPOS, OWNER, local, verificationDay} from './core.mjs';
+import {normalizePolicy, cronExpressions} from './schedule-policy.mjs';
+import {sourceDigest} from './source-digest.mjs';
 
 const marker = 'ahmedalsharqwi2-gif-five-repositories-v1';
 const required = ['CLOUDFLARE_ACCOUNT_ID', 'CLOUDFLARE_API_TOKEN', 'FACTORY_DISPATCH_TOKEN'];
@@ -13,17 +15,15 @@ if (missing.length) { console.error('Missing secure environment bindings: ' + mi
 const account = process.env.CLOUDFLARE_ACCOUNT_ID.trim();
 if (process.env.EXPECTED_CLOUDFLARE_ACCOUNT_ID && account !== process.env.EXPECTED_CLOUDFLARE_ACCOUNT_ID.trim()) { console.error('Existing account credential does not match the explicitly selected Cloudflare account; no deployment performed'); process.exit(2); }
 const config = JSON.parse(await readFile(new URL('./wrangler.json', import.meta.url), 'utf8'));
+const releaseConfig = JSON.parse(await readFile(new URL('../config/remotion_daily_release.json', import.meta.url), 'utf8'));
+const policy = normalizePolicy(releaseConfig);
+config.triggers.crons = cronExpressions(policy);
 const deployment = randomBytes(12).toString('hex'), ops = randomBytes(32).toString('hex');
 const localConfig = new URL('./wrangler.deploy.json', import.meta.url);
 const report = {deployment_id: deployment, started_at: new Date().toISOString(), live: false, checks: [], generation_calls_added: 0, publication_calls_added: 0};
 const reportFile = new URL('./live-verification.json', import.meta.url);
 let activationAttempted = false;
 let workerModified = false;
-async function sourceDigest() {
-  const digest = createHash('sha256');
-  for (const name of ['worker.mjs','core.mjs','deploy.mjs','wrangler.json','package-lock.json']) digest.update(name + '\0').update(await readFile(new URL('./' + name, import.meta.url)));
-  return digest.digest('hex');
-}
 const expectedSource = await sourceDigest();
 report.source_sha256 = expectedSource;
 const pause = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -62,7 +62,7 @@ function wrangler(args, stdin) {
   });
 }
 async function saveConfig(probeOnly) {
-  const staged = {...config, account_id: account, vars: {...config.vars, DEPLOYMENT_ID: deployment, PROBE_ONLY: String(probeOnly), DISPATCH_ENABLED: String(!probeOnly)}, triggers: {crons: probeOnly ? ['* * * * *'] : config.triggers.crons}};
+  const staged = {...config, account_id: account, vars: {...config.vars, DEPLOYMENT_ID: deployment, SOURCE_SHA256: expectedSource, SCHEDULE_POLICY: JSON.stringify(policy), PROBE_ONLY: String(probeOnly), DISPATCH_ENABLED: String(!probeOnly)}, triggers: {crons: probeOnly ? ['* * * * *'] : config.triggers.crons}};
   await writeFile(localConfig, JSON.stringify(staged, null, 2) + '\n');
 }
 async function persist() { await writeFile(reportFile, JSON.stringify(report, null, 2) + '\n'); }
@@ -71,7 +71,8 @@ try {
   const existing = await cf('/workers/scripts/' + config.name + '/settings');
   if (existing && !existing.bindings?.some(binding => binding.name === 'FACTORY_OWNER' && binding.text === marker)) throw new Error('Existing Worker does not have this project ownership marker; refusing overwrite');
   const day = local(Date.now()).day;
-  if (local(Date.now()).hour >= 16) throw new Error('Too late to safely verify same-day production dry runs; no deployment performed');
+  const testDay = verificationDay(Date.now(), policy);
+  report.verification_target_day = testDay;
   let accountSubdomain = await cf('/workers/subdomain');
   if (!accountSubdomain?.subdomain) {
     accountSubdomain = await cf('/workers/subdomain', {
@@ -89,11 +90,22 @@ try {
     if (definition.state !== 'active') throw new Error('Required workflow inactive: ' + repo);
     const source = await fetch(`https://raw.githubusercontent.com/${OWNER}/${repo}/main/.github/workflows/remotion-daily.yml`, {signal: AbortSignal.timeout(30000)});
     if (!source.ok) throw new Error('Public workflow definition could not be verified: ' + repo);
+    const policyResponse = await fetch(`https://raw.githubusercontent.com/${OWNER}/${repo}/main/config/remotion_daily_release.json`, {signal: AbortSignal.timeout(30000)});
+    if (!policyResponse.ok || JSON.stringify(normalizePolicy(await policyResponse.json())) !== JSON.stringify(policy)) throw new Error('Repository release policy differs from the shared clock: ' + repo);
     const contents = await source.text();
     if (!JSON.parse(contents).on.workflow_dispatch.inputs.trigger_source) throw new Error('Independent-clock integration is not installed: ' + repo);
     before[repo] = new Set((await gh(repo, '/actions/workflows/remotion-daily.yml/runs?event=workflow_dispatch&created=' + day + '&per_page=100')).workflow_runs.map(run => run.id));
   }
-  report.checks.push('Five active production workflows accept explicit independent clock/test inputs');
+  report.checks.push('Five active workflows and five identical release policies verified');
+  const existingSchedules = await cf('/workers/scripts/' + config.name + '/schedules');
+  const existingCrons = existingSchedules?.schedules || existingSchedules || [];
+  const binding = name => existing?.bindings?.find(b => b.name === name)?.text;
+  report.previous_live_source_sha256 = binding('SOURCE_SHA256') || null;
+  report.previous_live_deployment_id = binding('DEPLOYMENT_ID') || null;
+  if (process.env.CLOCK_DEPLOY_IF_CHANGED === 'true' && binding('SOURCE_SHA256') === expectedSource && binding('SCHEDULE_POLICY') === JSON.stringify(policy) && binding('DISPATCH_ENABLED') === 'true' && binding('PROBE_ONLY') === 'false' && Array.isArray(existingCrons) && JSON.stringify(existingCrons.map(s => s.cron).sort()) === JSON.stringify([...config.triggers.crons].sort())) {
+    report.live = true; report.unchanged_verified = true; report.schedules = existingCrons; await persist(); console.log('Live source, policy and cron registration already match; no provider mutation');
+    process.exit(0);
+  }
   await saveConfig(true);
   await wrangler(['deploy']);
   workerModified = true;
@@ -137,7 +149,7 @@ try {
         if (!response.ok) continue;
         for (const line of (await response.text()).split('\n')) {
           const i = line.indexOf('{"run":'); if (i < 0) continue;
-          try { const d = JSON.parse(line.slice(i)); if (d.trigger_source === 'cloudflare-clock-test' && d.dry_run === true && d.run === false && local(d.due_at).day === day) proof = d; } catch {}
+          try { const d = JSON.parse(line.slice(i)); if (d.trigger_source === 'cloudflare-clock-test' && d.dry_run === true && d.run === false && local(d.due_at).day === testDay) proof = d; } catch {}
         }
       }
       if (!proof) throw new Error('Missing exact dry-run clock provenance: ' + repo);
@@ -153,16 +165,21 @@ try {
   const schedules = await cf('/workers/scripts/' + config.name + '/schedules');
   const actual = schedules?.schedules || schedules || [];
   if (!Array.isArray(actual) || JSON.stringify(actual.map(s => s.cron).sort()) !== JSON.stringify([...config.triggers.crons].sort())) throw new Error('Final cron registration does not match the intended clock');
+  const liveSettings = await cf('/workers/scripts/' + config.name + '/settings');
+  const liveBinding = name => liveSettings?.bindings?.find(b => b.name === name)?.text;
+  if (liveBinding('SOURCE_SHA256') !== expectedSource || liveBinding('SCHEDULE_POLICY') !== JSON.stringify(policy) || liveBinding('DISPATCH_ENABLED') !== 'true') throw new Error('Live source/policy binding verification failed');
+  report.schedule_policy = policy;
   report.live = true; report.origin = origin; report.schedules = actual; report.completed_at = new Date().toISOString();
   report.worker_sha256 = createHash('sha256').update(await readFile(new URL('./worker.mjs', import.meta.url))).digest('hex');
   await persist(); console.log(JSON.stringify({live: true, report: 'live-verification.json', clock_probe: tick.scheduled_time, verified_repositories: Object.keys(verified), origin}));
 } catch (error) {
   if (activationAttempted || workerModified) {
     try {
-      const disabled = {...config, account_id: account, vars: {...config.vars, DEPLOYMENT_ID: deployment, PROBE_ONLY: 'false', DISPATCH_ENABLED: 'false'}, triggers: {crons: []}};
+      const disabled = {...config, account_id: account, vars: {...config.vars, DEPLOYMENT_ID: deployment, SOURCE_SHA256: expectedSource, SCHEDULE_POLICY: JSON.stringify(policy), PROBE_ONLY: 'false', DISPATCH_ENABLED: 'false'}, triggers: {crons: []}};
       await writeFile(localConfig, JSON.stringify(disabled, null, 2) + '\n');
       await wrangler(['deploy']); report.worker_left_disabled_after_failure = true;
     } catch { report.activation_state_uncertain_requires_attention = true; }
   }
   report.error = error.message; await persist(); console.error(error.message); process.exitCode = 1;
 } finally { await unlink(localConfig).catch(() => {}); }
+

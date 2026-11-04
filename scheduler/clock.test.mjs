@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {handleGate, handleRequest, REPOS, local, clockOperation, dispatchOnce, scheduledTick} from './core.mjs';
+import {handleGate, handleRequest, REPOS, local, clockOperation, verificationDay, dispatchOnce, scheduledTick} from './core.mjs';
 const winter = Date.parse('2030-01-03T07:00:00Z');
 const env = {FACTORY_DISPATCH_TOKEN: 'test-only-credential', OPS_TOKEN: 'test-only-ops', DEPLOYMENT_ID: 'tests'};
 class Store {
@@ -161,4 +161,31 @@ test('noon trial starts production on the previous evening and preserves target 
   assert.ok(mock.calls[0].url.includes('created=2026-11-04'));
   const audit=Date.parse('2026-11-05T10:35:00Z');
   assert.deepEqual(clockOperation(audit,audit),{kind:'publication-audit',day:'2026-11-05'});
+});
+
+
+import {normalizePolicy, cronExpressions, releasePlan} from './schedule-policy.mjs';
+test('late verification targets tomorrow without launching real production', async () => {
+ const now=Date.parse('2026-11-04T20:00:00Z');
+ assert.equal(verificationDay(now),'2026-11-05');
+ const api=apiMock();
+ await dispatchOnce(new Store(),env,{repo:REPOS[0],kind:'test',day:'2026-11-05'},api.http,now);
+ assert.equal(JSON.parse(api.posts()[0].body).inputs.dry_run,true);
+ await assert.rejects(dispatchOnce(new Store(),env,{repo:REPOS[0],kind:'test',day:'2026-11-04'},api.http,now));
+});
+test('worker policy binding follows configured hours instead of hard-coded trial dates', async () => {
+ const policy=normalizePolicy({timezone:'Africa/Cairo',production_local_hour:10,publication_local_hour:18,publication_day_offset:0});
+ const at=Date.parse('2030-01-03T08:00:00Z');
+ assert.deepEqual(clockOperation(at,at,policy),{kind:'production',day:'2030-01-03'});
+ assert.equal(clockOperation(winter,winter,policy),null);
+ const api=apiMock();
+ await dispatchOnce(new Store(),{...env,SCHEDULE_POLICY:JSON.stringify(policy)},operation,api.http,at);
+ assert.equal(api.posts().length,1);
+ assert.deepEqual(cronExpressions(policy),['0,17 7,8 * * *','35 15,16 * * *']);
+});
+test('invalid release policy and an expired real production window fail closed', async () => {
+ assert.throws(()=>normalizePolicy({timezone:'UTC',production_local_hour:9,publication_local_hour:17}));
+ const api=apiMock();
+ await assert.rejects(dispatchOnce(new Store(),env,{repo:REPOS[0],kind:'production',day:'2026-11-05'},api.http,Date.parse('2026-11-04T20:00:00Z')));
+ assert.equal(api.posts().length,0);
 });

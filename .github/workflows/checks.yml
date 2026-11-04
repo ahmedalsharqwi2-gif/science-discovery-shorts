@@ -79,7 +79,8 @@
           "type": "choice",
           "options": [
             "checks",
-            "deploy-independent-clock"
+            "deploy-independent-clock",
+            "audit-independent-clock"
           ],
           "default": "checks",
           "required": true
@@ -91,14 +92,19 @@
           "default": "21724b6755b7d103dfdfe6d9a6e5e399"
         }
       }
-    }
+    },
+    "schedule": [
+      {
+        "cron": "*/15 * * * *"
+      }
+    ]
   },
   "permissions": {
     "contents": "read"
   },
   "concurrency": {
-    "group": "${{ ((github.event_name == 'workflow_dispatch' && inputs.operation == 'deploy-independent-clock') || (github.event_name == 'push' && contains(github.event.head_commit.message, '[deploy-independent-clock]'))) && 'independent-clock-deployment' || format('quality-{0}-{1}', github.ref, inputs.operation || 'checks') }}",
-    "cancel-in-progress": "${{ !((github.event_name == 'workflow_dispatch' && inputs.operation == 'deploy-independent-clock') || (github.event_name == 'push' && contains(github.event.head_commit.message, '[deploy-independent-clock]'))) }}"
+    "group": "${{ format('quality-{0}-{1}', github.ref, github.run_id) }}",
+    "cancel-in-progress": false
   },
   "jobs": {
     "test": {
@@ -123,7 +129,8 @@
           "name": "Verify new duration, next-day target and executable scene contracts",
           "run": "python -m unittest discover -s tests -p test_duration_rule.py -q\npython -m unittest discover -s tests -p test_daily_request.py -q\npython -m unittest discover -s tests -p test_renderer_contract.py -q\npython -m unittest discover -s tests -p test_speech_characters.py -q\nnode --test professional_motion/svg_story.test.mjs"
         }
-      ]
+      ],
+      "if": "github.event_name != 'schedule' && inputs.operation != 'audit-independent-clock'"
     },
     "image_fallback": {
       "runs-on": "ubuntu-latest",
@@ -143,7 +150,8 @@
         {
           "run": "python -m unittest discover -s tests -p 'test_image_fallback.py' -v"
         }
-      ]
+      ],
+      "if": "github.event_name != 'schedule' && inputs.operation != 'audit-independent-clock'"
     },
     "motion-kit-tests": {
       "runs-on": "ubuntu-latest",
@@ -166,7 +174,8 @@
           "name": "Compile and test scene cues, SFX and frame overlays",
           "run": "python -m py_compile film_factory/motion_kit_timeline.py film_factory/cinematic_overlay.py film_factory/sound.py\npython -m unittest discover -s tests -p 'test_motion_kit_*.py' -v\npython -m unittest discover -s tests -p 'test_cinematic_overlay.py' -v\n"
         }
-      ]
+      ],
+      "if": "github.event_name != 'schedule' && inputs.operation != 'audit-independent-clock'"
     },
     "scene_director": {
       "runs-on": "ubuntu-latest",
@@ -183,7 +192,8 @@
         {
           "run": "python -m unittest discover -s tests -p 'test_scene_director.py' -v"
         }
-      ]
+      ],
+      "if": "github.event_name != 'schedule' && inputs.operation != 'audit-independent-clock'"
     },
     "validation": {
       "runs-on": "ubuntu-24.04",
@@ -200,7 +210,8 @@
           "name": "Exercise rejection of solid red, accept moving valid footage",
           "run": "mkdir -p /tmp/quality-check\nffmpeg -y -v error -f lavfi -i color=c=red:s=1080x1920:r=30:d=10 -c:v libx264 -preset ultrafast -pix_fmt yuv420p /tmp/quality-check/red.mp4\nffmpeg -y -v error -f lavfi -i testsrc2=s=1080x1920:r=30:d=10 -c:v libx264 -preset ultrafast -pix_fmt yuv420p /tmp/quality-check/moving.mp4\npython - <<'PY'\nfrom visual_quality_gate import audit\nfailed = False\ntry:\n    audit('/tmp/quality-check/red.mp4','/tmp/quality-check/red.json')\nexcept ValueError as exc:\n    print('Correctly rejected red:',exc)\n    failed = True\nassert failed, 'Safety gate incorrectly accepted all-red output'\nresult = audit('/tmp/quality-check/moving.mp4','/tmp/quality-check/moving.json')\nassert result['passed'],result\nprint('Accepted moving frames, sampled:',result['samples'])\nPY\n"
         }
-      ]
+      ],
+      "if": "github.event_name != 'schedule' && inputs.operation != 'audit-independent-clock'"
     },
     "remotion": {
       "name": "Remotion production regressions",
@@ -232,7 +243,8 @@
           "run": "npm ci --no-audit --no-fund\nnpm run check",
           "working-directory": "remotion_motion"
         }
-      ]
+      ],
+      "if": "github.event_name != 'schedule' && inputs.operation != 'audit-independent-clock'"
     },
     "independent-clock": {
       "name": "Independent clock — no secrets, no live generation",
@@ -261,11 +273,12 @@
           "run": "npm run check\nnpm run bundle\nnpm run test:runtime",
           "working-directory": "scheduler"
         }
-      ]
+      ],
+      "if": "github.event_name != 'schedule' && inputs.operation != 'audit-independent-clock'"
     },
     "deploy-independent-clock": {
-      "name": "Deploy verified independent clock — manual only",
-      "if": "github.ref == 'refs/heads/main' && ((github.event_name == 'workflow_dispatch' && inputs.operation == 'deploy-independent-clock') || (github.event_name == 'push' && contains(github.event.head_commit.message, '[deploy-independent-clock]')))",
+      "name": "Synchronize and verify live Cloudflare clock",
+      "if": "github.ref == 'refs/heads/main' && (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.operation == 'deploy-independent-clock'))",
       "needs": [
         "test",
         "image_fallback",
@@ -309,7 +322,8 @@
             "CLOUDFLARE_API_TOKEN": "${{ secrets.CLOUDFLARE_API_TOKEN }}",
             "FACTORY_DISPATCH_TOKEN": "${{ secrets.FACTORY_DISPATCH_TOKEN }}",
             "WRANGLER_SEND_METRICS": "false",
-            "EXPECTED_CLOUDFLARE_ACCOUNT_ID": "${{ inputs.cloudflare_account_id || '21724b6755b7d103dfdfe6d9a6e5e399' }}"
+            "EXPECTED_CLOUDFLARE_ACCOUNT_ID": "${{ inputs.cloudflare_account_id || '21724b6755b7d103dfdfe6d9a6e5e399' }}",
+            "CLOCK_DEPLOY_IF_CHANGED": "${{ github.event_name == 'push' && !contains(github.event.head_commit.message, '[deploy-independent-clock]') }}"
           }
         },
         {
@@ -322,7 +336,11 @@
             "if-no-files-found": "warn"
           }
         }
-      ]
+      ],
+      "concurrency": {
+        "group": "independent-clock-deployment",
+        "cancel-in-progress": false
+      }
     },
     "clock-access-probe": {
       "name": "Read-only check of existing Cloudflare repository credentials",
@@ -365,6 +383,53 @@
             "name": "independent-clock-access-${{ github.run_id }}",
             "path": "scheduler/credential-probe.json",
             "retention-days": 30,
+            "if-no-files-found": "warn"
+          }
+        }
+      ]
+    },
+    "clock-live-audit": {
+      "name": "Independent clock drift and overdue production audit",
+      "if": "always() && github.ref == 'refs/heads/main' && (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.operation == 'audit-independent-clock') || needs.deploy-independent-clock.result == 'success')",
+      "needs": [
+        "deploy-independent-clock"
+      ],
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 8,
+      "permissions": {
+        "contents": "read",
+        "issues": "write"
+      },
+      "steps": [
+        {
+          "uses": "actions/checkout@v4",
+          "with": {
+            "ref": "main"
+          }
+        },
+        {
+          "uses": "actions/setup-node@v4",
+          "with": {
+            "node-version": "24"
+          }
+        },
+        {
+          "name": "Read live source, schedules, shared policy and retained film receipts; never regenerate or resubmit",
+          "run": "node --use-env-proxy audit-live.mjs",
+          "working-directory": "scheduler",
+          "env": {
+            "CLOUDFLARE_ACCOUNT_ID": "${{ secrets.CLOUDFLARE_ACCOUNT_ID }}",
+            "CLOUDFLARE_API_TOKEN": "${{ secrets.CLOUDFLARE_API_TOKEN }}",
+            "GITHUB_TOKEN": "${{ github.token }}"
+          }
+        },
+        {
+          "uses": "actions/upload-artifact@v4",
+          "if": "always()",
+          "with": {
+            "name": "live-clock-audit-${{ github.run_id }}-${{ github.run_attempt }}",
+            "path": "scheduler/live-audit.json",
+            "retention-days": 90,
             "if-no-files-found": "warn"
           }
         }
