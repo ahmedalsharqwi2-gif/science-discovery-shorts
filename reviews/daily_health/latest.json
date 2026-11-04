@@ -2,9 +2,9 @@
   "date": "2026-11-04",
   "profile": "science",
   "phase": "postpublish",
-  "checked_at": "2026-11-04T15:13:28.621608+00:00",
-  "run_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/actions/runs/41855395844",
-  "report_path": "reviews/daily_health/2026-11-04/41855395844-1.json",
+  "checked_at": "2026-11-04T15:27:23.260079+00:00",
+  "run_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/actions/runs/41857813837",
+  "report_path": "reviews/daily_health/2026-11-04/41857813837-1.json",
   "publication_due_utc": "2026-11-04T12:45:00+00:00",
   "errors": [],
   "passed": true,
@@ -97,6 +97,6 @@
   "media_binding": "Three live sent post IDs match retained original submission receipts; original release SHA independently verified. Platform-transcoded bytes are not claimed identical.",
   "production_at_cairo": "2026-11-03T19:00:00+02:00",
   "publication_at_cairo": "2026-11-04T14:45:00+02:00",
-  "hours_until_publication": -2.47,
+  "hours_until_publication": -2.71,
   "readiness": "verified"
 }
