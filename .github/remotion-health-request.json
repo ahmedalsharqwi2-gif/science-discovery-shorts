@@ -1,7 +1,7 @@
 {
-  "date": "2026-11-03",
+  "date": "2026-11-04",
   "phase": "postpublish",
   "legacy_diagnostic": false,
-  "revision": 11,
-  "reason": "Owner-requested full read-only audit after repairing Pillow prerequisites"
+  "revision": 12,
+  "reason": "Owner reports missing science video: verify actual current statuses, sent links and provider errors for today's retained post IDs; read-only, no generation, rescheduling or resubmission"
 }
