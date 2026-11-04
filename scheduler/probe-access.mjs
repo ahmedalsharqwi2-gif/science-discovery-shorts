@@ -1,7 +1,8 @@
 // Read-only check of existing GitHub repository secrets. Never logs their values.
-import {writeFile} from 'node:fs/promises';
+import {readFile, writeFile} from 'node:fs/promises';
 const account = (process.env.CLOUDFLARE_ACCOUNT_ID || '').trim();
 const token = (process.env.CLOUDFLARE_API_TOKEN || '').trim();
+const expectedConfig = JSON.parse(await readFile(new URL('./wrangler.json', import.meta.url), 'utf8'));
 const report = {read_only: true, cloudflare_account_present: !!account, cloudflare_token_present: !!token, account_id_format_valid: /^[a-f0-9]{32}$/i.test(account), github_dispatch_token_present: process.env.HAS_FACTORY_DISPATCH_TOKEN === 'true', cloudflare_mutations: 0, generation_calls: 0, publication_calls: 0, checked_at: new Date().toISOString()};
 if (token && report.account_id_format_valid) {
   const check = async (name, path) => {
@@ -11,12 +12,15 @@ if (token && report.account_id_format_valid) {
       const result = {http_status: response.status, authenticated_read_succeeded: response.ok && body.success === true};
       if (name === 'workers_scripts' && result.authenticated_read_succeeded && Array.isArray(body.result)) result.clock_worker_already_exists = body.result.some(worker => worker.id === 'video-factory-cairo-clock');
       if (name === 'clock_settings' && result.authenticated_read_succeeded) {
+        result.deployment_id = body.result?.bindings?.find(b => b.name === 'DEPLOYMENT_ID')?.text;
         result.probe_only = body.result?.bindings?.find(b => b.name === 'PROBE_ONLY')?.text;
         result.dispatch_enabled = body.result?.bindings?.find(b => b.name === 'DISPATCH_ENABLED')?.text;
       }
       if (name === 'clock_schedules' && result.authenticated_read_succeeded) {
         const schedules = body.result?.schedules || body.result || [];
         result.registered_crons = Array.isArray(schedules) ? schedules.map(s => s.cron) : null;
+        result.expected_crons = expectedConfig.triggers.crons;
+        result.matches_source = JSON.stringify([...(result.registered_crons || [])].sort()) === JSON.stringify([...result.expected_crons].sort());
       }
       if (name === 'workers_subdomain' && result.authenticated_read_succeeded) result.configured = Boolean(body.result?.subdomain);
       return [name, result];
