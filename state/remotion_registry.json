@@ -333,7 +333,7 @@
     "daily-remotion-2026-11-05-science": {
       "profile": "science",
       "due_at": "2026-11-05T10:00:00Z",
-      "status": "voice_ready",
+      "status": "rendered",
       "source_run": 41917711577,
       "created_at": "2026-11-04T20:13:59.001029+00:00",
       "source_selection": {
@@ -373,7 +373,10 @@
       "duration": 150.6,
       "audio_sha256": "3d9faed08b59119c705cef8c90f78716e982d57e7e14b2bb81464d9a2b65d470",
       "timing_sha256": "c56c4558aebbc85396eb4118abda784e739e9766fa39d56eee7f433b96f8a28a",
-      "coverage": 0.9065420560747663
+      "coverage": 0.9065420560747663,
+      "video_sha256": "318bff64bb553609a243ad67152f52349006a26027a60719cd10386d65b28ea0",
+      "render_run": 41917711577,
+      "source_evidence_file": "professional_motion/output/remotion-validation.json"
     }
   },
   "cutover_evidence": {
