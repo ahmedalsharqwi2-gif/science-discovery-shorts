@@ -1,0 +1,102 @@
+{
+  "date": "2026-11-04",
+  "profile": "science",
+  "phase": "postpublish",
+  "checked_at": "2026-11-04T15:36:29.694114+00:00",
+  "run_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/actions/runs/41859409402",
+  "report_path": "reviews/daily_health/2026-11-04/41859409402-1.json",
+  "publication_due_utc": "2026-11-04T12:45:00+00:00",
+  "errors": [],
+  "passed": true,
+  "generation_calls": 0,
+  "publication_mutations": 0,
+  "preview": false,
+  "scheduler": {
+    "observed": false,
+    "reason": "Transition inventory retained; first automatic evening run targets November 5"
+  },
+  "observed_receipts": {
+    "tiktok": [
+      {
+        "id": "6aea42d25a7c19a37cd2d0a9",
+        "channelId": "6a9edf14cd8b9c702c230272",
+        "status": "sent",
+        "dueAt": "2026-11-04T12:45:00.000Z",
+        "sentAt": "2026-11-04T12:49:01.754Z",
+        "externalLink": "https://tiktok.com/@pagesof_history/video/7704296539014827282"
+      }
+    ],
+    "youtube": [
+      {
+        "id": "6aea42d8b3ec15847387bb2c",
+        "channelId": "6a9edee8cd8b9c702c2301cb",
+        "status": "sent",
+        "dueAt": "2026-11-04T12:45:00.000Z",
+        "sentAt": "2026-11-04T12:45:14.197Z",
+        "externalLink": "https://www.youtube.com/shorts/GqHlTUR_o28"
+      }
+    ],
+    "facebook": [
+      {
+        "id": "6aea42de343beca74f0c20f3",
+        "channelId": "6a9edebbcd8b9c702c230128",
+        "status": "sent",
+        "dueAt": "2026-11-04T12:45:00.000Z",
+        "sentAt": "2026-11-04T12:45:27.351Z",
+        "externalLink": "https://facebook.com/1524265489529546"
+      }
+    ]
+  },
+  "receipts": {
+    "tiktok": {
+      "id": "6aea42d25a7c19a37cd2d0a9",
+      "channelId": "6a9edf14cd8b9c702c230272",
+      "status": "sent",
+      "dueAt": "2026-11-04T12:45:00.000Z",
+      "sentAt": "2026-11-04T12:49:01.754Z",
+      "externalLink": "https://tiktok.com/@pagesof_history/video/7704296539014827282"
+    },
+    "youtube": {
+      "id": "6aea42d8b3ec15847387bb2c",
+      "channelId": "6a9edee8cd8b9c702c2301cb",
+      "status": "sent",
+      "dueAt": "2026-11-04T12:45:00.000Z",
+      "sentAt": "2026-11-04T12:45:14.197Z",
+      "externalLink": "https://www.youtube.com/shorts/GqHlTUR_o28"
+    },
+    "facebook": {
+      "id": "6aea42de343beca74f0c20f3",
+      "channelId": "6a9edebbcd8b9c702c230128",
+      "status": "sent",
+      "dueAt": "2026-11-04T12:45:00.000Z",
+      "sentAt": "2026-11-04T12:45:27.351Z",
+      "externalLink": "https://facebook.com/1524265489529546"
+    }
+  },
+  "episode": {
+    "slot": "daily-remotion-2026-11-04-science",
+    "title": "ليه بنشوف البرق الأول وبعدين بنسمع صوت الرعد؟",
+    "pipeline": "remotion",
+    "expected_sha256": "913d8acd4bca95bf0065f2357e4f82b62d7b98e9106d16d7ed05bf49d1967dee"
+  },
+  "technical": {
+    "passed": true,
+    "sha256": "913d8acd4bca95bf0065f2357e4f82b62d7b98e9106d16d7ed05bf49d1967dee",
+    "full_decode": true,
+    "duration": 143.133333,
+    "width": 1080,
+    "height": 1920,
+    "audio_mean_db": -19.6,
+    "actual_visual_samples": 12,
+    "unique_visual_samples": 12,
+    "checked_at": "2026-11-03T20:25:41.847206+00:00",
+    "scope": "Independent technical media check; no claim of human narrative or scientific review",
+    "reused_immutable_media_check": true,
+    "live_asset_metadata_verified": true
+  },
+  "media_binding": "Three live sent post IDs match retained original submission receipts; original release SHA independently verified. Platform-transcoded bytes are not claimed identical.",
+  "production_at_cairo": "2026-11-03T19:00:00+02:00",
+  "publication_at_cairo": "2026-11-04T14:45:00+02:00",
+  "hours_until_publication": -2.86,
+  "readiness": "verified"
+}
