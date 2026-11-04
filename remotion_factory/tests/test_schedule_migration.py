@@ -39,3 +39,24 @@ class ScheduleChanges(unittest.TestCase):
         result=edit_input('youtube','p',{'target_due_at':'2026-11-04T10:00:00Z'},{'metadata':metadata,'text':'unchanged','assets':[{'source':'original'}]})
         self.assertEqual(result['metadata']['youtube'],{'title':'existing title','privacy':'public','madeForKids':False,'notifySubscribers':False,'categoryId':'27'})
         self.assertEqual(result['text'],'unchanged');self.assertEqual(result['assets'],[{'video':{'url':'original'}}])
+
+class ExactOwnerTime(unittest.TestCase):
+    def validate(self,**updates):
+        from datetime import datetime,timezone
+        from remotion_factory.schedule_migration import validate_request
+        req={'repository':'owner/repo','approved_by_owner':True,'source_due_at':'2026-11-09T15:00:00Z','target_due_at':'2026-11-04T12:45:00Z','owner_requested_local_time':'2026-11-04T14:45:00+02:00','expected_ledger_due_at':'2026-11-04T10:00:00Z','video_sha256':'original'}
+        req.update(updates)
+        with patch('remotion_factory.schedule_migration.datetime',wraps=datetime) as clock:
+            clock.now.return_value=datetime(2026,11,4,12,30,tzinfo=timezone.utc)
+            validate_request(req,'owner/repo','science',{'due_at':'2026-11-04T10:00:00Z','video_sha256':'original','profile':'science'})
+    def test_exact_cairo_override_reconciles_known_ledger_time(self):
+        self.validate()
+    def test_different_explicit_time_is_rejected(self):
+        with self.assertRaises(ValueError):
+            self.validate(owner_requested_local_time='2026-11-04T15:45:00+02:00')
+    def test_expired_time_is_not_rolled_forward(self):
+        with self.assertRaises(ValueError):
+            self.validate(target_due_at='2026-11-04T12:00:00Z',owner_requested_local_time='2026-11-04T14:00:00+02:00')
+    def test_unexpected_ledger_change_is_not_overwritten(self):
+        with self.assertRaises(ValueError):
+            self.validate(expected_ledger_due_at='2026-11-05T10:00:00Z')

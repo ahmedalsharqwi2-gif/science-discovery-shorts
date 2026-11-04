@@ -79,11 +79,20 @@ def validate_request(req,repo,profile,entry):
     if req.get('repository')!=repo or req.get('approved_by_owner') is not True:
         raise ValueError('Exact owner-approved repository request required')
     target=instant(req['target_due_at']);day=target.astimezone(CAIRO).date()
-    if target<=datetime.now(timezone.utc) or not trial(day) or target!=due_for(day):
+    override=req.get('owner_requested_local_time')
+    if target<=datetime.now(timezone.utc):
+        raise ValueError('Approved target is already past; never roll it forward')
+    if override:
+        if instant(override)!=target or datetime.fromisoformat(override).utcoffset()!=target.astimezone(CAIRO).utcoffset():
+            raise ValueError('Exact owner-requested Cairo time must match the target')
+    elif not trial(day) or target!=due_for(day):
         raise ValueError('Only the approved future trial slot can be applied')
     if entry.get('video_sha256')!=req['video_sha256'] or entry.get('profile')!=profile:
         raise ValueError('Retained episode identity differs from the approved time-change target')
-    if instant(entry['due_at']) not in (instant(req['source_due_at']),target):
+    ledger_times=(instant(req['source_due_at']),target)
+    if override and req.get('expected_ledger_due_at'):
+        ledger_times+= (instant(req['expected_ledger_due_at']),)
+    if instant(entry['due_at']) not in ledger_times:
         raise ValueError('Ledger has another independent schedule change')
 
 def preflight(req,entry,profile):
@@ -135,6 +144,8 @@ def main():
         write_json(proof_path,{'request':req,'before':observations,'complete':False,'generation_calls':0,'new_posts':0})
     results={}
     for service,destination in mapping.items():
+        if instant(req['target_due_at'])<=datetime.now(timezone.utc):
+            raise ValueError('Approved target expired during execution; no late edit or rollover')
         record=dict(entry.get('time_change_receipts',{}).get(req['request_id'],{}).get(service,{}))
         persist=partial(save_change_record,req['slot'],req['request_id'],service,record)
         results[service]=move_one(service,destination,req['post_ids'][service],req,entry,record,persist)
