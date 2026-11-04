@@ -1,0 +1,48 @@
+{
+  "checked_at": "2026-11-04T20:35:25.613Z",
+  "read_only_provider": true,
+  "generation_calls": 0,
+  "publication_mutations": 0,
+  "errors": [
+    "science-discovery-shorts: no unique completed film with three retained scheduling receipts for 2026-11-05",
+    "arabic-horror-stories: no unique completed film with three retained scheduling receipts for 2026-11-05",
+    "documented-history-stories: no unique completed film with three retained scheduling receipts for 2026-11-05",
+    "ai-news-daily: no unique completed film with three retained scheduling receipts for 2026-11-05",
+    "stickman-what-if-shorts: no unique completed film with three retained scheduling receipts for 2026-11-05"
+  ],
+  "repositories": {
+    "science-discovery-shorts": {
+      "policy_matches": true,
+      "retained_complete_film_and_three_receipts": false
+    },
+    "arabic-horror-stories": {
+      "policy_matches": true,
+      "retained_complete_film_and_three_receipts": false
+    },
+    "documented-history-stories": {
+      "policy_matches": true,
+      "retained_complete_film_and_three_receipts": false
+    },
+    "ai-news-daily": {
+      "policy_matches": true,
+      "retained_complete_film_and_three_receipts": false
+    },
+    "stickman-what-if-shorts": {
+      "policy_matches": true,
+      "retained_complete_film_and_three_receipts": false
+    }
+  },
+  "deployment_id": "d420685d63ee0cc598b3e9e3",
+  "live_source_sha256": "5384e08893f3d3b2856c7f95420434d5aa3fef58d3a7b51d10d605896ba6dc96",
+  "expected_source_sha256": "5384e08893f3d3b2856c7f95420434d5aa3fef58d3a7b51d10d605896ba6dc96",
+  "actual_crons": [
+    "0,17 6,7,16,17 * * *",
+    "35 9,10,14,15 * * *"
+  ],
+  "expected_crons": [
+    "0,17 6,7,16,17 * * *",
+    "35 9,10,14,15 * * *"
+  ],
+  "production_audit_target": "2026-11-05",
+  "passed": false
+}

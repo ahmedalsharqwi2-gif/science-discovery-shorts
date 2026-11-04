@@ -1,0 +1,171 @@
+{
+  "deployment_id": "d420685d63ee0cc598b3e9e3",
+  "started_at": "2026-11-04T20:32:33.050Z",
+  "live": true,
+  "checks": [
+    "Five active workflows and five identical release policies verified",
+    "An actual Cloudflare cron tick reached the Durable Object while production was disabled",
+    "All five actual GitHub dispatch tests completed with run=false, dry_run=true and configured publication-date target"
+  ],
+  "generation_calls_added": 0,
+  "publication_calls_added": 0,
+  "source_sha256": "5384e08893f3d3b2856c7f95420434d5aa3fef58d3a7b51d10d605896ba6dc96",
+  "verification_target_day": "2026-11-05",
+  "previous_live_source_sha256": "5384e08893f3d3b2856c7f95420434d5aa3fef58d3a7b51d10d605896ba6dc96",
+  "previous_live_deployment_id": "5a85514cea954e5f69040294",
+  "clock_probe": {
+    "scheduled_time": "2026-11-04T20:33:36.590Z",
+    "observed_at": "2026-11-04T20:33:38.708Z",
+    "deployment_id": "d420685d63ee0cc598b3e9e3"
+  },
+  "test_dispatches": [
+    {
+      "phase": "dispatch_accepted",
+      "repo": "science-discovery-shorts",
+      "day": "2026-11-05",
+      "kind": "test",
+      "workflow": "remotion-daily.yml",
+      "dry_run": true,
+      "accepted_at": "2026-11-04T20:33:47.782Z",
+      "production_completion_claimed": false
+    },
+    {
+      "phase": "dispatch_accepted",
+      "repo": "arabic-horror-stories",
+      "day": "2026-11-05",
+      "kind": "test",
+      "workflow": "remotion-daily.yml",
+      "dry_run": true,
+      "accepted_at": "2026-11-04T20:33:49.556Z",
+      "production_completion_claimed": false
+    },
+    {
+      "phase": "dispatch_accepted",
+      "repo": "documented-history-stories",
+      "day": "2026-11-05",
+      "kind": "test",
+      "workflow": "remotion-daily.yml",
+      "dry_run": true,
+      "accepted_at": "2026-11-04T20:33:51.592Z",
+      "production_completion_claimed": false
+    },
+    {
+      "phase": "dispatch_accepted",
+      "repo": "ai-news-daily",
+      "day": "2026-11-05",
+      "kind": "test",
+      "workflow": "remotion-daily.yml",
+      "dry_run": true,
+      "accepted_at": "2026-11-04T20:33:53.345Z",
+      "production_completion_claimed": false
+    },
+    {
+      "phase": "dispatch_accepted",
+      "repo": "stickman-what-if-shorts",
+      "day": "2026-11-05",
+      "kind": "test",
+      "workflow": "remotion-daily.yml",
+      "dry_run": true,
+      "accepted_at": "2026-11-04T20:33:55.899Z",
+      "production_completion_claimed": false
+    }
+  ],
+  "github_tests": {
+    "science-discovery-shorts": {
+      "run_id": 41907786502,
+      "url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/actions/runs/41907786502",
+      "decision": {
+        "run": false,
+        "reason": "dry run; no provider mutation",
+        "profile": "science",
+        "due_at": "2026-11-05T10:00:00Z",
+        "entry": null,
+        "trigger_source": "cloudflare-clock-test",
+        "dry_run": true
+      }
+    },
+    "stickman-what-if-shorts": {
+      "run_id": 41907807347,
+      "url": "https://github.com/ahmedalsharqwi2-gif/stickman-what-if-shorts/actions/runs/41907807347",
+      "decision": {
+        "run": false,
+        "reason": "dry run; no provider mutation",
+        "profile": "stickman",
+        "due_at": "2026-11-05T10:00:00Z",
+        "entry": null,
+        "trigger_source": "cloudflare-clock-test",
+        "dry_run": true
+      }
+    },
+    "arabic-horror-stories": {
+      "run_id": 41907792176,
+      "url": "https://github.com/ahmedalsharqwi2-gif/arabic-horror-stories/actions/runs/41907792176",
+      "decision": {
+        "run": false,
+        "reason": "dry run; no provider mutation",
+        "profile": "horror",
+        "due_at": "2026-11-05T10:00:00Z",
+        "entry": null,
+        "trigger_source": "cloudflare-clock-test",
+        "dry_run": true
+      }
+    },
+    "documented-history-stories": {
+      "run_id": 41907796852,
+      "url": "https://github.com/ahmedalsharqwi2-gif/documented-history-stories/actions/runs/41907796852",
+      "decision": {
+        "run": false,
+        "reason": "dry run; no provider mutation",
+        "profile": "history",
+        "due_at": "2026-11-05T10:00:00Z",
+        "entry": null,
+        "trigger_source": "cloudflare-clock-test",
+        "dry_run": true
+      }
+    },
+    "ai-news-daily": {
+      "run_id": 41907801109,
+      "url": "https://github.com/ahmedalsharqwi2-gif/ai-news-daily/actions/runs/41907801109",
+      "decision": {
+        "run": false,
+        "reason": "dry run; no provider mutation",
+        "profile": "news",
+        "due_at": "2026-11-05T10:00:00Z",
+        "entry": null,
+        "trigger_source": "cloudflare-clock-test",
+        "dry_run": true
+      }
+    }
+  },
+  "schedule_policy": {
+    "timezone": "Africa/Cairo",
+    "baseline": {
+      "productionHour": 9,
+      "publicationHour": 17,
+      "dayOffset": 0
+    },
+    "trial": {
+      "enabled": true,
+      "start": "2026-11-04",
+      "end": "2026-11-18",
+      "productionHour": 19,
+      "publicationHour": 12,
+      "dayOffset": -1
+    }
+  },
+  "origin": "https://video-factory-cairo-clock.ahmed-video-factory-21724b.workers.dev",
+  "schedules": [
+    {
+      "cron": "0,17 6,7,16,17 * * *",
+      "created_on": "2026-11-04T20:35:12.17673Z",
+      "modified_on": "2026-11-04T20:35:12.17673Z"
+    },
+    {
+      "cron": "35 9,10,14,15 * * *",
+      "created_on": "2026-11-04T20:35:12.17673Z",
+      "modified_on": "2026-11-04T20:35:12.17673Z"
+    }
+  ],
+  "completed_at": "2026-11-04T20:35:13.207Z",
+  "worker_sha256": "94e7abbe8d402db5c4c2d16489694d9f510e75b90d9244b418afd2ef75b0981d"
+}

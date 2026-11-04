@@ -1,9 +1,9 @@
 {
-  "status": "live-cloudflare-clock-five-github-tests-verified",
+  "status": "live-clock-repaired-policy-and-five-tests-verified-production-incomplete",
   "cloudflare_live": true,
   "dispatch_enabled": true,
   "blocker": null,
-  "core_tests_passed": 20,
+  "core_tests_passed": 24,
   "actual_local_cloudflare_runtime_tests_passed": 1,
   "github_clock_provenance_tests_passed": 8,
   "provider_authentication_or_live_clock_claimed": true,
@@ -91,180 +91,174 @@
   },
   "github_ci_passed": true,
   "live_deployment_attempt": {
-    "deployment_id": "a661827b986a50d665174735",
-    "started_at": "2026-11-03T12:30:36.082Z",
+    "deployment_id": "d420685d63ee0cc598b3e9e3",
+    "started_at": "2026-11-04T20:32:33.050Z",
     "live": true,
     "checks": [
-      "Five active production workflows accept explicit independent clock/test inputs",
+      "Five active workflows and five identical release policies verified",
       "An actual Cloudflare cron tick reached the Durable Object while production was disabled",
-      "All five actual GitHub dispatch tests completed with run=false, dry_run=true and same-day17 target"
+      "All five actual GitHub dispatch tests completed with run=false, dry_run=true and configured publication-date target"
     ],
     "generation_calls_added": 0,
     "publication_calls_added": 0,
-    "source_sha256": "0b272307df9afecc1d95e10db2ee4c6444b9caf57fae8d5bcbd98df227165009",
+    "source_sha256": "5384e08893f3d3b2856c7f95420434d5aa3fef58d3a7b51d10d605896ba6dc96",
+    "verification_target_day": "2026-11-05",
+    "previous_live_source_sha256": "5384e08893f3d3b2856c7f95420434d5aa3fef58d3a7b51d10d605896ba6dc96",
+    "previous_live_deployment_id": "5a85514cea954e5f69040294",
     "clock_probe": {
-      "scheduled_time": "2026-11-03T12:35:56.985Z",
-      "observed_at": "2026-11-03T12:35:58.028Z",
-      "deployment_id": "a661827b986a50d665174735"
+      "scheduled_time": "2026-11-04T20:33:36.590Z",
+      "observed_at": "2026-11-04T20:33:38.708Z",
+      "deployment_id": "d420685d63ee0cc598b3e9e3"
     },
     "test_dispatches": [
       {
         "phase": "dispatch_accepted",
         "repo": "science-discovery-shorts",
-        "day": "2026-11-03",
+        "day": "2026-11-05",
         "kind": "test",
         "workflow": "remotion-daily.yml",
         "dry_run": true,
-        "accepted_at": "2026-11-03T12:36:19.966Z",
+        "accepted_at": "2026-11-04T20:33:47.782Z",
         "production_completion_claimed": false
       },
       {
         "phase": "dispatch_accepted",
         "repo": "arabic-horror-stories",
-        "day": "2026-11-03",
+        "day": "2026-11-05",
         "kind": "test",
         "workflow": "remotion-daily.yml",
         "dry_run": true,
-        "accepted_at": "2026-11-03T12:36:21.695Z",
+        "accepted_at": "2026-11-04T20:33:49.556Z",
         "production_completion_claimed": false
       },
       {
         "phase": "dispatch_accepted",
         "repo": "documented-history-stories",
-        "day": "2026-11-03",
+        "day": "2026-11-05",
         "kind": "test",
         "workflow": "remotion-daily.yml",
         "dry_run": true,
-        "accepted_at": "2026-11-03T12:36:23.945Z",
+        "accepted_at": "2026-11-04T20:33:51.592Z",
         "production_completion_claimed": false
       },
       {
         "phase": "dispatch_accepted",
         "repo": "ai-news-daily",
-        "day": "2026-11-03",
+        "day": "2026-11-05",
         "kind": "test",
         "workflow": "remotion-daily.yml",
         "dry_run": true,
-        "accepted_at": "2026-11-03T12:36:26.013Z",
+        "accepted_at": "2026-11-04T20:33:53.345Z",
         "production_completion_claimed": false
       },
       {
         "phase": "dispatch_accepted",
         "repo": "stickman-what-if-shorts",
-        "day": "2026-11-03",
+        "day": "2026-11-05",
         "kind": "test",
         "workflow": "remotion-daily.yml",
         "dry_run": true,
-        "accepted_at": "2026-11-03T12:36:28.118Z",
+        "accepted_at": "2026-11-04T20:33:55.899Z",
         "production_completion_claimed": false
       }
     ],
     "github_tests": {
       "science-discovery-shorts": {
-        "run_id": 41637126412,
-        "url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/actions/runs/41637126412",
+        "run_id": 41907786502,
+        "url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/actions/runs/41907786502",
         "decision": {
           "run": false,
-          "reason": "all three existing destination slots occupied; preserve them",
-          "due_at": "2026-11-03T15:00:00Z",
-          "occupied_slot_proof": {
-            "retained_post_ids_verified": true,
-            "original_release_verified": true,
-            "video_sha256": "a7861d4462e10dbb252e2f293cb011feee20272a34ca1282fdfaeffb7c7643a8",
-            "duration": 108.566667,
-            "technical_passed": true
-          },
-          "trigger_source": "cloudflare-clock-test",
-          "dry_run": true
-        }
-      },
-      "arabic-horror-stories": {
-        "run_id": 41637131574,
-        "url": "https://github.com/ahmedalsharqwi2-gif/arabic-horror-stories/actions/runs/41637131574",
-        "decision": {
-          "run": false,
-          "reason": "all three existing destination slots occupied; preserve them",
-          "due_at": "2026-11-03T15:00:00Z",
-          "occupied_slot_proof": {
-            "retained_post_ids_verified": true,
-            "original_release_verified": true,
-            "video_sha256": "d760a9cabe69219ccda0bbfcb6c7daf50da250778c022b418e1b369cda8b75b2",
-            "duration": 142.933333,
-            "technical_passed": true
-          },
-          "trigger_source": "cloudflare-clock-test",
-          "dry_run": true
-        }
-      },
-      "documented-history-stories": {
-        "run_id": 41637135956,
-        "url": "https://github.com/ahmedalsharqwi2-gif/documented-history-stories/actions/runs/41637135956",
-        "decision": {
-          "run": false,
-          "reason": "all three existing destination slots occupied; preserve them",
-          "due_at": "2026-11-03T15:00:00Z",
-          "occupied_slot_proof": {
-            "retained_post_ids_verified": true,
-            "original_release_verified": true,
-            "video_sha256": "5f609f7b5bc2b40f01f7a2ac6d1202b2f19dab804103fb26b0a0d6ca19cf7c58",
-            "duration": 155.333333,
-            "technical_passed": true
-          },
-          "trigger_source": "cloudflare-clock-test",
-          "dry_run": true
-        }
-      },
-      "ai-news-daily": {
-        "run_id": 41637140951,
-        "url": "https://github.com/ahmedalsharqwi2-gif/ai-news-daily/actions/runs/41637140951",
-        "decision": {
-          "run": false,
-          "reason": "all three existing destination slots occupied; preserve them",
-          "due_at": "2026-11-03T15:00:00Z",
-          "occupied_slot_proof": {
-            "retained_post_ids_verified": true,
-            "original_release_verified": true,
-            "video_sha256": "d0f630ee425fc8657ea2c4341de7a11ec20acda6b65b5ec3b85e6fa4c1e3adcc",
-            "duration": 66.5,
-            "technical_passed": true
-          },
+          "reason": "dry run; no provider mutation",
+          "profile": "science",
+          "due_at": "2026-11-05T10:00:00Z",
+          "entry": null,
           "trigger_source": "cloudflare-clock-test",
           "dry_run": true
         }
       },
       "stickman-what-if-shorts": {
-        "run_id": 41637145199,
-        "url": "https://github.com/ahmedalsharqwi2-gif/stickman-what-if-shorts/actions/runs/41637145199",
+        "run_id": 41907807347,
+        "url": "https://github.com/ahmedalsharqwi2-gif/stickman-what-if-shorts/actions/runs/41907807347",
         "decision": {
           "run": false,
-          "reason": "all three existing destination slots occupied; preserve them",
-          "due_at": "2026-11-03T15:00:00Z",
-          "occupied_slot_proof": {
-            "retained_post_ids_verified": true,
-            "original_release_verified": true,
-            "video_sha256": "16a3fee0065ca42528abcc398443e2bb192615d6a3a619bc73413716163f8efa",
-            "duration": 139.733333,
-            "technical_passed": true
-          },
+          "reason": "dry run; no provider mutation",
+          "profile": "stickman",
+          "due_at": "2026-11-05T10:00:00Z",
+          "entry": null,
+          "trigger_source": "cloudflare-clock-test",
+          "dry_run": true
+        }
+      },
+      "arabic-horror-stories": {
+        "run_id": 41907792176,
+        "url": "https://github.com/ahmedalsharqwi2-gif/arabic-horror-stories/actions/runs/41907792176",
+        "decision": {
+          "run": false,
+          "reason": "dry run; no provider mutation",
+          "profile": "horror",
+          "due_at": "2026-11-05T10:00:00Z",
+          "entry": null,
+          "trigger_source": "cloudflare-clock-test",
+          "dry_run": true
+        }
+      },
+      "documented-history-stories": {
+        "run_id": 41907796852,
+        "url": "https://github.com/ahmedalsharqwi2-gif/documented-history-stories/actions/runs/41907796852",
+        "decision": {
+          "run": false,
+          "reason": "dry run; no provider mutation",
+          "profile": "history",
+          "due_at": "2026-11-05T10:00:00Z",
+          "entry": null,
+          "trigger_source": "cloudflare-clock-test",
+          "dry_run": true
+        }
+      },
+      "ai-news-daily": {
+        "run_id": 41907801109,
+        "url": "https://github.com/ahmedalsharqwi2-gif/ai-news-daily/actions/runs/41907801109",
+        "decision": {
+          "run": false,
+          "reason": "dry run; no provider mutation",
+          "profile": "news",
+          "due_at": "2026-11-05T10:00:00Z",
+          "entry": null,
           "trigger_source": "cloudflare-clock-test",
           "dry_run": true
         }
       }
     },
+    "schedule_policy": {
+      "timezone": "Africa/Cairo",
+      "baseline": {
+        "productionHour": 9,
+        "publicationHour": 17,
+        "dayOffset": 0
+      },
+      "trial": {
+        "enabled": true,
+        "start": "2026-11-04",
+        "end": "2026-11-18",
+        "productionHour": 19,
+        "publicationHour": 12,
+        "dayOffset": -1
+      }
+    },
     "origin": "https://video-factory-cairo-clock.ahmed-video-factory-21724b.workers.dev",
     "schedules": [
       {
-        "cron": "0,17 6,7 * * *",
-        "created_on": "2026-11-03T12:37:42.944071Z",
-        "modified_on": "2026-11-03T12:37:42.944071Z"
+        "cron": "0,17 6,7,16,17 * * *",
+        "created_on": "2026-11-04T20:35:12.17673Z",
+        "modified_on": "2026-11-04T20:35:12.17673Z"
       },
       {
-        "cron": "35 14,15 * * *",
-        "created_on": "2026-11-03T12:37:42.944071Z",
-        "modified_on": "2026-11-03T12:37:42.944071Z"
+        "cron": "35 9,10,14,15 * * *",
+        "created_on": "2026-11-04T20:35:12.17673Z",
+        "modified_on": "2026-11-04T20:35:12.17673Z"
       }
     ],
-    "completed_at": "2026-11-03T12:37:43.238Z",
+    "completed_at": "2026-11-04T20:35:13.207Z",
     "worker_sha256": "94e7abbe8d402db5c4c2d16489694d9f510e75b90d9244b418afd2ef75b0981d"
   },
   "existing_repository_workflow_counts_unchanged": true,
@@ -275,8 +269,8 @@
   ],
   "deployment_credential_source": "science-discovery-shorts repository Actions secrets; no local credential export",
   "secret_name_correction": "GITHUB_ is a GitHub-reserved repository-secret prefix. Use FACTORY_DISPATCH_TOKEN with the same existing fine-grained token value.",
-  "provider_evidence_scope": "Actual Cloudflare scheduled tick, five successful read-only GitHub dispatch runs, and exact active provider cron registration. First real 09:00 production event under this clock has not yet occurred.",
-  "verification_run": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/actions/runs/41634596101/attempts/2",
+  "provider_evidence_scope": "Actual Cloudflare tick, five successful future-slot read-only dispatch tests, provider cron registration, live source digest and policy binding match. November 5 films remain incomplete; no automatic production success claimed.",
+  "verification_run": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/actions/runs/41905219646",
   "read_only_credential_probe": {
     "run_id": 41634270245,
     "account_settings_http_status": 200,
@@ -284,8 +278,22 @@
     "workers_subdomain_configured": true
   },
   "previous_failed_attempts_preserved_in": "reviews/independent-clock-failed-dispatch-2026-11-03.json",
-  "first_regular_production_due_at": "2026-11-04T09:00:00+02:00",
-  "same_day_publication_time": "17:00 Africa/Cairo",
-  "independent_publication_audit": "17:35 Africa/Cairo",
-  "first_regular_production_observed": false
+  "first_regular_production_due_at": "2026-11-05T19:00:00+02:00",
+  "independent_publication_audit": "12:35 Africa/Cairo during trial; 17:35 baseline",
+  "first_regular_production_observed": false,
+  "first_regular_publication_due_at": "2026-11-06T12:00:00+02:00",
+  "current_trial": {
+    "production": "19:00 Africa/Cairo on preceding day",
+    "publication": "12:00 Africa/Cairo",
+    "end_date_exclusive": "2026-11-18"
+  },
+  "drift_monitor": {
+    "workflow": ".github/workflows/checks.yml",
+    "configured_cron": "*/15 * * * *",
+    "actual_post_deployment_audit_observed": true,
+    "provider_mutations": 0,
+    "last_report": "reviews/independent-clock-live-audit-2026-11-04.json",
+    "last_report_passed": false,
+    "last_report_failure_scope": "Missing November 5 film/receipt evidence, not source/policy/cron drift"
+  }
 }

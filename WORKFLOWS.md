@@ -39,3 +39,12 @@ During these publication dates, prepare at **19:00 Cairo the previous day** and 
 Health reports check tomorrow at 21:30, today at 09:30 and 11:15, and actual publication at 12:30. Reports retain preparation/publication instants, readiness, immutable media proof, destination receipts and errors. A green workflow alone is never proof of actual publication.
 
 The one-time `[schedule-migration]` push runs only the exact existing-post time-change job. It changes dueAt in place and retains a before snapshot and independently read-back IDs. It never creates posts, renders videos or invokes voice generation. Uncertain writes require reconciliation rather than blind retry.
+
+
+## تصحيح الساعة بعد تغيير موعد الإنتاج — ٤ نوفمبر ٢٠٢٦
+
+كشف فحص Cloudflare الحي أن نسخة ٣ نوفمبر بقيت على الساعة ٩، بينما تغيّرت خطة المستودعات إلى إنتاج ٧ مساءً لليوم التالي ونشر ١٢ ظهرًا ضمن تجربة ٤–١٧ نوفمبر. لذلك لا تعني اختبارات المصدر وحدها أن الساعة الحية تواكب السياسة.
+
+تم نشر النسخة المصححة والتحقق من نبضة حقيقية، وخمسة اختبارات dry-run للتاريخ المستقبلي الصحيح، ومطابقة بصمة المصدر والسياسة والـcron. تغييرات main تمر باختبارات الجودة ثم تزامن الساعة؛ إذا كانت النسخة الحية مطابقة لا يعاد نشرها. checks.yml يشغّل فحص اختلاف الساعة وجاهزية السجلات كل ١٥ دقيقة دون مفاتيح توليد أو نشر فيديوهات، ويرفع تنبيهًا واحدًا. مواعيد GitHub قد تتأخر؛ سجلات التنفيذ الفعلية هي الدليل.
+
+[إيصال إصلاح الساعة](reviews/independent-clock-live-verification-2026-11-04.json) — [الفحص المستقل](reviews/independent-clock-live-audit-2026-11-04.json). اكتشف الفحص أن فيديوهات ٥ نوفمبر لم تكتمل؛ نجاح الربط لا يثبت جاهزيتها. أول موعد إنتاج آلي تالٍ بعد الإصلاح: ٥ نوفمبر ٧ مساءً لحلقات ٦ نوفمبر ١٢ ظهرًا. لا يُرحّل الموعد الفائت تلقائيًا ولا تعاد محاولات التوليد أو الإرسال غير المتيقنة.
