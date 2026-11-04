@@ -380,13 +380,16 @@
       "media_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/releases/download/production-daily-remotion-2026-11-05-science/science-daily-remotion-2026-11-05-science.mp4",
       "receipts": {
         "tiktok": {
-          "phase": "acknowledged",
+          "phase": "verified",
           "channel_id": "6a9edf14cd8b9c702c230272",
           "due_at": "2026-11-05T10:00:00Z",
           "media_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/releases/download/production-daily-remotion-2026-11-05-science/science-daily-remotion-2026-11-05-science.mp4",
           "created_at": "2026-11-04T21:47:04.362872+00:00",
           "id": "6aeba7da4cb090f0ac3ee3bc",
-          "accepted_at": "2026-11-04T21:47:06.577977+00:00"
+          "accepted_at": "2026-11-04T21:47:06.577977+00:00",
+          "status": "scheduled",
+          "scheduled_at": "2026-11-05T10:00:00.000Z",
+          "verified_at": "2026-11-04T21:47:08.044521+00:00"
         }
       }
     }
