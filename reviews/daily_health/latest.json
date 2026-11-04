@@ -2,9 +2,9 @@
   "date": "2026-11-04",
   "profile": "science",
   "phase": "postpublish",
-  "checked_at": "2026-11-04T12:19:54.134528+00:00",
-  "run_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/actions/runs/41828122191",
-  "report_path": "reviews/daily_health/2026-11-04/41828122191-1.json",
+  "checked_at": "2026-11-04T12:33:11.781543+00:00",
+  "run_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/actions/runs/41830141615",
+  "report_path": "reviews/daily_health/2026-11-04/41830141615-1.json",
   "publication_due_utc": "2026-11-04T10:00:00+00:00",
   "errors": [
     "tiktok: publication time differs from the configured Cairo slot"
@@ -23,7 +23,7 @@
         "id": "6aea42d25a7c19a37cd2d0a9",
         "channelId": "6a9edf14cd8b9c702c230272",
         "status": "scheduled",
-        "dueAt": "2026-11-09T15:00:00.000Z",
+        "dueAt": "2026-11-04T12:45:00.000Z",
         "sentAt": null,
         "externalLink": null
       }
@@ -33,7 +33,7 @@
         "id": "6aea42d8b3ec15847387bb2c",
         "channelId": "6a9edee8cd8b9c702c2301cb",
         "status": "scheduled",
-        "dueAt": "2026-11-09T15:00:00.000Z",
+        "dueAt": "2026-11-04T12:45:00.000Z",
         "sentAt": null,
         "externalLink": null
       }
@@ -43,7 +43,7 @@
         "id": "6aea42de343beca74f0c20f3",
         "channelId": "6a9edebbcd8b9c702c230128",
         "status": "scheduled",
-        "dueAt": "2026-11-09T15:00:00.000Z",
+        "dueAt": "2026-11-04T12:45:00.000Z",
         "sentAt": null,
         "externalLink": null
       }
@@ -51,6 +51,6 @@
   },
   "production_at_cairo": "2026-11-03T19:00:00+02:00",
   "publication_at_cairo": "2026-11-04T12:00:00+02:00",
-  "hours_until_publication": -2.33,
+  "hours_until_publication": -2.55,
   "readiness": "needs_attention"
 }
