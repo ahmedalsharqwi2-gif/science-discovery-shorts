@@ -1,0 +1,330 @@
+{
+  "date": "2026-11-05",
+  "status": "five_full_films_produced_and_fifteen_live_schedules_verified",
+  "recovery": "Owner explicitly authorized resume after automatic review rejection. Retained episodes, source documents, original voice requests and existing post IDs were used; no blind restart or late-slot rollover.",
+  "publication_at_cairo": "2026-11-05T12:00:00+02:00",
+  "publication_at_utc": "2026-11-05T10:00:00Z",
+  "schedule_basis": "Existing owner-approved November 4–17 noon trial; no schedule change in this completion",
+  "automatic_production_observed": false,
+  "next_regular_production_at_cairo": "2026-11-05T19:00:00+02:00",
+  "next_regular_publication_at_cairo": "2026-11-06T12:00:00+02:00",
+  "historical_clock_miss_preserved": true,
+  "remaining_production_blockers": [],
+  "episodes": [
+    {
+      "repository": "ahmedalsharqwi2-gif/science-discovery-shorts",
+      "slot": "daily-remotion-2026-11-05-science",
+      "title": "إزاي البكتيريا بتصنع درع ضد المضادات الحيوية؟",
+      "duration_seconds": 150.6,
+      "media_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/releases/download/production-daily-remotion-2026-11-05-science/science-daily-remotion-2026-11-05-science.mp4",
+      "video_sha256": "318bff64bb553609a243ad67152f52349006a26027a60719cd10386d65b28ea0",
+      "story_sha256": "fd7c93b79a560cffb8c39a37776ac986f583b7bd1a5997e1f30954c3041c81f8",
+      "audio_sha256": "3d9faed08b59119c705cef8c90f78716e982d57e7e14b2bb81464d9a2b65d470",
+      "original_voice_request_run": 41917711577,
+      "render_run": 41917711577,
+      "retained_ledger": "state/remotion_registry.json",
+      "health_report": "reviews/daily_health/2026-11-05/41922665146-1.json",
+      "health_run": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/actions/runs/41922665146",
+      "technical": {
+        "passed": true,
+        "sha256": "318bff64bb553609a243ad67152f52349006a26027a60719cd10386d65b28ea0",
+        "full_decode": true,
+        "duration": 150.6,
+        "width": 1080,
+        "height": 1920,
+        "audio_mean_db": -19,
+        "actual_visual_samples": 12,
+        "unique_visual_samples": 12,
+        "checked_at": "2026-11-04T21:48:35.738896+00:00",
+        "scope": "Independent technical media check; no claim of human narrative or scientific review",
+        "reused_immutable_media_check": true,
+        "live_asset_metadata_verified": true
+      },
+      "live_receipts": {
+        "tiktok": {
+          "id": "6aeba7da4cb090f0ac3ee3bc",
+          "channelId": "6a9edf14cd8b9c702c230272",
+          "status": "scheduled",
+          "dueAt": "2026-11-05T10:00:00.000Z",
+          "sentAt": null,
+          "externalLink": null
+        },
+        "youtube": {
+          "id": "6aeba7df4cb090f0ac3ee472",
+          "channelId": "6a9edee8cd8b9c702c2301cb",
+          "status": "scheduled",
+          "dueAt": "2026-11-05T10:00:00.000Z",
+          "sentAt": null,
+          "externalLink": null
+        },
+        "facebook": {
+          "id": "6aeba7e43a6057e11e77b71d",
+          "channelId": "6a9edebbcd8b9c702c230128",
+          "status": "scheduled",
+          "dueAt": "2026-11-05T10:00:00.000Z",
+          "sentAt": null,
+          "externalLink": null
+        }
+      },
+      "checked_at": "2026-11-04T22:09:41.608438+00:00",
+      "clock_warnings": [
+        "No successful clock-triggered daily run for this date; manual recovery and dry-run tests do not count as the automatic clock"
+      ]
+    },
+    {
+      "repository": "ahmedalsharqwi2-gif/arabic-horror-stories",
+      "slot": "daily-remotion-2026-11-05-horror",
+      "title": "كيف اختفى كل من كان على متن السفينة؟",
+      "duration_seconds": 179.5,
+      "media_url": "https://github.com/ahmedalsharqwi2-gif/arabic-horror-stories/releases/download/production-daily-remotion-2026-11-05-horror/horror-daily-remotion-2026-11-05-horror.mp4",
+      "video_sha256": "1a203b0c761e48a323faee4b1c47a89140fb57a91a56333f21d4d28a88990edc",
+      "story_sha256": "5105558d9916805d0dd54674bfd61ed3ccc6768f92b219726e9e78182fad06d3",
+      "audio_sha256": "0ce123d16ded9accce990d87fe8c7db03037118d52ea5d4713ba8eb7ab11a01d",
+      "original_voice_request_run": 41917792102,
+      "render_run": 41919799467,
+      "retained_ledger": "state/remotion_registry.json",
+      "health_report": "reviews/daily_health/2026-11-05/41922707064-1.json",
+      "health_run": "https://github.com/ahmedalsharqwi2-gif/arabic-horror-stories/actions/runs/41922707064",
+      "technical": {
+        "passed": true,
+        "sha256": "1a203b0c761e48a323faee4b1c47a89140fb57a91a56333f21d4d28a88990edc",
+        "full_decode": true,
+        "duration": 179.5,
+        "width": 1080,
+        "height": 1920,
+        "audio_mean_db": -19.1,
+        "actual_visual_samples": 12,
+        "unique_visual_samples": 12,
+        "checked_at": "2026-11-04T22:02:40.166332+00:00",
+        "scope": "Independent technical media check; no claim of human narrative or scientific review",
+        "reused_immutable_media_check": true,
+        "live_asset_metadata_verified": true
+      },
+      "live_receipts": {
+        "instagram": {
+          "id": "6aebab04c91738fad507280c",
+          "channelId": "6aad267dea19ca0bde778d5e",
+          "status": "scheduled",
+          "dueAt": "2026-11-05T10:00:00.000Z",
+          "sentAt": null,
+          "externalLink": null
+        },
+        "youtube": {
+          "id": "6aebab093a6057e11e78a122",
+          "channelId": "6aaa8778ea19ca0bde57da16",
+          "status": "scheduled",
+          "dueAt": "2026-11-05T10:00:00.000Z",
+          "sentAt": null,
+          "externalLink": null
+        },
+        "facebook": {
+          "id": "6aebab0ec91738fad50730af",
+          "channelId": "6aaa853fea19ca0bde57b5f7",
+          "status": "scheduled",
+          "dueAt": "2026-11-05T10:00:00.000Z",
+          "sentAt": null,
+          "externalLink": null
+        }
+      },
+      "checked_at": "2026-11-04T22:09:52.372839+00:00",
+      "clock_warnings": [
+        "No successful clock-triggered daily run for this date; manual recovery and dry-run tests do not count as the automatic clock"
+      ]
+    },
+    {
+      "repository": "ahmedalsharqwi2-gif/documented-history-stories",
+      "slot": "daily-remotion-2026-11-05-history",
+      "title": "أهرامات الجيزة مش لوحدها.. إيه حكاية ممفيس القديمة؟",
+      "duration_seconds": 133.533333,
+      "media_url": "https://github.com/ahmedalsharqwi2-gif/documented-history-stories/releases/download/production-daily-remotion-2026-11-05-history/history-daily-remotion-2026-11-05-history.mp4",
+      "video_sha256": "7025f07021dfa22dbcf741ebb30a71df3fbaed5ac269183cffb7fec2d01f9417",
+      "story_sha256": "c3fd2a200d0575b84d530107f4abf75e68dddf876186e441e4e85fea915f101a",
+      "audio_sha256": "a4ba4a64b48a749c513d076dea9c8060062354f981708f10266c517493108644",
+      "original_voice_request_run": 41917097674,
+      "render_run": 41917097674,
+      "retained_ledger": "state/remotion_registry.json",
+      "health_report": "reviews/daily_health/2026-11-05/41922817581-1.json",
+      "health_run": "https://github.com/ahmedalsharqwi2-gif/documented-history-stories/actions/runs/41922817581",
+      "technical": {
+        "passed": true,
+        "sha256": "7025f07021dfa22dbcf741ebb30a71df3fbaed5ac269183cffb7fec2d01f9417",
+        "full_decode": true,
+        "duration": 133.533333,
+        "width": 1080,
+        "height": 1920,
+        "audio_mean_db": -19.3,
+        "actual_visual_samples": 12,
+        "unique_visual_samples": 12,
+        "checked_at": "2026-11-04T21:44:32.386775+00:00",
+        "scope": "Independent technical media check; no claim of human narrative or scientific review",
+        "reused_immutable_media_check": true,
+        "live_asset_metadata_verified": true
+      },
+      "live_receipts": {
+        "youtube": {
+          "id": "6aeba6c0dce07267a194bfb9",
+          "channelId": "6ab67b4fea19ca0bdee58218",
+          "status": "scheduled",
+          "dueAt": "2026-11-05T10:00:00.000Z",
+          "sentAt": null,
+          "externalLink": null
+        },
+        "facebook": {
+          "id": "6aeba6c5dce07267a194c04a",
+          "channelId": "6ab67b0dea19ca0bdee58014",
+          "status": "scheduled",
+          "dueAt": "2026-11-05T10:00:00.000Z",
+          "sentAt": null,
+          "externalLink": null
+        },
+        "instagram": {
+          "id": "6aeba6ca4cb090f0ac3ea70c",
+          "channelId": "6ab67accea19ca0bdee57e17",
+          "status": "scheduled",
+          "dueAt": "2026-11-05T10:00:00.000Z",
+          "sentAt": null,
+          "externalLink": null
+        }
+      },
+      "checked_at": "2026-11-04T22:10:38.599785+00:00",
+      "clock_warnings": [
+        "No successful clock-triggered daily run for this date; manual recovery and dry-run tests do not count as the automatic clock"
+      ]
+    },
+    {
+      "repository": "ahmedalsharqwi2-gif/ai-news-daily",
+      "slot": "daily-remotion-2026-11-05-news",
+      "title": "أوبن إيه آي ناوية تشتري بيير.. إيه اللي هيتغير في كودكس؟",
+      "duration_seconds": 83.466667,
+      "media_url": "https://github.com/ahmedalsharqwi2-gif/ai-news-daily/releases/download/production-daily-remotion-2026-11-05-news/news-daily-remotion-2026-11-05-news.mp4",
+      "video_sha256": "393a991618dfe1f36b3e6106575d59f5a7a5851c5e110718f408b3394762f785",
+      "story_sha256": "6595c40ca241023d990f8be7afc4e9f590ab297512ae4c6bddf61f4dff249dd1",
+      "audio_sha256": "111c50d27ea1d35a4156b44061754e40081ba54e652d31260ade429112a441a1",
+      "original_voice_request_run": 41919166545,
+      "render_run": 41922021119,
+      "retained_ledger": "state/remotion_registry.json",
+      "health_report": "reviews/daily_health/2026-11-05/41922964130-1.json",
+      "health_run": "https://github.com/ahmedalsharqwi2-gif/ai-news-daily/actions/runs/41922964130",
+      "technical": {
+        "passed": true,
+        "sha256": "393a991618dfe1f36b3e6106575d59f5a7a5851c5e110718f408b3394762f785",
+        "full_decode": true,
+        "duration": 83.466667,
+        "width": 1080,
+        "height": 1920,
+        "audio_mean_db": -19.2,
+        "actual_visual_samples": 12,
+        "unique_visual_samples": 12,
+        "checked_at": "2026-11-04T22:11:46.596368+00:00",
+        "scope": "Independent technical media check; no claim of human narrative or scientific review",
+        "reused_immutable_media_check": false,
+        "live_asset_metadata_verified": true
+      },
+      "live_receipts": {
+        "youtube": {
+          "id": "6aebad2e4cb090f0ac40b9d6",
+          "channelId": "6ad3ef9d778b240e2f3fa5b9",
+          "status": "scheduled",
+          "dueAt": "2026-11-05T10:00:00.000Z",
+          "sentAt": null,
+          "externalLink": null
+        },
+        "facebook": {
+          "id": "6aebad340baebf13ccc43b28",
+          "channelId": "6ad3ef2c778b240e2f3fa387",
+          "status": "scheduled",
+          "dueAt": "2026-11-05T10:00:00.000Z",
+          "sentAt": null,
+          "externalLink": null
+        },
+        "instagram": {
+          "id": "6aebad3a0baebf13ccc43c93",
+          "channelId": "6ad3eeea778b240e2f3fa23b",
+          "status": "scheduled",
+          "dueAt": "2026-11-05T10:00:00.000Z",
+          "sentAt": null,
+          "externalLink": null
+        }
+      },
+      "checked_at": "2026-11-04T22:11:35.075849+00:00",
+      "clock_warnings": [
+        "No successful clock-triggered daily run for this date; manual recovery and dry-run tests do not count as the automatic clock"
+      ]
+    },
+    {
+      "repository": "ahmedalsharqwi2-gif/stickman-what-if-shorts",
+      "slot": "daily-remotion-2026-11-05-stickman",
+      "title": "ماذا لو بقيت بحجم نملة جنب كوباية مية؟",
+      "duration_seconds": 127,
+      "media_url": "https://github.com/ahmedalsharqwi2-gif/stickman-what-if-shorts/releases/download/production-daily-remotion-2026-11-05-stickman/stickman-daily-remotion-2026-11-05-stickman.mp4",
+      "video_sha256": "86f3bc27491bde83fb66879d4ef878ab1762ae5efe08c6821ee5e2af4dc3aa2a",
+      "story_sha256": "770e32781b8713dd664a058a823dc8270621f5b20615d7a3bf25e56338a64c1c",
+      "audio_sha256": "33a66a87b261ddfbc2122fac14db7f478b3898281845f9c87ed1c65166683982",
+      "original_voice_request_run": 41916692910,
+      "render_run": 41918800449,
+      "retained_ledger": "state/remotion_registry.json",
+      "health_report": "reviews/daily_health/2026-11-05/41922874835-1.json",
+      "health_run": "https://github.com/ahmedalsharqwi2-gif/stickman-what-if-shorts/actions/runs/41922874835",
+      "technical": {
+        "passed": true,
+        "sha256": "86f3bc27491bde83fb66879d4ef878ab1762ae5efe08c6821ee5e2af4dc3aa2a",
+        "full_decode": true,
+        "duration": 127,
+        "width": 1080,
+        "height": 1920,
+        "audio_mean_db": -19.7,
+        "actual_visual_samples": 12,
+        "unique_visual_samples": 12,
+        "checked_at": "2026-11-04T21:50:14.972671+00:00",
+        "scope": "Independent technical media check; no claim of human narrative or scientific review",
+        "reused_immutable_media_check": true,
+        "live_asset_metadata_verified": true
+      },
+      "live_receipts": {
+        "youtube": {
+          "id": "6aeba84bc91738fad5067080",
+          "channelId": "6ae65d0a2f1f5ed648378c6c",
+          "status": "scheduled",
+          "dueAt": "2026-11-05T10:00:00.000Z",
+          "sentAt": null,
+          "externalLink": null
+        },
+        "facebook": {
+          "id": "6aeba84f4cb090f0ac3f001e",
+          "channelId": "6ae65c3c2f1f5ed64837853d",
+          "status": "scheduled",
+          "dueAt": "2026-11-05T10:00:00.000Z",
+          "sentAt": null,
+          "externalLink": null
+        },
+        "instagram": {
+          "id": "6aeba853c91738fad5067194",
+          "channelId": "6ae65c082f1f5ed648378367",
+          "status": "scheduled",
+          "dueAt": "2026-11-05T10:00:00.000Z",
+          "sentAt": null,
+          "externalLink": null
+        }
+      },
+      "checked_at": "2026-11-04T22:11:04.684639+00:00",
+      "clock_warnings": [
+        "No successful clock-triggered daily run for this date; manual recovery and dry-run tests do not count as the automatic clock"
+      ]
+    }
+  ],
+  "repairs": [
+    "Signed official Ubuntu mirrors, bounded dependency installation, planning separated from renderer packages in all five repositories",
+    "Legacy source normalization and same-slot novelty exclusion",
+    "Exact short source evidence extraction before bounded correction; factual editorial review retained",
+    "Reuse retained voice artifacts across render recovery",
+    "Story-scoped technical-name ASR spelling alignment with unchanged thresholds/raw ASR",
+    "Stickman unspoken short aside excluded from captions with independent alignment evidence; original voice unchanged",
+    "Horror only measured quiet PCM pauses removed: 183.4 to 179.5 seconds; original retained",
+    "Live Cloudflare policy/source/cron synchronization and independent drift monitoring"
+  ],
+  "limitations": [
+    "Scheduled is not published; actual publication must be checked after due time",
+    "Manual recovery does not prove the next autonomous cycle",
+    "Historical missed clock warning remains in each health report"
+  ]
+}

@@ -1,5 +1,5 @@
 {
-  "status": "live-clock-repaired-policy-and-five-tests-verified-production-incomplete",
+  "status": "live-clock-repaired-five-films-and-fifteen-schedules-verified-manual-recovery",
   "cloudflare_live": true,
   "dispatch_enabled": true,
   "blocker": null,
@@ -269,7 +269,7 @@
   ],
   "deployment_credential_source": "science-discovery-shorts repository Actions secrets; no local credential export",
   "secret_name_correction": "GITHUB_ is a GitHub-reserved repository-secret prefix. Use FACTORY_DISPATCH_TOKEN with the same existing fine-grained token value.",
-  "provider_evidence_scope": "Actual Cloudflare tick, five successful future-slot read-only dispatch tests, provider cron registration, live source digest and policy binding match. November 5 films remain incomplete; no automatic production success claimed.",
+  "provider_evidence_scope": "Actual Cloudflare tick and five read-only dispatch tests verified. November 5 full films and fifteen live schedules verified by independent technical/receipt checks. This was manual recovery; next regular automatic production remains unobserved.",
   "verification_run": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/actions/runs/41905219646",
   "read_only_credential_probe": {
     "run_id": 41634270245,
@@ -295,5 +295,6 @@
     "last_report": "reviews/independent-clock-live-audit-2026-11-04.json",
     "last_report_passed": false,
     "last_report_failure_scope": "Missing November 5 film/receipt evidence, not source/policy/cron drift"
-  }
+  },
+  "production_completion_report": "reviews/production-completion-2026-11-05.json"
 }
