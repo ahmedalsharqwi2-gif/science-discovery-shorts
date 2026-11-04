@@ -102,7 +102,8 @@
         },
         {
           "name": "Install planning prerequisites",
-          "run": "python -m pip install requests beautifulsoup4 Pillow numpy pyyaml\nif ! command -v ffmpeg >/dev/null; then sudo apt-get update -qq; sudo apt-get install -y ffmpeg; fi"
+          "run": "python -m pip install --disable-pip-version-check --timeout 30 --retries 2 requests beautifulsoup4 Pillow numpy pyyaml",
+          "timeout-minutes": 5
         },
         {
           "name": "Freeze original date; verify configured Cairo clock and existing queues",
@@ -119,7 +120,11 @@
         {
           "name": "Install exact renderer, measured speech and audio prerequisites",
           "if": "steps.decision.outputs.run == 'true'",
-          "run": "sudo apt-get update -qq\nsudo apt-get install -y ffmpeg fonts-noto-core libnss3 libgbm1 libasound2t64\npython -m pip install faster-whisper==1.2.1 google-genai google-auth num2words\ncd remotion_motion\nnpm ci --no-audit --no-fund\nnpx remotion browser ensure\nnpm run check"
+          "run": "timeout 240s sudo apt-get -o Acquire::Retries=2 -o Acquire::http::Timeout=30 update -qq\ntimeout 240s sudo apt-get -o Acquire::Retries=2 -o Acquire::http::Timeout=30 install -y ffmpeg fonts-noto-core libnss3 libgbm1 libasound2t64\npython -m pip install faster-whisper==1.2.1 google-genai google-auth num2words\ncd remotion_motion\nnpm ci --no-audit --no-fund\nnpx remotion browser ensure\nnpm run check",
+          "timeout-minutes": 15,
+          "env": {
+            "DEBIAN_FRONTEND": "noninteractive"
+          }
         },
         {
           "uses": "actions/cache@v4",

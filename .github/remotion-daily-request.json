@@ -1,6 +1,6 @@
 {
   "publish_date": "2026-11-05",
-  "revision": "clock-drift-manual-recovery-20261105-v1",
+  "revision": "owner-bounded-retained-production-v3",
   "preserve_existing_posts": true,
-  "reason": "Owner-authorized remediation of proven stale external clock. Explicit manual recovery for original November 5 noon slot; inspect queues and retained state, generate only a missing film, never duplicate or roll publication forward."
+  "reason": "Explicit owner continuation: same retained episode; corrected bounded dependency setup. Concurrency and durable state prevent duplicate writing, voice or posting."
 }

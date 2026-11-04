@@ -53,15 +53,17 @@
         },
         {
           "name": "Install inventory and regression prerequisites",
-          "run": "python -m pip install requests beautifulsoup4 Pillow"
+          "run": "python -m pip install requests beautifulsoup4 Pillow",
+          "if": "!contains(github.event.head_commit.message, '[cancel-prerequisites-only]')"
         },
         {
           "name": "Verify protected refs, active work and cache-only deletion guards",
-          "run": "python -m unittest discover -s remotion_factory/tests -q"
+          "run": "python -m unittest discover -s remotion_factory/tests -q",
+          "if": "!contains(github.event.head_commit.message, '[cancel-prerequisites-only]')"
         },
         {
           "name": "Inventory or apply the guarded recovery-backed cleanup",
-          "run": "python - <<'PY'\nimport json,subprocess\nfrom pathlib import Path\nr=json.loads(Path('.github/remotion-cleanup-request.json').read_text())\nmodule='remotion_factory.workflow_catalog' if r.get('workflow_catalog') else 'remotion_factory.housekeeping'\nsubprocess.run(['python','-m',module],check=True)\nPY"
+          "run": "python - <<'PY'\nimport json,subprocess\nfrom pathlib import Path\nr=json.loads(Path('.github/remotion-cleanup-request.json').read_text())\nif r.get('operation')=='cancel-stuck-prerequisites':\n subprocess.run(['python','-m','unittest','discover','-s','remotion_factory/tests','-p','test_cancel_dependency_stall.py','-q'],check=True)\n subprocess.run(['python','-m','remotion_factory.cancel_dependency_stall'],check=True)\nelse:\n subprocess.run(['python','-m','remotion_factory.workflow_catalog' if r.get('workflow_catalog') else 'remotion_factory.housekeeping'],check=True)\nPY"
         },
         {
           "uses": "actions/upload-artifact@v4",
