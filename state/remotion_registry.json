@@ -333,8 +333,8 @@
     "daily-remotion-2026-11-05-science": {
       "profile": "science",
       "due_at": "2026-11-05T10:00:00Z",
-      "status": "authored",
-      "source_run": 41904494022,
+      "status": "voice_requested",
+      "source_run": 41917711577,
       "created_at": "2026-11-04T20:13:59.001029+00:00",
       "source_selection": {
         "title": "كيف تقاوم البكتيريا المضادات الحيوية؟",
@@ -368,7 +368,8 @@
         "issues": [],
         "passed": true
       },
-      "story_sha256": "fd7c93b79a560cffb8c39a37776ac986f583b7bd1a5997e1f30954c3041c81f8"
+      "story_sha256": "fd7c93b79a560cffb8c39a37776ac986f583b7bd1a5997e1f30954c3041c81f8",
+      "voice_request_run": 41917711577
     }
   },
   "cutover_evidence": {
