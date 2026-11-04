@@ -1,0 +1,101 @@
+{
+  "title": "إزاي البكتيريا بتصنع درع ضد المضادات الحيوية؟",
+  "canonical_subject": "antimicrobial-resistance-bacteria",
+  "hashtags": [
+    "البكتيريا",
+    "المضادات_الحيوية",
+    "العلوم",
+    "مقاومة_الميكروبات"
+  ],
+  "scenes": [
+    {
+      "label": "بدء التجربة",
+      "narration": "تخيل أن بطلنا الصغير 'سري' قرر يلبس درع معدني ضخم عشان يواجه أسراب البكتيريا الدقيقة في معمل بيولوجي غريب، بس البكتيريا مكنتش خايفة وكانت بتستعد بطريقتها الخاصة وبكل هدوء لإنتاج وسائل دفاع عجيبة تكشف عن ذكائها الفطري المدهش في التكيف السريع مع البيئة المحيطة.",
+      "evidence_quote": "Antimicrobial resistance (AMR) occurs when bacteria, viruses, fungi and parasites do not respond to antimicrobial medicines.",
+      "diagram": "flow",
+      "labels": [
+        "بكتيريا",
+        "تكييف",
+        "درع دفاعي"
+      ]
+    },
+    {
+      "label": "وصول الدواء",
+      "narration": "مع أول هجوم من المضاد الحيوي الشهير، 'سري' أطلق صافرة الإنذار وهو شايف الدواء بيحاول يخترق جدران الخلايا البكتيرية، لكن البكتيريا فاجأت الجميع وطلعت بروتينات خاصة بتعمل كدروع بشرية تمنع وصول الدواء لجوه الخلية بشكل تام ومذهل للغاية.",
+      "evidence_quote": "Infections become difficult or impossible to treat, increasing the risk of disease spread, severe illness, disability and death.",
+      "diagram": "layers",
+      "labels": [
+        "مضاد حيوي",
+        "بروتينات",
+        "حماية الخلية"
+      ]
+    },
+    {
+      "label": "طفرة جينية",
+      "narration": "بدل ما البكتيريا تهرب، بدأت تعمل تعديلات جوهرية في حمضها النووي عبر طفرات جينية سريعة، 'سري' حاول يحلل الكود الجديد بلوب من العدسات المكبرة، واكتشف إن الجينات المتحورة بتنسخ نفسها وتوزع أسرار المقاومة على كل الخلايا المجاورة في ثوانٍ معدودة.",
+      "evidence_quote": "The misuse and overuse of antimicrobial are driving the development and spread of drug-resistant pathogens.",
+      "diagram": "cycle",
+      "labels": [
+        "حمض نووي",
+        "طفرة",
+        "مقاومة جينية"
+      ]
+    },
+    {
+      "label": "بناء المضخات",
+      "narration": "البكتيريا طورت خط دفاع تاني أكثر شراسة وهو بناء مضخات جزيئية مجهرية على سطحها الخارجي، وظيفة المضخات دي هي طرد أي جزيء دواء يدخل الخلية فوراً للخارج، لقى 'سري' نفسه قدام نظام طرد مركزي بيولوجي فعال بيخلي الدواء ولا كأنه دخل أصلاً.",
+      "evidence_quote": "Approximately 1 in 6 laboratory-confirmed bacterial infections worldwide were resistant to antibiotics in 2023.",
+      "diagram": "flow",
+      "labels": [
+        "مضخات جزيئية",
+        "طرد الدواء",
+        "سطح الخلية"
+      ]
+    },
+    {
+      "label": "تغيير الأقفال",
+      "narration": "المواجهة اتحولت للغز معقد لما البكتيريا غيرت شكل مستقبلاتها السطحية تماماً، وبقى شكلها عامل زي قفل الباب اللي اتغير مفتاحه، 'سري' جرب آلاف المفاتيح الكيميائية المختلفة بس ولا مفتاح نفع يفتح القفل الجديد أو يرتبط بالمستقبلات البكتيرية المتطورة دي.",
+      "evidence_quote": "Antimicrobials – including antibiotics, antivirals, antifungals and antiparasitics – are medicines used to prevent and treat infectious diseases.",
+      "diagram": "compare",
+      "labels": [
+        "مستقبلات",
+        "تغيير القفل",
+        "ارتباط كيميائي"
+      ]
+    },
+    {
+      "label": "تشكيل الأغشية",
+      "narration": "بعدين بدأت البكتيريا تبني مدينة كاملة محصنة اسمها الغشاء الحيوي الرقيق أو البيوفيلم، البيوفيلم ده عبارة عن طبقة لزجة سميكة بتجمع ملايين البكتيريا مع بعض وتخليهم شبه حصن منيع يصعب على أي مضاد حيوي تقليدي اختراقه أو الوصول لقلب المستعمرة.",
+      "evidence_quote": "The emergence and spread of multi-drug resistant Candidozyma auris, an invasive fungal infection, is of particular concern.",
+      "diagram": "layers",
+      "labels": [
+        "بيوفيلم",
+        "غشاء رقيق",
+        "حصن بكتيري"
+      ]
+    },
+    {
+      "label": "الاستنساخ الجماعي",
+      "narration": "وسط الذهول ده، استخدمت البكتيريا تقنية الانقسام السريع لنقل جينات المقاومة لنسخ جديدة بتظهر كل دقايق معدودة، 'سري' حاول يلاحق أعدادهم الهائلة اللي بتتضاعف بمتوالية هندسية مرعبة، ولقى نفسه محاط بجيش لا ينتهي من الخلايا الخارقة التي لا تحطيم لها.",
+      "evidence_quote": "Between 2018 and 2023, antibiotic resistance rose in over 40% of the pathogen-antibiotic combinations monitored with an average annual increase of 5–15%.",
+      "diagram": "cycle",
+      "labels": [
+        "انقسام سريع",
+        "استنساخ",
+        "جيش بكتيري"
+      ]
+    },
+    {
+      "label": "الدرس المستفاد",
+      "narration": "في النهاية، فهم 'سري' إن الاستخدام العشوائي للمضادات الحيوية هو اللي علم البكتيريا كل الحيل دي وخلانا نواجه أزمة عالمية كبرى، فقرر يرفع لافتة تحذير بيئية بتدعو للاستخدام الرشيد للأدوية والحفاظ على فعالية العلاجات الطبية قبل فوات الأوان.",
+      "evidence_quote": "WHO leads global efforts to prevent and control AMR in humans, as part of the Global action plan on antimicrobial resistance.",
+      "diagram": "flow",
+      "labels": [
+        "وعي صحي",
+        "استخدام رشيد",
+        "أزمة عالمية"
+      ]
+    }
+  ],
+  "cover_text": "كيف تقاوم البكتيريا العلاج"
+}
