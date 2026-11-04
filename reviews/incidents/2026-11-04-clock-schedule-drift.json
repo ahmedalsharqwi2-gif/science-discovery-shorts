@@ -1,0 +1,72 @@
+{
+  "date": "2026-11-04",
+  "incident": "no-November-5-production-after-release-policy-change",
+  "cause_verified": true,
+  "cause": "Repository production policy changed to previous-day 19:00 Cairo / next-day noon, but the actual Cloudflare deployment retained the original 09:00 clock and old cron registration.",
+  "live_probe": {
+    "run_id": 41903329141,
+    "job_id": 126831392102,
+    "checked_at": "2026-11-04T20:06:28.990Z",
+    "deployment_id": "a661827b986a50d665174735",
+    "registered_crons": [
+      "0,17 6,7 * * *",
+      "35 14,15 * * *"
+    ],
+    "required_crons": [
+      "0,17 6,7,16,17 * * *",
+      "35 9,10,14,15 * * *"
+    ],
+    "matches_source": false
+  },
+  "remediation": {
+    "shared_policy_binding": true,
+    "auto_deploy_after_main_quality_checks": true,
+    "live_source_sha_and_policy_and_cron_verification": true,
+    "read_only_monitor_every_15_minutes": true,
+    "one_own_repository_incident_issue": true,
+    "no_automatic_late_rollover": true
+  },
+  "live_redeployment": {
+    "run_id": 41904921441,
+    "status": "awaiting_actual_provider_tick_and_five_dry_runs"
+  },
+  "manual_recovery_runs": {
+    "science-discovery-shorts": 41904494022,
+    "arabic-horror-stories": 41904549127,
+    "documented-history-stories": 41904622517,
+    "ai-news-daily": 41904681860,
+    "stickman-what-if-shorts": 41904759546
+  },
+  "resume_block": {
+    "repository": "science-discovery-shorts",
+    "run_id": 41904494022,
+    "automatic_approval_review_rejected": true,
+    "reason": "Potential duplicate generation or publication from rerunning a previous production job; no alternate execution attempted.",
+    "observed_pre_generation_state": [
+      [
+        "daily-remotion-2026-11-05-science",
+        {
+          "profile": "science",
+          "due_at": "2026-11-05T10:00:00Z",
+          "status": "author_pending",
+          "source_run": 41904494022,
+          "created_at": "2026-11-04T20:13:59.001029+00:00"
+        }
+      ]
+    ]
+  },
+  "other_findings": {
+    "legacy_source_shape_bug": "Legacy source URL strings and narrative strings caused history/horror author preflight crashes. Normalized without removing topic history, with regression tests in all five repos.",
+    "stickman_editorial_review": {
+      "supported": false,
+      "engaging": true,
+      "novel": true,
+      "visuals_match": false,
+      "issues": [
+        "The story includes unapproved objects like a control button/screen in scene 7 which violates the strict allowed actual renderer objects list (cup, droplet and oversized steps).",
+        "Scene 7 mentions turning on a screen and pressing a button, turning it into an escape room or control panel puzzle which is explicitly forbidden by the source and topic."
+      ],
+      "passed": false
+    }
+  }
+}
