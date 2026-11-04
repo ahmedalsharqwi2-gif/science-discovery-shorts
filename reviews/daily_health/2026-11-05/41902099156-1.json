@@ -1,0 +1,26 @@
+{
+  "date": "2026-11-05",
+  "profile": "science",
+  "phase": "prepublish",
+  "checked_at": "2026-11-04T19:59:01.036598+00:00",
+  "run_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/actions/runs/41902099156",
+  "report_path": "reviews/daily_health/2026-11-05/41902099156-1.json",
+  "publication_due_utc": "2026-11-05T10:00:00+00:00",
+  "errors": [
+    "No successful clock-triggered daily run for this date; manual recovery and dry-run tests do not count as the automatic clock",
+    "tiktok: missing post or duplicate posts at the configured Cairo slot"
+  ],
+  "passed": false,
+  "generation_calls": 0,
+  "publication_mutations": 0,
+  "preview": true,
+  "observed_receipts": {
+    "tiktok": [],
+    "youtube": [],
+    "facebook": []
+  },
+  "production_at_cairo": "2026-11-04T19:00:00+02:00",
+  "publication_at_cairo": "2026-11-05T12:00:00+02:00",
+  "hours_until_publication": 14.02,
+  "readiness": "needs_attention"
+}
