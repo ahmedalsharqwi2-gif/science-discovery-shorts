@@ -105,7 +105,9 @@ def main():
  if tags:caption+='\n'+' '.join(tags)
  if source.get('url'):caption+='\nالمصدر: '+source['url']
  credits=report.get('licensed_assets',{}).get('assets',[])
- if credits:caption+='\nصور ورسومات أرشيفية: '+', '.join(sorted({str(a.get('artist') or 'Public domain').strip() for a in credits}))
+ if credits:
+  from .asset_credits import format_credits
+  caption+='\nاعتمادات الصور:\n'+format_credits(credits)
  for service,destination in mapping.items():
   record=dict(entry.get('receipts',{}).get(service,{}))
   def persist():
@@ -121,3 +123,4 @@ def main():
   e.update(status='scheduled',due_at=due)
  mutate(done);print(json.dumps({'status':'scheduled','profile':profile,'due_at':due,'media_url':url,'receipts_verified':3}))
 if __name__=='__main__':main()
+

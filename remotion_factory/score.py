@@ -1,113 +1,73 @@
-"""Original 112 BPM electronica score and sync cues, composed for this film.
-
-No reference sound is sampled. Chord changes, melodic arpeggios, bass, drums,
-scene swells and stereo echoes are generated deterministically at 48 kHz.
-"""
-import json,math,wave
+"""Five distinct original scores and semantic cues, varied by retained topic hash."""
+import hashlib,json,math,wave
 from pathlib import Path
 import numpy as np
 SR=48000
-
-
-def build(duration,starts,directory,profile="science",reveal_beats=None):
-    out=Path(directory);n=math.ceil(duration*SR);music=np.zeros((n,2),np.float32);sfx=np.zeros_like(music)
-    rng=np.random.default_rng(2197);bpm={'science':112,'history':104,'horror':94,'news':120,'stickman':116}[profile];beat=60/bpm
-    def midi(m):return 440*2**((m-69)/12)
-    def put(target,audio,at,gain=1,pan=0):
-        lo=round(at*SR)
-        if lo<0:audio=audio[-lo:];lo=0
-        count=min(len(audio),n-lo)
-        if count<=0:return
-        audio=audio[:count]*gain
-        target[lo:lo+count,0]+=audio*np.sqrt((1-pan)/2)
-        target[lo:lo+count,1]+=audio*np.sqrt((1+pan)/2)
-    def tone(freq,length,kind='pluck'):
-        t=np.arange(round(length*SR),dtype=np.float32)/SR
-        if kind=='pluck':
-            a=(np.sin(2*np.pi*freq*t)+.22*np.sin(2*np.pi*freq*2.002*t)+.08*np.sin(2*np.pi*freq*4*t))*np.exp(-4.7*t)
-            a*=np.minimum(1,t/.008)
-        elif kind=='pad':
-            a=sum(np.sin(2*np.pi*freq*(1+detune)*t) for detune in (-.003,0,.003))/3
-            a+=.13*np.sin(2*np.pi*freq*2*t)
-            a*=np.minimum(1,t/.6)*np.minimum(1,np.maximum(0,length-t)/.9)
-        else:
-            a=(np.sin(2*np.pi*freq*t)+.18*np.sin(2*np.pi*freq*2*t))*np.minimum(1,t/.012)*np.exp(-3*t)
-        return a.astype(np.float32)
-    chords=[(50,57,60,64),(46,53,57,60),(53,60,64,69),(48,55,57,64)]
-    if profile=='horror':chords=[(38,45,50,53),(37,44,48,52),(41,48,50,56),(38,45,49,53)]
-    elif profile=='history':chords=[(48,55,60,63),(46,53,58,62),(43,50,55,58),(48,55,58,63)]
-    bar=beat*4
-    for i in range(math.ceil(duration/bar)):
-        chord=chords[(i//2)%4];at=i*bar;intensity=.55 if at<4 else .9 if at<duration-6 else .6
-        for j,note in enumerate(chord):put(music,tone(midi(note),bar*1.3,'pad'),at,.055*intensity,(j-1.5)*.4)
-        pattern=[0,2,1,3,2,1,3,2]
-        for k,degree in enumerate(pattern):
-            note=chord[degree]+12+(12 if k in (3,7) and i%2 else 0)
-            a=tone(midi(note),1.25);pos=at+k*beat/2
-            if profile=='horror':a*=.38 if k%2 else .6
-            pan=.6*math.sin(i+k*1.3)
-            put(music,a,pos,.11*intensity,pan)
-            put(music,a,pos+beat*.75,.027*intensity,-pan)
-            put(music,a,pos+beat*1.5,.012*intensity,pan)
-        for k in (0,1.5,2.5):put(music,tone(midi(chord[0]-12),.7,'bass'),at+k*beat,.17*intensity)
-    for k in range(math.ceil(duration/beat)):
-        if profile=='horror':continue
-        at=k*beat;section=at/max(duration,1)
-        if section<.06 or section>.94:continue
-        t=np.arange(int(.32*SR),dtype=np.float32)/SR
-        freq=48+100*np.exp(-38*t);phase=2*np.pi*(48*t+100/38*(1-np.exp(-38*t)))
-        kick=np.sin(phase)*np.exp(-15*t)*np.minimum(1,t/.002)
-        if k%4 in (0,2):put(music,kick,at,.23)
-        if k%4 in (1,3):
-            noise=rng.standard_normal(int(.18*SR)).astype(np.float32)
-            high=noise-np.convolve(noise,np.ones(7)/7,mode='same')
-            ti=np.arange(len(high))/SR
-            snare=high*np.exp(-28*ti)+.25*np.sin(2*np.pi*180*ti)*np.exp(-30*ti)
-            put(music,snare,at,.055,.14)
-        for half in (0,.5):
-            noise=rng.standard_normal(int(.055*SR)).astype(np.float32)
-            high=noise-np.convolve(noise,np.ones(11)/11,mode='same');ti=np.arange(len(high))/SR
-            put(music,high*np.exp(-70*ti),at+half*beat,.022 if half else .012,-.35 if half else .35)
-    cues=[]
-    for i,at in enumerate(starts):
-        if i==0:continue
-        length=.7;t=np.arange(int(length*SR),dtype=np.float32)/SR
-        noise=rng.standard_normal(len(t)).astype(np.float32);noise=np.convolve(noise,np.ones(9)/9,mode='same')
-        env=np.sin(np.pi*t/length)**2
-        swoosh=noise*env*np.sin(2*np.pi*(350*t+900*t*t))
-        put(sfx,swoosh,at-.35,.28,(-.5 if i%2 else .5))
-        impact=np.sin(2*np.pi*(45*t+17*(1-np.exp(-7*t))))*np.exp(-9*t)
-        put(sfx,impact,at,.12)
-        cues.append({'type':'scene_swell','at':at})
-    for i in range(10):
-        at=starts[min(4,len(starts)-1)]+i*.42
-        if at>=duration:break
-        put(sfx,tone(midi(84+i%4*3),.35),at,.045,math.sin(i)*.7)
-    if profile=='horror':
-        # Controlled quiet gaps and brief original low impacts create contrast.
-        # Narration is never removed, stretched or padded.
-        for at in (reveal_beats or []):
-            lo=max(0,round((at-.65)*SR));hi=min(n,round((at+.12)*SR))
-            if hi>lo:music[lo:hi]*=.10
-            t=np.arange(round(.65*SR),dtype=np.float32)/SR
-            hit=(np.sin(2*np.pi*(39*t+9*(1-np.exp(-9*t))))+.18*np.sin(2*np.pi*147*t))*np.exp(-9*t)*np.minimum(1,t/.006)
-            put(sfx,hit,at,.13)
-            cues.append({'type':'measured_horror_reveal','at':at})
-    # Smooth intro/outro; final cadence resolves rather than ending mid-beat.
-    put(music,tone(midi(38 if profile=='horror' else 62),2.3,'pad'),max(0,duration-2.4),.13)
-    ts=np.arange(n)/SR;fade=np.minimum(1,ts/.6)*np.minimum(1,np.maximum(0,duration-ts)/1.2)
-    music*=fade[:,None];sfx*=fade[:,None]
-    def save(name,data):
-        peak=float(np.max(np.abs(data)))
-        if peak>.9:data*=.9/peak
-        with wave.open(str(out/name),'wb') as w:
-            w.setnchannels(2);w.setsampwidth(2);w.setframerate(SR);w.writeframes((data*32767).astype('<i2').tobytes())
-    out.mkdir(exist_ok=True,parents=True);save('score.wav',music);save('sfx.wav',sfx)
-    (out/'score.json').write_text(json.dumps({'bpm':bpm,'original_composition':True,'reference_audio_sampled':False,'cues':cues,'duration':duration},indent=2))
-
-
-if __name__=='__main__':
-    root=Path(__file__).resolve().parent
-    p=root/'delivery/timing.json'
-    if not p.exists():raise SystemExit('Measured voice timing is required for the final score')
-    t=json.loads(p.read_text());build(t['duration'],[s['start'] for s in t['scenes']],root/'output')
+FAMILIES={'science':(98,'glass mallets and warm low strings'),'history':(66,'bowed strings, flute and frame drum'),'horror':(58,'low drone, sparse piano and creaks'),'news':(114,'dry electronic percussion and short bass pulse'),'stickman':(126,'pizzicato, playful bass and physical comedy accents')}
+def build(duration,starts,directory,profile='science',reveal_beats=None,episode_key=None,scene_kinds=None):
+ out=Path(directory);out.mkdir(exist_ok=True,parents=True);key=episode_key or profile+':'+str(duration);seed=int(hashlib.sha256(key.encode()).hexdigest()[:8],16);rng=np.random.default_rng(seed);transpose=int(seed%5)-2;bpm=FAMILIES[profile][0]+int(seed%7)-3;beat=60/bpm;n=math.ceil(duration*SR);music=np.zeros((n,2),np.float32);sfx=np.zeros_like(music);cues=[]
+ def put(target,a,at,gain,pan=0):
+  lo=round(at*SR)
+  if lo<0:a=a[-lo:];lo=0
+  count=min(len(a),n-lo)
+  if count<=0:return
+  a=a[:count]*gain;target[lo:lo+count,0]+=a*math.sqrt((1-pan)/2);target[lo:lo+count,1]+=a*math.sqrt((1+pan)/2)
+ def tone(note,length,kind):
+  t=np.arange(round(length*SR))/SR;hz=440*2**((note+transpose-69)/12)*(1+(seed%997)/100000)
+  if kind=='glass':return np.sin(2*np.pi*hz*t+1.1*np.sin(2*np.pi*hz*2*t)*np.exp(-t*15))*np.exp(-5*t)*np.minimum(1,t/.006)
+  if kind=='pluck':return (np.sin(2*np.pi*hz*t)+.28*np.sin(2*np.pi*hz*2*t))*np.exp(-t*8)*np.minimum(1,t/.004)
+  if kind=='bow':return (np.sin(2*np.pi*hz*t)+.24*np.sin(2*np.pi*hz*2*t)+.1*np.sin(2*np.pi*hz*3*t))*np.minimum(1,t/.7)*np.minimum(1,(length-t)/1)
+  if kind=='flute':return np.sin(2*np.pi*hz*t+.012*np.sin(t*31))*np.sin(np.pi*t/length)**2
+  return np.sin(2*np.pi*hz*t)*np.exp(-4*t)*np.minimum(1,t/.01)
+ if profile=='science':
+  melody=[72,79,76,81,79,74,76,71]
+  for i in range(math.ceil(duration/beat)):
+   if i%8 not in (3,7):put(music,tone(melody[(i+seed%8)%8],.85,'glass'),i*beat,.11,(-.4 if i%2 else .4))
+  for i,at in enumerate(np.arange(0,duration,4)):put(music,tone([48,53,55,50][i%4],3.8,'bow'),at,.045)
+ elif profile=='history':
+  for i,at in enumerate(np.arange(0,duration,5)):
+   for degree in (0,7,12):put(music,tone([45,43,41,43][i%4]+degree,6.4,'bow'),at,.055 if not degree else .027,.2 if degree%2 else -.25)
+  for i,at in enumerate(np.arange(3,duration,7)):put(music,tone([69,67,65,64][i%4],3.2,'flute'),at,.04)
+ elif profile=='horror':
+  for i,at in enumerate(np.arange(0,duration,7)):
+   put(music,tone([33,32,35,31][i%4],8,'bow'),at,.065,-.2);put(music,tone([45,44,47,43][i%4],7,'bow'),at,.02,.3)
+   if i%2:put(music,tone(72+i%3,2.8,'glass'),at+2,.027,.5)
+ elif profile=='news':
+  for i in range(math.ceil(duration/beat)):
+   put(music,tone([45,45,48,43][i%4],.25,'bass'),i*beat,.10)
+   t=np.arange(round(.07*SR))/SR;tick=rng.standard_normal(len(t))*np.exp(-t*80)
+   if i%2:put(music,tick,i*beat,.025,.2)
+   if i%8 in (0,3):put(music,tone([76,79,81,74][i%4],.32,'glass'),i*beat,.055,-.35)
+ else:
+  for i in range(math.ceil(duration/beat)):
+   put(music,tone([60,67,64,69,65,72,67,62][(i+seed%8)%8],.4,'pluck'),i*beat,.11,.4 if i%2 else -.4)
+   if i%2==0:put(music,tone([36,41,43,38][i//4%4],.35,'bass'),i*beat,.13)
+ for i,at in enumerate(starts):
+  kind=(scene_kinds or [''])[min(i,len(scene_kinds or [''])-1)];t=np.arange(round(.7*SR))/SR
+  if profile=='science':
+   if kind in ('micelle','surfactant','molecule','cell','bacterium'):
+    cue=np.sin(2*np.pi*(920*t+180*np.log1p(9*t)))*np.exp(-t*27)*np.minimum(1,t/.003);name='molecular_pop'
+   else:cue=tone(83+i%4,.22,'glass');name='mechanism_click'
+   put(sfx,cue,at,.13,.3 if i%2 else -.3)
+  elif profile=='history':
+   noise=rng.standard_normal(len(t));noise=np.convolve(noise,np.ones(7)/7,mode='same')*np.sin(np.pi*t/.7)**2;put(sfx,noise,at,.07,.2);name='archive_paper'
+   if i%3==0:put(sfx,np.sin(2*np.pi*(48*t+14*(1-np.exp(-t*7))))*np.exp(-t*6),at,.10)
+  elif profile=='horror':
+   creak=np.sin(2*np.pi*(180*t+40*t*t))*(.6+.4*np.sin(t*49))*np.exp(-t*4)*np.minimum(1,t/.04);put(sfx,creak,at,.055,-.3);name='restrained_environment_creak'
+  elif profile=='news':put(sfx,tone(85,.09,'pluck'),at,.11,.2);name='interface_tick'
+  else:
+   put(sfx,tone([77,72,84,65,81,79,88,70][i%8],.25,'pluck'),at,.13,.2);name='physical_comedy_accent'
+   if i in (2,3):
+    until=starts[i+1] if i+1<len(starts) else duration
+    for step in np.arange(at,until,.33):put(sfx,tone(40,.065,'bass'),step,.09,.2 if int(step*3)%2 else -.2)
+  cues.append({'type':name,'at':at,'scene_object':kind})
+ if profile=='horror':
+  for at in reveal_beats or starts[2::3]:
+   lo=max(0,round((at-.6)*SR));hi=min(n,round((at+.12)*SR));music[lo:hi]*=.08;cues.append({'type':'music_only_silence_before_reveal','at':at,'narration_untouched':True})
+ t=np.arange(n)/SR;fade=np.minimum(1,t/.4)*np.minimum(1,np.maximum(0,duration-t)/1.1);music*=fade[:,None];sfx*=fade[:,None]
+ def save(name,data):
+  peak=float(np.max(np.abs(data)))
+  if peak>.85:data*=.85/peak
+  with wave.open(str(out/name),'wb') as w:w.setnchannels(2);w.setsampwidth(2);w.setframerate(SR);w.writeframes((data*32767).astype('<i2').tobytes())
+ save('score.wav',music);save('sfx.wav',sfx)
+ (out/'score.json').write_text(json.dumps({'profile':profile,'bpm':bpm,'sound_identity':FAMILIES[profile][1],'seed':seed,'episode_key_sha256':hashlib.sha256(key.encode()).hexdigest(),'duration':duration,'cues':cues,'original_composition':True,'reference_audio_sampled':False,'score_sha256':hashlib.sha256((out/'score.wav').read_bytes()).hexdigest()},indent=2)+'\n')

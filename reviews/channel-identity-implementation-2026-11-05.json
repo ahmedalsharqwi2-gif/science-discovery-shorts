@@ -1,0 +1,204 @@
+{
+  "date": "2026-11-05",
+  "repository": "science-discovery-shorts",
+  "tested_code_sha": "35bc1ba9b8f1b556fd163aac4d830adfb3ba4245",
+  "github_ci": [
+    {
+      "id": 41964392355,
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/actions/runs/41964392355"
+    }
+  ],
+  "local_tests": {
+    "python_exit": 0,
+    "typescript_exit": 0,
+    "summary": "....................................................................................................\n----------------------------------------------------------------------\nRan 116 tests in 0.527s\n\nOK\n"
+  },
+  "full_film_qa": {
+    "repo": "science-discovery-shorts",
+    "profile": "science",
+    "status": "complete_private_qa_film_technically_verified",
+    "review_only": true,
+    "publishable": false,
+    "scheduled": false,
+    "voice_generation_calls": 0,
+    "publication_calls": 0,
+    "duration": 134.1,
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "movie_sha256": "42163d9f6207ad4d6b9478bfdce645cd644785f7e8e3921db7336f9c8b455c87",
+    "original_voice_sha256": "06acaeb8aa52a0802ee2506e87a4433353d1e9ab9f1ef6023dd19a8717e8173c",
+    "original_story_sha256": "c80d36f884dc87103e7e29be8e6d189ec7e4d22271fd94ddab5e6de4438f834d",
+    "full_decode_passed": true,
+    "frames": 4023,
+    "audio_tail": {
+      "audio_seconds": 134.08,
+      "video_seconds": 134.08,
+      "difference_seconds": 0.0,
+      "last_speech_window_correlation": 0.9968880414962769,
+      "audio_tail_checked": true,
+      "silence_padding_used_to_hide_lost_speech": false
+    },
+    "scene_images": [
+      {
+        "name": "remotion-shot-1.png",
+        "sha256": "7235a6a9919859c2dbe16ae45393240a3a645b2db73c70cc1846f937fb55f1ee"
+      },
+      {
+        "name": "remotion-shot-2.png",
+        "sha256": "9970e9eabb50b59a6dfc9133d1b0965e516ef056ea325a2ef98db59a737a5939"
+      },
+      {
+        "name": "remotion-shot-3.png",
+        "sha256": "be70aac0edc65b3ea565223ce475f816a68615dcb3a156392c41fedc6fc918f1"
+      },
+      {
+        "name": "remotion-shot-4.png",
+        "sha256": "ecafde32d8f9d783b5a58d0f8cb2fe3e99402a0636bb021ee47f0d11f04dd0b4"
+      },
+      {
+        "name": "remotion-shot-5.png",
+        "sha256": "0ca0a89a3b8ec6cef4b9f3c8997c49566e5c74e5dd8f520bd284083468f64f29"
+      },
+      {
+        "name": "remotion-shot-6.png",
+        "sha256": "956a72d4cd2c4b386de95c00905b7c1375ca07de624682f44746ef03472fe959"
+      },
+      {
+        "name": "remotion-shot-7.png",
+        "sha256": "28173d466415c4fb9ca409351cf13d3de8a5f5a06efe546c2a2e52c0cc70a31d"
+      },
+      {
+        "name": "remotion-shot-8.png",
+        "sha256": "aebc3028bc390d4152b2c70e85b7e73a69f1af39791a580f18a859384dc81e60"
+      }
+    ],
+    "unique_scene_images": 8,
+    "identity": {
+      "version": "channel-identities-v1",
+      "profile": "science",
+      "name": "مختبر الحياة",
+      "background": "#e5f2ed",
+      "ink": "#153e40",
+      "accent": "#179ca6",
+      "visual": "bright three-dimensional laboratory, topic-specific objects, meaningful experiments",
+      "sound": "glass mallets, light organic bass, water and mechanism cues"
+    },
+    "sound": {
+      "profile": "science",
+      "bpm": 101,
+      "sound_identity": "glass mallets and warm low strings",
+      "seed": 3863044646,
+      "episode_key_sha256": "e64162263c1d8cb84f84b067572fd6c537428a2a1ccd4d429b07af69a7f2c8ff",
+      "duration": 134.08,
+      "cues": [
+        {
+          "type": "molecular_pop",
+          "at": 0,
+          "scene_object": "surfactant"
+        },
+        {
+          "type": "molecular_pop",
+          "at": 17.44,
+          "scene_object": "molecule"
+        },
+        {
+          "type": "molecular_pop",
+          "at": 34.86,
+          "scene_object": "surfactant"
+        },
+        {
+          "type": "molecular_pop",
+          "at": 51.58,
+          "scene_object": "micelle"
+        },
+        {
+          "type": "molecular_pop",
+          "at": 69.54,
+          "scene_object": "micelle"
+        },
+        {
+          "type": "molecular_pop",
+          "at": 83.6,
+          "scene_object": "surfactant"
+        },
+        {
+          "type": "molecular_pop",
+          "at": 101.18,
+          "scene_object": "surfactant"
+        },
+        {
+          "type": "molecular_pop",
+          "at": 118.0,
+          "scene_object": "surfactant"
+        }
+      ],
+      "original_composition": true,
+      "reference_audio_sampled": false,
+      "score_sha256": "3cfa363b39fd80baf1759ad0687ceb350d902ee9f8a058f4018c3e3256b2c9dc"
+    },
+    "renderer": {
+      "pipeline": "remotion",
+      "renderer": "Remotion4.0.540",
+      "duration": 134.08,
+      "fps": 30,
+      "width": 1080,
+      "height": 1920,
+      "originalVoice": true,
+      "review": false,
+      "story_sha256": "c80d36f884dc87103e7e29be8e6d189ec7e4d22271fd94ddab5e6de4438f834d",
+      "audio_sha256": "06acaeb8aa52a0802ee2506e87a4433353d1e9ab9f1ef6023dd19a8717e8173c",
+      "total_frames": 4023,
+      "rendered_frames": 4023,
+      "render_mode": "video",
+      "visual_style": "مختبر الحياة",
+      "identity_version": "channel-identities-v1",
+      "identity_plan_sha256": "9ec0726af4678d80c4e979f6617e8d0793bf2e4bfb8b0b8be8d6a4bfd475c8cd",
+      "burned_hashtags": [
+        "الصابون",
+        "كيمياء",
+        "الدهون"
+      ],
+      "errors": [],
+      "renderer_sources": {
+        "src/AdventurePlate.tsx": "da8a8c16496723b0ff44412cd771909e82cfdad33c95e3e2e36e1540cf2e739a",
+        "src/Documentary.tsx": "77661efe40f83978040e2215972057c430cdf7f1ede8c2b52945e9836fdf2556",
+        "src/ExplainerPlate.tsx": "3ec96774f04e1aeffc9c5ca2cd9a9918815b41dfe5bcd26ed0857d7c207c386b",
+        "src/IdentityFilm.tsx": "e4ae4cebc55175f496abad12b548ed6e1ff9631c3ef4c52ab8d814d083952ac4",
+        "src/IdentityStickman.tsx": "ced2f0ecb0ef26fe01c3740495e5807c3ec99dd941a0893665685cec9365183f",
+        "src/LearningDevice.tsx": "0f6e5d1a54e3b7b67333d292281dc9a39483e9f02ee7e94bb9f26ee1ab08da88",
+        "src/LegacyWorld.tsx": "f83f66d937393d6f7180db6ad11caad2667d8a2acc300303d745b2d7ddc6523d",
+        "src/MapPlate.tsx": "9f5beb4bb0a5451d8b8ae438ca2b247f10c11742ceae2e6378067d7751354745",
+        "src/MotionFinish.tsx": "c01d9c9e0e7c4b0f1fc7e7ed7c4e66dce6b93e9188fb459f6e02eb6908748f2f",
+        "src/OpeningCover.tsx": "64e114f1531ce5676c4d4ab8d63757bf1ebdf20dcd7ae2b9c95389d78ec74ea7",
+        "src/Root.tsx": "c5f240f57d18387c8d047fdcc731e5775694278ed89bc2407afc85898872fb47",
+        "src/SciencePlate.tsx": "35064313d2afdd40e3cf5c0f8e04307c64c544fff554539f465444624e22f830",
+        "src/StickmanPlate.tsx": "a2249b511f86dcd9aa5b554bbb4e11e5494edee4e1de1bb1900e481410d39288",
+        "src/WhatIfPlate.tsx": "fbcd98d7212e65f83acca8a55d6b61a698f9651c7cf3ea3516d6083f84cdecfa",
+        "src/index.ts": "28c07a9c5b90643adcecc9e9235322ab175ab5c423bc4f0c813ecfb06e23ff56",
+        "src/types.ts": "696c6f841288407c611d0007c4e743010c10af6610c1f61717970e8934e977a7",
+        "render.mjs": "aa2155b7d533bcf2621cffc7b2e1faf0bdb61b7c8bbf16c80f8f0b0d680860fe",
+        "package.json": "422907b1c8db1264e6ff674d5faa386e69fc6b713b8869e7347617b081c8951a",
+        "package-lock.json": "32147035bebea55f6b61667031723a159347192ec99968b8de33b57c7416c3c1",
+        "visual-overrides.json": "e7a13610af470eea3a4f8e0d9b80fad904caeb322103d3399ad21cdcaf7a2fae",
+        "../professional_motion/procedural_story.js": "b62aa83386efc5c3733a1957f7f64ed0005c86ae6cef0276f36eda7e575c5a13",
+        "../professional_motion/identity_stage.js": "d8bd47fa0c1118ee358453f1a2a1aa6f74774c1ee82b965e03fc7332e99a230a",
+        "../professional_motion/cinema.js": "37954e44c4362a83df34e5523b768026a90bd06d4cf257bc1fd91eae49083667",
+        "../professional_motion/science_shots.js": "d051358861c5e2a6a55b43a2a0c6f9ca295fe082ad262bf3e48781cb92913df7"
+      }
+    },
+    "technical_checks_are_not_a_guarantee_of_engagement": true
+  },
+  "qa_narration": "Retained original episode and original narration; no new narration generated. Stickman next-episode writing rules are updated separately.",
+  "production_safeguards": {
+    "existing_posts_unchanged": true,
+    "schedule_unchanged": true,
+    "secrets_unchanged": true,
+    "generation_calls": 0,
+    "publication_calls": 0
+  },
+  "next_automatic_cycle_observed": false,
+  "review_media_upload": "Not uploaded: exact full-file Drive authorization pending."
+}
