@@ -48,6 +48,16 @@ def checked_draft(slot, draft, profile, source, row, validate, ask, schema,
     try:
         if corrected.get('canonical_subject') != draft.get('canonical_subject'):
             raise ValueError('Correction changed the retained episode topic')
+        if draft.get('visual_template_version')==1:
+            # The correction model may edit prose, never replace the separately
+            # generated/reviewed opening or downgrade to the legacy contract.
+            if corrected.get('hook_line')!=draft.get('hook_line'):
+                raise ValueError('Correction changed or omitted the immutable reviewed hook')
+            immutable=('hook_evidence_quote','hook_source_terms','hook_review','visual_template_version')
+            for key in immutable:
+                if key in corrected and corrected[key]!=draft.get(key):
+                    raise ValueError('Correction changed retained hook proof: '+key)
+            corrected={**corrected,**{key:draft[key] for key in immutable if key in draft}}
         corrected = normalize(corrected) if normalize else corrected
         validate(corrected, profile, source)
     except ValueError as exc:
