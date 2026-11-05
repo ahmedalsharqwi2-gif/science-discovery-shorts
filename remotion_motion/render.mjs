@@ -22,6 +22,7 @@ const publication=publicationBytes?JSON.parse(publicationBytes):null;
 if(publication&&(publication.story_sha256!==hash(storyBytes)||publication.profile!==story.profile||publication.cover_frame!==6||publication.cover_offset_ms!==200||publication.opening_frames!==18||publication.fps!==30))throw Error('Publication package does not match the episode');
 const identityBytes=await fs.readFile(path.join(project,'public/identity-plan.json')).catch(()=>null);const identityPlan=identityBytes?JSON.parse(identityBytes):null;
 if(identityPlan&&(identityPlan.story_sha256!==hash(storyBytes)||identityPlan.audio_sha256!==hash(voiceBytes)||identityPlan.identity.profile!==story.profile))throw Error('Channel direction is not bound to this exact retained episode');
+if(identityPlan&&story.profile==='news')scenes.forEach((s,i)=>{if(!s.labels?.length)s.labels=identityPlan.scenes[i].labels;});
 const episode={...(identityPlan?{identity_plan:identityPlan}:{}),cover_text:publication?.cover_text,publication_title:publication?.title,profile:story.profile,series:story.series,title:story.title,duration:timing.duration,scenes,caption_groups:timing.caption_groups,audio:'narration.wav',review_only:false,hashtags:(story.hashtags||[]).slice(0,5),source_date:story.source?.published?.slice(0,10)};
 await fs.writeFile(path.join(output,'remotion-props.json'),JSON.stringify({episode},null,2));
 const serveUrl=await bundle({entryPoint:path.join(project,'src/index.ts'),publicDir:path.join(project,'public'),onProgress:()=>{}});

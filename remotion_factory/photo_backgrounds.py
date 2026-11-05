@@ -15,7 +15,7 @@ def render(story,timing,plan,public):
   digest=hashlib.sha256(source.read_bytes()).hexdigest();duration=measured['end']-measured['start'];frames=(math.ceil(timing['duration']*30) if i==len(plan['scenes'])-1 else round(measured['end']*30))-round(measured['start']*30)
   signature=hashlib.sha256(f'{digest}:{duration}:{frames}:{i}:photo-camera-v1'.encode()).hexdigest()[:20];name=signature+'.mp4';target=folder/name;proof=target.with_suffix('.json')
   if proof.exists() and target.exists() and hashlib.sha256(target.read_bytes()).hexdigest()==json.loads(proof.read_text()).get('sha256'):
-   scene['background_clip']='identity-backgrounds/'+name;continue
+   scene['background_clip']='identity-backgrounds/'+name;photo_frames.append(json.loads(proof.read_text()));continue
   camera=BoundPhotoCamera(source);spec={'start':0,'end':duration,'background':'image','camera_start':[1.04,(-1 if i%2 else 1)*45,-25],'camera_end':[1.13,(-1 if i%2 else 1)*-35,20]}
   ff=subprocess.Popen(['ffmpeg','-y','-v','error','-f','rawvideo','-pix_fmt','rgb24','-s','720x1280','-r','30','-i','pipe:0','-an','-c:v','libx264','-preset','fast','-crf','20','-threads','2','-pix_fmt','yuv420p',str(target)],stdin=subprocess.PIPE)
   try:

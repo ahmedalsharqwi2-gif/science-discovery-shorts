@@ -1,6 +1,6 @@
 /** Bounded declarative 3D story scenes. No generated JavaScript is executed. */
 import * as THREE from 'three';
-const ASSETS=new Set(['bacterium','surfactant','micelle','cell','leaf','heart','dna','molecule','crystal','rock_layers','volcano','tree','pendulum','gear','magnet','circuit','river','fossil','scroll','book','temple','house','ship','cart','person','stickman','door','clock','lantern','table','sphere','box','cylinder','cone','torus','server','monitor','robot','satellite_dish','microphone','phone','chip','document','shield','network','waveform']);
+const ASSETS=new Set(['egypt_temple','pyramid','bacterium','surfactant','micelle','cell','leaf','heart','dna','molecule','crystal','rock_layers','volcano','tree','pendulum','gear','magnet','circuit','river','fossil','scroll','book','temple','house','ship','cart','person','stickman','door','clock','lantern','table','sphere','box','cylinder','cone','torus','server','monitor','robot','satellite_dish','microphone','phone','chip','document','shield','network','waveform']);
 const MOTIONS=new Set(['none','spin','pulse','drift','orbit','grow','assemble','split','swing','flow','slam','open','close','shake','float','backward','head_turn']);
 function material(color,extra={}){return new THREE.MeshStandardMaterial({color,roughness:.58,metalness:.08,...extra});}
 function mesh(parent,geometry,mat,x=0,y=0,z=0){const o=new THREE.Mesh(geometry,mat);o.position.set(x,y,z);o.castShadow=true;o.receiveShadow=true;parent.add(o);return o;}
@@ -10,7 +10,12 @@ function shape(kind,color){
  const ball=(r,x=0,y=0,z=0,mat=m)=>mesh(g,new THREE.SphereGeometry(r,24,16),mat,x,y,z);
  const box=(x,y,z,px=0,py=0,pz=0,mat=m)=>mesh(g,new THREE.BoxGeometry(x,y,z),mat,px,py,pz);
  const tube=(r,h,x=0,y=0,z=0,mat=m)=>mesh(g,new THREE.CylinderGeometry(r,r,h,24),mat,x,y,z);
- if(kind==='bacterium'){
+ if(kind==='pyramid'){
+  const stone=material(0xc7a26c);const o=mesh(g,new THREE.ConeGeometry(1.8,2.6,4),stone,0,-.05);o.rotation.y=Math.PI/4;box(3.3,.15,3.3,0,-1.4,0,material(0xa98b61));
+ }else if(kind==='egypt_temple'){
+  const stone=material(0xc6a16b);box(4,3.1,.6,0,.05,-.7,stone);box(4.5,.22,1.5,0,-1.5,-.2,stone);box(.75,1.8,.7,0,-.5,-.3,dark);
+  for(const x of [-1.5,-.6,.6,1.5]){box(.48,1.1,.45,x,-.1,0,stone);mesh(g,new THREE.SphereGeometry(.24,20,12),stone,x,.7,0);box(.5,.55,.7,x,-.8,.2,stone);box(.18,.8,.18,x-.14,-1.05,.52,stone);box(.18,.8,.18,x+.14,-1.05,.52,stone);}
+ }else if(kind==='bacterium'){
   const body=mesh(g,new THREE.CapsuleGeometry(.46,1.1,10,24),material(color,{roughness:.35}));body.rotation.z=Math.PI/2;
   for(let i=0;i<5;i++){const points=[];for(let j=0;j<25;j++)points.push(new THREE.Vector3(-1.05-j*.055,Math.sin(j*.38+i)*.1,Math.cos(j*.38+i)*.1));mesh(g,new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points),35,.022,6,false),material(0x7aa993));}
  }else if(kind==='surfactant'){

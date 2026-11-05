@@ -67,7 +67,11 @@ def candidates(profile):
   # New stories must pass independent novelty review against retained topics.
   worlds={'phone':'شاشة هاتف، إشعارات وصور وشبكة وبطارية وشاحن وزر طاقة','sleep':'غرفة، سرير، ساعة ومكتب وشاشة وشخصية تجرّب وتتعب وتتعافى','gravity':'شخصية تطفو مع كتل وقطرات في غرفة، والكتلة محفوظة','tiny':'شخصية صغيرة مع كوب وقطرة ودرجات سلم كبيرة','giant':'شخصية عملاقة ومبانٍ وكوب، مع قيود قوانين الحجم','freeze':'شخصية وكرات وساعة متوقفة، والضوء والتنفس مستثنيان صراحة','ocean':'شخصية وقاع بحر وسفينة وأسماك ومؤشر مستوى الماء','earth-stop':'شخصية وكرات وخطوط حركة قصور ذاتي وساعة'}
   for scenario,world in worlds.items():rows.append({'title':'ابتكر فرضية ماذا لو جديدة بالكامل داخل عالم '+scenario,'canonical_subject':'creative-environment-'+scenario,'scenario':scenario,'publisher':'افترض كده','brief':'ابتكر فرضية أصلية محددة مختلفة جوهريًا عن كل الموضوعات السابقة، وليست إعادة عنوان الحلقة الأولى. البيئة والأشياء التي يستطيع الرسام إظهارها فقط: '+world+'. التزم بالمراحل الثمانية impact/experiment/escalation/fail/discovery/adapt/solution/twist، واستعمل الحركة والأشياء المرسومة فعليًا. الخيال معلن، لا تقلد شخصية أو حبكة من قناة أخرى. لا تفرض غرفة هروب على كل قصة.'})
- return list({r.get('url') or r['canonical_subject']:r for r in rows}.values())
+ result=list({r.get('url') or r['canonical_subject']:r for r in rows}.values())
+ if profile=='science':
+  from .science_topics import balanced
+  result=balanced(result,used())
+ return result
 def read_source(row):
  if not row.get('url'):return row['brief']
  host=urlparse(row['url']).hostname
@@ -167,6 +171,7 @@ def author(req,entry):
   s['visual']={'kind':'explainer','kicker':s['diagram'],'labels':s['labels']}
   if profile=='stickman':s['visual']={'kind':'whatif','kicker':ACTIONS[i],'scenario':row['scenario'],'labels':s['labels']}
   elif i in (1,5) and row.get('latitude') is not None:s['visual']={'kind':'map','latitude':row['latitude'],'longitude':row['longitude'],'zoom':row.get('zoom',4),'detail':row['title'][:70]}
+ if profile=='science':story['science_domain']=row.get('science_domain','general')
  story=authored_visual(story,row)
  # The reviewer sees the exact draft and source independently; it cannot rewrite it.
  story_document=document_write(slot,'story',story)

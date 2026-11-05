@@ -31,3 +31,12 @@ class ChannelIdentities(unittest.TestCase):
  def test_same_episode_sound_is_repeatable_without_any_provider_request(self):
   with tempfile.TemporaryDirectory() as folder:
    a,b=Path(folder)/'a',Path(folder)/'b';build(2,[0,1],a,'science',episode_key='exact-same-episode');build(2,[0,1],b,'science',episode_key='exact-same-episode');self.assertEqual((a/'score.wav').read_bytes(),(b/'score.wav').read_bytes())
+
+ def test_archival_credits_keep_the_author_license_and_source_without_repeating_scenes(self):
+  from remotion_factory.asset_credits import format_credits
+  source={'artist':'Actual photographer','license':'CC BY-SA 4.0','attribution_url':'https://commons.wikimedia.org/?curid=123'}
+  text=format_credits([source,source]);self.assertIn('Actual photographer',text);self.assertIn('CC BY-SA 4.0',text);self.assertEqual(text.count('curid=123'),1)
+ def test_egyptian_monuments_are_not_drawn_as_a_greek_temple(self):
+  s=self.story('history');s['canonical_subject']='abu-simbel-relocation-1960s';s['scenes'][0]['narration']='تفكيك أجزاء المعبد ونقلها';self.assertEqual(scene_plan(s)['scenes'][0]['hero_object'],'egypt_temple')
+ def test_a_scene_does_not_inherit_every_object_from_the_episode_title(self):
+  s=self.story('science');s['canonical_subject']='soap-surfactants-micelles-and-rinsing';s['scenes'][0]['narration']='الجزيء له ذيل ورأس';self.assertEqual(scene_plan(s)['scenes'][0]['hero_object'],'surfactant')

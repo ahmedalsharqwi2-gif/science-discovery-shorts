@@ -2,7 +2,7 @@
 import copy,hashlib,json,re
 from pathlib import Path
 VERSION='channel-identities-v1'
-OBJECTS=('cell','bacterium','leaf','heart','dna','molecule','surfactant','micelle','crystal','rock_layers','volcano','tree','pendulum','gear','magnet','circuit','river','fossil','scroll','book','temple','house','ship','cart','person','sphere','server','monitor','robot','microphone','phone','chip','document','shield','network','waveform')
+OBJECTS=('cell','bacterium','leaf','heart','dna','molecule','surfactant','micelle','crystal','rock_layers','volcano','tree','pendulum','gear','magnet','circuit','river','fossil','scroll','book','temple','egypt_temple','pyramid','house','ship','cart','person','sphere','server','monitor','robot','microphone','phone','chip','document','shield','network','waveform')
 MOTIONS=('none','spin','pulse','drift','orbit','grow','assemble','split','swing','flow','shake','float')
 SHOTS={'science':('experiment','macro','process','comparison','photo'),'history':('archive','place','artifact','reconstruction','chronology'),'horror':('archive','location','evidence','absence','reconstruction'),'news':('headline','product','workflow','comparison','takeaway'),'stickman':('impact','experiment','escalation','fail','discovery','adapt','solution','twist')}
 IDENTITIES={
@@ -25,7 +25,7 @@ def schema_for(base,profile):
  return value
 def direction(profile):
  common=f'VISUAL IDENTITY {VERSION}: {json.dumps(IDENTITIES[profile],ensure_ascii=False)}. Select shot_type from {SHOTS[profile]}; eight changes in the situation, NOT eight copies of one diagram. hero_object must be a literal object actually discussed, from {OBJECTS}; object_motion from {MOTIONS}. image_query identifies the actual subject in English, not a made-up event or random decorative image. visual_rationale describes a concrete visible action and its relation to narration. Use secondary_object and interaction to show a causal process: approach/separate/encircle/transfer/contrast, or none when not relevant. Both objects must be supported by the spoken mechanism; never decorate a true event with invented equipment. No generated JavaScript, URLs or fabricated screenshots. Do not describe illustrations as original footage.'
- if profile=='history':common+=' Tell a genuine event with decisions, obstacles and consequences. A monument description is not a complete story; identify what happened, who acted, what was at stake and the outcome. Real photographs, places and documents take precedence over text lists.'
+ if profile=='history':common+=' Tell a genuine event with decisions, obstacles and consequences. A monument description is not a complete story; identify what happened, who acted, what was at stake and the outcome. Real photographs, places and documents take precedence over text lists. Use egypt_temple for Abu Simbel and Egyptian statue temples, pyramid for pyramids; never replace them with a Greek-column building.'
  if profile=='horror':common+=' Actual documented mysteries only. Build tension through a concrete known clue, a contradiction, an unanswered question and the limits of the record. No invented ghosts, dialogue, witnesses, supernatural explanations or made-up evidence. Distinguish absence of evidence from proof.'
  if profile=='news':common+=' Show what was announced, what changes for a user, and what remains a proposal. Vary headline/product/workflow/comparison/takeaway shots. Any drawn interface must be labelled illustrative, not a genuine screenshot. Keep the narration concise; do not lengthen to fill a template.'
  if profile=='science':common+=' Science includes biology, chemistry, health, Earth science, physics and technology. Explain a mechanism using objects interacting and a visible before/after. Never use space as a default decorative world. A cell with a nucleus must not represent a bacterium. A surfactant head faces water, tail faces oil; no literal magnetic attraction claim.'
@@ -51,13 +51,17 @@ def authored_visual(story,row):
  return story
 def inferred_object(scene,story):
  text=(scene.get('narration','')+' '+scene.get('label','')).lower()
+ if story['profile']=='history' and any(w in story.get('canonical_subject','').lower() for w in ('abu-simbel','abu_simbel','memphis','egypt')) and any(w in text for w in ('معبد','تمثال','temple','statue')):return 'egypt_temple'
  kicker=scene.get('visual',{}).get('kicker')
  known={'bubble':'surfactant','water-oil':'molecule','molecule':'surfactant','micelle':'micelle','rinse':'micelle','foam':'sphere'}
  if story['profile']=='science' and kicker in known:return known[kicker]
  families=[('bacterium',('بكتير','bacter')),('surfactant',('جزيء','صابون','surfactant')),('micelle',('مذيل','micelle','تجمعات')),('dna',('جين','وراث','dna')),('leaf',('نبات','ورقة','تمثيل ضوئي')),('heart',('قلب','شريان')),('cell',('خلي','cell')),('volcano',('بركان','volcano')),('rock_layers',('صخر','طبقات','أحفور')),('magnet',('مغناط','magnet')),('pendulum',('بندول','اهتزاز','pendulum')),('waveform',('صوت','موجة','sound')),('ship',('سفين','بحر','celeste','captain')),('temple',('معبد','أهرام','memphis','abu-simbel')),('monitor',('كود','codex','code','برمج')),('phone',('هاتف','موبايل')),('robot',('روبوت','ذكاء اصطناعي'))]
  # A micelle is the assembled structure, not an individual surfactant molecule.
  if any(x in text for x in ['مذيل','micelle','تجمعات دي']):return 'micelle'
- return next((kind for kind,words in families if any(w in text for w in words)),'document' if story['profile'] in ('history','horror') else 'molecule')
+ kind=next((kind for kind,words in families if any(w in text for w in words)),'document' if story['profile'] in ('history','horror') else 'molecule')
+ if kind=='temple' and any(w in text for w in ('هرم','أهرام','pyramid')):return 'pyramid'
+ if kind=='temple' and any(w in story.get('canonical_subject','').lower() for w in ('abu-simbel','abu_simbel','memphis','egypt')):return 'egypt_temple'
+ return kind
 def scene_plan(story):
  profile=story['profile'];result=[]
  for i,s in enumerate(story['scenes']):
@@ -68,5 +72,7 @@ def scene_plan(story):
   query=v.get('image_query') or s.get('image_query') or ''
   if not query and profile in ('history','horror'):
    title=story.get('source',{}).get('title','');query=re.sub(r'[^a-zA-Z0-9 –-]',' ',title).strip()[:90]
-  result.append({'id':s['id'],'shot_type':shot,'hero_object':kind,'secondary_object':v.get('secondary_object') or s.get('secondary_object') or ('sphere' if profile=='science' and kind in ('surfactant','molecule') else 'none'),'interaction':v.get('interaction') or s.get('interaction') or ('approach' if profile=='science' and kind=='surfactant' else 'contrast' if profile=='science' and kind=='molecule' else 'none'),'object_motion':v.get('object_motion') or s.get('object_motion') or ['assemble','spin','flow','split','pulse','orbit','grow','drift'][i],'image_query':query,'visual_rationale':v.get('visual_rationale') or s.get('visual_rationale') or 'Illustration of the subject described in this exact scene; not original footage','labels':s.get('labels',[]),'scenario':v.get('scenario'),'legacy_kind':v.get('kind'),'asset':v.get('asset'),'asset_label':v.get('asset_label')})
+  labels=s.get('labels') or v.get('labels') or []
+  if profile=='news' and not labels:labels=[str(x) for x in (v.get('number'),v.get('detail'),s.get('label')) if x]
+  result.append({'id':s['id'],'shot_type':shot,'hero_object':kind,'secondary_object':v.get('secondary_object') or s.get('secondary_object') or ('sphere' if profile=='science' and kind in ('surfactant','molecule') else 'none'),'interaction':v.get('interaction') or s.get('interaction') or ('approach' if profile=='science' and kind=='surfactant' else 'contrast' if profile=='science' and kind=='molecule' else 'none'),'object_motion':v.get('object_motion') or s.get('object_motion') or ['assemble','spin','flow','split','pulse','orbit','grow','drift'][i],'image_query':query,'visual_rationale':v.get('visual_rationale') or s.get('visual_rationale') or 'Illustration of the subject described in this exact scene; not original footage','labels':labels,'scenario':v.get('scenario'),'legacy_kind':v.get('kind'),'asset':v.get('asset'),'asset_label':v.get('asset_label')})
  return {'version':VERSION,'identity':identity(profile),'story_sha256':hashlib.sha256((json.dumps(story,ensure_ascii=False,indent=2)+'\n').encode()).hexdigest(),'scenes':result}

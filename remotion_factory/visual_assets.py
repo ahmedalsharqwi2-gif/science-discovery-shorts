@@ -19,7 +19,7 @@ def choose(query,pages):
   if urlparse(url).scheme!='https' or urlparse(url).hostname not in HOSTS or info.get('mime','').lower() not in ('image/jpeg','image/png','image/webp','image/svg+xml'):continue
   ranked.append((matched,page,info,m,license,url))
  if not ranked:return None
- _,page,info,m,license,url=max(ranked,key=lambda r:r[0]);return {'query':query,'title':page['title'],'url':url,'page':info.get('descriptionurl'),'artist':clean(m.get('Artist',{}).get('value',''))[:400],'description':clean(m.get('ImageDescription',{}).get('value',''))[:1400],'license':license,'license_url':m.get('LicenseUrl',{}).get('value'),'representation':'archival subject image; may show a different date, never claimed as footage of the narrated event'}
+ _,page,info,m,license,url=max(ranked,key=lambda r:r[0]);return {'query':query,'title':page['title'],'url':url,'page':info.get('descriptionurl'),'attribution_url':('https://commons.wikimedia.org/?curid='+str(page['pageid'])) if isinstance(page.get('pageid'),int) and page['pageid']>0 else info.get('descriptionurl'),'artist':clean(m.get('Artist',{}).get('value',''))[:400],'description':clean(m.get('ImageDescription',{}).get('value',''))[:1400],'license':license,'license_url':m.get('LicenseUrl',{}).get('value'),'representation':'archival subject image; may show a different date, never claimed as footage of the narrated event'}
 def resolve(query,cache):
  key=hashlib.sha256(query.casefold().encode()).hexdigest()[:20];proof=cache/(key+'.json');image=cache/(key+'.jpg')
  if proof.exists():
@@ -39,7 +39,7 @@ def resolve(query,cache):
     parts.append(part)
   raw=b''.join(parts)
   with Image.open(io.BytesIO(raw)) as im:
-   if min(im.size)<600 or max(im.size)>12000:raise ValueError('Image resolution outside bounds')
+   if (min(im.size)<600 and not (max(im.size)>=900 and min(im.size)>=120 and max(im.size)/min(im.size)>3)) or max(im.size)>12000:raise ValueError('Image resolution outside bounds')
    im=im.convert('RGB');im.thumbnail((2200,2200));im.save(image,quality=94)
   saved={**selected,'available':True,'sha256':hashlib.sha256(image.read_bytes()).hexdigest(),'original_download_sha256':hashlib.sha256(raw).hexdigest(),'alterations':'JPEG conversion, crop, camera movement and color treatment; no fabricated event imagery'}
  except (requests.RequestException,ValueError,OSError) as e:saved={'query':query,'available':False,'reason':type(e).__name__+': '+str(e)[:180]}
@@ -55,6 +55,6 @@ def enrich(story,plan,public,delivery):
   if query not in queries:queries[query]=resolve(query,cache)
   proof,image=queries[query];evidence.append({'scene':scene['id'],**proof})
   if image:
-   name='identity-media/'+image.name;target=public/name;target.parent.mkdir(exist_ok=True,parents=True);target.write_bytes(image.read_bytes());scene.update(asset=name,asset_label='صورة للموضوع • '+proof['license'],asset_representation=proof['representation'],asset_sha256=proof['sha256'])
+   name='identity-media/'+image.name;target=public/name;target.parent.mkdir(exist_ok=True,parents=True);target.write_bytes(image.read_bytes());scene.update(asset=name,asset_label=(proof.get('artist','')[:60]+' • '+proof['license']).strip(' •'),asset_representation=proof['representation'],asset_sha256=proof['sha256'])
   else:scene['asset_unavailable']=proof['reason'];scene['representation']='تصوّر توضيحي للموضوع • ليس توثيقًا مصورًا للحدث'
  return evidence

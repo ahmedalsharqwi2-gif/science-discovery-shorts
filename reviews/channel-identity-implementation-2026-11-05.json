@@ -1,10 +1,11 @@
 {
-  "status": "code_and_regressions_ready_full_movie_validation_in_progress",
+  "status": "final_code_regressions_passed_full_movie_QA_finishing",
   "active_on_main": false,
-  "python_tests_passed": true,
-  "python_test_summary": "----------------------------------------------------------------------\nRan 108 tests in 1.358s\n\nOK\n",
+  "python_and_typescript_passed": true,
+  "test_summary": "----------------------------------------------------------------------\nRan 115 tests in 0.495s\n\nOK\n",
   "new_workflow_definitions": 0,
-  "provider_requests_added": 0,
-  "publication_mutations": 0,
-  "existing_posts_and_dates_unchanged": true
+  "provider_generation_calls": 0,
+  "publication_calls": 0,
+  "factual_history_and_horror_preserved": true,
+  "permanent_duration_policy": "news >60 seconds; all others >90; no padding or repeat voice requests"
 }
