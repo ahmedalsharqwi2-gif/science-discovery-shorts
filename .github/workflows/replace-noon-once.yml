@@ -1,0 +1,60 @@
+{
+  "name": "One-time owner-approved noon video replacement",
+  "on": {
+    "workflow_dispatch": {}
+  },
+  "permissions": {
+    "contents": "write"
+  },
+  "concurrency": {
+    "group": "professional-daily-science",
+    "cancel-in-progress": false
+  },
+  "jobs": {
+    "replace": {
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 20,
+      "env": {
+        "PYTHONPATH": "${{ github.workspace }}",
+        "GITHUB_TOKEN": "${{ github.token }}",
+        "BUFFER_API_KEY": "${{ secrets.BUFFER_API_KEY }}",
+        "PYTHONUNBUFFERED": "1"
+      },
+      "steps": [
+        {
+          "uses": "actions/checkout@v4",
+          "with": {
+            "ref": "main"
+          }
+        },
+        {
+          "uses": "actions/setup-python@v5",
+          "with": {
+            "python-version": "3.11"
+          }
+        },
+        {
+          "name": "Install bounded inspection prerequisites",
+          "run": "python -m pip install requests beautifulsoup4 Pillow\nif ! command -v ffmpeg >/dev/null; then sudo apt-get update -qq && sudo apt-get install -y --no-install-recommends ffmpeg; fi"
+        },
+        {
+          "name": "Host exact owner-approved file in GitHub Releases",
+          "run": "python -m remotion_factory.release_approved_transport"
+        },
+        {
+          "name": "Verify exact movie and replace existing IDs only",
+          "run": "python -m remotion_factory.replace_existing_noon"
+        },
+        {
+          "uses": "actions/upload-artifact@v4",
+          "if": "always()",
+          "with": {
+            "name": "noon-replacement-evidence",
+            "path": "replacement-output/",
+            "if-no-files-found": "warn"
+          }
+        }
+      ]
+    }
+  }
+}
