@@ -1,6 +1,6 @@
 /** Bounded declarative 3D story scenes. No generated JavaScript is executed. */
 import * as THREE from 'three';
-const ASSETS=new Set(['cell','leaf','heart','dna','molecule','crystal','rock_layers','volcano','tree','pendulum','gear','magnet','circuit','river','fossil','scroll','book','temple','house','ship','cart','person','stickman','door','clock','lantern','table','sphere','box','cylinder','cone','torus','server','monitor','robot','satellite_dish','microphone','phone','chip','document','shield','network','waveform']);
+const ASSETS=new Set(['bacterium','surfactant','micelle','cell','leaf','heart','dna','molecule','crystal','rock_layers','volcano','tree','pendulum','gear','magnet','circuit','river','fossil','scroll','book','temple','house','ship','cart','person','stickman','door','clock','lantern','table','sphere','box','cylinder','cone','torus','server','monitor','robot','satellite_dish','microphone','phone','chip','document','shield','network','waveform']);
 const MOTIONS=new Set(['none','spin','pulse','drift','orbit','grow','assemble','split','swing','flow','slam','open','close','shake','float','backward','head_turn']);
 function material(color,extra={}){return new THREE.MeshStandardMaterial({color,roughness:.58,metalness:.08,...extra});}
 function mesh(parent,geometry,mat,x=0,y=0,z=0){const o=new THREE.Mesh(geometry,mat);o.position.set(x,y,z);o.castShadow=true;o.receiveShadow=true;parent.add(o);return o;}
@@ -10,7 +10,23 @@ function shape(kind,color){
  const ball=(r,x=0,y=0,z=0,mat=m)=>mesh(g,new THREE.SphereGeometry(r,24,16),mat,x,y,z);
  const box=(x,y,z,px=0,py=0,pz=0,mat=m)=>mesh(g,new THREE.BoxGeometry(x,y,z),mat,px,py,pz);
  const tube=(r,h,x=0,y=0,z=0,mat=m)=>mesh(g,new THREE.CylinderGeometry(r,r,h,24),mat,x,y,z);
- if(kind==='sphere')ball(1);
+ if(kind==='bacterium'){
+  const body=mesh(g,new THREE.CapsuleGeometry(.46,1.1,10,24),material(color,{roughness:.35}));body.rotation.z=Math.PI/2;
+  for(let i=0;i<5;i++){const points=[];for(let j=0;j<25;j++)points.push(new THREE.Vector3(-1.05-j*.055,Math.sin(j*.38+i)*.1,Math.cos(j*.38+i)*.1));mesh(g,new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points),35,.022,6,false),material(0x7aa993));}
+ }else if(kind==='surfactant'){
+  ball(.32,0,0,0,material(0x35b6c8,{roughness:.22}));
+  const points=[];for(let i=0;i<22;i++)points.push(new THREE.Vector3(-.20-i*.065,Math.sin(i*.8)*.055,Math.cos(i*.8)*.035));
+  mesh(g,new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points),40,.065,8,false),material(0xefb75b,{roughness:.38}));
+ }else if(kind==='micelle'){
+  const oil=ball(1.1,0,0,0,material(0xe5aa45,{roughness:.25,metalness:.03}));g.userData.surfactants=[];
+  for(let i=0;i<38;i++){
+   const y=1-2*(i+.5)/38,r=Math.sqrt(1-y*y),a=i*2.399963;
+   const radial=new THREE.Vector3(Math.cos(a)*r,y,Math.sin(a)*r);
+   const part=shape('surfactant',color);part.scale.setScalar(.55);part.position.copy(radial).multiplyScalar(1.95);
+   part.quaternion.setFromUnitVectors(new THREE.Vector3(1,0,0),radial);
+   part.userData.radial=radial;g.add(part);g.userData.surfactants.push(part);
+  }
+ }else if(kind==='sphere')ball(1);
  else if(kind==='box')box(1.8,1.8,1.8);
  else if(kind==='cylinder')tube(.8,1.8);
  else if(kind==='cone')mesh(g,new THREE.ConeGeometry(1,2,40),m);
@@ -136,6 +152,7 @@ function shape(kind,color){
  g.userData.parts=parts;return g;
 }
 function environment(group,name){
+ if(name==='molecular_water')return;
  const indoors=['laboratory','body_section','workshop','dark_interior'].includes(name),night=['dark_interior','forest','ocean'].includes(name);
  const ground=material(name==='ocean'?0x234f70:name==='landscape'||name==='forest'?0x537452:indoors?0x274858:0x8b7356);
  mesh(group,new THREE.BoxGeometry(24,.2,22),ground,0,-3,0);
