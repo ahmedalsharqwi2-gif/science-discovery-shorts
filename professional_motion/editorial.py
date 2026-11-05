@@ -8,7 +8,7 @@ from bs4 import BeautifulSoup
 from .style_warnings import note
 ROOT=Path(__file__).resolve().parent
 STATE=Path('state/professional_topics.json')
-BRANDS={'science':'اسرار الكون','horror':'ملفات غامضه','history':'نقص ونروى','news':'ai على السريع'}
+BRANDS={'science':'أسرار الكون','horror':'ملفات غامضه','history':'نقص ونروى','news':'ai على السريع'}
 ALLOWED=('nasa.gov','grc.nasa.gov','science.nasa.gov','rmg.co.uk','smithsonianmag.com','smarthistory.org','whc.unesco.org','blog.google','blogs.nvidia.com','huggingface.co','deepmind.google','openai.com','nature.com','investor.nvidia.com')
 FAMILIES={'science':{'space','field','wave','octopus'},'horror':{'maritime','haunted_interior'},'history':{'architecture'},'news':{'compute'}}
 REVIEW={'type':'OBJECT','properties':{'supported':{'type':'BOOLEAN'},'novel':{'type':'BOOLEAN'},'issues':{'type':'ARRAY','items':{'type':'STRING'}}},'required':['supported','novel','issues']}

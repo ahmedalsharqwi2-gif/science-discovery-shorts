@@ -128,7 +128,7 @@ def mechanism_frame(scene,t,duration):
         label(im,'المحرك',225,1400,32,GOLD);label(im,'المروحة',570,1400,32,WHITE);label(im,'الهوا',900,1400,32,CYAN)
     # Fixed text and captions remain independent of camera motion.
     d.rectangle((0,0,W,235),fill='#0a1723')
-    label(im,'اسرار الكون',540,126,38,CYAN)
+    label(im,'أسرار الكون',540,126,38,CYAN)
     label(im,TITLES[kind],540,335,57,WHITE,width=920,maxlines=2)
     d.rectangle((0,1650,W,H),fill='#071420')
     label(im,'تحريك توضيحي، وليس قياسًا للسرعة أو الضغط',540,1890,24,MUTED)

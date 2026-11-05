@@ -1,0 +1,141 @@
+{
+  "version": 1,
+  "channel": "science",
+  "display_name": "أسرار الكون",
+  "display_name_source": "config/brand.json",
+  "canvas": {
+    "w": 1080,
+    "h": 1920,
+    "fps": 30
+  },
+  "palette": {
+    "bg": "#e5f2ed",
+    "ink": "#153e40",
+    "accent": "#179ca6",
+    "secondary": "#d9a441"
+  },
+  "font": {
+    "family": "Noto Naskh Arabic",
+    "bold": "assets/fonts/NotoNaskhArabic.ttf",
+    "regular": "assets/fonts/NotoNaskhArabic.ttf",
+    "source": "https://raw.githubusercontent.com/google/fonts/main/ofl/notonaskharabic/NotoNaskhArabic%5Bwght%5D.ttf",
+    "sha256": "67b5a525a661b607971fbd3f96a81b89d3a768e74534fca84f18ac97e6fab72f"
+  },
+  "title": {
+    "y": 340,
+    "size": 88,
+    "max_lines": 2,
+    "accent_rule": "exactly_one_word"
+  },
+  "caption": {
+    "anchor": "bottom",
+    "y_bottom": 1248,
+    "size": 52,
+    "words_per_chunk": 4,
+    "align": "rtl_per_word_event",
+    "max_lines": 2,
+    "highlight_keywords": true,
+    "max_highlights_per_event": 1
+  },
+  "progress": {
+    "label": "n/N",
+    "position": "top_left",
+    "y": 150
+  },
+  "disclaimer": {
+    "text": "رسوم توضيحية مبسّطة · الأحجام والمسافات غير مقيّسة",
+    "y": 292,
+    "size": 26,
+    "position": "top_of_text_zone",
+    "source": "approved reference video"
+  },
+  "safe": {
+    "top": 290,
+    "bottom": 1248
+  },
+  "safe_zone": {
+    "profile": "multi_platform_v1",
+    "version": 1,
+    "text_x": [
+      190,
+      890
+    ],
+    "text_y": [
+      290,
+      1248
+    ],
+    "text_x_lower": {
+      "from_y": 840,
+      "x": [
+        190,
+        780
+      ]
+    },
+    "caption_anchor": "bottom",
+    "caption_y_bottom": 1248,
+    "caption_max_lines": 2,
+    "caption_max_width": 590,
+    "caption_center_x": 485,
+    "caption_max_height": 175,
+    "dead_zone_y_from": 1248,
+    "dead_zone_x_each_side": 190,
+    "chrome_min_y": 130,
+    "art_stage": {
+      "focal_x": [
+        190,
+        890
+      ],
+      "focal_y": [
+        520,
+        1070
+      ],
+      "min_scale_vs_reference": 0.85,
+      "background": "full_bleed_1080x1920"
+    }
+  },
+  "motion": {
+    "easing": "smooth_ease",
+    "scene_seconds": [
+      8,
+      14
+    ],
+    "max_zoom": 1.06
+  },
+  "hook": {
+    "max_words": 14,
+    "max_seconds": 3.0
+  },
+  "duration_seconds": {
+    "min_exclusive": 90,
+    "max_exclusive": 180
+  },
+  "locked": true,
+  "layout": {
+    "brand_y": 150,
+    "brand_size": 26,
+    "review_y": 210,
+    "review_size": 22,
+    "title_bottom": 530,
+    "title_width": 698,
+    "title_line_height": 1.12,
+    "focal_reference_max_extent": 610,
+    "focal_display_scale": 0.9,
+    "caption_padding": [
+      14,
+      18
+    ],
+    "caption_radius": 18,
+    "caption_opacity": 0.92,
+    "caption_line_height": 1.25,
+    "mask_colors": {
+      "title": "#ff0000",
+      "caption": "#00ff00",
+      "disclaimer": "#0000ff",
+      "source": "#ff00ff",
+      "brand": "#00ffff",
+      "review": "#ffff00"
+    },
+    "title_right_clearance_note": "The conservative Shorts checker reserves x>=888; title container ends at 888, two pixels inside the rounded text_x limit 890."
+  },
+  "public_title_prefix": "أسرار الكون | "
+}

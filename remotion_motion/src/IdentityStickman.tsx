@@ -2,7 +2,7 @@ import React from 'react';
 import {interpolate,useCurrentFrame,useVideoConfig} from 'remotion';
 type Turn={speaker:'a'|'b';text:string;start:number;end:number};
 const clamp={extrapolateLeft:'clamp',extrapolateRight:'clamp'} as const;
-const Figure=({x,y,scale=1.7,speaker,active,pose,progress}:{x:number;y:number;scale?:number;speaker:'a'|'b';active:boolean;pose:string;progress:number})=>{const f=useCurrentFrame(),{fps}=useVideoConfig(),t=f/fps;const c=speaker==='a'?'#253345':'#287c83',run=pose==='run',stride=run?Math.sin(t*9)*32:Math.sin(t*1.5)*3;const reaching=pose==='reach'||pose==='push'||pose==='point';const arm=active?Math.sin(t*5)*14:Math.sin(t*1.3)*3;return <g transform={`translate(${x} ${y}) scale(${scale}) rotate(${pose==='fall'?progress*55:pose==='brace'?-12:Math.sin(t*1.2)*2} 0 -100)`}>
+export const Figure=({x,y,scale=1.7,speaker,active,pose,progress}:{x:number;y:number;scale?:number;speaker:'a'|'b';active:boolean;pose:string;progress:number})=>{const f=useCurrentFrame(),{fps}=useVideoConfig(),t=f/fps;const c=speaker==='a'?'#253345':'#287c83',run=pose==='run',stride=run?Math.sin(t*9)*32:Math.sin(t*1.5)*3;const reaching=pose==='reach'||pose==='push'||pose==='point';const arm=active?Math.sin(t*5)*14:Math.sin(t*1.3)*3;return <g transform={`translate(${x} ${y}) scale(${scale}) rotate(${pose==='fall'?progress*55:pose==='brace'?-12:Math.sin(t*1.2)*2} 0 -100)`}>
  <ellipse cy="8" rx="45" ry="7" fill="#243447" opacity=".09"/><circle cy="-198" r="39" fill="#fff9e9" stroke={c} strokeWidth="5"/>
  {speaker==='b'?<path d="M-35 -212q35 -22 70 0" stroke={c} strokeWidth="9" fill="none"/>:<path d="M-27 -227l20 -10m-4 10l17 -13" stroke={c} strokeWidth="5"/>}
  <circle cx="-13" cy="-199" r="3.4" fill={c}/><circle cx="13" cy="-199" r="3.4" fill={c}/>

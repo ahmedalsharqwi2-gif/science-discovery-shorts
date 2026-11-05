@@ -86,6 +86,8 @@ def check_profile(profile, evidence):
 
 
 def evaluate(manifest):
+    from visual_contract import load_template
+    template=load_template()
     evidence = manifest.get('profiles', {})
     results = {}
     for profile in PROFILES:
@@ -95,6 +97,6 @@ def evaluate(manifest):
             results[profile] = check_profile(profile, evidence[profile])
         except (ValueError, KeyError, OSError, subprocess.SubprocessError) as error:
             results[profile] = {'profile': profile, 'passed': False, 'reason': str(error)}
-    return {'cutover_eligible': all(row['passed'] for row in results.values()),
+    return {'visual_template':{'version':template['version'],'channel':template['channel'],'valid':True},'cutover_eligible': all(row['passed'] for row in results.values()),
             'active_pipeline': 'legacy', 'automatic_cutover': False, 'profiles': results,
             'next_step': 'Only after all channels pass, review an explicit workflow switch that disables every legacy trigger before enabling v2'}

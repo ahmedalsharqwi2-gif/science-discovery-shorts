@@ -11,7 +11,10 @@ from .alignment import measured_timing
 from .speech_characters import character_timing
 from .speech_lexicon import recognized_key
 def main():
- req=read_request();story=json.loads((DELIVERY/'story.json').read_text());full=' '.join(s['narration'] for s in story['scenes']);wav=DELIVERY/'narration.wav';source=DELIVERY/'narration.source.json'
+ req=read_request();story=json.loads((DELIVERY/'story.json').read_text());
+ from .locked_episode import validate_episode,validate_timing,validate_first_audio_frame
+ validate_episode(story)
+ full=' '.join(s['narration'] for s in story['scenes']);wav=DELIVERY/'narration.wav';source=DELIVERY/'narration.source.json'
  def started(data):
   e=data['episodes'][req['slot']]
   if not wav.exists() and e['status'] in ('voice_requested','voice_ready'):raise RuntimeError('A voice request already exists; restore it instead of synthesizing again')
@@ -46,6 +49,12 @@ def main():
   except ValueError:pass
  if timing is None:raise ValueError('Independent ASR does not cover enough real speech; original voice retained')
  timing.update(story_sha256=hashlib.sha256((DELIVERY/'story.json').read_bytes()).hexdigest(),audio_sha256=hashlib.sha256(wav.read_bytes()).hexdigest(),profile=story['profile'],topic_key=story['topic_key'])
+ validate_first_audio_frame(wav)
+ short_events=validate_timing(story,timing)
+ timing['short_caption_events']=short_events
+ from .captions import write as write_captions
+ caption_path=DELIVERY/('captions-'+hashlib.sha256(json.dumps(timing,sort_keys=True).encode()).hexdigest()[:12]+'.ass')
+ if not caption_path.exists():write_captions(story,timing,caption_path)
  (DELIVERY/'timing.json').write_text(json.dumps(timing,ensure_ascii=False,indent=2)+'\n')
  def ready(data):data['episodes'][req['slot']].update(status='voice_ready',duration=duration,audio_sha256=timing['audio_sha256'],timing_sha256=hashlib.sha256((DELIVERY/'timing.json').read_bytes()).hexdigest(),coverage=timing['coverage'])
  mutate(ready);print(json.dumps({'duration':duration,'coverage':timing['coverage'],'profile':story['profile']}))

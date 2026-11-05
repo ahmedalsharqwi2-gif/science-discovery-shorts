@@ -33,7 +33,8 @@ def main():
    world.write_bytes(r.content)
   shutil.copy2(root/'node_modules/maplibre-gl/dist/maplibre-gl-worker.mjs',public/'maplibre-worker.mjs')
  fonts=public/'fonts';fonts.mkdir(exist_ok=True)
- for weight in ('Regular','Bold'):shutil.copy2('/usr/share/fonts/truetype/noto/NotoSansArabic-'+weight+'.ttf',fonts/('Arabic-'+weight+'.ttf'))
+ from .fonts import prepare_fonts
+ prepare_fonts()
  from .identity_assets import prepare as prepare_identity
  plan=prepare_identity(story,evidence)
  (public/'assets-evidence.json').write_text(json.dumps({'assets':evidence,'world':manifest['world'],'fonts':'Noto Sans Arabic; SIL Open Font License','identity':plan['identity'],'identity_plan_sha256':sha(public/'identity-plan.json'),'identity':plan['identity'],'identity_plan_sha256':sha(public/'identity-plan.json'),'identity':plan['identity'],'identity_plan_sha256':sha(public/'identity-plan.json')},ensure_ascii=False,indent=2)+'\n')

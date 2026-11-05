@@ -31,6 +31,17 @@ def clean_title(value):
     return title
 
 
+def locked_public_title(value,profile):
+    from visual_contract import load_template
+    t=load_template()
+    if profile!=t['channel']:raise ValueError('Cross-channel publication title')
+    prefix=t.get('public_title_prefix','')
+    raw=value[len(prefix):] if prefix and value.startswith(prefix) else value
+    title=prefix+clean_title(raw)
+    if len(title)>100:raise ValueError('Publication title exceeds 100 characters; rewrite, never truncate')
+    return title
+
+
 def metadata(story, story_digest):
     title = clean_title(story.get('title'))
     cover = story.get('cover_text') or title
@@ -40,7 +51,10 @@ def metadata(story, story_digest):
     # Retained episodes keep their whole title; never invent a new claim or cut it.
     if len(cover) > 100:
         raise ValueError('Cover heading is too long')
-    return {'version': VERSION, 'profile': story['profile'], 'title': title,
+    extra={}
+    if story.get('visual_template_version')==1:
+        title=locked_public_title(title,story['profile']);extra['visual_template_version']=1
+    return {**extra,'version': VERSION, 'profile': story['profile'], 'title': title,
             'cover_text': cover, 'story_sha256': story_digest,
             'cover_file': 'cover.png', 'cover_frame': COVER_FRAME,
             'cover_offset_ms': COVER_FRAME * 1000 // FPS,
@@ -65,7 +79,8 @@ def verify(root, report):
         raise ValueError('Publication package belongs to another episode')
     if package.get('cover_file') != 'cover.png' or sha(root / 'cover.png') != renderer.get('cover_sha256'):
         raise ValueError('Cover image changed after rendering')
-    if clean_title(package['title']) != package['title'] or clean_title(package['cover_text']) != package['cover_text']:
+    canonical=locked_public_title(package['title'],package['profile']) if package.get('visual_template_version')==1 else clean_title(package['title'])
+    if canonical != package['title'] or clean_title(package['cover_text']) != package['cover_text']:
         raise ValueError('Publication text is not canonical')
     if (package.get('version'), package.get('cover_frame'), package.get('cover_offset_ms'), package.get('opening_frames'), package.get('fps')) != (VERSION, COVER_FRAME, 200, OPENING_FRAMES, FPS):
         raise ValueError('Cover frame does not match the rendered opening')
