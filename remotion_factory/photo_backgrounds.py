@@ -4,7 +4,10 @@ from pathlib import Path
 from PIL import Image
 from photo_motion.engine import Renderer
 class BoundPhotoCamera(Renderer):
- def __init__(self,path):self.images={'image':Image.open(path).convert('RGBA')};self.profile={'accent':'#edc37a'}
+ def __init__(self,path):
+  from visual_contract import load_template
+  self.images={'image':Image.open(path).convert('RGBA')}
+  self.profile={'accent':load_template()['palette']['accent']}
 def render(story,timing,plan,public):
  if story['profile'] not in ('history','horror'):return
  folder=public/'identity-backgrounds';folder.mkdir(exist_ok=True);photo_frames=[]
@@ -16,6 +19,7 @@ def render(story,timing,plan,public):
   signature=hashlib.sha256(f'{digest}:{duration}:{frames}:{i}:photo-camera-v1'.encode()).hexdigest()[:20];name=signature+'.mp4';target=folder/name;proof=target.with_suffix('.json')
   if proof.exists() and target.exists() and hashlib.sha256(target.read_bytes()).hexdigest()==json.loads(proof.read_text()).get('sha256'):
    scene['background_clip']='identity-backgrounds/'+name;photo_frames.append(json.loads(proof.read_text()));continue
+  if target.exists() or proof.exists():raise FileExistsError('Unverified existing photo output; choose a new immutable path')
   camera=BoundPhotoCamera(source);spec={'start':0,'end':duration,'background':'image','camera_start':[1.04,(-1 if i%2 else 1)*45,-25],'camera_end':[1.13,(-1 if i%2 else 1)*-35,20]}
   ff=subprocess.Popen(['ffmpeg','-y','-v','error','-f','rawvideo','-pix_fmt','rgb24','-s','720x1280','-r','30','-i','pipe:0','-an','-c:v','libx264','-preset','fast','-crf','20','-threads','2','-pix_fmt','yuv420p',str(target)],stdin=subprocess.PIPE)
   try:

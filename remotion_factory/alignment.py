@@ -94,8 +94,9 @@ def measured_timing(story, duration, transcripts, *, allow_low_coverage=False):
             scene[prefix+'_beat']=min(w['start'] for w in points);scene[prefix+'_end']=max(w['end'] for w in points)
         offset+=len(words)
     captions=[]
-    for start in range(0,len(expected),6):
-        stop=min(start+6,len(expected));matches=[anchors[k] for k in range(start,stop) if k in anchors]
+    boundaries=([0]+list(range(len(story['hook_line'].split()),len(expected),4))) if story.get('visual_template_version')==1 else list(range(0,len(expected),6))
+    for group_index,start in enumerate(boundaries):
+        stop=boundaries[group_index+1] if group_index+1<len(boundaries) else len(expected);matches=[anchors[k] for k in range(start,stop) if k in anchors]
         if not matches:
             if not allow_low_coverage:raise ValueError('Insufficient measured speech for caption')
             diagnostic_only=True

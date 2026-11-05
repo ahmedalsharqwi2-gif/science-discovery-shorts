@@ -9,7 +9,7 @@ from .state import mutate,local
 from .identity import schema_for as identity_schema,direction,validate_director,authored_visual
 from .evidence_excerpt import narrow_excerpts
 from .documents import write as document_write,read as document_read
-SERIES={'science':'اسرار الكون','horror':'ملفات غامضه','history':'نقص ونروى','news':'ai على السريع','stickman':'افترض كده'}
+SERIES={'science':'أسرار الكون','horror':'ملفات غامضة','history':'نقص ونروي','news':'AI على السريع','stickman':'افترض كده'}
 MODES=('flow','compare','cycle','layers')
 ACTIONS=('impact','experiment','escalation','fail','discovery','adapt','solution','twist')
 SCENARIOS=('sleep','phone','ocean','tiny','giant','freeze','gravity','earth-stop')
@@ -93,6 +93,10 @@ SCHEMA={'type':'OBJECT','properties':{'title':{'type':'STRING'},'canonical_subje
 SCHEMA['properties']['cover_text']={'type':'STRING'}
 SCHEMA['required'].append('cover_text')
 SCHEMA=identity_schema(SCHEMA,'science')
+SCHEMA['properties']={'hook_line':{'type':'STRING'},'title_accent_word':{'type':'STRING'},**SCHEMA['properties']}
+SCHEMA['required']=['hook_line','title_accent_word',*SCHEMA['required']]
+SCHEMA['properties']['scenes']['items']['properties']['title_accent_word']={'type':'STRING'}
+SCHEMA['properties']['scenes']['items']['required'].append('title_accent_word')
 REVIEW={'type':'OBJECT','properties':{'supported':{'type':'BOOLEAN'},'engaging':{'type':'BOOLEAN'},'novel':{'type':'BOOLEAN'},'visuals_match':{'type':'BOOLEAN'},'issues':{'type':'ARRAY','items':{'type':'STRING'}}},'required':['supported','engaging','novel','visuals_match','issues']}
 def model(review):
  cfg=json.loads(Path('config/professional_models.json').read_text());return cfg['reviewer' if review else 'writer']
@@ -108,6 +112,9 @@ def ask_once(prompt,schema,review=False):
  if candidate.get('finishReason')!='STOP':raise ValueError('Editorial output incomplete; retained response must be inspected')
  return json.loads(''.join(p.get('text','') for p in candidate.get('content',{}).get('parts',[]) if not p.get('thought')))
 def validate(story,profile,source):
+ if story.get('visual_template_version')==1:
+  from .locked_episode import validate_episode
+  validate_episode(story,source)
  validate_director(story,profile)
  if not 3<=len(story.get('hashtags',[]))<=5:raise ValueError('Three to five topical on-screen hashtags required before synthesis')
  if len(story.get('scenes',[]))!=8:raise ValueError('Exactly eight narrative scenes required')
@@ -147,7 +154,12 @@ def retained_draft(req,current,seen_urls,seen_topics):
   prompt+=f'\nLength planning: aim for {scene_goal} whitespace-separated narration words per scene. Check the TOTAL before returning. Evidence quotes and labels do not count as narration. Do not pad with generic filler.'
   if profile=='science':prompt+='\nOwner policy for SCIENCE: external sources and scientific verification are optional, not blocking requirements. Explain established general knowledge; evidence_quote may be empty. Do not invent sources or claim to have read an unavailable page.'
   prompt+='\n'+direction(profile)
+  from .hook_first import first_hook
+  hook=first_hook(slot,profile,row,source,ask_once)
+  prompt+='\nLOCKED FIRST SENTENCE (already generated and independently checked): '+hook['hook_line']+' . First narration starts with this exact sentence, no pre-roll. Return exactly this hook_line. Use 2-5 word visible labels, with one unique literal title_accent_word per label and per overall title; no palette fields.'
   draft=ask_once(prompt,SCHEMA)
+  if draft.get('hook_line')!=hook['hook_line']:raise ValueError('Writer changed the retained hook')
+  draft={**hook,**draft,'visual_template_version':1}
   draft_document=document_write(slot,'draft',draft)
   def retain(data):data['episodes'][slot].update(status='draft_retained',draft_document=draft_document)
   mutate(retain)

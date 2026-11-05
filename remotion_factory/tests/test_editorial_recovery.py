@@ -71,13 +71,15 @@ class AuthorIntegration(unittest.TestCase):
         from remotion_factory import author as module
         scene={'label':'تفسير واضح','narration':' '.join(['كلمة']*55),'labels':['فكرة','تفسير'],'diagram':'flow','evidence_quote':'a short supported source quote'}
         bad={'title':'عنوان الحلقة','cover_text':'الفكرة واضحة','canonical_subject':'retained-original-topic','hashtags':['علم','تاريخ','معلومة'],'scenes':[copy.deepcopy(scene) for _ in range(8)]}
+        from visual_contract import load_template
+        profile=load_template()['channel']
         good=copy.deepcopy(bad)
-        for scene in good['scenes']:scene['narration']=' '.join(['كلمة']*34)
-        state={'episodes':{'slot':{'raw_draft':bad,'source_selection':{'title':'موضوع الحلقة'},'source_text':'a short supported source quote','status':'draft_retained'}}}
+        for scene in good['scenes']:scene['narration']=' '.join(['كلمة']*(24 if profile=='news' else 34))
+        state={'episodes':{'slot':{'raw_draft':bad,'source_selection':{'title':'موضوع الحلقة','scenario':'gravity'},'source_text':'a short supported source quote','status':'draft_retained'}}}
         def mutate(fn):fn(state)
         review={'supported':True,'engaging':True,'novel':True,'visuals_match':True,'issues':[]}
         with tempfile.TemporaryDirectory() as folder,patch.object(module,'local',side_effect=lambda:state),patch.object(module,'mutate',side_effect=mutate),patch.object(module,'used',return_value=[]),patch.object(module,'document_write',return_value={'path':'retained','sha256':'hash'}),patch.object(module,'ask_once',side_effect=[good,review]) as ask,patch.object(module,'Path',side_effect=lambda value:Path(folder)/value):
-            result=module.author({'slot':'slot','profile':'history'}, {})
+            result=module.author({'slot':'slot','profile':profile}, {})
         self.assertEqual(result['canonical_subject'],bad['canonical_subject'])
         self.assertEqual(ask.call_count,2)
         self.assertTrue(ask.call_args.kwargs.get('review',ask.call_args.args[2] if len(ask.call_args.args)>2 else False))

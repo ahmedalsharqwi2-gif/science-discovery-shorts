@@ -60,8 +60,8 @@ def character_timing(story,duration,transcripts,key,exact_coverage=0):
     if any(a['start']>=b['start'] for a,b in zip(scenes,scenes[1:])):raise ValueError('Scene opening anchors are not monotonic')
     for i,scene in enumerate(scenes):scene['end']=scenes[i+1]['start'] if i+1<len(scenes) else duration
     captions=[]
-    boundaries=list(range(0,len(expected),6))
-    if len(boundaries)>1 and len(expected)-boundaries[-1]<=2:boundaries.pop()
+    boundaries=([0]+list(range(len(story['hook_line'].split()),len(expected),4))) if story.get('visual_template_version')==1 else list(range(0,len(expected),6))
+    if story.get('visual_template_version')!=1 and len(boundaries)>1 and len(expected)-boundaries[-1]<=2:boundaries.pop()
     for group_index,start in enumerate(boundaries):
         stop=boundaries[group_index+1] if group_index+1<len(boundaries) else len(expected);points=[anchors[k] for k in range(start,stop) if k in anchors]
         if not points:raise ValueError('Caption lacks independently recognized speech')
@@ -72,6 +72,8 @@ def character_timing(story,duration,transcripts,key,exact_coverage=0):
                 # Switch at the next independently recognized phrase start.
                 captions[-1]['end']=entry['start'];captions.append(entry)
             else:
+
+                if story.get('visual_template_version')==1:raise ValueError('Shared ASR token prevents a readable four-word caption; retain speech for alignment review')
                 captions[-1]['text']+=' '+entry['text'];captions[-1]['end']=max(captions[-1]['end'],entry['end'])
         else:captions.append(entry)
     if captions:captions[-1]['end']=duration  # Keep the last phrase visible; never invent a word anchor.

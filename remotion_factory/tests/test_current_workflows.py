@@ -6,8 +6,10 @@ class CurrentWorkflowLayout(unittest.TestCase):
  def test_only_allowlisted_current_definitions_are_active(self):
   request=json.loads((self.root/'.github/remotion-cleanup-request.json').read_text())
   actual={str(p.relative_to(self.root)) for p in (self.root/'.github/workflows').glob('*') if p.suffix in ('.yml','.yaml')}
-  self.assertEqual(actual,set(request['keep_paths']))
+  self.assertEqual(actual,set(request['keep_paths'])|{'.github/workflows/replace-noon-once.yml'})
   self.assertFalse(actual&set(request['retired_paths']))
+  replacement=(self.root/'.github/workflows/replace-noon-once.yml').read_text()
+  self.assertNotRegex(replacement,r'(?m)^\s+schedule\s*:')
  def test_only_production_health_and_read_only_clock_audit_have_schedules(self):
   scheduled=[]
   for p in (self.root/'.github/workflows').glob('*.yml'):
