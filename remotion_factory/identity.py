@@ -20,6 +20,8 @@ def schema_for(base,profile):
  item['required']=list(dict.fromkeys(item['required']+['secondary_object','interaction','shot_type','hero_object','object_motion','image_query','visual_rationale']))
  value['properties']['director_version']={'type':'STRING','enum':[VERSION]};value['required']=list(dict.fromkeys(value['required']+['director_version']))
  if profile=='stickman':
+  for name in ['shot_type','hero_object','object_motion','secondary_object','interaction','image_query']:
+   item['properties'].pop(name,None);item['required']=[key for key in item['required'] if key!=name]
   item['properties'].update(cause={'type':'STRING'},attempt={'type':'STRING'},consequence={'type':'STRING'})
   item['required']+=['cause','attempt','consequence']
  return value
@@ -29,13 +31,15 @@ def direction(profile):
  if profile=='horror':common+=' Actual documented mysteries only. Build tension through a concrete known clue, a contradiction, an unanswered question and the limits of the record. No invented ghosts, dialogue, witnesses, supernatural explanations or made-up evidence. Distinguish absence of evidence from proof.'
  if profile=='news':common+=' Show what was announced, what changes for a user, and what remains a proposal. Vary headline/product/workflow/comparison/takeaway shots. Any drawn interface must be labelled illustrative, not a genuine screenshot. Keep the narration concise; do not lengthen to fill a template.'
  if profile=='science':common+=' Science includes biology, chemistry, health, Earth science, physics and technology. Explain a mechanism using objects interacting and a visible before/after. Never use space as a default decorative world. A cell with a nucleus must not represent a bacterium. A surfactant head faces water, tail faces oil; no literal magnetic attraction claim.'
- if profile=='stickman':common+=' Original What If story: a clear hypothetical rule, an immediate visible consequence, an attempted experiment, a failure caused by that same rule, a discovery, and a payoff. Each scene supplies cause/attempt/consequence; each follows causally from the preceding one. The solution stage means an outcome or realization, NOT a compulsory happy rescue or magic control panel. The premise may be impossible; consequences must be internally consistent and scientific qualifications honest. Two unnamed characters talk naturally and interact with the objects. No spoken Stickman/Arnold names or narrator repeating who did what. An impulsive attempt and a dry reaction create comedy; no explanatory lecture disguised as dialogue. First turn at most12 words. Do not invent numeric survival timelines. Reject a premise whose only novelty is an object becoming bigger or smaller without a compelling consequence. No recycling a competitor plot.'
+ if profile=='stickman':
+  common=f'VISUAL IDENTITY {VERSION}: two large original unnamed stick figures in the supplied world. Write the story first; do not select Three.js objects or image-search queries. Each scene supplies visual_rationale, cause, attempt and consequence, describing actual actions involving the supported scenario props. Fixed stages are impact/experiment/escalation/fail/discovery/adapt/solution/twist. The stage metadata is assigned by the renderer and is never spoken.'
+  common+=' Original What If story: a clear hypothetical rule, an immediate visible consequence, an attempted experiment, a failure caused by that same rule, a discovery, and a payoff. Each scene supplies cause/attempt/consequence; each follows causally from the preceding one. The solution stage means an outcome or realization, NOT a compulsory happy rescue or magic control panel. The premise may be impossible; consequences must be internally consistent and scientific qualifications honest. Two unnamed characters talk naturally and interact with the objects. No spoken Stickman/Arnold names or narrator repeating who did what. An impulsive attempt and a dry reaction create comedy; no explanatory lecture disguised as dialogue. First turn at most12 words. Do not invent numeric survival timelines. Reject a premise whose only novelty is an object becoming bigger or smaller without a compelling consequence. No recycling a competitor plot.'
  return common
 def validate_director(draft,profile):
  if draft.get('director_version')!=VERSION:return # retain acknowledged older drafts without rewriting them
  scenes=draft.get('scenes',[])
  for s in scenes:
-  if s.get('shot_type') not in SHOTS[profile] or s.get('hero_object') not in OBJECTS or s.get('object_motion') not in MOTIONS:raise ValueError('Unimplemented channel visual direction')
+  if profile!='stickman' and (s.get('shot_type') not in SHOTS[profile] or s.get('hero_object') not in OBJECTS or s.get('object_motion') not in MOTIONS):raise ValueError('Unimplemented channel visual direction')
   if s.get('secondary_object','none') not in ('none',*OBJECTS) or s.get('interaction','none') not in ('none','approach','separate','encircle','transfer','contrast'):raise ValueError('Unsupported secondary object or interaction')
   if not 12<=len(s.get('visual_rationale',''))<=450:raise ValueError('A concrete shot action is required')
   q=s.get('image_query','')
@@ -47,7 +51,7 @@ def authored_visual(story,row):
  profile=story['profile'];story['visual_identity']=identity(profile)
  if story.get('director_version')!=VERSION:return story
  for i,s in enumerate(story['scenes']):
-  old=s.get('visual',{});s['visual']={**old,'shot_type':s['shot_type'],'hero_object':s['hero_object'],'object_motion':s['object_motion'],'image_query':s['image_query'],'visual_rationale':s['visual_rationale'],'secondary_object':s.get('secondary_object','none'),'interaction':s.get('interaction','none')}
+  old=s.get('visual',{});s['visual']={**old,'shot_type':SHOTS[profile][i] if profile=='stickman' else s['shot_type'],'hero_object':s.get('hero_object','sphere'),'object_motion':s.get('object_motion','none'),'image_query':s.get('image_query',''),'visual_rationale':s['visual_rationale'],'secondary_object':s.get('secondary_object','none'),'interaction':s.get('interaction','none')}
  return story
 def inferred_object(scene,story):
  text=(scene.get('narration','')+' '+scene.get('label','')).lower()

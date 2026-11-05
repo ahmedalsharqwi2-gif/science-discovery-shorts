@@ -40,3 +40,7 @@ class ChannelIdentities(unittest.TestCase):
   s=self.story('history');s['canonical_subject']='abu-simbel-relocation-1960s';s['scenes'][0]['narration']='تفكيك أجزاء المعبد ونقلها';self.assertEqual(scene_plan(s)['scenes'][0]['hero_object'],'egypt_temple')
  def test_a_scene_does_not_inherit_every_object_from_the_episode_title(self):
   s=self.story('science');s['canonical_subject']='soap-surfactants-micelles-and-rinsing';s['scenes'][0]['narration']='الجزيء له ذيل ورأس';self.assertEqual(scene_plan(s)['scenes'][0]['hero_object'],'surfactant')
+
+ def test_stickman_dialogue_is_not_forced_into_a_three_dimensional_object_catalog(self):
+  schema=schema_for({'properties':{'scenes':{'items':{'properties':{},'required':[]}}},'required':[]},'stickman')
+  required=schema['properties']['scenes']['items']['required'];self.assertIn('cause',required);self.assertIn('consequence',required);self.assertNotIn('hero_object',required);self.assertNotIn('image_query',required)
