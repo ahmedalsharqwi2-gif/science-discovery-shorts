@@ -1,6 +1,6 @@
 /** Bounded declarative 3D story scenes. No generated JavaScript is executed. */
 import * as THREE from 'three';
-const ASSETS=new Set(['egypt_temple','pyramid','bacterium','surfactant','micelle','cell','leaf','heart','dna','molecule','crystal','rock_layers','volcano','tree','pendulum','gear','magnet','circuit','river','fossil','scroll','book','temple','house','ship','cart','person','stickman','door','clock','lantern','table','sphere','box','cylinder','cone','torus','server','monitor','robot','satellite_dish','microphone','phone','chip','document','shield','network','waveform']);
+const ASSETS=new Set(['egypt_temple','pyramid','bacterium','water_oil','soap_rinse','wash_timer','cleaning_compare','soap_finish','surfactant','micelle','cell','leaf','heart','dna','molecule','crystal','rock_layers','volcano','tree','pendulum','gear','magnet','circuit','river','fossil','scroll','book','temple','house','ship','cart','person','stickman','door','clock','lantern','table','sphere','box','cylinder','cone','torus','server','monitor','robot','satellite_dish','microphone','phone','chip','document','shield','network','waveform']);
 const MOTIONS=new Set(['none','spin','pulse','drift','orbit','grow','assemble','split','swing','flow','slam','open','close','shake','float','backward','head_turn']);
 function material(color,extra={}){return new THREE.MeshStandardMaterial({color,roughness:.58,metalness:.08,...extra});}
 function mesh(parent,geometry,mat,x=0,y=0,z=0){const o=new THREE.Mesh(geometry,mat);o.position.set(x,y,z);o.castShadow=true;o.receiveShadow=true;parent.add(o);return o;}
@@ -18,6 +18,24 @@ function shape(kind,color){
  }else if(kind==='bacterium'){
   const body=mesh(g,new THREE.CapsuleGeometry(.46,1.1,10,24),material(color,{roughness:.35}));body.rotation.z=Math.PI/2;
   for(let i=0;i<5;i++){const points=[];for(let j=0;j<25;j++)points.push(new THREE.Vector3(-1.05-j*.055,Math.sin(j*.38+i)*.1,Math.cos(j*.38+i)*.1));mesh(g,new THREE.TubeGeometry(new THREE.CatmullRomCurve3(points),35,.022,6,false),material(0x7aa993));}
+ }else if(kind==='water_oil'){
+  box(3.7,1.05,.65,0,-.65,0,material(0x179ca6,{transparent:true,opacity:.42}));
+  const oil=ball(.74,0,.18,.15,material(0xd9a441));oil.scale.set(1.7,.42,1);g.userData.oil=oil;
+  box(3.8,.055,.8,0,-1.19,0,dark);
+ }else if(kind==='soap_rinse'||kind==='soap_finish'){
+  box(3.9,.2,1.35,0,-1.22,0,light);
+  const cluster=shape('micelle',color);cluster.scale.setScalar(.48);cluster.position.set(-.6,.05,0);g.add(cluster);g.userData.rinseCluster=cluster;
+  g.userData.streams=[];
+  for(let i=0;i<6;i++){const line=rod(g,[-1.8,-.8+i*.33,-.4],[1.8,-.8+i*.33,-.4],.018,material(0x179ca6,{transparent:true,opacity:.55}));g.userData.streams.push(line);}
+ }else if(kind==='wash_timer'){
+  const ring=mesh(g,new THREE.TorusGeometry(1.25,.085,12,64),material(0x179ca6));
+  const arm=rod(g,[0,0,.15],[0,1.05,.15],.045,dark);g.userData.timerHand=arm;
+  ball(.10,0,0,.18,dark);
+  for(let i=0;i<20;i++){const a=i/20*Math.PI*2;ball(.038,Math.sin(a)*1.06,Math.cos(a)*1.06,0,dark);}
+ }else if(kind==='cleaning_compare'){
+  box(1.65,.17,1.2,-1,-.85,0,light);box(1.65,.17,1.2,1,-.85,0,light);g.userData.dirt=[];
+  for(let side of [-1,1])for(let i=0;i<12;i++){const d=ball(.09,side+(-.55+(i%4)*.36),-.52+Math.floor(i/4)*.38,.1,material(0xd9a441));if(side===1)g.userData.dirt.push(d);}
+  rod(g,[0,-1.1,.1],[0,1,.1],.02,dark);
  }else if(kind==='surfactant'){
   ball(.32,0,0,0,material(0x35b6c8,{roughness:.22}));
   const points=[];for(let i=0;i<22;i++)points.push(new THREE.Vector3(-.20-i*.065,Math.sin(i*.8)*.055,Math.cos(i*.8)*.035));
@@ -203,6 +221,12 @@ export function proceduralDirector(scene,story){
     if(o.userData.flowDot){const dot=o.userData.flowDot,x=(t*.5)%4;dot.position.set(x<1?-1+2*x:x<2?1:x<3?1-2*(x-2):-1,.12,x<1?-.6:x<2?-.6+1.2*(x-1):x<3?.6:.6-1.2*(x-3));}
     else o.position.x+=((t*.3+i*.2)%1-.5)*.65;
    }
+   // Child animation changes the mechanism while keeping the full-sized frame stable.
+   if(o.userData.oil)o.userData.oil.scale.y=.40+.02*Math.cos(t*.8);
+   if(o.userData.rinseCluster){o.userData.rinseCluster.position.x=-.6+q*1.05;o.userData.rinseCluster.rotation.y=q*.4;}
+   if(o.userData.timerHand)o.userData.timerHand.rotation.z=-p*Math.PI*2;
+   if(o.userData.dirt)o.userData.dirt.forEach((d,j)=>{d.visible=j<2||p<(j-1)/12;});
+   if(o.userData.surfactants)o.userData.surfactants.forEach((part,j)=>{part.position.copy(part.userData.radial).multiplyScalar(1.95-(1-q)*.12);});
    o.userData.arms?.forEach((arm,j)=>arm.rotation.z=Math.sin(phase+j*Math.PI)*.18);
   });
   const s=stage.definition,pos=s.camera_start.map((v,i)=>v+(s.camera_end[i]-v)*q);

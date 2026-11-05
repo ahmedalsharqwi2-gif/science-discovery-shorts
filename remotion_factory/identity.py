@@ -2,7 +2,7 @@
 import copy,hashlib,json,re
 from pathlib import Path
 VERSION='channel-identities-v1'
-OBJECTS=('cell','bacterium','leaf','heart','dna','molecule','surfactant','micelle','crystal','rock_layers','volcano','tree','pendulum','gear','magnet','circuit','river','fossil','scroll','book','temple','egypt_temple','pyramid','house','ship','cart','person','sphere','server','monitor','robot','microphone','phone','chip','document','shield','network','waveform')
+OBJECTS=('water_oil','soap_rinse','wash_timer','cleaning_compare','soap_finish','cell','bacterium','leaf','heart','dna','molecule','surfactant','micelle','crystal','rock_layers','volcano','tree','pendulum','gear','magnet','circuit','river','fossil','scroll','book','temple','egypt_temple','pyramid','house','ship','cart','person','sphere','server','monitor','robot','microphone','phone','chip','document','shield','network','waveform')
 MOTIONS=('none','spin','pulse','drift','orbit','grow','assemble','split','swing','flow','shake','float')
 SHOTS={'science':('experiment','macro','process','comparison','photo'),'history':('archive','place','artifact','reconstruction','chronology'),'horror':('archive','location','evidence','absence','reconstruction'),'news':('headline','product','workflow','comparison','takeaway'),'stickman':('impact','experiment','escalation','fail','discovery','adapt','solution','twist')}
 IDENTITIES=('science','history','horror','news','stickman')

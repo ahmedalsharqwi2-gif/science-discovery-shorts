@@ -8,7 +8,8 @@ export function createIdentityStage(canvas,plan,profile,t){
  const scene=new THREE.Scene(),camera=new THREE.PerspectiveCamera(35,w/h,.1,200);scene.add(new THREE.HemisphereLight(t.palette.ink,t.palette.bg,2));const light=new THREE.DirectionalLight(t.palette.ink,2.5);light.position.set(4,7,8);scene.add(light);
  const defs=plan.map(s=>({environment:'molecular_water',camera_start:[0,0,10],camera_end:[0,0,10],objects:[{kind:s.hero_object,position:[0,0,0],scale:[1,1,1],rotation:[0,0,0],motion:s.object_motion,color:t.palette.ink},...(s.secondary_object&&s.secondary_object!=='none'?[{kind:s.secondary_object,position:[2.2,0,0],scale:[.55,.55,.55],rotation:[0,0,0],motion:'none',color:t.palette.ink}]:[])]}));
  const director=proceduralDirector(scene,{profile,visual_plan:{world:'procedural_story'},scenes:defs});
- scene.traverse(o=>{if(o.isMesh&&o.material){for(const m of Array.isArray(o.material)?o.material:[o.material])if(m.color){const v=(m.color.r+m.color.g+m.color.b)/3;m.color=new THREE.Color(t.palette.bg).lerp(new THREE.Color(t.palette.ink),.25+v*.6);}}});
+ // Semantic diagram colors use the channel's locked mint/teal/ochre palette.
+
  const corners=box=>{const a=[];for(const x of [box.min.x,box.max.x])for(const y of [box.min.y,box.max.y])for(const z of [box.min.z,box.max.z])a.push(new THREE.Vector3(x,y,z));return a;};
  const projected=box=>{const a=corners(box).map(v=>v.project(camera));return [Math.min(...a.map(v=>(v.x+1)*w/2)),Math.min(...a.map(v=>(1-v.y)*h/2)),Math.max(...a.map(v=>(v.x+1)*w/2)),Math.max(...a.map(v=>(1-v.y)*h/2))];};
  const bounds=stage=>{const b=new THREE.Box3();for(const o of stage.objects)b.expandByObject(o.object);return b;};
