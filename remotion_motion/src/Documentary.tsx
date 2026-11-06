@@ -13,6 +13,7 @@ import {ExplainerPlate} from './ExplainerPlate';
 import {AdventurePlate} from './AdventurePlate';
 import {WhatIfPlate} from './WhatIfPlate';
 import {OpeningCover} from './OpeningCover';
+import {SceneContract} from './SceneContract';
 loadFont({family:'Arabic',url:staticFile('fonts/Arabic-Regular.ttf'),weight:'400'});
 loadFont({family:'Arabic',url:staticFile('fonts/Arabic-Bold.ttf'),weight:'700'});
 const palettes={history:{accent:'#e8bd78',background:'#171b21',eyebrow:'قصة حقيقية • من ذاكرة التاريخ'},horror:{accent:'#d07a61',background:'#10171e',eyebrow:'حدث حقيقي • بلا حكايات مختلقة'},science:{accent:'#76dfd1',background:'#081c2a',eyebrow:'اكتشف العلم في حياتك'},news:{accent:'#f7ba64',background:'#101e30',eyebrow:'الذكاء الاصطناعي • خبر في السريع'},stickman:{accent:'#c05a43',background:'#f7f1e7',eyebrow:'افترض كده • حكاية خيالية'}};
@@ -26,6 +27,7 @@ const NewsPlatform=({scene,color}:{scene:Scene;color:string})=>{const f=useCurre
 const SceneView=({scene,episode,index}:{scene:Scene;episode:Episode;index:number})=>{const f=useCurrentFrame();const {fps}=useVideoConfig();const palette=palettes[episode.profile];const title=index===0?(episode.cover_text||scene.headline||scene.label):(scene.headline||scene.label);return <AbsoluteFill style={{background:palette.background,color:'#fff8ed',fontFamily:'Arabic',overflow:'hidden'}} dir="rtl" lang="ar">
  <AbsoluteFill style={{background:`radial-gradient(ellipse at 80% 45%,${palette.accent}15,transparent 65%)`}}/>
  {scene.asset?<Photo scene={scene} profile={episode.profile}/>:null}
+ {<SceneContract scene={scene} episode={episode}/>}
  {scene.kind==='map'?<AbsoluteFill style={{scale:1+Math.min(.04,f/(fps*300)),transformOrigin:'50% 50%'}}><MapPlate longitude={scene.longitude} latitude={scene.latitude} zoom={scene.zoom} color={palette.accent} marker={episode.profile!=='news'}/></AbsoluteFill>:null}
  {scene.kind==='science'?<SciencePlate kind={scene.kicker||'bubble'}/>:null}
  {scene.kind==='timeline'?<Timeline scene={scene} color={palette.accent}/>:null}
