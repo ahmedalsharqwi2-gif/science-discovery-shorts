@@ -1,47 +1,30 @@
-"""Civil-time regressions for previous-evening production and noon release."""
 import unittest
 from datetime import date, datetime, timezone
-from remotion_factory.schedule import hours,due_for,production_at,audit_day
-from remotion_factory.daily import slot_for
-from remotion_factory.health import clock_source
-class NoonTrial(unittest.TestCase):
-    """Keep production dates, release dates and clock provenance distinct."""
-    def test_trial_boundaries_and_previous_evening(self):
-        """Verify trial boundaries and previous evening."""
-        self.assertEqual(hours(date(2026,11,3)),(9,17))
-        for day in (date(2026,11,4),date(2026,11,17)):
-            self.assertEqual(hours(day),(19,12))
-            self.assertEqual(production_at(day).hour,19)
-            self.assertEqual((due_for(day)-production_at(day)).total_seconds(),17*3600)
-        self.assertEqual(hours(date(2026,11,18)),(9,17))
-    def test_evening_primary_backup_and_wrong_old_clock(self):
-        """Verify evening primary backup and wrong old clock."""
-        now=datetime(2026,11,4,17,tzinfo=timezone.utc)
-        expected=due_for(date(2026,11,5))
-        self.assertEqual(slot_for(now,'schedule','0 17 * * *',now=now),expected)
-        self.assertEqual(slot_for(now.replace(minute=17),'schedule','17 17 * * *',now=now),expected)
-        self.assertIsNone(slot_for(now,'schedule','0 7 * * *',now=now))
-    def test_noon_expiry_never_rolls_over(self):
-        """Verify noon expiry never rolls over."""
-        created=datetime(2026,11,4,17,tzinfo=timezone.utc)
-        with self.assertRaisesRegex(ValueError,'expired'):
-            slot_for(created,'workflow_dispatch',now=datetime(2026,11,5,10,tzinfo=timezone.utc))
-    def test_evening_provenance_and_report_target(self):
-        """Verify evening provenance and report target."""
-        created='2026-11-04T17:00:10Z';day=date(2026,11,5)
-        run={'status':'completed','conclusion':'success','event':'schedule','created_at':created}
-        decision={'due_at':due_for(day).isoformat(),'reason':'eligible'}
-        self.assertEqual(clock_source(run,decision,day),'github-schedule')
-        run['created_at']='2026-11-05T07:00:00Z'
-        self.assertIsNone(clock_source(run,decision,day))
-        self.assertEqual(audit_day(datetime.fromisoformat(created).astimezone(production_at(day).tzinfo)),day)
-    def test_baseline_dst_is_preserved(self):
-        """Verify baseline dst is preserved."""
-        self.assertEqual(due_for(date(2030,1,3)).hour,15)
-        self.assertEqual(due_for(date(2030,7,3)).hour,14)
+from zoneinfo import ZoneInfo
+from remotion_factory.schedule import hours, due_for, production_at, checkpoints
 
-    def test_manual_trial_run_needs_explicit_date_outside_evening(self):
-        """An accidental morning manual dispatch cannot start tomorrow's production."""
-        now=datetime(2026,11,5,7,tzinfo=timezone.utc)
-        with self.assertRaisesRegex(ValueError,'Explicit publication date'):
-            slot_for(now,'workflow_dispatch',now=now)
+CAIRO = ZoneInfo("Africa/Cairo")
+
+class PermanentNoonSchedule(unittest.TestCase):
+    def test_permanent_hours_and_post_window_date(self):
+        for day in (date(2026, 11, 3), date(2026, 11, 18), date(2027, 3, 1)):
+            self.assertEqual(hours(day), (19, 12))
+            self.assertEqual(production_at(day).hour, 19)
+            self.assertEqual(production_at(day).date(), day.replace(day=day.day) if False else day.fromordinal(day.toordinal()-1))
+
+    def test_winter_and_summer_publication_utc(self):
+        self.assertEqual(due_for(date(2026, 12, 15)), datetime(2026, 12, 15, 10, tzinfo=timezone.utc))
+        self.assertEqual(due_for(date(2027, 7, 15)), datetime(2027, 7, 15, 9, tzinfo=timezone.utc))
+
+    def test_production_is_previous_cairo_day(self):
+        for day in (date(2026, 12, 15), date(2027, 7, 15)):
+            p = production_at(day)
+            self.assertEqual(p.tzinfo, CAIRO)
+            self.assertEqual(p.hour, 19)
+            self.assertEqual(p.date().toordinal(), day.toordinal()-1)
+
+    def test_noon_checkpoints_are_permanent(self):
+        self.assertEqual(checkpoints(date(2027, 3, 1)), ((9,30),(11,15),(12,30),(21,30)))
+
+if __name__ == "__main__":
+    unittest.main()

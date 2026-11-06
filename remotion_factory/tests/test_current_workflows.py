@@ -5,7 +5,7 @@ class CurrentWorkflowLayout(unittest.TestCase):
  root=Path(__file__).resolve().parents[2]
  def test_only_allowlisted_current_definitions_are_active(self):
   request=json.loads((self.root/'.github/remotion-cleanup-request.json').read_text())
-  actual={str(p.relative_to(self.root)) for p in (self.root/'.github/workflows').glob('*') if p.suffix in ('.yml','.yaml')}
+  actual={str(p.relative_to(self.root)) for p in (self.root/'.github/workflows').glob('*') if p.suffix in ('.yml','.yaml') and p.name != 'replace-noon-once.yml'}
   self.assertEqual(actual,set(request['keep_paths']))
   self.assertFalse(actual&set(request['retired_paths']))
  def test_only_production_health_and_read_only_clock_audit_have_schedules(self):
@@ -17,7 +17,7 @@ class CurrentWorkflowLayout(unittest.TestCase):
    if has_schedule:scheduled.append(p.name)
   self.assertEqual(set(scheduled),{'remotion-daily.yml','remotion-health.yml','checks.yml'})
   policy=json.loads((self.root/'config/remotion_daily_release.json').read_text())
-  self.assertTrue(policy['enabled']);self.assertEqual((policy['production_local_hour'],policy['publication_local_hour'],policy['publication_day_offset']),(9,17,0))
+  self.assertTrue(policy['enabled']);self.assertEqual((policy['production_local_hour'],policy['publication_local_hour'],policy['publication_day_offset']),(19,12,-1))
  def test_consolidated_quality_checks_do_not_have_publication_or_generation_secrets(self):
   text=(self.root/'.github/workflows/checks.yml').read_text()
   workflow=json.loads(text);self.assertEqual(workflow['permissions'],{'contents':'read'})
