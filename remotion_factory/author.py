@@ -102,7 +102,7 @@ def ask_once(prompt,schema,review=False):
  if not key:raise ValueError('Own repository text credential missing')
  from api_budget import reserve
  name=model(review);reserve('text',name,key)
- payload={'contents':[{'parts':[{'text':prompt}]}],'generationConfig':{'responseMimeType':'application/json','responseSchema':schema,'temperature':.15 if review else .65,'maxOutputTokens':10000}}
+ payload={'contents':[{'parts':[{'text':prompt}]}],'generationConfig':{'responseMimeType':'application/json','responseSchema':schema,'maxOutputTokens':10000}}
  r=None
  for attempt in range(3):
   r=requests.post('https://generativelanguage.googleapis.com/v1beta/models/'+name+':generateContent',headers={'x-goog-api-key':key},json=payload,timeout=180)
