@@ -104,7 +104,8 @@
         "PYTHONPATH": "${{ github.workspace }}",
         "PYTHONUNBUFFERED": "1",
         "GITHUB_TOKEN": "${{ github.token }}",
-        "BUFFER_API_KEY": "${{ secrets.BUFFER_API_KEY }}"
+        "BUFFER_API_KEY": "${{ secrets.BUFFER_API_KEY }}",
+        "CLOCK_GATE_ENFORCED": "0"
       },
       "steps": [
         {

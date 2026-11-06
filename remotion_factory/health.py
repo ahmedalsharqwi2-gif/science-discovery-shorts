@@ -1,5 +1,5 @@
 """Read-only production/social audit. Never writes topics, synthesizes or publishes."""
-import argparse,base64,hashlib,json,math,os,re,statistics,subprocess,sys,tempfile
+import argparse, os,base64,hashlib,json,math,os,re,statistics,subprocess,sys,tempfile
 from datetime import datetime,timedelta,timezone
 from pathlib import Path
 from urllib.parse import unquote,urlparse
@@ -191,7 +191,8 @@ def clock_source(run,decision,day):
 # Temporary, owner-authorised 2026-11-07: the automatic-clock requirement is disabled
 # until the owner reviews the quality of the produced videos.
 # RESTORE: set CLOCK_GATE_ENFORCED = True (single line, no other edits needed).
-CLOCK_GATE_ENFORCED = False
+# Runtime switch, not a constant: unit tests stay strict, the health workflow relaxes it.
+CLOCK_GATE_ENFORCED = os.environ.get('CLOCK_GATE_ENFORCED', '1') == '1'
 
 def scheduler(day):
  data=gh('/actions/workflows/remotion-daily.yml/runs?per_page=100&created='+production_day(day).isoformat()) or {}
