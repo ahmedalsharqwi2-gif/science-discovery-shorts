@@ -508,9 +508,23 @@
     "daily-remotion-2026-11-08-science": {
       "profile": "science",
       "due_at": "2026-11-08T10:00:00Z",
-      "status": "author_pending",
+      "status": "author_requested",
       "source_run": 42240001899,
-      "created_at": "2026-11-06T15:07:58.890774+00:00"
+      "created_at": "2026-11-06T15:07:58.890774+00:00",
+      "source_selection": {
+        "title": "لماذا الملح يذيب الثلج؟",
+        "publisher": "معلومة علمية مبسطة",
+        "canonical_subject": "salt-ice-freezing-point",
+        "science_domain": "chemistry"
+      },
+      "source": {
+        "url": null
+      },
+      "source_document": {
+        "path": "state/remotion_documents/daily-remotion-2026-11-08-science-source-1e0d645ef4b0995e.json",
+        "sha256": "1e0d645ef4b0995ed7ae4fbd97e34c6b8d8d70f9a237ff0f0313b86f4ef7968f"
+      },
+      "writer_run": 42240001899
     }
   },
   "cutover_evidence": {
