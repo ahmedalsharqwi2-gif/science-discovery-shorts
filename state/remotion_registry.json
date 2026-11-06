@@ -508,7 +508,7 @@
     "daily-remotion-2026-11-08-science": {
       "profile": "science",
       "due_at": "2026-11-08T10:00:00Z",
-      "status": "publishing",
+      "status": "scheduled",
       "source_run": 42240001899,
       "created_at": "2026-11-06T15:07:58.890774+00:00",
       "source_selection": {
