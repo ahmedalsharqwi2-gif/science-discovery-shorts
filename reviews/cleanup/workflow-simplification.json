@@ -48,7 +48,7 @@
     },
     {
       "path": ".github/workflows/professional-daily.yml",
-      "sha": "bf0d01878c45e0a80f472f7a4904273f259fb8d3"
+      "sha": "154ea0dd4a9641c5a5813b195ef790b340c37915"
     },
     {
       "path": ".github/workflows/professional-eclipse-delivery-audit.yml",

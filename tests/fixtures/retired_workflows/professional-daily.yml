@@ -303,7 +303,7 @@ jobs:
     - name: Persist the completed episode and its exact video checksum
       if: steps.finish.outcome == 'success'
       run: python -m professional_motion.persist_state
-    - name: Schedule approved daily film for exactly 17:00 Cairo
+    - name: Schedule approved daily film for exactly 12:00 Cairo
       if: steps.finish.outcome == 'success' && needs.produce.outputs.publish == 'true'
       run: python -m professional_motion.cli publish science --slot "${{ needs.produce.outputs.slot
         }}" --due "${{ needs.produce.outputs.due }}"
