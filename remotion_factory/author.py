@@ -124,6 +124,8 @@ def retained_draft(req,current,seen_urls,seen_topics):
  slot=req['slot'];profile=req['profile']
  if current.get('raw_draft') or current.get('draft_document'):
   draft=current.get('raw_draft') or document_read(current['draft_document']);row=current['source_selection'];source=current.get('source_text') or document_read(current['source_document'])['text']
+ elif current.get('recovery_requested') and current.get('source_selection') and current.get('source_document'):
+  row=current['source_selection'];source=current.get('source_text') or document_read(current['source_document'])['text']
  else:
   rows=[r for r in candidates(profile) if (not r.get('url') or r['url'] not in seen_urls) and r.get('canonical_subject') not in seen_topics]
   if profile=='news':
@@ -149,7 +151,7 @@ def retained_draft(req,current,seen_urls,seen_topics):
   prompt+='\n'+direction(profile)
   draft=ask_once(prompt,SCHEMA)
   draft_document=document_write(slot,'draft',draft)
-  def retain(data):data['episodes'][slot].update(status='draft_retained',draft_document=draft_document)
+  def retain(data):data['episodes'][slot].update(status='draft_retained',draft_document=draft_document);data['episodes'][slot].pop('recovery_requested',None)
   mutate(retain)
  return draft,row,source
 def author(req,entry):
@@ -158,7 +160,7 @@ def author(req,entry):
  if current.get('authored_story') or current.get('story_document'):
   if not current.get('editorial_review',{}).get('passed'):raise ValueError('Retained draft awaits its original review; never regenerate')
   return current.get('authored_story') or document_read(current['story_document'])
- if current.get('status')=='author_requested':raise ValueError('Previous writing request unacknowledged; recover it, never rewrite')
+ if current.get('status')=='author_requested' and not current.get('recovery_requested'):raise ValueError('Previous writing request unacknowledged; recover it, never rewrite')
  prior=used();seen_urls,seen_topics=prior_identifiers(prior)
  draft,row,source=retained_draft(req,current,seen_urls,seen_topics)
  from .editorial_recovery import checked_draft

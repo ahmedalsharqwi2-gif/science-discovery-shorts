@@ -436,7 +436,9 @@
         "path": "state/remotion_documents/daily-remotion-2026-11-07-science-source-324e6454e4604eb8.json",
         "sha256": "324e6454e4604eb863561480070b3ee05e7560731e1f7eac210639ed99603332"
       },
-      "writer_run": 42228768486
+      "writer_run": 42228768486,
+      "recovery_requested": true,
+      "recovery_reason": "Confirmed prior author request ended non-200 before draft; Gemini diagnostic now returned HTTP 200; reuse retained source only."
     }
   },
   "cutover_evidence": {
