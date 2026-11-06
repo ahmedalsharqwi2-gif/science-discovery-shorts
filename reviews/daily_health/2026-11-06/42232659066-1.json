@@ -1,0 +1,54 @@
+{
+  "date": "2026-11-06",
+  "profile": "science",
+  "phase": "postpublish",
+  "checked_at": "2026-11-06T14:18:20.696447+00:00",
+  "run_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/actions/runs/42232659066",
+  "report_path": "reviews/daily_health/2026-11-06/42232659066-1.json",
+  "publication_due_utc": "2026-11-06T10:00:00+00:00",
+  "errors": [
+    "No successful clock-triggered daily run for this date; manual recovery and dry-run tests do not count as the automatic clock",
+    "tiktok: publication time differs from the configured Cairo slot",
+    "Production workflow failed/cancelled; inspect its retained evidence"
+  ],
+  "passed": false,
+  "generation_calls": 0,
+  "publication_mutations": 0,
+  "preview": false,
+  "observed_receipts": {
+    "tiktok": [
+      {
+        "id": "6ae8d34987c5ea7cde5404e5",
+        "channelId": "6a9edf14cd8b9c702c230272",
+        "status": "draft",
+        "dueAt": "2026-11-06T15:00:00.000Z",
+        "sentAt": null,
+        "externalLink": null
+      }
+    ],
+    "youtube": [
+      {
+        "id": "6ae8d34fc1e1a07104365865",
+        "channelId": "6a9edee8cd8b9c702c2301cb",
+        "status": "draft",
+        "dueAt": "2026-11-06T15:00:00.000Z",
+        "sentAt": null,
+        "externalLink": null
+      }
+    ],
+    "facebook": [
+      {
+        "id": "6ae8d3544e55e02608791d97",
+        "channelId": "6a9edebbcd8b9c702c230128",
+        "status": "draft",
+        "dueAt": "2026-11-06T15:00:00.000Z",
+        "sentAt": null,
+        "externalLink": null
+      }
+    ]
+  },
+  "production_at_cairo": "2026-11-05T19:00:00+02:00",
+  "publication_at_cairo": "2026-11-06T12:00:00+02:00",
+  "hours_until_publication": -4.31,
+  "readiness": "needs_attention"
+}
