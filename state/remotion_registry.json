@@ -508,7 +508,7 @@
     "daily-remotion-2026-11-08-science": {
       "profile": "science",
       "due_at": "2026-11-08T10:00:00Z",
-      "status": "rendered",
+      "status": "publishing",
       "source_run": 42240001899,
       "created_at": "2026-11-06T15:07:58.890774+00:00",
       "source_selection": {
@@ -551,7 +551,8 @@
       "coverage": 0.9244712990936556,
       "video_sha256": "9ea2b276b242e2a1a4a437d8b35206b5cbf932c77edbe29b1c13b74e65fb355c",
       "render_run": 42240001899,
-      "source_evidence_file": "professional_motion/output/remotion-validation.json"
+      "source_evidence_file": "professional_motion/output/remotion-validation.json",
+      "media_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/releases/download/production-daily-remotion-2026-11-08-science/science-daily-remotion-2026-11-08-science.mp4"
     }
   },
   "cutover_evidence": {
