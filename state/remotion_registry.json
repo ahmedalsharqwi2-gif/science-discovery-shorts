@@ -455,7 +455,8 @@
         "visuals_match": true,
         "issues": [],
         "passed": true
-      }
+      },
+      "story_sha256": "faa95c9dd4712b4b8f21afffb757276061a8a546ccd78622b277067400b1106c"
     }
   },
   "cutover_evidence": {
