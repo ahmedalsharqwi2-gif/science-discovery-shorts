@@ -555,11 +555,13 @@
       "media_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/releases/download/production-daily-remotion-2026-11-08-science/science-daily-remotion-2026-11-08-science.mp4",
       "receipts": {
         "tiktok": {
-          "phase": "intent",
+          "phase": "acknowledged",
           "channel_id": "6a9edf14cd8b9c702c230272",
           "due_at": "2026-11-08T10:00:00Z",
           "media_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/releases/download/production-daily-remotion-2026-11-08-science/science-daily-remotion-2026-11-08-science.mp4",
-          "created_at": "2026-11-06T15:22:37.166152+00:00"
+          "created_at": "2026-11-06T15:22:37.166152+00:00",
+          "id": "6aedf0bfd7bf6f595dc35b5d",
+          "accepted_at": "2026-11-06T15:22:39.300250+00:00"
         }
       }
     }
