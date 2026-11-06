@@ -2,9 +2,9 @@
   "date": "2026-11-07",
   "profile": "science",
   "phase": "prepublish",
-  "checked_at": "2026-11-06T21:24:03.398757+00:00",
-  "run_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/actions/runs/42296322069",
-  "report_path": "reviews/daily_health/2026-11-07/42296322069-1.json",
+  "checked_at": "2026-11-06T21:35:26.328832+00:00",
+  "run_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/actions/runs/42297885907",
+  "report_path": "reviews/daily_health/2026-11-07/42297885907-1.json",
   "publication_due_utc": "2026-11-07T10:00:00+00:00",
   "errors": [
     "No successful clock-triggered daily run for this date; manual recovery and dry-run tests do not count as the automatic clock"
@@ -95,6 +95,6 @@
   "media_binding": "Same live scheduled source URL and independently hashed original",
   "production_at_cairo": "2026-11-06T19:00:00+02:00",
   "publication_at_cairo": "2026-11-07T12:00:00+02:00",
-  "hours_until_publication": 12.6,
+  "hours_until_publication": 12.41,
   "readiness": "verified"
 }
