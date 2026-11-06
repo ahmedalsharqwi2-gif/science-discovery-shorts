@@ -1,0 +1,159 @@
+{
+  "title": "إزاي الملح بيسيح الثلج في ثواني؟",
+  "canonical_subject": "salt-ice-freezing-point",
+  "hashtags": [
+    "علوم",
+    "تجربة",
+    "تجارب_علمية",
+    "مصر",
+    "كيمياء"
+  ],
+  "scenes": [
+    {
+      "label": "تحدي الثلج",
+      "narration": "تخيل إنك واقف في عز الصقيع ومعاك قالب ثلج عنيد مش راضي يتحرك ولا يفك نهائي، وفجأة بترمي عليه شوية ملح طعام عادي جداً، تفتكر إيه اللي هيحصل وهل الملح عنده القوة السحرية دي عشان يدوب الثلج بالسرعة الجنونية دي قدام عينك ولا دي مجرد خدعة بصرية مش أكتر؟",
+      "evidence_quote": "",
+      "diagram": "flow",
+      "labels": [
+        "ثلج",
+        "ملح",
+        "صقيع"
+      ],
+      "secondary_object": "none",
+      "interaction": "none",
+      "shot_type": "experiment",
+      "hero_object": "crystal",
+      "object_motion": "none",
+      "image_query": "block of ice in winter with salt crystals on top",
+      "visual_rationale": "Shows a solid block of ice with coarse salt crystals resting on the surface, setting up the chemical interaction."
+    },
+    {
+      "label": "حركة الجزيئات",
+      "narration": "القصة بتبدأ لما نبص جوه بعين المجاهر ونشوف جزيئات الثلج وهي مرتبة نفسها في شبكة بلورية متماسكة وقوية جداً، وكل جزيء متمسك بالثاني بقوة عشان يخلي الثلج صلب بالشكل ده، لحد ما تيجي بلورات الملح وتدخل في النص وتلخبط الترتيب الهادئ ده تماماً وتقلب الدنيا.",
+      "evidence_quote": "",
+      "diagram": "layers",
+      "labels": [
+        "شبكة بلورية",
+        "جزيئات",
+        "تماسك"
+      ],
+      "secondary_object": "molecule",
+      "interaction": "approach",
+      "shot_type": "macro",
+      "hero_object": "molecule",
+      "object_motion": "pulse",
+      "image_query": "microscopic view of water ice crystal lattice structure",
+      "visual_rationale": "A 3D macro animation illustrating the rigid hexagonal crystal structure of water molecules in ice."
+    },
+    {
+      "label": "دخول الملح",
+      "narration": "أول ما الملح بينزل على السطح البارد بيقترب من جزيئات الميه اللي على الحرف ويبدأ يتفاعل معاها فوراً، والتركيب الكيميائي للملح بيتكون من صوديوم الكلور اللي بيحب يندمج مع طبقة الميه الرقيقة جداً اللي بتكون موجودة أساساً على وش الثلج من بره.",
+      "evidence_quote": "",
+      "diagram": "compare",
+      "labels": [
+        "صوديوم",
+        "كلور",
+        "تفاعل"
+      ],
+      "secondary_object": "crystal",
+      "interaction": "encircle",
+      "shot_type": "process",
+      "hero_object": "crystal",
+      "object_motion": "drift",
+      "image_query": "salt crystals dissolving into a thin film of water on ice",
+      "visual_rationale": "Close-up of sodium and chloride ions embedding themselves into the thin microscopic liquid layer on the ice."
+    },
+    {
+      "label": "خفض التجمد",
+      "narration": "الحركة دي بتعمل حاجة اسمها خفض نقطة التجمد، يعني الميه بدل ما تجمد عند الصفر المئوي زي ما احنا متعودين، بتبص تلاقي درجة التجمد نزلت لتحت وبقت تحت الصفر بكتير، وده بيخلي الميه اللي دابت تفضل سايلة وما ترجعش تجمد تاني أبداً.",
+      "evidence_quote": "",
+      "diagram": "cycle",
+      "labels": [
+        "نقطة التجمد",
+        "حرارة",
+        "إذابة"
+      ],
+      "secondary_object": "none",
+      "interaction": "none",
+      "shot_type": "experiment",
+      "hero_object": "molecule",
+      "object_motion": "spin",
+      "image_query": "thermometer showing freezing point depression with salt and ice",
+      "visual_rationale": "Visual graph comparing the standard freezing point of water versus the depressed freezing point caused by saline solution."
+    },
+    {
+      "label": "تكوين المحلول",
+      "narration": "المحلول الملحي الناتج بيبدأ ينتشر ويسلل بين طبقات الثلج الأعمق والأعمق، وكل ما ينزل لتحت يوسع الفتحات ويخلي التفاعل ينتشر بسرعة أكبر في كل حتة جوه القالب، لغاية ما تحس إن الثلج بيتدمر من جواه بفعل فاعل خفي.",
+      "evidence_quote": "",
+      "diagram": "flow",
+      "labels": [
+        "محلول ملحي",
+        "انتشار",
+        "طبقات"
+      ],
+      "secondary_object": "molecule",
+      "interaction": "transfer",
+      "shot_type": "process",
+      "hero_object": "crystal",
+      "object_motion": "flow",
+      "image_query": "brine solution flowing down through channels in melting ice",
+      "visual_rationale": "Liquid brine channels carving pathways downward through the dissolving ice block."
+    },
+    {
+      "label": "انهيار الهيكل",
+      "narration": "من كتر ما الشبكة البلورية اتدمرت وبقت مليانة محاليل ملحية، الهيكل الصلب بيفقد تماسكه تماماً ويبدأ ينهار على بعضه، وتشوف الثلج قدامك بيتحول بسرعة من حالة الصلابة الكاملة إلى مياه سايلة ومرتاحة مفيهاش أي مقاومة خالص.",
+      "evidence_quote": "",
+      "diagram": "layers",
+      "labels": [
+        "انهيار",
+        "تفكك",
+        "سيولة"
+      ],
+      "secondary_object": "crystal",
+      "interaction": "separate",
+      "shot_type": "comparison",
+      "hero_object": "crystal",
+      "object_motion": "split",
+      "image_query": "collapsing ice block structure turning into slush",
+      "visual_rationale": "Side-by-side comparison showing rigid ice structure transforming into a loose slush mixture."
+    },
+    {
+      "label": "الاستخدام العملي",
+      "narration": "السر ده مش مجرد لعبة علمية وخخلاص، دي الفكرة اللي بتنقذ بلاد كتيرة في الشتاء لما بيرموا الملح على الشوارع عشان يمنعوا تراكم الثلوج وحوادث العربيات الخطيرة، وبيخلوا حركة المرور تمشي بشكل طبيعي من غير أي تعطل ولا زحمة.",
+      "evidence_quote": "",
+      "diagram": "flow",
+      "labels": [
+        "شوارع",
+        "مرور",
+        "سلامة"
+      ],
+      "secondary_object": "cart",
+      "interaction": "none",
+      "shot_type": "experiment",
+      "hero_object": "crystal",
+      "object_motion": "none",
+      "image_query": "salt truck spreading salt on a snowy winter road",
+      "visual_rationale": "A practical view of road salting showing clear pavement amidst surrounding snow."
+    },
+    {
+      "label": "الخلاصة العلمية",
+      "narration": "باختصار شديد، الم مش بيسخن الثلج ولا بيولع فيه نار، هو كل الحكاية بيستغل الكيمياء عشان يمنع الميه من الاستمرار في التجمد، ويدينا النتيجة المذهلة دي اللي بتثبت لنا إن أبسط المواد في المطبخ ممكن تحل أكبر المشاكل بكل سهولة.",
+      "evidence_quote": "",
+      "diagram": "cycle",
+      "labels": [
+        "كيمياء",
+        "نتيجة",
+        "مطبخ"
+      ],
+      "secondary_object": "molecule",
+      "interaction": "none",
+      "shot_type": "process",
+      "hero_object": "crystal",
+      "object_motion": "assemble",
+      "image_query": "laboratory flask with melting ice and salt crystals glowing",
+      "visual_rationale": "Final laboratory shot summarizing the chemical transformation with glowing molecular bonds."
+    }
+  ],
+  "cover_text": "إزاي الملح بيسيح الثلج",
+  "director_version": "v1.0"
+}
