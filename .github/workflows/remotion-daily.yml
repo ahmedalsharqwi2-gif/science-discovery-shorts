@@ -106,6 +106,14 @@
           "timeout-minutes": 5
         },
         {
+          "name": "Install media probe tools before retained-media preflight",
+          "run": "if [ -f /etc/apt/apt-mirrors.txt ]; then printf '%s\\n' 'https://archive.ubuntu.com/ubuntu' | sudo tee /etc/apt/apt-mirrors.txt >/dev/null; fi\nif [ -f /etc/apt/apt-mirrors-security.txt ]; then printf '%s\\n' 'https://security.ubuntu.com/ubuntu' | sudo tee /etc/apt/apt-mirrors-security.txt >/dev/null; fi\ntimeout 240s sudo apt-get -o Acquire::Retries=2 -o Acquire::http::Timeout=30 update -qq\ntimeout 240s sudo apt-get -o Acquire::Retries=2 -o Acquire::http::Timeout=30 install -y --no-install-recommends ffmpeg",
+          "timeout-minutes": 8,
+          "env": {
+            "DEBIAN_FRONTEND": "noninteractive"
+          }
+        },
+        {
           "name": "Freeze original date; verify configured Cairo clock and existing queues",
           "id": "decision",
           "run": "python -m remotion_factory.daily --decide-only ${{ inputs.dry_run && '--dry-run' || '' }}"
