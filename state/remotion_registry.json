@@ -577,6 +577,13 @@
           "status": "scheduled",
           "scheduled_at": "2026-11-08T10:00:00.000Z",
           "verified_at": "2026-11-06T15:22:47.320118+00:00"
+        },
+        "facebook": {
+          "phase": "intent",
+          "channel_id": "6a9edebbcd8b9c702c230128",
+          "due_at": "2026-11-08T10:00:00Z",
+          "media_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/releases/download/production-daily-remotion-2026-11-08-science/science-daily-remotion-2026-11-08-science.mp4",
+          "created_at": "2026-11-06T15:22:48.993823+00:00"
         }
       }
     }
