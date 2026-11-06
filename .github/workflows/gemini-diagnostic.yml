@@ -1,60 +1,22 @@
-name: Gemini API diagnostic
-on:
-  workflow_dispatch:
-permissions:
-  contents: read
-jobs:
-  test:
-    runs-on: ubuntu-24.04
-    timeout-minutes: 5
-    env:
-      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-      GEMINI_TEXT_API_KEY: ${{ secrets.GEMINI_TEXT_API_KEY || secrets.GEMINI_API_KEY }}
-    steps:
-      - name: Test key presence and Gemini model access
-        shell: bash
-        run: |
-          set -u
-          key="${GEMINI_TEXT_API_KEY:-}"
-          if [ -z "$key" ]; then
-            echo 'RESULT key_present=false source=GEMINI_TEXT_API_KEY_or_GEMINI_API_KEY'
-            exit 10
-          fi
-          echo 'RESULT key_present=true'
-          tmp=$(mktemp)
-          code=$(curl -sS --max-time 45 -o "$tmp" -w '%{http_code}' \
-            -H "x-goog-api-key: $key" \
-            "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite") || code=000
-          echo "MODEL_HTTP_STATUS=$code"
-          python3 - "$tmp" <<'PY'
-import json,sys
-p=sys.argv[1]
-try:
- d=json.load(open(p))
- out={k:d.get(k) for k in ('name','displayName','supportedGenerationMethods','error') if k in d}
- print(json.dumps(out,ensure_ascii=False))
-except Exception as e:
- print(json.dumps({'body_read_error':str(e)}))
-PY
-          if [ "$code" != 200 ]; then exit 11; fi
-          payload='{"contents":[{"parts":[{"text":"Return exactly JSON: {\\"ok\\":true}"}]}],"generationConfig":{"responseMimeType":"application/json","maxOutputTokens":32}}'
-          tmp2=$(mktemp)
-          code2=$(curl -sS --max-time 90 -o "$tmp2" -w '%{http_code}' \
-            -H 'Content-Type: application/json' -H "x-goog-api-key: $key" \
-            -d "$payload" \
-            "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent") || code2=000
-          echo "GENERATE_HTTP_STATUS=$code2"
-          python3 - "$tmp2" <<'PY'
-import json,sys
-p=sys.argv[1]
-try:
- d=json.load(open(p))
- if 'error' in d:
-  e=d['error']; print(json.dumps({'error':{k:e.get(k) for k in ('code','status','message') if k in e}},ensure_ascii=False))
- else:
-  c=(d.get('candidates') or [{}])[0]
-  print(json.dumps({'finishReason':c.get('finishReason'),'has_text':bool(c.get('content',{}).get('parts'))},ensure_ascii=False))
-except Exception as e:
- print(json.dumps({'body_read_error':str(e)}))
-PY
-          [ "$code2" = 200 ]
+{
+  "name": "Gemini API diagnostic",
+  "on": {"workflow_dispatch": {}},
+  "permissions": {"contents": "read"},
+  "jobs": {
+    "test": {
+      "runs-on": "ubuntu-24.04",
+      "timeout-minutes": 5,
+      "env": {
+        "GEMINI_API_KEY": "${{ secrets.GEMINI_API_KEY }}",
+        "GEMINI_TEXT_API_KEY": "${{ secrets.GEMINI_TEXT_API_KEY || secrets.GEMINI_API_KEY }}"
+      },
+      "steps": [
+        {
+          "name": "Test key presence and Gemini model access",
+          "shell": "bash",
+          "run": "set -u\nkey=\"${GEMINI_TEXT_API_KEY:-}\"\nif [ -z \"$key\" ]; then echo 'RESULT key_present=false source=GEMINI_TEXT_API_KEY_or_GEMINI_API_KEY'; exit 10; fi\necho 'RESULT key_present=true'\ntmp=$(mktemp)\ncode=$(curl -sS --max-time 45 -o \"$tmp\" -w '%{http_code}' -H \"x-goog-api-key: $key\" \"https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite\") || code=000\necho \"MODEL_HTTP_STATUS=$code\"\npython3 - \"$tmp\" <<'PY'\nimport json,sys\ntry:\n d=json.load(open(sys.argv[1])); print(json.dumps({k:d.get(k) for k in ('name','displayName','supportedGenerationMethods','error') if k in d},ensure_ascii=False))\nexcept Exception as e: print(json.dumps({'body_read_error':str(e)}))\nPY\nif [ \"$code\" != 200 ]; then exit 11; fi\npayload='{\"contents\":[{\"parts\":[{\"text\":\"Return exactly JSON: {\\\"ok\\\":true}\"}]}],\"generationConfig\":{\"responseMimeType\":\"application/json\",\"maxOutputTokens\":32}}'\ntmp2=$(mktemp)\ncode2=$(curl -sS --max-time 90 -o \"$tmp2\" -w '%{http_code}' -H 'Content-Type: application/json' -H \"x-goog-api-key: $key\" -d \"$payload\" \"https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent\") || code2=000\necho \"GENERATE_HTTP_STATUS=$code2\"\npython3 - \"$tmp2\" <<'PY'\nimport json,sys\ntry:\n d=json.load(open(sys.argv[1])); e=d.get('error'); print(json.dumps({'error':{k:e.get(k) for k in ('code','status','message') if k in e}} if e else {'finishReason':(d.get('candidates') or [{}])[0].get('finishReason'),'has_text':bool((d.get('candidates') or [{}])[0].get('content',{}).get('parts'))},ensure_ascii=False))\nexcept Exception as e: print(json.dumps({'body_read_error':str(e)}))\nPY\n[ \"$code2\" = 200 ]"
+        }
+      ]
+    }
+  }
+}
