@@ -1,53 +1,100 @@
 {
-  "date": "2026-11-06",
+  "date": "2026-11-07",
   "profile": "science",
-  "phase": "postpublish",
-  "checked_at": "2026-11-06T15:24:18.240491+00:00",
-  "run_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/actions/runs/42242635345",
-  "report_path": "reviews/daily_health/2026-11-06/42242635345-1.json",
-  "publication_due_utc": "2026-11-06T10:00:00+00:00",
+  "phase": "prepublish",
+  "checked_at": "2026-11-06T21:24:03.398757+00:00",
+  "run_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/actions/runs/42296322069",
+  "report_path": "reviews/daily_health/2026-11-07/42296322069-1.json",
+  "publication_due_utc": "2026-11-07T10:00:00+00:00",
   "errors": [
-    "No successful clock-triggered daily run for this date; manual recovery and dry-run tests do not count as the automatic clock",
-    "tiktok: publication time differs from the configured Cairo slot"
+    "No successful clock-triggered daily run for this date; manual recovery and dry-run tests do not count as the automatic clock"
   ],
   "passed": false,
   "generation_calls": 0,
   "publication_mutations": 0,
-  "preview": false,
+  "preview": true,
   "observed_receipts": {
     "tiktok": [
       {
-        "id": "6ae8d34987c5ea7cde5404e5",
+        "id": "6aede47fd7bf6f595dbe02f3",
         "channelId": "6a9edf14cd8b9c702c230272",
-        "status": "draft",
-        "dueAt": "2026-11-06T15:00:00.000Z",
+        "status": "scheduled",
+        "dueAt": "2026-11-07T10:00:00.000Z",
         "sentAt": null,
         "externalLink": null
       }
     ],
     "youtube": [
       {
-        "id": "6ae8d34fc1e1a07104365865",
+        "id": "6aede4856e87069bd713ff79",
         "channelId": "6a9edee8cd8b9c702c2301cb",
-        "status": "draft",
-        "dueAt": "2026-11-06T15:00:00.000Z",
+        "status": "scheduled",
+        "dueAt": "2026-11-07T10:00:00.000Z",
         "sentAt": null,
         "externalLink": null
       }
     ],
     "facebook": [
       {
-        "id": "6ae8d3544e55e02608791d97",
+        "id": "6aede48abbaeea3ce9f129ee",
         "channelId": "6a9edebbcd8b9c702c230128",
-        "status": "draft",
-        "dueAt": "2026-11-06T15:00:00.000Z",
+        "status": "scheduled",
+        "dueAt": "2026-11-07T10:00:00.000Z",
         "sentAt": null,
         "externalLink": null
       }
     ]
   },
-  "production_at_cairo": "2026-11-05T19:00:00+02:00",
-  "publication_at_cairo": "2026-11-06T12:00:00+02:00",
-  "hours_until_publication": -5.41,
-  "readiness": "needs_attention"
+  "receipts": {
+    "tiktok": {
+      "id": "6aede47fd7bf6f595dbe02f3",
+      "channelId": "6a9edf14cd8b9c702c230272",
+      "status": "scheduled",
+      "dueAt": "2026-11-07T10:00:00.000Z",
+      "sentAt": null,
+      "externalLink": null
+    },
+    "youtube": {
+      "id": "6aede4856e87069bd713ff79",
+      "channelId": "6a9edee8cd8b9c702c2301cb",
+      "status": "scheduled",
+      "dueAt": "2026-11-07T10:00:00.000Z",
+      "sentAt": null,
+      "externalLink": null
+    },
+    "facebook": {
+      "id": "6aede48abbaeea3ce9f129ee",
+      "channelId": "6a9edebbcd8b9c702c230128",
+      "status": "scheduled",
+      "dueAt": "2026-11-07T10:00:00.000Z",
+      "sentAt": null,
+      "externalLink": null
+    }
+  },
+  "episode": {
+    "slot": "daily-remotion-2026-11-07-science",
+    "title": "الصدأ: ماذا يفعل الأكسجين بالحديد؟",
+    "pipeline": "remotion",
+    "expected_sha256": "dc0967e984ada7379a56eec177c5e69940b08b07b32d135129a0b70a3c5af9de"
+  },
+  "technical": {
+    "passed": true,
+    "sha256": "dc0967e984ada7379a56eec177c5e69940b08b07b32d135129a0b70a3c5af9de",
+    "full_decode": true,
+    "duration": 166.9,
+    "width": 1080,
+    "height": 1920,
+    "audio_mean_db": -18.9,
+    "actual_visual_samples": 12,
+    "unique_visual_samples": 12,
+    "checked_at": "2026-11-06T14:49:03.898020+00:00",
+    "scope": "Independent technical media check; no claim of human narrative or scientific review",
+    "reused_immutable_media_check": true,
+    "live_asset_metadata_verified": true
+  },
+  "media_binding": "Same live scheduled source URL and independently hashed original",
+  "production_at_cairo": "2026-11-06T19:00:00+02:00",
+  "publication_at_cairo": "2026-11-07T12:00:00+02:00",
+  "hours_until_publication": 12.6,
+  "readiness": "verified"
 }
