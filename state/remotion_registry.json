@@ -508,7 +508,7 @@
     "daily-remotion-2026-11-08-science": {
       "profile": "science",
       "due_at": "2026-11-08T10:00:00Z",
-      "status": "review_requested",
+      "status": "authored",
       "source_run": 42240001899,
       "created_at": "2026-11-06T15:07:58.890774+00:00",
       "source_selection": {
@@ -534,7 +534,15 @@
         "sha256": "8ac82f8ce7a83cf8592afaced99f616fecfa3adff0054e5a7daf99ac65ae29f9"
       },
       "canonical_subject": "salt-ice-freezing-point",
-      "title": "إزاي الملح بيسيح الثلج في ثواني؟"
+      "title": "إزاي الملح بيسيح الثلج في ثواني؟",
+      "editorial_review": {
+        "supported": true,
+        "engaging": true,
+        "novel": true,
+        "visuals_match": true,
+        "issues": [],
+        "passed": true
+      }
     }
   },
   "cutover_evidence": {
