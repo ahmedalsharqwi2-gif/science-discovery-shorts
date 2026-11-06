@@ -1,13 +1,14 @@
 {
-  "date": "2026-11-05",
+  "date": "2026-11-06",
   "profile": "science",
-  "phase": "prepublish",
-  "checked_at": "2026-11-04T22:40:48.243333+00:00",
-  "run_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/actions/runs/41927305165",
-  "report_path": "reviews/daily_health/2026-11-05/41927305165-1.json",
-  "publication_due_utc": "2026-11-05T10:00:00+00:00",
+  "phase": "postpublish",
+  "checked_at": "2026-11-06T13:47:00.256435+00:00",
+  "run_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/actions/runs/42228201964",
+  "report_path": "reviews/daily_health/2026-11-06/42228201964-1.json",
+  "publication_due_utc": "2026-11-06T10:00:00+00:00",
   "errors": [
-    "No successful clock-triggered daily run for this date; manual recovery and dry-run tests do not count as the automatic clock"
+    "No successful clock-triggered daily run for this date; manual recovery and dry-run tests do not count as the automatic clock",
+    "tiktok: publication time differs from the configured Cairo slot"
   ],
   "passed": false,
   "generation_calls": 0,
@@ -16,85 +17,37 @@
   "observed_receipts": {
     "tiktok": [
       {
-        "id": "6aeba7da4cb090f0ac3ee3bc",
+        "id": "6ae8d34987c5ea7cde5404e5",
         "channelId": "6a9edf14cd8b9c702c230272",
-        "status": "scheduled",
-        "dueAt": "2026-11-05T10:00:00.000Z",
+        "status": "draft",
+        "dueAt": "2026-11-06T15:00:00.000Z",
         "sentAt": null,
         "externalLink": null
       }
     ],
     "youtube": [
       {
-        "id": "6aeba7df4cb090f0ac3ee472",
+        "id": "6ae8d34fc1e1a07104365865",
         "channelId": "6a9edee8cd8b9c702c2301cb",
-        "status": "scheduled",
-        "dueAt": "2026-11-05T10:00:00.000Z",
+        "status": "draft",
+        "dueAt": "2026-11-06T15:00:00.000Z",
         "sentAt": null,
         "externalLink": null
       }
     ],
     "facebook": [
       {
-        "id": "6aeba7e43a6057e11e77b71d",
+        "id": "6ae8d3544e55e02608791d97",
         "channelId": "6a9edebbcd8b9c702c230128",
-        "status": "scheduled",
-        "dueAt": "2026-11-05T10:00:00.000Z",
+        "status": "draft",
+        "dueAt": "2026-11-06T15:00:00.000Z",
         "sentAt": null,
         "externalLink": null
       }
     ]
   },
-  "receipts": {
-    "tiktok": {
-      "id": "6aeba7da4cb090f0ac3ee3bc",
-      "channelId": "6a9edf14cd8b9c702c230272",
-      "status": "scheduled",
-      "dueAt": "2026-11-05T10:00:00.000Z",
-      "sentAt": null,
-      "externalLink": null
-    },
-    "youtube": {
-      "id": "6aeba7df4cb090f0ac3ee472",
-      "channelId": "6a9edee8cd8b9c702c2301cb",
-      "status": "scheduled",
-      "dueAt": "2026-11-05T10:00:00.000Z",
-      "sentAt": null,
-      "externalLink": null
-    },
-    "facebook": {
-      "id": "6aeba7e43a6057e11e77b71d",
-      "channelId": "6a9edebbcd8b9c702c230128",
-      "status": "scheduled",
-      "dueAt": "2026-11-05T10:00:00.000Z",
-      "sentAt": null,
-      "externalLink": null
-    }
-  },
-  "episode": {
-    "slot": "daily-remotion-2026-11-05-science",
-    "title": "إزاي البكتيريا بتصنع درع ضد المضادات الحيوية؟",
-    "pipeline": "remotion",
-    "expected_sha256": "318bff64bb553609a243ad67152f52349006a26027a60719cd10386d65b28ea0"
-  },
-  "technical": {
-    "passed": true,
-    "sha256": "318bff64bb553609a243ad67152f52349006a26027a60719cd10386d65b28ea0",
-    "full_decode": true,
-    "duration": 150.6,
-    "width": 1080,
-    "height": 1920,
-    "audio_mean_db": -19.0,
-    "actual_visual_samples": 12,
-    "unique_visual_samples": 12,
-    "checked_at": "2026-11-04T21:48:35.738896+00:00",
-    "scope": "Independent technical media check; no claim of human narrative or scientific review",
-    "reused_immutable_media_check": true,
-    "live_asset_metadata_verified": true
-  },
-  "media_binding": "Same live scheduled source URL and independently hashed original",
-  "production_at_cairo": "2026-11-04T19:00:00+02:00",
-  "publication_at_cairo": "2026-11-05T12:00:00+02:00",
-  "hours_until_publication": 11.32,
-  "readiness": "verified"
+  "production_at_cairo": "2026-11-05T19:00:00+02:00",
+  "publication_at_cairo": "2026-11-06T12:00:00+02:00",
+  "hours_until_publication": -3.78,
+  "readiness": "needs_attention"
 }
