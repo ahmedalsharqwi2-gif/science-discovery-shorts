@@ -27,7 +27,7 @@ def checked_draft(slot, draft, profile, source, row, validate, ask, schema,
     prompt = (
         'Edit this retained Egyptian Arabic draft, do not choose a new episode. Use natural Egyptian colloquial Masri only; NEVER use Modern Standard Arabic or formal translated prose. Include ده/دي/مش/اللي/عشان/إزاي naturally where they fit. '
         f'Fix the reported validation problem: {problem}. Exactly eight scenes, '
-        f'TOTAL {low}-{high} whitespace-separated narration words. '
+        f'TOTAL {low}-{high} whitespace-separated narration words, with 32-43 words in EACH of the eight narration fields. Count every field before returning and reject your own answer if the total is outside the range. Use natural Egyptian colloquial Masri only, never Modern Standard Arabic. '
         'Preserve every existing dialogue turn and speaker role; fix length in the turns themselves when present. Never add spoken role labels. Keep the EXACT canonical_subject and the same topic, factual meaning, '
         'scene order and ending. Remove repetition and filler if long; explain '
         'only facts supported by SOURCE if short. No invented events, quotes, '
