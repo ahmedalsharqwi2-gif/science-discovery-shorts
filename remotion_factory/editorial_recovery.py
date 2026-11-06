@@ -25,7 +25,7 @@ def checked_draft(slot, draft, profile, source, row, validate, ask, schema,
     mutate(retain)
     low, high = (185, 235) if profile == 'news' else (270, 330)
     prompt = (
-        'Edit this retained Egyptian Arabic draft, do not choose a new episode. '
+        'Edit this retained Egyptian Arabic draft, do not choose a new episode. Use natural Egyptian colloquial Masri only; NEVER use Modern Standard Arabic or formal translated prose. Include ده/دي/مش/اللي/عشان/إزاي naturally where they fit. '
         f'Fix the reported validation problem: {problem}. Exactly eight scenes, '
         f'TOTAL {low}-{high} whitespace-separated narration words. '
         'Preserve every existing dialogue turn and speaker role; fix length in the turns themselves when present. Never add spoken role labels. Keep the EXACT canonical_subject and the same topic, factual meaning, '

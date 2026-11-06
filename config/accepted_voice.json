@@ -3,7 +3,7 @@
   "model": "gemini-3.8-flash-tts",
   "speaker": "Charon",
   "language": "ar-EG",
-  "style": "Egyptian Arabic ar-EG, native conversational Cairo accent. Mature warm male documentary storyteller, low resonant register, clear exact articulation, measured pace around 140 words per minute. Say the year numbers naturally in Egyptian Arabic. Preserve every word and sentence of the transcript, finish the last sentence clearly. No music, no sound effects, no singing, no spoken instructions.",
+  "style": "Egyptian Arabic ar-EG only: native conversational Cairo/Lower-Egypt colloquial speech, never Modern Standard Arabic or formal news prose. Use natural words such as ده، دي، مش، اللي، عشان، إزاي، كده، إحنا when they fit; do not translate the script into fusha. Mature warm male documentary storyteller, low resonant register, clear exact articulation, measured pace around 140 words per minute. Say the year numbers naturally in Egyptian Arabic. Preserve every word and sentence of the transcript, finish the last sentence clearly. No music, no sound effects, no singing, no spoken instructions.",
   "fallback_allowed": false,
   "approved_sample_run": 39508370425,
   "approval": "User selected complete Egyptian Charon narration",
