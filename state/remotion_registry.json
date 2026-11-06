@@ -504,6 +504,13 @@
           "verified_at": "2026-11-06T14:30:36.520584+00:00"
         }
       }
+    },
+    "daily-remotion-2026-11-08-science": {
+      "profile": "science",
+      "due_at": "2026-11-08T10:00:00Z",
+      "status": "author_pending",
+      "source_run": 42240001899,
+      "created_at": "2026-11-06T15:07:58.890774+00:00"
     }
   },
   "cutover_evidence": {
