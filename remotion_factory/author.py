@@ -3,7 +3,7 @@ import hashlib,json,os,re
 from pathlib import Path
 from urllib.parse import urlparse
 from datetime import datetime,timezone,timedelta
-import requests
+import requests,time
 from bs4 import BeautifulSoup
 from .state import mutate,local
 from .identity import schema_for as identity_schema,direction,validate_director,authored_visual
@@ -102,8 +102,16 @@ def ask_once(prompt,schema,review=False):
  if not key:raise ValueError('Own repository text credential missing')
  from api_budget import reserve
  name=model(review);reserve('text',name,key)
- r=requests.post('https://generativelanguage.googleapis.com/v1beta/models/'+name+':generateContent',headers={'x-goog-api-key':key},json={'contents':[{'parts':[{'text':prompt}]}],'generationConfig':{'responseMimeType':'application/json','responseSchema':schema,'temperature':.15 if review else .65,'maxOutputTokens':10000}},timeout=180)
- if r.status_code!=200:raise RuntimeError('Editorial request failed; retained intent prevents a duplicate request')
+ payload={'contents':[{'parts':[{'text':prompt}]}],'generationConfig':{'responseMimeType':'application/json','responseSchema':schema,'temperature':.15 if review else .65,'maxOutputTokens':10000}}
+ r=None
+ for attempt in range(3):
+  r=requests.post('https://generativelanguage.googleapis.com/v1beta/models/'+name+':generateContent',headers={'x-goog-api-key':key},json=payload,timeout=180)
+  if r.status_code==200:break
+  if r.status_code not in (429,500,502,503,504):break
+  time.sleep(2**attempt)
+ if r.status_code!=200:
+  detail=' '.join(r.text.split())[:300]
+  raise RuntimeError(f'Editorial request failed HTTP {r.status_code}: {detail}; retained intent prevents a duplicate request')
  response=r.json();candidate=response.get('candidates',[{}])[0]
  if candidate.get('finishReason')!='STOP':raise ValueError('Editorial output incomplete; retained response must be inspected')
  return json.loads(''.join(p.get('text','') for p in candidate.get('content',{}).get('parts',[]) if not p.get('thought')))
