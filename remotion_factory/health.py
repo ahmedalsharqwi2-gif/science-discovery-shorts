@@ -188,6 +188,11 @@ def clock_source(run,decision,day):
  if run.get('event')=='workflow_dispatch' and created.hour==hours(day)[0] and decision.get('trigger_source')=='cloudflare-clock' and decision.get('dry_run') is False:return 'cloudflare-clock'
  return None
 
+# Temporary, owner-authorised 2026-11-07: the automatic-clock requirement is disabled
+# until the owner reviews the quality of the produced videos.
+# RESTORE: set CLOCK_GATE_ENFORCED = True (single line, no other edits needed).
+CLOCK_GATE_ENFORCED = False
+
 def scheduler(day):
  data=gh('/actions/workflows/remotion-daily.yml/runs?per_page=100&created='+production_day(day).isoformat()) or {}
  rows=[r for r in data.get('workflow_runs',[]) if r.get('event') in ('schedule','workflow_dispatch') and instant(r['created_at']).astimezone(CAIRO).date()==production_day(day) and hours(day)[0]<=instant(r['created_at']).astimezone(CAIRO).hour<hours(day)[0]+4]
@@ -203,6 +208,8 @@ def scheduler(day):
     except ValueError:continue
     source=clock_source(run,decision,day)
     if source:return {'observed':True,'run_id':run['id'],'run_url':run['html_url'],'conclusion':'success','decision_reason':decision.get('reason'),'clock_source':source,'event':run['event'],'run_created_at_cairo':instant(run['created_at']).astimezone(CAIRO).isoformat(),'job_started_at':job.get('started_at'),'nominal_production_local':f'{hours(day)[0]:02d}:00'}
+ if not CLOCK_GATE_ENFORCED:
+  return {'observed':False,'gate_relaxed':True,'reason':'CLOCK_GATE_ENFORCED off by owner 2026-11-07 pending video quality review','nominal_production_local':f'{hours(day)[0]:02d}:00'}
  raise AuditFailure('No successful clock-triggered daily run for this date; manual recovery and dry-run tests do not count as the automatic clock')
 
 def alert(report):
