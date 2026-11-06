@@ -63,7 +63,7 @@ def decide(args):
  if not args.dry_run:mutate(choose)
  return {'run':not args.dry_run,'reason':'eligible' if not args.dry_run else 'dry run; no provider mutation','profile':profile,'due_at':due,'entry':selected}
 def main():
- parser=argparse.ArgumentParser();parser.add_argument('--dry-run',action='store_true');parser.add_argument('--date');parser.add_argument('--decide-only',action='store_true');args=parser.parse_args();decision=decide(args)
+ parser=argparse.ArgumentParser();parser.add_argument('--dry-run',action='store_true');parser.add_argument('--render-only',action='store_true');parser.add_argument('--date');parser.add_argument('--decide-only',action='store_true');args=parser.parse_args();decision=decide(args)
  source_event=json.loads(Path(os.environ['GITHUB_EVENT_PATH']).read_text())
  decision['trigger_source']=source_event.get('inputs',{}).get('trigger_source','manual') if os.getenv('GITHUB_EVENT_NAME')=='workflow_dispatch' else os.getenv('GITHUB_EVENT_NAME','unknown')
  decision['dry_run']=bool(args.dry_run)
@@ -97,6 +97,11 @@ def main():
  # never a claim that the owner watched an automatically produced episode.
  from .quality import verify
  verify(movie,report,profile)
+ if args.render_only:
+  render_report={'render_only':True,'automatically_published':False,'publish_skipped':True,'video':str(movie),'video_sha256':hashlib.sha256(movie.read_bytes()).hexdigest(),'profile':profile,'slot':entry['slot']}
+  Path('professional_motion/output/render-only-validation.json').write_text(json.dumps(render_report,ensure_ascii=False,indent=2)+'\n')
+  print(json.dumps(render_report,ensure_ascii=False))
+  return
  approval=Path('.work/approval.json');approval.write_text(json.dumps({'video_sha256':hashlib.sha256(movie.read_bytes()).hexdigest(),'visual_review_passed':True,'approval_basis':'standing owner style approval plus automated scene/technical/source checks','owner_watched_this_episode':False}));os.environ['REMOTION_APPROVAL_PATH']=str(approval)
  from .publish import main as publish
  publish()

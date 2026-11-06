@@ -39,6 +39,11 @@
           "type": "boolean",
           "default": false
         },
+        "render_only": {
+          "description": "Render and validate a real video artifact, but skip all external publishing",
+          "type": "boolean",
+          "default": false
+        },
         "trigger_source": {
           "description": "Declared initiating service; tests/manual actions are never treated as an actual automatic clock",
           "type": "choice",
@@ -150,7 +155,7 @@
         {
           "name": "New topic → retained voice → Remotion → full decode → verified configured-time scheduling",
           "if": "steps.decision.outputs.run == 'true'",
-          "run": "python -m remotion_factory.daily"
+          "run": "python -m remotion_factory.daily ${{ inputs.render_only && '--render-only' || '' }}"
         },
         {
           "uses": "actions/upload-artifact@v4",
