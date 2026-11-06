@@ -1,0 +1,266 @@
+{
+  "title": "الصدأ: ماذا يفعل الأكسجين بالحديد؟",
+  "canonical_subject": "iron-rust-oxidation",
+  "hashtags": [
+    "الصدأ",
+    "الأكسجين",
+    "الكيمياء",
+    "معلومات_علمية"
+  ],
+  "scenes": [
+    {
+      "label": "البداية",
+      "narration": "تخيل أنك بنيت بيتا كاملا من معدن الحديد القوي اللامع لتستمتع بمتانة لا توصف وتعيش في أمان تام دون أي قلق من الزمن، لكن الأكسجين المحيط بك لا ينام أبدا ولديه خطة أخرى خفية لتدمير كل هذا الصلابة ببطء شديد وبدون أي إنذار مسبق.",
+      "evidence_quote": "الحديد يتفاعل مع الأكسجين",
+      "diagram": "flow",
+      "labels": [
+        "حديد",
+        "أكسجين",
+        "تفاعل"
+      ],
+      "secondary_object": "molecule",
+      "interaction": "approach",
+      "shot_type": "experiment",
+      "hero_object": "house",
+      "object_motion": "none",
+      "image_query": "iron house interacting with oxygen molecules",
+      "visual_rationale": "Shows a shiny iron house surrounded by floating oxygen molecules to introduce the oxidation threat.",
+      "id": "scene_1",
+      "visual_mode": "hero",
+      "visual": {
+        "kind": "explainer",
+        "kicker": "flow",
+        "labels": [
+          "حديد",
+          "أكسجين",
+          "تفاعل"
+        ]
+      }
+    },
+    {
+      "label": "الخطوة الأولى",
+      "narration": "في اللحظة التي تلمس فيها جزيئات الماء الرطوبة الموجودة في الجو تبدأ عملية سرقة الإلكترونات السريعة، حيث يفقد الحديد الكتروناته الثمينة بكل سهولة بينما يبتلعها الأكسجين الجشع بلا توقف، وتتحول ذرات المعدن الصلبة إلى أيونات مشحونة تفتح باب الكارثة على مصراعيه.",
+      "evidence_quote": "فقدان الإلكترونات",
+      "diagram": "layers",
+      "labels": [
+        "إلكترونات",
+        "أيونات",
+        "ماء"
+      ],
+      "secondary_object": "circuit",
+      "interaction": "transfer",
+      "shot_type": "macro",
+      "hero_object": "molecule",
+      "object_motion": "split",
+      "image_query": "iron atoms losing electrons to oxygen with water present",
+      "visual_rationale": "Macro shot of iron molecules splitting and transferring electrons in the presence of water.",
+      "id": "scene_2",
+      "visual_mode": "hero",
+      "visual": {
+        "kind": "explainer",
+        "kicker": "layers",
+        "labels": [
+          "إلكترونات",
+          "أيونات",
+          "ماء"
+        ]
+      }
+    },
+    {
+      "label": "تكوين المركب",
+      "narration": "تتجمع الأيونات الناتجة مع جزيئات الماء والأكسجين لتنتج معا مادة هشة جديدة تماما تعرف باسم أكسيد الحديد المائي، هذه المادة الحمراء البنية تفتقر تماما لأي قوة أو تماسك وتتشكل على سطح المعدن الأصلي كطبقة إسفنجية قبيحة ومفككة.",
+      "evidence_quote": "أكسيد الحديد المائي",
+      "diagram": "cycle",
+      "labels": [
+        "مركب",
+        "لون بني",
+        "طبقة هشة"
+      ],
+      "secondary_object": "crystal",
+      "interaction": "encircle",
+      "shot_type": "process",
+      "hero_object": "crystal",
+      "object_motion": "assemble",
+      "image_query": "formation of hydrated iron oxide crystals",
+      "visual_rationale": "Crystals assembling to form the brittle reddish-brown rust layer on the surface.",
+      "id": "scene_3",
+      "visual_mode": "hero",
+      "visual": {
+        "kind": "explainer",
+        "kicker": "cycle",
+        "labels": [
+          "مركب",
+          "لون بني",
+          "طبقة هشة"
+        ]
+      }
+    },
+    {
+      "label": "تآكل السطح",
+      "narration": "بمرور الأيام تتسع المسام في هذه الطبقة الصدئة وتسمح للمزيد من الهواء والرطوبة بالتسغل للعمق وتجاوز السطح الخارجي بسهولة، فيستمر التآكل للداخل وتتآكل الأعمدة وتضعف الدعامات الحاملة شيئا فشيئا حتى يفقد البيت صلابته تماما ويصبح عرضة للانهيار الفجائي في أي لحظة.",
+      "evidence_quote": "تآكل العمق",
+      "diagram": "layers",
+      "labels": [
+        "مسام",
+        "تآكل",
+        "ضعف"
+      ],
+      "secondary_object": "rock_layers",
+      "interaction": "contrast",
+      "shot_type": "comparison",
+      "hero_object": "house",
+      "object_motion": "shake",
+      "image_query": "cross section of rusted iron showing deep corrosion",
+      "visual_rationale": "Comparison view showing the structure shaking as rust penetrates deep into the layers.",
+      "id": "scene_4",
+      "visual_mode": "hero",
+      "visual": {
+        "kind": "explainer",
+        "kicker": "layers",
+        "labels": [
+          "مسام",
+          "تآكل",
+          "ضعف"
+        ]
+      }
+    },
+    {
+      "label": "محاولة الحماية",
+      "narration": "لكي توقف هذا المد المدمر عليك أن تعزل المعدن تماما عن الهواء والماء بطبقة طلاء عازلة أو بمعادن أخرى تقحي نفسها كدرع بشري، فالزنك مثلا يضحي بنفسه ويتأكل أولا ليحمي قلب الحديد تحته عبر تفاعل تضحية كيميائي ذكي وفعال جدا.",
+      "evidence_quote": "الطلاء الواقي",
+      "diagram": "flow",
+      "labels": [
+        "طلاء",
+        "زنك",
+        "حماية"
+      ],
+      "secondary_object": "shield",
+      "interaction": "approach",
+      "shot_type": "experiment",
+      "hero_object": "shield",
+      "object_motion": "none",
+      "image_query": "protective paint shield covering iron surface",
+      "visual_rationale": "A protective shield layer covering the iron surface to block oxygen and moisture.",
+      "id": "scene_5",
+      "visual_mode": "hero",
+      "visual": {
+        "kind": "explainer",
+        "kicker": "flow",
+        "labels": [
+          "طلاء",
+          "زنك",
+          "حماية"
+        ]
+      }
+    },
+    {
+      "label": "التجربة العملية",
+      "narration": "إذا وضعت مسمارا في ماء مقطر خال تماما من الهواء المذاب فلن يصدأ أبدا مهما طال الزمن، بينما المسمار المعرض للهواء والرطوبة معا يتحول إلى كتلة حمراء هشة في أيام معدودة، وهذه التجربة البسيطة تثبت أن العاملين معا هما سر المشكلة بالكامل.",
+      "evidence_quote": "الماء والهواء معا",
+      "diagram": "compare",
+      "labels": [
+        "مسمار",
+        "تجربة",
+        "مقارنة"
+      ],
+      "secondary_object": "monitor",
+      "interaction": "contrast",
+      "shot_type": "comparison",
+      "hero_object": "pendulum",
+      "object_motion": "none",
+      "image_query": "comparison between rusted nail in air and clean nail in pure water",
+      "visual_rationale": "Side-by-side comparison of a clean nail in pure water versus a rusted nail in air.",
+      "id": "scene_6",
+      "visual_mode": "hero",
+      "visual": {
+        "kind": "explainer",
+        "kicker": "compare",
+        "labels": [
+          "مسمار",
+          "تجربة",
+          "مقارنة"
+        ]
+      }
+    },
+    {
+      "label": "الجانب الاقتصادي",
+      "narration": "هذه العملية الكيميائية البسيطة تكلف العالم مليارات الدولارات سنويا لترميم الجسور والسفن والسيارات المنهارة، لأن الطبيعة لا تترك شيئا على حاله وهي مصرة دائما على إعادة كل المعادن المصنعة إلى حالتها الخام المستقرة في صورة خامات أرضية مستقرة.",
+      "evidence_quote": "تخريب اقتصادي",
+      "diagram": "flow",
+      "labels": [
+        "تكلفة",
+        "جسور",
+        "خامات"
+      ],
+      "secondary_object": "ship",
+      "interaction": "flow",
+      "shot_type": "process",
+      "hero_object": "ship",
+      "object_motion": "drift",
+      "image_query": "rusted metal structures and industrial economic impact",
+      "visual_rationale": "Flow diagram showing the economic drain caused by rust on ships and bridges.",
+      "id": "scene_7",
+      "visual_mode": "hero",
+      "visual": {
+        "kind": "explainer",
+        "kicker": "flow",
+        "labels": [
+          "تكلفة",
+          "جسور",
+          "خامات"
+        ]
+      }
+    },
+    {
+      "label": "الخلاصة",
+      "narration": "في النهاية الصدأ ليس مجرد لون قبيح بل هو درس في قوى الكيمياء الطبيعية المستمرة التي تحكم كوكبنا، وفهمنا الدقيق لهذه العملية يمكننا من ابتكار مواد أحدث وسبائك أذكى تقاوم الزمن وتحافظ على منشآتنا صلبة وآمنة في وجه الأكسجين الشره للأبد.",
+      "evidence_quote": "فهم الكيمياء",
+      "diagram": "cycle",
+      "labels": [
+        "خلاصة",
+        "سبائك",
+        "أمان"
+      ],
+      "secondary_object": "molecule",
+      "interaction": "encircle",
+      "shot_type": "experiment",
+      "hero_object": "molecule",
+      "object_motion": "pulse",
+      "image_query": "advanced alloy molecules resisting oxidation",
+      "visual_rationale": "Pulsing alloy molecules demonstrating robust resistance to oxygen attack.",
+      "id": "scene_8",
+      "visual_mode": "hero",
+      "visual": {
+        "kind": "explainer",
+        "kicker": "cycle",
+        "labels": [
+          "خلاصة",
+          "سبائك",
+          "أمان"
+        ]
+      }
+    }
+  ],
+  "cover_text": "لماذا يصدأ الحديد؟",
+  "director_version": "v1.0",
+  "profile": "science",
+  "series": "اسرار الكون",
+  "fiction": false,
+  "documented": true,
+  "topic_key": "remotion-iron-rust-oxidation",
+  "source": {
+    "title": "الصدأ: ماذا يفعل الأكسجين بالحديد؟",
+    "publisher": "معلومة علمية مبسطة"
+  },
+  "science_domain": "biology",
+  "visual_identity": {
+    "version": "channel-identities-v1",
+    "profile": "science",
+    "name": "مختبر الحياة",
+    "background": "#e5f2ed",
+    "ink": "#153e40",
+    "accent": "#179ca6",
+    "visual": "bright three-dimensional laboratory, topic-specific objects, meaningful experiments",
+    "sound": "glass mallets, light organic bass, water and mechanism cues"
+  }
+}
