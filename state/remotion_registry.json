@@ -420,8 +420,8 @@
     "daily-remotion-2026-11-07-science": {
       "profile": "science",
       "due_at": "2026-11-07T10:00:00Z",
-      "status": "authored",
-      "source_run": 42228768486,
+      "status": "voice_requested",
+      "source_run": 42232962168,
       "created_at": "2026-11-06T13:50:57.867315+00:00",
       "source_selection": {
         "title": "الصدأ: ماذا يفعل الأكسجين بالحديد؟",
@@ -456,7 +456,8 @@
         "issues": [],
         "passed": true
       },
-      "story_sha256": "faa95c9dd4712b4b8f21afffb757276061a8a546ccd78622b277067400b1106c"
+      "story_sha256": "faa95c9dd4712b4b8f21afffb757276061a8a546ccd78622b277067400b1106c",
+      "voice_request_run": 42232962168
     }
   },
   "cutover_evidence": {
