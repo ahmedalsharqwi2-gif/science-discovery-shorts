@@ -96,13 +96,17 @@ SCHEMA=identity_schema(SCHEMA,'science')
 REVIEW={'type':'OBJECT','properties':{'supported':{'type':'BOOLEAN'},'engaging':{'type':'BOOLEAN'},'novel':{'type':'BOOLEAN'},'visuals_match':{'type':'BOOLEAN'},'issues':{'type':'ARRAY','items':{'type':'STRING'}}},'required':['supported','engaging','novel','visuals_match','issues']}
 def model(review):
  cfg=json.loads(Path('config/professional_models.json').read_text());return cfg['reviewer' if review else 'writer']
+def api_schema(value):
+ if isinstance(value,dict):return {k:api_schema(v) for k,v in value.items() if k not in ('minItems','maxItems','enum','description')}
+ if isinstance(value,list):return [api_schema(v) for v in value]
+ return value
 def ask_once(prompt,schema,review=False):
  # No provider/model fallback and no repeated uncertain generation.
  key=(os.getenv('GEMINI_TEXT_API_KEY') or os.getenv('GEMINI_API_KEY') or '').strip()
  if not key:raise ValueError('Own repository text credential missing')
  from api_budget import reserve
  name=model(review);reserve('text',name,key)
- payload={'contents':[{'parts':[{'text':prompt}]}],'generationConfig':{'responseMimeType':'application/json','responseSchema':schema,'maxOutputTokens':10000}}
+ payload={'contents':[{'parts':[{'text':prompt}]}],'generationConfig':{'responseMimeType':'application/json','responseSchema':api_schema(schema),'maxOutputTokens':10000}}
  r=None
  for attempt in range(3):
   r=requests.post('https://generativelanguage.googleapis.com/v1beta/models/'+name+':generateContent',headers={'x-goog-api-key':key},json=payload,timeout=180)
