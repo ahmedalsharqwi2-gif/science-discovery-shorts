@@ -678,7 +678,7 @@
     "daily-remotion-2026-11-12-science": {
       "profile": "science",
       "due_at": "2026-11-12T10:00:00Z",
-      "status": "review_requested",
+      "status": "authored",
       "source_run": 42424309713,
       "created_at": "2026-11-07T23:14:53.290603+00:00",
       "source_selection": {
@@ -705,7 +705,15 @@
         "sha256": "8a0791cf6d4f2f8b9163f207048776f5731bacc7e8cf3dcb8c58f4c2899f2ef6"
       },
       "canonical_subject": "science-9226f10856398403b2d8",
-      "title": "إزاي العلما حلوا لغز كيمياء بقاله ستين سنة بالصدفة؟"
+      "title": "إزاي العلما حلوا لغز كيمياء بقاله ستين سنة بالصدفة؟",
+      "editorial_review": {
+        "supported": true,
+        "engaging": true,
+        "novel": true,
+        "visuals_match": true,
+        "issues": [],
+        "passed": true
+      }
     }
   },
   "cutover_evidence": {
