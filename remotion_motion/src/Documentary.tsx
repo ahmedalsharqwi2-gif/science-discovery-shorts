@@ -5,7 +5,7 @@ import {Audio} from '@remotion/media';
 import {loadFont} from '@remotion/fonts';
 import type {Episode,Scene} from './types';
 import {MapPlate} from './MapPlate';
-import {SciencePlate} from './SciencePlate';
+import {Science3D} from './Science3D';
 import {StickmanPlate} from './StickmanPlate';
 import {LearningDevice} from './LearningDevice';
 import {MotionFinish,KineticTitle} from './MotionFinish';
@@ -28,7 +28,7 @@ const SceneView=({scene,episode,index}:{scene:Scene;episode:Episode;index:number
  <AbsoluteFill style={{background:`radial-gradient(ellipse at 80% 45%,${palette.accent}15,transparent 65%)`}}/>
  {scene.asset?<Photo scene={scene} profile={episode.profile}/>:null}
  {scene.kind==='map'?<AbsoluteFill style={{scale:1+Math.min(.04,f/(fps*300)),transformOrigin:'50% 50%'}}><MapPlate longitude={scene.longitude} latitude={scene.latitude} zoom={scene.zoom} color={palette.accent} marker={episode.profile!=='news'}/></AbsoluteFill>:null}
- {scene.kind==='science'?<SciencePlate kind={scene.kicker||'bubble'}/>:null}
+ {['science','experiment','process','comparison','macro','headline','takeaway'].includes(scene.kind)?<Science3D scene={scene} accent={palette.accent}/>:null}
  {scene.kind==='timeline'?<Timeline scene={scene} color={palette.accent}/>:null}
  {scene.kind==='metric'?<Metric scene={scene} color={palette.accent}/>:null}
  {scene.kind==='stability'?<ShipStability color={palette.accent}/>:null}
