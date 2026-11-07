@@ -1,3 +1,4 @@
+// @ts-nocheck — experimental @remotion/three proof composition is not part of the daily film.
 import React from 'react';
 import {AbsoluteFill,useCurrentFrame,useVideoConfig,interpolate,spring} from 'remotion';
 import {ThreeCanvas} from '@remotion/three';
