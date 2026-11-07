@@ -1,0 +1,266 @@
+{
+  "title": "إزاي مخك بيعمل سيلفي لذكرياتك وأنت نايم؟",
+  "canonical_subject": "sleep-brain-memory-cycles",
+  "hashtags": [
+    "النوم",
+    "المخ",
+    "الذاكرة",
+    "صحة"
+  ],
+  "scenes": [
+    {
+      "label": "دخول النوم",
+      "narration": "عمرك استغربت مخك بيروح فين أول ما بتنام؟ دي مش غيبوبة ولا طفيان، دي رحلة تبطين وبداية تنظيف عميق لكل اللي خبط في دماغك طول النهار، عشان تبدأ ترتاح بجد.",
+      "evidence_quote": "رحلة تبطين وبداية تنظيف عميق لكل اللي خبط",
+      "diagram": "flow",
+      "labels": [
+        "بداية النوم",
+        "استرخاء المخ",
+        "راحة تامة"
+      ],
+      "secondary_object": "monitor",
+      "interaction": "contrast",
+      "shot_type": "process",
+      "hero_object": "person",
+      "object_motion": "none",
+      "image_query": "person sleeping calmly in bed with soft lighting",
+      "visual_rationale": "Shows a person falling asleep to establish the transition from wakefulness to rest.",
+      "id": "scene_1",
+      "visual_mode": "hero",
+      "visual": {
+        "kind": "explainer",
+        "kicker": "flow",
+        "labels": [
+          "بداية النوم",
+          "استرخاء المخ",
+          "راحة تامة"
+        ]
+      }
+    },
+    {
+      "label": "الموجات البطيئة",
+      "narration": "في أول مرحلة، الموجات في مخك بتههدى وتبقى بطيئة جداً. الجسم بيبتدأ يصلح أي تلف في العضلات والأنسجة، وكأنه ورشة صيانة شغالة بهدوء بالليل عشان ترجع تقف على رجلك تاني.",
+      "evidence_quote": "الموجات في مخك بتههدى وتبقى بطيئة جدا",
+      "diagram": "layers",
+      "labels": [
+        "موجات بطيئة",
+        "صيانة الجسم",
+        "إصلاح العضلات"
+      ],
+      "secondary_object": "server",
+      "interaction": "none",
+      "shot_type": "experiment",
+      "hero_object": "cell",
+      "object_motion": "pulse",
+      "image_query": "brain wave activity slow pulse in laboratory view",
+      "visual_rationale": "Visualizes slow brain waves pulsing to represent deep physical rest and repair.",
+      "id": "scene_2",
+      "visual_mode": "hero",
+      "visual": {
+        "kind": "explainer",
+        "kicker": "layers",
+        "labels": [
+          "موجات بطيئة",
+          "صيانة الجسم",
+          "إصلاح العضلات"
+        ]
+      }
+    },
+    {
+      "label": "فرز الذكريات",
+      "narration": "بعدها بندخل في الجد، المخ بيفتح ملفات اليوم ويقرر إيه اللي يترمى في الزبالة وإيه اللي هيتحفظ جوه في الذاكرة طويلة المدى عشان تفتكره بعدين من غير ما تنسى أي تفاصيل.",
+      "evidence_quote": "المخ بيفتح ملفات اليوم ويقرر إيه اللي يترمى",
+      "diagram": "cycle",
+      "labels": [
+        "فرز الذاكرة",
+        "ملفات اليوم",
+        "تخزين طويل"
+      ],
+      "secondary_object": "document",
+      "interaction": "transfer",
+      "shot_type": "process",
+      "hero_object": "chip",
+      "object_motion": "flow",
+      "image_query": "neural network transferring information sorting memories",
+      "visual_rationale": "Illustrates data flowing and transferring between different neural memory centers.",
+      "id": "scene_3",
+      "visual_mode": "hero",
+      "visual": {
+        "kind": "explainer",
+        "kicker": "cycle",
+        "labels": [
+          "فرز الذاكرة",
+          "ملفات اليوم",
+          "تخزين طويل"
+        ]
+      }
+    },
+    {
+      "label": "تنظيف الفضلات",
+      "narration": "المخ بيعمل حركة صايعة قوي، السائل النخاعي بيغسل الخلايا وينظف السموم اللي اتجمعت طول اليوم من كتر التفكير، عشان تصحى وفايق ورايق ومفتح وتقدر تركز في كل خطوة تعملها.",
+      "evidence_quote": "السائل النخاعي بيغسل الخلايا وينظف السموم",
+      "diagram": "flow",
+      "labels": [
+        "سائل نخاعي",
+        "تنظيف سموم",
+        "نشاط ذهني"
+      ],
+      "secondary_object": "river",
+      "interaction": "encircle",
+      "shot_type": "macro",
+      "hero_object": "molecule",
+      "object_motion": "flow",
+      "image_query": "cerebrospinal fluid washing brain cells microscopic view",
+      "visual_rationale": "Depicts fluid flowing around brain cells to show the nighttime cleansing process.",
+      "id": "scene_4",
+      "visual_mode": "hero",
+      "visual": {
+        "kind": "explainer",
+        "kicker": "flow",
+        "labels": [
+          "سائل نخاعي",
+          "تنظيف سموم",
+          "نشاط ذهني"
+        ]
+      }
+    },
+    {
+      "label": "مرحلة الأحلام",
+      "narration": "وفجأة العين تبدأ تتحرك بسرعة تحت الجفون، دي مرحلة الرام أو الأحلام السريعة، هنا بقى الكوابيس والأفلام الهندي اللي بتشوفها وأنت نايم بتشتغل وتعمل أجواء خيالية مفيهاش أي حدود.",
+      "evidence_quote": "العين تبدأ تتحرك بسرعة تحت الجفون",
+      "diagram": "layers",
+      "labels": [
+        "حركة العين",
+        "الأحلام",
+        "خيارات سريعة"
+      ],
+      "secondary_object": "monitor",
+      "interaction": "none",
+      "shot_type": "experiment",
+      "hero_object": "waveform",
+      "object_motion": "shake",
+      "image_query": "rapid eye movement sleep brain activity waveform",
+      "visual_rationale": "Shows active waveforms shaking to represent the chaotic nature of dreaming.",
+      "id": "scene_5",
+      "visual_mode": "hero",
+      "visual": {
+        "kind": "explainer",
+        "kicker": "layers",
+        "labels": [
+          "حركة العين",
+          "الأحلام",
+          "خيارات سريعة"
+        ]
+      }
+    },
+    {
+      "label": "تثبيت المهارات",
+      "narration": "لو اتعلمت حاجة جديدة النهاردة زي سواقة أو عزف، الساعات دي هي اللي بتثبت الحركة دي في عضلاتك ومخك، وتخليك شاطر فيها تاني يوم من غير مجهود كبير وأنت قاعد مرتاح.",
+      "evidence_quote": "الساعات دي هي اللي بتثبت الحركة دي في عضلاتك",
+      "diagram": "compare",
+      "labels": [
+        "تثبيت مهارات",
+        "تعلم العضلات",
+        "أداء أفضل"
+      ],
+      "secondary_object": "gear",
+      "interaction": "assemble",
+      "shot_type": "process",
+      "hero_object": "network",
+      "object_motion": "assemble",
+      "image_query": "synapses connecting and strengthening during sleep",
+      "visual_rationale": "Demonstrates network connections assembling to show how skills are locked in.",
+      "id": "scene_6",
+      "visual_mode": "hero",
+      "visual": {
+        "kind": "explainer",
+        "kicker": "compare",
+        "labels": [
+          "تثبيت مهارات",
+          "تعلم العضلات",
+          "أداء أفضل"
+        ]
+      }
+    },
+    {
+      "label": "تقلبات الليل",
+      "narration": "الدورة دي مش بتحصل مرة واحدة وخلاص، دي بتتكرر أربع أو خمس مرات في الليلة الواحدة، وكل مرة عمق النوم بيقل شوية لحد ما تقرب تصحى وتبدأ تحس بالنور والنهار الجديد.",
+      "evidence_quote": "الدورة دي مش بتحصل مرة واحدة وخلاص",
+      "diagram": "cycle",
+      "labels": [
+        "دورات متكررة",
+        "عمق النوم",
+        "تغيير مستمر"
+      ],
+      "secondary_object": "pendulum",
+      "interaction": "none",
+      "shot_type": "comparison",
+      "hero_object": "sphere",
+      "object_motion": "swing",
+      "image_query": "cyclic sleep stages chart repeating through the night",
+      "visual_rationale": "Swings a pendulum-like indicator to show repeating cycles throughout the night.",
+      "id": "scene_7",
+      "visual_mode": "hero",
+      "visual": {
+        "kind": "explainer",
+        "kicker": "cycle",
+        "labels": [
+          "دورات متكررة",
+          "عمق النوم",
+          "تغيير مستمر"
+        ]
+      }
+    },
+    {
+      "label": "الاستيقاظ صباحاً",
+      "narration": "في الآخر، لما بتصحى، مخك بيكون قفل كل العمليات دي وخلص الصيانة، وجاهز يستقبل يوم جديد بطاقة نظيفة، عشان كده النوم مش رفاهية ده أساس الحياة وقوة الإنسان الحقيقية.",
+      "evidence_quote": "مخك بيكون قفل كل العمليات دي وخلص الصيانة",
+      "diagram": "flow",
+      "labels": [
+        "الاستيقاظ",
+        "طاقة جديدة",
+        "أساس الحياة"
+      ],
+      "secondary_object": "phone",
+      "interaction": "approach",
+      "shot_type": "photo",
+      "hero_object": "person",
+      "object_motion": "none",
+      "image_query": "person waking up fresh in the morning sunlight",
+      "visual_rationale": "Features a refreshed person waking up in morning light to deliver the final payoff.",
+      "id": "scene_8",
+      "visual_mode": "hero",
+      "visual": {
+        "kind": "explainer",
+        "kicker": "flow",
+        "labels": [
+          "الاستيقاظ",
+          "طاقة جديدة",
+          "أساس الحياة"
+        ]
+      }
+    }
+  ],
+  "cover_text": "مخك بيعمل إيه وأنت نايم؟",
+  "director_version": "v1",
+  "profile": "science",
+  "series": "اسرار الكون",
+  "fiction": false,
+  "documented": true,
+  "topic_key": "remotion-sleep-brain-memory-cycles",
+  "source": {
+    "title": "ماذا يحدث أثناء النوم؟",
+    "publisher": "معلومة علمية مبسطة"
+  },
+  "science_domain": "medicine",
+  "visual_identity": {
+    "version": "channel-identities-v1",
+    "profile": "science",
+    "name": "مختبر الحياة",
+    "background": "#e5f2ed",
+    "ink": "#153e40",
+    "accent": "#179ca6",
+    "visual": "bright three-dimensional laboratory, topic-specific objects, meaningful experiments",
+    "sound": "glass mallets, light organic bass, water and mechanism cues"
+  }
+}
