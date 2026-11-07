@@ -1,0 +1,267 @@
+{
+  "title": "إزاي اللقاحات بتعلم مناعة الجسم ضد الأمراض؟",
+  "canonical_subject": "vaccination-immune-memory",
+  "hashtags": [
+    "مناعة",
+    "صحة",
+    "تطعيمات",
+    "علوم"
+  ],
+  "scenes": [
+    {
+      "label": "خط الدفاع الأول",
+      "narration": "الجسم حواليه ميكروبات في كل حتة، وجلدنا والمخاط بيحاولوا يمنعوهم يدخلوا جوانا من الأساس، بس لو الميكروب دخل، المناعة بتتحرك فوراً عشان تهاجمه وتدمره بطريقتها الخاصة اللي بتحمينا بجد من أي خطر.",
+      "evidence_quote": "The body has many ways of defending itself against pathogens",
+      "diagram": "layers",
+      "labels": [
+        "جلد",
+        "مخاط",
+        "دفاع"
+      ],
+      "secondary_object": "shield",
+      "interaction": "approach",
+      "shot_type": "macro",
+      "hero_object": "cell",
+      "object_motion": "pulse",
+      "image_query": "skin barrier and microscopic pathogens",
+      "visual_rationale": "Shows biological physical barriers stopping germs from entering tissue layers.",
+      "id": "scene_1",
+      "visual_mode": "hero",
+      "visual": {
+        "kind": "explainer",
+        "kicker": "layers",
+        "labels": [
+          "جلد",
+          "مخاط",
+          "دفاع"
+        ]
+      }
+    },
+    {
+      "label": "التعرف على المستضد",
+      "narration": "كل ميكروب جواه أجزاء مميزة اسمها أنتيجينات أو مستضديات، ودي اللي بتخلي الجسم يطلع أجسام مضادة كأنها عساكر متخصصة تقف قدام كل غريب عشان تدافع عننا وتمنع الضرر إنه ينتشر جوه جسمنا كله.",
+      "evidence_quote": "The subpart of a pathogen that causes the formation of antibodies is called an antigen",
+      "diagram": "flow",
+      "labels": [
+        "أنتيجين",
+        "أجسام مضادة",
+        "تعرف"
+      ],
+      "secondary_object": "molecule",
+      "interaction": "transfer",
+      "shot_type": "experiment",
+      "hero_object": "molecule",
+      "object_motion": "spin",
+      "image_query": "pathogen antigen structure and antibodies",
+      "visual_rationale": "Visualizes specific antigen molecules binding to matching antibody proteins.",
+      "id": "scene_2",
+      "visual_mode": "hero",
+      "visual": {
+        "kind": "explainer",
+        "kicker": "flow",
+        "labels": [
+          "أنتيجين",
+          "أجسام مضادة",
+          "تعرف"
+        ]
+      }
+    },
+    {
+      "label": "بطء الاستجابة الأولى",
+      "narration": "لما الجسم بيشوف الأنتيجين لأول مرة، بيقعد وقت عقبال ما يصنع الأجسام المضادة المخصوصة ليه، وفي الفترة دي الشخص بيكون معرض إنه يتعب بجد ويحس بالمرض عشان لسه المناعة بتتعرف على العدو الجديد.",
+      "evidence_quote": "human body is exposed to an antigen for the first time, it takes time for the immune system",
+      "diagram": "compare",
+      "labels": [
+        "استجابة أولية",
+        "تأخير",
+        "مرض"
+      ],
+      "secondary_object": "document",
+      "interaction": "contrast",
+      "shot_type": "process",
+      "hero_object": "cell",
+      "object_motion": "drift",
+      "image_query": "immune system delay response first exposure",
+      "visual_rationale": "Compares slow initial antibody production timeline against active infection.",
+      "id": "scene_3",
+      "visual_mode": "hero",
+      "visual": {
+        "kind": "explainer",
+        "kicker": "compare",
+        "labels": [
+          "استجابة أولية",
+          "تأخير",
+          "مرض"
+        ]
+      }
+    },
+    {
+      "label": "دور الخلايا الذاكرة",
+      "narration": "بعد ما المعركة بتخلص والنصر بيتحقق، الجسم مش بيسكت، ده بيسيب خلايا ذاكرة عايشة جوانا عشان تفضل جاهزة لأي هجوم تاني مستقبلي وتفتكر شكل الميكروب بدقة عشان تدافع عننا بسرعة في المرات الجاية.",
+      "evidence_quote": "memory cells, which remain alive even after the pathogen is defeated",
+      "diagram": "cycle",
+      "labels": [
+        "خلايا ذاكرة",
+        "بقاء",
+        "جاهزية"
+      ],
+      "secondary_object": "network",
+      "interaction": "none",
+      "shot_type": "macro",
+      "hero_object": "cell",
+      "object_motion": "grow",
+      "image_query": "immune memory cells living inside tissue",
+      "visual_rationale": "Highlights surviving memory cells forming a persistent internal network.",
+      "id": "scene_4",
+      "visual_mode": "hero",
+      "visual": {
+        "kind": "explainer",
+        "kicker": "cycle",
+        "labels": [
+          "خلايا ذاكرة",
+          "بقاء",
+          "جاهزية"
+        ]
+      }
+    },
+    {
+      "label": "حيلة اللقاحات الآمنة",
+      "narration": "اللقاح بقى بيوفر الحكاية دي من غير تعب؛ بيحط أجزاء ضعيفة أو ميتة من الميكروب، أو حتى الشفرة الجينية بتاعته، عشان يعلم المناعة من غير ما يمرضنا ولا يتعبنا بأي شكل من الأشكال.",
+      "evidence_quote": "Vaccines contain weakened or inactive parts of a particular organism",
+      "diagram": "flow",
+      "labels": [
+        "لقاح",
+        "شفرة جينية",
+        "أمان"
+      ],
+      "secondary_object": "dna",
+      "interaction": "transfer",
+      "shot_type": "experiment",
+      "hero_object": "dna",
+      "object_motion": "assemble",
+      "image_query": "vaccine weakened antigen and genetic blueprint",
+      "visual_rationale": "Demonstrates how DNA or RNA blueprint is introduced safely without causing illness.",
+      "id": "scene_5",
+      "visual_mode": "hero",
+      "visual": {
+        "kind": "explainer",
+        "kicker": "flow",
+        "labels": [
+          "لقاح",
+          "شفرة جينية",
+          "أمان"
+        ]
+      }
+    },
+    {
+      "label": "الاستجابة السريعة الثانية",
+      "narration": "لو دخل الميكروب الحقيقي بعد التطعيم، خلايا الذاكرة بتفرز ملايين الأجسام المضادة في ثواني معدودة، وبتخلص عليه قبل ما المرض يتمكن مننا أصلاً وده بيخلينا نحس بالفرق الكبير في السرعة.",
+      "evidence_quote": "the antibody response is much faster and more effective than the first time around",
+      "diagram": "flow",
+      "labels": [
+        "سرعة",
+        "دفاع فوري",
+        "قضاء"
+      ],
+      "secondary_object": "shield",
+      "interaction": "encircle",
+      "shot_type": "process",
+      "hero_object": "cell",
+      "object_motion": "pulse",
+      "image_query": "fast immune response second exposure memory cells",
+      "visual_rationale": "Shows memory cells rapidly surrounding and destroying incoming pathogens instantly.",
+      "id": "scene_6",
+      "visual_mode": "hero",
+      "visual": {
+        "kind": "explainer",
+        "kicker": "flow",
+        "labels": [
+          "سرعة",
+          "دفاع فوري",
+          "قضاء"
+        ]
+      }
+    },
+    {
+      "label": "حماية مجتمعة ومناعة القطيع",
+      "narration": "لما معظم الناس بتاخد اللقاح، الميكروب بيلاقي صعوبة كبيرة إنه يتنقل بيننا، وده بيحمي حتى الناس اللي ظروفهم الصحية بتمنعهم ياخدوا التطعيم عشان المجتمع كله بيبقى محصن وقوي ضد الأمراض.",
+      "evidence_quote": "When a lot of people in a community are vaccinated, the pathogen has a hard time circulating",
+      "diagram": "layers",
+      "labels": [
+        "مناعة القطيع",
+        "حماية مجتمعية",
+        "انتشار"
+      ],
+      "secondary_object": "network",
+      "interaction": "none",
+      "shot_type": "comparison",
+      "hero_object": "person",
+      "object_motion": "none",
+      "image_query": "herd immunity community protection network",
+      "visual_rationale": "Illustrates a connected community blocking pathogen transmission paths effectively.",
+      "id": "scene_7",
+      "visual_mode": "hero",
+      "visual": {
+        "kind": "explainer",
+        "kicker": "layers",
+        "labels": [
+          "مناعة القطيع",
+          "حماية مجتمعية",
+          "انتشار"
+        ]
+      }
+    },
+    {
+      "label": "القضاء على الأمراض الخطيرة",
+      "narration": "بالطريقة البسيطة دي، التاريخ قدر يتخلص من الجدري ويحاصر شلل الأطفال وشلل المجتمعات، وبقت التطعيمات درع واقي للبشرية كلها ضد الأمراض الخطيرة اللي هددت حياة الناس سنين طويلة.",
+      "evidence_quote": "Throughout history, humans have successfully developed vaccines for a number of life-threatening diseases",
+      "diagram": "flow",
+      "labels": [
+        "القضاء",
+        "تاريخ",
+        "درع بشري"
+      ],
+      "secondary_object": "document",
+      "interaction": "approach",
+      "shot_type": "photo",
+      "hero_object": "shield",
+      "object_motion": "float",
+      "image_query": "eradicated diseases history and vaccine success",
+      "visual_rationale": "Presents a symbolic protective shield representing the global eradication of diseases.",
+      "id": "scene_8",
+      "visual_mode": "hero",
+      "visual": {
+        "kind": "explainer",
+        "kicker": "flow",
+        "labels": [
+          "القضاء",
+          "تاريخ",
+          "درع بشري"
+        ]
+      }
+    }
+  ],
+  "cover_text": "إزاي اللقاحات بتحمينا؟",
+  "director_version": "v1",
+  "profile": "science",
+  "series": "اسرار الكون",
+  "fiction": false,
+  "documented": true,
+  "topic_key": "remotion-vaccination-immune-memory",
+  "source": {
+    "url": "https://www.who.int/news-room/feature-stories/detail/how-do-vaccines-work",
+    "title": "كيف تحفظ اللقاحات ذاكرة المناعة؟",
+    "publisher": "WHO"
+  },
+  "science_domain": "medicine",
+  "visual_identity": {
+    "version": "channel-identities-v1",
+    "profile": "science",
+    "name": "مختبر الحياة",
+    "background": "#e5f2ed",
+    "ink": "#153e40",
+    "accent": "#179ca6",
+    "visual": "bright three-dimensional laboratory, topic-specific objects, meaningful experiments",
+    "sound": "glass mallets, light organic bass, water and mechanism cues"
+  }
+}
