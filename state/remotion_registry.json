@@ -753,6 +753,13 @@
       "draft_document": {
         "path": "state/remotion_documents/daily-remotion-2026-11-15-science-draft-cde1afb4c26af479.json",
         "sha256": "cde1afb4c26af479a2062a99c9837c39150ad674a391b6e461d271ca7934dc2a"
+      },
+      "draft_repair": {
+        "phase": "requested",
+        "original_sha256": "278b94d9d7812ee65c7ff7ba1591561b066dfb6f0afc16dc62d3a8759885c5b0",
+        "problem": "Draft word budget fails natural-duration preflight: actual 186, required 240-370; no TTS requested",
+        "maximum_requests": 1,
+        "voice_requests": 0
       }
     }
   },
