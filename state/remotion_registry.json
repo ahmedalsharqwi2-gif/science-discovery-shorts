@@ -678,9 +678,24 @@
     "daily-remotion-2026-11-12-science": {
       "profile": "science",
       "due_at": "2026-11-12T10:00:00Z",
-      "status": "author_pending",
+      "status": "author_requested",
       "source_run": 42424309713,
-      "created_at": "2026-11-07T23:14:53.290603+00:00"
+      "created_at": "2026-11-07T23:14:53.290603+00:00",
+      "source_selection": {
+        "title": "Scientists accidentally solve a chemistry mystery that lasted 60 years",
+        "url": "https://www.sciencedaily.com/releases/2026/11/261103003205.htm",
+        "publisher": "ScienceDaily",
+        "canonical_subject": "science-9226f10856398403b2d8",
+        "science_domain": "chemistry"
+      },
+      "source": {
+        "url": "https://www.sciencedaily.com/releases/2026/11/261103003205.htm"
+      },
+      "source_document": {
+        "path": "state/remotion_documents/daily-remotion-2026-11-12-science-source-a4f6da4a0bc3050d.json",
+        "sha256": "a4f6da4a0bc3050dc2b85f62e4fbb3037d5c12eb6d88661f7d9143283435858e"
+      },
+      "writer_run": 42424309713
     }
   },
   "cutover_evidence": {
