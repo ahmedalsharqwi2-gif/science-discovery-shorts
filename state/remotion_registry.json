@@ -828,11 +828,13 @@
           "verified_at": "2026-11-07T23:47:48.068506+00:00"
         },
         "facebook": {
-          "phase": "intent",
+          "phase": "acknowledged",
           "channel_id": "6a9edebbcd8b9c702c230128",
           "due_at": "2026-11-15T10:00:00Z",
           "media_url": "https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts/releases/download/production-daily-remotion-2026-11-15-science/science-daily-remotion-2026-11-15-science.mp4",
-          "created_at": "2026-11-07T23:47:49.330423+00:00"
+          "created_at": "2026-11-07T23:47:49.330423+00:00",
+          "id": "6aefb8a6562f2e6de9897aad",
+          "accepted_at": "2026-11-07T23:47:50.967039+00:00"
         }
       }
     }
