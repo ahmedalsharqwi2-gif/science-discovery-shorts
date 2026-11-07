@@ -1,0 +1,266 @@
+{
+  "title": "إزاي العلما حلوا لغز كيمياء بقاله ستين سنة بالصدفة؟",
+  "canonical_subject": "science-9226f10856398403b2d8",
+  "hashtags": [
+    "كيمياء",
+    "تجارب",
+    "علوم"
+  ],
+  "scenes": [
+    {
+      "label": "لغز الستين سنة",
+      "narration": "من أكتر من ستين سنة وعلماء الكيمياء بيحاولوا يمسكوا نوع معين من الجزيئات، بس كانت غير مستقرة خالص وبتتفكك في ثواني. الموضوع ده فضل لغز محير لكل الباحثين لحد ما حصلت المفاجأة غير المخطط ليها في المعمل.",
+      "evidence_quote": "A chemistry challenge that had frustrated researchers for more than 60 years has finally been overcome",
+      "diagram": "compare",
+      "labels": [
+        "تحدي",
+        "ستين سنة",
+        "جزيئات"
+      ],
+      "secondary_object": "document",
+      "interaction": "contrast",
+      "shot_type": "process",
+      "hero_object": "scroll",
+      "object_motion": "none",
+      "image_query": "old chemical formulas on a parchment paper",
+      "visual_rationale": "Shows ancient laboratory notes contrasting with modern chemistry puzzles.",
+      "id": "scene_1",
+      "visual_mode": "hero",
+      "visual": {
+        "kind": "explainer",
+        "kicker": "compare",
+        "labels": [
+          "تحدي",
+          "ستين سنة",
+          "جزيئات"
+        ]
+      }
+    },
+    {
+      "label": "طبيعة ذرة البورون",
+      "narration": "عنصر البورون ده معروف عنه إنه نادر جداً لما بيعمل روابط ثلاثية مع العناصر التانية. الأبحاث القديمة فضلت سنين طويلة تحاول تكسر القاعدة دي وتخليه يرتبط بطرق غريبة بس من غير أي فايدة حقيقية تذكر.",
+      "evidence_quote": "Boron is an element that rarely forms triple bonds",
+      "diagram": "layers",
+      "labels": [
+        "بورون",
+        "روابط ثلاثية",
+        "جدول دوري"
+      ],
+      "secondary_object": "crystal",
+      "interaction": "approach",
+      "shot_type": "macro",
+      "hero_object": "molecule",
+      "object_motion": "pulse",
+      "image_query": "3d atomic structure of boron element",
+      "visual_rationale": "Visualizes the atomic configuration of boron with glowing electron shells.",
+      "id": "scene_2",
+      "visual_mode": "hero",
+      "visual": {
+        "kind": "explainer",
+        "kicker": "layers",
+        "labels": [
+          "بورون",
+          "روابط ثلاثية",
+          "جدول دوري"
+        ]
+      }
+    },
+    {
+      "label": "تجربة الكيتونات",
+      "narration": "في يوم من الأيام، اتنين طلاب دكتوراه كانوا شغالين على تفاعلات عادية خالص بين مركب اسمه ديبوراكامولين وبين مواد تانية اسمها الكيتونات. هما كانوا بيدوروا على حاجة تانية خالص مش ماسك الجزيئات الصعبة دي.",
+      "evidence_quote": "were independently investigating reactions between a compound known as a diboracumulene and various ketones",
+      "diagram": "flow",
+      "labels": [
+        "كيتونات",
+        "ديبوراكامولين",
+        "تفاعل"
+      ],
+      "secondary_object": "sphere",
+      "interaction": "transfer",
+      "shot_type": "experiment",
+      "hero_object": "molecule",
+      "object_motion": "drift",
+      "image_query": "laboratory glassware mixing chemical solutions",
+      "visual_rationale": "Demonstrates the initial mixing phase of different chemical substrates in beakers.",
+      "id": "scene_3",
+      "visual_mode": "hero",
+      "visual": {
+        "kind": "explainer",
+        "kicker": "flow",
+        "labels": [
+          "كيتونات",
+          "ديبوراكامولين",
+          "تفاعل"
+        ]
+      }
+    },
+    {
+      "label": "ظهور الصوامع الملونة",
+      "narration": "فجأة، لاحظ الباحثين إن التفاعل طلع مواد صلبة بألوان غريبة زي الأصفر والأبرتقالي. الحاجة دي لفتت انتباههم جامد وقرروا يفحصوا المحلول ده كويس عشان يعرفوا إيه اللي تكون جوه الكاس بالظبط من غير توقع مسبق.",
+      "evidence_quote": "Instead of producing only the outcomes they might have expected, the reactions generated distinctive orange or yellow solids",
+      "diagram": "cycle",
+      "labels": [
+        "لون أصفر",
+        "مادة صلبة",
+        "مفاجأة"
+      ],
+      "secondary_object": "monitor",
+      "interaction": "separate",
+      "shot_type": "experiment",
+      "hero_object": "crystal",
+      "object_motion": "grow",
+      "image_query": "yellow and orange chemical precipitate in a beaker",
+      "visual_rationale": "Highlights the unexpected color change signaling a new chemical compound.",
+      "id": "scene_4",
+      "visual_mode": "hero",
+      "visual": {
+        "kind": "explainer",
+        "kicker": "cycle",
+        "labels": [
+          "لون أصفر",
+          "مادة صلبة",
+          "مفاجأة"
+        ]
+      }
+    },
+    {
+      "label": "اكتشاف الأوكسوبورانات",
+      "narration": "المفاجأة الكبيرة بقى إن النتيجة الرئيسية كانت تكوين جزيئات الأوكسوبورانات الخطيرة دي. يعني المادة اللي الكل كان فاكرها مستحيلة ومستقرتش أبداً، ظهرت لوحدها ومن غير تعقيد كبير في تفاعل بسيط ومباشر خالص.",
+      "evidence_quote": "oxoboranes emerged as the main products of these reactions, even though several other chemical outcomes had appeared more",
+      "diagram": "layers",
+      "labels": [
+        "أوكسوبورانات",
+        "مركب جديد",
+        "استقرار"
+      ],
+      "secondary_object": "molecule",
+      "interaction": "approach",
+      "shot_type": "macro",
+      "hero_object": "molecule",
+      "object_motion": "spin",
+      "image_query": "3d molecular model of oxoborane with triple bond",
+      "visual_rationale": "Rotates the newly isolated stable oxoborane molecule structure in 3D space.",
+      "id": "scene_5",
+      "visual_mode": "hero",
+      "visual": {
+        "kind": "explainer",
+        "kicker": "layers",
+        "labels": [
+          "أوكسوبورانات",
+          "مركب جديد",
+          "استقرار"
+        ]
+      }
+    },
+    {
+      "label": "دهشة العلماء",
+      "narration": "البروفيسور هولجر والفرق بتاعتهم اذهلوا لما لقوا الجزيئات دي ثابتة وماسكة نفسها كفاية عشان يدرسوها. مع إن المجال كله كان خلاص رفع الراية البيضا وقال إن الموضوع ده مستحيل علمياً ويئسوا تماماً.",
+      "evidence_quote": "in the field had given up on oxoboranes, as they were thought to be just too unstable to",
+      "diagram": "compare",
+      "labels": [
+        "دهشة",
+        "يأس",
+        "نجاح غير متوقع"
+      ],
+      "secondary_object": "document",
+      "interaction": "none",
+      "shot_type": "photo",
+      "hero_object": "person",
+      "object_motion": "none",
+      "image_query": "scientist looking amazed at computer screen in lab",
+      "visual_rationale": "Reflects the researchers' astonishment at capturing the elusive molecules.",
+      "id": "scene_6",
+      "visual_mode": "hero",
+      "visual": {
+        "kind": "explainer",
+        "kicker": "compare",
+        "labels": [
+          "دهشة",
+          "يأس",
+          "نجاح غير متوقع"
+        ]
+      }
+    },
+    {
+      "label": "تطبيق الطريقة الجديدة",
+      "narration": "الطريقة البسيطة دي نجحت مع أكتر من مركب وطلبت تلات أنواع مختلفة من الأوكسوبورانات لحد دلوقتي. ده معناه إن باب جديد خالص اتفتح قدام كيمياء المركبات النادرة عشان يعملوا مواد تانية أكتر تعقيداً.",
+      "evidence_quote": "successfully prepared three different oxoboranes. The fact that the approach worked with multiple compounds suggests that it could",
+      "diagram": "flow",
+      "labels": [
+        "تطبيق",
+        "مركبات متعددة",
+        "تقدم"
+      ],
+      "secondary_object": "circuit",
+      "interaction": "transfer",
+      "shot_type": "process",
+      "hero_object": "crystal",
+      "object_motion": "assemble",
+      "image_query": "multiple chemical crystal samples in laboratory vials",
+      "visual_rationale": "Presents multiple successful samples produced by the new synthesis method.",
+      "id": "scene_7",
+      "visual_mode": "hero",
+      "visual": {
+        "kind": "explainer",
+        "kicker": "flow",
+        "labels": [
+          "تطبيق",
+          "مركبات متعددة",
+          "تقدم"
+        ]
+      }
+    },
+    {
+      "label": "آفاق علمية جديدة",
+      "narration": "بالصدفة البحتة وبشوية فضول علمي، اتحل لغز ستيني غير الكيمياء للأبد. والتجربة دي بتثبت دايماً إن أبسط الأخطاء أو المفاجآت في المعمل ممكن تقلب الموازين وتفتح بيببان مقفولة قدام البشرية كلها.",
+      "evidence_quote": "resolves a problem that challenged chemists for more than six decades but also demonstrates how unexpected chemical reactions",
+      "diagram": "cycle",
+      "labels": [
+        "مستقبل",
+        "آفاق",
+        "بحث علمي"
+      ],
+      "secondary_object": "monitor",
+      "interaction": "none",
+      "shot_type": "process",
+      "hero_object": "molecule",
+      "object_motion": "float",
+      "image_query": "futuristic chemical laboratory with glowing molecular graphics",
+      "visual_rationale": "Concludes with floating animated molecules symbolizing future chemistry breakthroughs.",
+      "id": "scene_8",
+      "visual_mode": "hero",
+      "visual": {
+        "kind": "explainer",
+        "kicker": "cycle",
+        "labels": [
+          "مستقبل",
+          "آفاق",
+          "بحث علمي"
+        ]
+      }
+    }
+  ],
+  "cover_text": "حل لغز كيمياء عمره ستين سنة بالصدفة",
+  "director_version": "v1",
+  "profile": "science",
+  "series": "اسرار الكون",
+  "fiction": false,
+  "documented": true,
+  "topic_key": "remotion-science-9226f10856398403b2d8",
+  "source": {
+    "url": "https://www.sciencedaily.com/releases/2026/11/261103003205.htm",
+    "title": "Scientists accidentally solve a chemistry mystery that lasted 60 years",
+    "publisher": "ScienceDaily"
+  },
+  "science_domain": "chemistry",
+  "visual_identity": {
+    "version": "channel-identities-v1",
+    "profile": "science",
+    "name": "مختبر الحياة",
+    "background": "#e5f2ed",
+    "ink": "#153e40",
+    "accent": "#179ca6",
+    "visual": "bright three-dimensional laboratory, topic-specific objects, meaningful experiments",
+    "sound": "glass mallets, light organic bass, water and mechanism cues"
+  }
+}
