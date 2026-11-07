@@ -732,7 +732,7 @@
     "daily-remotion-2026-11-15-science": {
       "profile": "science",
       "due_at": "2026-11-15T10:00:00Z",
-      "status": "author_requested",
+      "status": "draft_retained",
       "source_run": 42425768513,
       "created_at": "2026-11-07T23:34:04.100595+00:00",
       "source_selection": {
@@ -749,7 +749,11 @@
         "path": "state/remotion_documents/daily-remotion-2026-11-15-science-source-d371071df7a7f836.json",
         "sha256": "d371071df7a7f836d1dad5be44b77017fad786dfe4335f3d3822ca056aca6da1"
       },
-      "writer_run": 42425768513
+      "writer_run": 42425768513,
+      "draft_document": {
+        "path": "state/remotion_documents/daily-remotion-2026-11-15-science-draft-cde1afb4c26af479.json",
+        "sha256": "cde1afb4c26af479a2062a99c9837c39150ad674a391b6e461d271ca7934dc2a"
+      }
     }
   },
   "cutover_evidence": {
