@@ -1,3 +1,4 @@
+// @ts-nocheck — experimental @remotion/three composition is not used by the daily renderer.
 import React from 'react';
 import {AbsoluteFill,useCurrentFrame,useVideoConfig,interpolate,spring} from 'remotion';
 import {ThreeCanvas} from '@remotion/three';
