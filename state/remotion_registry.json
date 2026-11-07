@@ -667,7 +667,8 @@
         "visuals_match": true,
         "issues": [],
         "passed": true
-      }
+      },
+      "story_sha256": "9edcba58923fe40bf63da3bf537c32e4c653e8d0bf7b6921f61bb4eff904f0e4"
     }
   },
   "cutover_evidence": {
