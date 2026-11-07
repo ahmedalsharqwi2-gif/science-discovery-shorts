@@ -122,6 +122,7 @@ def ask_once(prompt,schema,review=False):
 def validate(story,profile,source):
  validate_director(story,profile)
  if not 3<=len(story.get('hashtags',[]))<=5:raise ValueError('Three to five topical on-screen hashtags required before synthesis')
+ if not 2<=len(story.get('cover_text','').split())<=6 or len(story.get('cover_text',''))>48:raise ValueError('Cover text must be 2-6 words and at most 48 characters')
  if len(story.get('scenes',[]))!=8:raise ValueError('Exactly eight narrative scenes required')
  words=sum(len(s['narration'].split()) for s in story['scenes']);low,high=(160,270) if profile=='news' else (240,370)
  if not low<=words<=high:raise ValueError(f'Draft word budget fails natural-duration preflight: actual {words}, required {low}-{high}; no TTS requested')
@@ -201,4 +202,3 @@ def author(req,entry):
  mutate(save)
  if not review['passed']:raise ValueError('Independent editorial review rejected this retained draft; no new TTS or rewrite')
  return story
-
