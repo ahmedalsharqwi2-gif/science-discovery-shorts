@@ -1,0 +1,150 @@
+{
+  "title": "إزاي مخك بيعمل سيلفي لذكرياتك وأنت نايم؟",
+  "canonical_subject": "sleep-brain-memory-cycles",
+  "hashtags": [
+    "النوم",
+    "المخ",
+    "الذاكرة",
+    "صحة"
+  ],
+  "scenes": [
+    {
+      "label": "دخول النوم",
+      "narration": "عمرك استغربت مخك بيروح فين أول ما بتنام؟ دي مش غيبوبة ولا طفيان، دي رحلة تبطين وبداية تنظيف عميق لكل اللي خبط في دماغك طول النهار.",
+      "evidence_quote": "",
+      "diagram": "flow",
+      "labels": [
+        "بداية النوم",
+        "استرخاء المخ"
+      ],
+      "secondary_object": "monitor",
+      "interaction": "contrast",
+      "shot_type": "process",
+      "hero_object": "person",
+      "object_motion": "none",
+      "image_query": "person sleeping calmly in bed with soft lighting",
+      "visual_rationale": "Shows a person falling asleep to establish the transition from wakefulness to rest."
+    },
+    {
+      "label": "الموجات البطيئة",
+      "narration": "في أول مرحلة، الموجات في مخك بتههدى وتبقى بطيئة جداً. الجسم بيبتدأ يصلح أي تلف في العضلات والأنسجة، وكأنه ورشة صيانة شغالة بهدوء بالليل.",
+      "evidence_quote": "",
+      "diagram": "layers",
+      "labels": [
+        "موجات بطيئة",
+        "صيانة الجسم"
+      ],
+      "secondary_object": "server",
+      "interaction": "none",
+      "shot_type": "experiment",
+      "hero_object": "cell",
+      "object_motion": "pulse",
+      "image_query": "brain wave activity slow pulse in laboratory view",
+      "visual_rationale": "Visualizes slow brain waves pulsing to represent deep physical rest and repair."
+    },
+    {
+      "label": "فرز الذكريات",
+      "narration": "بعدها بندخل في الجد، المخ بيفتح ملفات اليوم ويقرر إيه اللي يترمى في الزبالة وإيه اللي هيتحفظ جوه في الذاكرة طويلة المدى عشان تفتكره بعدين.",
+      "evidence_quote": "",
+      "diagram": "cycle",
+      "labels": [
+        "فرز الذاكرة",
+        "ملفات اليوم"
+      ],
+      "secondary_object": "document",
+      "interaction": "transfer",
+      "shot_type": "process",
+      "hero_object": "chip",
+      "object_motion": "flow",
+      "image_query": "neural network transferring information sorting memories",
+      "visual_rationale": "Illustrates data flowing and transferring between different neural memory centers."
+    },
+    {
+      "label": "تنظيف الفضلات",
+      "narration": "المخ بيعمل حركة صايعة قوي، السائل النخاعي بيغسل الخلايا وينظف السموم اللي اتجمعت طول اليوم من كتر التفكير، عشان تصحى وفايق ورايق ومفتح.",
+      "evidence_quote": "",
+      "diagram": "flow",
+      "labels": [
+        "سائل نخاعي",
+        "تنظيف سموم"
+      ],
+      "secondary_object": "river",
+      "interaction": "encircle",
+      "shot_type": "macro",
+      "hero_object": "molecule",
+      "object_motion": "flow",
+      "image_query": "cerebrospinal fluid washing brain cells microscopic view",
+      "visual_rationale": "Depicts fluid flowing around brain cells to show the nighttime cleansing process."
+    },
+    {
+      "label": "مرحلة الأحلام",
+      "narration": "وفجأة العين تبدأ تتحرك بسرعة تحت الجفون، دي مرحلة الرام أو الأحلام السريعة، هنا بقى الكوابيس والأفلام الهندي اللي بتشوفها وأنت نايم بتشتغل.",
+      "evidence_quote": "",
+      "diagram": "layers",
+      "labels": [
+        "حركة العين السريعة",
+        "الأحلام"
+      ],
+      "secondary_object": "monitor",
+      "interaction": "none",
+      "shot_type": "experiment",
+      "hero_object": "waveform",
+      "object_motion": "shake",
+      "image_query": "rapid eye movement sleep brain activity waveform",
+      "visual_rationale": "Shows active waveforms shaking to represent the chaotic nature of dreaming."
+    },
+    {
+      "label": "تثبيت المهارات",
+      "narration": "لو اتعلمت حاجة جديدة النهاردة زي سواقة أو عزف، الساعات دي هي اللي بتثبت الحركة دي في عضلاتك ومخك، وتخليك شاطر فيها تاني يوم من غير مجهود.",
+      "evidence_quote": "",
+      "diagram": "compare",
+      "labels": [
+        "تثبيت مهارات",
+        "تعلم العضلات"
+      ],
+      "secondary_object": "gear",
+      "interaction": "assemble",
+      "shot_type": "process",
+      "hero_object": "network",
+      "object_motion": "assemble",
+      "image_query": "synapses connecting and strengthening during sleep",
+      "visual_rationale": "Demonstrates network connections assembling to show how skills are locked in."
+    },
+    {
+      "label": "تقلبات الليل",
+      "narration": "الدورة دي مش بتحصل مرة واحدة وخلاص، دي بتتكرر أربع أو خمس مرات في الليلة الواحدة، وكل مرة عمق النوم بيقل شوية لحد ما تقرب تصحى.",
+      "evidence_quote": "",
+      "diagram": "cycle",
+      "labels": [
+        "دورات متكررة",
+        "عمق النوم"
+      ],
+      "secondary_object": "pendulum",
+      "interaction": "none",
+      "shot_type": "comparison",
+      "hero_object": "sphere",
+      "object_motion": "swing",
+      "image_query": "cyclic sleep stages chart repeating through the night",
+      "visual_rationale": "Swings a pendulum-like indicator to show repeating cycles throughout the night."
+    },
+    {
+      "label": "الاستيقاظ صباحاً",
+      "narration": "في الآخر، لما بتصحى، مخك بيكون قفل كل العمليات دي وخلص الصيانة، وجاهز يستقبل يوم جديد بطاقة نظيفة، عشان كده النوم مش رفاهية ده أساس الحياة.",
+      "evidence_quote": "",
+      "diagram": "flow",
+      "labels": [
+        "الاستيقاظ",
+        "طاقة جديدة"
+      ],
+      "secondary_object": "phone",
+      "interaction": "approach",
+      "shot_type": "photo",
+      "hero_object": "person",
+      "object_motion": "none",
+      "image_query": "person waking up fresh in the morning sunlight",
+      "visual_rationale": "Features a refreshed person waking up in morning light to deliver the final payoff."
+    }
+  ],
+  "cover_text": "مخك بيعمل إيه وأنت نايم؟",
+  "director_version": "v1"
+}
