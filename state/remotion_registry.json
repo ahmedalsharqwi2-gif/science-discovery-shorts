@@ -732,9 +732,24 @@
     "daily-remotion-2026-11-15-science": {
       "profile": "science",
       "due_at": "2026-11-15T10:00:00Z",
-      "status": "author_pending",
+      "status": "author_requested",
       "source_run": 42425768513,
-      "created_at": "2026-11-07T23:34:04.100595+00:00"
+      "created_at": "2026-11-07T23:34:04.100595+00:00",
+      "source_selection": {
+        "title": "كيف تحفظ اللقاحات ذاكرة المناعة؟",
+        "url": "https://www.who.int/news-room/feature-stories/detail/how-do-vaccines-work",
+        "publisher": "WHO",
+        "canonical_subject": "vaccination-immune-memory",
+        "science_domain": "medicine"
+      },
+      "source": {
+        "url": "https://www.who.int/news-room/feature-stories/detail/how-do-vaccines-work"
+      },
+      "source_document": {
+        "path": "state/remotion_documents/daily-remotion-2026-11-15-science-source-d371071df7a7f836.json",
+        "sha256": "d371071df7a7f836d1dad5be44b77017fad786dfe4335f3d3822ca056aca6da1"
+      },
+      "writer_run": 42425768513
     }
   },
   "cutover_evidence": {
