@@ -21,7 +21,7 @@ class PublicationPackage(unittest.TestCase):
   story['cover_text']='الصوت بيوصل إزاي؟'
   self.assertEqual(metadata(story,'story-digest')['cover_offset_ms'],200)
   story['cover_text']=' '.join(['كلمة']*8)
-  with self.assertRaises(ValueError):metadata(story,'story-digest')
+  self.assertEqual(len(metadata(story,'story-digest')['cover_text'].split()),6)
 
  def make_proof(self,root):
   package=metadata({'profile':'science','title':'إزاي الصوت بينتقل؟','cover_text':'الصوت بيوصل إزاي؟'},'script-sha')
