@@ -609,9 +609,23 @@
     "daily-remotion-2026-11-11-science": {
       "profile": "science",
       "due_at": "2026-11-11T10:00:00Z",
-      "status": "author_pending",
+      "status": "author_requested",
       "source_run": 42423455508,
-      "created_at": "2026-11-07T23:04:00.657825+00:00"
+      "created_at": "2026-11-07T23:04:00.657825+00:00",
+      "source_selection": {
+        "title": "ماذا يحدث أثناء النوم؟",
+        "publisher": "معلومة علمية مبسطة",
+        "canonical_subject": "sleep-brain-memory-cycles",
+        "science_domain": "medicine"
+      },
+      "source": {
+        "url": null
+      },
+      "source_document": {
+        "path": "state/remotion_documents/daily-remotion-2026-11-11-science-source-314990979c9ce4ce.json",
+        "sha256": "314990979c9ce4cecb66be2c9a21e347592a8f4b458d1f4b6f4c9fc89763ea5b"
+      },
+      "writer_run": 42423455508
     }
   },
   "cutover_evidence": {
