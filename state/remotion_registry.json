@@ -721,6 +721,13 @@
       "status": "author_pending",
       "source_run": 42425194191,
       "created_at": "2026-11-07T23:26:27.288253+00:00"
+    },
+    "daily-remotion-2026-11-14-science": {
+      "profile": "science",
+      "due_at": "2026-11-14T10:00:00Z",
+      "status": "author_pending",
+      "source_run": 42425471742,
+      "created_at": "2026-11-07T23:30:14.210109+00:00"
     }
   },
   "cutover_evidence": {
