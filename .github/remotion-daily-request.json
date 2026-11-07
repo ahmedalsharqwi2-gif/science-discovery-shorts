@@ -1,6 +1,6 @@
 {
-  "publish_date": "2026-11-05",
-  "revision": "owner-bounded-retained-production-v3",
+  "publish_date": "2026-11-07",
+  "revision": "design-v2-1-science-discovery-shorts-031124",
   "preserve_existing_posts": true,
-  "reason": "Explicit owner continuation: same retained episode; corrected bounded dependency setup. Concurrency and durable state prevent duplicate writing, voice or posting."
+  "reason": "Owner: the repositories must produce the videos. Queue the next slot with the v2.1 pack."
 }
