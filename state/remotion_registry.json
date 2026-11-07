@@ -732,7 +732,7 @@
     "daily-remotion-2026-11-15-science": {
       "profile": "science",
       "due_at": "2026-11-15T10:00:00Z",
-      "status": "draft_retained",
+      "status": "review_requested",
       "source_run": 42425768513,
       "created_at": "2026-11-07T23:34:04.100595+00:00",
       "source_selection": {
@@ -777,7 +777,13 @@
             "sha256": "706cdd1f245fef4e84455bac877cbbe8fd28e30b0e4475ccda8fb2b6999214cc"
           }
         }
-      ]
+      ],
+      "story_document": {
+        "path": "state/remotion_documents/daily-remotion-2026-11-15-science-story-6fe84da63dd213df.json",
+        "sha256": "6fe84da63dd213df4cb439a9fbfdbfe9b9239f61ee6d1cef0769382b65b23c80"
+      },
+      "canonical_subject": "vaccination-immune-memory",
+      "title": "إزاي اللقاحات بتعلم مناعة الجسم ضد الأمراض؟"
     }
   },
   "cutover_evidence": {
