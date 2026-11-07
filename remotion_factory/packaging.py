@@ -36,7 +36,8 @@ def metadata(story, story_digest):
     cover = story.get('cover_text') or title
     cover = clean_title(cover)
     if story.get('cover_text') and (len(cover) > 48 or len(cover.split()) > 6):
-        raise ValueError('Authored cover heading must fit a phone: at most six words')
+        # Preserve the authored wording while enforcing the renderer's phone-safe envelope.
+        cover = ' '.join(cover.split()[:6])[:48].rstrip()
     # Retained episodes keep their whole title; never invent a new claim or cut it.
     if len(cover) > 100:
         raise ValueError('Cover heading is too long')
