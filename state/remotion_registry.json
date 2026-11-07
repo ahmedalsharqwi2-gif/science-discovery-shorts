@@ -631,11 +631,15 @@
         "sha256": "0447eb01fa438158ddee65e3f8798bc421141984f6a9e8761aebf61f69b891c2"
       },
       "draft_repair": {
-        "phase": "requested",
+        "phase": "received",
         "original_sha256": "cebe071275e9ee4f6263485d85551eb5aaf130b25d4240e31a0cff6d03c87060",
         "problem": "Draft word budget fails natural-duration preflight: actual 200, required 240-370; no TTS requested",
         "maximum_requests": 1,
-        "voice_requests": 0
+        "voice_requests": 0,
+        "document": {
+          "path": "state/remotion_documents/daily-remotion-2026-11-11-science-corrected-draft-4de39d3d346163dd.json",
+          "sha256": "4de39d3d346163dd2216460d368825514e3256ea438eb13d0a8952a14c71c2cf"
+        }
       }
     }
   },
