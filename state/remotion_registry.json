@@ -595,8 +595,8 @@
     "daily-remotion-2026-11-09-science": {
       "profile": "science",
       "due_at": "2026-11-09T10:00:00Z",
-      "status": "authored",
-      "source_run": 42420476950,
+      "status": "voice_requested",
+      "source_run": 42468479135,
       "created_at": "2026-11-07T22:25:36.167041+00:00",
       "source_selection": {
         "title": "Gene editing could replace a lifetime of medication, but there's a catch",
@@ -631,7 +631,8 @@
         "issues": [],
         "passed": true
       },
-      "story_sha256": "a3edde282c0e775b9c1d88b9f336001e4736c35fa7cc01f4ac17675e130f0b3e"
+      "story_sha256": "a3edde282c0e775b9c1d88b9f336001e4736c35fa7cc01f4ac17675e130f0b3e",
+      "voice_request_run": 42468479135
     },
     "daily-remotion-2026-11-10-science": {
       "profile": "science",
