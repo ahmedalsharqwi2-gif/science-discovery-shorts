@@ -1,0 +1,267 @@
+{
+  "title": "إزاي تعديل الجينات ممكن يغنينا عن الدوا طول العمر؟",
+  "canonical_subject": "science-adc152e42557b311fdb2",
+  "hashtags": [
+    "علم",
+    "تكنولوجيا_حيوية",
+    "صحة",
+    "جينات"
+  ],
+  "scenes": [
+    {
+      "label": "المشكلة في الأدوية التقليدية",
+      "narration": "تخيل إنك بتخد دوا كل يوم عشان تفضل صحتك كويسة، بس إيه رأيك لو حقنة واحدة ممكن تحميك لسنين طويلة؟ الأدوية العادية بتشتغل وقت ما تاخدها بس، ولو بطلتها المشكلة بترجع تاني، ودي النقطة اللي بتخلي العلماء يفكروا في حلول تانية أعمق بكتير لعلاج الأمراض المزمنة.",
+      "evidence_quote": "Traditional medicines generally work only as long as patients continue taking them.",
+      "diagram": "compare",
+      "labels": [
+        "أدوية",
+        "علاج يومي",
+        "تأثير مؤقت"
+      ],
+      "secondary_object": "document",
+      "interaction": "contrast",
+      "shot_type": "comparison",
+      "hero_object": "pill",
+      "object_motion": "drift",
+      "image_query": "daily medication pills bottle on table",
+      "visual_rationale": "المقارنة بين زجاجة أدوية تقليدية تتطلب تناولاً يومياً وبين فكرة العلاج الجيني طويل الأمد لبيان الفرق الجوهري في الاستمرارية.",
+      "id": "scene_1",
+      "visual_mode": "hero",
+      "visual": {
+        "kind": "explainer",
+        "kicker": "compare",
+        "labels": [
+          "أدوية",
+          "علاج يومي",
+          "تأثير مؤقت"
+        ]
+      }
+    },
+    {
+      "label": "دخول عالم تعديل الجينات",
+      "narration": "هنا بقى بيجي دور تعديل الجينات اللي بيتعامل مع أصل الحكاية جوه خلايا جسم الإنسان نفسه. بدل ما نصلح العرض كل يوم، التكنولوجيا دي بتدخل عشان تعدل تسلسل الـ دي إن إيه، وتصلح الغلط من جذوره عشان تضمن إن الخلية تشتغل صح لوحدها.",
+      "evidence_quote": "Genomic therapies operate differently because they act on genetic material itself.",
+      "diagram": "layers",
+      "labels": [
+        "دي إن إيه",
+        "تعديل جيني",
+        "جذور المشكلة"
+      ],
+      "secondary_object": "cell",
+      "interaction": "transfer",
+      "shot_type": "macro",
+      "hero_object": "dna",
+      "object_motion": "pulse",
+      "image_query": "dna double helix structure glowing in laboratory",
+      "visual_rationale": "عرض شريط الـ دي إن إيه وهو يتلقى تعديلاً دقيقاً يوضح كيفية التعامل مع المادة الوراثية بشكل مباشر.",
+      "id": "scene_2",
+      "visual_mode": "hero",
+      "visual": {
+        "kind": "explainer",
+        "kicker": "layers",
+        "labels": [
+          "دي إن إيه",
+          "تعديل جيني",
+          "جذور المشكلة"
+        ]
+      }
+    },
+    {
+      "label": "جرعة واحدة وتأثير دائم",
+      "narration": "المميز في العلاجات الجينية دي إنها بتتصمم عشان تاخدها مرة واحدة بس وتدي مفعول مستمر. العلاج بيحمل تعليمات جديدة للخلايا عشان تبطل تنتج حاجات ضارة زي الكوليسترول العالي، وده معناه استغناء تام عن الحبوب اليومية وجداول المواعيد المتععبة للمريض.",
+      "evidence_quote": "Such therapies are often called",
+      "diagram": "flow",
+      "labels": [
+        "جرعة واحدة",
+        "مفعول طويل",
+        "استمرارية"
+      ],
+      "secondary_object": "server",
+      "interaction": "approach",
+      "shot_type": "process",
+      "hero_object": "molecule",
+      "object_motion": "assemble",
+      "image_query": "single injection medical syringe with glowing molecular background",
+      "visual_rationale": "توضيح حقنة واحدة تدخل الجسم وتستقر لتؤدي وظيفتها لفترة طويلة دون الحاجة لتكرار الجرعة.",
+      "id": "scene_3",
+      "visual_mode": "hero",
+      "visual": {
+        "kind": "explainer",
+        "kicker": "flow",
+        "labels": [
+          "جرعة واحدة",
+          "مفعول طويل",
+          "استمرارية"
+        ]
+      }
+    },
+    {
+      "label": "صعوبة التكرار والمناعة",
+      "narration": "بس استنى، الموضوع مش بالسهولة دي عشان فيه عتبة كبيرة بتقابلنا كلنا. الحقيقة إن العلاجات دي غالباً بتدخل جوه الجسم عن طريق فيروسات متطورة، وجسم الإنسان بطبيعته بيتعرف عليها وبيكون مناعة ضدها، فلو حبيت تاخد نفس العلاج تاني، غالباً مش هينفع.",
+      "evidence_quote": "The immune system can recognize these delivery vehicles and develop a response against them.",
+      "diagram": "cycle",
+      "labels": [
+        "جهاز المناعة",
+        "فيروس معدل",
+        "صعوبة التكرار"
+      ],
+      "secondary_object": "shield",
+      "interaction": "encircle",
+      "shot_type": "experiment",
+      "hero_object": "cell",
+      "object_motion": "shake",
+      "image_query": "immune system cells attacking virus vector in 3d",
+      "visual_rationale": "عرض خلايا المناعة وهي تحيط بناقل العلاج الفيروسي لتوضيح سبب صعوبة إعطاء نفس العلاج مرة أخرى.",
+      "id": "scene_4",
+      "visual_mode": "hero",
+      "visual": {
+        "kind": "explainer",
+        "kicker": "cycle",
+        "labels": [
+          "جهاز المناعة",
+          "فيروس معدل",
+          "صعوبة التكرار"
+        ]
+      }
+    },
+    {
+      "label": "الفرق بين الأمراض النادرة والشائعة",
+      "narration": "لما كنا بنعالج أمراض نادرة وخطيرة جداً، كان الخطر مقبول لأن المريض مكنش قدامه حلول تانية أصلاً. لكن لما ننقل نفس التكنولوجيا دي لأمراض منتشرة زي السكر أو ارتفاع الكوليسترول، هنا الحسابات بتتغير تماماً عشان الفئة المستهدفة بقت ضخمة جداً.",
+      "evidence_quote": "The situation becomes considerably more complicated when the same technology is used against common diseases.",
+      "diagram": "compare",
+      "labels": [
+        "أمراض نادرة",
+        "أمراض شائعة",
+        "مقارنة المخاطر"
+      ],
+      "secondary_object": "monitor",
+      "interaction": "contrast",
+      "shot_type": "comparison",
+      "hero_object": "heart",
+      "object_motion": "none",
+      "image_query": "human heart medical 3d model with risk indicators",
+      "visual_rationale": "المقارنة البصرية بين تأثير العلاج على الأمراض النادرة مقابل تطبيقه على ملايين البشر بأمراض شائعة.",
+      "id": "scene_5",
+      "visual_mode": "hero",
+      "visual": {
+        "kind": "explainer",
+        "kicker": "compare",
+        "labels": [
+          "أمراض نادرة",
+          "أمراض شائعة",
+          "مقارنة المخاطر"
+        ]
+      }
+    },
+    {
+      "label": "صعوبة التراجع عن التعديل",
+      "narration": "الخطورة الكبيرة هنا هي الديمومة؛ يعني لو حصل أي عرض جانبي مش محسوب بعد التعديل الجيني، مش هتععرف ترجع في كلامك بسهولة زي الأدوية العادية. الأدوية التقليدية ممكن توقفها فوراً لو تعبتك، لكن التعديل الجيني المكتوب في الجينات ملوش زرار إيقاف لحد دلوقتي.",
+      "evidence_quote": "Permanent gene therapies generally lack that option.",
+      "diagram": "flow",
+      "labels": [
+        "تغيير دائم",
+        "غياب زر الإيقاف",
+        "مخاطر خفية"
+      ],
+      "secondary_object": "gear",
+      "interaction": "separate",
+      "shot_type": "process",
+      "hero_object": "dna",
+      "object_motion": "split",
+      "image_query": "dna strand locking permanently with mechanical gear lock",
+      "visual_rationale": "إظهار عملية إغلاق جيني دائم يصعب التراجع فيها، مما يبرز أهمية الحذر قبل اتخاذ القرار.",
+      "id": "scene_6",
+      "visual_mode": "hero",
+      "visual": {
+        "kind": "explainer",
+        "kicker": "flow",
+        "labels": [
+          "تغيير دائم",
+          "غياب زر الإيقاف",
+          "مخاطر خفية"
+        ]
+      }
+    },
+    {
+      "label": "أهمية المراقبة طويلة الأمد",
+      "narration": "علشان كده العلماء بيقولوا إن المراقبة المستمرة مش مجرد خطوة إضافية، دي حاجة أساسية لا غنى عنها. التجارب اللي بتتعمل على مجموعة صغيرة من الناس لفترة قصيرة ممكن تพลาด أعراض نادرة بتظهر بعد سنين طويلة لما العلاج ينتشر ويتخد لملايين البشر.",
+      "evidence_quote": "monitoring cannot be treated as an afterthought.",
+      "diagram": "cycle",
+      "labels": [
+        "سجلات المرضى",
+        "مراقبة طويلة",
+        "دراسة الأمان"
+      ],
+      "secondary_object": "network",
+      "interaction": "approach",
+      "shot_type": "experiment",
+      "hero_object": "robot",
+      "object_motion": "float",
+      "image_query": "medical data network tracking patient health metrics over years",
+      "visual_rationale": "توضيح شبكة ربط بيانات المرضى لتتبع الآثار الجانبية على المدى الطويل وضمان الأمان العام.",
+      "id": "scene_7",
+      "visual_mode": "hero",
+      "visual": {
+        "kind": "explainer",
+        "kicker": "cycle",
+        "labels": [
+          "سجلات المرضى",
+          "مراقبة طويلة",
+          "دراسة الأمان"
+        ]
+      }
+    },
+    {
+      "label": "التكلفة والتوازن بين الأمل والحذر",
+      "narration": "وفي الآخر بتظهر مشكلة التكلفة اللي ممكن تعدي مليون دولار للحقنة الواحدة، وده بيحط ضغط رهيب على المنظومة الصحية. الخلاصة إن العلم بيفتح لنا باب عظيم لعلاج الأمراض، بس التحدي الحقيقي هو إزاي نضمن إن الحلم ده يبقى آمن ومتاح للكل من غير ما نستعجل.",
+      "evidence_quote": "Safety is not the only barrier to bringing gene editing into mainstream healthcare.",
+      "diagram": "compare",
+      "labels": [
+        "التكلفة",
+        "إتاحة العلاج",
+        "مستقبل الطب"
+      ],
+      "secondary_object": "phone",
+      "interaction": "transfer",
+      "shot_type": "comparison",
+      "hero_object": "shield",
+      "object_motion": "none",
+      "image_query": "healthcare balance scale showing cost and genetic safety",
+      "visual_rationale": "عرض ميزان يوضح التوازن الدقيق بين تكلفة العلاج العالية وضرورة الحفاظ على الأمان الطبي للمرضى.",
+      "id": "scene_8",
+      "visual_mode": "hero",
+      "visual": {
+        "kind": "explainer",
+        "kicker": "compare",
+        "labels": [
+          "التكلفة",
+          "إتاحة العلاج",
+          "مستقبل الطب"
+        ]
+      }
+    }
+  ],
+  "cover_text": "حقنة واحدة تغير جيناتك للأبد؟",
+  "director_version": "v2.5-colloquial-cinematic",
+  "profile": "science",
+  "series": "اسرار الكون",
+  "fiction": false,
+  "documented": true,
+  "topic_key": "remotion-science-adc152e42557b311fdb2",
+  "source": {
+    "url": "https://www.sciencedaily.com/releases/2026/11/261102202829.htm",
+    "title": "Gene editing could replace a lifetime of medication, but there's a catch",
+    "publisher": "ScienceDaily"
+  },
+  "science_domain": "biology",
+  "visual_identity": {
+    "version": "channel-identities-v1",
+    "profile": "science",
+    "name": "مختبر الحياة",
+    "background": "#e5f2ed",
+    "ink": "#153e40",
+    "accent": "#179ca6",
+    "visual": "bright three-dimensional laboratory, topic-specific objects, meaningful experiments",
+    "sound": "glass mallets, light organic bass, water and mechanism cues"
+  }
+}
