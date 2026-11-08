@@ -34,5 +34,7 @@
       "evidence": "reviews/schedule_changes/owner-science-2026-11-04-1445.json",
       "scope": "One-day audit only; production schedule unchanged"
     }
-  }
+  },
+  "publication_interval_days": 3,
+  "publication_cadence_anchor_local_date": "2026-11-09"
 }

@@ -50,12 +50,19 @@ def due_for(day):
     return _cairo_at(day, publication_hour).astimezone(UTC)
 
 
+def publication_cadence(day):
+    """Return whether this Cairo-local date is an authorized publication date."""
+    cfg = _config()
+    interval = int(cfg.get("publication_interval_days", 1))
+    anchor = date.fromisoformat(cfg.get("publication_cadence_anchor_local_date", "1970-01-01"))
+    return interval <= 1 or (_day(day) - anchor).days % interval == 0
+
+
 def clock_target(local):
-    """Resolve an evening production run to the next Cairo-local publication date."""
+    """Resolve an evening production run only when the next date is on cadence."""
     local = local.astimezone(CAIRO)
-    if local.hour >= hours(local.date())[0]:
-        return local.date() + timedelta(days=1)
-    return None
+    candidate = local.date() + timedelta(days=1) if local.hour >= hours(local.date())[0] else None
+    return candidate if candidate is not None and publication_cadence(candidate) else None
 
 
 def audit_day(local):
@@ -70,4 +77,4 @@ def checkpoints(day):
 
 
 def automatic_expected(day):
-    return True
+    return publication_cadence(day)
