@@ -1,64 +1,6 @@
 {
-  "name": "Independent daily video health — production, media and publication",
+  "name": "PAUSED — Independent video production health (owner request 2026-11-08)",
   "on": {
-    "schedule": [
-      {
-        "cron": "30 6 * * *"
-      },
-      {
-        "cron": "30 7 * * *"
-      },
-      {
-        "cron": "15 8 * * *"
-      },
-      {
-        "cron": "30 8 * * *"
-      },
-      {
-        "cron": "15 9 * * *"
-      },
-      {
-        "cron": "30 9 * * *"
-      },
-      {
-        "cron": "30 10 * * *"
-      },
-      {
-        "cron": "0 12 * * *"
-      },
-      {
-        "cron": "0 13 * * *"
-      },
-      {
-        "cron": "15 13 * * *"
-      },
-      {
-        "cron": "15 14 * * *"
-      },
-      {
-        "cron": "30 14 * * *"
-      },
-      {
-        "cron": "30 15 * * *"
-      },
-      {
-        "cron": "30 18 * * *"
-      },
-      {
-        "cron": "30 19 * * *"
-      }
-    ],
-    "workflow_run": {
-      "workflows": [
-        "Automatic Remotion — configured Cairo production and publication"
-      ],
-      "types": [
-        "completed"
-      ],
-      "branches": [
-        "main"
-      ]
-    },
     "workflow_dispatch": {
       "inputs": {
         "date": {
@@ -77,14 +19,6 @@
           "default": "auto"
         }
       }
-    },
-    "push": {
-      "branches": [
-        "main"
-      ],
-      "paths": [
-        ".github/remotion-health-request.json"
-      ]
     }
   },
   "permissions": {
