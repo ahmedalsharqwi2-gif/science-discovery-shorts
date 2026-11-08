@@ -630,7 +630,8 @@
         "visuals_match": true,
         "issues": [],
         "passed": true
-      }
+      },
+      "story_sha256": "a3edde282c0e775b9c1d88b9f336001e4736c35fa7cc01f4ac17675e130f0b3e"
     },
     "daily-remotion-2026-11-10-science": {
       "profile": "science",
