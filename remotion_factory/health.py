@@ -183,6 +183,7 @@ def clock_source(run,decision,day):
   created=instant(run['created_at']).astimezone(CAIRO)
   if created.date()!=production_day(day) or not hours(day)[0]<=created.hour<hours(day)[0]+4:return None
   if not decision.get('due_at') or instant(decision['due_at'])!=target_due(day) or decision.get('reason')=='other DST trigger':return None
+  if decision.get('dry_run') is not False:return None
  except (ValueError,TypeError,KeyError,AttributeError):return None
  if run.get('event')=='schedule':return 'github-schedule'
  if run.get('event')=='workflow_dispatch' and created.hour==hours(day)[0] and decision.get('trigger_source')=='cloudflare-clock' and decision.get('dry_run') is False:return 'cloudflare-clock'
