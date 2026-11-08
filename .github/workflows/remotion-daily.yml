@@ -1,66 +1,7 @@
 {
-  "name": "Automatic Remotion — configured Cairo production and publication",
+  "name": "PAUSED — Automatic Remotion production (owner request 2026-11-08)",
   "on": {
-    "schedule": [
-      {
-        "cron": "0 6 * * *"
-      },
-      {
-        "cron": "17 6 * * *"
-      },
-      {
-        "cron": "0 7 * * *"
-      },
-      {
-        "cron": "17 7 * * *"
-      },
-      {
-        "cron": "0 16 * * *"
-      },
-      {
-        "cron": "17 16 * * *"
-      },
-      {
-        "cron": "0 17 * * *"
-      },
-      {
-        "cron": "17 17 * * *"
-      }
-    ],
-    "workflow_dispatch": {
-      "inputs": {
-        "publish_date": {
-          "description": "Optional explicit future publication date YYYY-MM-DD; never roll expired slots",
-          "type": "string",
-          "required": false
-        },
-        "dry_run": {
-          "description": "Queue/time checks only; no generation or posting",
-          "type": "boolean",
-          "default": false
-        },
-        "trigger_source": {
-          "description": "Declared initiating service; tests/manual actions are never treated as an actual automatic clock",
-          "type": "choice",
-          "options": [
-            "manual",
-            "cloudflare-clock",
-            "cloudflare-clock-test"
-          ],
-          "default": "manual",
-          "required": false
-        }
-      }
-    },
-    "push": {
-      "branches": [
-        "main"
-      ],
-      "paths": [
-        ".github/remotion-daily-request.json",
-        ".github/remotion-time-change.json"
-      ]
-    }
+    "workflow_dispatch": {}
   },
   "permissions": {
     "contents": "write",
@@ -173,10 +114,10 @@
           }
         }
       ],
-      "if": "github.event_name != 'push' || !contains(github.event.head_commit.message, '[schedule-migration]')"
+      "if": "${{ false }}"
     },
     "adjust_time": {
-      "if": "github.event_name == 'push' && contains(github.event.head_commit.message, '[schedule-migration]')",
+      "if": "${{ false }}",
       "runs-on": "ubuntu-24.04",
       "timeout-minutes": 15,
       "env": {
