@@ -92,12 +92,7 @@
           "default": "21724b6755b7d103dfdfe6d9a6e5e399"
         }
       }
-    },
-    "schedule": [
-      {
-        "cron": "*/15 * * * *"
-      }
-    ]
+    }
   },
   "permissions": {
     "contents": "read"
