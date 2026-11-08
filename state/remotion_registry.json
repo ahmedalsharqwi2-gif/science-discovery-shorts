@@ -595,9 +595,24 @@
     "daily-remotion-2026-11-09-science": {
       "profile": "science",
       "due_at": "2026-11-09T10:00:00Z",
-      "status": "author_pending",
+      "status": "author_requested",
       "source_run": 42420476950,
-      "created_at": "2026-11-07T22:25:36.167041+00:00"
+      "created_at": "2026-11-07T22:25:36.167041+00:00",
+      "source_selection": {
+        "title": "Gene editing could replace a lifetime of medication, but there's a catch",
+        "url": "https://www.sciencedaily.com/releases/2026/11/261102202829.htm",
+        "publisher": "ScienceDaily",
+        "canonical_subject": "science-adc152e42557b311fdb2",
+        "science_domain": "biology"
+      },
+      "source": {
+        "url": "https://www.sciencedaily.com/releases/2026/11/261102202829.htm"
+      },
+      "source_document": {
+        "path": "state/remotion_documents/daily-remotion-2026-11-09-science-source-39bce12f447d33c9.json",
+        "sha256": "39bce12f447d33c9514c049c06c5ab1c6d572afd0e6047c262f8ee14d36bd62e"
+      },
+      "writer_run": 42468479135
     },
     "daily-remotion-2026-11-10-science": {
       "profile": "science",
