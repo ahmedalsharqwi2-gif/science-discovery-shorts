@@ -595,7 +595,7 @@
     "daily-remotion-2026-11-09-science": {
       "profile": "science",
       "due_at": "2026-11-09T10:00:00Z",
-      "status": "voice_requested",
+      "status": "voice_ready",
       "source_run": 42468479135,
       "created_at": "2026-11-07T22:25:36.167041+00:00",
       "source_selection": {
@@ -632,7 +632,11 @@
         "passed": true
       },
       "story_sha256": "a3edde282c0e775b9c1d88b9f336001e4736c35fa7cc01f4ac17675e130f0b3e",
-      "voice_request_run": 42468479135
+      "voice_request_run": 42468479135,
+      "duration": 141.36,
+      "audio_sha256": "0ab7ee8f1af84dfc7da7e756997a31e0b35ce6bf8e5814d4e1e99b137c36f12f",
+      "timing_sha256": "3d5d6e04f5a5a61677622007ba8d66cc45790f6ebb02a29a48616b7d8dd7d4ac",
+      "coverage": 0.9023668639053254
     },
     "daily-remotion-2026-11-10-science": {
       "profile": "science",
