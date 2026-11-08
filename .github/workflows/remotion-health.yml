@@ -81,7 +81,8 @@
             "if-no-files-found": "warn"
           }
         }
-      ]
+      ],
+      "if": "false"
     }
   }
 }
