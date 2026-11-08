@@ -595,7 +595,7 @@
     "daily-remotion-2026-11-09-science": {
       "profile": "science",
       "due_at": "2026-11-09T10:00:00Z",
-      "status": "draft_retained",
+      "status": "review_requested",
       "source_run": 42420476950,
       "created_at": "2026-11-07T22:25:36.167041+00:00",
       "source_selection": {
@@ -616,7 +616,13 @@
       "draft_document": {
         "path": "state/remotion_documents/daily-remotion-2026-11-09-science-draft-d94324f348609414.json",
         "sha256": "d94324f348609414fa3771b65d3e58ce5ee491a071c60b73152f21fa05f2dcf0"
-      }
+      },
+      "story_document": {
+        "path": "state/remotion_documents/daily-remotion-2026-11-09-science-story-a3edde282c0e775b.json",
+        "sha256": "a3edde282c0e775b9c1d88b9f336001e4736c35fa7cc01f4ac17675e130f0b3e"
+      },
+      "canonical_subject": "science-adc152e42557b311fdb2",
+      "title": "إزاي تعديل الجينات ممكن يغنينا عن الدوا طول العمر؟"
     },
     "daily-remotion-2026-11-10-science": {
       "profile": "science",
