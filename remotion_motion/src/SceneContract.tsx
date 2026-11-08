@@ -3,7 +3,7 @@ import {AbsoluteFill, Easing, interpolate, interpolateColors, useCurrentFrame, u
 import type {Episode, Scene} from './types';
 
 type Props={scene:Scene;episode:Episode};
-type Contract='sunset_journey'|'prism_scattering'|'eye_light'|'earth_atmosphere'|'science_orbit'|'horror_mist'|'paper_story'|'cinematic_atmosphere';
+type Contract='sunset_journey'|'prism_scattering'|'eye_light'|'earth_atmosphere'|'science_orbit'|'horror_mist'|'paper_story'|'history_layers'|'news_broadcast'|'cinematic_atmosphere';
 
 /**
  * Visual Story Mode
@@ -15,12 +15,16 @@ type Contract='sunset_journey'|'prism_scattering'|'eye_light'|'earth_atmosphere'
 export const sceneContractFor=(scene:Scene,episode:Episode):Contract=>{
   if(scene.motion_contract) return scene.motion_contract as Contract;
   const text=[scene.label,scene.headline,scene.detail,scene.narration,scene.kicker,episode.title].filter(Boolean).join(' ');
+  // The channel profile wins over generic words such as "sun" in a narration.
+  // An explicit motion_contract remains the escape hatch for a hand-authored scene.
+  if(episode.profile==='science'||scene.kind==='science') return 'science_orbit';
+  if(episode.profile==='horror') return 'horror_mist';
+  if(episode.profile==='stickman'||scene.kind==='stickman'||scene.kind==='whatif') return 'paper_story';
+  if(episode.profile==='history') return 'history_layers';
+  if(episode.profile==='news') return 'news_broadcast';
   if(/منشور|طيف|انكسار|prism|spectrum|refraction/i.test(text)) return 'prism_scattering';
   if(/عين|بصر|رؤية|شبكية|eye|vision|retina/i.test(text)) return 'eye_light';
   if(/غلاف جوي|مسافة الضوء|نهار|غروب|شروق|شمس|سماء|طريق|رحلة|earth|atmosphere|sunset|sunrise|sun|sky|journey|road/i.test(text)) return 'earth_atmosphere';
-  if(episode.profile==='science'||scene.kind==='science'||/فضاء|كوكب|ذرة|موجة|space|planet|atom|molecule/i.test(text)) return 'science_orbit';
-  if(episode.profile==='horror') return 'horror_mist';
-  if(episode.profile==='stickman'||scene.kind==='stickman'||scene.kind==='whatif') return 'paper_story';
   return 'cinematic_atmosphere';
 };
 
@@ -70,6 +74,8 @@ export const SceneContract=({scene,episode}:Props)=>{
       {contract==='eye_light'&&<g><path d="M230 1010Q540 720 850 1010Q540 1300 230 1010Z" fill="#173044" stroke="#dceeff" strokeWidth="8"/><ellipse cx="540" cy="1010" rx="90" ry="130" fill="#8ad4dd"/><circle cx="540" cy="1010" r="42" fill="#101827"/>{[-1,0,1].map(i=><path key={i} d={`M${100+i*80} ${700+i*70}L500 970`} stroke={accent} strokeWidth="6" strokeDasharray="18 16" opacity=".86"/>)}<path d="M580 1010L960 820" stroke="#fff" strokeWidth="6" strokeDasharray="18 16"/></g>}
       {contract==='science_orbit'&&<g fill="none" stroke="#7cecff" opacity=".7"><ellipse cx="540" cy="900" rx="320" ry="125" transform={`rotate(${interpolate(p,[0,1],[-18,18])} 540 900)`}/><ellipse cx="540" cy="900" rx="220" ry="82" transform={`rotate(${interpolate(p,[0,1],[22,-22])} 540 900)`}/><circle cx="540" cy="900" r="40" fill="#7cecff"/>{Array.from({length:8},(_,i)=><circle key={i} cx={540+Math.cos(i*Math.PI/4+frame/60)*320} cy={900+Math.sin(i*Math.PI/4+frame/60)*125} r="12" fill={i%2?'#ffe7a1':'#7cecff'}/>)}</g>}
       {contract==='horror_mist'&&<g fill="#d37a9b" opacity={.13+.07*Math.sin(frame/29)}><ellipse cx="180" cy="980" rx="360" ry="80"/><ellipse cx="900" cy="1120" rx="420" ry="95"/></g>}
+      {contract==='history_layers'&&<g transform={`translate(${interpolate(p,[0,1],[0,-18])} 0)`}><rect x="130" y="560" width="820" height="760" rx="28" fill="#d9b987" opacity=".18" stroke="#f6d49b" strokeWidth="5"/><path d="M210 1100Q370 820 540 1020T870 760" fill="none" stroke="#f6d49b" strokeWidth="8" strokeDasharray="18 16" opacity=".8"/><circle cx={interpolate(p,[0,1],[240,840])} cy="1080" r="18" fill="#f6d49b"/><path d="M220 1240H860" stroke="#f6d49b" strokeWidth="5" opacity=".7"/>{[0,1,2,3,4].map(i=><line key={i} x1={260+i*140} y1="1230" x2={260+i*140} y2="1260" stroke="#f6d49b" strokeWidth="5"/>)}</g>}
+      {contract==='news_broadcast'&&<g><rect x="70" y="620" width="940" height="520" rx="30" fill="#102b3d" opacity=".72" stroke="#7cf0c7" strokeWidth="4"/><circle cx={interpolate(p,[0,1],[210,870])} cy="880" r="130" fill="#7cf0c7" opacity=".12"/><path d={`M120 1260H${interpolate(p,[0,1],[960,180])}`} stroke="#7cf0c7" strokeWidth="9" opacity=".8"/><path d="M120 1300H960" stroke="#f47971" strokeWidth="5" strokeDasharray="28 18" opacity=".7"/></g>}
       {contract==='earth_atmosphere'&&<g fill="none" stroke="#8be7ff" opacity=".48"><ellipse cx="540" cy="1180" rx="340" ry="100" transform={`rotate(${interpolate(p,[0,1],[-12,12])} 540 1180)`}/><path d="M170 1180Q540 920 910 1180" strokeDasharray="20 18" strokeWidth="8"/></g>}
     </svg>
   </AbsoluteFill>;
