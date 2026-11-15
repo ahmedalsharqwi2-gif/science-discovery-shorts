@@ -1,0 +1,179 @@
+{
+  "topicKey": "astronomy-andromeda-ngc206-star-clouds",
+  "title": "أسرار التجمع النجمي إن جي سي 206",
+  "hook": "هل فكرت قبل كده إزاي بنقدر نرصد بالتلسكوبات تجمعات نجوم عملاقة وشابة جداً وبتلمع بلون أزرق ساحر جوه مجرة تانية خالص زي أندروميدا المجاورة لمجرتنا في أعماق الفضاء البعيد؟",
+  "cta": "تابعونا وشاركونا رأيكم في التعليقات عشان تكتشفوا دايماً أسرار الفضاء والكون المذهل، وخليكم مستعدين لكل رحلة جديدة بنكتشف فيها مع بعض أسرار النجوم والمجرات البعيدة المحيطة بينا!",
+  "scenes": [
+    {
+      "title": "لغز النجوم الزرقاء في أندروميدا",
+      "text": "هل فكرت قبل كده إزاي بنقدر نرصد بالتلسكوبات تجمعات نجوم عملاقة وشابة جداً وبتلمع بلون أزرق ساحر جوه مجرة تانية خالص زي أندروميدا المجاورة لمجرتنا في أعماق الفضاء البعيد؟",
+      "summary": "رصد تجمعات النجوم الزرقاء الشابة في مجرة أندروميدا",
+      "keyword": "أندروميدا",
+      "template": "phenomenon",
+      "labels": [
+        "مجرة أندروميدا",
+        "تجمع نجمي",
+        "نجوم زرقاء"
+      ],
+      "values": [],
+      "claim": "تضم مجرة أندروميدا المجاورة تجمعات نجمية عملاقة ولامعة",
+      "sourceId": "f8746cf4ef0b",
+      "evidence": "The large stellar association cataloged as NGC 206 is nestled within the dusty arms of the neighboring Andromeda galaxy along with the galaxy’s pinkish star-forming regions.",
+      "kind": "fact",
+      "expression": 1,
+      "action": "walk"
+    },
+    {
+      "title": "موقع التجمع النجمي إن جي سي 206",
+      "text": "الصورة الفلكية الدقيقة بتكشف لينا بكل وضوح التجمع النجمي الضخم المعروف علمياً باسم إن جي سي ميتين وستة، وهو مستقر ومحمي وسط الأذرع المليانة غبار لمجرة أندروميدا الحلزونية المجاورة لمجرتنا.",
+      "summary": "ظهور تجمع NGC 206 داخل أذرع أندروميدا الغبارية",
+      "keyword": "NGC 206",
+      "template": "map",
+      "labels": [
+        "أذرع غبارية",
+        "إن جي سي 206",
+        "مجرة حلزونية"
+      ],
+      "values": [],
+      "claim": "يقع التجمع النجمي NGC 206 وسط أذرع مجرة أندروميدا الغبارية",
+      "sourceId": "f8746cf4ef0b",
+      "evidence": "The large stellar association cataloged as NGC 206 is nestled within the dusty arms of the neighboring Andromeda galaxy",
+      "kind": "fact",
+      "expression": 0,
+      "action": "point"
+    },
+    {
+      "title": "المسافة إلى مجرة أندروميدا",
+      "text": "مجرة أندروميدا الحلزونية الرائعة دي بتتعرف في كتب الفلك كمان برمز مسييه واحد وتلاتين، وهي بتبعد عن كوكبنا الأرضي مسافة محسوبة بتوصل لمجرد اتنين ونص مليون سنة ضوئية بس.",
+      "summary": "تبعد مجرة M31 نحو 2.5 مليون سنة ضوئية",
+      "keyword": "مسييه 31",
+      "template": "journey",
+      "labels": [
+        "مسييه 31",
+        "سنة ضوئية",
+        "المسافة الفلكية"
+      ],
+      "values": [],
+      "claim": "تبعد مجرة أندروميدا الحلزونية نحو 2.5 مليون سنة ضوئية عن الأرض",
+      "sourceId": "f8746cf4ef0b",
+      "evidence": "Also known as M31, the spiral galaxy is a mere 2.5 million light-years away.",
+      "kind": "fact",
+      "expression": 8,
+      "action": "walk"
+    },
+    {
+      "title": "تفاصيل قرص المجرة ومناطق التكون",
+      "text": "بنشوف التجمع النجمي دا متمركز بدقة في قلب لقطة مقربة ومفصلة للامتداد الجنوبي الغربي لقرص مجرة أندروميدا، بجانب وجود مناطق وردية ساطعة بتتشكل فيها نجوم جديدة جوه المجرة.",
+      "summary": "موقع التجمع في الجزء الجنوبي الغربي من قرص أندروميدا",
+      "keyword": "قرص أندروميدا",
+      "template": "phenomenon",
+      "labels": [
+        "قرص المجرة",
+        "مناطق وردية",
+        "ولادة النجوم"
+      ],
+      "values": [],
+      "claim": "يقع NGC 206 في الامتداد الجنوبي الغربي لقرص أندروميدا قرب مناطق تشكل نجوم وردية",
+      "sourceId": "f8746cf4ef0b",
+      "evidence": "NGC 206 is found at the center of this sharp and detailed close-up of the southwestern extent of Andromeda’s disk.",
+      "kind": "fact",
+      "expression": 2,
+      "action": "point"
+    },
+    {
+      "title": "شباب النجوم الزرقاء الضخمة",
+      "text": "النجوم الزرقا الساطعة والمنورة بقوة اللي بتملى تجمع إن جي سي ميتين وستة بتأكد شبابها الفلكي، لأن أحدث وأضخم النجوم جواه عمرها في الحقيقة بيقل عن عشرة مليون سنة بس.",
+      "summary": "عمر أصغر نجوم التجمع يقل عن 10 ملايين سنة",
+      "keyword": "عمر النجوم",
+      "template": "chart",
+      "labels": [
+        "نجوم زرقاء",
+        "أعمار النجوم",
+        "شباب كوني"
+      ],
+      "values": [],
+      "claim": "عمر أحدث النجوم الضخمة في NGC 206 يقل عن 10 ملايين سنة",
+      "sourceId": "f8746cf4ef0b",
+      "evidence": "The bright, blue stars of NGC 206 indicate its youth. In fact, its youngest massive stars are less than 10 million years old.",
+      "kind": "fact",
+      "expression": 0,
+      "action": "turn"
+    },
+    {
+      "title": "مقارنة مع عناقيد درب التبانة",
+      "text": "الحجم الضخم للتجمع النجمي دا بيعتبر أكبر بكتير جداً من كل العناقيد المفتوحة أو العناقيد المجرية بتاعة النجوم الشابة اللي بنرصدها متوزعة جوه قرص مجرتنا درب التبانة.",
+      "summary": "تجمع NGC 206 يفوق عناقيد درب التبانة المفتوحة حجماً",
+      "keyword": "درب التبانة",
+      "template": "comparison",
+      "labels": [
+        "درب التبانة",
+        "عناقيد مفتوحة",
+        "مقارنة فلكية"
+      ],
+      "values": [],
+      "claim": "حجم NGC 206 أكبر بكثير من العناقيد المفتوحة في درب التبانة",
+      "sourceId": "f8746cf4ef0b",
+      "evidence": "Much larger than the open or galactic clusters of young stars in the disk of our Milky Way galaxy,",
+      "kind": "fact",
+      "expression": 5,
+      "action": "walk"
+    },
+    {
+      "title": "امتداد هائل بآلاف السنين الضوئية",
+      "text": "المساحة الهائلة اللي بيمتد عليها تجمع إن جي سي ميتين وستة بتوصل لنحو أربعة آلاف سنة ضوئية كاملة، وده بيخليه واحد من أوسع التجمعات النجمية اللي درسها العلماء بالتفصيل.",
+      "summary": "يمتد تجمع NGC 206 على مساحة 4000 سنة ضوئية",
+      "keyword": "اتساع كوني",
+      "template": "phenomenon",
+      "labels": [
+        "اتساع التجمع",
+        "أبعاد فلكية",
+        "سنة ضوئية"
+      ],
+      "values": [],
+      "claim": "يمتد تجمع NGC 206 على نحو 4000 سنة ضوئية",
+      "sourceId": "f8746cf4ef0b",
+      "evidence": "NGC 206 spans about 4,000 light-years.",
+      "kind": "fact",
+      "expression": 8,
+      "action": "point"
+    },
+    {
+      "title": "عمالقة الحواضن النجمية الكونية",
+      "text": "اتساع التجمع العملاق دا بيتقارن مباشرة في الحجم مع أضخم حاضنات النجوم الكونية، زي سديم العنكبوت في سحابة ماجلان الكبرى وتجمع إن جي سي ستمية وأربعة في مجرة المثلث المجاورة.",
+      "summary": "حجمه يماثل سديم العنكبوت وتجمع NGC 604",
+      "keyword": "حاضنات النجوم",
+      "template": "comparison",
+      "labels": [
+        "سديم العنكبوت",
+        "إن جي سي 604",
+        "حاضنات النجوم"
+      ],
+      "values": [],
+      "claim": "يقارن حجم NGC 206 بحواضن عملاقة كسديم العنكبوت وNGC 604",
+      "sourceId": "f8746cf4ef0b",
+      "evidence": "That’s comparable in size to the giant stellar nurseries NGC 604 in nearby spiral M33 and the Tarantula Nebula in the Large Magellanic Cloud.",
+      "kind": "fact",
+      "expression": 0,
+      "action": "turn"
+    },
+    {
+      "title": "دعوة لاكتشاف أسرار السماء",
+      "text": "تابعونا وشاركونا رأيكم في التعليقات عشان تكتشفوا دايماً أسرار الفضاء والكون المذهل، وخليكم مستعدين لكل رحلة جديدة بنكتشف فيها مع بعض أسرار النجوم والمجرات البعيدة المحيطة بينا!",
+      "summary": "دعوة للمتابعة والتعليق لاكتشاف أسرار الكون",
+      "keyword": "أسرار الفضاء",
+      "template": "journey",
+      "labels": [
+        "استكشاف الفضاء",
+        "أسرار الكون",
+        "متابعة"
+      ],
+      "values": [],
+      "claim": "استكشاف الكون وصوره اليومية يثري معرفتنا بعجائب الفضاء",
+      "sourceId": "f8746cf4ef0b",
+      "evidence": "Discover the cosmos! Each day a different image or photograph of our fascinating universe is featured, along with a brief explanation written by a professional astronomer.",
+      "kind": "fact",
+      "expression": 1,
+      "action": "jump"
+    }
+  ]
+}
