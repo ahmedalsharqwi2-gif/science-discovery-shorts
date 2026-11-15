@@ -1,0 +1,179 @@
+{
+  "topicKey": "astronomy-massive-star-outbursts-at2016blu",
+  "title": "لغز ثورات النجم العملاق في الفضاء",
+  "hook": "هل سألت نفسك قبل كده إيه اللي ممكن يخلي نجم عملاق في الفضاء ينفجر بشكل متكرر وغامض ويفضل صامد؟",
+  "cta": "اشترك في القناة لمتابعة أحدث أسرار الكون أولاً بأول",
+  "scenes": [
+    {
+      "title": "لغز النجم المتفجر",
+      "text": "هل سألت نفسك قبل كده إيه اللي ممكن يخلي نجم عملاق في الفضاء ينفجر بشكل متكرر وغامض ويفضل صامد، وده اللغز المثير اللي فك شفرته تلسكوب شاندرا الفضائي مؤخراً؟",
+      "summary": "رصد ثورات متكررة لنجم عملاق غامض في الفضاء",
+      "keyword": "star_outburst",
+      "template": "phenomenon",
+      "labels": [
+        "شاندرا",
+        "نجم عملاق",
+        "انفجارات الفضاء"
+      ],
+      "values": [],
+      "claim": "اكتشف العلماء ما يسبب الثورات المتكررة لنجم عملاق وغير مستقر في الفضاء.",
+      "sourceId": "e714212c4694",
+      "evidence": "Using NASA’s Chandra X-ray Observatory, astronomers have discovered what is triggering repeated outbursts from a giant, unstable star located in the galaxy shown in this image released on Nov. 9, 2026.",
+      "kind": "fact",
+      "expression": 10,
+      "action": "point"
+    },
+    {
+      "title": "مرصد شاندرا يفك الشفرة",
+      "text": "علماء الفلك اعتمدوا على مرصد شاندرا للأشعة السينية التابع لوكالة ناسا علشان يعرفوا المحفز والسبب الحقيقي وراء الثورات المتكررة اللي بتحصل للنجم العملاق وغير المستقر في الفضاء السحيق.",
+      "summary": "تلسكوب ناسا يكشف أسباب ثورات النجم العملاق",
+      "keyword": "chandra_observatory",
+      "template": "cause",
+      "labels": [
+        "مرصد شاندرا",
+        "ناسا",
+        "الأشعة السينية"
+      ],
+      "values": [],
+      "claim": "تم استخدام مرصد شاندرا التابع لناسا لتحديد سبب انفجارات النجم العملاق.",
+      "sourceId": "e714212c4694",
+      "evidence": "Using NASA’s Chandra X-ray Observatory, astronomers have discovered what is triggering repeated outbursts from a giant, unstable star",
+      "kind": "fact",
+      "expression": 8,
+      "action": "walk"
+    },
+    {
+      "title": "هوية النجم والمجرة",
+      "text": "النجم المتقلب والمضطرب ده بيُعرف علمياً باسم AT 2016blu، ومكانه موجود جوه مجرة حلزونية ساحرة وشهيرة اسمها NGC 4559 ظهرت بتفاصيل مبهرة في الصورة الفضائية اللي نشرتها الوكالة.",
+      "summary": "النجم AT 2016blu داخل مجرة NGC 4559",
+      "keyword": "spiral_galaxy",
+      "template": "map",
+      "labels": [
+        "مجرة حلزونية",
+        "سديم",
+        "أجرام سماوية"
+      ],
+      "values": [],
+      "claim": "النجم المتقلب يسمى AT 2016blu ويقع في مجرة حلزونية تسمى NGC 4559.",
+      "sourceId": "e714212c4694",
+      "evidence": "The volatile star, known as AT 2016blu, is in the spiral galaxy NGC 4559",
+      "kind": "fact",
+      "expression": 1,
+      "action": "point"
+    },
+    {
+      "title": "مسافة كونية سحيقة",
+      "text": "المجرة الحلزونية دي بتبعد عن كوكبنا الأرض مسافة كونية هائلة بتوصل لحوالي ثلاثين مليون سنة ضوئية، ومع ذلك نجحت التلسكوبات في التقاط إشارات الانفجارات بدقة علمية استثنائية وغير مسبوقة.",
+      "summary": "المجرة تبعد ثلاثين مليون سنة ضوئية عن الأرض",
+      "keyword": "light_years",
+      "template": "journey",
+      "labels": [
+        "سنة ضوئية",
+        "المسافات الكونية",
+        "كوكب الأرض"
+      ],
+      "values": [],
+      "claim": "تقع المجرة على بعد نحو ثلاثين مليون سنة ضوئية من الأرض.",
+      "sourceId": "e714212c4694",
+      "evidence": "located about 30 million light-years from Earth.",
+      "kind": "fact",
+      "expression": 2,
+      "action": "turn"
+    },
+    {
+      "title": "كتلة هائلة تفوق الشمس",
+      "text": "تقديرات وحسابات الباحثين بتأكد إن كتلة النجم العملاق ده ضخمة بشكل لا يصدق، حيث بتبلغ على الأقل ثلاثة وثلاثين ضعف كتلة شمسنا، وده بيخليه من أثقل النجوم المرصودة بالكون.",
+      "summary": "كتلة النجم تبلغ 33 ضعف كتلة شمسنا على الأقل",
+      "keyword": "massive_star",
+      "template": "comparison",
+      "labels": [
+        "كتلة النجم",
+        "الشمس",
+        "العمالقة الحمر"
+      ],
+      "values": [],
+      "claim": "يقدر الفلكيون كتلة هذا النجم بما لا يقل عن ثلاثة وثلاثين ضعف كتلة الشمس.",
+      "sourceId": "e714212c4694",
+      "evidence": "Astronomers estimate the mass of this star is at least 33 times that of the Sun.",
+      "kind": "fact",
+      "expression": 9,
+      "action": "jump"
+    },
+    {
+      "title": "عملاق متقلب وغير مستقر",
+      "text": "النجم الجبار بيعيش حالة من عدم الاستقرار الشديد، وده اللي بيخليه يمر بنوبات متكررة من الثوران والانفجارات العنيفة اللي كانت محيرة لعلماء الفلك لسنين طويلة قبل الاكتشاف ده.",
+      "summary": "انفجارات وثورات متكررة لنجم غير مستقر",
+      "keyword": "unstable_star",
+      "template": "steps",
+      "labels": [
+        "عدم الاستقرار",
+        "ثورات نجمية",
+        "فيزياء فلكية"
+      ],
+      "values": [],
+      "claim": "يمر النجم بحالة تقلب وعدم استقرار تؤدي إلى انفجارات وثورات دورية.",
+      "sourceId": "e714212c4694",
+      "evidence": "triggering repeated outbursts from a giant, unstable star",
+      "kind": "fact",
+      "expression": 6,
+      "action": "turn"
+    },
+    {
+      "title": "صورة مركبة مذهلة",
+      "text": "المشهد الكوني الرائع ده اتكون من دمج أرصاد الأشعة السينية لشاندرا مع بيانات الضوء المرئي من مسح سلون الرقمي، علشان يظهر النجم ومجرته بأوضح صورة ممكنة للبشر والعلماء.",
+      "summary": "دمج أرصاد شاندرا بالأشعة السينية ومسح سلون",
+      "keyword": "composite_image",
+      "template": "phenomenon",
+      "labels": [
+        "تلسكوب سلون",
+        "أشعة سينية",
+        "معالجة الصور"
+      ],
+      "values": [],
+      "claim": "تم دمج بيانات الأشعة السينية لشاندرا مع الضوء المرئي لمسح سلون لإنتاج الصورة.",
+      "sourceId": "e714212c4694",
+      "evidence": "X-ray: NASA/CXC/Univ. of Virginia/M. Aghakhanloo et al.; Optical: SDSS; Image Processing: NASA/CXC/SAO/P. Edmonds",
+      "kind": "fact",
+      "expression": 1,
+      "action": "point"
+    },
+    {
+      "title": "جهود فريق البحث العلمي",
+      "text": "البحث المثير قاده فريق علمي متخصص من جامعة فيرجينيا بالتعاون مع خبراء ناسا، وقدروا يحللوا البيانات ويكتشفوا الآلية اللي بتشعل الثورات المتكررة للعملاق الفلكي AT 2016blu بدقة علمية.",
+      "summary": "علماء جامعة فيرجينيا بالتعاون مع ناسا",
+      "keyword": "astronomy_research",
+      "template": "cause",
+      "labels": [
+        "جامعة فيرجينيا",
+        "أبحاث ناسا",
+        "فلكيون"
+      ],
+      "values": [],
+      "claim": "أجرى فريق جامعة فيرجينيا ومشاركون تحليل البيانات لاكتشاف سبب الثورات.",
+      "sourceId": "e714212c4694",
+      "evidence": "Univ. of Virginia/M. Aghakhanloo et al.",
+      "kind": "fact",
+      "expression": 5,
+      "action": "walk"
+    },
+    {
+      "title": "عجائب لا تنتهي في الفضاء",
+      "text": "أسرار الكون الواسع ما بتنتهيش وكل يوم بيكشفلنا مفاجآت مدهشة، اعمل لايك واشترك في القناة وشير الفيديو مع أصحابك علشان تتابع معانا أحدث أسرار الفضاء أولاً بأول دايماً.",
+      "summary": "دعوة لمتابعة المزيد من أسرار واكتشافات الكون",
+      "keyword": "space_secrets",
+      "template": "journey",
+      "labels": [
+        "أسرار الفضاء",
+        "علم الفلك",
+        "استكشاف الكون"
+      ],
+      "values": [],
+      "claim": "تتيح المراصد الفضائية الكشف المستمر عن أسرار النجوم والمجرات البعيدة.",
+      "sourceId": "e714212c4694",
+      "evidence": "Using NASA’s Chandra X-ray Observatory, astronomers have discovered what is triggering repeated outbursts from a giant, unstable star",
+      "kind": "fact",
+      "expression": 11,
+      "action": "jump"
+    }
+  ]
+}
