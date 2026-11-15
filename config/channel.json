@@ -1,0 +1,18 @@
+{
+  "profile": "science",
+  "name": "أسرار الكون",
+  "accent": "#179ca6",
+  "counter": "رحلة الكون",
+  "maxAgeHours": 168,
+  "feeds": [
+    {
+      "url": "https://www.nasa.gov/feed/",
+      "official": true
+    },
+    {
+      "url": "https://www.esa.int/rssfeed/Our_Activities/Space_Science",
+      "official": true
+    }
+  ],
+  "logo": ""
+}

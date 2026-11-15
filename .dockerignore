@@ -1,0 +1,8 @@
+.git
+node_modules
+out
+.cache
+.venv
+.env*
+data
+public/generated

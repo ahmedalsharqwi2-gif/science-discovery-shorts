@@ -1,0 +1,2 @@
+import {run} from './io.mjs';import {writeFile,mkdir} from 'node:fs/promises';
+const found=(await run('git',['ls-remote','--heads','origin','review-media'])).stdout.trim();if(found){await run('git',['fetch','origin','review-media']);const r=await run('git',['show','FETCH_HEAD:state/topics.json']).catch(()=>({stdout:'[]'}));const state=JSON.parse(r.stdout);if(!Array.isArray(state))throw Error('INVALID_REMOTE_TOPIC_STATE');await mkdir('state',{recursive:true});await writeFile('state/topics.json',JSON.stringify(state,null,2));}

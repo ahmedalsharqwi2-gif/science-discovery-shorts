@@ -1,0 +1,103 @@
+{
+  "files": 656,
+  "python_syntax_errors": [],
+  "workflows": [
+    ".github/workflows/arabic_guard.yml",
+    ".github/workflows/replace-noon-once.yml",
+    ".github/workflows/checks.yml",
+    ".github/workflows/remotion-cleanup.yml",
+    ".github/workflows/remotion-health.yml",
+    ".github/workflows/remotion-daily.yml",
+    ".github/workflows/validation.yml"
+  ],
+  "network_publish_modules": [
+    "remotion_factory/publish.py",
+    "scripts/publish_youtube_direct.py",
+    "scripts/publish_content.py",
+    "scripts/reschedule_existing.py",
+    "film_factory/buffer.py",
+    "film_factory/publish.py"
+  ],
+  "secret_names": [
+    "BUFFER_API_KEY",
+    "CLOUDFLARE_ACCOUNT_ID",
+    "CLOUDFLARE_API_TOKEN",
+    "FACTORY_DISPATCH_TOKEN",
+    "GEMINI_API_KEY",
+    "GEMINI_TEXT_API_KEY",
+    "GEMINI_TTS_API_KEY"
+  ],
+  "main_sha": "48379ed518bae7fe6884fff49a2fadd034188d0e",
+  "preserved": [
+    {
+      "path": "topic_history.json",
+      "sha256": "a8cf21b1cd90d0039bd99823eb69c082a2e0f422379e2c57a5858bfcd8fe7d93",
+      "bytes": 77213
+    },
+    {
+      "path": "config/channel_identity.json",
+      "sha256": "e630d4d625ecee6e2b48d1a511cdb43d28b2e421ba83082af0a000a3e5c2a606",
+      "bytes": 545
+    },
+    {
+      "path": "config/arabic_pronunciation.json",
+      "sha256": "942e37bd8c59e2295229348b01b403c09e2820f1593d4ee540b20bfdade205a2",
+      "bytes": 262
+    },
+    {
+      "path": "state/science_visual_history.json",
+      "sha256": "95bc6ec7115c4a8bc0323fa2535dccbe03588dac1957c1bcd6f6b2d513908e56",
+      "bytes": 1608
+    },
+    {
+      "path": "professional_motion/branding.json",
+      "sha256": "e28364e79ca1f56ea6a45a0524fb0731979ebf9f70fa06e2784e6d25aaf53b85",
+      "bytes": 334
+    },
+    {
+      "path": "remotion_motion/public/fonts/Arabic-Bold.ttf",
+      "sha256": "ded6fc7359ca36d15d7aab9ef0c066e21ce48b26a069994d6602fa2cb9a1b952",
+      "bytes": 252940
+    },
+    {
+      "path": "remotion_motion/public/fonts/Arabic-Regular.ttf",
+      "sha256": "504d7407d86875acf7d04dfaa0fd7524d0b8797723bc4aa18022f29db25b0b6e",
+      "bytes": 244072
+    },
+    {
+      "path": "photo_motion/assets/Noto-Fonts-Copyright.txt",
+      "sha256": "075f91382875da1c4b491f1facf2586f55448705133264d98ce15cab6211b125",
+      "bytes": 5208
+    },
+    {
+      "path": "photo_motion/assets/NotoSansArabic-Bold.ttf",
+      "sha256": "ded6fc7359ca36d15d7aab9ef0c066e21ce48b26a069994d6602fa2cb9a1b952",
+      "bytes": 252940
+    },
+    {
+      "path": "photo_motion/assets/NotoSansArabic-Regular.ttf",
+      "sha256": "504d7407d86875acf7d04dfaa0fd7524d0b8797723bc4aa18022f29db25b0b6e",
+      "bytes": 244072
+    },
+    {
+      "path": "professional_motion/fonts/OFL-IBM-Plex.txt",
+      "sha256": "7e6b2818edbd8f6a01ae80641cc8f16a51080d08fb4e532be3a0b6f74adb07da",
+      "bytes": 4456
+    },
+    {
+      "path": "professional_motion/fonts/Noto-Fonts-Copyright.txt",
+      "sha256": "075f91382875da1c4b491f1facf2586f55448705133264d98ce15cab6211b125",
+      "bytes": 5208
+    },
+    {
+      "path": "professional_motion/fonts/NotoSansArabic-Bold.ttf",
+      "sha256": "ded6fc7359ca36d15d7aab9ef0c066e21ce48b26a069994d6602fa2cb9a1b952",
+      "bytes": 252940
+    },
+    {
+      "path": "professional_motion/fonts/IBMPlexMono-Medium.ttf",
+      "sha256": "a9b4c49bb299e05b5f6c481e7fb5e78943d2793249a0c8874ab574a2d1ea6755",
+      "bytes": 136704
+    }
+  ]
+}

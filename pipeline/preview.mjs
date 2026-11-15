@@ -1,0 +1,10 @@
+import {bundle} from '@remotion/bundler';import {selectComposition,renderStill} from '@remotion/renderer';import path from 'node:path';import {mkdir,writeFile} from 'node:fs/promises';
+const dir=path.resolve('out/template-preview');await mkdir(dir,{recursive:true});
+const templates=['phenomenon','comparison','steps','journey','map','chart','cause'];
+const scenes=templates.map((template,i)=>({title:'كل فكرة ليها حكاية — '+(i+1),text:'معاينة تصميم فقط',summary:'معاينة القوالب، مش حلقة منتجة',keyword:'فكرة',template,labels:['البداية','السبب','النتيجة'],values:template==='chart'?[25,50,75]:[],kind:'illustration',duration:5,words:[],expression:i,action:'point'}));
+const props={title:'Template preview',scenes,durationInFrames:1050,preview:true};
+const browserExecutable=process.env.CHROME_PATH||undefined;
+const serveUrl=await bundle({entryPoint:path.resolve('src/index.tsx'),publicDir:path.resolve('public')});
+const composition=await selectComposition({serveUrl,id:'Episode',inputProps:props,browserExecutable});
+for(let i=0;i<scenes.length;i++)await renderStill({serveUrl,composition,inputProps:props,frame:i*150+45,output:path.join(dir,templates[i]+'.png'),browserExecutable});
+await writeFile(dir+'/README.txt','Design template preview only. Illustrative values are fixture data, not editorial claims. No generated narration or complete episode.\n');console.log('Rendered 7 template stills');

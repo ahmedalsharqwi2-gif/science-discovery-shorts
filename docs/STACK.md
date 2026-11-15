@@ -1,0 +1,5 @@
+# Stack
+
+React + Remotion 4.0.543: deterministic frame-driven Arabic typography, SVG diagrams, original animated character rig and local font. Bundler/renderer/CLI build and render the composition. Express: bounded authenticated review endpoint, health and disabled YouTube endpoint. Zod: topic/episode/media timing validation. fast-xml-parser: official RSS feeds. Node built-ins: atomic writes, hashing, provider requests with finite timeouts, retries and caching. faster-whisper 1.2.1: measured Arabic word timestamps, mapped to original script with strict rejection on unmatched words. Pillow 12.0.0: reference QA/contact-sheet tooling. FFmpeg/ffprobe: voice conversion, original synthesized bed, ducking, two-pass loudness, contact sheet and media checks.
+
+Only used packages installed. npm versions and transitives locked in package-lock.json. Python direct versions pinned; full cross-platform transitive Python lock is not yet provided. No Three/Lottie/matter-js dependency is installed because the implemented vector templates do not use them. No available Remotion skill was listed.
