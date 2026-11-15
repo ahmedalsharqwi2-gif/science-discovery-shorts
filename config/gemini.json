@@ -1,0 +1,61 @@
+{
+  "schema": 2,
+  "rateLimit": {
+    "requestsPerMinute": 2,
+    "minIntervalMs": 30000
+  },
+  "retry": {
+    "maxAttemptsPerModel": 3,
+    "maxTotalAttempts": 6,
+    "timeoutMs": 90000,
+    "maxElapsedMs": 240000,
+    "baseDelayMs": 3000,
+    "maxDelayMs": 45000,
+    "jitter": 0.35
+  },
+  "models": {
+    "text": {
+      "ordered": [
+        "gemini-4-flash",
+        "gemini-3.1-flash-lite-preview",
+        "gemini-3-flash-preview",
+        "gemini-2.5-flash"
+      ],
+      "discover": {
+        "include": "^gemini-.*flash",
+        "exclude": "tts|image|embedding|native-audio|robotics|computer-use"
+      }
+    },
+    "voice": {
+      "ordered": [
+        "gemini-3.1-flash-tts-preview",
+        "gemini-2.5-flash-preview-tts",
+        "gemini-2.5-pro-preview-tts"
+      ],
+      "discover": {
+        "include": "^gemini-.*tts",
+        "exclude": "embedding"
+      }
+    },
+    "image": {
+      "ordered": [
+        "gemini-3.1-flash-image-preview",
+        "gemini-3-pro-image-preview",
+        "gemini-2.5-flash-image"
+      ],
+      "discover": {
+        "include": "^gemini-.*image",
+        "exclude": "embedding"
+      }
+    }
+  },
+  "voice": {
+    "voiceName": "Charon",
+    "sampleRate": 24000,
+    "style": "صوت مصري طبيعي وواضح، عامية مصرية بيضاء، هادي ومفهوم، اقرأ الكلمات نفسها بدون أي إضافات.",
+    "chunking": {
+      "maxChars": 420,
+      "maxSentences": 2
+    }
+  }
+}

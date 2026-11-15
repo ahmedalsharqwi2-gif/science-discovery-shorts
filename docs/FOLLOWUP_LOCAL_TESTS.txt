@@ -1,0 +1,44 @@
+npm test
+
+> review-video-pipeline@2.0.0 test
+> node --test tests/*.test.mjs
+
+✔ installed logo bytes match the recorded original SHA256 and the public source resolves to it (24.784451ms)
+✔ logo verification rejects altered bytes (21.174891ms)
+✔ missing Gemini reports required secret names only (0.673778ms)
+✔ claims require an exact excerpt from an attached source (61.35343ms)
+✔ a science script cannot relabel a legend as a verified source (0.674202ms)
+✔ 429 Retry-After is honored and successful response is reused without another request (313.04568ms)
+✔ 503 retries use exponential backoff plus jitter and stop at the configured attempts (82.377194ms)
+✔ fallback model still respects Retry-After set by the previous model (66.901763ms)
+✔ 404 falls back in configured order; authorization errors never cycle through models (26.343189ms)
+✔ Retry-After beyond total deadline stops rather than sending too early (10.704447ms)
+✔ limiter serializes starts and enforces the per-minute quota (0.427402ms)
+✔ resume keeps successful voice chunk after a later 503 and after a fresh client instance (63.202413ms)
+✔ changing voice settings invalidates cache and long narration is split without losing words (23.773915ms)
+✔ parallel requests for the same response share one request (5.089511ms)
+✔ model-discovery Retry-After also delays the following generation call (5.694019ms)
+✔ publish blocked even if config edited (1.568587ms)
+✔ Cairo 17:00 covers winter and summer offset (66.750077ms)
+✔ original words and measured monotonic times required (4.144726ms)
+✔ canonical identity and source prevent changed-title duplicates (1.911214ms)
+✔ reject silent media or wrong output format (5.884695ms)
+✔ service health independent of provider and uploads closed (179.075717ms)
+✔ 72-hour news window includes a verified 70-hour announcement (8.332981ms)
+✔ weekly fallback is explicitly labeled and never admits older than a week (32.305164ms)
+✔ one secondary publisher cannot confirm a story; independent publishers must cite the same primary reference (0.815747ms)
+✔ missing dates and future posts are excluded instead of given the current time (2.833892ms)
+✔ previous source URLs remain excluded when article headlines change (0.408442ms)
+ℹ tests 26
+ℹ suites 0
+ℹ pass 26
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7416.147666
+npm run typecheck
+
+> review-video-pipeline@2.0.0 typecheck
+> tsc --noEmit
+

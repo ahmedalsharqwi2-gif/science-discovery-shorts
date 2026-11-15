@@ -45,10 +45,18 @@ jobs:
       - if: github.event_name != 'schedule' || steps.slot.outputs.due == 'true'
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y ffmpeg
+          sudo apt-get install -y ffmpeg tesseract-ocr
           pip install -r requirements.txt
           npx remotion browser ensure
           node pipeline/restore-state.mjs
+      - uses: actions/cache/restore@v4
+        id: provider-cache
+        with:
+          path: |
+            .cache/gemini
+            .cache/voice
+          key: gemini-v2-${{ github.repository_id }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: gemini-v2-${{ github.repository_id }}-
       - if: github.event_name != 'schedule' || steps.slot.outputs.due == 'true'
         run: make review
         env:
@@ -56,6 +64,13 @@ jobs:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           GEMINI_TEXT_API_KEY: ${{ secrets.GEMINI_TEXT_API_KEY }}
           GEMINI_TTS_API_KEY: ${{ secrets.GEMINI_TTS_API_KEY }}
+      - uses: actions/cache/save@v4
+        if: always() && steps.provider-cache.outputs.cache-primary-key != ''
+        with:
+          path: |
+            .cache/gemini
+            .cache/voice
+          key: gemini-v2-${{ github.repository_id }}-${{ github.run_id }}-${{ github.run_attempt }}
       - uses: actions/upload-artifact@v4
         if: always()
         with:

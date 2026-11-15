@@ -1,0 +1,2 @@
+import React from 'react';import {Img,staticFile} from 'remotion';import logo from '../config/logo.json';
+export function BrandLogo({size=132}:{size?:number}){return <div data-logo-source={logo.path} style={{width:size,height:size,borderRadius:16,overflow:'hidden',background:logo.badgeBackground,flexShrink:0}}><Img src={staticFile(logo.path)} style={{width:'100%',height:'100%',objectFit:'contain'}}/></div>;}

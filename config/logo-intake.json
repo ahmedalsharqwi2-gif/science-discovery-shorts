@@ -1,6 +1,6 @@
 {
-  "status": "inline_reference_seen_original_file_not_exposed_to_download",
-  "requested_path": "public/brand/logo.png",
-  "recreate": false,
-  "note": "Owner supplied logos inline during rebuild; do not regenerate, extract from screenshot or substitute. Install exact original when attachment bytes are available."
+  "status": "installed_original_bytes",
+  "canonical": "brand/logo/logo.jpg",
+  "sha256": "21b536514d9e76218d72aae06fe5c59ef61ac822db2f65ceef148b049ee0e227",
+  "recreated": false
 }
