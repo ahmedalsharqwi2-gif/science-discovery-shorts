@@ -7,3 +7,5 @@ React, React DOM, Zod, fast-xml-parser, Express, faster-whisper: MIT. TypeScript
 FFmpeg: build-dependent LGPL/GPL, inspect `ffmpeg -L` for the installed binary, especially libx264 GPL. It is a system tool, not a relicensed bundled binary.
 
 OpenMontage upstream LICENSE inspected: AGPL-3.0. MoneyPrinterTurbo upstream LICENSE inspected: MIT, copyright 2024 Harry. Architecture ideas only; NO source copied from either, so no undocumented AGPL code import. Models and generated image/voice use remain subject to their provider/model terms; generated media is not asserted to be CC0. Research article text is not an asset license. Original logo ownership supplied by channel owner; logo pixels not regenerated.
+
+Noto Sans Arabic OFL 1.1 obtained from google/fonts upstream and retained in docs/Noto-OFL.txt.

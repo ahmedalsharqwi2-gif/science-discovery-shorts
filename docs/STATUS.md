@@ -5,3 +5,5 @@ Local `make test`: PASS, eight tests plus TypeScript. Local `make review`: actua
 Review-only GitHub Actions is the next environment attempt. Remote test/run status must be read from Actions; local test success is not evidence of remote media production. Remotion may require a paid Company License for commercial organizations outside the free eligibility.
 
 First remote run: verify PASS. Review failed; see review-media/reviews/*/report.json. Added public-feed redirect handling and Gemini model discovery after observed HTTP 404. News freshness window remains 48 hours. Await the next actual run before claiming any success.
+
+Latest observed remote result: completed / failure; voice: PROVIDER_HTTP_429. No new complete review film exists. See REMOTE_CHECKS.json for the exact run ID; later Actions status supersedes this observation.
