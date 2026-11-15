@@ -1,0 +1,179 @@
+{
+  "topicKey": "space-gemini-earth-observation-program",
+  "title": "كيف ألهمت صور جيميني مراقبة الأرض؟",
+  "hook": "هل كنت تتخيل إن صورة التقطها رواد الفضاء لنهر النيل والبحر الأحمر سنة ستة وستين، غيرت بالكامل طريقتنا في مراقبة كوكب الأرض من الفضاء الخارجي وحماية موارده الطبيعية؟",
+  "cta": "فما رأيك في التأثير المذهل لصور رواد الفضاء الأوائل، وشاركنا رأيك في التعليقات وتابعنا لاكتشاف أسرار جديدة ومثيرة حول كوكبنا العجيب والكون الفسيح في كل حلقة قادمة معنا.",
+  "scenes": [
+    {
+      "title": "صورة تاريخية من الفضاء",
+      "text": "هل كنت تتخيل إن صورة التقطها رواد الفضاء لنهر النيل والبحر الأحمر سنة ستة وستين، غيرت بالكامل طريقتنا في مراقبة كوكب الأرض من الفضاء الخارجي وحماية موارده الطبيعية؟",
+      "summary": "صورة فضائية تاريخية غيرت أسلوب مراقبة الأرض",
+      "keyword": "مراقبة الأرض",
+      "template": "phenomenon",
+      "labels": [
+        "نهر النيل",
+        "البحر الأحمر",
+        "الفضاء"
+      ],
+      "values": [],
+      "claim": "التقط رواد فضاء صورة لنهر النيل والبحر الأحمر ألهمت مراقبة الأرض",
+      "sourceId": "43fbd5f391f2",
+      "evidence": "NASA astronauts James A. Lovell Jr. and Edwin E. Buzz Aldrin Jr. captured this image of the area surrounding the Red Sea and Nile river valley on November 14, 1966",
+      "kind": "fact",
+      "expression": 1,
+      "action": "point"
+    },
+    {
+      "title": "لقطة نيل مصر من المدار",
+      "text": "في أربعة عشر نوفمبر سنة ستة وستين، التقط الرائدان جيمس لوفيل وإدوين باز ألدرين لقطة مذهلة لوادي النيل أثناء مهمتهما الفضائية التي استمرت أربعة أيام متواصلة في مدار الأرض.",
+      "summary": "رواد الفضاء يلتقطون وادي النيل والبحر الأحمر",
+      "keyword": "وادي النيل",
+      "template": "map",
+      "labels": [
+        "جيمس لوفيل",
+        "باز ألدرين",
+        "مدار الأرض"
+      ],
+      "values": [],
+      "claim": "التقط لوفيل وألدرين صورة وادي النيل في 14 نوفمبر 1966",
+      "sourceId": "43fbd5f391f2",
+      "evidence": "NASA astronauts James A. Lovell Jr. and Edwin E. Buzz Aldrin Jr. captured this image of the area surrounding the Red Sea and Nile river valley on November 14, 1966, during their four-day mission in space.",
+      "kind": "fact",
+      "expression": 5,
+      "action": "turn"
+    },
+    {
+      "title": "المهمة الأخيرة لبرنامج جيميني",
+      "text": "الرحلة دي كانت جيميني اثنا عشر، وهي المهمة الأخيرة ضمن برنامج جيميني التابع لناسا، ودارت حول كوكب الأرض بين الحادي عشر والخامس عشر من شهر نوفمبر في نفس السنة بنجاح تام.",
+      "summary": "رحلة جيميني 12 الأخيرة حول كوكب الأرض",
+      "keyword": "جيميني 12",
+      "template": "journey",
+      "labels": [
+        "جيميني 12",
+        "ناسا",
+        "المدار الأرضي"
+      ],
+      "values": [],
+      "claim": "جيميني 12 كانت المهمة الختامية لبرنامج جيميني التابع لناسا",
+      "sourceId": "43fbd5f391f2",
+      "evidence": "Gemini XII was the final flight of NASA s Gemini Program. NASA Astronauts James A. Lovell Jr. and Edwin E. Buzz Aldrin Jr. orbited Earth from November 11 to 15, 1966, on Gemini XII , the final mission of NASA s Gemini program.",
+      "kind": "fact",
+      "expression": 0,
+      "action": "walk"
+    },
+    {
+      "title": "أهداف تتجاوز الوصول للقمر",
+      "text": "بجانب إتمام مناورات الالتقاء وعمليات السير في الفضاء الحيوية لإرسال رواد أمريكيين للقمر، فتحت تلك المهمة التاريخية باباً جديداً تماماً في مجال استكشاف كوكبنا ومراقبته بدقة من المدار.",
+      "summary": "مهام السير ومناورات الفضاء فتحت آفاق مراقبة الأرض",
+      "keyword": "استكشاف الأرض",
+      "template": "steps",
+      "labels": [
+        "السير في الفضاء",
+        "رحلات القمر",
+        "استكشاف المدار"
+      ],
+      "values": [],
+      "claim": "مناورات جيميني حفزت أيضاً مجال مراقبة الأرض من الفضاء",
+      "sourceId": "43fbd5f391f2",
+      "evidence": "In addition to successfully completing rendezvous maneuvers and spacewalks, procedures vital to sending American astronauts to the Moon, the crew was also spurring the development of a different field of exploration, observing Earth from space.",
+      "kind": "fact",
+      "expression": 8,
+      "action": "turn"
+    },
+    {
+      "title": "قيمة الصور المدارية للعلماء",
+      "text": "الصور الفوتوغرافية التي وثقها لوفيل وألدرين ورواد جيميني أثبتت للعلماء القيمة العلمية الكبيرة للتصوير الفضائي المداري في دراسة تضاريس سطح الأرض وخصائصها الجغرافية بشكل أعمق وأوضح من أي وقت مضى.",
+      "summary": "الصور الفضائية أثبتت أهميتها في دراسة سطح الأرض",
+      "keyword": "التصوير المداري",
+      "template": "phenomenon",
+      "labels": [
+        "سطح الأرض",
+        "التصوير المداري",
+        "أبحاث علمية"
+      ],
+      "values": [],
+      "claim": "أثبتت لقطات رواد الفضاء قيمة التصوير المداري لسطح الأرض",
+      "sourceId": "43fbd5f391f2",
+      "evidence": "The photos taken by Lovell, Aldrin, and other Gemini astronauts demonstrated the value of orbital imagery for studying Earth s surface. Their images helped scientists make the case for a dedicated Earth observation satellite program.",
+      "kind": "fact",
+      "expression": 9,
+      "action": "point"
+    },
+    {
+      "title": "الدعوة لبرنامج أقمار مخصص",
+      "text": "ولهذا السبب تحمس ويليام بيكورا مدير هيئة المساحة الجيولوجية الأمريكية، وطالب بقوة بتسريع إطلاق برنامج أقمار صناعية متخصص يرصد الأرض ومواردها المتنوعة بناءً على تلك المشاهدات المدارية المبهرة والمقنعة.",
+      "summary": "مطالبة رسمية بتسريع إطلاق أقمار صناعية لمراقبة الأرض",
+      "keyword": "ويليام بيكورا",
+      "template": "cause",
+      "labels": [
+        "ويليام بيكورا",
+        "المساحة الجيولوجية",
+        "أقمار صناعية"
+      ],
+      "values": [],
+      "claim": "ويليام بيكورا طالب بتسريع استخدام أقمار مراقبة الأرض",
+      "sourceId": "43fbd5f391f2",
+      "evidence": "One of strongest advocates for accelerating the use of Earth-observing satellites was William T. Pecora, the director of the United States Geological Survey from 1965 to 1971.",
+      "kind": "fact",
+      "expression": 11,
+      "action": "walk"
+    },
+    {
+      "title": "ولادة مشروع لاندسات",
+      "text": "وأوضح بيكورا في بيان رسمي سنة تسعة وستين أن برنامج إيروس الذي مهد لاحقاً لبرنامج لاندسات الشهير، وُلدت فكرته نتيجة مباشرة لنجاح التصوير المداري في رحلات ميركوري وجيميني الفضائية.",
+      "summary": "برنامج لاندسات انطلق بناءً على نجاح تصوير جيميني وميركوري",
+      "keyword": "برنامج لاندسات",
+      "template": "steps",
+      "labels": [
+        "برنامج إيروس",
+        "لاندسات",
+        "مشروع ميركوري"
+      ],
+      "values": [],
+      "claim": "صور ميركوري وجيميني ألهمت مشروع إيروس الذي مهد للاندسات",
+      "sourceId": "43fbd5f391f2",
+      "evidence": "In a 1969 statement, Pecora noted that the Earth Resources Observation Satellite (EROS) program he championed, and which later paved the way for Landsat , was conceived in 1966 largely as a direct result of the demonstrated utility of Mercury and Gemini orbital photography to Earth resource studies.",
+      "kind": "fact",
+      "expression": 0,
+      "action": "point"
+    },
+    {
+      "title": "خمسة عقود من حماية الكوكب",
+      "text": "وعلى مدار أكثر من خمسة عقود كاملة، قدم لاندسات والأقمار المماثلة بيانات علمية لا تقدر بثمن لمراقبة المحاصيل الزراعية وحرائق الغابات والفيضانات وصحة الغطاء النباتي وتغيرات الكوكب المستمرة بدقة بالغة.",
+      "summary": "عقود من مراقبة المحاصيل وحرائق الغابات والفيضانات",
+      "keyword": "بيانات لاندسات",
+      "template": "chart",
+      "labels": [
+        "المحاصيل الزراعية",
+        "حرائق الغابات",
+        "رصد الفيضانات"
+      ],
+      "values": [],
+      "claim": "وفرت أقمار لاندسات بيانات لمراقبة المحاصيل والحرائق والفيضانات لخمسة عقود",
+      "sourceId": "43fbd5f391f2",
+      "evidence": "For more than five decades, Landsat and other Earth-observing satellites have provided invaluable data used around the world to monitor crops, wildfires, flooding, vegetation health, land use, and countless other changes to our planet.",
+      "kind": "fact",
+      "expression": 1,
+      "action": "hang"
+    },
+    {
+      "title": "أسرار الرصد الفضائي",
+      "text": "فما رأيك في التأثير المذهل لصور رواد الفضاء الأوائل، وشاركنا رأيك في التعليقات وتابعنا لاكتشاف أسرار جديدة ومثيرة حول كوكبنا العجيب والكون الفسيح في كل حلقة قادمة معنا.",
+      "summary": "دعوة للمشاركة والمتابعة لاكتشاف أسرار الكون",
+      "keyword": "أسرار الكون",
+      "template": "journey",
+      "labels": [
+        "مراقبة الأرض",
+        "رواد الفضاء",
+        "أسرار الكون"
+      ],
+      "values": [],
+      "claim": "دعوة الجمهور للتفاعل ومتابعة حقائق الفضاء واستكشاف الأرض",
+      "sourceId": "43fbd5f391f2",
+      "evidence": "Their images helped scientists make the case for a dedicated Earth observation satellite program.",
+      "kind": "fact",
+      "expression": 2,
+      "action": "jump"
+    }
+  ]
+}
