@@ -5,3 +5,5 @@ React + Remotion 4.0.543: deterministic frame-driven Arabic typography, SVG diag
 Only used packages installed. npm versions and transitives locked in package-lock.json. Python direct versions pinned; full cross-platform transitive Python lock is not yet provided. No Three/Lottie/matter-js dependency is installed because the implemented vector templates do not use them. No available Remotion skill was listed.
 
 Follow-up: unified built-in Node Gemini client with deterministic fake-clock tests, immutable logo manifest, durable audio chunk and response caches, Pillow logo pixel check and Playwright Core 1.65.1 with @remotion/player 4.0.543 for text-bound checks at all caption cues.
+
+Measured forced-alignment upgrade: stable-ts2.19.1 with CPU torch/torchaudio2.9.1+cpu; exact original transcript, independent unprompted ASR proof and strict measured spans. Not an estimated word-duration fallback.

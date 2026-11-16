@@ -1,2 +1,4 @@
 faster-whisper==1.2.1
 Pillow==12.0.0
+
+-r requirements-alignment.txt

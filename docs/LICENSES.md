@@ -11,3 +11,5 @@ OpenMontage upstream LICENSE inspected: AGPL-3.0. MoneyPrinterTurbo upstream LIC
 Noto Sans Arabic OFL 1.1 obtained from google/fonts upstream and retained in docs/Noto-OFL.txt.
 
 Follow-up: @remotion/player 4.0.543 uses the same inspected Remotion license. Playwright Core 1.65.1: Apache-2.0, inspected installed package declaration/LICENSE. No additional paid library beyond Remotion eligibility.
+
+Alignment dependencies: stable-ts2.19.1 MIT, OpenAI Whisper MIT, faster-whisper MIT, CPU PyTorch2.9.1 BSD-style and torchaudio2.9.1 BSD-style. Transitive installed distribution declarations retained separately when generated; not a blanket commercial clearance. Original model/provider terms continue to apply.

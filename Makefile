@@ -4,6 +4,7 @@ review:
 test:
 	npm test
 	npm run typecheck
+	$(or $(PYTHON),python) -m unittest discover -s tests -p 'test_alignment.py'
 
 visual-review:
 	node pipeline/visual-review.mjs

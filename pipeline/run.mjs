@@ -1,4 +1,4 @@
-import path from 'node:path';import {fileURLToPath,pathToFileURL} from 'node:url';import {readFile,writeFile,mkdir,open,rm} from 'node:fs/promises';
+import path from 'node:path';import {fileURLToPath,pathToFileURL} from 'node:url';import {readFile,writeFile,mkdir,open,rm,copyFile} from 'node:fs/promises';
 import {assertReviewMode,assertTiming,assertMedia,dueInCairo,digest,episodeSchema,sourceSchema} from './policy.mjs';
 import {json,save,run,probe} from './io.mjs';import {selectTopic,script,voice,backgrounds} from './providers.mjs';
 import {preflight} from './preflight.mjs';import {providerDiagnostics} from './provider-client.mjs';import {renderEpisode,visualQA,partialReview} from './render.mjs';import {layoutQA} from './layout-qa.mjs';
@@ -34,7 +34,11 @@ export async function review({mode='review',scheduled=false,topicReservationPath
   for(const source of topic.sources)if(!ledger.some(r=>r.run===id&&r.value===source.url))ledger.push({topicKey:episode.topicKey,value:source.url,status:'reserved',run:id});await save(path.resolve('state/topics.json'),ledger);
   const pub=path.resolve('public/generated',id);await mkdir(pub,{recursive:true});
   const segments=await stage('voice',()=>voice(episode,pub,{progressPath:out+'/voice-progress.json'}));await save(out+'/segments.json',segments);
-  await stage('align',async()=>{await run(process.env.PYTHON||'python',['pipeline/align.py',out+'/segments.json',out+'/alignment.json'],{timeout:1800000,maxBuffer:2000000});const aligned=await json(out+'/alignment.json');segments.forEach((s,i)=>assertTiming(aligned[i],s.duration,s.text));episode.scenes.forEach((s,i)=>{s.words=aligned[i];s.duration=segments[i].duration;});});
+  // Retain real successful Charon parts even when alignment later fails.
+  const audioDir=path.join(out,'audio');await mkdir(audioDir,{recursive:true});const audioIndex=[];
+  for(let i=0;i<segments.length;i++){const name='scene-'+i+'.wav';await copyFile(segments[i].file,path.join(audioDir,name));audioIndex.push({...segments[i],file:'audio/'+name});}
+  await save(out+'/audio-index.json',audioIndex);
+  await stage('align',async()=>{try{await run(process.env.PYTHON||'python',['pipeline/align.py',out+'/segments.json',out+'/alignment.json'],{timeout:1800000,maxBuffer:2000000});}catch{const diagnostic=await optionalJSON(out+'/alignment-diagnostics.json',null);throw Error(diagnostic?.code||'ALIGNMENT_PROCESS_FAILED');}const aligned=await json(out+'/alignment.json');segments.forEach((s,i)=>assertTiming(aligned[i],s.duration,s.text));episode.scenes.forEach((s,i)=>{s.words=aligned[i];s.duration=segments[i].duration;});});
   await stage('assets',async()=>{for(const s of episode.scenes){const source=topic.sources.find(v=>v.id===s.sourceId);s.sourceUrl=source.url;s.sourceLabel=new URL(source.url).hostname;}const assets=await backgrounds(episode,config,pub);await save(out+'/assets.json',assets);await writeFile(out+'/ATTRIBUTIONS.md','# Asset rights\n\nOriginal vector motion and FFmpeg synthesized bed; immutable owner logo at config/logo.json with SHA256. Fonts and provider terms: docs/LICENSES.md. Individual generated image models and cache keys are recorded in assets.json. Research sources are in sources.json and are not blanket image licenses.\n');});
   const duration=await stage('mix',()=>mix(segments,pub));const props={...episode,audio:'generated/'+id+'/audio.wav',durationInFrames:Math.ceil(duration*30)};await save(out+'/props.json',props);
   await stage('layout-qa',()=>layoutQA(props,out));await stage('render',()=>renderEpisode(props,out));
@@ -51,8 +55,8 @@ export async function review({mode='review',scheduled=false,topicReservationPath
   if(active){active.state='failed';active.lastFailure={stage:stageName,code:report.errorCode};await save(path.resolve('state/active-review.json'),active);}
   await checkpoint();
   if(mode==='review'&&lock&&process.env.RENDER_PARTIAL!=='false'){
-   try{const partialOut=path.join(out,'incomplete');await mkdir(partialOut,{recursive:true});const partialProps=episode?{...episode,scenes:episode.scenes.map(s=>({...s,duration:96/episode.scenes.length,words:[]})),durationInFrames:2880,incomplete:true}:null;
-    const result=await partialReview(partialOut,config,{episode,reason:report.errorCode});report.partial={status:'rendered',path:result.file,incomplete:true};
+   try{const retained=await optionalJSON(out+'/audio-index.json',null);let narration=null;if(episode&&retained?.length===episode.scenes.length){for(let i=0;i<retained.length;i++){const row=retained[i];if(row.text!==episode.scenes[i].text||row.voice!=='Charon'||row.provider!=='Gemini'||digest(await readFile(path.resolve(out,row.file)))!==row.sha256)throw Error('PARTIAL_AUDIO_INDEX_INTEGRITY_FAILED');}const parts=retained.map(row=>({...row,file:path.resolve(out,row.file)}));const audioDirectory=path.resolve('public/generated',id);const duration=await mix(parts,audioDirectory);narration={segments:parts,duration,audio:'generated/'+id+'/audio.wav'};await copyFile(path.join(audioDirectory,'audio.wav'),path.join(out,'audio','narration-normalized.wav'));}const partialOut=path.join(out,narration?'incomplete-with-voice':'incomplete');await mkdir(partialOut,{recursive:true});const partialProps=episode?{...episode,scenes:episode.scenes.map(s=>({...s,duration:96/episode.scenes.length,words:[]})),durationInFrames:2880,incomplete:true}:null;
+    const result=await partialReview(partialOut,config,{episode,reason:report.errorCode,narration,alignmentReady:report.stages.some(stage=>stage.name==='align'&&stage.status==='pass')});report.partial={status:'rendered',path:result.file,incomplete:true};
    }catch(partialError){report.partial={status:'failed',code:/^[A-Z_]{3,100}$/.test(partialError.message)?partialError.message:'PARTIAL_RENDER_FAILED'};}
   }
   await checkpoint();throw Error(`${stageName}: ${report.errorCode}`);

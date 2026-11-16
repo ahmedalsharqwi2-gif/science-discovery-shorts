@@ -18,3 +18,9 @@ No new complete film, final contact sheet, listening approval or reference-level
 Provider 429 means usage/rate limits; 503 means provider unavailable; no-current-source deliberately stops stale/unverified news; missing Gemini binding needs the existing secure repository connection configured, not a key pasted into chat.
 
 Remotion may require a paid Company License for commercial organizations outside its free eligibility; see LICENSES.md.
+
+## Measured-alignment and voiced review follow-up
+
+The preceding missing-key/429 report is historical. Actual subsequent Actions runs in science, Nafhamha, history and horror passed Gemini Charon voice generation/reuse; alignment then failed and a silent visual fallback was retained. This revision adds original-text forced alignment with independent ASR, safe exact diagnostics, retained original Charon WAVs, and a clearly INCOMPLETE voiced review when alignment fails. No timing is estimated to fabricate success. Wrong-channel inherited history/horror stories are quarantined before new generation, with original hashes/history/cache retained. Generic maps no longer default to Earth; galaxy, star-cluster, star and light-path diagrams follow the scene focus. The original logos remain byte-identical.
+
+Local Node tests, TypeScript and four alignment-unit tests were actually run and passed for this revision. Live rendered-film acceptance remains pending the actual new Actions result; a voiced incomplete video is not a fully aligned approved film. Publication remains false and no real scheduled post was created.
