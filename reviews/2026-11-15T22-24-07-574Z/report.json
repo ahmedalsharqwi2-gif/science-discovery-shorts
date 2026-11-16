@@ -1,6 +1,6 @@
 {
   "id": "2026-11-15T22-24-07-574Z",
-  "attemptId": "2026-11-15T22-55-53-261Z",
+  "attemptId": "2026-11-16T10-59-10-501Z",
   "mode": "review",
   "published": false,
   "status": "failed",
@@ -9,7 +9,7 @@
     {
       "name": "preflight",
       "status": "pass",
-      "seconds": 0.17
+      "seconds": 0.126
     },
     {
       "name": "topics",
@@ -22,17 +22,16 @@
     {
       "name": "voice",
       "status": "pass",
-      "seconds": 277.568
+      "seconds": 0.67
     }
   ],
   "limitations": [
     "Incomplete visual previews never pass narrated-film acceptance. Human pronunciation and art-direction approval are separate."
   ],
   "failedStage": "align",
-  "errorCode": "STAGE_FAILED_SEE_RUNBOOK",
+  "errorCode": "ALIGNMENT_SPEECH_MISMATCH",
   "partial": {
-    "status": "rendered",
-    "path": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/out/2026-11-15T22-24-07-574Z/incomplete/visual-preview-incomplete.mp4",
-    "incomplete": true
+    "status": "failed",
+    "code": "PARTIAL_RENDER_FAILED"
   }
 }

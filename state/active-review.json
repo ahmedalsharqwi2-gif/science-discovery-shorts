@@ -220,6 +220,6 @@
   "migration": "Recovered original reserved script after the earlier provider failure; no new script or repeated source selection.",
   "lastFailure": {
     "stage": "align",
-    "code": "STAGE_FAILED_SEE_RUNBOOK"
+    "code": "ALIGNMENT_SPEECH_MISMATCH"
   }
 }
