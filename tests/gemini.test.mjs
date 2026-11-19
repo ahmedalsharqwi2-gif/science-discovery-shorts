@@ -52,3 +52,26 @@ test('model-discovery Retry-After also delays the following generation call',asy
  const f=await fixture(t,async url=>{calls++;return url.includes('?pageSize=')?new Response('',{status:429,headers:{'Retry-After':'4'}}):textResponse();},config);
  await f.client.generate('text',{contents:[]});assert.equal(calls,2);assert(f.waits.includes(4000));
 });
+test('quota exhaustion rotates to the next key and cools the exhausted one',async t=>{
+ const config=configuration();config.models.text.ordered=['only-fixture'];config.retry.maxAttemptsPerModel=1;config.retry.maxTotalAttempts=2;
+ const seen=[],rotated=[];
+ const f=await fixture(t,async(url,opts)=>{const key=opts.headers['x-goog-api-key']||'none';seen.push(key);return key==='key-b'?textResponse():new Response('',{status:429,headers:{'Retry-After':'0'}});},config);
+ f.options.keysFor=()=>[{id:'a',key:'key-a'},{id:'b',key:'key-b'}];
+ f.options.onKeyExhausted=(id)=>rotated.push(id);
+ const client=new GeminiClient(f.options);
+ await client.generate('text',{contents:[{parts:[{text:'fixture'}]}]});
+ assert(seen.includes('key-a')&&seen.includes('key-b'));assert.deepEqual(rotated,['a']);
+});
+test('cooled-down keys are skipped; all cooled down reads as missing binding',async t=>{
+ const f=await fixture(t,async()=>textResponse());
+ f.options.keysFor=()=>[{id:'a',key:'key-a'}];f.options.cooledDown=()=>true;
+ await assert.rejects(new GeminiClient(f.options).generate('text',{contents:[]}),/MISSING_GEMINI_BINDING/);
+});
+test('non-quota errors never rotate keys',async t=>{
+ const config=configuration();config.models.text.ordered=['only-fixture'];config.retry.maxAttemptsPerModel=1;
+ let calls=0;const rotated=[];
+ const f=await fixture(t,async()=>{calls++;return new Response('',{status:503});},config);
+ f.options.keysFor=()=>[{id:'a',key:'key-a'},{id:'b',key:'key-b'}];f.options.onKeyExhausted=id=>rotated.push(id);
+ await assert.rejects(new GeminiClient(f.options).generate('text',{contents:[]}),/GEMINI_HTTP_503_EXHAUSTED/);
+ assert.equal(rotated.length,0);
+});

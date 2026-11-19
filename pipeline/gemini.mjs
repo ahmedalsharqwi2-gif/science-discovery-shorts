@@ -18,8 +18,8 @@ export class RateLimiter{
 }
 export function cacheIdentity(kind,body,settings){return hash(stable({version:2,kind,body,settings}));}
 export class GeminiClient{
- constructor({config,keyFor,fetcher=fetch,sleep=pause,clock=Date.now,random=Math.random,cacheDir='.cache/gemini',onEvent=()=>{}}){
-  this.config=config;this.keyFor=keyFor;this.fetcher=fetcher;this.sleep=sleep;this.clock=clock;this.random=random;this.cacheDir=cacheDir;this.onEvent=onEvent;this.events=[];this.inflight=new Map();this.queue=Promise.resolve();this.resolved=new Map();this.limiter=new RateLimiter(config.rateLimit,clock,sleep);this.notBefore=0;
+ constructor({config,keyFor,keysFor,cooledDown,onKeyExhausted,fetcher=fetch,sleep=pause,clock=Date.now,random=Math.random,cacheDir='.cache/gemini',onEvent=()=>{}}){
+  this.config=config;this.keyFor=keyFor;this.keysFor=keysFor||(keyFor?(kind)=>{const k=keyFor(kind);return k?[{id:'primary',key:k}]:[];}:()=>[]);this.cooledDown=cooledDown||(()=>false);this.onKeyExhausted=onKeyExhausted||(()=>{});this.fetcher=fetcher;this.sleep=sleep;this.clock=clock;this.random=random;this.cacheDir=cacheDir;this.onEvent=onEvent;this.events=[];this.inflight=new Map();this.queue=Promise.resolve();this.resolved=new Map();this.limiter=new RateLimiter(config.rateLimit,clock,sleep);this.notBefore=0;
   const r=config.retry;if(!r||r.maxAttemptsPerModel<1||r.maxTotalAttempts<1||r.timeoutMs<1||r.maxElapsedMs<1)throw Error('INVALID_GEMINI_RETRY_CONFIG');
  }
  event(e){const safe={...e,at:this.clock()};this.events.push(safe);this.onEvent(safe);}
@@ -57,8 +57,13 @@ export class GeminiClient{
    // One request at a time across text, voice, images and callers in this client.
    const previous=this.queue;let release;this.queue=new Promise(r=>{release=r;});await previous;
    try{if(useCache){const cached=await this.readCache(id);if(cached&&this.valid(kind,cached))return cached;}
-    const key=this.keyFor(kind);if(!key)throw new GeminiError(kind==='voice'?'MISSING_GEMINI_TTS_BINDING':'MISSING_GEMINI_BINDING',this.events);
-    const deadline=this.clock()+this.config.retry.maxElapsedMs,models=await this.models(kind,key,deadline);let count=0,lastStatus=0;
+    const pool=this.keysFor(kind).filter(k=>k&&k.key&&!this.cooledDown(k.id,kind));
+    if(!pool.length)throw new GeminiError(kind==='voice'?'MISSING_GEMINI_TTS_BINDING':'MISSING_GEMINI_BINDING',this.events);
+    const deadline=this.clock()+this.config.retry.maxElapsedMs;let lastErr=null;
+    for(let ki=0;ki<pool.length;ki++){const {id:keyId,key}=pool[ki];
+    let rotated=false;
+    try{
+    const models=await this.models(kind,key,deadline);let count=0,lastStatus=0;
     for(const model of models){for(let attempt=0;attempt<this.config.retry.maxAttemptsPerModel;attempt++){
      if(++count>this.config.retry.maxTotalAttempts)throw new GeminiError(lastStatus?'GEMINI_HTTP_'+lastStatus+'_EXHAUSTED':'GEMINI_ATTEMPTS_EXHAUSTED',this.events);
      const response=await this.request(model,body,key,deadline);lastStatus=response.status||0;
@@ -75,6 +80,13 @@ export class GeminiClient{
      this.event({type:'backoff',kind,model,status:lastStatus,waitMs:wait,retryAfterMs:response.retryAfter||0});await this.sleep(wait);
     }}
     throw new GeminiError(lastStatus?'GEMINI_HTTP_'+lastStatus+'_EXHAUSTED':'GEMINI_NO_VALID_RESPONSE',this.events);
+    }catch(e){
+     if(e&&e.code==='GEMINI_HTTP_429_EXHAUSTED'&&ki<pool.length-1){this.event({type:'key_rotation',kind,keyId});try{await this.onKeyExhausted(keyId,kind);}catch{}lastErr=e;rotated=true;}
+     else throw e;
+    }
+    if(!rotated&&lastErr)throw lastErr;
+    }
+    throw lastErr||new GeminiError('GEMINI_NO_VALID_RESPONSE',this.events);
    }finally{release();}
   })();this.inflight.set(id,task);try{return await task;}finally{this.inflight.delete(id);}
  }
