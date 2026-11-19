@@ -1,45 +1,18 @@
 {
   "id": "2026-11-19T13-38-12-511Z",
-  "attemptId": "2026-11-19T14-30-57-320Z",
+  "attemptId": "2026-11-19T15-58-34-238Z",
   "mode": "review",
   "published": false,
-  "status": "failed",
+  "status": "running",
   "resumed": true,
   "stages": [
     {
       "name": "preflight",
       "status": "pass",
-      "seconds": 0.279
-    },
-    {
-      "name": "topics",
-      "status": "resumed_from_saved_source_manifest"
-    },
-    {
-      "name": "script",
-      "status": "resumed_from_hash_verified_script"
-    },
-    {
-      "name": "voice",
-      "status": "pass",
-      "seconds": 0.731
-    },
-    {
-      "name": "voice-repair-1",
-      "status": "pass",
-      "seconds": 1.499
+      "seconds": 0.334
     }
   ],
   "limitations": [
-    "Incomplete visual previews never pass narrated-film acceptance. Human pronunciation and art-direction approval are separate.",
-    "align failed (ALIGNMENT_INVALID_MEASURED_SPAN); re-narrating once with fresh synthesis",
-    "align repair failed (ALIGNMENT_INVALID_MEASURED_SPAN); repair budget exhausted"
-  ],
-  "failedStage": "align-repair-1",
-  "errorCode": "ALIGNMENT_INVALID_MEASURED_SPAN",
-  "partial": {
-    "status": "rendered",
-    "path": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/out/2026-11-19T13-38-12-511Z/incomplete-with-voice/review-with-voice-INCOMPLETE.mp4",
-    "incomplete": true
-  }
+    "Incomplete visual previews never pass narrated-film acceptance. Human pronunciation and art-direction approval are separate."
+  ]
 }

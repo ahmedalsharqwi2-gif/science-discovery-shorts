@@ -1,0 +1,767 @@
+{
+  "selected": {
+    "id": "016ac8483c20",
+    "title": "NASA Science Data Powers New Method to Discover Hard-to-Find Pulsars",
+    "url": "https://science.nasa.gov/open-science/fermi-data-pulsar-discovery/",
+    "text": "5 min read NASA Science Data Powers New Method to Discover Hard-to-Find Pulsars NASA’s Fermi Gamma-ray Space Telescope, illustrated here, scans the entire sky every three hours as it orbits Earth. Its publicly available data helps scientists find the rapidly spinning cores of dead stars, known as pulsars. NASA’s Goddard Space Flight Center/Chris Smith (USRA/GESTAR) An international team of scientists has developed a method that can find pulsars in publicly available NASA data about a million times faster than before. This opens the door to discovering many more of these rapidly spinning objects. A paper describing the results published Thursday in the Physical Review Letters. Using 15 years of data from NASA’s Fermi Gamma-ray Space Telescope and a cryptography-based method developed by study co-authors Dotan Gazith and Barak Zackay from the Weizmann Institute of Science in Israel, the team found PSR J1622−7204, an isolated pulsar spinning 261 times per second, using the equivalent of 10 hours of computing time on a standard computer processor. By comparison, the previous best method failed to find the pulsar, despite using enough computing power that a standard processor would take 600 years to perform the calculation. A pulsar is a rapidly spinning neutron star that sweeps beams of radiation toward Earth, much like a lighthouse. Finding pulsars in gamma-ray data is extraordinarily difficult because Fermi detects only a tiny number of photons from a given pulsar, mixed in with background noise from other gamma-ray-emitting sources and the broader universe. To find the signal, researchers must accurately guess several unknowns at once: how fast the star spins, how quickly the spin is slowing down, and precisely where it sits in the sky. Searching every possible combination would require an impossible number of computations. “We don’t see every rotation from the pulsar, and we can’t just count the rotations to work out where the photon came from,” said lead author Daniel Pook-Kolb, a scientist at the Max Planck Institute for Gravitational Physics (Albert Einstein Institute) in Germany. “We have a four-dimensional grid, and we must search each direction with millions of trials in it. There’s just not enough computing power on Earth to do it.” This artist’s concept shows a pulsar, which emits light in regular pulses as it rotates, like a cosmic lighthouse. Pulsars are dense remnants of exploded stars, and are part of a class of objects called neutron stars. Openly available data from NASA’s Fermi space telescope can help scientists spot pulsars in the gamma-ray spectrum. NASA/JPL-Caltech Traditionally, scientists have searched for these pulsars by breaking Fermi data into smaller chunks and analyzing them by crowdsourcing computing power from volunteers around the world. Even with these volunteers contributing their computers’ unused processing power to run searches, it typically took the equivalent of hundreds of computer-years to identify a single pulsar. Gazith and Zackay realized that the search could be transformed into a geometry problem: finding the shortest vector in a high-dimensional lattice, or a regularly spaced array of points. This lattice technique draws on algorithms developed by cryptographers trying to break encryption systems designed to resist code-breaking by future quantum computers . The method has also been used to help make satellite navigation systems more efficient. “We have nothing to do with cryptography in our analysis here, but those algorithms can help us solve the problem of searching for pulsars in our data,” Gazith said. Each trial run of the algorithm took about five minutes on a single computer core — easily doable on a standard laptop, which usually has between two and eight cores. Once the lattice method identified a pulsar candidate, the researchers confirmed it by feeding in the full Fermi data set, revealing a signal so strong it could not be a chance occurrence. The team’s next goal is even more ambitious: finding pulsars in binary systems, where a pulsar orbits a star. These discoveries have long been considered out of reach because a companion star’s gravity distorts the signal in ways that have made these pulsars essentially impossible to discover with traditional methods. “We know that there are probably tens or maybe even hundreds of these pulsars in the data set that we just couldn’t find,” said Colin Clark, an astrophysicist at the Max Planck Institute who co-authored the study. “The next goal is to extend the searches and use the combination of the new algorithm and the crowdsourced computing power from volunteers in our Einstein@Home program to hopefully find many new pulsars that we think should be there.” This view of the gamma-ray sky is constructed from one year of Fermi Large Area Telescope (LAT) observations. The map shows the rate at which the LAT instrument detects gamma rays with energies above 300 million electron volts — about 120 million times the energy of visible light — from different sky directions. Brighter colors equal higher rates. Fermi’s openly available data archive contains a wealth of information that has supercharged scientific studies about the extreme universe. NASA/DOE/Fermi LAT Collaboration The discovery would not have happened without NASA’s longstanding, Gold Standard Science policy of making its science data, including data from Fermi, freely available to anyone. Launched in 2008, Fermi surveys the entire sky every three hours, observing the universe in gamma rays — the highest-energy form of light. After an initial one-year calibration period, all Fermi data became fully public and continues to be released as soon as it is processed. “The nice thing about NASA data is it’s all open,” Clark said. “All 18 years of Fermi data have been made public, and the data just keeps growing.” That openness allowed researchers from outside the Fermi mission, including the cryptography-inspired team, to apply a completely new approach to the dataset. NASA’s support for the science community, through open software and tools such as NASA’s Fermitools , enabled the team to prepare their dataset before beginning their analysis. The Fermi mission has grown its catalog from a few hundred gamma ray sources to thousands, with new findings emerging as scientists apply fresh ideas to the same data. “Any search that one team is doing, another team can just go and do that and check the search,” said Elizabeth Hays, Fermi project scientist at NASA’s Goddard Space Flight Center in Greenbelt, Maryland. “It’s made all of the science better.” For more information about NASA’s Fermi mission, visit: https://www.nasa.gov/fermi By Amanda Moon Adams Communications Lead for the Office of the Chief Science Data Officer Share Details Last Updated Nov 19, 2026 Related Terms Open Science Fermi Gamma-Ray Space Telescope Pulsars Explore More 2 min read NASA Space Apps Challenge Breaks Global Hackathon Records Article 2 days ago 4 min read NASA Welcomes All Ages, Experience Levels for Space Apps Challenge Article 1 month ago 5 min read NASA-JAXA XRISM Mission Sees Pulsar Gathering Companion’s ‘Wind’ Article 2 months ago Keep Exploring Discover Related Topics Missions Humans in Space Climate Change Solar System",
+    "published": "2026-11-19T15:33:55.000Z",
+    "official": true,
+    "dateBasis": "item_publication_or_update",
+    "publisher": "www.nasa.gov",
+    "primaryRefs": [
+      "https://assets.science.nasa.gov/content/dam/science/cds/general/images/2023/05/screenshot-2023-06-06-at-2.57.05-pm.png",
+      "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/general/images/2023/05/screenshot-2023-06-06-at-2.57.05-pm.png?w=1652&#038;h=928&#038;fit=clip",
+      "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/general/images/2023/05/screenshot-2023-06-06-at-2.57.05-pm.png?w=1652&#038;h=928&#038;fit=clip",
+      "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/general/images/2023/05/screenshot-2023-06-06-at-2.57.05-pm.png?w=150&#038;h=150&#038;fit=clip",
+      "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/general/images/2023/05/screenshot-2023-06-06-at-2.57.05-pm.png?w=300&#038;h=300&#038;fit=clip",
+      "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/general/images/2023/05/screenshot-2023-06-06-at-2.57.05-pm.png?w=768&#038;h=928&#038;fit=clip",
+      "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/general/images/2023/05/screenshot-2023-06-06-at-2.57.05-pm.png?w=1024&#038;h=928&#038;fit=clip",
+      "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/general/images/2023/05/screenshot-2023-06-06-at-2.57.05-pm.png?w=1536&#038;h=928&#038;fit=clip",
+      "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/general/images/2023/05/screenshot-2023-06-06-at-2.57.05-pm.png?w=50&#038;h=50&#038;fit=clip",
+      "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/general/images/2023/05/screenshot-2023-06-06-at-2.57.05-pm.png?w=100&#038;h=100&#038;fit=clip",
+      "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/general/images/2023/05/screenshot-2023-06-06-at-2.57.05-pm.png?w=200&#038;h=200&#038;fit=clip",
+      "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/general/images/2023/05/screenshot-2023-06-06-at-2.57.05-pm.png?w=400&#038;h=400&#038;fit=clip",
+      "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/general/images/2023/05/screenshot-2023-06-06-at-2.57.05-pm.png?w=600&#038;h=600&#038;fit=clip",
+      "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/general/images/2023/05/screenshot-2023-06-06-at-2.57.05-pm.png?w=900&#038;h=900&#038;fit=clip",
+      "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/general/images/2023/05/screenshot-2023-06-06-at-2.57.05-pm.png?w=1200&#038;h=928&#038;fit=clip",
+      "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/general/images/2023/05/screenshot-2023-06-06-at-2.57.05-pm.png?w=1568&#038;h=928&#038;fit=clip",
+      "https://link.aps.org/doi/10.1103/vlt2-xzgk",
+      "https://science.nasa.gov/mission/fermi/",
+      "https://images-assets.nasa.gov/image/PIA21085/PIA21085~large.jpg?w=1920&#038;h=1080&#038;fit=clip&#038;crop=faces%2Cfocalpoint",
+      "https://images-assets.nasa.gov/image/PIA21085/PIA21085~large.jpg?w=1920&#038;h=1080&#038;fit=clip&#038;crop=faces%2Cfocalpoint",
+      "https://images-assets.nasa.gov/image/PIA21085/PIA21085~large.jpg?w=1920&#038;h=1080&#038;fit=crop&#038;crop=faces%2Cfocalpoint",
+      "https://images-assets.nasa.gov/image/PIA21085/PIA21085~large.jpg?w=300&#038;h=169&#038;fit=crop&#038;crop=faces%2Cfocalpoint",
+      "https://images-assets.nasa.gov/image/PIA21085/PIA21085~large.jpg?w=768&#038;h=432&#038;fit=crop&#038;crop=faces%2Cfocalpoint",
+      "https://images-assets.nasa.gov/image/PIA21085/PIA21085~large.jpg?w=1024&#038;h=576&#038;fit=crop&#038;crop=faces%2Cfocalpoint",
+      "https://images-assets.nasa.gov/image/PIA21085/PIA21085~large.jpg?w=1536&#038;h=864&#038;fit=crop&#038;crop=faces%2Cfocalpoint",
+      "https://images-assets.nasa.gov/image/PIA21085/PIA21085~large.jpg?w=400&#038;h=225&#038;fit=crop&#038;crop=faces%2Cfocalpoint",
+      "https://images-assets.nasa.gov/image/PIA21085/PIA21085~large.jpg?w=600&#038;h=338&#038;fit=crop&#038;crop=faces%2Cfocalpoint",
+      "https://images-assets.nasa.gov/image/PIA21085/PIA21085~large.jpg?w=900&#038;h=506&#038;fit=crop&#038;crop=faces%2Cfocalpoint",
+      "https://images-assets.nasa.gov/image/PIA21085/PIA21085~large.jpg?w=1200&#038;h=675&#038;fit=crop&#038;crop=faces%2Cfocalpoint",
+      "https://www.nasa.gov/technology/computing/what-is-quantum-computing/",
+      "https://images-assets.nasa.gov/image/GSFC_20171208_Archive_e002215/GSFC_20171208_Archive_e002215~large.jpg?w=1920&#038;h=1145&#038;fit=clip&#038;crop=faces%2Cfocalpoint",
+      "https://images-assets.nasa.gov/image/GSFC_20171208_Archive_e002215/GSFC_20171208_Archive_e002215~large.jpg?w=1920&#038;h=1145&#038;fit=clip&#038;crop=faces%2Cfocalpoint",
+      "https://fermi.gsfc.nasa.gov/ssc/data/analysis/",
+      "https://www.nasa.gov/fermi",
+      "https://www.nasa.gov/fermi",
+      "https://science.nasa.gov/about-us/ocsdo/",
+      "https://x.com/intent/tweet?via=NASA&#038;text=NASA%20Science%20Data%20Powers%20New%20Method%20to%20Discover%20Hard-to-Find%20Pulsars&#038;url=https%3A%2F%2Fscience.nasa.gov%2Fopen-science%2Ffermi-data-pulsar-discovery%2F",
+      "http://www.w3.org/2000/svg",
+      "https://www.facebook.com/sharer.php?u=https%3A%2F%2Fscience.nasa.gov%2Fopen-science%2Ffermi-data-pulsar-discovery%2F",
+      "http://www.w3.org/2000/svg",
+      "https://www.linkedin.com/shareArticle?mini=true&#038;url=https%3A%2F%2Fscience.nasa.gov%2Fopen-science%2Ffermi-data-pulsar-discovery%2F",
+      "http://www.w3.org/2000/svg",
+      "http://www.w3.org/2000/svg",
+      "https://science.nasa.gov/open-science/",
+      "https://science.nasa.gov/mission/fermi",
+      "https://science.nasa.gov/category/universe/stars/neutron-stars/pulsars/",
+      "https://science.nasa.gov/open-science/nasa-space-apps-challenge-breaks-global-hackathon-records/",
+      "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/open-science/Space%20Apps%20Challenge%202026%20Brazil.jpeg?w=300&#038;h=300&#038;fit=clip",
+      "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/open-science/Space%20Apps%20Challenge%202026%20Brazil.jpeg?w=300&#038;h=300&#038;fit=clip",
+      "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/open-science/Space%20Apps%20Challenge%202026%20Brazil.jpeg?w=150&#038;h=150&#038;fit=clip",
+      "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/open-science/Space%20Apps%20Challenge%202026%20Brazil.jpeg?w=768&#038;h=1706&#038;fit=clip",
+      "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/open-science/Space%20Apps%20Challenge%202026%20Brazil.jpeg?w=1024&#038;h=1024&#038;fit=clip",
+      "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/open-science/Space%20Apps%20Challenge%202026%20Brazil.jpeg?w=1536&#038;h=1536&#038;fit=clip",
+      "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/open-science/Space%20Apps%20Challenge%202026%20Brazil.jpeg?w=2048&#038;h=1706&#038;fit=clip",
+      "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/open-science/Space%20Apps%20Challenge%202026%20Brazil.jpeg?w=50&#038;h=50&#038;fit=clip",
+      "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/open-science/Space%20Apps%20Challenge%202026%20Brazil.jpeg?w=100&#038;h=100&#038;fit=clip",
+      "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/open-science/Space%20Apps%20Challenge%202026%20Brazil.jpeg?w=200&#038;h=200&#038;fit=clip",
+      "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/open-science/Space%20Apps%20Challenge%202026%20Brazil.jpeg?w=400&#038;h=400&#038;fit=clip",
+      "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/open-science/Space%20Apps%20Challenge%202026%20Brazil.jpeg?w=600&#038;h=600&#038;fit=clip",
+      "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/open-science/Space%20Apps%20Challenge%202026%20Brazil.jpeg?w=900&#038;h=900&#038;fit=clip",
+      "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/open-science/Space%20Apps%20Challenge%202026%20Brazil.jpeg?w=1200&#038;h=1200&#038;fit=clip",
+      "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/open-science/Space%20Apps%20Challenge%202026%20Brazil.jpeg?w=2000&#038;h=1706&#038;fit=clip",
+      "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/open-science/Space%20Apps%20Challenge%202026%20Brazil.jpeg?w=1568&#038;h=1706&#038;fit=clip",
+      "http://www.w3.org/2000/svg",
+      "http://www.w3.org/1999/xlink",
+      "https://science.nasa.gov/universe/nasa-welcomes-all-ages-experience-levels-for-space-apps-challenge/",
+      "https://assets.science.nasa.gov/dynamicimage/assets/science/astro/exo-explore/2023/09/s/spherex.jpg?w=300&#038;h=300&#038;fit=clip",
+      "http://www.w3.org/2000/svg",
+      "http://www.w3.org/1999/xlink",
+      "https://science.nasa.gov/missions/xrism/xrism-sees-pulsar-gathering-companions-wind/",
+      "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/svs/a020000/a020300/a020374/XRISM_S1_4k_30fps_ProRes-00001_print.jpg?w=300&#038;h=300&#038;fit=clip",
+      "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/svs/a020000/a020300/a020374/XRISM_S1_4k_30fps_ProRes-00001_print.jpg?w=300&#038;h=300&#038;fit=clip",
+      "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/svs/a020000/a020300/a020374/XRISM_S1_4k_30fps_ProRes-00001_print.jpg?w=150&#038;h=150&#038;fit=clip",
+      "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/svs/a020000/a020300/a020374/XRISM_S1_4k_30fps_ProRes-00001_print.jpg?w=768&#038;h=576&#038;fit=clip",
+      "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/svs/a020000/a020300/a020374/XRISM_S1_4k_30fps_ProRes-00001_print.jpg?w=50&#038;h=50&#038;fit=clip",
+      "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/svs/a020000/a020300/a020374/XRISM_S1_4k_30fps_ProRes-00001_print.jpg?w=100&#038;h=100&#038;fit=clip",
+      "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/svs/a020000/a020300/a020374/XRISM_S1_4k_30fps_ProRes-00001_print.jpg?w=200&#038;h=200&#038;fit=clip",
+      "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/svs/a020000/a020300/a020374/XRISM_S1_4k_30fps_ProRes-00001_print.jpg?w=400&#038;h=400&#038;fit=clip",
+      "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/svs/a020000/a020300/a020374/XRISM_S1_4k_30fps_ProRes-00001_print.jpg?w=600&#038;h=576&#038;fit=clip",
+      "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/svs/a020000/a020300/a020374/XRISM_S1_4k_30fps_ProRes-00001_print.jpg?w=900&#038;h=576&#038;fit=clip",
+      "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/svs/a020000/a020300/a020374/XRISM_S1_4k_30fps_ProRes-00001_print.jpg?w=1024&#038;h=576&#038;fit=clip",
+      "http://www.w3.org/2000/svg",
+      "http://www.w3.org/1999/xlink",
+      "http://www.w3.org/2000/svg",
+      "https://science.nasa.gov/wp-content/plugins/nasa-blocks/assets/images/topic-cards/topic-card-sample-1.jpg",
+      "http://www.w3.org/2000/svg",
+      "https://science.nasa.gov/wp-content/plugins/nasa-blocks/assets/images/topic-cards/topic-card-sample-2.jpg",
+      "http://www.w3.org/2000/svg",
+      "https://science.nasa.gov/wp-content/plugins/nasa-blocks/assets/images/topic-cards/topic-card-sample-3.jpg",
+      "http://www.w3.org/2000/svg",
+      "https://science.nasa.gov/wp-content/plugins/nasa-blocks/assets/images/topic-cards/topic-card-sample-4.jpg"
+    ]
+  },
+  "sources": [
+    {
+      "id": "016ac8483c20",
+      "title": "NASA Science Data Powers New Method to Discover Hard-to-Find Pulsars",
+      "url": "https://science.nasa.gov/open-science/fermi-data-pulsar-discovery/",
+      "text": "5 min read NASA Science Data Powers New Method to Discover Hard-to-Find Pulsars NASA’s Fermi Gamma-ray Space Telescope, illustrated here, scans the entire sky every three hours as it orbits Earth. Its publicly available data helps scientists find the rapidly spinning cores of dead stars, known as pulsars. NASA’s Goddard Space Flight Center/Chris Smith (USRA/GESTAR) An international team of scientists has developed a method that can find pulsars in publicly available NASA data about a million times faster than before. This opens the door to discovering many more of these rapidly spinning objects. A paper describing the results published Thursday in the Physical Review Letters. Using 15 years of data from NASA’s Fermi Gamma-ray Space Telescope and a cryptography-based method developed by study co-authors Dotan Gazith and Barak Zackay from the Weizmann Institute of Science in Israel, the team found PSR J1622−7204, an isolated pulsar spinning 261 times per second, using the equivalent of 10 hours of computing time on a standard computer processor. By comparison, the previous best method failed to find the pulsar, despite using enough computing power that a standard processor would take 600 years to perform the calculation. A pulsar is a rapidly spinning neutron star that sweeps beams of radiation toward Earth, much like a lighthouse. Finding pulsars in gamma-ray data is extraordinarily difficult because Fermi detects only a tiny number of photons from a given pulsar, mixed in with background noise from other gamma-ray-emitting sources and the broader universe. To find the signal, researchers must accurately guess several unknowns at once: how fast the star spins, how quickly the spin is slowing down, and precisely where it sits in the sky. Searching every possible combination would require an impossible number of computations. “We don’t see every rotation from the pulsar, and we can’t just count the rotations to work out where the photon came from,” said lead author Daniel Pook-Kolb, a scientist at the Max Planck Institute for Gravitational Physics (Albert Einstein Institute) in Germany. “We have a four-dimensional grid, and we must search each direction with millions of trials in it. There’s just not enough computing power on Earth to do it.” This artist’s concept shows a pulsar, which emits light in regular pulses as it rotates, like a cosmic lighthouse. Pulsars are dense remnants of exploded stars, and are part of a class of objects called neutron stars. Openly available data from NASA’s Fermi space telescope can help scientists spot pulsars in the gamma-ray spectrum. NASA/JPL-Caltech Traditionally, scientists have searched for these pulsars by breaking Fermi data into smaller chunks and analyzing them by crowdsourcing computing power from volunteers around the world. Even with these volunteers contributing their computers’ unused processing power to run searches, it typically took the equivalent of hundreds of computer-years to identify a single pulsar. Gazith and Zackay realized that the search could be transformed into a geometry problem: finding the shortest vector in a high-dimensional lattice, or a regularly spaced array of points. This lattice technique draws on algorithms developed by cryptographers trying to break encryption systems designed to resist code-breaking by future quantum computers . The method has also been used to help make satellite navigation systems more efficient. “We have nothing to do with cryptography in our analysis here, but those algorithms can help us solve the problem of searching for pulsars in our data,” Gazith said. Each trial run of the algorithm took about five minutes on a single computer core — easily doable on a standard laptop, which usually has between two and eight cores. Once the lattice method identified a pulsar candidate, the researchers confirmed it by feeding in the full Fermi data set, revealing a signal so strong it could not be a chance occurrence. The team’s next goal is even more ambitious: finding pulsars in binary systems, where a pulsar orbits a star. These discoveries have long been considered out of reach because a companion star’s gravity distorts the signal in ways that have made these pulsars essentially impossible to discover with traditional methods. “We know that there are probably tens or maybe even hundreds of these pulsars in the data set that we just couldn’t find,” said Colin Clark, an astrophysicist at the Max Planck Institute who co-authored the study. “The next goal is to extend the searches and use the combination of the new algorithm and the crowdsourced computing power from volunteers in our Einstein@Home program to hopefully find many new pulsars that we think should be there.” This view of the gamma-ray sky is constructed from one year of Fermi Large Area Telescope (LAT) observations. The map shows the rate at which the LAT instrument detects gamma rays with energies above 300 million electron volts — about 120 million times the energy of visible light — from different sky directions. Brighter colors equal higher rates. Fermi’s openly available data archive contains a wealth of information that has supercharged scientific studies about the extreme universe. NASA/DOE/Fermi LAT Collaboration The discovery would not have happened without NASA’s longstanding, Gold Standard Science policy of making its science data, including data from Fermi, freely available to anyone. Launched in 2008, Fermi surveys the entire sky every three hours, observing the universe in gamma rays — the highest-energy form of light. After an initial one-year calibration period, all Fermi data became fully public and continues to be released as soon as it is processed. “The nice thing about NASA data is it’s all open,” Clark said. “All 18 years of Fermi data have been made public, and the data just keeps growing.” That openness allowed researchers from outside the Fermi mission, including the cryptography-inspired team, to apply a completely new approach to the dataset. NASA’s support for the science community, through open software and tools such as NASA’s Fermitools , enabled the team to prepare their dataset before beginning their analysis. The Fermi mission has grown its catalog from a few hundred gamma ray sources to thousands, with new findings emerging as scientists apply fresh ideas to the same data. “Any search that one team is doing, another team can just go and do that and check the search,” said Elizabeth Hays, Fermi project scientist at NASA’s Goddard Space Flight Center in Greenbelt, Maryland. “It’s made all of the science better.” For more information about NASA’s Fermi mission, visit: https://www.nasa.gov/fermi By Amanda Moon Adams Communications Lead for the Office of the Chief Science Data Officer Share Details Last Updated Nov 19, 2026 Related Terms Open Science Fermi Gamma-Ray Space Telescope Pulsars Explore More 2 min read NASA Space Apps Challenge Breaks Global Hackathon Records Article 2 days ago 4 min read NASA Welcomes All Ages, Experience Levels for Space Apps Challenge Article 1 month ago 5 min read NASA-JAXA XRISM Mission Sees Pulsar Gathering Companion’s ‘Wind’ Article 2 months ago Keep Exploring Discover Related Topics Missions Humans in Space Climate Change Solar System",
+      "published": "2026-11-19T15:33:55.000Z",
+      "official": true,
+      "dateBasis": "item_publication_or_update",
+      "publisher": "www.nasa.gov",
+      "primaryRefs": [
+        "https://assets.science.nasa.gov/content/dam/science/cds/general/images/2023/05/screenshot-2023-06-06-at-2.57.05-pm.png",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/general/images/2023/05/screenshot-2023-06-06-at-2.57.05-pm.png?w=1652&#038;h=928&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/general/images/2023/05/screenshot-2023-06-06-at-2.57.05-pm.png?w=1652&#038;h=928&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/general/images/2023/05/screenshot-2023-06-06-at-2.57.05-pm.png?w=150&#038;h=150&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/general/images/2023/05/screenshot-2023-06-06-at-2.57.05-pm.png?w=300&#038;h=300&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/general/images/2023/05/screenshot-2023-06-06-at-2.57.05-pm.png?w=768&#038;h=928&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/general/images/2023/05/screenshot-2023-06-06-at-2.57.05-pm.png?w=1024&#038;h=928&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/general/images/2023/05/screenshot-2023-06-06-at-2.57.05-pm.png?w=1536&#038;h=928&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/general/images/2023/05/screenshot-2023-06-06-at-2.57.05-pm.png?w=50&#038;h=50&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/general/images/2023/05/screenshot-2023-06-06-at-2.57.05-pm.png?w=100&#038;h=100&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/general/images/2023/05/screenshot-2023-06-06-at-2.57.05-pm.png?w=200&#038;h=200&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/general/images/2023/05/screenshot-2023-06-06-at-2.57.05-pm.png?w=400&#038;h=400&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/general/images/2023/05/screenshot-2023-06-06-at-2.57.05-pm.png?w=600&#038;h=600&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/general/images/2023/05/screenshot-2023-06-06-at-2.57.05-pm.png?w=900&#038;h=900&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/general/images/2023/05/screenshot-2023-06-06-at-2.57.05-pm.png?w=1200&#038;h=928&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/general/images/2023/05/screenshot-2023-06-06-at-2.57.05-pm.png?w=1568&#038;h=928&#038;fit=clip",
+        "https://link.aps.org/doi/10.1103/vlt2-xzgk",
+        "https://science.nasa.gov/mission/fermi/",
+        "https://images-assets.nasa.gov/image/PIA21085/PIA21085~large.jpg?w=1920&#038;h=1080&#038;fit=clip&#038;crop=faces%2Cfocalpoint",
+        "https://images-assets.nasa.gov/image/PIA21085/PIA21085~large.jpg?w=1920&#038;h=1080&#038;fit=clip&#038;crop=faces%2Cfocalpoint",
+        "https://images-assets.nasa.gov/image/PIA21085/PIA21085~large.jpg?w=1920&#038;h=1080&#038;fit=crop&#038;crop=faces%2Cfocalpoint",
+        "https://images-assets.nasa.gov/image/PIA21085/PIA21085~large.jpg?w=300&#038;h=169&#038;fit=crop&#038;crop=faces%2Cfocalpoint",
+        "https://images-assets.nasa.gov/image/PIA21085/PIA21085~large.jpg?w=768&#038;h=432&#038;fit=crop&#038;crop=faces%2Cfocalpoint",
+        "https://images-assets.nasa.gov/image/PIA21085/PIA21085~large.jpg?w=1024&#038;h=576&#038;fit=crop&#038;crop=faces%2Cfocalpoint",
+        "https://images-assets.nasa.gov/image/PIA21085/PIA21085~large.jpg?w=1536&#038;h=864&#038;fit=crop&#038;crop=faces%2Cfocalpoint",
+        "https://images-assets.nasa.gov/image/PIA21085/PIA21085~large.jpg?w=400&#038;h=225&#038;fit=crop&#038;crop=faces%2Cfocalpoint",
+        "https://images-assets.nasa.gov/image/PIA21085/PIA21085~large.jpg?w=600&#038;h=338&#038;fit=crop&#038;crop=faces%2Cfocalpoint",
+        "https://images-assets.nasa.gov/image/PIA21085/PIA21085~large.jpg?w=900&#038;h=506&#038;fit=crop&#038;crop=faces%2Cfocalpoint",
+        "https://images-assets.nasa.gov/image/PIA21085/PIA21085~large.jpg?w=1200&#038;h=675&#038;fit=crop&#038;crop=faces%2Cfocalpoint",
+        "https://www.nasa.gov/technology/computing/what-is-quantum-computing/",
+        "https://images-assets.nasa.gov/image/GSFC_20171208_Archive_e002215/GSFC_20171208_Archive_e002215~large.jpg?w=1920&#038;h=1145&#038;fit=clip&#038;crop=faces%2Cfocalpoint",
+        "https://images-assets.nasa.gov/image/GSFC_20171208_Archive_e002215/GSFC_20171208_Archive_e002215~large.jpg?w=1920&#038;h=1145&#038;fit=clip&#038;crop=faces%2Cfocalpoint",
+        "https://fermi.gsfc.nasa.gov/ssc/data/analysis/",
+        "https://www.nasa.gov/fermi",
+        "https://www.nasa.gov/fermi",
+        "https://science.nasa.gov/about-us/ocsdo/",
+        "https://x.com/intent/tweet?via=NASA&#038;text=NASA%20Science%20Data%20Powers%20New%20Method%20to%20Discover%20Hard-to-Find%20Pulsars&#038;url=https%3A%2F%2Fscience.nasa.gov%2Fopen-science%2Ffermi-data-pulsar-discovery%2F",
+        "http://www.w3.org/2000/svg",
+        "https://www.facebook.com/sharer.php?u=https%3A%2F%2Fscience.nasa.gov%2Fopen-science%2Ffermi-data-pulsar-discovery%2F",
+        "http://www.w3.org/2000/svg",
+        "https://www.linkedin.com/shareArticle?mini=true&#038;url=https%3A%2F%2Fscience.nasa.gov%2Fopen-science%2Ffermi-data-pulsar-discovery%2F",
+        "http://www.w3.org/2000/svg",
+        "http://www.w3.org/2000/svg",
+        "https://science.nasa.gov/open-science/",
+        "https://science.nasa.gov/mission/fermi",
+        "https://science.nasa.gov/category/universe/stars/neutron-stars/pulsars/",
+        "https://science.nasa.gov/open-science/nasa-space-apps-challenge-breaks-global-hackathon-records/",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/open-science/Space%20Apps%20Challenge%202026%20Brazil.jpeg?w=300&#038;h=300&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/open-science/Space%20Apps%20Challenge%202026%20Brazil.jpeg?w=300&#038;h=300&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/open-science/Space%20Apps%20Challenge%202026%20Brazil.jpeg?w=150&#038;h=150&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/open-science/Space%20Apps%20Challenge%202026%20Brazil.jpeg?w=768&#038;h=1706&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/open-science/Space%20Apps%20Challenge%202026%20Brazil.jpeg?w=1024&#038;h=1024&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/open-science/Space%20Apps%20Challenge%202026%20Brazil.jpeg?w=1536&#038;h=1536&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/open-science/Space%20Apps%20Challenge%202026%20Brazil.jpeg?w=2048&#038;h=1706&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/open-science/Space%20Apps%20Challenge%202026%20Brazil.jpeg?w=50&#038;h=50&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/open-science/Space%20Apps%20Challenge%202026%20Brazil.jpeg?w=100&#038;h=100&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/open-science/Space%20Apps%20Challenge%202026%20Brazil.jpeg?w=200&#038;h=200&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/open-science/Space%20Apps%20Challenge%202026%20Brazil.jpeg?w=400&#038;h=400&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/open-science/Space%20Apps%20Challenge%202026%20Brazil.jpeg?w=600&#038;h=600&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/open-science/Space%20Apps%20Challenge%202026%20Brazil.jpeg?w=900&#038;h=900&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/open-science/Space%20Apps%20Challenge%202026%20Brazil.jpeg?w=1200&#038;h=1200&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/open-science/Space%20Apps%20Challenge%202026%20Brazil.jpeg?w=2000&#038;h=1706&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/open-science/Space%20Apps%20Challenge%202026%20Brazil.jpeg?w=1568&#038;h=1706&#038;fit=clip",
+        "http://www.w3.org/2000/svg",
+        "http://www.w3.org/1999/xlink",
+        "https://science.nasa.gov/universe/nasa-welcomes-all-ages-experience-levels-for-space-apps-challenge/",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/astro/exo-explore/2023/09/s/spherex.jpg?w=300&#038;h=300&#038;fit=clip",
+        "http://www.w3.org/2000/svg",
+        "http://www.w3.org/1999/xlink",
+        "https://science.nasa.gov/missions/xrism/xrism-sees-pulsar-gathering-companions-wind/",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/svs/a020000/a020300/a020374/XRISM_S1_4k_30fps_ProRes-00001_print.jpg?w=300&#038;h=300&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/svs/a020000/a020300/a020374/XRISM_S1_4k_30fps_ProRes-00001_print.jpg?w=300&#038;h=300&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/svs/a020000/a020300/a020374/XRISM_S1_4k_30fps_ProRes-00001_print.jpg?w=150&#038;h=150&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/svs/a020000/a020300/a020374/XRISM_S1_4k_30fps_ProRes-00001_print.jpg?w=768&#038;h=576&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/svs/a020000/a020300/a020374/XRISM_S1_4k_30fps_ProRes-00001_print.jpg?w=50&#038;h=50&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/svs/a020000/a020300/a020374/XRISM_S1_4k_30fps_ProRes-00001_print.jpg?w=100&#038;h=100&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/svs/a020000/a020300/a020374/XRISM_S1_4k_30fps_ProRes-00001_print.jpg?w=200&#038;h=200&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/svs/a020000/a020300/a020374/XRISM_S1_4k_30fps_ProRes-00001_print.jpg?w=400&#038;h=400&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/svs/a020000/a020300/a020374/XRISM_S1_4k_30fps_ProRes-00001_print.jpg?w=600&#038;h=576&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/svs/a020000/a020300/a020374/XRISM_S1_4k_30fps_ProRes-00001_print.jpg?w=900&#038;h=576&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/cds/svs/a020000/a020300/a020374/XRISM_S1_4k_30fps_ProRes-00001_print.jpg?w=1024&#038;h=576&#038;fit=clip",
+        "http://www.w3.org/2000/svg",
+        "http://www.w3.org/1999/xlink",
+        "http://www.w3.org/2000/svg",
+        "https://science.nasa.gov/wp-content/plugins/nasa-blocks/assets/images/topic-cards/topic-card-sample-1.jpg",
+        "http://www.w3.org/2000/svg",
+        "https://science.nasa.gov/wp-content/plugins/nasa-blocks/assets/images/topic-cards/topic-card-sample-2.jpg",
+        "http://www.w3.org/2000/svg",
+        "https://science.nasa.gov/wp-content/plugins/nasa-blocks/assets/images/topic-cards/topic-card-sample-3.jpg",
+        "http://www.w3.org/2000/svg",
+        "https://science.nasa.gov/wp-content/plugins/nasa-blocks/assets/images/topic-cards/topic-card-sample-4.jpg"
+      ]
+    }
+  ],
+  "editorialMode": "daily",
+  "editorialLabel": null,
+  "windowHours": 168,
+  "verification": [
+    {
+      "id": "016ac8483c20",
+      "basis": "official_primary_source",
+      "sourceIds": [
+        "016ac8483c20"
+      ]
+    }
+  ],
+  "diagnostics": [
+    {
+      "url": "https://www.nasa.gov/feed/",
+      "items": 10,
+      "valid": 10,
+      "invalid": 0,
+      "future": 0,
+      "status": "ok",
+      "cache": "miss"
+    },
+    {
+      "url": "https://www.esa.int/rssfeed/Our_Activities/Space_Science",
+      "status": "unavailable",
+      "code": "HTTP_404"
+    }
+  ],
+  "trend": [
+    {
+      "id": "016ac8483c20",
+      "title": "NASA Science Data Powers New Method to Discover Hard-to-Find Pulsars",
+      "demand": 18,
+      "recency": 0.994,
+      "matches": [
+        {
+          "kind": "google_trend",
+          "label": "العين ضد الظفرة",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "anthropic stock",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "اذان المغرب",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "سعر كيلو الفراخ البيضاء",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "red dead redemption",
+          "weight": 10
+        }
+      ],
+      "score": 18.497134745810385
+    },
+    {
+      "id": "72ab3b40ae04",
+      "title": "Lake Pelku",
+      "demand": 6,
+      "recency": 0.994,
+      "matches": [
+        {
+          "kind": "google_trend",
+          "label": "anthropic stock",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "red dead redemption",
+          "weight": 4
+        }
+      ],
+      "score": 6.496989002360695
+    },
+    {
+      "id": "4ed2e9bef49f",
+      "title": "NASA Conducts Latest RS-25 Engine Test in Support of Future Artemis Missions",
+      "demand": 12,
+      "recency": 0.983,
+      "matches": [
+        {
+          "kind": "google_trend",
+          "label": "العين ضد الظفرة",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "اذان المغرب",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "سعر كيلو الفراخ البيضاء",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "red dead redemption",
+          "weight": 6
+        }
+      ],
+      "score": 12.491497467359407
+    },
+    {
+      "id": "b71681db2cca",
+      "title": "NASA’s Voyager 1 Makes History Reaching One Light-Day From Earth",
+      "demand": 14,
+      "recency": 0.98,
+      "matches": [
+        {
+          "kind": "google_trend",
+          "label": "العين ضد الظفرة",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "anthropic stock",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "اذان المغرب",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "سعر كيلو الفراخ البيضاء",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "red dead redemption",
+          "weight": 6
+        }
+      ],
+      "score": 14.489975277054983
+    },
+    {
+      "id": "b41c4de3e0f2",
+      "title": "El Niño Rains Paint the Atacama",
+      "demand": 14,
+      "recency": 0.859,
+      "matches": [
+        {
+          "kind": "google_trend",
+          "label": "العين ضد الظفرة",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "anthropic stock",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "اذان المغرب",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "سعر كيلو الفراخ البيضاء",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "red dead redemption",
+          "weight": 6
+        }
+      ],
+      "score": 14.429285044871682
+    },
+    {
+      "id": "9d57f4dbe2e3",
+      "title": "MAF EAP Holidays – How to manage the BAH HUMBUG that tries to sneak in",
+      "demand": 16,
+      "recency": 0.747,
+      "matches": [
+        {
+          "kind": "google_trend",
+          "label": "anthropic stock",
+          "weight": 8
+        },
+        {
+          "kind": "google_trend",
+          "label": "red dead redemption",
+          "weight": 8
+        }
+      ],
+      "score": 16.373483360492823
+    },
+    {
+      "id": "946586051f9f",
+      "title": "NASA Announces Mid-Power Electric Rocket Challenge for US Companies",
+      "demand": 14,
+      "recency": 0.739,
+      "matches": [
+        {
+          "kind": "google_trend",
+          "label": "العين ضد الظفرة",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "عمرو سعد",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "اذان المغرب",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "سعر كيلو الفراخ البيضاء",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "red dead redemption",
+          "weight": 6
+        }
+      ],
+      "score": 14.369534681030574
+    },
+    {
+      "id": "0cb2e3ffdc8f",
+      "title": "Empire State Building Goes Gold for Voyager",
+      "demand": 12,
+      "recency": 0.735,
+      "matches": [
+        {
+          "kind": "google_trend",
+          "label": "العين ضد الظفرة",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "anthropic stock",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "اذان المغرب",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "سعر كيلو الفراخ البيضاء",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "red dead redemption",
+          "weight": 4
+        }
+      ],
+      "score": 12.367649064682237
+    }
+  ],
+  "scoring": "Source authority, verified freshness and unused canonical source URL; no invented trend-volume metric.",
+  "trendDiagnostics": {
+    "sources": [
+      {
+        "source": "trends",
+        "status": "ok",
+        "items": 10
+      },
+      {
+        "source": "suggestions",
+        "status": "ok",
+        "items": 2
+      },
+      {
+        "source": "suggestions",
+        "status": "ok",
+        "items": 0
+      },
+      {
+        "source": "suggestions",
+        "status": "ok",
+        "items": 9
+      },
+      {
+        "source": "suggestions",
+        "status": "ok",
+        "items": 10
+      },
+      {
+        "source": "suggestions",
+        "status": "ok",
+        "items": 10
+      },
+      {
+        "source": "suggestions",
+        "status": "ok",
+        "items": 9
+      },
+      {
+        "source": "suggestions",
+        "status": "ok",
+        "items": 10
+      },
+      {
+        "source": "suggestions",
+        "status": "ok",
+        "items": 10
+      }
+    ],
+    "degraded": false,
+    "decisions": [
+      {
+        "id": "016ac8483c20",
+        "title": "NASA Science Data Powers New Method to Discover Hard-to-Find Pulsars",
+        "demand": 18,
+        "recency": 0.994,
+        "matches": [
+          {
+            "kind": "google_trend",
+            "label": "العين ضد الظفرة",
+            "weight": 2
+          },
+          {
+            "kind": "google_trend",
+            "label": "anthropic stock",
+            "weight": 2
+          },
+          {
+            "kind": "google_trend",
+            "label": "اذان المغرب",
+            "weight": 2
+          },
+          {
+            "kind": "google_trend",
+            "label": "سعر كيلو الفراخ البيضاء",
+            "weight": 2
+          },
+          {
+            "kind": "google_trend",
+            "label": "red dead redemption",
+            "weight": 10
+          }
+        ],
+        "score": 18.497134745810385
+      },
+      {
+        "id": "72ab3b40ae04",
+        "title": "Lake Pelku",
+        "demand": 6,
+        "recency": 0.994,
+        "matches": [
+          {
+            "kind": "google_trend",
+            "label": "anthropic stock",
+            "weight": 2
+          },
+          {
+            "kind": "google_trend",
+            "label": "red dead redemption",
+            "weight": 4
+          }
+        ],
+        "score": 6.496989002360695
+      },
+      {
+        "id": "4ed2e9bef49f",
+        "title": "NASA Conducts Latest RS-25 Engine Test in Support of Future Artemis Missions",
+        "demand": 12,
+        "recency": 0.983,
+        "matches": [
+          {
+            "kind": "google_trend",
+            "label": "العين ضد الظفرة",
+            "weight": 2
+          },
+          {
+            "kind": "google_trend",
+            "label": "اذان المغرب",
+            "weight": 2
+          },
+          {
+            "kind": "google_trend",
+            "label": "سعر كيلو الفراخ البيضاء",
+            "weight": 2
+          },
+          {
+            "kind": "google_trend",
+            "label": "red dead redemption",
+            "weight": 6
+          }
+        ],
+        "score": 12.491497467359407
+      },
+      {
+        "id": "b71681db2cca",
+        "title": "NASA’s Voyager 1 Makes History Reaching One Light-Day From Earth",
+        "demand": 14,
+        "recency": 0.98,
+        "matches": [
+          {
+            "kind": "google_trend",
+            "label": "العين ضد الظفرة",
+            "weight": 2
+          },
+          {
+            "kind": "google_trend",
+            "label": "anthropic stock",
+            "weight": 2
+          },
+          {
+            "kind": "google_trend",
+            "label": "اذان المغرب",
+            "weight": 2
+          },
+          {
+            "kind": "google_trend",
+            "label": "سعر كيلو الفراخ البيضاء",
+            "weight": 2
+          },
+          {
+            "kind": "google_trend",
+            "label": "red dead redemption",
+            "weight": 6
+          }
+        ],
+        "score": 14.489975277054983
+      },
+      {
+        "id": "b41c4de3e0f2",
+        "title": "El Niño Rains Paint the Atacama",
+        "demand": 14,
+        "recency": 0.859,
+        "matches": [
+          {
+            "kind": "google_trend",
+            "label": "العين ضد الظفرة",
+            "weight": 2
+          },
+          {
+            "kind": "google_trend",
+            "label": "anthropic stock",
+            "weight": 2
+          },
+          {
+            "kind": "google_trend",
+            "label": "اذان المغرب",
+            "weight": 2
+          },
+          {
+            "kind": "google_trend",
+            "label": "سعر كيلو الفراخ البيضاء",
+            "weight": 2
+          },
+          {
+            "kind": "google_trend",
+            "label": "red dead redemption",
+            "weight": 6
+          }
+        ],
+        "score": 14.429285044871682
+      },
+      {
+        "id": "9d57f4dbe2e3",
+        "title": "MAF EAP Holidays – How to manage the BAH HUMBUG that tries to sneak in",
+        "demand": 16,
+        "recency": 0.747,
+        "matches": [
+          {
+            "kind": "google_trend",
+            "label": "anthropic stock",
+            "weight": 8
+          },
+          {
+            "kind": "google_trend",
+            "label": "red dead redemption",
+            "weight": 8
+          }
+        ],
+        "score": 16.373483360492823
+      },
+      {
+        "id": "946586051f9f",
+        "title": "NASA Announces Mid-Power Electric Rocket Challenge for US Companies",
+        "demand": 14,
+        "recency": 0.739,
+        "matches": [
+          {
+            "kind": "google_trend",
+            "label": "العين ضد الظفرة",
+            "weight": 2
+          },
+          {
+            "kind": "google_trend",
+            "label": "عمرو سعد",
+            "weight": 2
+          },
+          {
+            "kind": "google_trend",
+            "label": "اذان المغرب",
+            "weight": 2
+          },
+          {
+            "kind": "google_trend",
+            "label": "سعر كيلو الفراخ البيضاء",
+            "weight": 2
+          },
+          {
+            "kind": "google_trend",
+            "label": "red dead redemption",
+            "weight": 6
+          }
+        ],
+        "score": 14.369534681030574
+      },
+      {
+        "id": "0cb2e3ffdc8f",
+        "title": "Empire State Building Goes Gold for Voyager",
+        "demand": 12,
+        "recency": 0.735,
+        "matches": [
+          {
+            "kind": "google_trend",
+            "label": "العين ضد الظفرة",
+            "weight": 2
+          },
+          {
+            "kind": "google_trend",
+            "label": "anthropic stock",
+            "weight": 2
+          },
+          {
+            "kind": "google_trend",
+            "label": "اذان المغرب",
+            "weight": 2
+          },
+          {
+            "kind": "google_trend",
+            "label": "سعر كيلو الفراخ البيضاء",
+            "weight": 2
+          },
+          {
+            "kind": "google_trend",
+            "label": "red dead redemption",
+            "weight": 4
+          }
+        ],
+        "score": 12.367649064682237
+      }
+    ]
+  }
+}

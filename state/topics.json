@@ -32,7 +32,19 @@
   {
     "topicKey": "nasa-crs-25-resupply-mission",
     "value": "https://www.nasa.gov/news-release/nasa-sets-coverage-for-northrop-grumman-crs-25-launch-prelaunch/",
-    "status": "reserved",
+    "status": "retired",
     "run": "2026-11-19T13-38-12-511Z"
+  },
+  {
+    "value": "https://science.nasa.gov/open-science/fermi-data-pulsar-discovery/",
+    "status": "retired",
+    "reason": "STAGE_FAILED_SEE_RUNBOOK",
+    "run": "2026-11-19T15-58-34-238Z"
+  },
+  {
+    "value": "https://www.nasa.gov/centers-and-facilities/michoud/maf-eap/maf-eap-holidays-how-to-manage-the-bah-humbug-that-tries-to-sneak-in/",
+    "status": "retired",
+    "reason": "GEMINI_ATTEMPTS_EXHAUSTED",
+    "run": "2026-11-19T15-59-51-186Z"
   }
 ]

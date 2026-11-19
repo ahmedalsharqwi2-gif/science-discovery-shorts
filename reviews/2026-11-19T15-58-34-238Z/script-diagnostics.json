@@ -1,0 +1,6 @@
+{
+  "code": "SCRIPT_LINT",
+  "attempt": 2,
+  "zodIssues": null,
+  "detail": "scene[5].text spelled_out_number_run: 3 consecutive number-words in: الفريق نجح فعلاً في اكتشاف نجم نابض بيلف مائتين وواحد وستين مرة في الثانية الواحدة."
+}

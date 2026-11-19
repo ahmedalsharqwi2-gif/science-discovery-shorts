@@ -1,0 +1,289 @@
+{
+  "sources": [
+    {
+      "source": "trends",
+      "status": "ok",
+      "items": 10
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 2
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 0
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 9
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 10
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 10
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 9
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 10
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 10
+    }
+  ],
+  "degraded": false,
+  "decisions": [
+    {
+      "id": "016ac8483c20",
+      "title": "NASA Science Data Powers New Method to Discover Hard-to-Find Pulsars",
+      "demand": 18,
+      "recency": 0.994,
+      "matches": [
+        {
+          "kind": "google_trend",
+          "label": "العين ضد الظفرة",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "anthropic stock",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "اذان المغرب",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "سعر كيلو الفراخ البيضاء",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "red dead redemption",
+          "weight": 10
+        }
+      ],
+      "score": 18.497134745810385
+    },
+    {
+      "id": "72ab3b40ae04",
+      "title": "Lake Pelku",
+      "demand": 6,
+      "recency": 0.994,
+      "matches": [
+        {
+          "kind": "google_trend",
+          "label": "anthropic stock",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "red dead redemption",
+          "weight": 4
+        }
+      ],
+      "score": 6.496989002360695
+    },
+    {
+      "id": "4ed2e9bef49f",
+      "title": "NASA Conducts Latest RS-25 Engine Test in Support of Future Artemis Missions",
+      "demand": 12,
+      "recency": 0.983,
+      "matches": [
+        {
+          "kind": "google_trend",
+          "label": "العين ضد الظفرة",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "اذان المغرب",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "سعر كيلو الفراخ البيضاء",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "red dead redemption",
+          "weight": 6
+        }
+      ],
+      "score": 12.491497467359407
+    },
+    {
+      "id": "b71681db2cca",
+      "title": "NASA’s Voyager 1 Makes History Reaching One Light-Day From Earth",
+      "demand": 14,
+      "recency": 0.98,
+      "matches": [
+        {
+          "kind": "google_trend",
+          "label": "العين ضد الظفرة",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "anthropic stock",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "اذان المغرب",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "سعر كيلو الفراخ البيضاء",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "red dead redemption",
+          "weight": 6
+        }
+      ],
+      "score": 14.489975277054983
+    },
+    {
+      "id": "b41c4de3e0f2",
+      "title": "El Niño Rains Paint the Atacama",
+      "demand": 14,
+      "recency": 0.859,
+      "matches": [
+        {
+          "kind": "google_trend",
+          "label": "العين ضد الظفرة",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "anthropic stock",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "اذان المغرب",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "سعر كيلو الفراخ البيضاء",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "red dead redemption",
+          "weight": 6
+        }
+      ],
+      "score": 14.429285044871682
+    },
+    {
+      "id": "9d57f4dbe2e3",
+      "title": "MAF EAP Holidays – How to manage the BAH HUMBUG that tries to sneak in",
+      "demand": 16,
+      "recency": 0.747,
+      "matches": [
+        {
+          "kind": "google_trend",
+          "label": "anthropic stock",
+          "weight": 8
+        },
+        {
+          "kind": "google_trend",
+          "label": "red dead redemption",
+          "weight": 8
+        }
+      ],
+      "score": 16.373483360492823
+    },
+    {
+      "id": "946586051f9f",
+      "title": "NASA Announces Mid-Power Electric Rocket Challenge for US Companies",
+      "demand": 14,
+      "recency": 0.739,
+      "matches": [
+        {
+          "kind": "google_trend",
+          "label": "العين ضد الظفرة",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "عمرو سعد",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "اذان المغرب",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "سعر كيلو الفراخ البيضاء",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "red dead redemption",
+          "weight": 6
+        }
+      ],
+      "score": 14.369534681030574
+    },
+    {
+      "id": "0cb2e3ffdc8f",
+      "title": "Empire State Building Goes Gold for Voyager",
+      "demand": 12,
+      "recency": 0.735,
+      "matches": [
+        {
+          "kind": "google_trend",
+          "label": "العين ضد الظفرة",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "anthropic stock",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "اذان المغرب",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "سعر كيلو الفراخ البيضاء",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "red dead redemption",
+          "weight": 4
+        }
+      ],
+      "score": 12.367649064682237
+    }
+  ]
+}
