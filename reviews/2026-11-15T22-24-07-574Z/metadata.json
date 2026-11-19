@@ -1,0 +1,18 @@
+{
+  "title": "أسرار التجمع النجمي إن جي سي 206",
+  "topicKey": "astronomy-andromeda-ngc206-star-clouds",
+  "voice": "Charon",
+  "provider": "Gemini",
+  "sources": [
+    {
+      "id": "f8746cf4ef0b",
+      "title": "APOD: 2026 November 13 – NGC 206 and the Star Clouds of Andromeda",
+      "url": "https://science.nasa.gov/image-article/apod-2026-november-13-ngc-206-and-the-star-clouds-of-andromeda/",
+      "published": "2026-11-13T05:05:00.000Z",
+      "official": true
+    }
+  ],
+  "video_sha256": "91c27525c6c615c22e202aeffafeb898f69eae3f0878529e97e73126e4632540",
+  "reviewOnly": true,
+  "approved": false
+}

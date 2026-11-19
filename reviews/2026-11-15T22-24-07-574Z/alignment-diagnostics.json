@@ -46,8 +46,8 @@
       "scene": 4,
       "passed": true,
       "words": 30,
-      "characterSimilarity": 0.8764940239043825,
-      "wordCoverage": 0.7,
+      "characterSimilarity": 0.8844621513944223,
+      "wordCoverage": 0.7333333333333333,
       "sourceWords": 30,
       "recognizedWords": 27,
       "missingNumerals": []
