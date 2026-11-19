@@ -1,5 +1,5 @@
 {
-  "model": "medium",
+  "model": "turbo",
   "language": "ar",
   "cpuThreads": 4,
   "beamSize": 5,
