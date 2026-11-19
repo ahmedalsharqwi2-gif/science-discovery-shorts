@@ -668,6 +668,6 @@
   "lastFailure": {
     "stage": "align-repair-1",
     "code": "ALIGNMENT_INVALID_MEASURED_SPAN",
-    "repeat": 0
+    "repeat": 1
   }
 }
