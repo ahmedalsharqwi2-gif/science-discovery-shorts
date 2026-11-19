@@ -1,0 +1,8 @@
+{
+  "demand": 30, "gap": 25, "trend": 10, "fit": 15, "visual": 10, "hook": 10,
+  "penalties": {"saturationHigh": -15, "saturationMedium": -5, "risk": -20},
+  "bankMix": {"evergreen": 70, "trending": 30},
+  "maxCandidatesPerRun": 40,
+  "sources": {"reddit": false},
+  "quota": {"maxSearchCallsPerDay": 20, "unitsPerSearchList": 100, "defaultDailyUnits": 10000}
+}

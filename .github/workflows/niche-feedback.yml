@@ -1,0 +1,20 @@
+name: Niche feedback (weekly, review-only)
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 7 * * 1'
+permissions:
+  contents: read
+jobs:
+  feedback:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22', cache: npm}
+      - run: npm ci
+      - run: node niche_intel/run.mjs feedback
+      - uses: actions/upload-artifact@v4
+        with: {name: weekly-insights, path: docs/WEEKLY_INSIGHTS.md}
+      # Weight proposals are never auto-applied or auto-merged; a human opens the PR from the artifact.

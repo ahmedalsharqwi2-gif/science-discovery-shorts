@@ -1,0 +1,127 @@
+{
+  "channel": "أسرار الكون",
+  "audience": "Egyptian/Arab viewers 16-40 who like simplified science and curiosity",
+  "searchIntent": "questions: ليه / إزاي / إيه اللي يحصل لو… with a simple scientific answer; prefer questions most competitors lack a simple Arabic answer for",
+  "tone": "curious, clear Egyptian-colloquial-friendly Arabic, calm authority, no hype claims",
+  "pillars": [
+    {
+      "id": "space",
+      "title": "الفضاء والكون",
+      "keywords": [
+        "فضاء",
+        "كون",
+        "ثقب أسود",
+        "كوكب",
+        "نجم",
+        "مجرة",
+        "مريخ",
+        "قمر",
+        "ناسا",
+        "نيزك",
+        "كويكب",
+        "تلسكوب",
+        "شمس",
+        "space",
+        "nasa",
+        "galaxy",
+        "black hole",
+        "planet",
+        "asteroid",
+        "mars",
+        "moon"
+      ]
+    },
+    {
+      "id": "body_mind",
+      "title": "جسم الإنسان والعقل",
+      "keywords": [
+        "جسم",
+        "مخ",
+        "عقل",
+        "نوم",
+        "قلب",
+        "خلايا",
+        "دماغ",
+        "جينات",
+        "brain",
+        "sleep",
+        "dna"
+      ]
+    },
+    {
+      "id": "physics_odd",
+      "title": "الفيزياء والظواهر الغريبة",
+      "keywords": [
+        "فيزياء",
+        "جاذبية",
+        "ضوء",
+        "طاقة",
+        "ذرة",
+        "ظاهرة",
+        "سرعة",
+        "physics",
+        "quantum",
+        "gravity",
+        "light"
+      ]
+    },
+    {
+      "id": "earth_nature",
+      "title": "الأرض والطبيعة والمناخ",
+      "keywords": [
+        "زلزال",
+        "بركان",
+        "مناخ",
+        "محيط",
+        "حرارة",
+        "طقس",
+        "حيوان",
+        "نبات",
+        "كوكب الأرض",
+        "طوفان",
+        "earthquake",
+        "volcano",
+        "climate",
+        "ocean",
+        "species"
+      ]
+    },
+    {
+      "id": "recent_discoveries",
+      "title": "اكتشافات حديثة",
+      "keywords": [
+        "اكتشاف",
+        "اكتشف",
+        "علماء",
+        "دراسة",
+        "بحث علمي",
+        "اختراع",
+        "discovery",
+        "scientists",
+        "study",
+        "fossil",
+        "أحفورة"
+      ]
+    }
+  ],
+  "questionPatterns": [
+    "ليه",
+    "إزاي",
+    "إيه اللي يحصل لو"
+  ],
+  "bannedTopics": [
+    "نصيحة طبية",
+    "علاج",
+    "نتائج أولية غير مؤكدة"
+  ],
+  "rules": [
+    "every claim has a scientific source",
+    "exclude medical advice and unconfirmed preliminary results"
+  ],
+  "bankMix": {
+    "evergreen": 70,
+    "trending": 30
+  },
+  "visualFilmabilityDefault": 0.6,
+  "aiDisclosure": "محتوى مُنشأ بمساعدة الذكاء الاصطناعي"
+}
