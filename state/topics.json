@@ -46,5 +46,17 @@
     "status": "retired",
     "reason": "GEMINI_ATTEMPTS_EXHAUSTED",
     "run": "2026-11-19T15-59-51-186Z"
+  },
+  {
+    "value": "https://www.nasa.gov/news-release/nasas-voyager-1-makes-history-reaching-one-light-day-from-earth/",
+    "status": "retired",
+    "reason": "STAGE_FAILED_SEE_RUNBOOK",
+    "run": "2026-11-19T16-38-07-907Z"
+  },
+  {
+    "value": "https://www.nasa.gov/directorates/stmd/prizes-challenges-crowdsourcing-program/nasa-announces-mid-power-electric-rocket-challenge-for-us-companies/",
+    "status": "retired",
+    "reason": "STAGE_FAILED_SEE_RUNBOOK",
+    "run": "2026-11-19T16-38-18-133Z"
   }
 ]

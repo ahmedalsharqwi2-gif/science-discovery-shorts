@@ -1,0 +1,6 @@
+{
+  "code": "SCRIPT_LINT",
+  "attempt": 1,
+  "zodIssues": null,
+  "detail": "scene[1].text spelled_out_number_run: 3 consecutive number-words in: ودي مسافة ضخمة جداً بتوصل لحوالي ستة عشر مليار ميل، | scene[1].text spelled_out_number_run: 3 consecutive number-words in: يعني حوالي ستة وعشرين مليار كيلومتر، | scene[2].text spelled_out_number_run: 3 consecutive number-words in: الضوء بيتحرك بسرعة خيالية بتوصل لمية ستة وتمانين ألف ميل في الثانية الواحدة في الفراغ،"
+}

@@ -1,0 +1,11 @@
+{
+  "events": [
+    {
+      "type": "cache_hit",
+      "id": "a4c47a5b33ee315f359988b9eebb8e213cc41f6760eb39efdf3ee7ce3951010a",
+      "model": "gemini-3.1-flash-lite",
+      "at": 1795106298127
+    }
+  ],
+  "resolvedModels": {}
+}

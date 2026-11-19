@@ -1,0 +1,6 @@
+{
+  "code": "SCRIPT_LINT",
+  "attempt": 3,
+  "zodIssues": null,
+  "detail": "scene[0].text spelled_out_year: year-like number words in: لكن في ربيع عام ألفين وستة وعشرين، | scene[6].text spelled_out_number_run: 3 consecutive number-words in: العلماء بيقولوا إن حدث سنة ألفين وستة وعشرين هو الأهم والأكبر من نوعه من وقت ما بدأنا نستخدم تكنولوجيا الاستشعار عن بعد،"
+}

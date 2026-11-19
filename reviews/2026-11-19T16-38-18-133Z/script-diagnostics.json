@@ -1,0 +1,6 @@
+{
+  "code": "SCRIPT_LINT",
+  "attempt": 2,
+  "zodIssues": null,
+  "detail": "scene[7].text spelled_out_year: year-like number words in: التحدي ده مفتوح لحد بداية سنة ألفين سبعة وعشرين."
+}

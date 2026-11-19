@@ -1,0 +1,13 @@
+{
+  "mean_absolute_rgb_error": 4.24041543392505,
+  "threshold": 15,
+  "passed": true,
+  "region": [
+    868,
+    170,
+    1000,
+    302
+  ],
+  "source_sha256": "21b536514d9e76218d72aae06fe5c59ef61ac822db2f65ceef148b049ee0e227",
+  "note": "Rendered thumbnail pixel check, excluding rounded border; exact source bytes are separately hash-verified."
+}
