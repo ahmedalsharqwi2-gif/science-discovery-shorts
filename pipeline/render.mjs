@@ -12,15 +12,15 @@ export async function renderEpisode(props,out,{filename='review.mp4'}={}){
  await run('ffmpeg',['-y','-v','error','-i',path.join(out,filename),'-vf','fps=1/3,scale=180:320,tile=6x'+rows,'-frames:v','1',path.join(out,'contact-sheet.jpg')],{timeout:180000});
  return {file:path.join(out,filename),thumbnail:path.join(out,'thumbnail.png'),contactSheet:path.join(out,'contact-sheet.jpg')};
 }
-export async function visualQA(out,filename,{incomplete=false}={}){
+export async function visualQA(out,filename,{incomplete=false,paper=false}={}){
  const logo=await verifyBrand(),media=await probe(path.join(out,filename)),v=media.streams.find(s=>s.codec_type==='video');
  const geometry=Boolean(v&&v.width===1080&&v.height===1920&&v.r_frame_rate==='30/1'&&Number(media.format.duration)>=90&&Number(media.format.duration)<=180);
  if(!geometry)throw Error('VISUAL_REVIEW_MEDIA_CONTRACT_FAILED');
- await run(process.env.PYTHON||'python',['pipeline/visual_qa.py',path.resolve(out,'thumbnail.png'),path.resolve('brand/logo'),path.resolve('config/logo.json'),path.resolve(out,'logo-render-qa.json')],{timeout:30000});
+ await run(process.env.PYTHON||'python',['pipeline/visual_qa.py',path.resolve(out,'thumbnail.png'),path.resolve('brand/logo'),path.resolve('config/logo.json'),path.resolve(out,'logo-render-qa.json'),paper?'paper':'classic'],{timeout:30000});
  const ocr=await run('tesseract',[path.join(out,'thumbnail.png'),'stdout','-l','eng'],{timeout:30000}).then(r=>r.stdout).catch(()=>null);
  if(!incomplete&&ocr===null)throw Error('WATERMARK_QA_TOOL_UNAVAILABLE');
  const banned=ocr!==null&&/made\s*with\s*manus|shutterstock|alamy|istock|storyblocks/i.test(ocr);if(banned)throw Error('FOREIGN_WATERMARK_TEXT_DETECTED');
- const result={width:v.width,height:v.height,fps:30,duration:Number(media.format.duration),geometryPassed:geometry,logo:{...logo,renderedPixelsChecked:true},watermark:{knownTextScan:ocr===null?'unavailable':'no_known_foreign_watermark_detected',assetPolicy:'Only original vectors, owner-supplied immutable logos and documented generated backgrounds; listening/visual approval remains separate.'},audioRequired:!incomplete,complete:!incomplete,approved:false};
+ const result={width:v.width,height:v.height,fps:30,duration:Number(media.format.duration),geometryPassed:geometry,logo:{...logo,renderedPixelsChecked:!paper,wordmarkChecked:paper},watermark:{knownTextScan:ocr===null?'unavailable':'no_known_foreign_watermark_detected',assetPolicy:'Only original vectors, owner-supplied immutable logos and documented generated backgrounds; listening/visual approval remains separate.'},audioRequired:!incomplete,complete:!incomplete,approved:false};
  await save(path.resolve(out,'visual-qa.json'),result);return result;
 }
 export async function partialReview(out,config,{episode,reason='PROVIDER_UNAVAILABLE',narration,alignmentReady=false}={}){

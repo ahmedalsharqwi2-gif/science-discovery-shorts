@@ -14,5 +14,7 @@
       "official": true
     }
   ],
-  "logo": "brand/logo/logo.jpg"
+  "logo": "brand/logo/logo.jpg",
+  "paper": true,
+  "mascot": false
 }
