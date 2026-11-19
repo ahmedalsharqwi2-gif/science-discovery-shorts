@@ -27,3 +27,26 @@ class AlignmentTests(unittest.TestCase):
         with self.assertRaisesRegex(alignment.AlignmentError,'INVALID_MEASURED_SPAN'):alignment.measured_original_words('مجرة',[{'word':'مجرة','start':.8,'end':2.6}],2)
 
 if __name__=='__main__':unittest.main()
+
+class SpeechNormalizationTests(unittest.TestCase):
+    CFG={'minCharacterSimilarity':.85,'minWordCoverage':.65}
+    def test_latin_brand_and_digit_spoken_forms_pass(self):
+        original='إنفيديا بدأت عروض الجمعة البيضاء على خدمة جيفورس ناو. دلوقتي تقدر تشترك في باقات الأداء أو الباقات المتطورة لمدة ست شهور بخصم ثلاثين في المئة، وده بيخلي الألعاب أسهل وأوفر بكتير.'
+        heard='Nvidia بدأت عروض الجمعة البيضاء على خدمة GeForce Now. دلوقتي تقدر تشترك في باقات الأداء أو الباقات المتطورة لمدة 6 شهور بخصم 30%، وده بيخلي الألعاب أسهل وأوفر بكتير.'
+        alignment.verify_speech(original,heard,self.CFG)
+    def test_wrong_number_still_fails(self):
+        with self.assertRaisesRegex(alignment.AlignmentError,'SPEECH_MISMATCH'):
+            alignment.verify_speech('الباقة بعشرين جنيه','الباقة بخمسين جنيه',self.CFG)
+        with self.assertRaisesRegex(alignment.AlignmentError,'SPEECH_MISMATCH'):
+            alignment.verify_speech('المسافة 12 سنة ضوئية','المسافة سنة ضوئية',self.CFG)
+    def test_different_content_still_fails(self):
+        with self.assertRaisesRegex(alignment.AlignmentError,'SPEECH_MISMATCH'):
+            alignment.verify_speech('الذكاء الاصطناعي بيغير الشغل','الطقس النهارده حار جدا في الصيف',self.CFG)
+
+class AcronymAndNumberTests(unittest.TestCase):
+    CFG={'minCharacterSimilarity':.85,'minWordCoverage':.65}
+    def test_spelled_acronyms_match_caps_asr(self):
+        original='الباقات المتطورة بتديك أداء كروت آر تي إكس خمسة آلاف وثمانين، مع دعم تقنيات زي دي إل إس إس خمسة، عشان تستمتع بإضاءة واقعية جداً في ألعاب زي هوجورتس ليجاسي.'
+        heard='الباقات المتطورة بتديك أداء كروت RTX 5080، مع دعم تقنيات زي DLSS 5، عشان تستمتع بإضاءة واقعية جداً في ألعاب زي هوجورتس ليجاسي.'
+        proof=alignment.verify_speech(original,heard,self.CFG)
+        assert proof['characterSimilarity']>=.85 and proof['wordCoverage']>=.65
