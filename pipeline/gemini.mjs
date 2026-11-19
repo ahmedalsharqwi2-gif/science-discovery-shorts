@@ -59,8 +59,9 @@ export class GeminiClient{
    try{if(useCache){const cached=await this.readCache(id);if(cached&&this.valid(kind,cached))return cached;}
     const pool=this.keysFor(kind).filter(k=>k&&k.key&&!this.cooledDown(k.id,kind));
     if(!pool.length)throw new GeminiError(kind==='voice'?'MISSING_GEMINI_TTS_BINDING':'MISSING_GEMINI_BINDING',this.events);
-    const deadline=this.clock()+this.config.retry.maxElapsedMs;let lastErr=null;
+    let lastErr=null;
     for(let ki=0;ki<pool.length;ki++){const {id:keyId,key}=pool[ki];
+    const deadline=this.clock()+this.config.retry.maxElapsedMs;
     let rotated=false;
     try{
     const models=await this.models(kind,key,deadline);let count=0,lastStatus=0;
@@ -71,17 +72,19 @@ export class GeminiClient{
      if(response.ok&&this.valid(kind,response.data)){if(useCache)await this.saveCache(id,model,response.data);return {...response.data,_pipeline:{model,cacheKey:id,cacheHit:false}};}
      if(response.ok){this.event({type:'invalid_response',kind,model});break;}
      if(response.status===401||response.status===403)throw new GeminiError('GEMINI_AUTHORIZATION_FAILED',this.events);
+     if(response.status===400&&(response.text||'').includes('API_KEY_INVALID'))throw new GeminiError('GEMINI_AUTHORIZATION_FAILED',this.events);
      if([400,404,410,422].includes(response.status))break;
      if(response.status&&response.status!==429&&response.status<500)throw new GeminiError('GEMINI_HTTP_'+response.status,this.events);
      if(attempt===this.config.retry.maxAttemptsPerModel-1)break;
      const exponential=Math.min(this.config.retry.maxDelayMs,this.config.retry.baseDelayMs*2**attempt),jitter=exponential*this.config.retry.jitter*this.random();
      const wait=Math.max(response.retryAfter||0,exponential+jitter);
+     if(response.status===429&&(response.retryAfter>120000||this.clock()+wait>=deadline))throw new GeminiError('GEMINI_HTTP_429_EXHAUSTED',this.events);
      if(this.clock()+wait>=deadline)throw new GeminiError(response.retryAfter?'GEMINI_RETRY_AFTER_EXCEEDS_BUDGET':'GEMINI_TOTAL_TIMEOUT',this.events);
      this.event({type:'backoff',kind,model,status:lastStatus,waitMs:wait,retryAfterMs:response.retryAfter||0});await this.sleep(wait);
     }}
     throw new GeminiError(lastStatus?'GEMINI_HTTP_'+lastStatus+'_EXHAUSTED':'GEMINI_NO_VALID_RESPONSE',this.events);
     }catch(e){
-     if(e&&e.code==='GEMINI_HTTP_429_EXHAUSTED'&&ki<pool.length-1){this.event({type:'key_rotation',kind,keyId});try{await this.onKeyExhausted(keyId,kind);}catch{}lastErr=e;rotated=true;}
+     if(e&&['GEMINI_HTTP_429_EXHAUSTED','GEMINI_RETRY_AFTER_EXCEEDS_BUDGET','GEMINI_TOTAL_TIMEOUT','GEMINI_RATE_LIMIT_DEADLINE','GEMINI_AUTHORIZATION_FAILED','GEMINI_HTTP_400_EXHAUSTED'].includes(e.code)&&ki<pool.length-1){this.event({type:'key_rotation',kind,keyId,reason:e.code});try{await this.onKeyExhausted(keyId,kind);}catch{}lastErr=e;rotated=true;}
      else throw e;
     }
     if(!rotated&&lastErr)throw lastErr;

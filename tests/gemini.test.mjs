@@ -26,8 +26,8 @@ test('404 falls back in configured order; authorization errors never cycle throu
  const seen=[];const f=await fixture(t,async url=>{seen.push(url);return seen.length===1?new Response('',{status:404}):textResponse();});await f.client.generate('text',{contents:[]});assert(seen[0].includes('fixture-text-a'));assert(seen[1].includes('fixture-text-b'));
  let calls=0;const denied=await fixture(t,async()=>{calls++;return new Response('',{status:403});});await assert.rejects(denied.client.generate('text',{}),/GEMINI_AUTHORIZATION_FAILED/);assert.equal(calls,1);
 });
-test('Retry-After beyond total deadline stops rather than sending too early',async t=>{
- const f=await fixture(t,async()=>new Response('',{status:429,headers:{'Retry-After':'3600'}}));await assert.rejects(f.client.generate('text',{}),/GEMINI_RETRY_AFTER_EXCEEDS_BUDGET/);assert.equal(f.waits.length,0);
+test('Retry-After beyond budget exhausts the key for rotation rather than sleeping',async t=>{
+ const f=await fixture(t,async()=>new Response('',{status:429,headers:{'Retry-After':'3600'}}));await assert.rejects(f.client.generate('text',{}),/GEMINI_HTTP_429_EXHAUSTED/);assert.equal(f.waits.length,0);
  assert.equal(retryAfterMs('Wed, 21 Oct 2015 07:28:00 GMT',Date.parse('Wed, 21 Oct 2015 07:27:58 GMT')),2000);
 });
 test('limiter serializes starts and enforces the per-minute quota',async()=>{
