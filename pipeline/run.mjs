@@ -16,7 +16,7 @@ export async function mix(segments,dir){
 }
 async function activeReview(){const active=await optionalJSON('state/active-review.json',null);if(!active)return null;if(active.schema!==1||!/^[0-9TZ-]+$/.test(active.id)||digest(JSON.stringify(active.episode))!==active.scriptSha256)throw Error('ACTIVE_REVIEW_INTEGRITY_FAILED');episodeSchema.parse(active.episode);for(const s of active.topic.sources)sourceSchema.parse(s);return active;}
 export async function review({mode='review',scheduled=false,topicReservationPath}={}){
- process.chdir(ROOT);const config=await json('config/channel.json'),release=await json('config/release.json');if(scheduled&&!dueInCairo(new Date()))return {status:'outside_cairo_slot'};
+ process.chdir(ROOT);const config=await json('config/channel.json'),release=await json('config/release.json');const trendsConfig=await optionalJSON('config/trends.json',null);if(trendsConfig)config.trends=trendsConfig;if(scheduled&&!dueInCairo(new Date()))return {status:'outside_cairo_slot'};
  const attemptId=new Date().toISOString().replace(/[:.]/g,'-');let active=await activeReview();if(active&&active.profile!==config.profile)throw Error('ACTIVE_REVIEW_CHANNEL_MISMATCH');
  const id=active?.id||attemptId,out=path.resolve('out',id);await mkdir(out,{recursive:true});let stageName='preflight',lock,episode=active?structuredClone(active.episode):null,topic=active?.topic;
  const report={id,attemptId,mode:'review',published:false,status:'running',resumed:Boolean(active),stages:[],limitations:['Incomplete visual previews never pass narrated-film acceptance. Human pronunciation and art-direction approval are separate.']};
@@ -27,7 +27,7 @@ export async function review({mode='review',scheduled=false,topicReservationPath
   await stage('preflight',async()=>{await preflight({root:ROOT,needText:!active});await run('ffmpeg',['-version'],{timeout:10000});await readFile('public/fonts/Arabic-Bold.ttf');});
   const legacy=await json('state/legacy-topic-index.json'),ledger=await optionalJSON('state/topics.json',[]);const history=[...legacy,...ledger];
   if(!active){
-   topic=await stage('topics',async()=>{if(!topicReservationPath)return selectTopic(config,history);const reservation=await json(topicReservationPath);const chosen=reservation.pipelineTopic||reservation;for(const s of chosen.sources)sourceSchema.parse(s);if(!chosen.sources.length)throw Error('NO_CURRENT_VERIFIED_SOURCES');return chosen;});await save(out+'/sources.json',topic);
+   topic=await stage('topics',async()=>{if(!topicReservationPath)return selectTopic(config,history);const reservation=await json(topicReservationPath);const chosen=reservation.pipelineTopic||reservation;for(const s of chosen.sources)sourceSchema.parse(s);if(!chosen.sources.length)throw Error('NO_CURRENT_VERIFIED_SOURCES');return chosen;});await save(out+'/sources.json',topic);if(topic.trendDiagnostics)await save(out+'/trend-diagnostics.json',topic.trendDiagnostics);
    episode=await stage('script',()=>script(topic,config,history));await save(out+'/script.json',episode);
    active={schema:1,id,profile:config.profile,episode:structuredClone(episode),topic,scriptSha256:digest(JSON.stringify(episode)),state:'reserved'};await save(path.resolve('state/active-review.json'),active);
   }else{report.stages.push({name:'topics',status:'resumed_from_saved_source_manifest'},{name:'script',status:'resumed_from_hash_verified_script'});await save(out+'/sources.json',topic);await save(out+'/script.json',episode);}

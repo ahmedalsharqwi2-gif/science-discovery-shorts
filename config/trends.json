@@ -1,0 +1,12 @@
+{
+  "enabled": true,
+  "mode": "rerank",
+  "googleTrends": { "geo": "EG" },
+  "autocompleteSeeds": ["ليه السماء", "حقيقة علمية عن", "اكتشاف علمي", "الفضاء"],
+  "competitorChannelIds": [],
+  "onThisDay": { "enabled": false },
+  "hackerNews": { "enabled": false },
+  "redditSubreddits": [],
+  "weights": { "demand": 1.0, "recency": 0.5 },
+  "excludedTerms": []
+}

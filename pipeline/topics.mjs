@@ -1,4 +1,4 @@
-import {XMLParser} from 'fast-xml-parser';import {sourceSchema,normalized,digest,duplicate} from './policy.mjs';import {retry} from './io.mjs';import {fetchFeed} from './feed-fetch.mjs';
+import {XMLParser} from 'fast-xml-parser';import {fetchTrendSignals,rerankCandidates} from './trend-radar.mjs';import {sourceSchema,normalized,digest,duplicate} from './policy.mjs';import {retry} from './io.mjs';import {fetchFeed} from './feed-fetch.mjs';
 const array=x=>Array.isArray(x)?x:x?[x]:[];
 const plain=x=>typeof x==='string'?x:typeof x?.['#text']==='string'?x['#text']:'';
 const strip=x=>plain(x).replace(/<[^>]*>/g,' ').replace(/&[^;]+;/g,' ').replace(/\s+/g,' ').trim();
@@ -30,12 +30,21 @@ export function verifiedCandidates(sources,{history=[],maxAgeHours,now=Date.now(
   return others.length?{source,corroboration:[source,others[0]],verification:'two_independent_publishers_same_primary_reference'}:null;
  }).filter(Boolean);
 }
-export function chooseSources(sources,config,{history=[],now=Date.now(),diagnostics=[]}={}){
+export function chooseSources(sources,config,{history=[],now=Date.now(),diagnostics=[],trendSignals=null}={}){
  const hours=config.profile==='news'?72:config.maxAgeHours;let candidates=verifiedCandidates(sources,{history,maxAgeHours:hours,now});let mode='daily',windowHours=hours;
  if(!candidates.length&&config.profile==='news'&&config.weeklyFallback?.enabled){candidates=verifiedCandidates(sources,{history,maxAgeHours:config.weeklyFallback.maxAgeHours,now});mode='weekly';windowHours=config.weeklyFallback.maxAgeHours;}
  candidates.sort((a,b)=>(Number(b.source.official)-Number(a.source.official))||Date.parse(b.source.published)-Date.parse(a.source.published));
+ let trend=[];
+ if(trendSignals){const ranked=rerankCandidates(candidates,trendSignals,config.trends||{},{now});candidates=ranked.candidates;trend=ranked.decisions;}
  if(!candidates.length){const e=Error('NO_CURRENT_VERIFIED_SOURCES');e.sourceDiagnostics={feeds:diagnostics,windowHours:hours,weeklyWindowHours:config.weeklyFallback?.maxAgeHours||null,parsed:sources.length,reasons:['No unused, dated, corroborated or official source inside the permitted windows.']};throw e;}
  const selected=mode==='weekly'?candidates.slice(0,config.weeklyFallback.maxStories||3):[candidates[0]],pool=[...new Map(selected.flatMap(c=>c.corroboration).map(s=>[s.id,s])).values()];
- return {selected:candidates[0].source,sources:pool,editorialMode:mode,editorialLabel:mode==='weekly'?'أهم أخبار الأسبوع':null,windowHours,verification:selected.map(c=>({id:c.source.id,basis:c.verification,sourceIds:c.corroboration.map(s=>s.id)})),diagnostics,trend:[],scoring:'Source authority, verified freshness and unused canonical source URL; no invented trend-volume metric.'};
+ return {selected:candidates[0].source,sources:pool,editorialMode:mode,editorialLabel:mode==='weekly'?'أهم أخبار الأسبوع':null,windowHours,verification:selected.map(c=>({id:c.source.id,basis:c.verification,sourceIds:c.corroboration.map(s=>s.id)})),diagnostics,trend,scoring:'Source authority, verified freshness and unused canonical source URL; no invented trend-volume metric.'};
 }
-export async function selectTopic(config,history,options={}){const collected=await collectSources(config,options);return chooseSources(collected.sources,config,{...options,history,diagnostics:collected.diagnostics});}
+export async function selectTopic(config,history,options={}){
+ const collected=await collectSources(config,options);
+ let trendSignals=null,trendDiagnostics=null;
+ if(config.trends?.enabled){try{const radar=await fetchTrendSignals(config.trends,options);trendSignals=radar.degraded?null:radar.signals;trendDiagnostics={sources:radar.diagnostics,degraded:radar.degraded};}catch(e){trendDiagnostics={sources:[],degraded:true,code:/[A-Z_]+/.exec(e.message)?.[0]||'TREND_RADAR_UNAVAILABLE'};}}
+ const chosen=chooseSources(collected.sources,config,{...options,history,diagnostics:collected.diagnostics,trendSignals});
+ if(trendDiagnostics||chosen.trend?.length)chosen.trendDiagnostics={...(trendDiagnostics||{}),decisions:chosen.trend||[]};
+ return chosen;
+}
