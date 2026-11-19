@@ -1,0 +1,6 @@
+{
+  "schema": 1,
+  "message": "Unexpected non-whitespace character after JSON at position 262 (line 13 column 1)",
+  "stderr": "",
+  "stdout": ""
+}
