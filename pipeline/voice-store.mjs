@@ -18,21 +18,26 @@ export async function decodeAudio(audio,target,settings){
  const p=await probe(target);if(!p.streams.some(s=>s.codec_type==='audio')||Number(p.format.duration)<=0)throw Error('VOICE_DECODE_FAILED');
 }
 export class VoiceStore{
- constructor({client,settings,cacheDir='.cache/voice',decoder=decodeAudio}){this.client=client;this.settings=settings;this.cacheDir=cacheDir;this.decoder=decoder;}
+ constructor({client,settings,cacheDir='.cache/voice',decoder=decodeAudio}){this.client=client;this.settings=settings;this.cacheDir=cacheDir;this.decoder=decoder;this.pinnedModel=null;}
  async get(text){
   const body=voiceBody(text,this.settings),id=cacheIdentity('voice',body,{settings:this.settings,models:this.client.config.models.voice});
   await mkdir(this.cacheDir,{recursive:true});const file=path.resolve(this.cacheDir,id+'.wav'),meta=file+'.json';
-  try{const saved=JSON.parse(await readFile(meta,'utf8')),bytes=await readFile(file);if(saved.sha256===sha(bytes)&&saved.text_sha256===sha(text))return {...saved,file,reused:true};}catch(e){if(e.code!=='ENOENT'&&!(e instanceof SyntaxError))throw e;}
-  const response=await this.client.generate('voice',body,{settings:this.settings});const audio=response.candidates?.[0]?.content?.parts?.find(p=>p.inlineData?.mimeType?.startsWith('audio/'))?.inlineData;
+  try{const saved=JSON.parse(await readFile(meta,'utf8')),bytes=await readFile(file);if(saved.sha256===sha(bytes)&&saved.text_sha256===sha(text)&&(!this.pinnedModel||saved.model===this.pinnedModel))return {...saved,file,reused:true};}catch(e){if(e.code!=='ENOENT'&&!(e instanceof SyntaxError))throw e;}
+  const response=await this.client.generate('voice',body,{settings:this.settings,useCache:!this.pinnedModel});const audio=response.candidates?.[0]?.content?.parts?.find(p=>p.inlineData?.mimeType?.startsWith('audio/'))?.inlineData;
+  if(this.pinnedModel&&response._pipeline?.model&&response._pipeline.model!==this.pinnedModel)throw Error('VOICE_PINNED_MODEL_MISMATCH '+this.pinnedModel+' got '+response._pipeline.model);
   if(!audio)throw Error('VOICE_RESPONSE_NO_AUDIO');const temp=file+'.'+randomUUID()+'.wav';await this.decoder(audio,temp,this.settings);const bytes=await readFile(temp);
   const saved={schema:1,cacheKey:id,sha256:sha(bytes),text_sha256:sha(text),voice:this.settings.voiceName,provider:'Gemini',model:response._pipeline?.model||'unknown',bytes:bytes.length};await rename(temp,file);await writeFile(meta+'.tmp',JSON.stringify(saved,null,2));await rename(meta+'.tmp',meta);return {...saved,file,reused:response._pipeline?.cacheHit||false};
  }
 }
 export async function produceVoice(episode,publicDir,{client,settings,progressPath,cacheDir='.cache/voice'}={}){
- const store=new VoiceStore({client,settings,cacheDir});await mkdir(publicDir,{recursive:true});const scenes=[],chunks=[];
+ const store=new VoiceStore({client,settings,cacheDir});await mkdir(publicDir,{recursive:true});const scenes=[],chunks=[];let episodeModel=null;
  for(let i=0;i<episode.scenes.length;i++){
   const pieces=splitSpeech(episode.scenes[i].text,settings.chunking);const files=[];
-  for(let j=0;j<pieces.length;j++){const chunk=await store.get(pieces[j]);files.push(chunk.file);chunks.push({scene:i,chunk:j,...chunk});if(progressPath)await writeFile(progressPath,JSON.stringify({complete:false,chunks},null,2));}
+  for(let j=0;j<pieces.length;j++){
+   if(episodeModel){store.pinnedModel=episodeModel;if(typeof client.pinModel==='function')client.pinModel('voice',episodeModel);}
+   let chunk;try{chunk=await store.get(pieces[j]);}catch(e){if(episodeModel)throw Error('VOICE_PINNED_MODEL_EXHAUSTED '+episodeModel+' :: '+String(e&&e.code||e&&e.message||e));throw e;}
+   if(!episodeModel)episodeModel=chunk.model;
+   files.push(chunk.file);chunks.push({scene:i,chunk:j,...chunk});if(progressPath)await writeFile(progressPath,JSON.stringify({complete:false,chunks},null,2));}
   const listFile=path.join(publicDir,'scene-'+i+'.concat.txt'),target=path.join(publicDir,'scene-'+i+'.wav');await writeFile(listFile,files.map(f=>"file '"+f.replaceAll("'","'\\''")+"'").join('\n'));
   await run('ffmpeg',['-y','-v','error','-f','concat','-safe','0','-i',listFile,'-c:a','pcm_s16le',target],{timeout:30000});
   const p=await probe(target);scenes.push({file:target,duration:Number(p.format.duration),text:episode.scenes[i].text,sha256:sha(await readFile(target)),provider:'Gemini',voice:settings.voiceName,chunks:chunks.filter(c=>c.scene===i).map(({file,...c})=>c)});

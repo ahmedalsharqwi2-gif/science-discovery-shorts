@@ -19,10 +19,11 @@ export class RateLimiter{
 export function cacheIdentity(kind,body,settings){return hash(stable({version:2,kind,body,settings}));}
 export class GeminiClient{
  constructor({config,keyFor,keysFor,cooledDown,onKeyExhausted,fetcher=fetch,sleep=pause,clock=Date.now,random=Math.random,cacheDir='.cache/gemini',onEvent=()=>{}}){
-  this.config=config;this.keyFor=keyFor;this.keysFor=keysFor||(keyFor?(kind)=>{const k=keyFor(kind);return k?[{id:'primary',key:k}]:[];}:()=>[]);this.cooledDown=cooledDown||(()=>false);this.onKeyExhausted=onKeyExhausted||(()=>{});this.fetcher=fetcher;this.sleep=sleep;this.clock=clock;this.random=random;this.cacheDir=cacheDir;this.onEvent=onEvent;this.events=[];this.inflight=new Map();this.queue=Promise.resolve();this.resolved=new Map();this.limiter=new RateLimiter(config.rateLimit,clock,sleep);this.notBefore=0;
+  this.config=config;this.keyFor=keyFor;this.keysFor=keysFor||(keyFor?(kind)=>{const k=keyFor(kind);return k?[{id:'primary',key:k}]:[];}:()=>[]);this.cooledDown=cooledDown||(()=>false);this.pins=new Map();this.onKeyExhausted=onKeyExhausted||(()=>{});this.fetcher=fetcher;this.sleep=sleep;this.clock=clock;this.random=random;this.cacheDir=cacheDir;this.onEvent=onEvent;this.events=[];this.inflight=new Map();this.queue=Promise.resolve();this.resolved=new Map();this.limiter=new RateLimiter(config.rateLimit,clock,sleep);this.notBefore=0;
   const r=config.retry;if(!r||r.maxAttemptsPerModel<1||r.maxTotalAttempts<1||r.timeoutMs<1||r.maxElapsedMs<1)throw Error('INVALID_GEMINI_RETRY_CONFIG');
  }
  event(e){const safe={...e,at:this.clock()};this.events.push(safe);this.onEvent(safe);}
+ pinModel(kind,model){if(this.pins.get(kind)!==model){this.pins.set(kind,model);this.event({type:'model_pinned',kind,model});}}
  async readCache(id){try{const row=JSON.parse(await readFile(path.join(this.cacheDir,id+'.json'),'utf8'));if(row.schema!==2||row.sha256!==hash(stable(row.data)))throw Error('CACHE_CORRUPT');this.event({type:'cache_hit',id,model:row.model});return {...row.data,_pipeline:{model:row.model,cacheHit:true,cacheKey:id}};}catch(e){if(e.code==='ENOENT')return null;await unlink(path.join(this.cacheDir,id+'.json')).catch(()=>{});this.event({type:'cache_rejected',id});return null;}}
  async saveCache(id,model,data){await mkdir(this.cacheDir,{recursive:true});const target=path.join(this.cacheDir,id+'.json'),temp=target+'.'+randomUUID()+'.tmp';await writeFile(temp,JSON.stringify({schema:2,model,sha256:hash(stable(data)),data}));await rename(temp,target);}
  async cooldown(deadline){const wait=Math.max(0,this.notBefore-this.clock());if(this.clock()+wait>=deadline)throw new GeminiError('GEMINI_RETRY_AFTER_EXCEEDS_BUDGET',this.events);if(wait)await this.sleep(wait);}
@@ -64,7 +65,7 @@ export class GeminiClient{
     const deadline=this.clock()+this.config.retry.maxElapsedMs;
     let rotated=false;
     try{
-    const models=await this.models(kind,key,deadline);let count=0,lastStatus=0;
+    const resolvedModels=await this.models(kind,key,deadline);const pin=this.pins.get(kind);const models=pin?resolvedModels.filter(m=>m===pin):resolvedModels;if(pin&&!models.length)throw new GeminiError('GEMINI_PINNED_MODEL_UNAVAILABLE',this.events);let count=0,lastStatus=0;
     for(const model of models){for(let attempt=0;attempt<this.config.retry.maxAttemptsPerModel;attempt++){
      if(++count>this.config.retry.maxTotalAttempts)throw new GeminiError(lastStatus?'GEMINI_HTTP_'+lastStatus+'_EXHAUSTED':'GEMINI_ATTEMPTS_EXHAUSTED',this.events);
      const response=await this.request(model,body,key,deadline);lastStatus=response.status||0;

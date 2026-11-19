@@ -75,3 +75,19 @@ test('non-quota errors never rotate keys',async t=>{
  await assert.rejects(new GeminiClient(f.options).generate('text',{contents:[]}),/GEMINI_HTTP_503_EXHAUSTED/);
  assert.equal(rotated.length,0);
 });
+
+test('a pinned voice model is the only model used; cache from another model is regenerated',async t=>{
+ const config=configuration();config.models.voice={ordered:['fixture-voice-a','fixture-voice-b']};const modelsUsed=[];
+ const fetcher=async url=>{const m=decodeURIComponent(String(url).match(/models\/([^:]+)/)[1]);modelsUsed.push(m);return audioResponse();};
+ const f=await fixture(t,fetcher,config);const decoder=async(audio,target)=>writeFile(target,Buffer.from(audio.data,'base64'));
+ const store=new VoiceStore({client:f.client,settings,cacheDir:path.join(f.root,'audio'),decoder});
+ const first=await store.get('first sentence');assert.equal(first.model,'fixture-voice-a');
+ f.client.pinModel('voice','fixture-voice-a');
+ const second=await store.get('second sentence');assert.equal(second.model,'fixture-voice-a');
+ assert.deepEqual(modelsUsed,['fixture-voice-a','fixture-voice-a']);
+ const other=new VoiceStore({client:f.client,settings,cacheDir:path.join(f.root,'audio'),decoder});
+ other.pinnedModel='fixture-voice-b';f.client.pinModel('voice','fixture-voice-b');
+ const regen=await other.get('first sentence');
+ assert.equal(regen.model,'fixture-voice-b');assert.equal(regen.reused,false);
+ assert.deepEqual(modelsUsed,['fixture-voice-a','fixture-voice-a','fixture-voice-b']);
+});
