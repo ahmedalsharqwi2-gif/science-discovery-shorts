@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "spec": "pro-motion design system (owner spec 2026-11-20)",
+  "canvas": {"width": 1080, "height": 1920, "fps": 30, "durationRangeSeconds": [90, 180]},
+  "safeArea": {"topPx": 150, "bottomPx": 250, "titleFloor": 385, "captionCeil": 1560},
+  "themes": {
+    "paper-technical": {
+      "paper": "#EDE4D0", "ink": "#1A1512", "blue": "#2E6E8E", "starBlue": "#3B7FB8",
+      "red": "#B03A2E", "orange": "#E0A458", "grid": "#D8CBB2", "cyan": "#12bce5",
+      "white": "#FFFFFF", "yellow": "#ffda34", "gold": "#C99700", "green": "#4E7E5B", "shoeRed": "#E23B2E",
+      "vignette": 0.10, "grain": 0.04
+    },
+    "blueprint-dark": {
+      "paper": "#0C1B2E", "ink": "#DCEAF7", "blue": "#3D6E9E", "starBlue": "#7FB6E8",
+      "red": "#D96A4A", "orange": "#E0A458", "grid": "#1B3350", "cyan": "#4FC3E8",
+      "white": "#FFFFFF", "yellow": "#ffda34", "gold": "#E3B23C", "green": "#5E9E6E", "shoeRed": "#E23B2E",
+      "vignette": 0.22, "grain": 0.05, "glow": "#4FC3E8"
+    }
+  },
+  "motion": {
+    "easing": {"in": "easeInCubic", "out": "easeOutCubic", "emphasis": "spring-gentle"},
+    "durationsFrames": {"fast": [6, 10], "normal": [12, 20], "emphasis": [20, 30]},
+    "staggerFrames": [3, 6],
+    "maxStaticSeconds": 1.0,
+    "cameraDriftPxPerSec": 6
+  },
+  "type": {
+    "family": "ChannelArabic, Cairo, sans-serif",
+    "title": 54, "header": 26, "caption": 44, "callout": 30, "counter": 22, "bigNumber": 120
+  },
+  "transitions": ["morph", "wipe-shape", "mask-reveal", "zoom-through"],
+  "sound": {"loudnessLUFS": -14, "truePeakMax": -1, "duckingUnderNarrationDb": -12}
+}

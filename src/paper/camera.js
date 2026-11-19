@@ -56,6 +56,10 @@ export function camTargetsFor(windows, layers) {
   });
 }
 
+// Slow secondary drift (pro-motion spec: no fully static shot). Applied to
+// the camera centre only; zone checks reserve DRIFT_Y pixels for it.
+export const DRIFT_X = 4, DRIFT_Y = 5;
+
 export function camAt(fr, windows, camTargets, easing) {
   let i = windows.findIndex(w => fr < w.start + w.frames);
   if (i < 0) i = windows.length - 1;
@@ -69,7 +73,7 @@ export function camAt(fr, windows, camTargets, easing) {
   const s = (from.s + (to.s - from.s) * p) * (1 + push);
   const x = from.x + (to.x - from.x) * p, y = from.y + (to.y - from.y) * p;
   const a = (from.a !== undefined ? from.a : ANCHOR_Y) + ((to.a !== undefined ? to.a : ANCHOR_Y) - (from.a !== undefined ? from.a : ANCHOR_Y)) * p;
-  return {x, y, s, a};
+  return {x: x + Math.sin(fr / 45) * DRIFT_X, y: y + Math.cos(fr / 60) * DRIFT_Y, s, a};
 }
 
 // Zone check: every point of every visible layer, under every scene's
@@ -84,8 +88,8 @@ export function zoneViolations(windows, layers, camTargets) {
       layers.slice(0, si + 1).forEach((laid, li) => {
         for (const p of pointsOf(laid)) {
           const sy = anchor - s * (t.y - p.y);
-          if (sy < TITLE_FLOOR) violations.push(`scene ${si} camera puts layer ${li} point at y=${Math.round(sy)} < ${TITLE_FLOOR}`);
-          if (sy > CAPTION_CEIL) violations.push(`scene ${si} camera puts layer ${li} point at y=${Math.round(sy)} > ${CAPTION_CEIL}`);
+          if (sy - DRIFT_Y < TITLE_FLOOR) violations.push(`scene ${si} camera puts layer ${li} point at y=${Math.round(sy)} - drift < ${TITLE_FLOOR}`);
+          if (sy + DRIFT_Y > CAPTION_CEIL) violations.push(`scene ${si} camera puts layer ${li} point at y=${Math.round(sy)} + drift > ${CAPTION_CEIL}`);
         }
       });
     }

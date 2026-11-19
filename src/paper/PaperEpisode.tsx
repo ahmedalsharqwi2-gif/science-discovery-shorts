@@ -4,6 +4,7 @@ import {Mascot as MascotJs} from './Mascot.jsx';
 const Mascot: any = MascotJs;
 import {samplePath, pointAt} from './pathFollow.js';
 import {camTargetsFor, camAt} from './camera.js';
+import motionTokens from '../../brand/motion-tokens.json';
 
 // Paper-style episode renderer (طب إزاي؟ grammar, user-approved 2026-11-19):
 // grid paper, question title with colored keyword + sketchy underline, ONE
@@ -12,11 +13,11 @@ import {camTargetsFor, camAt} from './camera.js';
 // The drawing plan comes from pipeline/drawplan.mjs (validated JSON spec).
 
 const FPS = 30;
-const T: Record<string, string> = {
-  paper: '#EDE4D0', ink: '#1A1512', blue: '#2E6E8E', starBlue: '#3B7FB8',
-  red: '#B03A2E', orange: '#E0A458', grid: '#D8CBB2', cyan: '#12bce5',
-  white: '#FFFFFF', yellow: '#ffda34', gold: '#C99700', green: '#4E7E5B', shoeRed: '#E23B2E',
-};
+// Theme palette comes from brand/motion-tokens.json (pro-motion design
+// system). T is module-level because the render process draws one episode
+// (one theme) at a time; PaperEpisode rebinds it from props.paper.theme.
+const themes = (motionTokens as any).themes as Record<string, Record<string, string>>;
+let T: Record<string, string> = {...themes['paper-technical']};
 const fontFamily = 'ChannelArabic, Cairo, sans-serif';
 
 type Op = any;
@@ -281,6 +282,7 @@ const EndCard = ({frame, start, title, plan, callouts}: {frame: number; start: n
 };
 
 export const PaperEpisode = (props: any) => {
+  T = {...themes['paper-technical'], ...(themes[props.paper?.theme] || {})};
   const frame = useCurrentFrame();
   const plan: Plan = props.paper.plan;
   const scenes = props.scenes || [];
