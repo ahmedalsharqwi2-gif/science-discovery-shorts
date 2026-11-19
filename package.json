@@ -1,0 +1,31 @@
+{
+  "name": "review-video-pipeline",
+  "private": true,
+  "type": "module",
+  "version": "2.0.0",
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "typecheck": "tsc --noEmit",
+    "review": "node pipeline/run.mjs",
+    "start": "node server.mjs",
+    "preview": "remotion studio src/index.tsx"
+  },
+  "dependencies": {
+    "@remotion/bundler": "4.0.543",
+    "@remotion/cli": "4.0.543",
+    "@remotion/player": "4.0.543",
+    "@remotion/renderer": "4.0.543",
+    "express": "5.2.1",
+    "fast-xml-parser": "5.3.8",
+    "playwright-core": "1.65.1",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "remotion": "4.0.543",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "typescript": "6.0.2"
+  }
+}

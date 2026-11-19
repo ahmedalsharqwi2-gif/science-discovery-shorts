@@ -1,8 +1,0 @@
-{
-  "writer": "gemini-3.5-flash-lite",
-  "reviewer": "gemini-3.5-flash-lite",
-  "verified_generation_date": "2026-10-29",
-  "verification": "Previous completed repository productions used gemini-3.5-flash-lite. This is an explicit configured model choice, not an automatic fallback.",
-  "no_silent_quality_downgrade": true,
-  "selection_reason": "Explicit recovery selection after gemini-3.8-flash editorial HTTP 503. This model previously produced repository films; source, Egyptian narration, novelty, duration, voice and visual checks remain mandatory."
-}

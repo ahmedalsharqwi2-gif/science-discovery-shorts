@@ -1,42 +1,11 @@
-# Runtime output and generated media
-work/
-output/
-*.mp4
-*.ass
-*.normalized.mp3
-*.try*.mp3
-
-# Python cache and local environments
-__pycache__/
-*.py[cod]
-.pytest_cache/
+node_modules/
+out/
+.cache/
 .venv/
-venv/
-
-# Local secrets and tooling files
-.env
-.env.*
+__pycache__/
+*.pyc
+.env*
 !.env.example
-.vscode/
-.idea/
-.DS_Store
-
-.cinematic_cache/
-
-.voice_cache/
-state/api_budget.sqlite3*
-.env
-
-# Professional renderer dependencies and local media
-professional_motion/node_modules/
-professional_motion/delivery/
-professional_motion/output/
-
-/review_download/
-
-professional_motion/node_modules
-
-# Isolated candidate renders; durable publishing storage is not yet activated
-/.candidate-v2/
-/.work/
-state/production-v2.sqlite3*
+public/generated/
+bundle/
+data/

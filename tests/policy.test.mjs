@@ -1,0 +1,10 @@
+import {test} from 'node:test';import assert from 'node:assert/strict';
+import {assertReviewMode,assertTiming,dueInCairo,duplicate,assertMedia} from '../pipeline/policy.mjs';
+import {once} from 'node:events';
+import {app} from '../server.mjs';
+test('publish blocked even if config edited',()=>{assert.throws(()=>assertReviewMode('publish',{publish_enabled:false}));assert.throws(()=>assertReviewMode('review',{publish_enabled:true}));assertReviewMode('review',{publish_enabled:false});});
+test('Cairo 17:00 covers winter and summer offset',()=>{assert.equal(dueInCairo(new Date('2026-11-15T15:00:00Z')),true);assert.equal(dueInCairo(new Date('2026-07-15T14:00:00Z')),true);assert.equal(dueInCairo(new Date('2026-07-15T15:00:00Z')),false);});
+test('original words and measured monotonic times required',()=>{assertTiming([{text:'إيه',start:0,end:.5},{text:'الحكاية',start:.5,end:1}],1,'إيه الحكاية');assert.throws(()=>assertTiming([{text:'بديل',start:0,end:.5}],1,'الحكاية'));assert.throws(()=>assertTiming([{text:'إيه',start:1,end:.5}],1,'إيه'));});
+test('canonical identity and source prevent changed-title duplicates',()=>{assert(duplicate('اختفاء الجاذبية ساعة',[{value:'إختفاء الجاذبيه ساعه'},{value:'اختفاء الجاذبية ساعة'}]));assert(duplicate('https://nasa.gov/a',[{value:'https://nasa.gov/a'}]));assert(!duplicate('ظاهرة مختلفة تمامًا',[{value:'رحلة الضوء'}]));});
+test('reject silent media or wrong output format',()=>{const p={streams:[{codec_type:'video',width:1080,height:1920,r_frame_rate:'30/1'},{codec_type:'audio'}],format:{duration:100}};assert.equal(assertMedia(p),100);assert.throws(()=>assertMedia({...p,streams:p.streams.slice(0,1)}));assert.throws(()=>assertMedia({...p,format:{duration:15}}));});
+test('service health independent of provider and uploads closed',async()=>{const server=app().listen(0,'127.0.0.1');await once(server,'listening');try{const base='http://127.0.0.1:'+server.address().port;assert.equal((await fetch(base+'/health')).status,200);assert.equal((await fetch(base+'/api/youtube/upload',{method:'POST'})).status,401);}finally{await new Promise(r=>server.close(r));}});

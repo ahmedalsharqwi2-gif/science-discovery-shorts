@@ -1,0 +1,34 @@
+{
+  "profile": "science",
+  "name": "أسرار الكون",
+  "accent": "#179ca6",
+  "counter": "رحلة الكون",
+  "maxAgeHours": 168,
+  "feeds": [
+    {
+      "url": "https://www.nasa.gov/feed/",
+      "official": true
+    },
+    {
+      "url": "https://www.esa.int/rssfeed/Our_Activities/Space_Science",
+      "official": true
+    }
+  ],
+  "logo": "brand/logo/logo.jpg",
+  "paper": true,
+  "mascot": false,
+  "grounding": {
+    "enabled": true,
+    "useWhen": "fallback",
+    "mode": "strict",
+    "maxCandidates": 6,
+    "blockedDomains": [
+      "facebook.com",
+      "tiktok.com",
+      "pinterest.com",
+      "quora.com",
+      "reddit.com",
+      "youtube.com"
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "model": "turbo",
+  "language": "ar",
+  "cpuThreads": 4,
+  "beamSize": 5,
+  "minCharacterSimilarity": 0.85,
+  "minWordCoverage": 0.65,
+  "failureThreshold": 0.15,
+  "downloadRoot": ".cache/alignment-models"
+}

@@ -1,0 +1,27 @@
+npm test
+
+> review-video-pipeline@2.0.0 test
+> node --test tests/*.test.mjs
+
+✔ claims require an exact excerpt from an attached source (13.632239ms)
+✔ a science script cannot relabel a legend as a verified source (0.775404ms)
+✔ publish blocked even if config edited (1.532579ms)
+✔ Cairo 17:00 covers winter and summer offset (193.080803ms)
+✔ original words and measured monotonic times required (5.406089ms)
+✔ canonical identity and source prevent changed-title duplicates (9.22443ms)
+✔ reject silent media or wrong output format (0.354966ms)
+✔ service health independent of provider and uploads closed (230.782207ms)
+ℹ tests 8
+ℹ suites 0
+ℹ pass 8
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4796.490935
+npm run typecheck
+
+> review-video-pipeline@2.0.0 typecheck
+> tsc --noEmit
+
+

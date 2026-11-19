@@ -1,8 +1,0 @@
-node_modules/
-dist/
-.wrangler/
-.env
-.dev.vars
-wrangler.deploy.json
-live-verification.json
-credential-probe.json
