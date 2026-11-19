@@ -115,20 +115,23 @@ export function validatePlan(plan, sceneCount) {
       if (![l.x1, l.y1, l.x2, l.y2].every(Number.isFinite)) {problems.push(where + ' label ' + idx + ': needs numeric x1,y1,x2,y2'); continue;}
       if (!inBox(l.x1, l.y1)) problems.push(where + ' label ' + idx + ': anchor (' + l.x1 + ',' + l.y1 + ') outside drawing box');
       if (typeof l.text !== 'string' || !l.text.trim() || l.text.length > 24) problems.push(where + ' label ' + idx + ': text must be 1-24 chars, got ' + String(l.text || '').length);
+      else { if (/\d/.test(l.text)) problems.push(where + ' label ' + idx + ': write numbers as Arabic words, no digits'); if (/[A-Za-z]/.test(l.text)) problems.push(where + ' label ' + idx + ': Arabic only, no Latin letters'); }
       if (l.x2 < 0 || l.x2 > CANVAS.width || l.y2 < 0 || l.y2 > CANVAS.height) problems.push(where + ' label ' + idx + ': text position outside canvas');
     }
   };
   checkOps(plan, 'base');
   plan.scenes.forEach((s, i) => {
     const count = ops.reduce((n, k) => n + (Array.isArray(s[k]) ? s[k].length : 0), 0);
+    if (count < 1) problems.push('scene ' + i + ' adds no visible ops; every scene must add at least one stroke, fill, mark or label so the drawing evolves');
     if (count > CAPS.perSceneOps) problems.push('scene ' + i + ' adds ' + count + ' ops, exceeds per-scene cap ' + CAPS.perSceneOps);
     if (Array.isArray(s.labels) && s.labels.length > CAPS.sceneLabels) problems.push('scene ' + i + ' labels ' + s.labels.length + ' exceeds per-scene cap ' + CAPS.sceneLabels);
     checkOps(s, 'scene ' + i);
   });
 
   if (typeof plan.endStat !== 'string' || !plan.endStat.trim() || plan.endStat.length > 24) problems.push('endStat must be 1-24 chars');
+  else { if (/\d/.test(plan.endStat)) problems.push('endStat must write numbers as Arabic words, no digits'); if (/[A-Za-z]/.test(plan.endStat)) problems.push('endStat must be Arabic only, no Latin letters'); }
   if (!Array.isArray(plan.summaryPoints) || plan.summaryPoints.length < 2 || plan.summaryPoints.length > 4) problems.push('summaryPoints must have 2-4 entries');
-  else plan.summaryPoints.forEach((pt, i) => { if (typeof pt !== 'string' || pt.length > 60) problems.push('summaryPoints ' + i + ' must be 1-60 chars'); });
+  else plan.summaryPoints.forEach((pt, i) => { if (typeof pt !== 'string' || pt.length > 60) problems.push('summaryPoints ' + i + ' must be 1-60 chars'); else { if (/\d/.test(pt)) problems.push('summaryPoints ' + i + ': write numbers as Arabic words, no digits'); if (/[A-Za-z]/.test(pt)) problems.push('summaryPoints ' + i + ': Arabic only, no Latin letters'); } });
   return problems;
 }
 
@@ -140,10 +143,10 @@ Canvas ${CANVAS.width}x${CANVAS.height}; keep ALL drawing inside the box x ${DRA
 
 Rules:
 - The base drawing (strokes/fills/marks/labels) is the episode's ONE iconic image, matching the title question. It must read clearly as a sketch on grid paper: 8-25 strokes, simple shapes, no shading.
-- scenes[] must have EXACTLY ${episode.scenes.length} entries; entry i lists only the NEW ops added during scene i (empty arrays are fine, but every scene should add something: a small detail, a fill, a mark, or at most ${CAPS.sceneLabels} labels). Total across base + scenes: max ${CAPS.strokes} strokes, ${CAPS.fills} fills, ${CAPS.marks} marks.
-- Labels are short Arabic callouts (1-3 words, max 24 chars) in Egyptian white dialect, each with anchor point (x1,y1) ON the part and text position (x2,y2) beside it.
+- scenes[] must have EXACTLY ${episode.scenes.length} entries; entry i lists only the NEW ops added during scene i (every scene MUST add at least one new visible op: a small detail, a fill, a mark, or at most ${CAPS.sceneLabels} labels). Total across base + scenes: max ${CAPS.strokes} strokes, ${CAPS.fills} fills, ${CAPS.marks} marks.
+- Labels are short Arabic callouts (1-3 words, max 24 chars) in Egyptian white dialect - Arabic only, no Latin letters, numbers as Arabic words. Each has anchor point (x1,y1) ON the part and text position (x2,y2) beside it.
 - Use each scene's template hint: phenomenon -> central object with motion marks; comparison -> two sides; steps -> numbered mini items in a row; journey -> path with stops; map -> simple outline map; chart -> bars with values; cause -> arrow chain.
-- endStat: the episode's single most surprising number as a short Arabic string (digits allowed, max 24 chars), for the giant red end-card stat.
+- endStat: the episode's single most surprising number as a short Arabic string (write the number as Arabic words - no digits, no Latin letters; max 24 chars), for the giant red end-card stat.
 - summaryPoints: 3 short Arabic takeaways (each max 60 chars), Egyptian white dialect, factual and matching the script.
 - Never draw text besides labels; never draw realistic gore, real people, or logos.
 

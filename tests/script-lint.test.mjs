@@ -54,3 +54,10 @@ test('lint: three-word year chain starting with thousand is still rejected',()=>
   const ep={hook:'',cta:'',scenes:[{text:'ده حصل في ألفين وتسعة وعشرين تقريبًا.'}]};
   assert.ok(lintNarration(ep).some(i=>i.kind==='spelled_out_year'));
 });
+
+test('a single Latin-script token in narration or the title is rejected',()=>{
+ const ep={title:'عنوان عربي',hook:'هنشوف',cta:'تابعنا',scenes:[{text:'البحيرة دي اسمها Pelku مشهورة جداً في العالم كله وده شيء جميل أوي ومثير للاهتمام فعلاً'}]};
+ assert(lintNarration(ep).some(h=>h.kind==='latin_names'));
+ const ep2={title:'إزاي رائد الفضاء بيشوف Pelku من فوق؟',hook:'هنشوف',cta:'تابعنا',scenes:[{text:'جملة عربية خالصة من غير أي حروف غريبة عن اللغة العربية تماماً وبتوضح الفكرة'}]};
+ assert(lintNarration(ep2).some(h=>h.kind==='latin_names'&&h.field==='title'));
+});

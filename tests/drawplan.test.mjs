@@ -76,3 +76,21 @@ test('drawplan throws DRAWPLAN_SCHEMA_INVALID after 3 invalid attempts', async (
     /DRAWPLAN_SCHEMA_INVALID/);
   assert.equal(client.calls(), 3);
 });
+
+test('a scene adding zero visible ops is rejected so the drawing must evolve', () => {
+  const plan = goodPlan(3);
+  plan.scenes[1] = {strokes: [], fills: [], marks: [], labels: []};
+  assert(validatePlan(plan, 3).some(p => p.includes('adds no visible ops')));
+});
+
+test('digits and Latin letters are rejected in endStat, labels and summaryPoints', () => {
+  const plan = goodPlan(2);
+  plan.endStat = '400 كم ارتفاع المدار';
+  assert(validatePlan(plan, 2).some(p => p.includes('endStat must write numbers as Arabic words')));
+  plan.endStat = 'أربعمائة كم ارتفاع المدار';
+  plan.labels = [{x1: 540, y1: 900, x2: 800, y2: 850, text: 'بحيرة Pelku'}];
+  assert(validatePlan(plan, 2).some(p => p.includes('no Latin letters')));
+  plan.labels = [{x1: 540, y1: 900, x2: 800, y2: 850, text: 'بحيرة عميقة'}];
+  plan.summaryPoints = ['نقطة فيها 3 أشياء', 'نقطة تانية قصيرة', 'نقطة تالتة قصيرة'];
+  assert(validatePlan(plan, 2).some(p => p.includes('summaryPoints 0')));
+});

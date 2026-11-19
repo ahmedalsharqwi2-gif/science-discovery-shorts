@@ -19,7 +19,7 @@ function lintText(text,field,out){
   }
   if(maxRun>=2&&maxStartThousand)out.push({field,kind:'spelled_out_year',detail:'year-like number words in: '+sentence.slice(0,120)});
   const latin=(sentence.match(/[A-Za-z][A-Za-z0-9.-]*/g)||[]).filter(w=>w.length>1);
-  if(latin.length>=2)out.push({field,kind:'latin_names',detail:latin.length+' Latin-script tokens ('+latin.slice(0,4).join(', ')+') in: '+sentence.slice(0,120)});
+  if(latin.length>=1)out.push({field,kind:'latin_names',detail:latin.length+' Latin-script token(s) ('+latin.slice(0,4).join(', ')+') in: '+sentence.slice(0,120)});
   const hits=new Set();
   for(const name of TRANSLIT_NAMES)if(sentence.includes(name))hits.add(name);
   if(hits.size>=2)out.push({field,kind:'dense_transliterated_names',detail:[...hits].join(' + ')+' in one sentence: '+sentence.slice(0,120)});
@@ -28,6 +28,7 @@ function lintText(text,field,out){
 export function lintNarration(episode){
  const out=[];
  if(!episode||typeof episode!=='object')return out;
+ lintText(episode.title,'title',out);
  lintText(episode.hook,'hook',out);
  lintText(episode.cta,'cta',out);
  (episode.scenes||[]).forEach((s,i)=>lintText(s&&s.text,'scene['+i+'].text',out));
