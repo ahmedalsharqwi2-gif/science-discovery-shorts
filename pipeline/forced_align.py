@@ -46,6 +46,8 @@ def measured_original_words(original, forced, duration):
         if not text:
             continue
         start, end = float(word['start']), float(word['end'])
+        if end > duration + .05 and end - duration <= .5:
+            end = duration  # provider overshoot past the container end: clamp small excess, never invent timing
         if start < 0 or end <= start or end > duration + .05:
             raise AlignmentError('ALIGNMENT_INVALID_MEASURED_SPAN')
         pieces.append((cursor, cursor + len(text), start, end))

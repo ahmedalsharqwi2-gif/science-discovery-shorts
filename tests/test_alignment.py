@@ -21,5 +21,9 @@ class AlignmentTests(unittest.TestCase):
     def test_unsplittable_or_zero_duration_is_rejected(self):
         with self.assertRaisesRegex(alignment.AlignmentError,'WORD_BOUNDARY_UNRESOLVED'):alignment.measured_original_words('في المجرة',[{'word':'في المجرة','start':.1,'end':1}],1)
         with self.assertRaisesRegex(alignment.AlignmentError,'INVALID_MEASURED_SPAN'):alignment.measured_original_words('مجرة',[{'word':'مجرة','start':1,'end':1}],2)
+    def test_small_overshoot_past_duration_clamps_but_large_overshoot_fails(self):
+        result=alignment.measured_original_words('مجرة',[{'word':'مجرة','start':.8,'end':2.4}],2)
+        assert result[0]['end']==2
+        with self.assertRaisesRegex(alignment.AlignmentError,'INVALID_MEASURED_SPAN'):alignment.measured_original_words('مجرة',[{'word':'مجرة','start':.8,'end':2.6}],2)
 
 if __name__=='__main__':unittest.main()
