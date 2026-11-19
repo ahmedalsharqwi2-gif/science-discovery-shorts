@@ -23,8 +23,9 @@ export async function review({mode='review',scheduled=false,topicReservationPath
  const report={id,attemptId,mode:'review',published:false,status:'running',resumed:Boolean(active),stages:[],limitations:['Incomplete visual previews never pass narrated-film acceptance. Human pronunciation and art-direction approval are separate.']};
  const checkpoint=async()=>{await save(out+'/report.json',report);await save(out+'/provider-diagnostics.json',providerDiagnostics());};
  async function stage(name,fn){stageName=name;console.error('STAGE_START '+name);const started=Date.now();const value=await fn();report.stages.push({name,status:'pass',seconds:(Date.now()-started)/1000});await checkpoint();return value;}
- try{
-  assertReviewMode(mode,release);lock=await open('.pipeline.lock','wx');
+ const ROLLABLE=new Set(['topics','script','voice','align']);let rolls=0,rollingNow=false;
+ while(true){try{
+  assertReviewMode(mode,release);if(!lock)lock=await open('.pipeline.lock','wx');
   await stage('preflight',async()=>{await preflight({root:ROOT,needText:!active});await run('ffmpeg',['-version'],{timeout:10000});await readFile('public/fonts/Arabic-Bold.ttf');});
   const legacy=await json('state/legacy-topic-index.json'),ledger=await optionalJSON('state/topics.json',[]);const history=[...legacy,...ledger];
   if(active&&active.state==='failed'&&(active.lastFailure?.repeat||0)>=1){const retiredId=active.id;ledger.filter(x=>x.run===retiredId).forEach(x=>{x.status='retired';});await save(path.resolve('state/topics.json'),ledger);report.retiredEpisode={id:retiredId,stage:active.lastFailure.stage,code:active.lastFailure.code,reason:'Same stage and code failed on consecutive resumed attempts; retained audio and hash-locked script are immutable, so the deterministic failure cannot clear. Episode retired; a fresh episode is rolled through the same gates.'};await rm(path.resolve('state/active-review.json'),{force:true});active=null;episode=null;topic=null;id=attemptId;out=path.resolve('out',id);await mkdir(out,{recursive:true});report.id=attemptId;report.resumed=false;}
@@ -35,12 +36,18 @@ export async function review({mode='review',scheduled=false,topicReservationPath
   }else{report.stages.push({name:'topics',status:'resumed_from_saved_source_manifest'},{name:'script',status:'resumed_from_hash_verified_script'});await save(out+'/sources.json',topic);await save(out+'/script.json',episode);}
   for(const source of topic.sources)if(!ledger.some(r=>r.run===id&&r.value===source.url))ledger.push({topicKey:episode.topicKey,value:source.url,status:'reserved',run:id});await save(path.resolve('state/topics.json'),ledger);
   const pub=path.resolve('public/generated',id);await mkdir(pub,{recursive:true});
-  const segments=await stage('voice',()=>voice(episode,pub,{progressPath:out+'/voice-progress.json'}));await save(out+'/segments.json',segments);
-  // Retain real successful Charon parts even when alignment later fails.
-  const audioDir=path.join(out,'audio');await mkdir(audioDir,{recursive:true});const audioIndex=[];
-  for(let i=0;i<segments.length;i++){const name='scene-'+i+'.wav';await copyFile(segments[i].file,path.join(audioDir,name));audioIndex.push({...segments[i],file:'audio/'+name});}
-  await save(out+'/audio-index.json',audioIndex);
-  await stage('align',async()=>{try{await run(process.env.PYTHON||'python',['pipeline/align.py',out+'/segments.json',out+'/alignment.json'],{timeout:1800000,maxBuffer:2000000});}catch{const diagnostic=await optionalJSON(out+'/alignment-diagnostics.json',null);throw Error(diagnostic?.code||'ALIGNMENT_PROCESS_FAILED');}const aligned=await json(out+'/alignment.json');segments.forEach((s,i)=>assertTiming(aligned[i],s.duration,s.text));episode.scenes.forEach((s,i)=>{s.words=aligned[i];s.duration=segments[i].duration;});});
+  let segments=await stage('voice',()=>voice(episode,pub,{progressPath:out+'/voice-progress.json'}));await save(out+'/segments.json',segments);
+  let alignedOk=false,alignErr=null;
+  for(let repair=0;repair<2&&!alignedOk;repair++){
+   if(repair>0){segments=await stage('voice-repair-'+repair,()=>voice(episode,pub,{progressPath:out+'/voice-progress.json',cacheDir:'.cache/voice-repair-'+repair}));await save(out+'/segments.json',segments);}
+   // Retain real successful Charon parts even when alignment later fails.
+   const audioDir=path.join(out,'audio');await mkdir(audioDir,{recursive:true});const audioIndex=[];
+   for(let i=0;i<segments.length;i++){const name='scene-'+i+'.wav';await copyFile(segments[i].file,path.join(audioDir,name));audioIndex.push({...segments[i],file:'audio/'+name});}
+   await save(out+'/audio-index.json',audioIndex);
+   try{await stage(repair?'align-repair-'+repair:'align',async()=>{try{await run(process.env.PYTHON||'python',['pipeline/align.py',out+'/segments.json',out+'/alignment.json'],{timeout:1800000,maxBuffer:2000000});}catch{const diagnostic=await optionalJSON(out+'/alignment-diagnostics.json',null);throw Error(diagnostic?.code||'ALIGNMENT_PROCESS_FAILED');}const aligned=await json(out+'/alignment.json');segments.forEach((s,i)=>assertTiming(aligned[i],s.duration,s.text));episode.scenes.forEach((s,i)=>{s.words=aligned[i];s.duration=segments[i].duration;});});alignedOk=true;}
+   catch(e){alignErr=e;report.limitations.push('align '+(repair?'repair failed':'failed')+' ('+String(e&&e.message||e)+')'+(repair?'; repair budget exhausted':'; re-narrating once with fresh synthesis'));}
+  }
+  if(!alignedOk)throw alignErr;
   await stage('assets',async()=>{for(const s of episode.scenes){const source=topic.sources.find(v=>v.id===s.sourceId);s.sourceUrl=source.url;s.sourceLabel=new URL(source.url).hostname;}const assets=await backgrounds(episode,config,pub);await save(out+'/assets.json',assets);await writeFile(out+'/ATTRIBUTIONS.md','# Asset rights\n\nOriginal vector motion and FFmpeg synthesized bed; immutable owner logo at config/logo.json with SHA256. Fonts and provider terms: docs/LICENSES.md. Individual generated image models and cache keys are recorded in assets.json. Research sources are in sources.json and are not blanket image licenses.\n');});
   const duration=await stage('mix',()=>mix(segments,pub,out+'/mix-diagnostics.json'));const props={...episode,audio:'generated/'+id+'/audio.wav',durationInFrames:Math.ceil(duration*30)};await save(out+'/props.json',props);
   await stage('layout-qa',()=>layoutQA(props,out));await stage('render',()=>renderEpisode(props,out));
@@ -52,7 +59,21 @@ export async function review({mode='review',scheduled=false,topicReservationPath
   await stage('package',()=>save(out+'/metadata.json',{title:episode.title,topicKey:episode.topicKey,voice:'Charon',provider:'Gemini',sources:topic.sources.map(({text,...s})=>s),editorialMode:topic.editorialMode,video_sha256:qa.video_sha256,reviewOnly:true,approved:false}));
   ledger.filter(r=>r.run===id).forEach(r=>{r.status='review';});await save(path.resolve('state/topics.json'),ledger);await rm(path.resolve('state/active-review.json'),{force:true});report.status='review_ready';await checkpoint();return {out,status:report.status,id,video:out+'/review.mp4',qa:out+'/qa.json',topicKey:episode.topicKey};
  }catch(e){
-  report.status='failed';report.failedStage=stageName;report.errorCode=e.code==='EEXIST'?'REVIEW_ALREADY_RUNNING':/^[A-Z0-9_: -]{3,100}$/.test(e.message)?e.message:'STAGE_FAILED_SEE_RUNBOOK';
+  const failCode=e.code==='EEXIST'?'REVIEW_ALREADY_RUNNING':/^[A-Z0-9_: -]{3,100}$/.test(e.message)?e.message:'STAGE_FAILED_SEE_RUNBOOK';
+  // Recovery ladder: on a content-stage failure with a live episode, retire it
+  // and roll a fresh topic in the SAME run (max 2 rolls), so a gate reject
+  // never reads as a stall. Thresholds themselves are untouched.
+  if(active&&ROLLABLE.has(stageName)&&rolls<2&&mode==='review'&&failCode!=='REVIEW_ALREADY_RUNNING'){
+   rolls++;
+   const ledgerNow=await optionalJSON('state/topics.json',[]);ledgerNow.filter(x=>x.run===id).forEach(x=>{x.status='retired';});await save(path.resolve('state/topics.json'),ledgerNow);
+   await rm(path.resolve('state/active-review.json'),{force:true});
+   (report.rolled=report.rolled||[]).push({id,stage:stageName,code:failCode,roll:rolls});
+   active=null;episode=null;topic=null;
+   id=new Date().toISOString().replace(/[:.]/g,'-');out=path.resolve('out',id);await mkdir(out,{recursive:true});
+   report.id=id;report.resumed=false;report.stages.push({name:'roll',status:'rolled_fresh_topic',roll:rolls,fromStage:stageName,code:failCode});
+   stageName='topics';rollingNow=true;continue;
+  }
+  report.status='failed';report.failedStage=stageName;report.errorCode=failCode;
   if(e.missingBindings)report.missingRepositorySecretNames=e.missingBindings;if(e.sourceDiagnostics)report.sourceDiagnostics=e.sourceDiagnostics;
   if(active){active.state='failed';const prev=active.lastFailure;active.lastFailure={stage:stageName,code:report.errorCode,repeat:prev&&prev.stage===stageName&&prev.code===report.errorCode?(prev.repeat||0)+1:0};await save(path.resolve('state/active-review.json'),active);}
   await checkpoint();
@@ -62,6 +83,7 @@ export async function review({mode='review',scheduled=false,topicReservationPath
    }catch(partialError){report.partial={status:'failed',code:/^[A-Z_]{3,100}$/.test(partialError.message)?partialError.message:'PARTIAL_RENDER_FAILED'};}
   }
   await checkpoint();throw Error(`${stageName}: ${report.errorCode}`);
- }finally{await save(out+'/attempt-'+attemptId+'.json',report);if(lock){await lock.close();await rm('.pipeline.lock',{force:true});}}
+ }finally{await save(out+'/attempt-'+attemptId+'.json',report);if(rollingNow){rollingNow=false;}else if(lock){await lock.close();await rm('.pipeline.lock',{force:true});}}
+}
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href){review({mode:process.env.MODE||'review',scheduled:process.env.SCHEDULED==='true',topicReservationPath:process.env.TOPIC_RESERVATION||undefined}).then(value=>console.log(JSON.stringify(value))).catch(e=>{console.error(e.message);process.exitCode=1;});}
