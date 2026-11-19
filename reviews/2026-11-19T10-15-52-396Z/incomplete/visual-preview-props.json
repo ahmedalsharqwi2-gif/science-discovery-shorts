@@ -1,0 +1,154 @@
+{
+  "title": "أسرار الكون — معاينة بصرية",
+  "editorialLabel": null,
+  "scenes": [
+    {
+      "title": "نبدأ بسؤال واضح",
+      "text": "",
+      "summary": "معاينة بصرية غير مكتملة — بدون صوت",
+      "keyword": "معاينة",
+      "template": "phenomenon",
+      "labels": [
+        "البداية",
+        "الفكرة",
+        "النتيجة"
+      ],
+      "values": [],
+      "kind": "illustration",
+      "expression": 0,
+      "action": "walk",
+      "duration": 12,
+      "words": []
+    },
+    {
+      "title": "نقارن الفكرة ببساطة",
+      "text": "",
+      "summary": "معاينة بصرية غير مكتملة — بدون صوت",
+      "keyword": "معاينة",
+      "template": "comparison",
+      "labels": [
+        "البداية",
+        "الفكرة",
+        "النتيجة"
+      ],
+      "values": [],
+      "kind": "illustration",
+      "expression": 1,
+      "action": "run",
+      "duration": 12,
+      "words": []
+    },
+    {
+      "title": "خطوة ورا خطوة",
+      "text": "",
+      "summary": "معاينة بصرية غير مكتملة — بدون صوت",
+      "keyword": "معاينة",
+      "template": "steps",
+      "labels": [
+        "البداية",
+        "الفكرة",
+        "النتيجة"
+      ],
+      "values": [],
+      "kind": "illustration",
+      "expression": 2,
+      "action": "jump",
+      "duration": 12,
+      "words": []
+    },
+    {
+      "title": "كل مشهد بيكمل اللي قبله",
+      "text": "",
+      "summary": "معاينة بصرية غير مكتملة — بدون صوت",
+      "keyword": "معاينة",
+      "template": "journey",
+      "labels": [
+        "البداية",
+        "الفكرة",
+        "النتيجة"
+      ],
+      "values": [],
+      "kind": "illustration",
+      "expression": 3,
+      "action": "fall",
+      "duration": 12,
+      "words": []
+    },
+    {
+      "title": "نرتب التفاصيل بصريًا",
+      "text": "",
+      "summary": "معاينة بصرية غير مكتملة — بدون صوت",
+      "keyword": "معاينة",
+      "template": "map",
+      "labels": [
+        "البداية",
+        "الفكرة",
+        "النتيجة"
+      ],
+      "values": [],
+      "kind": "illustration",
+      "expression": 4,
+      "action": "point",
+      "duration": 12,
+      "words": []
+    },
+    {
+      "title": "نوضح العلاقة بين العناصر",
+      "text": "",
+      "summary": "معاينة بصرية غير مكتملة — بدون صوت",
+      "keyword": "معاينة",
+      "template": "chart",
+      "labels": [
+        "البداية",
+        "الفكرة",
+        "النتيجة"
+      ],
+      "values": [],
+      "kind": "illustration",
+      "expression": 5,
+      "action": "turn",
+      "duration": 12,
+      "words": []
+    },
+    {
+      "title": "نفهم السبب والنتيجة",
+      "text": "",
+      "summary": "معاينة بصرية غير مكتملة — بدون صوت",
+      "keyword": "معاينة",
+      "template": "cause",
+      "labels": [
+        "البداية",
+        "الفكرة",
+        "النتيجة"
+      ],
+      "values": [],
+      "kind": "illustration",
+      "expression": 6,
+      "action": "hang",
+      "duration": 12,
+      "words": []
+    },
+    {
+      "title": "نرجع للسؤال الأول",
+      "text": "",
+      "summary": "معاينة بصرية غير مكتملة — بدون صوت",
+      "keyword": "معاينة",
+      "template": "phenomenon",
+      "labels": [
+        "البداية",
+        "الفكرة",
+        "النتيجة"
+      ],
+      "values": [],
+      "kind": "illustration",
+      "expression": 7,
+      "action": "sleep",
+      "duration": 12,
+      "words": []
+    }
+  ],
+  "durationInFrames": 2880,
+  "incompleteMode": "silent",
+  "preview": true,
+  "incomplete": true
+}

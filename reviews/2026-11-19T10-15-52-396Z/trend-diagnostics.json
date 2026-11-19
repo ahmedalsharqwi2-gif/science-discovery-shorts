@@ -1,0 +1,189 @@
+{
+  "sources": [
+    {
+      "source": "trends",
+      "status": "ok",
+      "items": 10
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 2
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 0
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 9
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 10
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 10
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 9
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 10
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 10
+    }
+  ],
+  "degraded": false,
+  "decisions": [
+    {
+      "id": "b41c4de3e0f2",
+      "title": "El Niño Rains Paint the Atacama",
+      "demand": 2,
+      "recency": 0.929,
+      "matches": [
+        {
+          "kind": "google_trend",
+          "label": "خضار",
+          "weight": 2
+        }
+      ],
+      "score": 2.464726976252702
+    },
+    {
+      "id": "162c5c6a72fe",
+      "title": "NASA Sets Coverage for Northrop Grumman CRS-25 Launch, Prelaunch",
+      "demand": 10,
+      "recency": 0.847,
+      "matches": [
+        {
+          "kind": "google_trend",
+          "label": "kuwait",
+          "weight": 6
+        },
+        {
+          "kind": "google_trend",
+          "label": "دينا الشربيني",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "خضار",
+          "weight": 2
+        }
+      ],
+      "score": 10.423558482424653
+    },
+    {
+      "id": "9d57f4dbe2e3",
+      "title": "MAF EAP Holidays – How to manage the BAH HUMBUG that tries to sneak in",
+      "demand": 6,
+      "recency": 0.809,
+      "matches": [
+        {
+          "kind": "google_trend",
+          "label": "kuwait",
+          "weight": 6
+        }
+      ],
+      "score": 6.404318284263569
+    },
+    {
+      "id": "946586051f9f",
+      "title": "NASA Announces Mid-Power Electric Rocket Challenge for US Companies",
+      "demand": 8,
+      "recency": 0.8,
+      "matches": [
+        {
+          "kind": "google_trend",
+          "label": "kuwait",
+          "weight": 4
+        },
+        {
+          "kind": "google_trend",
+          "label": "دينا الشربيني",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "خضار",
+          "weight": 2
+        }
+      ],
+      "score": 8.400043600370887
+    },
+    {
+      "id": "0cb2e3ffdc8f",
+      "title": "Empire State Building Goes Gold for Voyager",
+      "demand": 2,
+      "recency": 0.796,
+      "matches": [
+        {
+          "kind": "google_trend",
+          "label": "خضار",
+          "weight": 2
+        }
+      ],
+      "score": 2.3980023068424865
+    },
+    {
+      "id": "413bc2a06dfb",
+      "title": "What Is the Moon Base?",
+      "demand": 8,
+      "recency": 0.793,
+      "matches": [
+        {
+          "kind": "google_trend",
+          "label": "kuwait",
+          "weight": 6
+        },
+        {
+          "kind": "google_trend",
+          "label": "دينا الشربيني",
+          "weight": 2
+        }
+      ],
+      "score": 8.396679371551372
+    },
+    {
+      "id": "4294d968436d",
+      "title": "Thank You for Doing NASA Science!",
+      "demand": 6,
+      "recency": 0.793,
+      "matches": [
+        {
+          "kind": "google_trend",
+          "label": "kuwait",
+          "weight": 6
+        }
+      ],
+      "score": 6.396387173049897
+    },
+    {
+      "id": "0806628fa243",
+      "title": "APOD: 2026 November 18 – A Medium-Sized Solar Flare",
+      "demand": 2,
+      "recency": 0.667,
+      "matches": [
+        {
+          "kind": "google_trend",
+          "label": "خضار",
+          "weight": 2
+        }
+      ],
+      "score": 2.333377059222664
+    }
+  ]
+}

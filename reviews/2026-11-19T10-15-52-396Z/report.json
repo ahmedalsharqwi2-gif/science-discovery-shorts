@@ -1,0 +1,36 @@
+{
+  "id": "2026-11-19T10-15-52-396Z",
+  "attemptId": "2026-11-19T10-15-52-396Z",
+  "mode": "review",
+  "published": false,
+  "status": "failed",
+  "resumed": false,
+  "stages": [
+    {
+      "name": "preflight",
+      "status": "pass",
+      "seconds": 0.111
+    },
+    {
+      "name": "topics",
+      "status": "pass",
+      "seconds": 10.098
+    }
+  ],
+  "limitations": [
+    "Incomplete visual previews never pass narrated-film acceptance. Human pronunciation and art-direction approval are separate."
+  ],
+  "retiredEpisode": {
+    "id": "2026-11-19T08-37-00-478Z",
+    "stage": "align",
+    "code": "ALIGNMENT_INVALID_MEASURED_SPAN",
+    "reason": "Same stage and code failed on consecutive resumed attempts; retained audio and hash-locked script are immutable, so the deterministic failure cannot clear. Episode retired; a fresh episode is rolled through the same gates."
+  },
+  "failedStage": "script",
+  "errorCode": "GEMINI_HTTP_429_EXHAUSTED",
+  "partial": {
+    "status": "rendered",
+    "path": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/out/2026-11-19T10-15-52-396Z/incomplete/visual-preview-incomplete.mp4",
+    "incomplete": true
+  }
+}
