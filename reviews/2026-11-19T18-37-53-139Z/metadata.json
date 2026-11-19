@@ -1,0 +1,38 @@
+{
+  "title": "إزاي رائد الفضاء بيشوف بحيرة Pelku من فوق؟",
+  "topicKey": "nasa-lake-pelku-observation",
+  "voice": "Charon",
+  "provider": "Gemini",
+  "sources": [
+    {
+      "id": "72ab3b40ae04",
+      "title": "Lake Pelku",
+      "url": "https://www.nasa.gov/image-article/lake-pelku/",
+      "published": "2026-11-19T15:32:39.000Z",
+      "official": true,
+      "dateBasis": "item_publication_or_update",
+      "publisher": "www.nasa.gov",
+      "primaryRefs": [
+        "https://www.nasa.gov/wp-content/uploads/2026/11/iss075e0267074orig.jpg",
+        "https://www.nasa.gov/wp-content/uploads/2026/11/iss075e0267074orig.jpg?w=2048",
+        "https://www.nasa.gov/wp-content/uploads/2026/11/iss075e0267074orig.jpg",
+        "https://www.nasa.gov/wp-content/uploads/2026/11/iss075e0267074orig.jpg?resize=300,138",
+        "https://www.nasa.gov/wp-content/uploads/2026/11/iss075e0267074orig.jpg?resize=768,354",
+        "https://www.nasa.gov/wp-content/uploads/2026/11/iss075e0267074orig.jpg?resize=1024,472",
+        "https://www.nasa.gov/wp-content/uploads/2026/11/iss075e0267074orig.jpg?resize=1536,707",
+        "https://www.nasa.gov/wp-content/uploads/2026/11/iss075e0267074orig.jpg?resize=2048,943",
+        "https://www.nasa.gov/wp-content/uploads/2026/11/iss075e0267074orig.jpg?resize=400,184",
+        "https://www.nasa.gov/wp-content/uploads/2026/11/iss075e0267074orig.jpg?resize=600,276",
+        "https://www.nasa.gov/wp-content/uploads/2026/11/iss075e0267074orig.jpg?resize=900,415",
+        "https://www.nasa.gov/wp-content/uploads/2026/11/iss075e0267074orig.jpg?resize=1200,553",
+        "https://www.nasa.gov/wp-content/uploads/2026/11/iss075e0267074orig.jpg?resize=2000,921",
+        "https://www.nasa.gov/missions/station/earth-observation-from-the-space-station/",
+        "https://science.nasa.gov/earth/earth-observatory/icy-lake-paiku-150758/"
+      ]
+    }
+  ],
+  "editorialMode": "daily",
+  "video_sha256": "0a8602bae566f842311c2fbd23c1e9ce7b0540009dfa3888c9dd6b307f54bac8",
+  "reviewOnly": true,
+  "approved": false
+}

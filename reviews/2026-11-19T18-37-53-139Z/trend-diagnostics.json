@@ -1,0 +1,66 @@
+{
+  "sources": [
+    {
+      "source": "trends",
+      "status": "ok",
+      "items": 10
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 2
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 0
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 9
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 10
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 10
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 9
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 10
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 10
+    }
+  ],
+  "degraded": false,
+  "decisions": [
+    {
+      "id": "72ab3b40ae04",
+      "title": "Lake Pelku",
+      "demand": 8,
+      "recency": 0.958,
+      "matches": [
+        {
+          "kind": "google_trend",
+          "label": "fifa u-17 world cup",
+          "weight": 8
+        }
+      ],
+      "score": 8.47899504234262
+    }
+  ]
+}

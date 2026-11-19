@@ -1,0 +1,87 @@
+{
+  "method": "stable-ts attention forced alignment; independent unprompted faster-whisper ASR",
+  "estimatedTiming": false,
+  "scenes": [
+    {
+      "scene": 0,
+      "passed": true,
+      "words": 31,
+      "characterSimilarity": 0.9966101694915255,
+      "wordCoverage": 0.967741935483871,
+      "sourceWords": 31,
+      "recognizedWords": 31,
+      "missingNumerals": []
+    },
+    {
+      "scene": 1,
+      "passed": true,
+      "words": 33,
+      "characterSimilarity": 0.99375,
+      "wordCoverage": 0.9696969696969697,
+      "sourceWords": 33,
+      "recognizedWords": 33,
+      "missingNumerals": []
+    },
+    {
+      "scene": 2,
+      "passed": true,
+      "words": 33,
+      "characterSimilarity": 0.9517241379310345,
+      "wordCoverage": 0.9090909090909091,
+      "sourceWords": 33,
+      "recognizedWords": 33,
+      "missingNumerals": []
+    },
+    {
+      "scene": 3,
+      "passed": true,
+      "words": 32,
+      "characterSimilarity": 0.9968253968253968,
+      "wordCoverage": 0.96875,
+      "sourceWords": 32,
+      "recognizedWords": 32,
+      "missingNumerals": []
+    },
+    {
+      "scene": 4,
+      "passed": true,
+      "words": 32,
+      "characterSimilarity": 0.993421052631579,
+      "wordCoverage": 0.96875,
+      "sourceWords": 32,
+      "recognizedWords": 32,
+      "missingNumerals": []
+    },
+    {
+      "scene": 5,
+      "passed": true,
+      "words": 33,
+      "characterSimilarity": 0.9900332225913622,
+      "wordCoverage": 0.9696969696969697,
+      "sourceWords": 33,
+      "recognizedWords": 33,
+      "missingNumerals": []
+    },
+    {
+      "scene": 6,
+      "passed": true,
+      "words": 33,
+      "characterSimilarity": 0.9968253968253968,
+      "wordCoverage": 0.9696969696969697,
+      "sourceWords": 33,
+      "recognizedWords": 33,
+      "missingNumerals": []
+    },
+    {
+      "scene": 7,
+      "passed": true,
+      "words": 33,
+      "characterSimilarity": 0.9646302250803859,
+      "wordCoverage": 0.9393939393939394,
+      "sourceWords": 33,
+      "recognizedWords": 33,
+      "missingNumerals": []
+    }
+  ],
+  "passed": true
+}

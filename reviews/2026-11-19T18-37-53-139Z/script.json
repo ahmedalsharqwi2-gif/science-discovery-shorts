@@ -1,0 +1,164 @@
+{
+  "topicKey": "nasa-lake-pelku-observation",
+  "title": "إزاي رائد الفضاء بيشوف بحيرة Pelku من فوق؟",
+  "hook": "إزاي رائد الفضاء بيشوف بحيرة Pelku من فوق؟ تخيل تكون طاير في الفضاء وتلمح تفاصيل الأرض بدقة مذهلة، كأنك ماسك عدسة مكبرة عملاقة بتراقب كوكبنا من بعيد وتصور كل حاجة بتحصل في وقتها الحقيقي.",
+  "cta": "لو حابب تعرف أكتر عن أسرار كوكبنا اللي بنشوفها من الفضاء، تابعنا واشترك في القناة عشان يوصلك كل جديد عن رحلات الاستكشاف اللي بتغير نظرتنا للكون اللي حوالينا كل يوم.",
+  "scenes": [
+    {
+      "title": "محطة الفضاء الدولية",
+      "text": "محطة الفضاء الدولية مش مجرد مكان للسكن، دي منصة علمية فريدة بتسمح لرواد الفضاء بمراقبة الأرض بأجهزة متطورة جداً، بتساعدنا نفهم التغيرات اللي بتحصل على سطح الكوكب لحظة بلحظة وبكل دقة.",
+      "summary": "المحطة منصة مراقبة للأرض",
+      "keyword": "محطة",
+      "template": "phenomenon",
+      "labels": [
+        "محطة الفضاء",
+        "مراقبة الأرض"
+      ],
+      "values": [],
+      "claim": "The International Space Station serves as a unique platform for observing Earth with both hands-on and automated equipment.",
+      "sourceId": "72ab3b40ae04",
+      "evidence": "The International Space Station serves as a unique platform for observing Earth with both hands-on and automated equipment.",
+      "kind": "fact",
+      "expression": 5,
+      "action": "point",
+      "brollQuery": "International Space Station"
+    },
+    {
+      "title": "تصوير الأرض",
+      "text": "رواد الفضاء اللي بيعيشوا فوق قدروا يصوروا مئات الآلاف من الصور للأرض، الصور دي مش بس للذكرى، دي سجل تاريخي بيوثق الظواهر الطبيعية وبيدعم الأبحاث العلمية المهمة جداً لإنقاذ كوكبنا في حالات الكوارث.",
+      "summary": "رواد الفضاء يصورون الأرض",
+      "keyword": "صور",
+      "template": "steps",
+      "labels": [
+        "تصوير فضائي",
+        "أبحاث علمية"
+      ],
+      "values": [],
+      "claim": "Station crew members have produced hundreds of thousands of images.",
+      "sourceId": "72ab3b40ae04",
+      "evidence": "Station crew members have produced hundreds of thousands of images.",
+      "kind": "fact",
+      "expression": 6,
+      "action": "walk",
+      "brollQuery": "astronaut photography"
+    },
+    {
+      "title": "بحيرة Pelku",
+      "text": "واحدة من الصور المميزة اللي التقطها رائد فضاء من وكالة كندية كانت لبحيرة Pelku، البحيرة دي ظهرت بوضوح في مركز الصورة وهي تحت مدار المحطة مباشرة فوق قارة آسيا في مشهد يخطف الأنفاس.",
+      "summary": "رصد بحيرة Pelku من المدار",
+      "keyword": "بحيرة",
+      "template": "map",
+      "labels": [
+        "بحيرة Pelku",
+        "آسيا"
+      ],
+      "values": [],
+      "claim": "An astronaut on the International Space Station captured this photograph of Lake Pelku (near center) as the station orbited above Asia.",
+      "sourceId": "72ab3b40ae04",
+      "evidence": "An astronaut on the International Space Station captured this photograph of Lake Pelku (near center) as the station orbited above Asia.",
+      "kind": "fact",
+      "expression": 7,
+      "action": "turn",
+      "brollQuery": "Lake Pelku"
+    },
+    {
+      "title": "توثيق الظواهر",
+      "text": "الصور دي بتسجل الظواهر الطبيعية في وقتها الحقيقي، وده بيخلي العلماء يقدروا يحللوا التغيرات البيئية بسرعة، وكمان بتلعب دور حيوي في دعم جهود الإغاثة من الكوارث في المناطق اللي بيصعب الوصول ليها.",
+      "summary": "الصور تدعم الإغاثة",
+      "keyword": "ظواهر",
+      "template": "cause",
+      "labels": [
+        "كوارث طبيعية",
+        "إغاثة"
+      ],
+      "values": [],
+      "claim": "These images record phenomena in real time and support research and disaster relief.",
+      "sourceId": "72ab3b40ae04",
+      "evidence": "These images record phenomena in real time and support research and disaster relief.",
+      "kind": "fact",
+      "expression": 8,
+      "action": "point",
+      "brollQuery": "Earth observation"
+    },
+    {
+      "title": "تكنولوجيا المراقبة",
+      "text": "سواء باستخدام أجهزة يدوية أو معدات آلية، المحطة بتوفر رؤية شاملة مفيش زيها، التكنولوجيا دي بتخلينا نشوف تفاصيل صغيرة في مناطق بعيدة، وده بيفتح أبواب جديدة لفهم كوكبنا بشكل أعمق وأكثر دقة.",
+      "summary": "تكنولوجيا المراقبة الفضائية",
+      "keyword": "تكنولوجيا",
+      "template": "comparison",
+      "labels": [
+        "معدات آلية",
+        "أجهزة يدوية"
+      ],
+      "values": [],
+      "claim": "The International Space Station serves as a unique platform for observing Earth with both hands-on and automated equipment.",
+      "sourceId": "72ab3b40ae04",
+      "evidence": "The International Space Station serves as a unique platform for observing Earth with both hands-on and automated equipment.",
+      "kind": "fact",
+      "expression": 9,
+      "action": "walk",
+      "brollQuery": "space technology"
+    },
+    {
+      "title": "مهمة الاستكشاف",
+      "text": "كل صورة بيلتقطها رائد فضاء هي جزء من مهمة أكبر، المهمة دي هي حماية الأرض وفهم طبيعتها المتغيرة، ومع كل لفة للمحطة حول الكوكب، بنكتشف تفاصيل جديدة ومبهرة عن جغرافيا الأرض ومناخها المتغير.",
+      "summary": "مهمة حماية الأرض",
+      "keyword": "استكشاف",
+      "template": "journey",
+      "labels": [
+        "مهمة فضائية",
+        "حماية الأرض"
+      ],
+      "values": [],
+      "claim": "Station crew members have produced hundreds of thousands of images.",
+      "sourceId": "72ab3b40ae04",
+      "evidence": "Station crew members have produced hundreds of thousands of images.",
+      "kind": "fact",
+      "expression": 10,
+      "action": "run",
+      "brollQuery": "Earth from space"
+    },
+    {
+      "title": "أهمية البيانات",
+      "text": "البيانات اللي بتجمعها الصور دي بتتحول لمعلومات قيمة للباحثين، الصور دي مش مجرد لقطات جميلة، دي أدوات علمية بتساعدنا نتنبأ بالمخاطر ونخطط لمستقبل أفضل وأكثر أماناً لكل سكان كوكب الأرض في كل مكان.",
+      "summary": "الصور أدوات علمية",
+      "keyword": "بيانات",
+      "template": "chart",
+      "labels": [
+        "أبحاث",
+        "مستقبل"
+      ],
+      "values": [],
+      "claim": "These images record phenomena in real time and support research and disaster relief.",
+      "sourceId": "72ab3b40ae04",
+      "evidence": "These images record phenomena in real time and support research and disaster relief.",
+      "kind": "fact",
+      "expression": 11,
+      "action": "point",
+      "brollQuery": "scientific research"
+    },
+    {
+      "title": "خاتمة الرحلة",
+      "text": "في النهاية، رؤية الأرض من الفضاء بتغير نظرتنا للكون، وبحيرة Pelku هي مجرد مثال بسيط على الجمال والتعقيد اللي بنشوفه، استمروا في متابعتنا عشان نكتشف سوا أسرار تانية كتير مخبأة في كوكبنا العظيم.",
+      "summary": "خاتمة عن روعة الأرض",
+      "keyword": "أسرار",
+      "template": "phenomenon",
+      "labels": [
+        "جمال الأرض",
+        "أسرار الكون"
+      ],
+      "values": [],
+      "claim": "An astronaut on the International Space Station captured this photograph of Lake Pelku (near center) as the station orbited above Asia.",
+      "sourceId": "72ab3b40ae04",
+      "evidence": "An astronaut on the International Space Station captured this photograph of Lake Pelku (near center) as the station orbited above Asia.",
+      "kind": "fact",
+      "expression": 5,
+      "action": "jump",
+      "brollQuery": "Earth view"
+    }
+  ],
+  "seriesLabel": "أسرار الكون",
+  "editorialMode": "daily",
+  "editorialLabel": null,
+  "scriptModel": "gemini-3.1-flash-lite"
+}

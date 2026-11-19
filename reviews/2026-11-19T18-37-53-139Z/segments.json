@@ -1,0 +1,186 @@
+[
+  {
+    "file": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/public/generated/2026-11-19T18-37-53-139Z/scene-0.wav",
+    "duration": 15.84,
+    "text": "محطة الفضاء الدولية مش مجرد مكان للسكن، دي منصة علمية فريدة بتسمح لرواد الفضاء بمراقبة الأرض بأجهزة متطورة جداً، بتساعدنا نفهم التغيرات اللي بتحصل على سطح الكوكب لحظة بلحظة وبكل دقة.",
+    "sha256": "253461618f201ff2249d48a4e311f69bad2fbb4350fd2fcc5afcddc608b990a0",
+    "provider": "Gemini",
+    "voice": "Charon",
+    "chunks": [
+      {
+        "scene": 0,
+        "chunk": 0,
+        "schema": 1,
+        "cacheKey": "cb8c7dc86e3c08395ab4f3b2dd207f57b6f3aca571177fe355c489eb1ceab007",
+        "sha256": "253461618f201ff2249d48a4e311f69bad2fbb4350fd2fcc5afcddc608b990a0",
+        "text_sha256": "aa3cecf7ea7a49d19f6a3aeaafb35049109123625d49201cb6a5fe350d2aa7d8",
+        "voice": "Charon",
+        "provider": "Gemini",
+        "model": "gemini-3.1-flash-tts-preview",
+        "bytes": 760398,
+        "reused": false
+      }
+    ]
+  },
+  {
+    "file": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/public/generated/2026-11-19T18-37-53-139Z/scene-1.wav",
+    "duration": 15.88,
+    "text": "رواد الفضاء اللي بيعيشوا فوق قدروا يصوروا مئات الآلاف من الصور للأرض، الصور دي مش بس للذكرى، دي سجل تاريخي بيوثق الظواهر الطبيعية وبيدعم الأبحاث العلمية المهمة جداً لإنقاذ كوكبنا في حالات الكوارث.",
+    "sha256": "3a733e3c8ae6aa711e1f6165f60d7fb080cb14bab19c7249eb94eab00df9271e",
+    "provider": "Gemini",
+    "voice": "Charon",
+    "chunks": [
+      {
+        "scene": 1,
+        "chunk": 0,
+        "schema": 1,
+        "cacheKey": "e7e02a51c148521672d4db970e00776b303d04eb1bb7a25798ac5a221743bd07",
+        "sha256": "3a733e3c8ae6aa711e1f6165f60d7fb080cb14bab19c7249eb94eab00df9271e",
+        "text_sha256": "29abe65211f75ef71394d201e3110ec1312f24c7142581aec67078e6b74f7e63",
+        "voice": "Charon",
+        "provider": "Gemini",
+        "model": "gemini-3.1-flash-tts-preview",
+        "bytes": 762318,
+        "reused": false
+      }
+    ]
+  },
+  {
+    "file": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/public/generated/2026-11-19T18-37-53-139Z/scene-2.wav",
+    "duration": 16.12,
+    "text": "واحدة من الصور المميزة اللي التقطها رائد فضاء من وكالة كندية كانت لبحيرة Pelku، البحيرة دي ظهرت بوضوح في مركز الصورة وهي تحت مدار المحطة مباشرة فوق قارة آسيا في مشهد يخطف الأنفاس.",
+    "sha256": "0525b2569269ef181ce2a6f6c43e31dd56418f20a41bb784d1a70a3e766a000a",
+    "provider": "Gemini",
+    "voice": "Charon",
+    "chunks": [
+      {
+        "scene": 2,
+        "chunk": 0,
+        "schema": 1,
+        "cacheKey": "6017f5d651c179c4f4d403f7bf7299bb7ec97797f2efc52fc1d3eb06f683e591",
+        "sha256": "0525b2569269ef181ce2a6f6c43e31dd56418f20a41bb784d1a70a3e766a000a",
+        "text_sha256": "dde7b3237612cd756337724a4c0da9d745ddf3ce7e9d5713dba359f9001c58e0",
+        "voice": "Charon",
+        "provider": "Gemini",
+        "model": "gemini-3.1-flash-tts-preview",
+        "bytes": 773838,
+        "reused": false
+      }
+    ]
+  },
+  {
+    "file": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/public/generated/2026-11-19T18-37-53-139Z/scene-3.wav",
+    "duration": 14.48,
+    "text": "الصور دي بتسجل الظواهر الطبيعية في وقتها الحقيقي، وده بيخلي العلماء يقدروا يحللوا التغيرات البيئية بسرعة، وكمان بتلعب دور حيوي في دعم جهود الإغاثة من الكوارث في المناطق اللي بيصعب الوصول ليها.",
+    "sha256": "79d00866f9e52bc611d3cb3aeb0ba6d29d3ad932f97214487067ee52386f06e1",
+    "provider": "Gemini",
+    "voice": "Charon",
+    "chunks": [
+      {
+        "scene": 3,
+        "chunk": 0,
+        "schema": 1,
+        "cacheKey": "f7618ff5c0501c0b9c2dcc7f1d1d6e9b406ab6d0badaccd82a3fcd2f66986eff",
+        "sha256": "79d00866f9e52bc611d3cb3aeb0ba6d29d3ad932f97214487067ee52386f06e1",
+        "text_sha256": "e6b730ddd832e171b23a639c17a28b873ec8e4504e38cb4a4853eefaa8e8b616",
+        "voice": "Charon",
+        "provider": "Gemini",
+        "model": "gemini-3.1-flash-tts-preview",
+        "bytes": 695118,
+        "reused": false
+      }
+    ]
+  },
+  {
+    "file": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/public/generated/2026-11-19T18-37-53-139Z/scene-4.wav",
+    "duration": 18.010958,
+    "text": "سواء باستخدام أجهزة يدوية أو معدات آلية، المحطة بتوفر رؤية شاملة مفيش زيها، التكنولوجيا دي بتخلينا نشوف تفاصيل صغيرة في مناطق بعيدة، وده بيفتح أبواب جديدة لفهم كوكبنا بشكل أعمق وأكثر دقة.",
+    "sha256": "917b3f99f0620bfd588446759a089ee78e2275f91f0f3c3b5a6fa17173476605",
+    "provider": "Gemini",
+    "voice": "Charon",
+    "chunks": [
+      {
+        "scene": 4,
+        "chunk": 0,
+        "schema": 1,
+        "cacheKey": "65a631ebefb93f916e851320cab293c1f1616e829c061e086a0c39d6630af8db",
+        "sha256": "917b3f99f0620bfd588446759a089ee78e2275f91f0f3c3b5a6fa17173476605",
+        "text_sha256": "96f9778b2ae1f9f357dc47e13cf9b776836ed5a2ec6acb9e32378ceb77aa2c4d",
+        "voice": "Charon",
+        "provider": "Gemini",
+        "model": "gemini-2.5-flash-preview-tts",
+        "bytes": 864604,
+        "reused": false
+      }
+    ]
+  },
+  {
+    "file": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/public/generated/2026-11-19T18-37-53-139Z/scene-5.wav",
+    "duration": 17.810958,
+    "text": "كل صورة بيلتقطها رائد فضاء هي جزء من مهمة أكبر، المهمة دي هي حماية الأرض وفهم طبيعتها المتغيرة، ومع كل لفة للمحطة حول الكوكب، بنكتشف تفاصيل جديدة ومبهرة عن جغرافيا الأرض ومناخها المتغير.",
+    "sha256": "1a4a39f7f7a3fd159e2354c3f2a330bc66d25a1810a686b702bf5b7bfc19a7da",
+    "provider": "Gemini",
+    "voice": "Charon",
+    "chunks": [
+      {
+        "scene": 5,
+        "chunk": 0,
+        "schema": 1,
+        "cacheKey": "d490e52dd4e09a04ccc6de001e38f5c928362d45b8558b065b547f14a1b305c3",
+        "sha256": "1a4a39f7f7a3fd159e2354c3f2a330bc66d25a1810a686b702bf5b7bfc19a7da",
+        "text_sha256": "4aed59b22bf55d738ba4475b1d0e8d1d12ad911048493695895066a337e164c3",
+        "voice": "Charon",
+        "provider": "Gemini",
+        "model": "gemini-2.5-flash-preview-tts",
+        "bytes": 855004,
+        "reused": false
+      }
+    ]
+  },
+  {
+    "file": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/public/generated/2026-11-19T18-37-53-139Z/scene-6.wav",
+    "duration": 15.890958,
+    "text": "البيانات اللي بتجمعها الصور دي بتتحول لمعلومات قيمة للباحثين، الصور دي مش مجرد لقطات جميلة، دي أدوات علمية بتساعدنا نتنبأ بالمخاطر ونخطط لمستقبل أفضل وأكثر أماناً لكل سكان كوكب الأرض في كل مكان.",
+    "sha256": "3a228167a742d1c0621ccb141174dea38b162acd7bfb407fa3a4c6926ed3ce89",
+    "provider": "Gemini",
+    "voice": "Charon",
+    "chunks": [
+      {
+        "scene": 6,
+        "chunk": 0,
+        "schema": 1,
+        "cacheKey": "c84a609af829e2d8e43ae5bb1a129a80aff4a847b28af9a1fa5e48a0f6e96122",
+        "sha256": "3a228167a742d1c0621ccb141174dea38b162acd7bfb407fa3a4c6926ed3ce89",
+        "text_sha256": "515aa07844822ec38c5f5ebed394173460e45ed13205b95b7b19223db4999e2c",
+        "voice": "Charon",
+        "provider": "Gemini",
+        "model": "gemini-2.5-flash-preview-tts",
+        "bytes": 762844,
+        "reused": false
+      }
+    ]
+  },
+  {
+    "file": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/public/generated/2026-11-19T18-37-53-139Z/scene-7.wav",
+    "duration": 14.970958,
+    "text": "في النهاية، رؤية الأرض من الفضاء بتغير نظرتنا للكون، وبحيرة Pelku هي مجرد مثال بسيط على الجمال والتعقيد اللي بنشوفه، استمروا في متابعتنا عشان نكتشف سوا أسرار تانية كتير مخبأة في كوكبنا العظيم.",
+    "sha256": "2aeb355f04bc5096101e296097902fcb6103a67305added8a7e139f630d6b3ef",
+    "provider": "Gemini",
+    "voice": "Charon",
+    "chunks": [
+      {
+        "scene": 7,
+        "chunk": 0,
+        "schema": 1,
+        "cacheKey": "1bc1a426cea60bffcd03901334c758ec27f47d216394c3818b16946adc9ec28b",
+        "sha256": "2aeb355f04bc5096101e296097902fcb6103a67305added8a7e139f630d6b3ef",
+        "text_sha256": "2082c3dcdda62538716721ff556fe68982ac5bd71d7394a0a6c30c8257c2af9b",
+        "voice": "Charon",
+        "provider": "Gemini",
+        "model": "gemini-2.5-flash-preview-tts",
+        "bytes": 718684,
+        "reused": false
+      }
+    ]
+  }
+]

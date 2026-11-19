@@ -76,5 +76,11 @@
     "value": "https://www.nasa.gov/image-article/latest-rs-25-engine-test-in-support-of-future-artemis-missions/",
     "status": "review",
     "run": "2026-11-19T17-21-49-171Z"
+  },
+  {
+    "topicKey": "nasa-lake-pelku-observation",
+    "value": "https://www.nasa.gov/image-article/lake-pelku/",
+    "status": "review",
+    "run": "2026-11-19T18-37-53-139Z"
   }
 ]
