@@ -219,7 +219,7 @@
   "state": "failed",
   "migration": "Recovered original reserved script after the earlier provider failure; no new script or repeated source selection.",
   "lastFailure": {
-    "stage": "align",
-    "code": "ALIGNMENT_SPEECH_MISMATCH"
+    "stage": "mix",
+    "code": "STAGE_FAILED_SEE_RUNBOOK"
   }
 }
