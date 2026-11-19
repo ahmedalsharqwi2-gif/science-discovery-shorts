@@ -1,7 +1,7 @@
 {
-  "model": "small",
+  "model": "medium",
   "language": "ar",
-  "cpuThreads": 2,
+  "cpuThreads": 4,
   "beamSize": 5,
   "minCharacterSimilarity": 0.85,
   "minWordCoverage": 0.65,
