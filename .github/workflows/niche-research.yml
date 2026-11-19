@@ -1,0 +1,42 @@
+name: Niche research
+on:
+  workflow_dispatch:
+    inputs:
+      seed_bank:
+        type: boolean
+        default: false
+        description: Generate topic-bank ideas with Gemini (pending until validated)
+  schedule:
+    - cron: '30 6 * * 1'
+permissions:
+  contents: write
+concurrency:
+  group: niche-research-${{ github.repository }}
+  cancel-in-progress: false
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22', cache: npm}
+      - run: npm ci
+      - run: node --test tests/niche-intel.test.mjs
+      - name: Seed topic bank
+        if: ${{ inputs.seed_bank }}
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
+          GEMINI_API_KEY_3: ${{ secrets.GEMINI_API_KEY_3 }}
+        run: node niche_intel/run.mjs bank-seed
+      - name: Research
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
+          GEMINI_API_KEY_3: ${{ secrets.GEMINI_API_KEY_3 }}
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+        run: node niche_intel/run.mjs research
+      - uses: actions/upload-artifact@v4
+        with: {name: niche-state, path: 'state/niche/**'}
+      # Results are uploaded as an artifact only. Nothing is committed to main and nothing is published.
