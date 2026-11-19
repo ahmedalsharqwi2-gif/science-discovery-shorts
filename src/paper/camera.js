@@ -39,6 +39,10 @@ export function safeZoomPts(pts, cy, want) {
 // AND the vertical anchor solved so every visible element stays between the
 // title and captions zones at all times (including the 4% push-in peak).
 // Falls back to a static frame (s=1) when the layout is too tall to zoom.
+// Slow secondary drift (pro-motion spec: no fully static shot). Applied to
+// the camera centre only; zone checks and the camera solver reserve DRIFT_Y.
+export const DRIFT_X = 4, DRIFT_Y = 5;
+
 export function camTargetsFor(windows, layers) {
   return windows.map((w, i) => {
     const c = centroidOf(layers[i]);
@@ -48,17 +52,13 @@ export function camTargetsFor(windows, layers) {
     const want = i === 0 ? 1.04 : 1.1;
     for (let s = want; s >= 1.0; s -= 0.02) {
       const sz = s * 1.045;
-      const aLo = TITLE_FLOOR + sz * (cy - minY);
-      const aHi = CAPTION_CEIL - sz * (maxY - cy);
+      const aLo = TITLE_FLOOR + DRIFT_Y + sz * (cy - minY);
+      const aHi = CAPTION_CEIL - DRIFT_Y - sz * (maxY - cy);
       if (aLo <= aHi) return {x: c.x, y: cy, s, a: Math.min(Math.max(ANCHOR_Y, aLo), aHi)};
     }
     return {x: c.x, y: cy, s: 1, a: cy};
   });
 }
-
-// Slow secondary drift (pro-motion spec: no fully static shot). Applied to
-// the camera centre only; zone checks reserve DRIFT_Y pixels for it.
-export const DRIFT_X = 4, DRIFT_Y = 5;
 
 export function camAt(fr, windows, camTargets, easing) {
   let i = windows.findIndex(w => fr < w.start + w.frames);
