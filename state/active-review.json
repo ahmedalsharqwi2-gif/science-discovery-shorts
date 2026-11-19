@@ -945,6 +945,6 @@
   "lastFailure": {
     "stage": "align",
     "code": "ALIGNMENT_INVALID_MEASURED_SPAN",
-    "repeat": 0
+    "repeat": 1
   }
 }
