@@ -8,3 +8,6 @@ test:
 
 visual-review:
 	node pipeline/visual-review.mjs
+
+grounded-ping:
+	node pipeline/grounded-ping.mjs

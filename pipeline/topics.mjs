@@ -30,9 +30,11 @@ export function verifiedCandidates(sources,{history=[],maxAgeHours,now=Date.now(
   return others.length?{source,corroboration:[source,others[0]],verification:'two_independent_publishers_same_primary_reference'}:null;
  }).filter(Boolean);
 }
-export function chooseSources(sources,config,{history=[],now=Date.now(),diagnostics=[],trendSignals=null}={}){
+export function chooseSources(sources,config,{history=[],now=Date.now(),diagnostics=[],trendSignals=null,extraCandidates=[]}={}){
  const hours=config.profile==='news'?72:config.maxAgeHours;let candidates=verifiedCandidates(sources,{history,maxAgeHours:hours,now});let mode='daily',windowHours=hours;
  if(!candidates.length&&config.profile==='news'&&config.weeklyFallback?.enabled){candidates=verifiedCandidates(sources,{history,maxAgeHours:config.weeklyFallback.maxAgeHours,now});mode='weekly';windowHours=config.weeklyFallback.maxAgeHours;}
+ // Grounded fallback: candidates already fetch-verified by grounded-topics.mjs.
+ if(!candidates.length&&extraCandidates.length)candidates=extraCandidates;
  candidates.sort((a,b)=>(Number(b.source.official)-Number(a.source.official))||Date.parse(b.source.published)-Date.parse(a.source.published));
  let trend=[];
  if(trendSignals){const ranked=rerankCandidates(candidates,trendSignals,config.trends||{},{now});candidates=ranked.candidates;trend=ranked.decisions;}
@@ -44,7 +46,20 @@ export async function selectTopic(config,history,options={}){
  const collected=await collectSources(config,options);
  let trendSignals=null,trendDiagnostics=null;
  if(config.trends?.enabled){try{const radar=await fetchTrendSignals(config.trends,options);trendSignals=radar.degraded?null:radar.signals;trendDiagnostics={sources:radar.diagnostics,degraded:radar.degraded};}catch(e){trendDiagnostics={sources:[],degraded:true,code:/[A-Z_]+/.exec(e.message)?.[0]||'TREND_RADAR_UNAVAILABLE'};}}
- const chosen=chooseSources(collected.sources,config,{...options,history,diagnostics:collected.diagnostics,trendSignals});
- if(trendDiagnostics||chosen.trend?.length)chosen.trendDiagnostics={...(trendDiagnostics||{}),decisions:chosen.trend||[]};
- return chosen;
+ try{
+  const chosen=chooseSources(collected.sources,config,{...options,history,diagnostics:collected.diagnostics,trendSignals});
+  if(trendDiagnostics||chosen.trend?.length)chosen.trendDiagnostics={...(trendDiagnostics||{}),decisions:chosen.trend||[]};
+  return chosen;
+ }catch(e){
+  if(e.message!=='NO_CURRENT_VERIFIED_SOURCES'||!config.grounding?.enabled)throw e;
+  // Feed pool exhausted: fall back to Gemini Search-grounded proposals, each
+  // fetch-verified by our code before entering the pool.
+  const {proposeGroundedCandidates}=await import('./grounded-topics.mjs');
+  const client=options.client||(await import('./provider-client.mjs')).provider();
+  const grounded=await proposeGroundedCandidates({client:await client,config,history,now:options.now,fetcher:options.fetcher});
+  const chosen=chooseSources(collected.sources,config,{...options,history,diagnostics:collected.diagnostics,trendSignals,extraCandidates:grounded.candidates});
+  chosen.groundingDiagnostics=grounded.diagnostics;
+  if(trendDiagnostics||chosen.trend?.length)chosen.trendDiagnostics={...(trendDiagnostics||{}),decisions:chosen.trend||[]};
+  return chosen;
+ }
 }

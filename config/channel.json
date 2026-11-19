@@ -16,5 +16,19 @@
   ],
   "logo": "brand/logo/logo.jpg",
   "paper": true,
-  "mascot": false
+  "mascot": false,
+  "grounding": {
+    "enabled": true,
+    "useWhen": "fallback",
+    "mode": "strict",
+    "maxCandidates": 6,
+    "blockedDomains": [
+      "facebook.com",
+      "tiktok.com",
+      "pinterest.com",
+      "quora.com",
+      "reddit.com",
+      "youtube.com"
+    ]
+  }
 }
