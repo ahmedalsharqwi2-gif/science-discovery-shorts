@@ -90,3 +90,13 @@ test('chooseSources keeps legacy behavior when trend signals are absent', () => 
   assert.equal(chosen.selected.id, 'new');
   assert.deepEqual(chosen.trend, []);
 });
+
+test('everydayBoost lifts concrete everyday topics', () => {
+  const signals = {trends: [], suggestions: [], competitorVideos: [], onThisDay: [], hackerNews: [], reddit: []};
+  const cfg = {everydayTerms: ['غسالة', 'مطبخ'], everydayBoost: 1.5};
+  const hit = demandScore('الغسالة بتغسل إزاي', signals, cfg);
+  assert.equal(hit.demand, 1.5);
+  assert.deepEqual(hit.matches, [{kind: 'everyday_curiosity', label: 'غسالة', weight: 1.5}]);
+  const miss = demandScore('نظرية الأوتار الفائقة', signals, cfg);
+  assert.equal(miss.demand, 0);
+});

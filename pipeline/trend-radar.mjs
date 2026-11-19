@@ -65,6 +65,9 @@ export function demandScore(text,signals,config){
  for(const e of signals.onThisDay){const hit=overlap(words,tokens(e.text));if(hit>=2)add('on_this_day',e.text.slice(0,80),hit);}
  for(const h of signals.hackerNews){const hit=overlap(words,tokens(h.title));if(hit>=2)add('hacker_news',h.title,hit*0.75);}
  for(const p of signals.reddit){const hit=overlap(words,tokens(p.title));if(hit>=2)add('reddit',p.title,hit*0.5);}
+ const everyday=(config.everydayTerms||[]).map(t=>String(t).toLowerCase());
+ const everydayHit=everyday.find(term=>text.toLowerCase().includes(term));
+ if(everydayHit)add('everyday_curiosity',everydayHit,config.everydayBoost??1.5);
  return {demand,matches};
 }
 export function rerankCandidates(candidates,signals,config,{now=Date.now()}={}){

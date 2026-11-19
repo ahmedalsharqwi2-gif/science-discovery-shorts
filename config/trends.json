@@ -1,12 +1,64 @@
 {
   "enabled": true,
   "mode": "rerank",
-  "googleTrends": { "geo": "EG" },
-  "autocompleteSeeds": ["ليه السماء", "حقيقة علمية عن", "اكتشاف علمي", "الفضاء"],
+  "googleTrends": {
+    "geo": "EG"
+  },
+  "autocompleteSeeds": [
+    "ليه السماء",
+    "حقيقة علمية عن",
+    "اكتشاف علمي",
+    "الفضاء",
+    "إزاي بيشتغل",
+    "ليه بنحلم",
+    "ليه القمر",
+    "إزاي الجسم"
+  ],
   "competitorChannelIds": [],
-  "onThisDay": { "enabled": false },
-  "hackerNews": { "enabled": false },
+  "onThisDay": {
+    "enabled": false
+  },
+  "hackerNews": {
+    "enabled": false
+  },
   "redditSubreddits": [],
-  "weights": { "demand": 1.0, "recency": 0.5 },
-  "excludedTerms": []
+  "weights": {
+    "demand": 1.0,
+    "recency": 0.5
+  },
+  "excludedTerms": [],
+  "everydayTerms": [
+    "جسم",
+    "نوم",
+    "أكل",
+    "اكل",
+    "مطبخ",
+    "غسالة",
+    "موبايل",
+    "عربية",
+    "شارع",
+    "بيت",
+    "مية",
+    "مياه",
+    "كهربا",
+    "كهرباء",
+    "نار",
+    "تلاجة",
+    "طيارة",
+    "لبن",
+    "قهوة",
+    "شاي",
+    "مخ",
+    "قلب",
+    "شعر",
+    "أسنان",
+    "اسنان",
+    "معدة",
+    "تكييف",
+    "ميكروويف",
+    "قفل",
+    "إنترنت",
+    "انترنت"
+  ],
+  "everydayBoost": 1.5
 }
