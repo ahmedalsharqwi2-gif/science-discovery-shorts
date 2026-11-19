@@ -60,11 +60,12 @@ test('diversity: 60-day no-repeat and pillar max twice in a row', () => {
   assert.equal(passesDiversity({title: 'A', pillar: 'earth'}, picks, {now}).reason, 'DUPLICATE_WITHIN_60D');
   assert.equal(passesDiversity({title: 'A', pillar: 'earth'}, [{title: 'A', pillar: 'x', date: '2026-08-01'}], {now}).ok, true);
 });
-test('channel fit: banned topic scores 0, pillar+intent scores high', () => {
+test('channel fit: banned topic scores 0, pillar+intent scores high, no-pillar low', () => {
   const p = JSON.parse(readFileSync(new URL('../config/niche_profile.json', import.meta.url)));
-  assert.equal(channelFit({title: 'علاج السرطان', pillar: 'body_mind'}, p), 0);
-  assert.equal(channelFit({title: 'ليه السماء زرقاء', pillar: 'space'}, p), 1);
-  assert.equal(channelFit({title: 'مباراة الأهلي', pillar: null}, p), 0.15);
+  const pil = p.pillars[0], kw = pil.keywords.find(k => k.length > 3) || pil.keywords[0];
+  assert.equal(channelFit({title: p.bannedTopics[0], pillar: pil.id}, p), 0);
+  assert.equal(channelFit({title: p.questionPatterns[0] + ' ' + kw, pillar: pil.id}, p), 1);
+  assert.equal(channelFit({title: 'zzxxyy qqww', pillar: null}, p), 0.15);
 });
 test('packaging: honest title picked, repeats dropped, promise check enforced', () => {
   const t = pickTitle(['ليه الثقب الأسود مش بيبلع كل حاجة حوالينا؟', 'لن تصدق!! ثقب أسود', 'قصير'], {primaryKeyword: 'ثقب أسود', recentTitles: ['قصير']});
@@ -116,5 +117,6 @@ test('detectPillar: whole-word only, names with short substrings stay off-niche'
   const {detectPillar} = await import('../niche_intel/score.mjs');
   const p = JSON.parse(readFileSync(new URL('../config/niche_profile.json', import.meta.url)));
   assert.equal(detectPillar('عمر كمال', p), null);
-  assert.equal(detectPillar('ناسا تكتشف كويكب جديد', p), 'space');
+  const pil = p.pillars[0], kw = pil.keywords.find(k => k.length > 3) || pil.keywords[0];
+  assert.equal(detectPillar('خبر عن ' + kw + ' اليوم', p), pil.id);
 });

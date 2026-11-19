@@ -7,7 +7,6 @@
 import {createHash} from 'node:crypto';
 import {mkdir, readFile, writeFile, rename} from 'node:fs/promises';
 import path from 'node:path';
-import {XMLParser} from 'fast-xml-parser';
 
 const hash = s => createHash('sha256').update(s).digest('hex');
 const UA = 'NicheIntel/1.0 (+https://github.com/ahmedalsharqwi2-gif/science-discovery-shorts; topic research; cached)';
@@ -33,12 +32,11 @@ async function getText(url, {fetcher = fetch, timeout = 20000} = {}) {
   return res.text();
 }
 
+// Minimal RSS/Atom item extractor (no dependency): title + link per item.
+const tag = (x, t) => { const m = x.match(new RegExp('<' + t + '(?:\\s[^>]*)?>([\\s\\S]*?)</' + t + '>')); return m ? m[1].replace(/<!\\[CDATA\\[|\\]\\]>/g, '').trim() : ''; };
 const xmlItems = xml => {
-  const data = new XMLParser({ignoreAttributes: false}).parse(xml);
-  const items = data.rss?.channel?.item || data.feed?.entry || [];
-  const arr = Array.isArray(items) ? items : [items];
-  const plain = x => typeof x === 'string' ? x : typeof x?.['#text'] === 'string' ? x['#text'] : '';
-  return arr.filter(Boolean).map(it => ({title: plain(it.title), link: typeof it.link === 'string' ? it.link : it.link?.['@_href'] || plain(it.guid)}));
+  const items = xml.match(/<(item|entry)(\s[^>]*)?>[\s\S]*?<\/\1>/g) || [];
+  return items.map(x => ({title: tag(x, 'title'), link: x.match(/<link[^>]*href="([^"]+)"/)?.[1] || tag(x, 'link') || tag(x, 'guid')})).filter(i => i.title);
 };
 
 // Google Trends daily trending searches, Egypt (official public RSS).
