@@ -22,5 +22,11 @@
     "value": "https://science.nasa.gov/missions/webb/nasa-data-clinches-first-of-its-kind-stellar-merger/",
     "status": "retired",
     "run": "2026-11-19T06-37-39-488Z"
+  },
+  {
+    "topicKey": "astronomy-horsehead-flame-nebula-2026",
+    "value": "https://science.nasa.gov/image-article/apod-2026-november-19-the-horsehead-and-flame-nebulas/",
+    "status": "reserved",
+    "run": "2026-11-19T08-37-00-478Z"
   }
 ]

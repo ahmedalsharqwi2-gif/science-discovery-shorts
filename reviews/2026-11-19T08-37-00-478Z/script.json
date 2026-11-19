@@ -1,0 +1,163 @@
+{
+  "topicKey": "astronomy-horsehead-flame-nebula-2026",
+  "title": "أسرار سديم رأس الحصان المذهل",
+  "hook": "ماذا لو كانت الصور الفضائية التي نراها مجرد لوحات فنية مرسومة بدقة، وهل يمكننا فعلاً رؤية غبار وغازات الكون البعيد بوضوح تام من منازلنا في كوكب الأرض؟",
+  "cta": "تابعونا لاكتشاف المزيد من عجائب الكون، ولا تنسوا البحث عن صور ناسا اليومية لتعيشوا رحلة استكشافية جديدة كل يوم في أعماق الفضاء الشاسع.",
+  "scenes": [
+    {
+      "title": "جمال الفضاء الساحر",
+      "text": "اليوم نأخذكم في رحلة إلى سديم رأس الحصان الشهير، وهو مشهد يبدو وكأنه لوحة فنية مرسومة ببراعة، لكنه في الحقيقة تجمع مذهل من الغبار والغازات في أعماق كوننا الفسيح.",
+      "summary": "سديم رأس الحصان يبدو كلوحة فنية.",
+      "keyword": "سديم",
+      "template": "phenomenon",
+      "labels": [
+        "سديم",
+        "فضاء",
+        "كون"
+      ],
+      "values": [],
+      "claim": "Today’s image could have been a painting.",
+      "sourceId": "2e20115a6100",
+      "evidence": "Today’s image could have been a painting.",
+      "kind": "fact",
+      "expression": 5,
+      "action": "point"
+    },
+    {
+      "title": "نجم ألنطاك المتألق",
+      "text": "في قلب هذا المشهد نجد النجم الأزرق الساطع ألنطاك، وهو جزء من حزام كوكبة الجبار، ويعتبر نظاماً نجمياً ثلاثياً يضيء المنطقة المحيطة به بلمعان لا يصدق في سماء الليل.",
+      "summary": "النجم ألنطاك يضيء حزام الجبار.",
+      "keyword": "ألنطاك",
+      "template": "phenomenon",
+      "labels": [
+        "نجم",
+        "ألنطاك",
+        "الجبار"
+      ],
+      "values": [],
+      "claim": "The brightest star, left of the center, is blue Alnitak (the Girdle): a triple star system best known for being the easternmost star in Orion’s Belt .",
+      "sourceId": "2e20115a6100",
+      "evidence": "The brightest star, left of the center, is blue Alnitak (the Girdle): a triple star system best known for being the easternmost star in Orion’s Belt .",
+      "kind": "fact",
+      "expression": 8,
+      "action": "walk"
+    },
+    {
+      "title": "شكل رأس الحصان",
+      "text": "يتميز هذا السديم بشكل فريد يشبه رأس الحصان، وهو يمتد لحوالي خمس سنوات ضوئية، ويقع على بعد ألف وخمسمائة سنة ضوئية تقريباً من كوكبنا، مما يجعله معلماً فضائياً بارزاً جداً.",
+      "summary": "سديم رأس الحصان يمتد خمس سنوات ضوئية.",
+      "keyword": "رأس الحصان",
+      "template": "comparison",
+      "labels": [
+        "سديم",
+        "رأس الحصان",
+        "مسافة"
+      ],
+      "values": [],
+      "claim": "It is about five light-years tall and lies approximately 1,500 light-years away.",
+      "sourceId": "2e20115a6100",
+      "evidence": "It is about five light-years tall and lies approximately 1,500 light-years away.",
+      "kind": "fact",
+      "expression": 4,
+      "action": "jump"
+    },
+    {
+      "title": "توهج الهيدروجين",
+      "text": "يتكون السديم من غبار وغازات تحجب التوهج الأحمر خلفه، وهذا التوهج ناتج عن تأين غاز الهيدروجين بفعل النجم الساطع سيجما أوريونيس الموجود في أعلى هذا التكوين الفضائي الرائع والمميز.",
+      "summary": "تأين الهيدروجين يسبب التوهج الأحمر.",
+      "keyword": "هيدروجين",
+      "template": "cause",
+      "labels": [
+        "هيدروجين",
+        "تأين",
+        "توهج"
+      ],
+      "values": [],
+      "claim": "It is made of dust and gas that obscure the red glow behind it, which is caused by hydrogen gas being ionized by the bright star Sigma Orionis at the top.",
+      "sourceId": "2e20115a6100",
+      "evidence": "It is made of dust and gas that obscure the red glow behind it, which is caused by hydrogen gas being ionized by the bright star Sigma Orionis at the top.",
+      "kind": "fact",
+      "expression": 6,
+      "action": "turn"
+    },
+    {
+      "title": "سديم اللهب",
+      "text": "إلى اليسار نرى سديم اللهب البرتقالي بخيوطه المظلمة، وهو يضيف لمسة جمالية فريدة للمشهد، حيث تتداخل الألوان والغازات لتشكل لوحة كونية طبيعية تخطف أنظار كل من يراقب السماء ليلاً.",
+      "summary": "سديم اللهب يظهر بخيوط مظلمة.",
+      "keyword": "سديم اللهب",
+      "template": "phenomenon",
+      "labels": [
+        "سديم",
+        "اللهب",
+        "ألوان"
+      ],
+      "values": [],
+      "claim": "The orange nebula with dark filaments on the left is the Flame Nebula .",
+      "sourceId": "2e20115a6100",
+      "evidence": "The orange nebula with dark filaments on the left is the Flame Nebula .",
+      "kind": "fact",
+      "expression": 7,
+      "action": "point"
+    },
+    {
+      "title": "ولادة النجوم",
+      "text": "بالقرب من رأس الحصان، يوجد سديم الانعكاس الأزرق المعروف باسم إن جي سي ألفين وثلاثة وعشرين، وهو مكان نشط جداً حيث تتشكل النجوم الجديدة باستمرار في أعماق هذا الفضاء.",
+      "summary": "سديم إن جي سي ألفين وثلاثة وعشرين يولد نجوماً.",
+      "keyword": "نجوم",
+      "template": "phenomenon",
+      "labels": [
+        "نجوم",
+        "تكون",
+        "سديم"
+      ],
+      "values": [],
+      "claim": "Closer to the Horsehead, the blue reflection nebula NGC 2023 is actively forming stars.",
+      "sourceId": "2e20115a6100",
+      "evidence": "Closer to the Horsehead, the blue reflection nebula NGC 2023 is actively forming stars.",
+      "kind": "fact",
+      "expression": 9,
+      "action": "run"
+    },
+    {
+      "title": "تصوير عن بعد",
+      "text": "تم جمع بيانات هذه الصورة خلال ست ساعات تقريباً في مرصد يوتا الصحراوي، لكن المثير أن المصور كان يتحكم في المعدات من منزله في إلينوي على بعد ألفي كيلومتر.",
+      "summary": "تصوير فلكي عن بعد من مسافة كبيرة.",
+      "keyword": "تصوير",
+      "template": "journey",
+      "labels": [
+        "مرصد",
+        "يوتا",
+        "إلينوي"
+      ],
+      "values": [],
+      "claim": "The data for this “painting” were collected for almost six hours at the Utah Desert Remote Observatories , but the equipment was remotely controlled by the astrophotographer from his home, over 2,000 km away in Illinois .",
+      "sourceId": "2e20115a6100",
+      "evidence": "The data for this “painting” were collected for almost six hours at the Utah Desert Remote Observatories , but the equipment was remotely controlled by the astrophotographer from his home, over 2,000 km away in Illinois .",
+      "kind": "fact",
+      "expression": 3,
+      "action": "fall"
+    },
+    {
+      "title": "استكشاف الكون",
+      "text": "هذه الصور ليست مجرد لقطات عادية، بل هي نافذة تفتح لنا آفاقاً جديدة لفهم أسرار الكون، وتذكرنا دائماً بمدى اتساع وجمال هذا الفضاء الذي نعيش فيه جميعاً على الأرض.",
+      "summary": "الصور الفضائية نافذة لفهم الكون.",
+      "keyword": "استكشاف",
+      "template": "phenomenon",
+      "labels": [
+        "كون",
+        "فضاء",
+        "استكشاف"
+      ],
+      "values": [],
+      "claim": "Discover the cosmos! Each day a different image or photograph of our fascinating universe is featured",
+      "sourceId": "2e20115a6100",
+      "evidence": "Discover the cosmos! Each day a different image or photograph of our fascinating universe is featured",
+      "kind": "fact",
+      "expression": 10,
+      "action": "sleep"
+    }
+  ],
+  "editorialMode": "daily",
+  "editorialLabel": null,
+  "scriptModel": "gemini-3.1-flash-lite-preview"
+}
