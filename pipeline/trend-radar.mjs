@@ -10,7 +10,7 @@ async function googleTrends(geo,fetcher){
  return array(data.rss?.channel?.item).map(item=>({term:strip(item.title),traffic:strip(item['ht:approx_traffic']),news:array(item['ht:news_item']).map(n=>strip(n['ht:news_item_title'])).filter(Boolean).slice(0,3)})).filter(t=>t.term);
 }
 async function autocomplete(seed,fetcher){
- const response=await fetcher(`https://suggestqueries.google.com/complete/search?client=youtube&hl=ar&ds=yt&q=${encodeURIComponent(seed)}`,{timeout:15000,cacheTtlMs:86400000});
+ const response=await fetcher(`https://suggestqueries.google.com/complete/search?client=firefox&hl=ar&ds=yt&q=${encodeURIComponent(seed)}`,{timeout:15000,cacheTtlMs:86400000});
  const parsed=JSON.parse(await response.text());
  return array(parsed[1]).map(entry=>({seed,text:strip(Array.isArray(entry)?entry[0]:entry)})).filter(s=>s.text);
 }
