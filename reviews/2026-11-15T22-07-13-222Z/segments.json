@@ -1,0 +1,209 @@
+[
+  {
+    "file": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/public/generated/2026-11-15T22-07-13-222Z/scene-0.wav",
+    "duration": 15.16,
+    "text": "هل سألت نفسك قبل كده إيه اللي ممكن يخلي نجم عملاق في الفضاء ينفجر بشكل متكرر وغامض ويفضل صامد، وده اللغز المثير اللي فك شفرته تلسكوب شاندرا الفضائي مؤخراً؟",
+    "sha256": "564c8e2a87c2b90294ab91a431093ef9956dd6a4f1ec83a65e0caa825f345ab5",
+    "provider": "Gemini",
+    "voice": "Charon",
+    "chunks": [
+      {
+        "scene": 0,
+        "chunk": 0,
+        "schema": 1,
+        "cacheKey": "3c9d1c4bc5acfebcc1154b4a73278b2510d4d84e94c77c807d7779a7e333780e",
+        "sha256": "564c8e2a87c2b90294ab91a431093ef9956dd6a4f1ec83a65e0caa825f345ab5",
+        "text_sha256": "8cd0f3f5bbfb2b56406a117ef495f7eb0ad0cdbd9298e8bf472e295307561dd6",
+        "voice": "Charon",
+        "provider": "Gemini",
+        "model": "gemini-3.1-flash-tts-preview",
+        "bytes": 727758,
+        "reused": false
+      }
+    ]
+  },
+  {
+    "file": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/public/generated/2026-11-15T22-07-13-222Z/scene-1.wav",
+    "duration": 15.64,
+    "text": "علماء الفلك اعتمدوا على مرصد شاندرا للأشعة السينية التابع لوكالة ناسا علشان يعرفوا المحفز والسبب الحقيقي وراء الثورات المتكررة اللي بتحصل للنجم العملاق وغير المستقر في الفضاء السحيق.",
+    "sha256": "5af4f7cebce4481578969577a2802b043bbe468a5e4f11478608b77cdd03aa7e",
+    "provider": "Gemini",
+    "voice": "Charon",
+    "chunks": [
+      {
+        "scene": 1,
+        "chunk": 0,
+        "schema": 1,
+        "cacheKey": "d6b27c85ea003b64f72c9d19837865b9635cc72b239a78d787276f4416df4603",
+        "sha256": "5af4f7cebce4481578969577a2802b043bbe468a5e4f11478608b77cdd03aa7e",
+        "text_sha256": "252845e1c8f0228aae260d2ea54919f737f74a8596a8a7bb7240d946e2d7dcd0",
+        "voice": "Charon",
+        "provider": "Gemini",
+        "model": "gemini-3.1-flash-tts-preview",
+        "bytes": 750798,
+        "reused": false
+      }
+    ]
+  },
+  {
+    "file": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/public/generated/2026-11-15T22-07-13-222Z/scene-2.wav",
+    "duration": 19.56,
+    "text": "النجم المتقلب والمضطرب ده بيُعرف علمياً باسم AT 2016blu، ومكانه موجود جوه مجرة حلزونية ساحرة وشهيرة اسمها NGC 4559 ظهرت بتفاصيل مبهرة في الصورة الفضائية اللي نشرتها الوكالة.",
+    "sha256": "ac5668b2f69140efb8eec7d8391259a8c1c267a149ea2842f6855ac9ff0904dd",
+    "provider": "Gemini",
+    "voice": "Charon",
+    "chunks": [
+      {
+        "scene": 2,
+        "chunk": 0,
+        "schema": 1,
+        "cacheKey": "8c88877d353b391c97fe6aa9f789b4bda3e56866c3112599fe204733cb2f212b",
+        "sha256": "ac5668b2f69140efb8eec7d8391259a8c1c267a149ea2842f6855ac9ff0904dd",
+        "text_sha256": "f200eb69122bb95fe1599a421b0eadcd6fe4489aa1fd5504d8826ad20c15b1e1",
+        "voice": "Charon",
+        "provider": "Gemini",
+        "model": "gemini-3.1-flash-tts-preview",
+        "bytes": 938958,
+        "reused": false
+      }
+    ]
+  },
+  {
+    "file": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/public/generated/2026-11-15T22-07-13-222Z/scene-3.wav",
+    "duration": 16.6,
+    "text": "المجرة الحلزونية دي بتبعد عن كوكبنا الأرض مسافة كونية هائلة بتوصل لحوالي ثلاثين مليون سنة ضوئية، ومع ذلك نجحت التلسكوبات في التقاط إشارات الانفجارات بدقة علمية استثنائية وغير مسبوقة.",
+    "sha256": "ea8ce14d2cd32cb9c69544ae9af31b33d9d36fae808cb4cdd331c5831e36d792",
+    "provider": "Gemini",
+    "voice": "Charon",
+    "chunks": [
+      {
+        "scene": 3,
+        "chunk": 0,
+        "schema": 1,
+        "cacheKey": "c68ba2f6fd5f8735758ee308da4f7fcde48030d5c6a6656e718e1cf2b5463eaa",
+        "sha256": "ea8ce14d2cd32cb9c69544ae9af31b33d9d36fae808cb4cdd331c5831e36d792",
+        "text_sha256": "8ea353e17e531f9be4fe695c96172f7e7eb18ac9e986ad2202888f8a6e14c198",
+        "voice": "Charon",
+        "provider": "Gemini",
+        "model": "gemini-3.1-flash-tts-preview",
+        "bytes": 796878,
+        "reused": false
+      }
+    ]
+  },
+  {
+    "file": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/public/generated/2026-11-15T22-07-13-222Z/scene-4.wav",
+    "duration": 14.08,
+    "text": "تقديرات وحسابات الباحثين بتأكد إن كتلة النجم العملاق ده ضخمة بشكل لا يصدق، حيث بتبلغ على الأقل ثلاثة وثلاثين ضعف كتلة شمسنا، وده بيخليه من أثقل النجوم المرصودة بالكون.",
+    "sha256": "5f85382ecc201cb745b80162ebadbfb324cff778826c7560516ba33db1df685e",
+    "provider": "Gemini",
+    "voice": "Charon",
+    "chunks": [
+      {
+        "scene": 4,
+        "chunk": 0,
+        "schema": 1,
+        "cacheKey": "0b7184af5b9e8a12926e9942875c84080455295799b55c5116cd2d3727f7a691",
+        "sha256": "5f85382ecc201cb745b80162ebadbfb324cff778826c7560516ba33db1df685e",
+        "text_sha256": "fe6ed3be07badd0f24be1ab15657936e813b53ca597ec6a22ede2d853931da7b",
+        "voice": "Charon",
+        "provider": "Gemini",
+        "model": "gemini-3.1-flash-tts-preview",
+        "bytes": 675918,
+        "reused": false
+      }
+    ]
+  },
+  {
+    "file": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/public/generated/2026-11-15T22-07-13-222Z/scene-5.wav",
+    "duration": 14.8,
+    "text": "النجم الجبار بيعيش حالة من عدم الاستقرار الشديد، وده اللي بيخليه يمر بنوبات متكررة من الثوران والانفجارات العنيفة اللي كانت محيرة لعلماء الفلك لسنين طويلة قبل الاكتشاف ده.",
+    "sha256": "9d74f1e2f8090217fbea866959d393c659cda91c6eaac82056488d5f1246d146",
+    "provider": "Gemini",
+    "voice": "Charon",
+    "chunks": [
+      {
+        "scene": 5,
+        "chunk": 0,
+        "schema": 1,
+        "cacheKey": "8536f8d26fe0667baba3b019241e0254aa0e88f390623b7b43f111878e06d97d",
+        "sha256": "9d74f1e2f8090217fbea866959d393c659cda91c6eaac82056488d5f1246d146",
+        "text_sha256": "bc47a82ad27d4c87751cb83b031f09ac50168ebc6865afa898c7b2fa8df33ccf",
+        "voice": "Charon",
+        "provider": "Gemini",
+        "model": "gemini-3.1-flash-tts-preview",
+        "bytes": 710478,
+        "reused": false
+      }
+    ]
+  },
+  {
+    "file": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/public/generated/2026-11-15T22-07-13-222Z/scene-6.wav",
+    "duration": 14.64,
+    "text": "المشهد الكوني الرائع ده اتكون من دمج أرصاد الأشعة السينية لشاندرا مع بيانات الضوء المرئي من مسح سلون الرقمي، علشان يظهر النجم ومجرته بأوضح صورة ممكنة للبشر والعلماء.",
+    "sha256": "37716f24833c9a9d6dad42782d848e12af6563e53eb6d251de2bd30978ae8f7f",
+    "provider": "Gemini",
+    "voice": "Charon",
+    "chunks": [
+      {
+        "scene": 6,
+        "chunk": 0,
+        "schema": 1,
+        "cacheKey": "91347bd403dc5bd035937cf04513dedf0425bb9168ba211931785fbc5400c96d",
+        "sha256": "37716f24833c9a9d6dad42782d848e12af6563e53eb6d251de2bd30978ae8f7f",
+        "text_sha256": "906a5d460a2531e973608787465c86262bd3bdc3228c09a19a27bb117faec8af",
+        "voice": "Charon",
+        "provider": "Gemini",
+        "model": "gemini-3.1-flash-tts-preview",
+        "bytes": 702798,
+        "reused": false
+      }
+    ]
+  },
+  {
+    "file": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/public/generated/2026-11-15T22-07-13-222Z/scene-7.wav",
+    "duration": 16.88,
+    "text": "البحث المثير قاده فريق علمي متخصص من جامعة فيرجينيا بالتعاون مع خبراء ناسا، وقدروا يحللوا البيانات ويكتشفوا الآلية اللي بتشعل الثورات المتكررة للعملاق الفلكي AT 2016blu بدقة علمية.",
+    "sha256": "ec2602e21422deb3b1d948583505b1af33a2d031aed83ec5438f7f1b5f73e1dc",
+    "provider": "Gemini",
+    "voice": "Charon",
+    "chunks": [
+      {
+        "scene": 7,
+        "chunk": 0,
+        "schema": 1,
+        "cacheKey": "5f5ed8875ebf79b167b1a48d6db6ecf721afaf37ab5baffe807eecf5becac52b",
+        "sha256": "ec2602e21422deb3b1d948583505b1af33a2d031aed83ec5438f7f1b5f73e1dc",
+        "text_sha256": "e33ae1edaeaf47db326f5864e8bf0179ad094acb640ca2b8b8caf56d428d5e5d",
+        "voice": "Charon",
+        "provider": "Gemini",
+        "model": "gemini-3.1-flash-tts-preview",
+        "bytes": 810318,
+        "reused": false
+      }
+    ]
+  },
+  {
+    "file": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/public/generated/2026-11-15T22-07-13-222Z/scene-8.wav",
+    "duration": 14.370958,
+    "text": "أسرار الكون الواسع ما بتنتهيش وكل يوم بيكشفلنا مفاجآت مدهشة، اعمل لايك واشترك في القناة وشير الفيديو مع أصحابك علشان تتابع معانا أحدث أسرار الفضاء أولاً بأول دايماً.",
+    "sha256": "702637a708d72ff40f913139d623e058684339475be323948e64ed7d91fdf565",
+    "provider": "Gemini",
+    "voice": "Charon",
+    "chunks": [
+      {
+        "scene": 8,
+        "chunk": 0,
+        "schema": 1,
+        "cacheKey": "db867a3178b3c3c24897bb4dea41956bb3b4225ecbce144fef3abe1a31c1af4a",
+        "sha256": "702637a708d72ff40f913139d623e058684339475be323948e64ed7d91fdf565",
+        "text_sha256": "3c1b36df023b0e249661600f639fd6ee18dd744a1472318bf8136bbb6f68c6a8",
+        "voice": "Charon",
+        "provider": "Gemini",
+        "model": "gemini-2.5-flash-preview-tts",
+        "bytes": 689884,
+        "reused": false
+      }
+    ]
+  }
+]

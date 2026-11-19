@@ -1,0 +1,1501 @@
+{
+  "topicKey": "astronomy-massive-star-outbursts-at2016blu",
+  "title": "لغز ثورات النجم العملاق في الفضاء",
+  "hook": "هل سألت نفسك قبل كده إيه اللي ممكن يخلي نجم عملاق في الفضاء ينفجر بشكل متكرر وغامض ويفضل صامد؟",
+  "cta": "اشترك في القناة لمتابعة أحدث أسرار الكون أولاً بأول",
+  "scenes": [
+    {
+      "title": "لغز النجم المتفجر",
+      "text": "هل سألت نفسك قبل كده إيه اللي ممكن يخلي نجم عملاق في الفضاء ينفجر بشكل متكرر وغامض ويفضل صامد، وده اللغز المثير اللي فك شفرته تلسكوب شاندرا الفضائي مؤخراً؟",
+      "summary": "رصد ثورات متكررة لنجم عملاق غامض في الفضاء",
+      "keyword": "star_outburst",
+      "template": "phenomenon",
+      "labels": [
+        "شاندرا",
+        "نجم عملاق",
+        "انفجارات الفضاء"
+      ],
+      "values": [],
+      "claim": "اكتشف العلماء ما يسبب الثورات المتكررة لنجم عملاق وغير مستقر في الفضاء.",
+      "sourceId": "e714212c4694",
+      "evidence": "Using NASA’s Chandra X-ray Observatory, astronomers have discovered what is triggering repeated outbursts from a giant, unstable star located in the galaxy shown in this image released on Nov. 9, 2026.",
+      "kind": "fact",
+      "expression": 10,
+      "action": "point",
+      "words": [
+        {
+          "text": "هل",
+          "start": 0.34,
+          "end": 0.5
+        },
+        {
+          "text": "سألت",
+          "start": 0.5,
+          "end": 0.94
+        },
+        {
+          "text": "نفسك",
+          "start": 0.94,
+          "end": 1.36
+        },
+        {
+          "text": "قبل",
+          "start": 1.38,
+          "end": 1.58
+        },
+        {
+          "text": "كده",
+          "start": 1.58,
+          "end": 1.94
+        },
+        {
+          "text": "إيه",
+          "start": 2.4,
+          "end": 2.62
+        },
+        {
+          "text": "اللي",
+          "start": 2.62,
+          "end": 2.82
+        },
+        {
+          "text": "ممكن",
+          "start": 2.82,
+          "end": 3.14
+        },
+        {
+          "text": "يخلي",
+          "start": 3.14,
+          "end": 3.66
+        },
+        {
+          "text": "نجم",
+          "start": 3.66,
+          "end": 4.04
+        },
+        {
+          "text": "عملاق",
+          "start": 4.04,
+          "end": 4.62
+        },
+        {
+          "text": "في",
+          "start": 4.64,
+          "end": 4.74
+        },
+        {
+          "text": "الفضاء",
+          "start": 4.74,
+          "end": 5.22
+        },
+        {
+          "text": "ينفجر",
+          "start": 5.62,
+          "end": 6.18
+        },
+        {
+          "text": "بشكل",
+          "start": 6.18,
+          "end": 6.62
+        },
+        {
+          "text": "متكرر",
+          "start": 6.62,
+          "end": 7.38
+        },
+        {
+          "text": "وغامض",
+          "start": 7.38,
+          "end": 8
+        },
+        {
+          "text": "ويفضل",
+          "start": 8.36,
+          "end": 8.78
+        },
+        {
+          "text": "صامد،",
+          "start": 8.78,
+          "end": 9.28
+        },
+        {
+          "text": "وده",
+          "start": 9.98,
+          "end": 10.26
+        },
+        {
+          "text": "اللغز",
+          "start": 10.26,
+          "end": 10.68
+        },
+        {
+          "text": "المثير",
+          "start": 10.68,
+          "end": 11.22
+        },
+        {
+          "text": "اللي",
+          "start": 11.22,
+          "end": 11.84
+        },
+        {
+          "text": "فك",
+          "start": 12.02,
+          "end": 12.12
+        },
+        {
+          "text": "شفرته",
+          "start": 12.12,
+          "end": 12.68
+        },
+        {
+          "text": "تلسكوب",
+          "start": 12.68,
+          "end": 13.26
+        },
+        {
+          "text": "شاندرا",
+          "start": 13.26,
+          "end": 13.7
+        },
+        {
+          "text": "الفضائي",
+          "start": 13.7,
+          "end": 14.18
+        },
+        {
+          "text": "مؤخراً؟",
+          "start": 14.18,
+          "end": 14.66
+        }
+      ],
+      "duration": 15.16,
+      "sourceUrl": "https://www.nasa.gov/image-article/outbursts-from-a-massive-star/",
+      "sourceLabel": "www.nasa.gov"
+    },
+    {
+      "title": "مرصد شاندرا يفك الشفرة",
+      "text": "علماء الفلك اعتمدوا على مرصد شاندرا للأشعة السينية التابع لوكالة ناسا علشان يعرفوا المحفز والسبب الحقيقي وراء الثورات المتكررة اللي بتحصل للنجم العملاق وغير المستقر في الفضاء السحيق.",
+      "summary": "تلسكوب ناسا يكشف أسباب ثورات النجم العملاق",
+      "keyword": "chandra_observatory",
+      "template": "cause",
+      "labels": [
+        "مرصد شاندرا",
+        "ناسا",
+        "الأشعة السينية"
+      ],
+      "values": [],
+      "claim": "تم استخدام مرصد شاندرا التابع لناسا لتحديد سبب انفجارات النجم العملاق.",
+      "sourceId": "e714212c4694",
+      "evidence": "Using NASA’s Chandra X-ray Observatory, astronomers have discovered what is triggering repeated outbursts from a giant, unstable star",
+      "kind": "fact",
+      "expression": 8,
+      "action": "walk",
+      "words": [
+        {
+          "text": "علماء",
+          "start": 0.5,
+          "end": 0.82
+        },
+        {
+          "text": "الفلك",
+          "start": 0.82,
+          "end": 1.26
+        },
+        {
+          "text": "اعتمدوا",
+          "start": 1.48,
+          "end": 2.08
+        },
+        {
+          "text": "على",
+          "start": 2.08,
+          "end": 2.24
+        },
+        {
+          "text": "مرصد",
+          "start": 2.24,
+          "end": 2.68
+        },
+        {
+          "text": "شاندرا",
+          "start": 2.68,
+          "end": 3.16
+        },
+        {
+          "text": "للأشعة",
+          "start": 3.16,
+          "end": 3.92
+        },
+        {
+          "text": "السينية",
+          "start": 3.92,
+          "end": 4.46
+        },
+        {
+          "text": "التابع",
+          "start": 4.46,
+          "end": 5.16
+        },
+        {
+          "text": "لوكالة",
+          "start": 5.16,
+          "end": 5.66
+        },
+        {
+          "text": "ناسا",
+          "start": 5.68,
+          "end": 6
+        },
+        {
+          "text": "علشان",
+          "start": 6.44,
+          "end": 6.88
+        },
+        {
+          "text": "يعرفوا",
+          "start": 6.88,
+          "end": 7.32
+        },
+        {
+          "text": "المحفز",
+          "start": 7.32,
+          "end": 8
+        },
+        {
+          "text": "والسبب",
+          "start": 8.16,
+          "end": 8.62
+        },
+        {
+          "text": "الحقيقي",
+          "start": 8.62,
+          "end": 9.18
+        },
+        {
+          "text": "وراء",
+          "start": 9.18,
+          "end": 9.84
+        },
+        {
+          "text": "الثورات",
+          "start": 9.84,
+          "end": 10.38
+        },
+        {
+          "text": "المتكررة",
+          "start": 10.38,
+          "end": 11.1
+        },
+        {
+          "text": "اللي",
+          "start": 11.1,
+          "end": 11.54
+        },
+        {
+          "text": "بتحصل",
+          "start": 11.54,
+          "end": 11.94
+        },
+        {
+          "text": "للنجم",
+          "start": 11.94,
+          "end": 12.38
+        },
+        {
+          "text": "العملاق",
+          "start": 12.38,
+          "end": 12.92
+        },
+        {
+          "text": "وغير",
+          "start": 13.06,
+          "end": 13.38
+        },
+        {
+          "text": "المستقر",
+          "start": 13.38,
+          "end": 13.98
+        },
+        {
+          "text": "في",
+          "start": 14.18,
+          "end": 14.28
+        },
+        {
+          "text": "الفضاء",
+          "start": 14.28,
+          "end": 14.7
+        },
+        {
+          "text": "السحيق.",
+          "start": 14.7,
+          "end": 14.9
+        }
+      ],
+      "duration": 15.64,
+      "sourceUrl": "https://www.nasa.gov/image-article/outbursts-from-a-massive-star/",
+      "sourceLabel": "www.nasa.gov"
+    },
+    {
+      "title": "هوية النجم والمجرة",
+      "text": "النجم المتقلب والمضطرب ده بيُعرف علمياً باسم AT 2016blu، ومكانه موجود جوه مجرة حلزونية ساحرة وشهيرة اسمها NGC 4559 ظهرت بتفاصيل مبهرة في الصورة الفضائية اللي نشرتها الوكالة.",
+      "summary": "النجم AT 2016blu داخل مجرة NGC 4559",
+      "keyword": "spiral_galaxy",
+      "template": "map",
+      "labels": [
+        "مجرة حلزونية",
+        "سديم",
+        "أجرام سماوية"
+      ],
+      "values": [],
+      "claim": "النجم المتقلب يسمى AT 2016blu ويقع في مجرة حلزونية تسمى NGC 4559.",
+      "sourceId": "e714212c4694",
+      "evidence": "The volatile star, known as AT 2016blu, is in the spiral galaxy NGC 4559",
+      "kind": "fact",
+      "expression": 1,
+      "action": "point",
+      "words": [
+        {
+          "text": "النجم",
+          "start": 0.46,
+          "end": 0.72
+        },
+        {
+          "text": "المتقلب",
+          "start": 0.72,
+          "end": 1.4
+        },
+        {
+          "text": "والمضطرب",
+          "start": 1.4,
+          "end": 2.1
+        },
+        {
+          "text": "ده",
+          "start": 2.1,
+          "end": 2.34
+        },
+        {
+          "text": "بيُعرف",
+          "start": 2.7,
+          "end": 3.16
+        },
+        {
+          "text": "علمياً",
+          "start": 3.24,
+          "end": 3.76
+        },
+        {
+          "text": "باسم",
+          "start": 3.76,
+          "end": 4.2
+        },
+        {
+          "text": "AT",
+          "start": 4.54,
+          "end": 4.84
+        },
+        {
+          "text": "2016blu،",
+          "start": 4.84,
+          "end": 6.88
+        },
+        {
+          "text": "ومكانه",
+          "start": 7.36,
+          "end": 7.96
+        },
+        {
+          "text": "موجود",
+          "start": 7.96,
+          "end": 8.4
+        },
+        {
+          "text": "جوه",
+          "start": 8.4,
+          "end": 8.8
+        },
+        {
+          "text": "مجرة",
+          "start": 8.8,
+          "end": 9.22
+        },
+        {
+          "text": "حلزونية",
+          "start": 9.22,
+          "end": 9.96
+        },
+        {
+          "text": "ساحرة",
+          "start": 9.96,
+          "end": 10.5
+        },
+        {
+          "text": "وشهيرة",
+          "start": 10.5,
+          "end": 11.1
+        },
+        {
+          "text": "اسمها",
+          "start": 11.1,
+          "end": 11.88
+        },
+        {
+          "text": "NGC",
+          "start": 12.2,
+          "end": 12.86
+        },
+        {
+          "text": "4559",
+          "start": 12.86,
+          "end": 14.26
+        },
+        {
+          "text": "ظهرت",
+          "start": 14.26,
+          "end": 15.5
+        },
+        {
+          "text": "بتفاصيل",
+          "start": 15.86,
+          "end": 16.12
+        },
+        {
+          "text": "مبهرة",
+          "start": 16.12,
+          "end": 16.66
+        },
+        {
+          "text": "في",
+          "start": 16.66,
+          "end": 16.82
+        },
+        {
+          "text": "الصورة",
+          "start": 16.86,
+          "end": 17.16
+        },
+        {
+          "text": "الفضائية",
+          "start": 17.16,
+          "end": 17.74
+        },
+        {
+          "text": "اللي",
+          "start": 18.04,
+          "end": 18.2
+        },
+        {
+          "text": "نشرتها",
+          "start": 18.2,
+          "end": 18.7
+        },
+        {
+          "text": "الوكالة.",
+          "start": 18.7,
+          "end": 19.12
+        }
+      ],
+      "duration": 19.56,
+      "sourceUrl": "https://www.nasa.gov/image-article/outbursts-from-a-massive-star/",
+      "sourceLabel": "www.nasa.gov"
+    },
+    {
+      "title": "مسافة كونية سحيقة",
+      "text": "المجرة الحلزونية دي بتبعد عن كوكبنا الأرض مسافة كونية هائلة بتوصل لحوالي ثلاثين مليون سنة ضوئية، ومع ذلك نجحت التلسكوبات في التقاط إشارات الانفجارات بدقة علمية استثنائية وغير مسبوقة.",
+      "summary": "المجرة تبعد ثلاثين مليون سنة ضوئية عن الأرض",
+      "keyword": "light_years",
+      "template": "journey",
+      "labels": [
+        "سنة ضوئية",
+        "المسافات الكونية",
+        "كوكب الأرض"
+      ],
+      "values": [],
+      "claim": "تقع المجرة على بعد نحو ثلاثين مليون سنة ضوئية من الأرض.",
+      "sourceId": "e714212c4694",
+      "evidence": "located about 30 million light-years from Earth.",
+      "kind": "fact",
+      "expression": 2,
+      "action": "turn",
+      "words": [
+        {
+          "text": "المجرة",
+          "start": 0.26,
+          "end": 0.76
+        },
+        {
+          "text": "الحلزونية",
+          "start": 0.76,
+          "end": 1.46
+        },
+        {
+          "text": "دي",
+          "start": 1.46,
+          "end": 1.68
+        },
+        {
+          "text": "بتبعد",
+          "start": 2.02,
+          "end": 2.46
+        },
+        {
+          "text": "عن",
+          "start": 2.46,
+          "end": 2.64
+        },
+        {
+          "text": "كوكبنا",
+          "start": 2.64,
+          "end": 3.16
+        },
+        {
+          "text": "الأرض",
+          "start": 3.16,
+          "end": 3.58
+        },
+        {
+          "text": "مسافة",
+          "start": 3.76,
+          "end": 4.28
+        },
+        {
+          "text": "كونية",
+          "start": 4.32,
+          "end": 4.76
+        },
+        {
+          "text": "هائلة",
+          "start": 4.76,
+          "end": 5.3
+        },
+        {
+          "text": "بتوصل",
+          "start": 5.82,
+          "end": 6.22
+        },
+        {
+          "text": "لحوالي",
+          "start": 6.22,
+          "end": 6.8
+        },
+        {
+          "text": "ثلاثين",
+          "start": 6.8,
+          "end": 7.42
+        },
+        {
+          "text": "مليون",
+          "start": 7.42,
+          "end": 7.88
+        },
+        {
+          "text": "سنة",
+          "start": 7.88,
+          "end": 8.2
+        },
+        {
+          "text": "ضوئية،",
+          "start": 8.2,
+          "end": 8.76
+        },
+        {
+          "text": "ومع",
+          "start": 9.3,
+          "end": 9.52
+        },
+        {
+          "text": "ذلك",
+          "start": 9.52,
+          "end": 9.9
+        },
+        {
+          "text": "نجحت",
+          "start": 10.3,
+          "end": 10.68
+        },
+        {
+          "text": "التلسكوبات",
+          "start": 10.8,
+          "end": 11.42
+        },
+        {
+          "text": "في",
+          "start": 11.54,
+          "end": 11.64
+        },
+        {
+          "text": "التقاط",
+          "start": 11.64,
+          "end": 12.1
+        },
+        {
+          "text": "إشارات",
+          "start": 12.1,
+          "end": 12.62
+        },
+        {
+          "text": "الانفجارات",
+          "start": 12.62,
+          "end": 13.32
+        },
+        {
+          "text": "بدقة",
+          "start": 13.48,
+          "end": 13.92
+        },
+        {
+          "text": "علمية",
+          "start": 14.02,
+          "end": 14.44
+        },
+        {
+          "text": "استثنائية",
+          "start": 14.44,
+          "end": 15.18
+        },
+        {
+          "text": "وغير",
+          "start": 15.18,
+          "end": 15.72
+        },
+        {
+          "text": "مسبوقة.",
+          "start": 15.72,
+          "end": 16.1
+        }
+      ],
+      "duration": 16.6,
+      "sourceUrl": "https://www.nasa.gov/image-article/outbursts-from-a-massive-star/",
+      "sourceLabel": "www.nasa.gov"
+    },
+    {
+      "title": "كتلة هائلة تفوق الشمس",
+      "text": "تقديرات وحسابات الباحثين بتأكد إن كتلة النجم العملاق ده ضخمة بشكل لا يصدق، حيث بتبلغ على الأقل ثلاثة وثلاثين ضعف كتلة شمسنا، وده بيخليه من أثقل النجوم المرصودة بالكون.",
+      "summary": "كتلة النجم تبلغ 33 ضعف كتلة شمسنا على الأقل",
+      "keyword": "massive_star",
+      "template": "comparison",
+      "labels": [
+        "كتلة النجم",
+        "الشمس",
+        "العمالقة الحمر"
+      ],
+      "values": [],
+      "claim": "يقدر الفلكيون كتلة هذا النجم بما لا يقل عن ثلاثة وثلاثين ضعف كتلة الشمس.",
+      "sourceId": "e714212c4694",
+      "evidence": "Astronomers estimate the mass of this star is at least 33 times that of the Sun.",
+      "kind": "fact",
+      "expression": 9,
+      "action": "jump",
+      "words": [
+        {
+          "text": "تقديرات",
+          "start": 0.34,
+          "end": 0.84
+        },
+        {
+          "text": "وحسابات",
+          "start": 0.9,
+          "end": 1.42
+        },
+        {
+          "text": "الباحثين",
+          "start": 1.42,
+          "end": 2.04
+        },
+        {
+          "text": "بتأكد",
+          "start": 2.04,
+          "end": 2.7
+        },
+        {
+          "text": "إن",
+          "start": 2.7,
+          "end": 2.82
+        },
+        {
+          "text": "كتلة",
+          "start": 2.82,
+          "end": 3.24
+        },
+        {
+          "text": "النجم",
+          "start": 3.24,
+          "end": 3.64
+        },
+        {
+          "text": "العملاق",
+          "start": 3.64,
+          "end": 4.14
+        },
+        {
+          "text": "ده",
+          "start": 4.16,
+          "end": 4.32
+        },
+        {
+          "text": "ضخمة",
+          "start": 4.32,
+          "end": 5.04
+        },
+        {
+          "text": "بشكل",
+          "start": 5.04,
+          "end": 5.5
+        },
+        {
+          "text": "لا",
+          "start": 5.52,
+          "end": 5.7
+        },
+        {
+          "text": "يصدق،",
+          "start": 5.7,
+          "end": 6.44
+        },
+        {
+          "text": "حيث",
+          "start": 6.8,
+          "end": 6.96
+        },
+        {
+          "text": "بتبلغ",
+          "start": 7.12,
+          "end": 7.42
+        },
+        {
+          "text": "على",
+          "start": 7.42,
+          "end": 7.58
+        },
+        {
+          "text": "الأقل",
+          "start": 7.58,
+          "end": 8.06
+        },
+        {
+          "text": "ثلاثة",
+          "start": 8.06,
+          "end": 8.74
+        },
+        {
+          "text": "وثلاثين",
+          "start": 8.74,
+          "end": 9.22
+        },
+        {
+          "text": "ضعف",
+          "start": 9.22,
+          "end": 9.68
+        },
+        {
+          "text": "كتلة",
+          "start": 9.68,
+          "end": 10.06
+        },
+        {
+          "text": "شمسنا،",
+          "start": 10.2,
+          "end": 10.82
+        },
+        {
+          "text": "وده",
+          "start": 11.04,
+          "end": 11.22
+        },
+        {
+          "text": "بيخليه",
+          "start": 11.22,
+          "end": 11.8
+        },
+        {
+          "text": "من",
+          "start": 11.8,
+          "end": 11.94
+        },
+        {
+          "text": "أثقل",
+          "start": 11.94,
+          "end": 12.42
+        },
+        {
+          "text": "النجوم",
+          "start": 12.42,
+          "end": 12.82
+        },
+        {
+          "text": "المرصودة",
+          "start": 12.82,
+          "end": 13.34
+        },
+        {
+          "text": "بالكون.",
+          "start": 13.34,
+          "end": 13.48
+        }
+      ],
+      "duration": 14.08,
+      "sourceUrl": "https://www.nasa.gov/image-article/outbursts-from-a-massive-star/",
+      "sourceLabel": "www.nasa.gov"
+    },
+    {
+      "title": "عملاق متقلب وغير مستقر",
+      "text": "النجم الجبار بيعيش حالة من عدم الاستقرار الشديد، وده اللي بيخليه يمر بنوبات متكررة من الثوران والانفجارات العنيفة اللي كانت محيرة لعلماء الفلك لسنين طويلة قبل الاكتشاف ده.",
+      "summary": "انفجارات وثورات متكررة لنجم غير مستقر",
+      "keyword": "unstable_star",
+      "template": "steps",
+      "labels": [
+        "عدم الاستقرار",
+        "ثورات نجمية",
+        "فيزياء فلكية"
+      ],
+      "values": [],
+      "claim": "يمر النجم بحالة تقلب وعدم استقرار تؤدي إلى انفجارات وثورات دورية.",
+      "sourceId": "e714212c4694",
+      "evidence": "triggering repeated outbursts from a giant, unstable star",
+      "kind": "fact",
+      "expression": 6,
+      "action": "turn",
+      "words": [
+        {
+          "text": "النجم",
+          "start": 0.48,
+          "end": 0.72
+        },
+        {
+          "text": "الجبار",
+          "start": 0.72,
+          "end": 1.36
+        },
+        {
+          "text": "بيعيش",
+          "start": 1.8,
+          "end": 2.22
+        },
+        {
+          "text": "حالة",
+          "start": 2.22,
+          "end": 2.6
+        },
+        {
+          "text": "من",
+          "start": 2.6,
+          "end": 2.72
+        },
+        {
+          "text": "عدم",
+          "start": 2.72,
+          "end": 3.08
+        },
+        {
+          "text": "الاستقرار",
+          "start": 3.08,
+          "end": 3.7
+        },
+        {
+          "text": "الشديد،",
+          "start": 3.7,
+          "end": 4.44
+        },
+        {
+          "text": "وده",
+          "start": 4.96,
+          "end": 5.2
+        },
+        {
+          "text": "اللي",
+          "start": 5.2,
+          "end": 5.3
+        },
+        {
+          "text": "بيخليه",
+          "start": 5.3,
+          "end": 5.88
+        },
+        {
+          "text": "يمر",
+          "start": 5.88,
+          "end": 6.14
+        },
+        {
+          "text": "بنوبات",
+          "start": 6.14,
+          "end": 6.72
+        },
+        {
+          "text": "متكررة",
+          "start": 6.74,
+          "end": 7.46
+        },
+        {
+          "text": "من",
+          "start": 7.46,
+          "end": 7.68
+        },
+        {
+          "text": "الثوران",
+          "start": 7.68,
+          "end": 8.42
+        },
+        {
+          "text": "والانفجارات",
+          "start": 8.42,
+          "end": 9.2
+        },
+        {
+          "text": "العنيفة",
+          "start": 9.2,
+          "end": 9.78
+        },
+        {
+          "text": "اللي",
+          "start": 10.32,
+          "end": 10.5
+        },
+        {
+          "text": "كانت",
+          "start": 10.68,
+          "end": 10.78
+        },
+        {
+          "text": "محيرة",
+          "start": 10.78,
+          "end": 11.36
+        },
+        {
+          "text": "لعلماء",
+          "start": 11.36,
+          "end": 11.86
+        },
+        {
+          "text": "الفلك",
+          "start": 11.86,
+          "end": 12.26
+        },
+        {
+          "text": "لسنين",
+          "start": 12.36,
+          "end": 12.74
+        },
+        {
+          "text": "طويلة",
+          "start": 12.74,
+          "end": 13.3
+        },
+        {
+          "text": "قبل",
+          "start": 13.6,
+          "end": 13.78
+        },
+        {
+          "text": "الاكتشاف",
+          "start": 13.78,
+          "end": 14.28
+        },
+        {
+          "text": "ده.",
+          "start": 14.28,
+          "end": 14.38
+        }
+      ],
+      "duration": 14.8,
+      "sourceUrl": "https://www.nasa.gov/image-article/outbursts-from-a-massive-star/",
+      "sourceLabel": "www.nasa.gov"
+    },
+    {
+      "title": "صورة مركبة مذهلة",
+      "text": "المشهد الكوني الرائع ده اتكون من دمج أرصاد الأشعة السينية لشاندرا مع بيانات الضوء المرئي من مسح سلون الرقمي، علشان يظهر النجم ومجرته بأوضح صورة ممكنة للبشر والعلماء.",
+      "summary": "دمج أرصاد شاندرا بالأشعة السينية ومسح سلون",
+      "keyword": "composite_image",
+      "template": "phenomenon",
+      "labels": [
+        "تلسكوب سلون",
+        "أشعة سينية",
+        "معالجة الصور"
+      ],
+      "values": [],
+      "claim": "تم دمج بيانات الأشعة السينية لشاندرا مع الضوء المرئي لمسح سلون لإنتاج الصورة.",
+      "sourceId": "e714212c4694",
+      "evidence": "X-ray: NASA/CXC/Univ. of Virginia/M. Aghakhanloo et al.; Optical: SDSS; Image Processing: NASA/CXC/SAO/P. Edmonds",
+      "kind": "fact",
+      "expression": 1,
+      "action": "point",
+      "words": [
+        {
+          "text": "المشهد",
+          "start": 0.54,
+          "end": 0.9
+        },
+        {
+          "text": "الكوني",
+          "start": 0.9,
+          "end": 1.36
+        },
+        {
+          "text": "الرائع",
+          "start": 1.36,
+          "end": 1.86
+        },
+        {
+          "text": "ده",
+          "start": 1.86,
+          "end": 2.06
+        },
+        {
+          "text": "اتكون",
+          "start": 2.46,
+          "end": 2.9
+        },
+        {
+          "text": "من",
+          "start": 2.9,
+          "end": 3.16
+        },
+        {
+          "text": "دمج",
+          "start": 3.16,
+          "end": 3.54
+        },
+        {
+          "text": "أرصاد",
+          "start": 3.54,
+          "end": 4.04
+        },
+        {
+          "text": "الأشعة",
+          "start": 4.04,
+          "end": 4.54
+        },
+        {
+          "text": "السينية",
+          "start": 4.54,
+          "end": 5.08
+        },
+        {
+          "text": "لشاندرا",
+          "start": 5.08,
+          "end": 5.56
+        },
+        {
+          "text": "مع",
+          "start": 5.56,
+          "end": 6.14
+        },
+        {
+          "text": "بيانات",
+          "start": 6.14,
+          "end": 6.68
+        },
+        {
+          "text": "الضوء",
+          "start": 6.68,
+          "end": 7.04
+        },
+        {
+          "text": "المرئي",
+          "start": 7.04,
+          "end": 7.54
+        },
+        {
+          "text": "من",
+          "start": 7.54,
+          "end": 7.7
+        },
+        {
+          "text": "مسح",
+          "start": 7.7,
+          "end": 8.04
+        },
+        {
+          "text": "سلون",
+          "start": 8.1,
+          "end": 8.4
+        },
+        {
+          "text": "الرقمي،",
+          "start": 8.4,
+          "end": 9.04
+        },
+        {
+          "text": "علشان",
+          "start": 9.38,
+          "end": 9.78
+        },
+        {
+          "text": "يظهر",
+          "start": 9.78,
+          "end": 10.2
+        },
+        {
+          "text": "النجم",
+          "start": 10.2,
+          "end": 10.64
+        },
+        {
+          "text": "ومجرته",
+          "start": 10.64,
+          "end": 11.32
+        },
+        {
+          "text": "بأوضح",
+          "start": 11.7,
+          "end": 12.24
+        },
+        {
+          "text": "صورة",
+          "start": 12.3,
+          "end": 12.6
+        },
+        {
+          "text": "ممكنة",
+          "start": 12.6,
+          "end": 13.14
+        },
+        {
+          "text": "للبشر",
+          "start": 13.14,
+          "end": 13.6
+        },
+        {
+          "text": "والعلماء.",
+          "start": 13.6,
+          "end": 14.2
+        }
+      ],
+      "duration": 14.64,
+      "sourceUrl": "https://www.nasa.gov/image-article/outbursts-from-a-massive-star/",
+      "sourceLabel": "www.nasa.gov"
+    },
+    {
+      "title": "جهود فريق البحث العلمي",
+      "text": "البحث المثير قاده فريق علمي متخصص من جامعة فيرجينيا بالتعاون مع خبراء ناسا، وقدروا يحللوا البيانات ويكتشفوا الآلية اللي بتشعل الثورات المتكررة للعملاق الفلكي AT 2016blu بدقة علمية.",
+      "summary": "علماء جامعة فيرجينيا بالتعاون مع ناسا",
+      "keyword": "astronomy_research",
+      "template": "cause",
+      "labels": [
+        "جامعة فيرجينيا",
+        "أبحاث ناسا",
+        "فلكيون"
+      ],
+      "values": [],
+      "claim": "أجرى فريق جامعة فيرجينيا ومشاركون تحليل البيانات لاكتشاف سبب الثورات.",
+      "sourceId": "e714212c4694",
+      "evidence": "Univ. of Virginia/M. Aghakhanloo et al.",
+      "kind": "fact",
+      "expression": 5,
+      "action": "walk",
+      "words": [
+        {
+          "text": "البحث",
+          "start": 0.5,
+          "end": 0.7
+        },
+        {
+          "text": "المثير",
+          "start": 0.7,
+          "end": 1.22
+        },
+        {
+          "text": "قاده",
+          "start": 1.22,
+          "end": 1.9
+        },
+        {
+          "text": "فريق",
+          "start": 1.9,
+          "end": 2.28
+        },
+        {
+          "text": "علمي",
+          "start": 2.28,
+          "end": 2.66
+        },
+        {
+          "text": "متخصص",
+          "start": 2.66,
+          "end": 3.26
+        },
+        {
+          "text": "من",
+          "start": 3.28,
+          "end": 3.44
+        },
+        {
+          "text": "جامعة",
+          "start": 3.44,
+          "end": 3.78
+        },
+        {
+          "text": "فيرجينيا",
+          "start": 3.78,
+          "end": 4.3
+        },
+        {
+          "text": "بالتعاون",
+          "start": 4.64,
+          "end": 5.22
+        },
+        {
+          "text": "مع",
+          "start": 5.22,
+          "end": 5.4
+        },
+        {
+          "text": "خبراء",
+          "start": 5.4,
+          "end": 5.82
+        },
+        {
+          "text": "ناسا،",
+          "start": 5.82,
+          "end": 6.44
+        },
+        {
+          "text": "وقدروا",
+          "start": 6.7,
+          "end": 7.16
+        },
+        {
+          "text": "يحللوا",
+          "start": 7.16,
+          "end": 7.68
+        },
+        {
+          "text": "البيانات",
+          "start": 7.68,
+          "end": 8.18
+        },
+        {
+          "text": "ويكتشفوا",
+          "start": 8.44,
+          "end": 9.12
+        },
+        {
+          "text": "الآلية",
+          "start": 9.12,
+          "end": 9.64
+        },
+        {
+          "text": "اللي",
+          "start": 9.64,
+          "end": 9.92
+        },
+        {
+          "text": "بتشعل",
+          "start": 9.92,
+          "end": 10.36
+        },
+        {
+          "text": "الثورات",
+          "start": 10.36,
+          "end": 10.92
+        },
+        {
+          "text": "المتكررة",
+          "start": 10.92,
+          "end": 11.6
+        },
+        {
+          "text": "للعملاق",
+          "start": 11.6,
+          "end": 12.44
+        },
+        {
+          "text": "الفلكي",
+          "start": 12.62,
+          "end": 12.96
+        },
+        {
+          "text": "AT",
+          "start": 13.26,
+          "end": 13.56
+        },
+        {
+          "text": "2016blu",
+          "start": 13.58,
+          "end": 15.34
+        },
+        {
+          "text": "بدقة",
+          "start": 15.34,
+          "end": 16.06
+        },
+        {
+          "text": "علمية.",
+          "start": 16.06,
+          "end": 16.48
+        }
+      ],
+      "duration": 16.88,
+      "sourceUrl": "https://www.nasa.gov/image-article/outbursts-from-a-massive-star/",
+      "sourceLabel": "www.nasa.gov"
+    },
+    {
+      "title": "عجائب لا تنتهي في الفضاء",
+      "text": "أسرار الكون الواسع ما بتنتهيش وكل يوم بيكشفلنا مفاجآت مدهشة، اعمل لايك واشترك في القناة وشير الفيديو مع أصحابك علشان تتابع معانا أحدث أسرار الفضاء أولاً بأول دايماً.",
+      "summary": "دعوة لمتابعة المزيد من أسرار واكتشافات الكون",
+      "keyword": "space_secrets",
+      "template": "journey",
+      "labels": [
+        "أسرار الفضاء",
+        "علم الفلك",
+        "استكشاف الكون"
+      ],
+      "values": [],
+      "claim": "تتيح المراصد الفضائية الكشف المستمر عن أسرار النجوم والمجرات البعيدة.",
+      "sourceId": "e714212c4694",
+      "evidence": "Using NASA’s Chandra X-ray Observatory, astronomers have discovered what is triggering repeated outbursts from a giant, unstable star",
+      "kind": "fact",
+      "expression": 11,
+      "action": "jump",
+      "words": [
+        {
+          "text": "أسرار",
+          "start": 0.24,
+          "end": 0.6
+        },
+        {
+          "text": "الكون",
+          "start": 0.6,
+          "end": 1
+        },
+        {
+          "text": "الواسع",
+          "start": 1,
+          "end": 1.58
+        },
+        {
+          "text": "ما",
+          "start": 1.7,
+          "end": 1.82
+        },
+        {
+          "text": "بتنتهيش",
+          "start": 1.82,
+          "end": 2.52
+        },
+        {
+          "text": "وكل",
+          "start": 2.92,
+          "end": 3.3
+        },
+        {
+          "text": "يوم",
+          "start": 3.3,
+          "end": 3.62
+        },
+        {
+          "text": "بيكشفلنا",
+          "start": 3.62,
+          "end": 4.36
+        },
+        {
+          "text": "مفاجآت",
+          "start": 4.36,
+          "end": 5.08
+        },
+        {
+          "text": "مدهشة،",
+          "start": 5.08,
+          "end": 5.8
+        },
+        {
+          "text": "اعمل",
+          "start": 6.16,
+          "end": 6.48
+        },
+        {
+          "text": "لايك",
+          "start": 6.48,
+          "end": 6.88
+        },
+        {
+          "text": "واشترك",
+          "start": 6.96,
+          "end": 7.42
+        },
+        {
+          "text": "في",
+          "start": 7.42,
+          "end": 7.52
+        },
+        {
+          "text": "القناة",
+          "start": 7.52,
+          "end": 7.96
+        },
+        {
+          "text": "وشير",
+          "start": 8.32,
+          "end": 8.7
+        },
+        {
+          "text": "الفيديو",
+          "start": 8.7,
+          "end": 9.2
+        },
+        {
+          "text": "مع",
+          "start": 9.2,
+          "end": 9.36
+        },
+        {
+          "text": "أصحابك",
+          "start": 9.36,
+          "end": 9.96
+        },
+        {
+          "text": "علشان",
+          "start": 10.24,
+          "end": 10.64
+        },
+        {
+          "text": "تتابع",
+          "start": 10.64,
+          "end": 11.08
+        },
+        {
+          "text": "معانا",
+          "start": 11.08,
+          "end": 11.52
+        },
+        {
+          "text": "أحدث",
+          "start": 11.52,
+          "end": 11.98
+        },
+        {
+          "text": "أسرار",
+          "start": 11.98,
+          "end": 12.4
+        },
+        {
+          "text": "الفضاء",
+          "start": 12.4,
+          "end": 12.86
+        },
+        {
+          "text": "أولاً",
+          "start": 12.86,
+          "end": 13.42
+        },
+        {
+          "text": "بأول",
+          "start": 13.42,
+          "end": 13.78
+        },
+        {
+          "text": "دايماً.",
+          "start": 13.78,
+          "end": 14.24
+        }
+      ],
+      "duration": 14.370958,
+      "sourceUrl": "https://www.nasa.gov/image-article/outbursts-from-a-massive-star/",
+      "sourceLabel": "www.nasa.gov"
+    }
+  ],
+  "audio": "generated/2026-11-15T22-07-13-222Z/audio.wav",
+  "durationInFrames": 4252
+}
