@@ -1,30 +1,28 @@
 {
   "id": "2026-11-19T08-37-00-478Z",
-  "attemptId": "2026-11-19T08-37-00-478Z",
+  "attemptId": "2026-11-19T09-38-56-204Z",
   "mode": "review",
   "published": false,
   "status": "failed",
-  "resumed": false,
+  "resumed": true,
   "stages": [
     {
       "name": "preflight",
       "status": "pass",
-      "seconds": 0.067
+      "seconds": 0.172
     },
     {
       "name": "topics",
-      "status": "pass",
-      "seconds": 6.1
+      "status": "resumed_from_saved_source_manifest"
     },
     {
       "name": "script",
-      "status": "pass",
-      "seconds": 39.441
+      "status": "resumed_from_hash_verified_script"
     },
     {
       "name": "voice",
       "status": "pass",
-      "seconds": 268.926
+      "seconds": 0.606
     }
   ],
   "limitations": [

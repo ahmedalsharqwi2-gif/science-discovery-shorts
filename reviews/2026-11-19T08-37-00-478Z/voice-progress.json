@@ -13,7 +13,7 @@
       "model": "gemini-3.1-flash-tts-preview",
       "bytes": 735438,
       "file": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/.cache/voice/e56ad255fbd2019503b2624592f6649ac22aa5e46dafd7b567f413d3555dc328.wav",
-      "reused": false
+      "reused": true
     },
     {
       "scene": 1,
@@ -27,7 +27,7 @@
       "model": "gemini-3.1-flash-tts-preview",
       "bytes": 756558,
       "file": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/.cache/voice/207b173a8de6f40c980a83e5a8255e029ee13bd389182200ec7304d82d1eada5.wav",
-      "reused": false
+      "reused": true
     },
     {
       "scene": 2,
@@ -41,7 +41,7 @@
       "model": "gemini-3.1-flash-tts-preview",
       "bytes": 760398,
       "file": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/.cache/voice/1cc87502ad2b6a9e7681f516af0bdc47780bd0a463dcd51038e6c0608e2f519e.wav",
-      "reused": false
+      "reused": true
     },
     {
       "scene": 3,
@@ -55,7 +55,7 @@
       "model": "gemini-3.1-flash-tts-preview",
       "bytes": 789198,
       "file": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/.cache/voice/c14059c0dd86faf846a78c7cf6ff4aab83d9d2aed7488672bfd3c0e4c2e537bf.wav",
-      "reused": false
+      "reused": true
     },
     {
       "scene": 4,
@@ -69,7 +69,7 @@
       "model": "gemini-3.1-flash-tts-preview",
       "bytes": 821838,
       "file": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/.cache/voice/f5ab5a0188fc05092fbd7c3d17df767f35fa1bdc6456bc28e64b9b6ad70185f6.wav",
-      "reused": false
+      "reused": true
     },
     {
       "scene": 5,
@@ -83,7 +83,7 @@
       "model": "gemini-3.1-flash-tts-preview",
       "bytes": 679758,
       "file": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/.cache/voice/dbd8c8cd45c5275ca6335881fd90e927a10f4b54dea7877cb0e3a08813400324.wav",
-      "reused": false
+      "reused": true
     },
     {
       "scene": 6,
@@ -97,7 +97,7 @@
       "model": "gemini-3.1-flash-tts-preview",
       "bytes": 631758,
       "file": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/.cache/voice/12c97c1395a76a376a1df37042c09e5c3d416314189612ed35366e6493eff197.wav",
-      "reused": false
+      "reused": true
     },
     {
       "scene": 7,
@@ -111,7 +111,7 @@
       "model": "gemini-3.1-flash-tts-preview",
       "bytes": 783438,
       "file": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/.cache/voice/84fcee222f6a46e71de29913273ed3b9bc246280249b94df59ac77568f5ec8a9.wav",
-      "reused": false
+      "reused": true
     }
   ]
 }
