@@ -63,7 +63,7 @@ export async function review({mode='review',scheduled=false,topicReservationPath
   // Recovery ladder: on a content-stage failure with a live episode, retire it
   // and roll a fresh topic in the SAME run (max 2 rolls), so a gate reject
   // never reads as a stall. Thresholds themselves are untouched.
-  if(ROLLABLE.has(stageName)&&rolls<2&&mode==='review'&&failCode!=='REVIEW_ALREADY_RUNNING'){
+  if(ROLLABLE.has(stageName.replace(/-repair-\d+$/,''))&&rolls<2&&mode==='review'&&failCode!=='REVIEW_ALREADY_RUNNING'){
    {const ledgerReject=await optionalJSON('state/topics.json',[]);let rejectChanged=false;
    if(topic&&Array.isArray(topic.sources))for(const s of topic.sources){if(s&&s.url&&!ledgerReject.some(r=>r.value===s.url)){ledgerReject.push({topicKey:e.topicKey||(episode&&episode.topicKey)||undefined,value:s.url,status:'rejected',reason:failCode,run:id});rejectChanged=true;}}
    if(e.topicKey&&!ledgerReject.some(r=>r.topicKey===e.topicKey)){ledgerReject.push({topicKey:e.topicKey,value:'identity:'+e.topicKey,status:'rejected',reason:failCode,run:id});rejectChanged=true;}
