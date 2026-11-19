@@ -1,0 +1,96 @@
+{
+  "sources": [
+    {
+      "source": "trends",
+      "status": "ok",
+      "items": 10
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 2
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 0
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 9
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 10
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 10
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 9
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 10
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 10
+    }
+  ],
+  "degraded": false,
+  "decisions": [
+    {
+      "id": "58a8acf48ab8",
+      "title": "Challenge: Public Input on Life and the World in 2075",
+      "demand": 28,
+      "recency": 0.955,
+      "matches": [
+        {
+          "kind": "google_trend",
+          "label": "fast",
+          "weight": 8
+        },
+        {
+          "kind": "google_trend",
+          "label": "صرف مرتبات شهر نوفمبر",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "alexander zverev",
+          "weight": 4
+        },
+        {
+          "kind": "google_trend",
+          "label": "كامل العدد",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "شبيبة القبائل ضد اتحاد الجزائر",
+          "weight": 4
+        },
+        {
+          "kind": "google_trend",
+          "label": "hunger games",
+          "weight": 6
+        },
+        {
+          "kind": "google_trend",
+          "label": "جامعة",
+          "weight": 2
+        }
+      ],
+      "score": 28.47744698765723
+    }
+  ]
+}

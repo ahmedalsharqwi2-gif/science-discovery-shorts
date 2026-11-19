@@ -1,0 +1,172 @@
+{
+  "topicKey": "nasa-future-life-2075-challenge",
+  "title": "إيه اللي ممكن يتغير في حياتنا لحد سنة 2075؟",
+  "hook": "إيه اللي ممكن يتغير في حياتنا لحد سنة 2075؟ تخيل العالم بعد حوالي خمسين سنة من دلوقتي، هل فكرت إزاي التكنولوجيا ممكن تغير طريقة سفرنا أو حتى الطريقة اللي بنعيش بيها كل يوم؟",
+  "cta": "لو عندك أفكار إبداعية عن شكل الحياة في المستقبل، شاركنا في تحدي ناسا وقدم تصوراتك عشان نساهم سوا في رسم ملامح العالم الجديد اللي بنتمناه لأولادنا وأحفادنا في السنين اللي جاية.",
+  "scenes": [
+    {
+      "title": "تحدي ناسا للمستقبل",
+      "text": "وكالة الفضاء الأمريكية ناسا أطلقت تحدي جديد ومثير بيطلب من الناس يشاركون بأفكارهم وتصوراتهم عن شكل الحياة على كوكب الأرض في سنة 2075، وده بيشمل مجالات كتير زي الطيران وأنظمة الفضاء المتطورة.",
+      "summary": "ناسا تطلب أفكار الجمهور لمستقبل الحياة في 2075.",
+      "keyword": "ناسا",
+      "template": "phenomenon",
+      "labels": [
+        "ناسا",
+        "مستقبل",
+        "تكنولوجيا"
+      ],
+      "values": [],
+      "claim": "ناسا تطلب أفكار الجمهور لمستقبل الحياة في 2075.",
+      "sourceId": "58a8acf48ab8",
+      "evidence": "NASA’s Transformational Tools and Technologies (TTT) is gathering public perspectives on life today and how the world may change by 2075.",
+      "kind": "fact",
+      "expression": 5,
+      "action": "point",
+      "brollQuery": "NASA logo"
+    },
+    {
+      "title": "أهداف التحدي",
+      "text": "التحدي مش بس مجرد خيال، ده بيهدف لتحسين كفاءة الأنظمة وإدارة الموارد بشكل أفضل، وتقليل التكاليف، وتعزيز الشفافية، وكمان ربط المجتمعات ببعضها وتسهيل الوصول للخدمات الأساسية لكل الناس في كل مكان على الأرض.",
+      "summary": "أهداف التحدي تشمل تحسين الكفاءة وربط المجتمعات.",
+      "keyword": "أهداف",
+      "template": "steps",
+      "labels": [
+        "كفاءة",
+        "موارد",
+        "مجتمعات"
+      ],
+      "values": [],
+      "claim": "التحدي يهدف لتحسين الكفاءة وربط المجتمعات.",
+      "sourceId": "58a8acf48ab8",
+      "evidence": "Ideas should explore how future aviation or aerospace systems could: Improve efficiency Help manage resources better Reduce costs Strengthen trust and transparency Connect communities Improve access to services Support future national priorities",
+      "kind": "fact",
+      "expression": 6,
+      "action": "walk",
+      "brollQuery": "futuristic city"
+    },
+    {
+      "title": "طبيعة الأفكار المطلوبة",
+      "text": "المطلوب في التحدي ده أفكار مفاهيمية إبداعية مش لازم تكون تقنية معقدة، يعني ناسا بتدور على رؤية شاملة وتصورات مبتكرة تقدر تغير شكل حياتنا اليومية وتدعم الأولويات الوطنية في المستقبل البعيد بكل ثقة.",
+      "summary": "ناسا تبحث عن أفكار مفاهيمية إبداعية.",
+      "keyword": "أفكار",
+      "template": "phenomenon",
+      "labels": [
+        "إبداع",
+        "مفاهيم",
+        "تطوير"
+      ],
+      "values": [],
+      "claim": "ناسا تبحث عن أفكار مفاهيمية إبداعية.",
+      "sourceId": "58a8acf48ab8",
+      "evidence": "Ideas should be conceptual rather than technical.",
+      "kind": "fact",
+      "expression": 7,
+      "action": "turn",
+      "brollQuery": "innovation concept"
+    },
+    {
+      "title": "جوائز التحدي",
+      "text": "عشان تشجع الناس على المشاركة، ناسا خصصت جوائز مالية بتوصل لعشرين ألف دولار إجمالي، وده بيعكس مدى اهتمام الوكالة بسماع صوت الجمهور وأفكارهم اللي ممكن تشكل مستقبلنا المشترك في العقود اللي جاية.",
+      "summary": "جوائز مالية تصل لعشرين ألف دولار.",
+      "keyword": "جوائز",
+      "template": "chart",
+      "labels": [
+        "جوائز",
+        "تحفيز",
+        "مشاركة"
+      ],
+      "values": [],
+      "claim": "جوائز مالية تصل لعشرين ألف دولار.",
+      "sourceId": "58a8acf48ab8",
+      "evidence": "Award: $20,000 in total prizes",
+      "kind": "fact",
+      "expression": 8,
+      "action": "jump",
+      "brollQuery": "money prize"
+    },
+    {
+      "title": "مواعيد التسجيل",
+      "text": "التسجيل في التحدي مفتوح من يوم تلاتاشر نوفمبر 2026، والفرصة قدامك لحد يوم تمنتاشر يناير 2027 عشان تقدم فكرتك، فلو عندك حلم أو تصور للمستقبل، دي فرصتك الحقيقية عشان تشارك وتسمع صوتك.",
+      "summary": "مواعيد التسجيل من نوفمبر 2026 وحتى يناير 2027.",
+      "keyword": "مواعيد",
+      "template": "map",
+      "labels": [
+        "تسجيل",
+        "مواعيد",
+        "فرصة"
+      ],
+      "values": [],
+      "claim": "التسجيل مفتوح من نوفمبر 2026 حتى يناير 2027.",
+      "sourceId": "58a8acf48ab8",
+      "evidence": "Registration Open Date: November 13, 2026 Submission Deadline: January 18, 2027",
+      "kind": "fact",
+      "expression": 4,
+      "action": "point",
+      "brollQuery": "calendar date"
+    },
+    {
+      "title": "تكنولوجيا الطيران",
+      "text": "تخيل طيارات المستقبل اللي ممكن نستخدمها في سنة 2075، هل هتكون أسرع؟ هل هتكون صديقة للبيئة أكتر؟ ناسا بتستكشف كل الاحتمالات دي من خلال أفكار الجمهور عشان نطور أنظمة طيران بتخدم البشرية بشكل أفضل.",
+      "summary": "استكشاف مستقبل طيران صديق للبيئة.",
+      "keyword": "طيران",
+      "template": "journey",
+      "labels": [
+        "طيران",
+        "بيئة",
+        "تطور"
+      ],
+      "values": [],
+      "claim": "ناسا تستكشف مستقبل الطيران.",
+      "sourceId": "58a8acf48ab8",
+      "evidence": "Ideas should explore how future aviation or aerospace systems could: Improve efficiency Help manage resources better",
+      "kind": "fact",
+      "expression": 9,
+      "action": "run",
+      "brollQuery": "futuristic airplane"
+    },
+    {
+      "title": "تطوير أنظمة الفضاء",
+      "text": "مش بس الطيران، كمان أنظمة الفضاء بتشهد اهتمام كبير، لأننا بنحاول نفهم إزاي التكنولوجيا الفضائية ممكن تساعدنا في حل مشاكلنا على الأرض، سواء في إدارة الموارد أو في تحسين جودة الخدمات اللي بنحتاجها يومياً.",
+      "summary": "استخدام تكنولوجيا الفضاء لحل مشاكل الأرض.",
+      "keyword": "فضاء",
+      "template": "phenomenon",
+      "labels": [
+        "فضاء",
+        "موارد",
+        "خدمات"
+      ],
+      "values": [],
+      "claim": "تكنولوجيا الفضاء تساعد في حل مشاكل الأرض.",
+      "sourceId": "58a8acf48ab8",
+      "evidence": "Ideas should explore how future aviation or aerospace systems could: Improve efficiency Help manage resources better",
+      "kind": "fact",
+      "expression": 10,
+      "action": "fall",
+      "brollQuery": "space technology"
+    },
+    {
+      "title": "المشاركة في التحدي",
+      "text": "عشان تعرف أكتر عن القواعد وشروط المشاركة، تقدر تزور الموقع الرسمي المخصص للتحدي، هناك هتلاقي كل التفاصيل اللي محتاجها عشان تبدأ رحلتك في تقديم فكرتك وتكون جزء من صناعة المستقبل اللي بنحلم بيه.",
+      "summary": "زيارة الموقع الرسمي لمعرفة شروط المشاركة.",
+      "keyword": "مشاركة",
+      "template": "steps",
+      "labels": [
+        "موقع",
+        "قواعد",
+        "مشاركة"
+      ],
+      "values": [],
+      "claim": "زيارة الموقع الرسمي لمعرفة شروط المشاركة.",
+      "sourceId": "58a8acf48ab8",
+      "evidence": "For more information including registration , rules, and eligibility, visit: https://work.crowdplat.com/challenge/life-2075",
+      "kind": "fact",
+      "expression": 11,
+      "action": "sleep",
+      "brollQuery": "website interface"
+    }
+  ],
+  "seriesLabel": "استكشاف الفضاء",
+  "editorialMode": "daily",
+  "editorialLabel": null,
+  "scriptModel": "gemini-3.1-flash-lite"
+}

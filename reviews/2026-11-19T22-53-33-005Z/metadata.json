@@ -1,0 +1,39 @@
+{
+  "title": "إيه اللي ممكن يتغير في حياتنا لحد سنة 2075؟",
+  "topicKey": "nasa-future-life-2075-challenge",
+  "voice": "Charon",
+  "provider": "Gemini",
+  "sources": [
+    {
+      "id": "58a8acf48ab8",
+      "title": "Challenge: Public Input on Life and the World in 2075",
+      "url": "https://www.nasa.gov/directorates/stmd/prizes-challenges-crowdsourcing-program/center-of-excellence-for-collaborative-innovation-coeci/challenge-public-input-on-life-and-the-world-in-2075/",
+      "published": "2026-11-19T19:34:20.000Z",
+      "official": true,
+      "dateBasis": "item_publication_or_update",
+      "publisher": "www.nasa.gov",
+      "primaryRefs": [
+        "https://www.nasa.gov/wp-content/uploads/2026/11/ttt-publicinputonlife-2026.png",
+        "https://www.nasa.gov/wp-content/uploads/2026/11/ttt-publicinputonlife-2026.png?w=2048",
+        "https://www.nasa.gov/wp-content/uploads/2026/11/ttt-publicinputonlife-2026.png",
+        "https://www.nasa.gov/wp-content/uploads/2026/11/ttt-publicinputonlife-2026.png?resize=300,150",
+        "https://www.nasa.gov/wp-content/uploads/2026/11/ttt-publicinputonlife-2026.png?resize=768,384",
+        "https://www.nasa.gov/wp-content/uploads/2026/11/ttt-publicinputonlife-2026.png?resize=1024,512",
+        "https://www.nasa.gov/wp-content/uploads/2026/11/ttt-publicinputonlife-2026.png?resize=1536,768",
+        "https://www.nasa.gov/wp-content/uploads/2026/11/ttt-publicinputonlife-2026.png?resize=2048,1024",
+        "https://www.nasa.gov/wp-content/uploads/2026/11/ttt-publicinputonlife-2026.png?resize=400,200",
+        "https://www.nasa.gov/wp-content/uploads/2026/11/ttt-publicinputonlife-2026.png?resize=600,300",
+        "https://www.nasa.gov/wp-content/uploads/2026/11/ttt-publicinputonlife-2026.png?resize=900,450",
+        "https://www.nasa.gov/wp-content/uploads/2026/11/ttt-publicinputonlife-2026.png?resize=1200,600",
+        "https://www.nasa.gov/wp-content/uploads/2026/11/ttt-publicinputonlife-2026.png?resize=2000,1000",
+        "https://www.nasa.gov/directorates/armd/tacp/ttt/",
+        "https://work.crowdplat.com/challenge/life-2075",
+        "https://work.crowdplat.com/challenge/life-2075"
+      ]
+    }
+  ],
+  "editorialMode": "daily",
+  "video_sha256": "329dc210be308e513a52c39c89364b406267cb6c29a7cffe1a58dad6df2cf870",
+  "reviewOnly": true,
+  "approved": false
+}

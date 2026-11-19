@@ -82,5 +82,11 @@
     "value": "https://www.nasa.gov/image-article/lake-pelku/",
     "status": "review",
     "run": "2026-11-19T18-37-53-139Z"
+  },
+  {
+    "topicKey": "nasa-future-life-2075-challenge",
+    "value": "https://www.nasa.gov/directorates/stmd/prizes-challenges-crowdsourcing-program/center-of-excellence-for-collaborative-innovation-coeci/challenge-public-input-on-life-and-the-world-in-2075/",
+    "status": "review",
+    "run": "2026-11-19T22-53-33-005Z"
   }
 ]

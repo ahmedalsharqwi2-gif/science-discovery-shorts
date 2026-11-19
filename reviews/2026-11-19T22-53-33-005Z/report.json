@@ -1,0 +1,69 @@
+{
+  "id": "2026-11-19T22-53-33-005Z",
+  "attemptId": "2026-11-19T22-53-33-005Z",
+  "mode": "review",
+  "published": false,
+  "status": "review_ready",
+  "resumed": false,
+  "stages": [
+    {
+      "name": "preflight",
+      "status": "pass",
+      "seconds": 0.322
+    },
+    {
+      "name": "topics",
+      "status": "pass",
+      "seconds": 10.084
+    },
+    {
+      "name": "script",
+      "status": "pass",
+      "seconds": 67.69
+    },
+    {
+      "name": "voice",
+      "status": "pass",
+      "seconds": 480.258
+    },
+    {
+      "name": "align",
+      "status": "pass",
+      "seconds": 157.064
+    },
+    {
+      "name": "assets",
+      "status": "pass",
+      "seconds": 0.001
+    },
+    {
+      "name": "mix",
+      "status": "pass",
+      "seconds": 4.514
+    },
+    {
+      "name": "layout-qa",
+      "status": "pass",
+      "seconds": 27.891
+    },
+    {
+      "name": "render",
+      "status": "pass",
+      "seconds": 203.728
+    },
+    {
+      "name": "qa",
+      "status": "pass",
+      "seconds": 6.996
+    },
+    {
+      "name": "package",
+      "status": "pass",
+      "seconds": 0.003
+    }
+  ],
+  "limitations": [
+    "Incomplete visual previews never pass narrated-film acceptance. Human pronunciation and art-direction approval are separate.",
+    "drawplan failed (DRAWPLAN_SCHEMA_INVALID); rendered with the classic template instead."
+  ]
+}

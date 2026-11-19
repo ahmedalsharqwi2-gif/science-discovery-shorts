@@ -1,0 +1,5 @@
+{
+  "code": "DRAWPLAN_SCHEMA_INVALID",
+  "attempt": 3,
+  "detail": "DRAWPLAN_SCHEMA_INVALID: summaryPoints 0 must be 1-60 chars | summaryPoints 2 must be 1-60 chars"
+}
