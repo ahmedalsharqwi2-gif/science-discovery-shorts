@@ -1,0 +1,1536 @@
+{
+  "topicKey": "space-gemini-earth-observation-program",
+  "title": "كيف ألهمت صور جيميني مراقبة الأرض؟",
+  "hook": "هل كنت تتخيل إن صورة التقطها رواد الفضاء لنهر النيل والبحر الأحمر سنة ستة وستين، غيرت بالكامل طريقتنا في مراقبة كوكب الأرض من الفضاء الخارجي وحماية موارده الطبيعية؟",
+  "cta": "فما رأيك في التأثير المذهل لصور رواد الفضاء الأوائل، وشاركنا رأيك في التعليقات وتابعنا لاكتشاف أسرار جديدة ومثيرة حول كوكبنا العجيب والكون الفسيح في كل حلقة قادمة معنا.",
+  "scenes": [
+    {
+      "title": "صورة تاريخية من الفضاء",
+      "text": "هل كنت تتخيل إن صورة التقطها رواد الفضاء لنهر النيل والبحر الأحمر سنة ستة وستين، غيرت بالكامل طريقتنا في مراقبة كوكب الأرض من الفضاء الخارجي وحماية موارده الطبيعية؟",
+      "summary": "صورة فضائية تاريخية غيرت أسلوب مراقبة الأرض",
+      "keyword": "مراقبة الأرض",
+      "template": "phenomenon",
+      "labels": [
+        "نهر النيل",
+        "البحر الأحمر",
+        "الفضاء"
+      ],
+      "values": [],
+      "claim": "التقط رواد فضاء صورة لنهر النيل والبحر الأحمر ألهمت مراقبة الأرض",
+      "sourceId": "43fbd5f391f2",
+      "evidence": "NASA astronauts James A. Lovell Jr. and Edwin E. Buzz Aldrin Jr. captured this image of the area surrounding the Red Sea and Nile river valley on November 14, 1966",
+      "kind": "fact",
+      "expression": 1,
+      "action": "point",
+      "words": [
+        {
+          "text": "هل",
+          "start": 0.32,
+          "end": 0.48
+        },
+        {
+          "text": "كنت",
+          "start": 0.48,
+          "end": 0.74
+        },
+        {
+          "text": "تتخيل",
+          "start": 0.74,
+          "end": 1.4
+        },
+        {
+          "text": "إن",
+          "start": 1.8,
+          "end": 1.94
+        },
+        {
+          "text": "صورة",
+          "start": 1.94,
+          "end": 2.4
+        },
+        {
+          "text": "التقطها",
+          "start": 2.46,
+          "end": 2.84
+        },
+        {
+          "text": "رواد",
+          "start": 2.84,
+          "end": 3.24
+        },
+        {
+          "text": "الفضاء",
+          "start": 3.24,
+          "end": 3.72
+        },
+        {
+          "text": "لنهر",
+          "start": 4.06,
+          "end": 4.48
+        },
+        {
+          "text": "النيل",
+          "start": 4.48,
+          "end": 4.88
+        },
+        {
+          "text": "والبحر",
+          "start": 4.94,
+          "end": 5.44
+        },
+        {
+          "text": "الأحمر",
+          "start": 5.44,
+          "end": 5.9
+        },
+        {
+          "text": "سنة",
+          "start": 6.22,
+          "end": 6.44
+        },
+        {
+          "text": "ستة",
+          "start": 6.48,
+          "end": 6.76
+        },
+        {
+          "text": "وستين،",
+          "start": 6.76,
+          "end": 7.38
+        },
+        {
+          "text": "غيرت",
+          "start": 7.72,
+          "end": 8.14
+        },
+        {
+          "text": "بالكامل",
+          "start": 8.14,
+          "end": 8.78
+        },
+        {
+          "text": "طريقتنا",
+          "start": 8.78,
+          "end": 9.34
+        },
+        {
+          "text": "في",
+          "start": 9.48,
+          "end": 9.58
+        },
+        {
+          "text": "مراقبة",
+          "start": 9.58,
+          "end": 10.04
+        },
+        {
+          "text": "كوكب",
+          "start": 10.04,
+          "end": 10.44
+        },
+        {
+          "text": "الأرض",
+          "start": 10.44,
+          "end": 10.8
+        },
+        {
+          "text": "من",
+          "start": 10.92,
+          "end": 11.02
+        },
+        {
+          "text": "الفضاء",
+          "start": 11.02,
+          "end": 11.42
+        },
+        {
+          "text": "الخارجي",
+          "start": 11.42,
+          "end": 11.92
+        },
+        {
+          "text": "وحماية",
+          "start": 12.4,
+          "end": 12.7
+        },
+        {
+          "text": "موارده",
+          "start": 12.7,
+          "end": 13.14
+        },
+        {
+          "text": "الطبيعية؟",
+          "start": 13.14,
+          "end": 13.68
+        }
+      ],
+      "duration": 13.96,
+      "sourceUrl": "https://www.nasa.gov/image-article/gemini-astronaut-photos-inspired-early-earth-observation-program/",
+      "sourceLabel": "www.nasa.gov"
+    },
+    {
+      "title": "لقطة نيل مصر من المدار",
+      "text": "في أربعة عشر نوفمبر سنة ستة وستين، التقط الرائدان جيمس لوفيل وإدوين باز ألدرين لقطة مذهلة لوادي النيل أثناء مهمتهما الفضائية التي استمرت أربعة أيام متواصلة في مدار الأرض.",
+      "summary": "رواد الفضاء يلتقطون وادي النيل والبحر الأحمر",
+      "keyword": "وادي النيل",
+      "template": "map",
+      "labels": [
+        "جيمس لوفيل",
+        "باز ألدرين",
+        "مدار الأرض"
+      ],
+      "values": [],
+      "claim": "التقط لوفيل وألدرين صورة وادي النيل في 14 نوفمبر 1966",
+      "sourceId": "43fbd5f391f2",
+      "evidence": "NASA astronauts James A. Lovell Jr. and Edwin E. Buzz Aldrin Jr. captured this image of the area surrounding the Red Sea and Nile river valley on November 14, 1966, during their four-day mission in space.",
+      "kind": "fact",
+      "expression": 5,
+      "action": "turn",
+      "words": [
+        {
+          "text": "في",
+          "start": 0.38,
+          "end": 0.4
+        },
+        {
+          "text": "أربعة",
+          "start": 0.4,
+          "end": 0.76
+        },
+        {
+          "text": "عشر",
+          "start": 0.76,
+          "end": 1.04
+        },
+        {
+          "text": "نوفمبر",
+          "start": 1.04,
+          "end": 1.56
+        },
+        {
+          "text": "سنة",
+          "start": 1.56,
+          "end": 1.9
+        },
+        {
+          "text": "ستة",
+          "start": 1.96,
+          "end": 2.24
+        },
+        {
+          "text": "وستين،",
+          "start": 2.24,
+          "end": 2.86
+        },
+        {
+          "text": "التقط",
+          "start": 3.18,
+          "end": 3.6
+        },
+        {
+          "text": "الرائدان",
+          "start": 3.6,
+          "end": 4.26
+        },
+        {
+          "text": "جيمس",
+          "start": 4.26,
+          "end": 4.7
+        },
+        {
+          "text": "لوفيل",
+          "start": 4.7,
+          "end": 5.14
+        },
+        {
+          "text": "وإدوين",
+          "start": 5.6,
+          "end": 5.94
+        },
+        {
+          "text": "باز",
+          "start": 5.94,
+          "end": 6.28
+        },
+        {
+          "text": "ألدرين",
+          "start": 6.28,
+          "end": 6.78
+        },
+        {
+          "text": "لقطة",
+          "start": 6.78,
+          "end": 7.54
+        },
+        {
+          "text": "مذهلة",
+          "start": 7.54,
+          "end": 7.96
+        },
+        {
+          "text": "لوادي",
+          "start": 7.96,
+          "end": 8.36
+        },
+        {
+          "text": "النيل",
+          "start": 8.36,
+          "end": 8.76
+        },
+        {
+          "text": "أثناء",
+          "start": 9,
+          "end": 9.34
+        },
+        {
+          "text": "مهمتهما",
+          "start": 9.34,
+          "end": 9.96
+        },
+        {
+          "text": "الفضائية",
+          "start": 9.96,
+          "end": 10.56
+        },
+        {
+          "text": "التي",
+          "start": 10.56,
+          "end": 11.06
+        },
+        {
+          "text": "استمرت",
+          "start": 11.06,
+          "end": 11.68
+        },
+        {
+          "text": "أربعة",
+          "start": 11.68,
+          "end": 12.14
+        },
+        {
+          "text": "أيام",
+          "start": 12.14,
+          "end": 12.5
+        },
+        {
+          "text": "متواصلة",
+          "start": 12.5,
+          "end": 13.1
+        },
+        {
+          "text": "في",
+          "start": 13.1,
+          "end": 13.28
+        },
+        {
+          "text": "مدار",
+          "start": 13.28,
+          "end": 13.66
+        },
+        {
+          "text": "الأرض.",
+          "start": 13.66,
+          "end": 14.02
+        }
+      ],
+      "duration": 14.4,
+      "sourceUrl": "https://www.nasa.gov/image-article/gemini-astronaut-photos-inspired-early-earth-observation-program/",
+      "sourceLabel": "www.nasa.gov"
+    },
+    {
+      "title": "المهمة الأخيرة لبرنامج جيميني",
+      "text": "الرحلة دي كانت جيميني اثنا عشر، وهي المهمة الأخيرة ضمن برنامج جيميني التابع لناسا، ودارت حول كوكب الأرض بين الحادي عشر والخامس عشر من شهر نوفمبر في نفس السنة بنجاح تام.",
+      "summary": "رحلة جيميني 12 الأخيرة حول كوكب الأرض",
+      "keyword": "جيميني 12",
+      "template": "journey",
+      "labels": [
+        "جيميني 12",
+        "ناسا",
+        "المدار الأرضي"
+      ],
+      "values": [],
+      "claim": "جيميني 12 كانت المهمة الختامية لبرنامج جيميني التابع لناسا",
+      "sourceId": "43fbd5f391f2",
+      "evidence": "Gemini XII was the final flight of NASA s Gemini Program. NASA Astronauts James A. Lovell Jr. and Edwin E. Buzz Aldrin Jr. orbited Earth from November 11 to 15, 1966, on Gemini XII , the final mission of NASA s Gemini program.",
+      "kind": "fact",
+      "expression": 0,
+      "action": "walk",
+      "words": [
+        {
+          "text": "الرحلة",
+          "start": 0.5,
+          "end": 0.78
+        },
+        {
+          "text": "دي",
+          "start": 0.78,
+          "end": 1.02
+        },
+        {
+          "text": "كانت",
+          "start": 1.02,
+          "end": 1.44
+        },
+        {
+          "text": "جيميني",
+          "start": 1.44,
+          "end": 1.84
+        },
+        {
+          "text": "اثنا",
+          "start": 1.84,
+          "end": 2.22
+        },
+        {
+          "text": "عشر،",
+          "start": 2.22,
+          "end": 2.62
+        },
+        {
+          "text": "وهي",
+          "start": 3.06,
+          "end": 3.36
+        },
+        {
+          "text": "المهمة",
+          "start": 3.36,
+          "end": 3.88
+        },
+        {
+          "text": "الأخيرة",
+          "start": 3.88,
+          "end": 4.38
+        },
+        {
+          "text": "ضمن",
+          "start": 4.38,
+          "end": 5.04
+        },
+        {
+          "text": "برنامج",
+          "start": 5.04,
+          "end": 5.56
+        },
+        {
+          "text": "جيميني",
+          "start": 5.56,
+          "end": 6.02
+        },
+        {
+          "text": "التابع",
+          "start": 6.02,
+          "end": 6.52
+        },
+        {
+          "text": "لناسا،",
+          "start": 6.52,
+          "end": 7.36
+        },
+        {
+          "text": "ودارت",
+          "start": 7.64,
+          "end": 8.12
+        },
+        {
+          "text": "حول",
+          "start": 8.12,
+          "end": 8.38
+        },
+        {
+          "text": "كوكب",
+          "start": 8.38,
+          "end": 8.8
+        },
+        {
+          "text": "الأرض",
+          "start": 8.9,
+          "end": 9.18
+        },
+        {
+          "text": "بين",
+          "start": 9.54,
+          "end": 9.78
+        },
+        {
+          "text": "الحادي",
+          "start": 9.78,
+          "end": 10.2
+        },
+        {
+          "text": "عشر",
+          "start": 10.2,
+          "end": 10.58
+        },
+        {
+          "text": "والخامس",
+          "start": 10.58,
+          "end": 11.44
+        },
+        {
+          "text": "عشر",
+          "start": 11.44,
+          "end": 11.76
+        },
+        {
+          "text": "من",
+          "start": 11.76,
+          "end": 11.9
+        },
+        {
+          "text": "شهر",
+          "start": 11.9,
+          "end": 12.24
+        },
+        {
+          "text": "نوفمبر",
+          "start": 12.24,
+          "end": 12.72
+        },
+        {
+          "text": "في",
+          "start": 12.72,
+          "end": 12.92
+        },
+        {
+          "text": "نفس",
+          "start": 12.92,
+          "end": 13.2
+        },
+        {
+          "text": "السنة",
+          "start": 13.2,
+          "end": 13.64
+        },
+        {
+          "text": "بنجاح",
+          "start": 13.64,
+          "end": 14.28
+        },
+        {
+          "text": "تام.",
+          "start": 14.28,
+          "end": 14.56
+        }
+      ],
+      "duration": 15.04,
+      "sourceUrl": "https://www.nasa.gov/image-article/gemini-astronaut-photos-inspired-early-earth-observation-program/",
+      "sourceLabel": "www.nasa.gov"
+    },
+    {
+      "title": "أهداف تتجاوز الوصول للقمر",
+      "text": "بجانب إتمام مناورات الالتقاء وعمليات السير في الفضاء الحيوية لإرسال رواد أمريكيين للقمر، فتحت تلك المهمة التاريخية باباً جديداً تماماً في مجال استكشاف كوكبنا ومراقبته بدقة من المدار.",
+      "summary": "مهام السير ومناورات الفضاء فتحت آفاق مراقبة الأرض",
+      "keyword": "استكشاف الأرض",
+      "template": "steps",
+      "labels": [
+        "السير في الفضاء",
+        "رحلات القمر",
+        "استكشاف المدار"
+      ],
+      "values": [],
+      "claim": "مناورات جيميني حفزت أيضاً مجال مراقبة الأرض من الفضاء",
+      "sourceId": "43fbd5f391f2",
+      "evidence": "In addition to successfully completing rendezvous maneuvers and spacewalks, procedures vital to sending American astronauts to the Moon, the crew was also spurring the development of a different field of exploration, observing Earth from space.",
+      "kind": "fact",
+      "expression": 8,
+      "action": "turn",
+      "words": [
+        {
+          "text": "بجانب",
+          "start": 0.4,
+          "end": 0.8
+        },
+        {
+          "text": "إتمام",
+          "start": 0.8,
+          "end": 1.22
+        },
+        {
+          "text": "مناورات",
+          "start": 1.22,
+          "end": 1.84
+        },
+        {
+          "text": "الالتقاء",
+          "start": 1.84,
+          "end": 2.46
+        },
+        {
+          "text": "وعمليات",
+          "start": 2.46,
+          "end": 3.26
+        },
+        {
+          "text": "السير",
+          "start": 3.26,
+          "end": 3.64
+        },
+        {
+          "text": "في",
+          "start": 3.64,
+          "end": 3.78
+        },
+        {
+          "text": "الفضاء",
+          "start": 3.92,
+          "end": 4.2
+        },
+        {
+          "text": "الحيوية",
+          "start": 4.2,
+          "end": 4.88
+        },
+        {
+          "text": "لإرسال",
+          "start": 4.88,
+          "end": 5.78
+        },
+        {
+          "text": "رواد",
+          "start": 5.78,
+          "end": 6.22
+        },
+        {
+          "text": "أمريكيين",
+          "start": 6.22,
+          "end": 6.88
+        },
+        {
+          "text": "للقمر،",
+          "start": 6.88,
+          "end": 7.58
+        },
+        {
+          "text": "فتحت",
+          "start": 8,
+          "end": 8.32
+        },
+        {
+          "text": "تلك",
+          "start": 8.32,
+          "end": 8.6
+        },
+        {
+          "text": "المهمة",
+          "start": 8.6,
+          "end": 9.12
+        },
+        {
+          "text": "التاريخية",
+          "start": 9.12,
+          "end": 9.76
+        },
+        {
+          "text": "باباً",
+          "start": 9.76,
+          "end": 10.38
+        },
+        {
+          "text": "جديداً",
+          "start": 10.38,
+          "end": 10.9
+        },
+        {
+          "text": "تماماً",
+          "start": 10.9,
+          "end": 11.5
+        },
+        {
+          "text": "في",
+          "start": 11.76,
+          "end": 11.86
+        },
+        {
+          "text": "مجال",
+          "start": 11.86,
+          "end": 12.24
+        },
+        {
+          "text": "استكشاف",
+          "start": 12.24,
+          "end": 12.76
+        },
+        {
+          "text": "كوكبنا",
+          "start": 12.76,
+          "end": 13.34
+        },
+        {
+          "text": "ومراقبته",
+          "start": 13.34,
+          "end": 14.32
+        },
+        {
+          "text": "بدقة",
+          "start": 14.32,
+          "end": 14.78
+        },
+        {
+          "text": "من",
+          "start": 14.78,
+          "end": 15.12
+        },
+        {
+          "text": "المدار.",
+          "start": 15.12,
+          "end": 15.48
+        }
+      ],
+      "duration": 15.92,
+      "sourceUrl": "https://www.nasa.gov/image-article/gemini-astronaut-photos-inspired-early-earth-observation-program/",
+      "sourceLabel": "www.nasa.gov"
+    },
+    {
+      "title": "قيمة الصور المدارية للعلماء",
+      "text": "الصور الفوتوغرافية التي وثقها لوفيل وألدرين ورواد جيميني أثبتت للعلماء القيمة العلمية الكبيرة للتصوير الفضائي المداري في دراسة تضاريس سطح الأرض وخصائصها الجغرافية بشكل أعمق وأوضح من أي وقت مضى.",
+      "summary": "الصور الفضائية أثبتت أهميتها في دراسة سطح الأرض",
+      "keyword": "التصوير المداري",
+      "template": "phenomenon",
+      "labels": [
+        "سطح الأرض",
+        "التصوير المداري",
+        "أبحاث علمية"
+      ],
+      "values": [],
+      "claim": "أثبتت لقطات رواد الفضاء قيمة التصوير المداري لسطح الأرض",
+      "sourceId": "43fbd5f391f2",
+      "evidence": "The photos taken by Lovell, Aldrin, and other Gemini astronauts demonstrated the value of orbital imagery for studying Earth s surface. Their images helped scientists make the case for a dedicated Earth observation satellite program.",
+      "kind": "fact",
+      "expression": 9,
+      "action": "point",
+      "words": [
+        {
+          "text": "الصور",
+          "start": 0.28,
+          "end": 0.72
+        },
+        {
+          "text": "الفوتوغرافية",
+          "start": 0.72,
+          "end": 1.52
+        },
+        {
+          "text": "التي",
+          "start": 1.52,
+          "end": 1.78
+        },
+        {
+          "text": "وثقها",
+          "start": 1.82,
+          "end": 2.42
+        },
+        {
+          "text": "لوفيل",
+          "start": 2.42,
+          "end": 2.96
+        },
+        {
+          "text": "وألدرين",
+          "start": 2.96,
+          "end": 3.74
+        },
+        {
+          "text": "ورواد",
+          "start": 3.74,
+          "end": 4.38
+        },
+        {
+          "text": "جيميني",
+          "start": 4.38,
+          "end": 4.76
+        },
+        {
+          "text": "أثبتت",
+          "start": 4.76,
+          "end": 5.76
+        },
+        {
+          "text": "للعلماء",
+          "start": 5.76,
+          "end": 6.32
+        },
+        {
+          "text": "القيمة",
+          "start": 6.32,
+          "end": 6.78
+        },
+        {
+          "text": "العلمية",
+          "start": 6.78,
+          "end": 7.26
+        },
+        {
+          "text": "الكبيرة",
+          "start": 7.26,
+          "end": 7.8
+        },
+        {
+          "text": "للتصوير",
+          "start": 7.8,
+          "end": 8.36
+        },
+        {
+          "text": "الفضائي",
+          "start": 8.36,
+          "end": 8.84
+        },
+        {
+          "text": "المداري",
+          "start": 8.84,
+          "end": 9.32
+        },
+        {
+          "text": "في",
+          "start": 9.66,
+          "end": 9.76
+        },
+        {
+          "text": "دراسة",
+          "start": 9.76,
+          "end": 10.22
+        },
+        {
+          "text": "تضاريس",
+          "start": 10.22,
+          "end": 10.68
+        },
+        {
+          "text": "سطح",
+          "start": 10.68,
+          "end": 11
+        },
+        {
+          "text": "الأرض",
+          "start": 11,
+          "end": 11.38
+        },
+        {
+          "text": "وخصائصها",
+          "start": 12.1,
+          "end": 12.2
+        },
+        {
+          "text": "الجغرافية",
+          "start": 12.2,
+          "end": 12.84
+        },
+        {
+          "text": "بشكل",
+          "start": 12.84,
+          "end": 13.58
+        },
+        {
+          "text": "أعمق",
+          "start": 13.58,
+          "end": 14.1
+        },
+        {
+          "text": "وأوضح",
+          "start": 14.14,
+          "end": 14.72
+        },
+        {
+          "text": "من",
+          "start": 14.8,
+          "end": 14.9
+        },
+        {
+          "text": "أي",
+          "start": 14.9,
+          "end": 15.2
+        },
+        {
+          "text": "وقت",
+          "start": 15.2,
+          "end": 15.44
+        },
+        {
+          "text": "مضى.",
+          "start": 15.44,
+          "end": 15.54
+        }
+      ],
+      "duration": 16.2,
+      "sourceUrl": "https://www.nasa.gov/image-article/gemini-astronaut-photos-inspired-early-earth-observation-program/",
+      "sourceLabel": "www.nasa.gov"
+    },
+    {
+      "title": "الدعوة لبرنامج أقمار مخصص",
+      "text": "ولهذا السبب تحمس ويليام بيكورا مدير هيئة المساحة الجيولوجية الأمريكية، وطالب بقوة بتسريع إطلاق برنامج أقمار صناعية متخصص يرصد الأرض ومواردها المتنوعة بناءً على تلك المشاهدات المدارية المبهرة والمقنعة.",
+      "summary": "مطالبة رسمية بتسريع إطلاق أقمار صناعية لمراقبة الأرض",
+      "keyword": "ويليام بيكورا",
+      "template": "cause",
+      "labels": [
+        "ويليام بيكورا",
+        "المساحة الجيولوجية",
+        "أقمار صناعية"
+      ],
+      "values": [],
+      "claim": "ويليام بيكورا طالب بتسريع استخدام أقمار مراقبة الأرض",
+      "sourceId": "43fbd5f391f2",
+      "evidence": "One of strongest advocates for accelerating the use of Earth-observing satellites was William T. Pecora, the director of the United States Geological Survey from 1965 to 1971.",
+      "kind": "fact",
+      "expression": 11,
+      "action": "walk",
+      "words": [
+        {
+          "text": "ولهذا",
+          "start": 0.4,
+          "end": 0.82
+        },
+        {
+          "text": "السبب",
+          "start": 0.82,
+          "end": 1.26
+        },
+        {
+          "text": "تحمس",
+          "start": 1.6,
+          "end": 2.06
+        },
+        {
+          "text": "ويليام",
+          "start": 2.14,
+          "end": 2.42
+        },
+        {
+          "text": "بيكورا",
+          "start": 2.42,
+          "end": 2.98
+        },
+        {
+          "text": "مدير",
+          "start": 3.24,
+          "end": 3.58
+        },
+        {
+          "text": "هيئة",
+          "start": 3.58,
+          "end": 3.98
+        },
+        {
+          "text": "المساحة",
+          "start": 3.98,
+          "end": 4.46
+        },
+        {
+          "text": "الجيولوجية",
+          "start": 4.54,
+          "end": 5.02
+        },
+        {
+          "text": "الأمريكية،",
+          "start": 5.02,
+          "end": 5.76
+        },
+        {
+          "text": "وطالب",
+          "start": 6.2,
+          "end": 6.72
+        },
+        {
+          "text": "بقوة",
+          "start": 6.96,
+          "end": 7.28
+        },
+        {
+          "text": "بتسريع",
+          "start": 7.56,
+          "end": 8.06
+        },
+        {
+          "text": "إطلاق",
+          "start": 8.06,
+          "end": 8.48
+        },
+        {
+          "text": "برنامج",
+          "start": 8.54,
+          "end": 8.98
+        },
+        {
+          "text": "أقمار",
+          "start": 8.98,
+          "end": 9.44
+        },
+        {
+          "text": "صناعية",
+          "start": 9.44,
+          "end": 9.92
+        },
+        {
+          "text": "متخصص",
+          "start": 9.92,
+          "end": 10.58
+        },
+        {
+          "text": "يرصد",
+          "start": 10.98,
+          "end": 11.42
+        },
+        {
+          "text": "الأرض",
+          "start": 11.42,
+          "end": 11.82
+        },
+        {
+          "text": "ومواردها",
+          "start": 11.82,
+          "end": 12.56
+        },
+        {
+          "text": "المتنوعة",
+          "start": 12.56,
+          "end": 13.2
+        },
+        {
+          "text": "بناءً",
+          "start": 13.2,
+          "end": 14.04
+        },
+        {
+          "text": "على",
+          "start": 14.04,
+          "end": 14.2
+        },
+        {
+          "text": "تلك",
+          "start": 14.2,
+          "end": 14.48
+        },
+        {
+          "text": "المشاهدات",
+          "start": 14.5,
+          "end": 15.16
+        },
+        {
+          "text": "المدارية",
+          "start": 15.18,
+          "end": 15.68
+        },
+        {
+          "text": "المبهرة",
+          "start": 15.68,
+          "end": 16.18
+        },
+        {
+          "text": "والمقنعة.",
+          "start": 16.18,
+          "end": 16.84
+        }
+      ],
+      "duration": 17.44,
+      "sourceUrl": "https://www.nasa.gov/image-article/gemini-astronaut-photos-inspired-early-earth-observation-program/",
+      "sourceLabel": "www.nasa.gov"
+    },
+    {
+      "title": "ولادة مشروع لاندسات",
+      "text": "وأوضح بيكورا في بيان رسمي سنة تسعة وستين أن برنامج إيروس الذي مهد لاحقاً لبرنامج لاندسات الشهير، وُلدت فكرته نتيجة مباشرة لنجاح التصوير المداري في رحلات ميركوري وجيميني الفضائية.",
+      "summary": "برنامج لاندسات انطلق بناءً على نجاح تصوير جيميني وميركوري",
+      "keyword": "برنامج لاندسات",
+      "template": "steps",
+      "labels": [
+        "برنامج إيروس",
+        "لاندسات",
+        "مشروع ميركوري"
+      ],
+      "values": [],
+      "claim": "صور ميركوري وجيميني ألهمت مشروع إيروس الذي مهد للاندسات",
+      "sourceId": "43fbd5f391f2",
+      "evidence": "In a 1969 statement, Pecora noted that the Earth Resources Observation Satellite (EROS) program he championed, and which later paved the way for Landsat , was conceived in 1966 largely as a direct result of the demonstrated utility of Mercury and Gemini orbital photography to Earth resource studies.",
+      "kind": "fact",
+      "expression": 0,
+      "action": "point",
+      "words": [
+        {
+          "text": "وأوضح",
+          "start": 0.32,
+          "end": 0.78
+        },
+        {
+          "text": "بيكورا",
+          "start": 0.78,
+          "end": 1.32
+        },
+        {
+          "text": "في",
+          "start": 1.32,
+          "end": 1.6
+        },
+        {
+          "text": "بيان",
+          "start": 1.6,
+          "end": 1.92
+        },
+        {
+          "text": "رسمي",
+          "start": 1.92,
+          "end": 2.38
+        },
+        {
+          "text": "سنة",
+          "start": 2.54,
+          "end": 2.74
+        },
+        {
+          "text": "تسعة",
+          "start": 2.74,
+          "end": 3.02
+        },
+        {
+          "text": "وستين",
+          "start": 3.02,
+          "end": 3.54
+        },
+        {
+          "text": "أن",
+          "start": 3.54,
+          "end": 4.32
+        },
+        {
+          "text": "برنامج",
+          "start": 4.32,
+          "end": 4.86
+        },
+        {
+          "text": "إيروس",
+          "start": 4.86,
+          "end": 5.32
+        },
+        {
+          "text": "الذي",
+          "start": 5.32,
+          "end": 5.7
+        },
+        {
+          "text": "مهد",
+          "start": 5.7,
+          "end": 6.06
+        },
+        {
+          "text": "لاحقاً",
+          "start": 6.06,
+          "end": 6.58
+        },
+        {
+          "text": "لبرنامج",
+          "start": 6.58,
+          "end": 7.16
+        },
+        {
+          "text": "لاندسات",
+          "start": 7.16,
+          "end": 7.72
+        },
+        {
+          "text": "الشهير،",
+          "start": 7.72,
+          "end": 8.4
+        },
+        {
+          "text": "وُلدت",
+          "start": 8.84,
+          "end": 9.28
+        },
+        {
+          "text": "فكرته",
+          "start": 9.48,
+          "end": 9.74
+        },
+        {
+          "text": "نتيجة",
+          "start": 9.74,
+          "end": 10.4
+        },
+        {
+          "text": "مباشرة",
+          "start": 10.4,
+          "end": 10.94
+        },
+        {
+          "text": "لنجاح",
+          "start": 11.14,
+          "end": 11.58
+        },
+        {
+          "text": "التصوير",
+          "start": 11.76,
+          "end": 12.12
+        },
+        {
+          "text": "المداري",
+          "start": 12.12,
+          "end": 12.66
+        },
+        {
+          "text": "في",
+          "start": 12.94,
+          "end": 13.04
+        },
+        {
+          "text": "رحلات",
+          "start": 13.04,
+          "end": 13.5
+        },
+        {
+          "text": "ميركوري",
+          "start": 13.54,
+          "end": 14
+        },
+        {
+          "text": "وجيميني",
+          "start": 14,
+          "end": 14.54
+        },
+        {
+          "text": "الفضائية.",
+          "start": 14.54,
+          "end": 14.9
+        }
+      ],
+      "duration": 15.48,
+      "sourceUrl": "https://www.nasa.gov/image-article/gemini-astronaut-photos-inspired-early-earth-observation-program/",
+      "sourceLabel": "www.nasa.gov"
+    },
+    {
+      "title": "خمسة عقود من حماية الكوكب",
+      "text": "وعلى مدار أكثر من خمسة عقود كاملة، قدم لاندسات والأقمار المماثلة بيانات علمية لا تقدر بثمن لمراقبة المحاصيل الزراعية وحرائق الغابات والفيضانات وصحة الغطاء النباتي وتغيرات الكوكب المستمرة بدقة بالغة.",
+      "summary": "عقود من مراقبة المحاصيل وحرائق الغابات والفيضانات",
+      "keyword": "بيانات لاندسات",
+      "template": "chart",
+      "labels": [
+        "المحاصيل الزراعية",
+        "حرائق الغابات",
+        "رصد الفيضانات"
+      ],
+      "values": [],
+      "claim": "وفرت أقمار لاندسات بيانات لمراقبة المحاصيل والحرائق والفيضانات لخمسة عقود",
+      "sourceId": "43fbd5f391f2",
+      "evidence": "For more than five decades, Landsat and other Earth-observing satellites have provided invaluable data used around the world to monitor crops, wildfires, flooding, vegetation health, land use, and countless other changes to our planet.",
+      "kind": "fact",
+      "expression": 1,
+      "action": "hang",
+      "words": [
+        {
+          "text": "وعلى",
+          "start": 0.3,
+          "end": 0.58
+        },
+        {
+          "text": "مدار",
+          "start": 0.58,
+          "end": 0.92
+        },
+        {
+          "text": "أكثر",
+          "start": 0.92,
+          "end": 1.38
+        },
+        {
+          "text": "من",
+          "start": 1.38,
+          "end": 1.56
+        },
+        {
+          "text": "خمسة",
+          "start": 1.56,
+          "end": 1.94
+        },
+        {
+          "text": "عقود",
+          "start": 1.94,
+          "end": 2.32
+        },
+        {
+          "text": "كاملة،",
+          "start": 2.32,
+          "end": 2.86
+        },
+        {
+          "text": "قدم",
+          "start": 3.22,
+          "end": 3.56
+        },
+        {
+          "text": "لاندسات",
+          "start": 3.56,
+          "end": 4.24
+        },
+        {
+          "text": "والأقمار",
+          "start": 4.36,
+          "end": 4.92
+        },
+        {
+          "text": "المماثلة",
+          "start": 4.92,
+          "end": 5.48
+        },
+        {
+          "text": "بيانات",
+          "start": 5.48,
+          "end": 6.3
+        },
+        {
+          "text": "علمية",
+          "start": 6.3,
+          "end": 6.8
+        },
+        {
+          "text": "لا",
+          "start": 6.8,
+          "end": 7
+        },
+        {
+          "text": "تقدر",
+          "start": 7,
+          "end": 7.58
+        },
+        {
+          "text": "بثمن",
+          "start": 7.58,
+          "end": 7.98
+        },
+        {
+          "text": "لمراقبة",
+          "start": 8.38,
+          "end": 8.86
+        },
+        {
+          "text": "المحاصيل",
+          "start": 8.86,
+          "end": 9.38
+        },
+        {
+          "text": "الزراعية",
+          "start": 9.38,
+          "end": 10.06
+        },
+        {
+          "text": "وحرائق",
+          "start": 10.06,
+          "end": 10.7
+        },
+        {
+          "text": "الغابات",
+          "start": 10.7,
+          "end": 11.28
+        },
+        {
+          "text": "والفيضانات",
+          "start": 11.36,
+          "end": 12.14
+        },
+        {
+          "text": "وصحة",
+          "start": 12.54,
+          "end": 13
+        },
+        {
+          "text": "الغطاء",
+          "start": 13,
+          "end": 13.38
+        },
+        {
+          "text": "النباتي",
+          "start": 13.38,
+          "end": 13.92
+        },
+        {
+          "text": "وتغيرات",
+          "start": 13.92,
+          "end": 14.94
+        },
+        {
+          "text": "الكوكب",
+          "start": 14.94,
+          "end": 15.42
+        },
+        {
+          "text": "المستمرة",
+          "start": 15.42,
+          "end": 15.94
+        },
+        {
+          "text": "بدقة",
+          "start": 15.94,
+          "end": 16.5
+        },
+        {
+          "text": "بالغة.",
+          "start": 16.5,
+          "end": 16.9
+        }
+      ],
+      "duration": 17.4,
+      "sourceUrl": "https://www.nasa.gov/image-article/gemini-astronaut-photos-inspired-early-earth-observation-program/",
+      "sourceLabel": "www.nasa.gov"
+    },
+    {
+      "title": "أسرار الرصد الفضائي",
+      "text": "فما رأيك في التأثير المذهل لصور رواد الفضاء الأوائل، وشاركنا رأيك في التعليقات وتابعنا لاكتشاف أسرار جديدة ومثيرة حول كوكبنا العجيب والكون الفسيح في كل حلقة قادمة معنا.",
+      "summary": "دعوة للمشاركة والمتابعة لاكتشاف أسرار الكون",
+      "keyword": "أسرار الكون",
+      "template": "journey",
+      "labels": [
+        "مراقبة الأرض",
+        "رواد الفضاء",
+        "أسرار الكون"
+      ],
+      "values": [],
+      "claim": "دعوة الجمهور للتفاعل ومتابعة حقائق الفضاء واستكشاف الأرض",
+      "sourceId": "43fbd5f391f2",
+      "evidence": "Their images helped scientists make the case for a dedicated Earth observation satellite program.",
+      "kind": "fact",
+      "expression": 2,
+      "action": "jump",
+      "words": [
+        {
+          "text": "فما",
+          "start": 0.44,
+          "end": 0.6
+        },
+        {
+          "text": "رأيك",
+          "start": 0.6,
+          "end": 1
+        },
+        {
+          "text": "في",
+          "start": 1,
+          "end": 1.12
+        },
+        {
+          "text": "التأثير",
+          "start": 1.24,
+          "end": 1.6
+        },
+        {
+          "text": "المذهل",
+          "start": 1.6,
+          "end": 2.26
+        },
+        {
+          "text": "لصور",
+          "start": 2.26,
+          "end": 2.7
+        },
+        {
+          "text": "رواد",
+          "start": 2.7,
+          "end": 3.14
+        },
+        {
+          "text": "الفضاء",
+          "start": 3.14,
+          "end": 3.58
+        },
+        {
+          "text": "الأوائل،",
+          "start": 3.58,
+          "end": 4.12
+        },
+        {
+          "text": "وشاركنا",
+          "start": 4.74,
+          "end": 5.14
+        },
+        {
+          "text": "رأيك",
+          "start": 5.14,
+          "end": 5.46
+        },
+        {
+          "text": "في",
+          "start": 5.46,
+          "end": 5.56
+        },
+        {
+          "text": "التعليقات",
+          "start": 5.72,
+          "end": 6.22
+        },
+        {
+          "text": "وتابعنا",
+          "start": 6.6,
+          "end": 7.08
+        },
+        {
+          "text": "لاكتشاف",
+          "start": 7.08,
+          "end": 7.62
+        },
+        {
+          "text": "أسرار",
+          "start": 7.9,
+          "end": 8.04
+        },
+        {
+          "text": "جديدة",
+          "start": 8.04,
+          "end": 8.54
+        },
+        {
+          "text": "ومثيرة",
+          "start": 8.54,
+          "end": 9.2
+        },
+        {
+          "text": "حول",
+          "start": 9.56,
+          "end": 9.78
+        },
+        {
+          "text": "كوكبنا",
+          "start": 9.78,
+          "end": 10.32
+        },
+        {
+          "text": "العجيب",
+          "start": 10.32,
+          "end": 10.86
+        },
+        {
+          "text": "والكون",
+          "start": 10.86,
+          "end": 11.32
+        },
+        {
+          "text": "الفسيح",
+          "start": 11.32,
+          "end": 12
+        },
+        {
+          "text": "في",
+          "start": 12,
+          "end": 12.44
+        },
+        {
+          "text": "كل",
+          "start": 12.62,
+          "end": 12.78
+        },
+        {
+          "text": "حلقة",
+          "start": 12.78,
+          "end": 13.26
+        },
+        {
+          "text": "قادمة",
+          "start": 13.4,
+          "end": 13.66
+        },
+        {
+          "text": "معنا.",
+          "start": 13.66,
+          "end": 13.8
+        }
+      ],
+      "duration": 14.36,
+      "sourceUrl": "https://www.nasa.gov/image-article/gemini-astronaut-photos-inspired-early-earth-observation-program/",
+      "sourceLabel": "www.nasa.gov"
+    }
+  ],
+  "audio": "generated/2026-11-15T22-13-40-962Z/audio.wav",
+  "durationInFrames": 4206
+}

@@ -1,0 +1,18 @@
+{
+  "title": "كيف ألهمت صور جيميني مراقبة الأرض؟",
+  "topicKey": "space-gemini-earth-observation-program",
+  "voice": "Charon",
+  "provider": "Gemini",
+  "sources": [
+    {
+      "id": "43fbd5f391f2",
+      "title": "Gemini Astronaut Photos Inspired Early Earth Observation Program",
+      "url": "https://www.nasa.gov/image-article/gemini-astronaut-photos-inspired-early-earth-observation-program/",
+      "published": "2026-11-13T16:05:54.000Z",
+      "official": true
+    }
+  ],
+  "video_sha256": "844ff4013e9fdd8f679dec4518de844ae05bcd1fca71cffde7a87401e9a26fa1",
+  "reviewOnly": true,
+  "approved": false
+}
