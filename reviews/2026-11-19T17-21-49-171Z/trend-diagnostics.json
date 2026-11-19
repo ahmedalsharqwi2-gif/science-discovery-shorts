@@ -1,0 +1,90 @@
+{
+  "sources": [
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 2
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 0
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 10
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 10
+    },
+    {
+      "source": "trends",
+      "status": "ok",
+      "items": 10
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 9
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 10
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 10
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 9
+    }
+  ],
+  "degraded": false,
+  "decisions": [
+    {
+      "id": "72ab3b40ae04",
+      "title": "Lake Pelku",
+      "demand": 2,
+      "recency": 0.975,
+      "matches": [
+        {
+          "kind": "google_trend",
+          "label": "anthropic stock",
+          "weight": 2
+        }
+      ],
+      "score": 2.487522644881227
+    },
+    {
+      "id": "4ed2e9bef49f",
+      "title": "NASA Conducts Latest RS-25 Engine Test in Support of Future Artemis Missions",
+      "demand": 6,
+      "recency": 0.964,
+      "matches": [
+        {
+          "kind": "google_trend",
+          "label": "العين ضد الظفرة",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "اذان المغرب",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "سعر كيلو الفراخ البيضاء",
+          "weight": 2
+        }
+      ],
+      "score": 6.482135709444893
+    }
+  ]
+}

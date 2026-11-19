@@ -1,0 +1,186 @@
+[
+  {
+    "file": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/public/generated/2026-11-19T17-21-49-171Z/scene-0.wav",
+    "duration": 15.28,
+    "text": "في مركز ستينيس للفضاء، ناسا عملت اختبار حريق ساخن لمحرك من نوع آر إس خمسة وعشرين، الاختبار ده كان مهم جداً عشان نتأكد من كفاءة المحرك وقدرته على تحمل ظروف التشغيل الصعبة جداً.",
+    "sha256": "65928be47333b0f62ac227e27aa3926ded588e6b0dbad2ba48c82ae153171d31",
+    "provider": "Gemini",
+    "voice": "Charon",
+    "chunks": [
+      {
+        "scene": 0,
+        "chunk": 0,
+        "schema": 1,
+        "cacheKey": "d33b680f7e70206b64dbc866862391c053d486f9aa491063a15987459e461fe0",
+        "sha256": "65928be47333b0f62ac227e27aa3926ded588e6b0dbad2ba48c82ae153171d31",
+        "text_sha256": "ba1e85e76f3c5eab99b5880c3f67012b42cacf58747f37c91f3acfef72e63f9c",
+        "voice": "Charon",
+        "provider": "Gemini",
+        "model": "gemini-3.1-flash-tts-preview",
+        "bytes": 733518,
+        "reused": false
+      }
+    ]
+  },
+  {
+    "file": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/public/generated/2026-11-19T17-21-49-171Z/scene-1.wav",
+    "duration": 15.72,
+    "text": "فريق العمل شغل المحرك التجريبي لمدة مائتين ثانية، يعني حوالي ثلاث دقائق وعشرين ثانية، وده وقت كافي جداً عشان المهندسين يجمعوا بيانات دقيقة عن أداء المحرك ومدى اعتماديته في ظروف التشغيل القوية.",
+    "sha256": "7a74ddadaa5907d20672fbf0474d6b5f0a6d9ed4a484a5bc66bc672be0b94860",
+    "provider": "Gemini",
+    "voice": "Charon",
+    "chunks": [
+      {
+        "scene": 1,
+        "chunk": 0,
+        "schema": 1,
+        "cacheKey": "a959795a1030fdc5687d6b2339597d4dedf35aade0a760477e8551970a64d45f",
+        "sha256": "7a74ddadaa5907d20672fbf0474d6b5f0a6d9ed4a484a5bc66bc672be0b94860",
+        "text_sha256": "1e21a3c4275ba6427a3cfeb887cd4d92c2eb7a01743ed04f27bb8c6195bb7f82",
+        "voice": "Charon",
+        "provider": "Gemini",
+        "model": "gemini-3.1-flash-tts-preview",
+        "bytes": 754638,
+        "reused": false
+      }
+    ]
+  },
+  {
+    "file": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/public/generated/2026-11-19T17-21-49-171Z/scene-2.wav",
+    "duration": 14.72,
+    "text": "رغم إن المحرك ده مش هيطير في مهمة حقيقية، لكن البيانات اللي جمعناها منه هتساعد ناسا وشركائها في تحسين أداء المحركات الجاية، وده بيضمن لنا رحلات أكثر أماناً في مهمات أرتميس القادمة.",
+    "sha256": "1a4d7f0e089eeea75c15ee1aedbd25e3522f4ef9f83578c6d6d5e5fd3391d774",
+    "provider": "Gemini",
+    "voice": "Charon",
+    "chunks": [
+      {
+        "scene": 2,
+        "chunk": 0,
+        "schema": 1,
+        "cacheKey": "157334bf0ed7a7b6598f49073de096dc17385fd7c0e2114f06e5c5c7986ca61e",
+        "sha256": "1a4d7f0e089eeea75c15ee1aedbd25e3522f4ef9f83578c6d6d5e5fd3391d774",
+        "text_sha256": "648bb57b2e320ae161de5be5fae5937b9421fcee56af7b634bad5ecf2d22a395",
+        "voice": "Charon",
+        "provider": "Gemini",
+        "model": "gemini-3.1-flash-tts-preview",
+        "bytes": 706638,
+        "reused": false
+      }
+    ]
+  },
+  {
+    "file": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/public/generated/2026-11-19T17-21-49-171Z/scene-3.wav",
+    "duration": 18.08,
+    "text": "في سنة 2028، هنشوف انطلاق مهمة أرتميس الرابعة، المهمة دي هدفها الأساسي هو الهبوط على سطح القمر، وهتستخدم صاروخ عملاق عشان يوصل رواد الفضاء لسطح القمر بأمان تام وبكل دقة.",
+    "sha256": "3f25313057f2fbb03d23063115263c0489f9b9252749a58b28b85973e8aadd65",
+    "provider": "Gemini",
+    "voice": "Charon",
+    "chunks": [
+      {
+        "scene": 3,
+        "chunk": 0,
+        "schema": 1,
+        "cacheKey": "c4ecbd7f8dc4b63afc199fcec3268a105963fdf271b6431b553388329ffae585",
+        "sha256": "3f25313057f2fbb03d23063115263c0489f9b9252749a58b28b85973e8aadd65",
+        "text_sha256": "6ae753d91960b0a77a767fbf641dcfdabfc1112ab8a691ab64f5c9570b2f5d43",
+        "voice": "Charon",
+        "provider": "Gemini",
+        "model": "gemini-3.1-flash-tts-preview",
+        "bytes": 867918,
+        "reused": false
+      }
+    ]
+  },
+  {
+    "file": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/public/generated/2026-11-19T17-21-49-171Z/scene-4.wav",
+    "duration": 15.8,
+    "text": "المهمة دي مش بس للهبوط، دي خطوة كبيرة لاستكشاف القطب الجنوبي للقمر، وبناء وجود بشري دائم هناك، وده بيعتبر حجر الأساس لأول رحلة مأهولة للبشر لكوكب المريخ في المستقبل البعيد.",
+    "sha256": "41eb72157a03932bb35bcef5525dce830a6c49ade49154743cd3c76ee48dd21a",
+    "provider": "Gemini",
+    "voice": "Charon",
+    "chunks": [
+      {
+        "scene": 4,
+        "chunk": 0,
+        "schema": 1,
+        "cacheKey": "266c677d437557fb72539da167f269dab6b4ed17ef9ab70560712ed78dc02849",
+        "sha256": "41eb72157a03932bb35bcef5525dce830a6c49ade49154743cd3c76ee48dd21a",
+        "text_sha256": "7ef0a534bdb2015f74ee6c1ae3889ecc944173ef4909687f13cb7c1abf488dbb",
+        "voice": "Charon",
+        "provider": "Gemini",
+        "model": "gemini-3.1-flash-tts-preview",
+        "bytes": 758478,
+        "reused": false
+      }
+    ]
+  },
+  {
+    "file": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/public/generated/2026-11-19T17-21-49-171Z/scene-5.wav",
+    "duration": 15.36,
+    "text": "عشان الصاروخ يقدر يخرج من جاذبية الأرض، بيحتاج قوة دفع جبارة، وأربع محركات من نوع آر إس خمسة وعشرين بيقدروا ينتجوا قوة دفع بتوصل لمليوني رطل عشان يرفعوا الصاروخ للفضاء.",
+    "sha256": "24a23393bb021437416effd71a488181fe9e44379e87e79bac05da29c618cbb6",
+    "provider": "Gemini",
+    "voice": "Charon",
+    "chunks": [
+      {
+        "scene": 5,
+        "chunk": 0,
+        "schema": 1,
+        "cacheKey": "8103f452ca769adb10d58b65d1e046f61a58ab011a39e5cbbce9d7d92584aa63",
+        "sha256": "24a23393bb021437416effd71a488181fe9e44379e87e79bac05da29c618cbb6",
+        "text_sha256": "9e316da7a848ebe4554f78d03e7d5d4dccdc4496dcc836f34e92af0024f4db92",
+        "voice": "Charon",
+        "provider": "Gemini",
+        "model": "gemini-3.1-flash-tts-preview",
+        "bytes": 737358,
+        "reused": false
+      }
+    ]
+  },
+  {
+    "file": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/public/generated/2026-11-19T17-21-49-171Z/scene-6.wav",
+    "duration": 15.84,
+    "text": "قبل أي إطلاق، كل المحركات لازم تتجرب وتتأكد إنها صالحة للطيران في مركز ستينيس، وده بيتم بفضل مجهود فريق كبير من المشغلين والمهندسين اللي بيشتغلوا ليل نهار عشان يضمنوا نجاح المهمة.",
+    "sha256": "3a4eddecad67ea8734d79ab8abfc4e3f5f5daddba87e36b1a5ecae341a098336",
+    "provider": "Gemini",
+    "voice": "Charon",
+    "chunks": [
+      {
+        "scene": 6,
+        "chunk": 0,
+        "schema": 1,
+        "cacheKey": "f06ef9a6e180cd4dfdef577b910adca57184b215ccffc026cf534140e43f676f",
+        "sha256": "3a4eddecad67ea8734d79ab8abfc4e3f5f5daddba87e36b1a5ecae341a098336",
+        "text_sha256": "616a62575958aed17c76721903723bb07d13d83b29dd00e622f7fb24d1539d35",
+        "voice": "Charon",
+        "provider": "Gemini",
+        "model": "gemini-3.1-flash-tts-preview",
+        "bytes": 760398,
+        "reused": false
+      }
+    ]
+  },
+  {
+    "file": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/public/generated/2026-11-19T17-21-49-171Z/scene-7.wav",
+    "duration": 14.050958,
+    "text": "الاختبارات دي بتتم بمشاركة فرق من ناسا وشركات تانية متخصصة، كل واحد فيهم بيساهم بخبرته عشان يوصلوا لأفضل النتائج الممكنة، والعمل الجماعي ده هو السر الحقيقي وراء نجاح كل رحلاتنا للفضاء.",
+    "sha256": "ebb4d2e5d55708cec2ece61386448eeb8dfa79b6be34477e4e3478d33c44c190",
+    "provider": "Gemini",
+    "voice": "Charon",
+    "chunks": [
+      {
+        "scene": 7,
+        "chunk": 0,
+        "schema": 1,
+        "cacheKey": "d353262d6cdc4a197777e26893f9c63388cf08d6ba3695d50a26112e52629654",
+        "sha256": "ebb4d2e5d55708cec2ece61386448eeb8dfa79b6be34477e4e3478d33c44c190",
+        "text_sha256": "231a5088984184826e9dcde8725b077526e68eec905ecb57c25ecc29d1b07ac0",
+        "voice": "Charon",
+        "provider": "Gemini",
+        "model": "gemini-2.5-flash-preview-tts",
+        "bytes": 674524,
+        "reused": false
+      }
+    ]
+  }
+]

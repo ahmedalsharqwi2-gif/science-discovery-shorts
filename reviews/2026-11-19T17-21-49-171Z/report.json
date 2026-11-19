@@ -1,0 +1,116 @@
+{
+  "id": "2026-11-19T17-21-49-171Z",
+  "attemptId": "2026-11-19T17-16-07-644Z",
+  "mode": "review",
+  "published": false,
+  "status": "review_ready",
+  "resumed": false,
+  "stages": [
+    {
+      "name": "preflight",
+      "status": "pass",
+      "seconds": 0.41
+    },
+    {
+      "name": "topics",
+      "status": "pass",
+      "seconds": 10.064
+    },
+    {
+      "name": "roll",
+      "status": "rolled_fresh_topic",
+      "roll": 1,
+      "fromStage": "script",
+      "code": "UNSUPPORTED_CLAIM"
+    },
+    {
+      "name": "preflight",
+      "status": "pass",
+      "seconds": 0.031
+    },
+    {
+      "name": "topics",
+      "status": "pass",
+      "seconds": 0.179
+    },
+    {
+      "name": "roll",
+      "status": "rolled_fresh_topic",
+      "roll": 2,
+      "fromStage": "script",
+      "code": "GEMINI_HTTP_503_EXHAUSTED"
+    },
+    {
+      "name": "preflight",
+      "status": "pass",
+      "seconds": 0.029
+    },
+    {
+      "name": "topics",
+      "status": "pass",
+      "seconds": 0.165
+    },
+    {
+      "name": "script",
+      "status": "pass",
+      "seconds": 102.719
+    },
+    {
+      "name": "voice",
+      "status": "pass",
+      "seconds": 402.356
+    },
+    {
+      "name": "align",
+      "status": "pass",
+      "seconds": 79.211
+    },
+    {
+      "name": "assets",
+      "status": "pass",
+      "seconds": 0.001
+    },
+    {
+      "name": "mix",
+      "status": "pass",
+      "seconds": 2.624
+    },
+    {
+      "name": "layout-qa",
+      "status": "pass",
+      "seconds": 26.488
+    },
+    {
+      "name": "render",
+      "status": "pass",
+      "seconds": 144.137
+    },
+    {
+      "name": "qa",
+      "status": "pass",
+      "seconds": 3.901
+    },
+    {
+      "name": "package",
+      "status": "pass",
+      "seconds": 0
+    }
+  ],
+  "limitations": [
+    "Incomplete visual previews never pass narrated-film acceptance. Human pronunciation and art-direction approval are separate."
+  ],
+  "rolled": [
+    {
+      "id": "2026-11-19T17-16-07-644Z",
+      "stage": "script",
+      "code": "UNSUPPORTED_CLAIM",
+      "roll": 1
+    },
+    {
+      "id": "2026-11-19T17-17-58-998Z",
+      "stage": "script",
+      "code": "GEMINI_HTTP_503_EXHAUSTED",
+      "roll": 2
+    }
+  ]
+}

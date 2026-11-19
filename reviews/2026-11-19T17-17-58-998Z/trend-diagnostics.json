@@ -1,0 +1,119 @@
+{
+  "sources": [
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 2
+    },
+    {
+      "source": "trends",
+      "status": "ok",
+      "items": 10
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 9
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 0
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 10
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 10
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 10
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 9
+    },
+    {
+      "source": "suggestions",
+      "status": "ok",
+      "items": 10
+    }
+  ],
+  "degraded": false,
+  "decisions": [
+    {
+      "id": "72ab3b40ae04",
+      "title": "Lake Pelku",
+      "demand": 2,
+      "recency": 0.976,
+      "matches": [
+        {
+          "kind": "google_trend",
+          "label": "anthropic stock",
+          "weight": 2
+        }
+      ],
+      "score": 2.4879557448385192
+    },
+    {
+      "id": "4ed2e9bef49f",
+      "title": "NASA Conducts Latest RS-25 Engine Test in Support of Future Artemis Missions",
+      "demand": 6,
+      "recency": 0.965,
+      "matches": [
+        {
+          "kind": "google_trend",
+          "label": "العين ضد الظفرة",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "اذان المغرب",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "سعر كيلو الفراخ البيضاء",
+          "weight": 2
+        }
+      ],
+      "score": 6.482564023816259
+    },
+    {
+      "id": "0cb2e3ffdc8f",
+      "title": "Empire State Building Goes Gold for Voyager",
+      "demand": 8,
+      "recency": 0.722,
+      "matches": [
+        {
+          "kind": "google_trend",
+          "label": "العين ضد الظفرة",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "anthropic stock",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "اذان المغرب",
+          "weight": 2
+        },
+        {
+          "kind": "google_trend",
+          "label": "سعر كيلو الفراخ البيضاء",
+          "weight": 2
+        }
+      ],
+      "score": 8.36096668607167
+    }
+  ]
+}

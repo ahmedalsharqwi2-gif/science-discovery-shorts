@@ -1,0 +1,17 @@
+{
+  "code": "SCRIPT_SCHEMA_INVALID",
+  "attempt": 1,
+  "zodIssues": [
+    {
+      "origin": "array",
+      "code": "too_small",
+      "minimum": 8,
+      "inclusive": true,
+      "path": [
+        "scenes"
+      ],
+      "message": "Too small: expected array to have >=8 items"
+    }
+  ],
+  "detail": "scenes: Too small: expected array to have >=8 items"
+}

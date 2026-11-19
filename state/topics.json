@@ -58,5 +58,23 @@
     "status": "retired",
     "reason": "STAGE_FAILED_SEE_RUNBOOK",
     "run": "2026-11-19T16-38-18-133Z"
+  },
+  {
+    "value": "https://science.nasa.gov/earth/earth-observatory/el-nino-rains-paint-the-atacama/",
+    "status": "retired",
+    "reason": "UNSUPPORTED_CLAIM",
+    "run": "2026-11-19T17-16-07-644Z"
+  },
+  {
+    "value": "https://www.nasa.gov/image-article/empire-state-building-goes-gold-for-voyager/",
+    "status": "retired",
+    "reason": "GEMINI_HTTP_503_EXHAUSTED",
+    "run": "2026-11-19T17-17-58-998Z"
+  },
+  {
+    "topicKey": "nasa-rs25-engine-testing-artemis",
+    "value": "https://www.nasa.gov/image-article/latest-rs-25-engine-test-in-support-of-future-artemis-missions/",
+    "status": "review",
+    "run": "2026-11-19T17-21-49-171Z"
   }
 ]
