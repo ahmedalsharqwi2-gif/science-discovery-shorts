@@ -62,6 +62,8 @@ jobs:
         env:
           MODE: ${{ inputs.mode || 'review' }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
+          GEMINI_API_KEY_3: ${{ secrets.GEMINI_API_KEY_3 }}
           GEMINI_TEXT_API_KEY: ${{ secrets.GEMINI_TEXT_API_KEY }}
           GEMINI_TTS_API_KEY: ${{ secrets.GEMINI_TTS_API_KEY }}
       - uses: actions/cache/save@v4
