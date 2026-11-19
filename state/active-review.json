@@ -1,0 +1,950 @@
+{
+  "schema": 1,
+  "id": "2026-11-19T06-37-39-488Z",
+  "profile": "science",
+  "episode": {
+    "topicKey": "astronomy-stellar-merger-bao-andromeda",
+    "title": "أسرار الكون: اندماج النجوم في مجرة أندروميدا",
+    "hook": "ماذا لو اصطدم نجمان في الفضاء؟ هل تتخيل انفجاراً كونياً يغير شكل النجوم للأبد؟ هذا ما حدث بالفعل في مجرة أندروميدا المجاورة لنا، حيث شهدنا اندماجاً نجمياً نادراً ومذهلاً بكل المقاييس العلمية.",
+    "cta": "تابعونا لمعرفة المزيد عن أسرار الفضاء العميقة واكتشافات تلسكوب جيمس ويب التي تغير فهمنا للكون كل يوم. اشترك الآن ولا تفوت أي تحديث علمي جديد ومثير من وكالة ناسا.",
+    "scenes": [
+      {
+        "title": "اكتشاف نظام باو النجمي",
+        "text": "في مجرة أندروميدا، رصد العلماء نظاماً نجمياً ثنائياً أطلقوا عليه اسم باو. قبل الاندماج، كان النجمان يدوران حول بعضهما بسلام لآلاف السنين، لكن الأمور تغيرت فجأة عندما اقترب النجم الأصغر من سطح النجم العملاق.",
+        "summary": "اكتشاف نظام نجمي ثنائي في أندروميدا قبل اندماجهما.",
+        "keyword": "نظام باو",
+        "template": "phenomenon",
+        "labels": [
+          "أندروميدا",
+          "نظام ثنائي",
+          "نجوم"
+        ],
+        "values": [],
+        "claim": "نظام باو كان يتكون من نجمين يدوران حول بعضهما قبل الاندماج.",
+        "sourceId": "a9faff50e5d3",
+        "evidence": "Before their transformation, the two stars spent millennia placidly orbiting one another as a binary pair.",
+        "kind": "fact",
+        "expression": 5,
+        "action": "point"
+      },
+      {
+        "title": "بداية الاندماج العنيف",
+        "text": "بدأ النجم الأصغر في سحب طبقات النجم العملاق الخارجية، مما أدى لتدفق الغاز في الفضاء. هذه المرحلة تُعرف بتطور الغلاف المشترك، حيث ابتلع النجم العملاق رفيقه الأصغر الذي بدأ يغوص في أعماقه بسرعة.",
+        "summary": "النجم العملاق يبتلع رفيقه الأصغر في عملية اندماج.",
+        "keyword": "الغلاف المشترك",
+        "template": "journey",
+        "labels": [
+          "غاز",
+          "اندماج",
+          "تطور نجمي"
+        ],
+        "values": [],
+        "claim": "النجم العملاق ابتلع النجم الأصغر خلال مرحلة تطور الغلاف المشترك.",
+        "sourceId": "a9faff50e5d3",
+        "evidence": "In this system, the primary star engulfed the smaller star and the companion plummeted, spiraling through the envelope as it was robbed of orbital energy by drag.",
+        "kind": "fact",
+        "expression": 8,
+        "action": "fall"
+      },
+      {
+        "title": "سرعة الاندماج غير المتوقعة",
+        "text": "خلافاً للتوقعات التي أشارت إلى أن العملية قد تستغرق سنوات طويلة، حدث الاندماج النهائي بعد سبع مدارات فقط، أي حوالي سبع سنوات. زادت سطوع النجم بشكل مفاجئ خلال أسبوع واحد فقط قبل الانفجار.",
+        "summary": "الاندماج حدث بسرعة مذهلة خلال سبع سنوات فقط.",
+        "keyword": "سرعة الاندماج",
+        "template": "comparison",
+        "labels": [
+          "مدارات",
+          "سطوع",
+          "زمن"
+        ],
+        "values": [
+          7
+        ],
+        "claim": "الاندماج حدث بعد سبع مدارات فقط من تلامس النجمين.",
+        "sourceId": "a9faff50e5d3",
+        "evidence": "But once the smaller star came into contact with the surface of the giant star, their “unification” happened after only seven orbits (about seven years).",
+        "kind": "fact",
+        "expression": 3,
+        "action": "run"
+      },
+      {
+        "title": "قوة النجم العملاق باو",
+        "text": "قبل الانفجار، كان النجم العملاق باو وحشاً حقيقياً؛ حيث كانت كتلته سبعة أضعاف كتلة الشمس، ونصف قطره 350 ضعفاً، وسطوعه يفوق الشمس بـ 18 ألف مرة. كان يطغى تماماً على رفيقه الصغير في البيانات.",
+        "summary": "خصائص النجم العملاق باو قبل الاندماج.",
+        "keyword": "النجم العملاق",
+        "template": "chart",
+        "labels": [
+          "كتلة",
+          "نصف قطر",
+          "سطوع"
+        ],
+        "values": [],
+        "claim": "النجم العملاق كان سبعة أضعاف كتلة الشمس و18 ألف مرة أكثر سطوعاً.",
+        "sourceId": "a9faff50e5d3",
+        "evidence": "It was seven times as massive, 350 times the radius, and 18,000 times brighter — making “Big Bao” an appropriate nickname.",
+        "kind": "fact",
+        "expression": 10,
+        "action": "point"
+      },
+      {
+        "title": "دور تلسكوب جيمس ويب",
+        "text": "رصد تلسكوب جيمس ويب نظام باو بعد 47 يوماً فقط من ذروة الانفجار. كانت هذه أسرع عملية متابعة لحدث من هذا النوع، مما سمح للعلماء بإعادة بناء ما حدث بدقة مذهلة قبل وبعد الاندماج.",
+        "summary": "جيمس ويب يرصد الاندماج بعد 47 يوماً من الانفجار.",
+        "keyword": "جيمس ويب",
+        "template": "steps",
+        "labels": [
+          "رصد",
+          "تلسكوب",
+          "بيانات"
+        ],
+        "values": [
+          47
+        ],
+        "claim": "تلسكوب جيمس ويب رصد باو بعد 47 يوماً من ذروة الانفجار.",
+        "sourceId": "a9faff50e5d3",
+        "evidence": "Webb observed Bao only 47 days after the stars’ eruption peaked, the earliest ever follow-up of an event like this.",
+        "kind": "fact",
+        "expression": 7,
+        "action": "turn"
+      },
+      {
+        "title": "نهاية النجم الصغير",
+        "text": "أظهرت النماذج العلمية أن النجم الصغير لم ينجُ، بل سُحب إلى قلب النجم العملاق. وصف العلماء هذا اللقاء بأنه كان أشبه بقنبلة تنفجر داخل نجم حي، مما أدى إلى هذا الاندماج العنيف والفريد.",
+        "summary": "النجم الصغير سُحب إلى قلب العملاق وانفجر داخله.",
+        "keyword": "انفجار داخلي",
+        "template": "cause",
+        "labels": [
+          "نواة",
+          "طاقة",
+          "انفجار"
+        ],
+        "values": [],
+        "claim": "النجم الصغير سُحب إلى قلب النجم العملاق في انفجار داخلي.",
+        "sourceId": "a9faff50e5d3",
+        "evidence": "Their encounter was “almost like a bomb exploding inside a living star,” De said.",
+        "kind": "fact",
+        "expression": 2,
+        "action": "jump"
+      },
+      {
+        "title": "مستقبل الأبحاث الفضائية",
+        "text": "هذا الاكتشاف يفتح باباً جديداً لفهم تطور النجوم. مع إطلاق تلسكوب نانسي غريس رومان، يتوقع العلماء تدفقاً كبيراً لاكتشافات مشابهة، مما يساعدنا في فهم كيفية عمل الكون وتطور الأنظمة النجمية المعقدة عبر الزمن.",
+        "summary": "اكتشافات جديدة بانتظارنا مع التلسكوبات المستقبلية.",
+        "keyword": "أبحاث المستقبل",
+        "template": "map",
+        "labels": [
+          "تلسكوب رومان",
+          "اكتشافات",
+          "كون"
+        ],
+        "values": [],
+        "claim": "تلسكوب نانسي غريس رومان سيؤدي لتدفق اكتشافات مشابهة.",
+        "sourceId": "a9faff50e5d3",
+        "evidence": "“There’s going to be a large influx of similar discoveries just ahead,” Karambelkar said.",
+        "kind": "fact",
+        "expression": 9,
+        "action": "walk"
+      },
+      {
+        "title": "خاتمة ودعوة للمتابعة",
+        "text": "ما شهدناه في أندروميدا هو مجرد بداية لفهم أعمق لأسرار النجوم. هل تتساءلون عن المزيد من عجائب الفضاء؟ لا تنسوا متابعتنا لاستكشاف كل جديد في عالم الفلك والعلوم المذهلة التي تحيط بنا.",
+        "summary": "دعوة للمتابعة لاستكشاف المزيد من أسرار الفضاء.",
+        "keyword": "خاتمة",
+        "template": "journey",
+        "labels": [
+          "فضاء",
+          "علوم",
+          "نجوم"
+        ],
+        "values": [],
+        "claim": "متابعة القناة توفر فهماً أعمق لأسرار الفضاء.",
+        "sourceId": "a9faff50e5d3",
+        "evidence": "Webb is solving mysteries in our solar system, looking beyond to distant worlds around other stars, and probing the mysterious structures and origins of our universe and our place in it.",
+        "kind": "fact",
+        "expression": 11,
+        "action": "point"
+      }
+    ],
+    "editorialMode": "daily",
+    "editorialLabel": null,
+    "scriptModel": "gemini-3.1-flash-lite-preview"
+  },
+  "topic": {
+    "selected": {
+      "id": "a9faff50e5d3",
+      "title": "NASA Data Clinches First-of-Its-Kind Stellar Merger",
+      "url": "https://science.nasa.gov/missions/webb/nasa-data-clinches-first-of-its-kind-stellar-merger/",
+      "text": "Explore Webb Science James Webb Space Telescope (JWST) NASA Data Clinches… Webb News Latest News Latest Images Webb’s Blog Awards X (offsite – login reqd) Instagram (offsite – login reqd) Facebook (offsite- login reqd) Youtube (offsite) Overview About Who is James Webb? Fact Sheet Impacts+Benefits FAQ Webb Timeline Science Overview and Goals Early Universe Galaxies Over Time Star Lifecycle Other Worlds Science/Engineering Explainers Observatory Overview Launch Deployment Orbit Mirrors Sunshield Instruments ISIM Module Instrument: NIRCam Instrument: MIRI Instrument: NIRSpec Instrument: FGS/NIRISS Optical Telescope Element Backplane Spacecraft Bus Webb vs Hubble -> Multimedia About Webb Images Images Videos Products Activities Podcasts Webb Image Sonifications What is Webb Observing? 3d Webb in 3d Solar System Webb’s First Images Team International Team People Of Webb More For the Media For Scientists For Educators For Fun/Learning 7 Min Read NASA Data Clinches First-of-Its-Kind Stellar Merger In December 2025, observations from NASA’s James Webb Space Telescope provided the final evidence that allowed researchers to fully reconstruct what happened before, during, and after the merger of a binary star system nicknamed Bao in the Andromeda galaxy. Credits: Image: NASA, ESA, CSA, STScI, Viraj Karambelkar (Columbia), Kishalay De (Columbia); Image Processing: Alyssa Pagan (STScI); Acknowledgment: DSS, Robert Gendler Researchers recently identified a first of its kind: A star slightly less massive than the Sun spiraled into and merged with a puffy supergiant star at the outskirts of our neighboring Andromeda galaxy. They nicknamed the newly single, potentially “rejuvenated” star Bao. Their NASA-funded discovery was then bolstered by quick-turn observations from NASA’s James Webb Space Telescope that were carefully cross-referenced with extensive data from telescopes in space and on the ground. “Stellar mergers are very, very difficult to observe in real time because they are hard to predict,” said Viraj Karambelkar, the first author of a new paper in Nature published Wednesday and a NASA Hubble Fellow at Columbia University in New York. “However, we noticed something unusual was going on in 2023 and continued to monitor the system to see what it would do. Then, in 2025, it erupted! Webb observed Bao only 47 days after the stars’ eruption peaked, the earliest ever follow-up of an event like this. The telescope’s data helped us characterize what the system looked like before, during, and immediately after the merger, which is absolutely mind-blowing.” Image: AT 2025abao in the Andromeda Galaxy In December 2025, observations from NASA’s James Webb Space Telescope provided the final evidence that allowed researchers to fully reconstruct what happened before, during, and after the merger of a binary star system nicknamed Bao in the Andromeda galaxy. Image: NASA, ESA, CSA, STScI, Viraj Karambelkar (Columbia), Kishalay De (Columbia); Image Processing: Alyssa Pagan (STScI); Acknowledgment: DSS, Robert Gendler Before their transformation, the two stars spent millennia placidly orbiting one another as a binary pair. But once the smaller star came into contact with the surface of the giant star, their “unification” happened after only seven orbits (about seven years). Other known binary star mergers, featuring two smaller stars, occurred after thousands of orbits. “We thought an outburst from a such an extended star would take years,” said co-author Nadia Blagorodnova, an associate professor at the University of Barcelona in Spain. “One day, its brightness started rising and within a week, it peaked!” “When a companion star begins to interact with the outer surface of the primary star, it produces a subtle effect — a slow brightening, which we clearly saw in Bao’s data,” said co-author Kishalay De, an assistant professor at Columbia University in New York. “As the companion continues its orbit, it keeps peeling off the primary star’s outer layers, and that gas flows away into the surrounding space.” This is the beginning of a high-stakes showdown some binary stars go through, known as a common envelope evolution. The gas between the stars at this stage is known as a common envelope because its outer layer is shared between them. In this system, the primary star engulfed the smaller star and the companion plummeted, spiraling through the envelope as it was robbed of orbital energy by drag. While Webb’s data proved the stars merged, a merger wasn’t the only possible outcome for this system. In other systems, both stars survive the process — shedding a lot of mass along the way, but remaining independent in tight orbits. Over time, such surviving pairs can transform into neutron stars and black holes , explode as supernovae , produce ripples in space-time known as gravitational waves , and create millisecond pulsars . Hitting “replay” The team reconstructed what happened to Bao by updating their ongoing simulations. They found the model that matched Webb’s mid-infrared observations, which detailed the dust shed by the more massive primary star over centuries. The team concluded that prior to the eruption, Bao’s primary star dwarfed the Sun: It was seven times as massive, 350 times the radius, and 18,000 times brighter — making “Big Bao” an appropriate nickname. “It was an absolute beast of a star, completely outshining its companion in the data,” said co-author Karel Temmink, a Ph.D. student at Radboud University in Nijmegen, Netherlands, who led the simulations. Their modeling resulted in the first mass estimate for the smaller, now demolished, companion. Compared to our Sun, they found that “Little Bao” was likely less massive (about 0.7 solar masses), with a slightly smaller radius and fainter. After revealing the masses of the pair, the model showed there might be leftover energy for Little Bao to “flee” the scene. However, further analysis determined that Little Bao was dragged into Big Bao’s core. Their encounter was “almost like a bomb exploding inside a living star,” De said. What does the new star — now simply Bao — look like today? Only future observations will identify how its “heft” settles. Image: Andromeda Star Merger (Artist’s Concept) Top to bottom, left to right: In this artist’s concept, the stars are surrounded by a dust shell pre-merger; the stars brightened and the companion star’s orbit began to slow as the larger star engulfed it; the eruption occurred; dust freely expands at the poles after the merger. Illustration: NASA, ESA, CSA, STScI, Leah Hustak (STScI); Science: Viraj Karambelkar (Columbia) Reconstructing what happened While Webb’s data allowed the team to measure how much mass was ejected during this process and how efficient the process of common envelope evolution was, Karambelkar’s team also used observations that span ultraviolet, visible, and near-infrared light from several telescopes to watch the events, often as they unfolded. (In fact, they published their first paper right before the eruption in 2025.) Bao first caught the team’s attention in February 2023, when they saw an unusual variable star in data from NASA’s retired NEOWISE (Near-Earth Object Wide-Field Infrared Survey Explorer) mission. Before 2018, the object had a consistent luminosity. Observations from the Wide-field Infrared Transient Explorer (WINTER) in September 2024 showed that Bao was not only beginning to brighten, but also spew dust. When NASA’s SPHEREx (Spectro-Photometer for the History of the Universe, Epoch of Reionization and Ices Explorer) serendipitously saw Bao fade rapidly in visible light and brighten in infrared light during a routine survey in July 2025, the researchers knew it was an indicator of unusual activity. The Zwicky Transient Facility detected the eruption on Oct. 17, 2025, watching the stars rapidly brighten and radically heat up. In November 2025, the team received fast-turn observations from NASA’s now-retired Neil Gehrels Swift Observatory and NOIRLab’s Gemini North telescope in Hawaii. Webb’s observations were taken on Dec. 24, 2025, as part of a just-in-time Director’s Discretionary Time program . New path for future research The team’s analysis of Bao, formally known as AT 2025abao, offers an approach to reconstructing the events: They conducted their analysis and made observations of the stars’ merger in real time. That allowed them to measure how efficient common envelope evolution is. In other cases, astronomers have worked to carefully reverse-engineer events that may have happened hundreds or even millions of years ago. The new finding comes about just as NASA’s recently launched Nancy Grace Roman Space Telescope is about to conduct vast publicly available surveys . Its Galactic Bulge Time-Domain Survey will yield a huge number of new transient events that could benefit from similar analyses. “There’s going to be a large influx of similar discoveries just ahead,” Karambelkar said. This work is funded in part by a grant from NASA’s Astrophysics Data Analysis Program. The James Webb Space Telescope is the largest and most powerful observatory ever sent to space, serving thousands of astronomers worldwide. Webb is solving mysteries in our solar system, looking beyond to distant worlds around other stars, and probing the mysterious structures and origins of our universe and our place in it. Webb is an international program led by NASA with its partners, ESA (European Space Agency) and CSA (Canadian Space Agency). To learn more about Webb, visit: https://science.nasa.gov/webb Downloads Related Information The following sections contain links to download this article’s images and videos in all available resolutions followed by related information links, media contacts, and if available, research paper and Spanish translation links. Related Multimedia AT 2025abao in the Andromeda Galaxy In December 2025, observations from NASA’s James Webb Space Telescope provided the final evidence that allowed researchers to fully reconstruct what happened before, during, and after the merger of a binary star system nicknamed Bao in the Andromeda galaxy. Andromeda Star Merger (Artist’s Concept) Top to bottom, left to right: In this artist’s concept, the stars are surrounded by a dust shell pre-merger; the stars brightened and the companion star’s orbit began to slow as the larger star engulfed it; the eruption occurred; dust freely expands at the poles after the merger. Related Links More Andromeda Images: NASA Photojournal | Chandra | Hubble More Webb: News | Images | Science | Home Page Share Details Last Updated Nov 18, 2026 Location NASA Goddard Space Flight Center Contact Media Laura Betz NASA’s Goddard Space Flight Center Greenbelt, Maryland laura.e.betz@nasa.gov Claire Blome Space Telescope Science Institute Baltimore, Maryland Christine Pulliam Space Telescope Science Institute Baltimore, Maryland Related Terms James Webb Space Telescope (JWST) Astrophysics Astrophysics Division Binary Stars Galaxies Goddard Space Flight Center Science Research Sensing the Universe Multimessenger Astronomy Stars The Universe Keep Exploring Related Topics James Webb Space Telescope Webb is the premier observatory of the next decade, serving thousands of astronomers worldwide. It studies every phase in the… Stars Stars Stories Galaxies",
+      "published": "2026-11-18T16:00:00.000Z",
+      "official": true,
+      "dateBasis": "item_publication_or_update",
+      "publisher": "www.nasa.gov",
+      "primaryRefs": [
+        "http://www.w3.org/2000/svg",
+        "https://science.nasa.gov/",
+        "https://science.nasa.gov/mission/webb",
+        "https://science.nasa.gov/mission/webb/",
+        "http://www.w3.org/2000/svg",
+        "http://www.w3.org/2000/svg",
+        "https://science.nasa.gov/mission/webb/latestnews/",
+        "https://science.nasa.gov/mission/webb/multimedia/images/",
+        "https://blogs.nasa.gov/webb",
+        "https://science.nasa.gov/mission/webb/webb-telescope-awards/",
+        "https://twitter.com/NASAWebb",
+        "https://www.instagram.com/nasawebb/",
+        "https://www.facebook.com/NASAWebb/",
+        "https://www.youtube.com/user/NASAWebbTelescope",
+        "http://www.w3.org/2000/svg",
+        "http://www.w3.org/2000/svg",
+        "https://science.nasa.gov/mission/webb/about-overview/",
+        "https://science.nasa.gov/mission/webb/who-is-james-webb/",
+        "https://science.nasa.gov/mission/webb/fact-sheet/",
+        "https://science.nasa.gov/mission/webb/innovations/",
+        "https://science.nasa.gov/mission/webb/faqs-full/",
+        "https://science.nasa.gov/mission/webb/webb-mission-timeline/",
+        "http://www.w3.org/2000/svg",
+        "http://www.w3.org/2000/svg",
+        "https://science.nasa.gov/mission/webb/science-overview/",
+        "https://science.nasa.gov/mission/webb/early-universe/",
+        "https://science.nasa.gov/mission/webb/galaxies-over-time/",
+        "https://science.nasa.gov/mission/webb/star-lifecycle/",
+        "https://science.nasa.gov/mission/webb/other-worlds/",
+        "https://science.nasa.gov/mission/webb/science-overview/science-explainers/",
+        "http://www.w3.org/2000/svg",
+        "http://www.w3.org/2000/svg",
+        "https://science.nasa.gov/mission/webb/spacecraftoverview/",
+        "https://science.nasa.gov/mission/webb/launch/",
+        "https://science.nasa.gov/mission/webb/deployment/",
+        "https://science.nasa.gov/mission/webb/orbit/",
+        "https://science.nasa.gov/mission/webb/webbs-mirrors/",
+        "https://science.nasa.gov/mission/webb/webbs-sunshield/",
+        "https://science.nasa.gov/mission/webb/integrated-science-instrument-module-isim/",
+        "https://science.nasa.gov/mission/webb/nircam/",
+        "https://science.nasa.gov/mission/webb/mid-infrared-instrument-miri/",
+        "https://science.nasa.gov/mission/webb/nirspec/",
+        "https://science.nasa.gov/mission/webb/fine-guidance-sensor-near-infrared-imager-and-slitless-spectrograph-fgs-niriss/",
+        "https://science.nasa.gov/mission/webb/optical-telescope-element-ote/",
+        "https://science.nasa.gov/mission/webb/webbs-backplane/",
+        "https://science.nasa.gov/mission/webb/spacecraft-bus/",
+        "https://science.nasa.gov/mission/hubble/observatory/hubble-vs-webb/",
+        "http://www.w3.org/2000/svg",
+        "http://www.w3.org/2000/svg",
+        "https://science.nasa.gov/mission/webb/multimedia/about-webb-images/",
+        "https://science.nasa.gov/mission/webb/multimedia/images/",
+        "https://science.nasa.gov/mission/webb/webb-videos/",
+        "https://science.nasa.gov/mission/webb/for-fun/",
+        "https://science.nasa.gov/mission/webb/webb-podcasts/",
+        "https://science.nasa.gov/mission/webb/sonifications/",
+        "https://science.nasa.gov/mission/webb/what-is-webb-observing/",
+        "https://science.nasa.gov/mission/webb/webb-3d/",
+        "https://science.nasa.gov/mission/webb/webbs-first-images/",
+        "http://www.w3.org/2000/svg",
+        "http://www.w3.org/2000/svg",
+        "https://science.nasa.gov/mission/webb/webb-team/",
+        "https://science.nasa.gov/mission/webb/webb-people-bios/",
+        "http://www.w3.org/2000/svg",
+        "http://www.w3.org/2000/svg",
+        "https://science.nasa.gov/mission/webb/for-the-media/",
+        "https://science.nasa.gov/mission/webb/for-scientists/",
+        "https://science.nasa.gov/mission/webb/for-educators/",
+        "https://science.nasa.gov/mission/webb/for-fun/",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M6GTRN4J7R6FEJ4AJXM567QT.jpg?w=1536&#038;h=1536&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M6GTRN4J7R6FEJ4AJXM567QT.jpg?w=3819&#038;h=2571&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M6GTRN4J7R6FEJ4AJXM567QT.jpg?w=300&#038;h=300&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M6GTRN4J7R6FEJ4AJXM567QT.jpg?w=400&#038;h=400&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M6GTRN4J7R6FEJ4AJXM567QT.jpg?w=600&#038;h=600&#038;fit=clip",
+        "https://assets.science.nasa.gov/content/dam/science/missions/webb/science/2026/11/STScI-01M6GTRN4J7R6FEJ4AJXM567QT.jpg",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M6GTRN4J7R6FEJ4AJXM567QT.jpg?w=2048&#038;h=2048&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M6GTRN4J7R6FEJ4AJXM567QT.jpg?w=3819&#038;h=2571&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M6GTRN4J7R6FEJ4AJXM567QT.jpg?w=300&#038;h=300&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M6GTRN4J7R6FEJ4AJXM567QT.jpg?w=400&#038;h=400&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M6GTRN4J7R6FEJ4AJXM567QT.jpg?w=600&#038;h=600&#038;fit=clip",
+        "https://science.nasa.gov/universe/glossary/#neutron-star",
+        "https://science.nasa.gov/universe/glossary/#black-hole",
+        "https://science.nasa.gov/universe/glossary/#supernova",
+        "https://science.nasa.gov/universe/glossary/#gravitational-waves",
+        "https://science.nasa.gov/universe/glossary/#pulsar",
+        "https://assets.science.nasa.gov/content/dam/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=2048&#038;h=2048&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=2048&#038;h=2048&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=150&#038;h=150&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=300&#038;h=300&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=768&#038;h=2160&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=1024&#038;h=1024&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=1536&#038;h=1536&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=50&#038;h=50&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=100&#038;h=100&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=200&#038;h=200&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=400&#038;h=400&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=600&#038;h=600&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=900&#038;h=900&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=1200&#038;h=1200&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=2000&#038;h=2000&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=1568&#038;h=2160&#038;fit=clip",
+        "https://iopscience.iop.org/article/10.3847/1538-4357/ae00bc",
+        "https://science.nasa.gov/mission/neowise/",
+        "https://www.daniellefrostig.com/research/winter",
+        "https://science.nasa.gov/mission/spherex/",
+        "https://www.ztf.caltech.edu/",
+        "https://swift.gsfc.nasa.gov/",
+        "https://noirlab.edu/public/programs/gemini-observatory/gemini-north/",
+        "https://www.stsci.edu/jwst/science-execution/approved-programs/directors-discretionary-time",
+        "https://science.nasa.gov/mission/roman-space-telescope/planned-observations/",
+        "https://science.nasa.gov/mission/roman-space-telescope/galactic-bulge-time-domain-survey/",
+        "https://science.nasa.gov/webb",
+        "https://science.nasa.gov/webb",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M6GTRN4J7R6FEJ4AJXM567QT.jpg?w=150&#038;h=150&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M6GTRN4J7R6FEJ4AJXM567QT.jpg?w=3819&#038;h=2571&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M6GTRN4J7R6FEJ4AJXM567QT.jpg?w=300&#038;h=300&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M6GTRN4J7R6FEJ4AJXM567QT.jpg?w=400&#038;h=400&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M6GTRN4J7R6FEJ4AJXM567QT.jpg?w=600&#038;h=600&#038;fit=clip",
+        "https://science.nasa.gov/asset/webb/at-2025abao-in-the-andromeda-galaxy/",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=150&#038;h=150&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=150&#038;h=150&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=300&#038;h=300&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=768&#038;h=2160&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=1024&#038;h=1024&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=1536&#038;h=1536&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=2048&#038;h=2048&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=50&#038;h=50&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=100&#038;h=100&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=200&#038;h=200&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=400&#038;h=400&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=600&#038;h=600&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=900&#038;h=900&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=1200&#038;h=1200&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=2000&#038;h=2000&#038;fit=clip",
+        "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=1568&#038;h=2160&#038;fit=clip",
+        "https://science.nasa.gov/asset/webb/andromeda-star-merger-artists-concept/",
+        "https://science.nasa.gov/photojournal/andromeda/",
+        "https://www.nasa.gov/image-article/nasas-chandra-shares-a-new-view-of-our-galactic-neighbor/",
+        "https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-31/",
+        "https://science.nasa.gov/mission/webb/latestnews/",
+        "https://science.nasa.gov/mission/webb/multimedia/images/",
+        "https://science.nasa.gov/mission/webb/science-overview/",
+        "https://science.nasa.gov/mission/webb/",
+        "http://www.w3.org/TR/REC-html40/loose.dtd",
+        "https://x.com/intent/tweet?via=NASA&#038;text=NASA%20Data%20Clinches%20First-of-Its-Kind%20Stellar%20Merger&#038;url=https%3A%2F%2Fscience.nasa.gov%2Fmissions%2Fwebb%2Fnasa-data-clinches-first-of-its-kind-stellar-merger%2F",
+        "http://www.w3.org/2000/svg",
+        "https://www.facebook.com/sharer.php?u=https%3A%2F%2Fscience.nasa.gov%2Fmissions%2Fwebb%2Fnasa-data-clinches-first-of-its-kind-stellar-merger%2F",
+        "http://www.w3.org/2000/svg",
+        "https://www.linkedin.com/shareArticle?mini=true&#038;url=https%3A%2F%2Fscience.nasa.gov%2Fmissions%2Fwebb%2Fnasa-data-clinches-first-of-its-kind-stellar-merger%2F",
+        "http://www.w3.org/2000/svg",
+        "http://www.w3.org/2000/svg",
+        "https://nasa.gov/goddard",
+        "https://science.nasa.gov/mission/webb",
+        "https://science.nasa.gov/astrophysics/",
+        "https://science.nasa.gov/astrophysics/",
+        "https://science.nasa.gov/category/universe/stars/binary-stars/",
+        "https://science.nasa.gov/universe/galaxies/",
+        "https://www.nasa.gov/goddard/",
+        "https://science.nasa.gov/",
+        "https://science.nasa.gov/category/universe/sensing-the-universe-multimessenger-astronomy/",
+        "https://science.nasa.gov/universe/stars/",
+        "https://science.nasa.gov/universe/",
+        "https://science.nasa.gov/mission/webb/",
+        "http://www.w3.org/2000/svg",
+        "https://science.nasa.gov/wp-content/uploads/2024/05/jwst_artist_concept_0.png?w=1041",
+        "https://science.nasa.gov/wp-content/uploads/2024/05/jwst_artist_concept_0.png",
+        "https://science.nasa.gov/wp-content/uploads/2024/05/jwst_artist_concept_0.png?resize=150,150",
+        "https://science.nasa.gov/wp-content/uploads/2024/05/jwst_artist_concept_0.png?resize=300,297",
+        "https://science.nasa.gov/wp-content/uploads/2024/05/jwst_artist_concept_0.png?resize=768,761",
+        "https://science.nasa.gov/wp-content/uploads/2024/05/jwst_artist_concept_0.png?resize=1024,1015",
+        "https://science.nasa.gov/wp-content/uploads/2024/05/jwst_artist_concept_0.png?resize=50,50",
+        "https://science.nasa.gov/wp-content/uploads/2024/05/jwst_artist_concept_0.png?resize=100,100",
+        "https://science.nasa.gov/wp-content/uploads/2024/05/jwst_artist_concept_0.png?resize=400,397",
+        "https://science.nasa.gov/wp-content/uploads/2024/05/jwst_artist_concept_0.png?resize=600,595",
+        "https://science.nasa.gov/wp-content/uploads/2024/05/jwst_artist_concept_0.png?resize=900,892",
+        "https://science.nasa.gov/universe/stars/",
+        "http://www.w3.org/2000/svg",
+        "https://science.nasa.gov/wp-content/uploads/2023/06/may102022-x1pt5flare-171-131-304-jpg.webp?w=1536",
+        "https://science.nasa.gov/wp-content/uploads/2023/06/may102022-x1pt5flare-171-131-304-jpg.webp",
+        "https://science.nasa.gov/wp-content/uploads/2023/06/may102022-x1pt5flare-171-131-304-jpg.webp?resize=300,169",
+        "https://science.nasa.gov/wp-content/uploads/2023/06/may102022-x1pt5flare-171-131-304-jpg.webp?resize=768,432",
+        "https://science.nasa.gov/wp-content/uploads/2023/06/may102022-x1pt5flare-171-131-304-jpg.webp?resize=1024,576",
+        "https://science.nasa.gov/wp-content/uploads/2023/06/may102022-x1pt5flare-171-131-304-jpg.webp?resize=1536,864",
+        "https://science.nasa.gov/wp-content/uploads/2023/06/may102022-x1pt5flare-171-131-304-jpg.webp?resize=400,225",
+        "https://science.nasa.gov/wp-content/uploads/2023/06/may102022-x1pt5flare-171-131-304-jpg.webp?resize=600,338",
+        "https://science.nasa.gov/wp-content/uploads/2023/06/may102022-x1pt5flare-171-131-304-jpg.webp?resize=900,506",
+        "https://science.nasa.gov/wp-content/uploads/2023/06/may102022-x1pt5flare-171-131-304-jpg.webp?resize=1200,675",
+        "https://science.nasa.gov/astrophysics/focus-areas/how-do-stars-form-and-evolve/stories/",
+        "http://www.w3.org/2000/svg",
+        "https://science.nasa.gov/wp-content/uploads/2023/04/hubble-ngc3603-opo1022a-jpg.webp?w=1280",
+        "https://science.nasa.gov/wp-content/uploads/2023/04/hubble-ngc3603-opo1022a-jpg.webp",
+        "https://science.nasa.gov/wp-content/uploads/2023/04/hubble-ngc3603-opo1022a-jpg.webp?resize=300,267",
+        "https://science.nasa.gov/wp-content/uploads/2023/04/hubble-ngc3603-opo1022a-jpg.webp?resize=768,685",
+        "https://science.nasa.gov/wp-content/uploads/2023/04/hubble-ngc3603-opo1022a-jpg.webp?resize=1024,913",
+        "https://science.nasa.gov/wp-content/uploads/2023/04/hubble-ngc3603-opo1022a-jpg.webp?resize=400,357",
+        "https://science.nasa.gov/wp-content/uploads/2023/04/hubble-ngc3603-opo1022a-jpg.webp?resize=600,535",
+        "https://science.nasa.gov/wp-content/uploads/2023/04/hubble-ngc3603-opo1022a-jpg.webp?resize=900,802",
+        "https://science.nasa.gov/wp-content/uploads/2023/04/hubble-ngc3603-opo1022a-jpg.webp?resize=1200,1070",
+        "https://science.nasa.gov/universe/galaxies/",
+        "http://www.w3.org/2000/svg",
+        "https://science.nasa.gov/wp-content/uploads/2023/06/spiral-galaxy-jpg.webp?w=1200",
+        "https://science.nasa.gov/wp-content/uploads/2023/06/spiral-galaxy-jpg.webp",
+        "https://science.nasa.gov/wp-content/uploads/2023/06/spiral-galaxy-jpg.webp?resize=300,235",
+        "https://science.nasa.gov/wp-content/uploads/2023/06/spiral-galaxy-jpg.webp?resize=768,600",
+        "https://science.nasa.gov/wp-content/uploads/2023/06/spiral-galaxy-jpg.webp?resize=1024,800",
+        "https://science.nasa.gov/wp-content/uploads/2023/06/spiral-galaxy-jpg.webp?resize=400,313",
+        "https://science.nasa.gov/wp-content/uploads/2023/06/spiral-galaxy-jpg.webp?resize=600,469",
+        "https://science.nasa.gov/wp-content/uploads/2023/06/spiral-galaxy-jpg.webp?resize=900,704"
+      ]
+    },
+    "sources": [
+      {
+        "id": "a9faff50e5d3",
+        "title": "NASA Data Clinches First-of-Its-Kind Stellar Merger",
+        "url": "https://science.nasa.gov/missions/webb/nasa-data-clinches-first-of-its-kind-stellar-merger/",
+        "text": "Explore Webb Science James Webb Space Telescope (JWST) NASA Data Clinches… Webb News Latest News Latest Images Webb’s Blog Awards X (offsite – login reqd) Instagram (offsite – login reqd) Facebook (offsite- login reqd) Youtube (offsite) Overview About Who is James Webb? Fact Sheet Impacts+Benefits FAQ Webb Timeline Science Overview and Goals Early Universe Galaxies Over Time Star Lifecycle Other Worlds Science/Engineering Explainers Observatory Overview Launch Deployment Orbit Mirrors Sunshield Instruments ISIM Module Instrument: NIRCam Instrument: MIRI Instrument: NIRSpec Instrument: FGS/NIRISS Optical Telescope Element Backplane Spacecraft Bus Webb vs Hubble -> Multimedia About Webb Images Images Videos Products Activities Podcasts Webb Image Sonifications What is Webb Observing? 3d Webb in 3d Solar System Webb’s First Images Team International Team People Of Webb More For the Media For Scientists For Educators For Fun/Learning 7 Min Read NASA Data Clinches First-of-Its-Kind Stellar Merger In December 2025, observations from NASA’s James Webb Space Telescope provided the final evidence that allowed researchers to fully reconstruct what happened before, during, and after the merger of a binary star system nicknamed Bao in the Andromeda galaxy. Credits: Image: NASA, ESA, CSA, STScI, Viraj Karambelkar (Columbia), Kishalay De (Columbia); Image Processing: Alyssa Pagan (STScI); Acknowledgment: DSS, Robert Gendler Researchers recently identified a first of its kind: A star slightly less massive than the Sun spiraled into and merged with a puffy supergiant star at the outskirts of our neighboring Andromeda galaxy. They nicknamed the newly single, potentially “rejuvenated” star Bao. Their NASA-funded discovery was then bolstered by quick-turn observations from NASA’s James Webb Space Telescope that were carefully cross-referenced with extensive data from telescopes in space and on the ground. “Stellar mergers are very, very difficult to observe in real time because they are hard to predict,” said Viraj Karambelkar, the first author of a new paper in Nature published Wednesday and a NASA Hubble Fellow at Columbia University in New York. “However, we noticed something unusual was going on in 2023 and continued to monitor the system to see what it would do. Then, in 2025, it erupted! Webb observed Bao only 47 days after the stars’ eruption peaked, the earliest ever follow-up of an event like this. The telescope’s data helped us characterize what the system looked like before, during, and immediately after the merger, which is absolutely mind-blowing.” Image: AT 2025abao in the Andromeda Galaxy In December 2025, observations from NASA’s James Webb Space Telescope provided the final evidence that allowed researchers to fully reconstruct what happened before, during, and after the merger of a binary star system nicknamed Bao in the Andromeda galaxy. Image: NASA, ESA, CSA, STScI, Viraj Karambelkar (Columbia), Kishalay De (Columbia); Image Processing: Alyssa Pagan (STScI); Acknowledgment: DSS, Robert Gendler Before their transformation, the two stars spent millennia placidly orbiting one another as a binary pair. But once the smaller star came into contact with the surface of the giant star, their “unification” happened after only seven orbits (about seven years). Other known binary star mergers, featuring two smaller stars, occurred after thousands of orbits. “We thought an outburst from a such an extended star would take years,” said co-author Nadia Blagorodnova, an associate professor at the University of Barcelona in Spain. “One day, its brightness started rising and within a week, it peaked!” “When a companion star begins to interact with the outer surface of the primary star, it produces a subtle effect — a slow brightening, which we clearly saw in Bao’s data,” said co-author Kishalay De, an assistant professor at Columbia University in New York. “As the companion continues its orbit, it keeps peeling off the primary star’s outer layers, and that gas flows away into the surrounding space.” This is the beginning of a high-stakes showdown some binary stars go through, known as a common envelope evolution. The gas between the stars at this stage is known as a common envelope because its outer layer is shared between them. In this system, the primary star engulfed the smaller star and the companion plummeted, spiraling through the envelope as it was robbed of orbital energy by drag. While Webb’s data proved the stars merged, a merger wasn’t the only possible outcome for this system. In other systems, both stars survive the process — shedding a lot of mass along the way, but remaining independent in tight orbits. Over time, such surviving pairs can transform into neutron stars and black holes , explode as supernovae , produce ripples in space-time known as gravitational waves , and create millisecond pulsars . Hitting “replay” The team reconstructed what happened to Bao by updating their ongoing simulations. They found the model that matched Webb’s mid-infrared observations, which detailed the dust shed by the more massive primary star over centuries. The team concluded that prior to the eruption, Bao’s primary star dwarfed the Sun: It was seven times as massive, 350 times the radius, and 18,000 times brighter — making “Big Bao” an appropriate nickname. “It was an absolute beast of a star, completely outshining its companion in the data,” said co-author Karel Temmink, a Ph.D. student at Radboud University in Nijmegen, Netherlands, who led the simulations. Their modeling resulted in the first mass estimate for the smaller, now demolished, companion. Compared to our Sun, they found that “Little Bao” was likely less massive (about 0.7 solar masses), with a slightly smaller radius and fainter. After revealing the masses of the pair, the model showed there might be leftover energy for Little Bao to “flee” the scene. However, further analysis determined that Little Bao was dragged into Big Bao’s core. Their encounter was “almost like a bomb exploding inside a living star,” De said. What does the new star — now simply Bao — look like today? Only future observations will identify how its “heft” settles. Image: Andromeda Star Merger (Artist’s Concept) Top to bottom, left to right: In this artist’s concept, the stars are surrounded by a dust shell pre-merger; the stars brightened and the companion star’s orbit began to slow as the larger star engulfed it; the eruption occurred; dust freely expands at the poles after the merger. Illustration: NASA, ESA, CSA, STScI, Leah Hustak (STScI); Science: Viraj Karambelkar (Columbia) Reconstructing what happened While Webb’s data allowed the team to measure how much mass was ejected during this process and how efficient the process of common envelope evolution was, Karambelkar’s team also used observations that span ultraviolet, visible, and near-infrared light from several telescopes to watch the events, often as they unfolded. (In fact, they published their first paper right before the eruption in 2025.) Bao first caught the team’s attention in February 2023, when they saw an unusual variable star in data from NASA’s retired NEOWISE (Near-Earth Object Wide-Field Infrared Survey Explorer) mission. Before 2018, the object had a consistent luminosity. Observations from the Wide-field Infrared Transient Explorer (WINTER) in September 2024 showed that Bao was not only beginning to brighten, but also spew dust. When NASA’s SPHEREx (Spectro-Photometer for the History of the Universe, Epoch of Reionization and Ices Explorer) serendipitously saw Bao fade rapidly in visible light and brighten in infrared light during a routine survey in July 2025, the researchers knew it was an indicator of unusual activity. The Zwicky Transient Facility detected the eruption on Oct. 17, 2025, watching the stars rapidly brighten and radically heat up. In November 2025, the team received fast-turn observations from NASA’s now-retired Neil Gehrels Swift Observatory and NOIRLab’s Gemini North telescope in Hawaii. Webb’s observations were taken on Dec. 24, 2025, as part of a just-in-time Director’s Discretionary Time program . New path for future research The team’s analysis of Bao, formally known as AT 2025abao, offers an approach to reconstructing the events: They conducted their analysis and made observations of the stars’ merger in real time. That allowed them to measure how efficient common envelope evolution is. In other cases, astronomers have worked to carefully reverse-engineer events that may have happened hundreds or even millions of years ago. The new finding comes about just as NASA’s recently launched Nancy Grace Roman Space Telescope is about to conduct vast publicly available surveys . Its Galactic Bulge Time-Domain Survey will yield a huge number of new transient events that could benefit from similar analyses. “There’s going to be a large influx of similar discoveries just ahead,” Karambelkar said. This work is funded in part by a grant from NASA’s Astrophysics Data Analysis Program. The James Webb Space Telescope is the largest and most powerful observatory ever sent to space, serving thousands of astronomers worldwide. Webb is solving mysteries in our solar system, looking beyond to distant worlds around other stars, and probing the mysterious structures and origins of our universe and our place in it. Webb is an international program led by NASA with its partners, ESA (European Space Agency) and CSA (Canadian Space Agency). To learn more about Webb, visit: https://science.nasa.gov/webb Downloads Related Information The following sections contain links to download this article’s images and videos in all available resolutions followed by related information links, media contacts, and if available, research paper and Spanish translation links. Related Multimedia AT 2025abao in the Andromeda Galaxy In December 2025, observations from NASA’s James Webb Space Telescope provided the final evidence that allowed researchers to fully reconstruct what happened before, during, and after the merger of a binary star system nicknamed Bao in the Andromeda galaxy. Andromeda Star Merger (Artist’s Concept) Top to bottom, left to right: In this artist’s concept, the stars are surrounded by a dust shell pre-merger; the stars brightened and the companion star’s orbit began to slow as the larger star engulfed it; the eruption occurred; dust freely expands at the poles after the merger. Related Links More Andromeda Images: NASA Photojournal | Chandra | Hubble More Webb: News | Images | Science | Home Page Share Details Last Updated Nov 18, 2026 Location NASA Goddard Space Flight Center Contact Media Laura Betz NASA’s Goddard Space Flight Center Greenbelt, Maryland laura.e.betz@nasa.gov Claire Blome Space Telescope Science Institute Baltimore, Maryland Christine Pulliam Space Telescope Science Institute Baltimore, Maryland Related Terms James Webb Space Telescope (JWST) Astrophysics Astrophysics Division Binary Stars Galaxies Goddard Space Flight Center Science Research Sensing the Universe Multimessenger Astronomy Stars The Universe Keep Exploring Related Topics James Webb Space Telescope Webb is the premier observatory of the next decade, serving thousands of astronomers worldwide. It studies every phase in the… Stars Stars Stories Galaxies",
+        "published": "2026-11-18T16:00:00.000Z",
+        "official": true,
+        "dateBasis": "item_publication_or_update",
+        "publisher": "www.nasa.gov",
+        "primaryRefs": [
+          "http://www.w3.org/2000/svg",
+          "https://science.nasa.gov/",
+          "https://science.nasa.gov/mission/webb",
+          "https://science.nasa.gov/mission/webb/",
+          "http://www.w3.org/2000/svg",
+          "http://www.w3.org/2000/svg",
+          "https://science.nasa.gov/mission/webb/latestnews/",
+          "https://science.nasa.gov/mission/webb/multimedia/images/",
+          "https://blogs.nasa.gov/webb",
+          "https://science.nasa.gov/mission/webb/webb-telescope-awards/",
+          "https://twitter.com/NASAWebb",
+          "https://www.instagram.com/nasawebb/",
+          "https://www.facebook.com/NASAWebb/",
+          "https://www.youtube.com/user/NASAWebbTelescope",
+          "http://www.w3.org/2000/svg",
+          "http://www.w3.org/2000/svg",
+          "https://science.nasa.gov/mission/webb/about-overview/",
+          "https://science.nasa.gov/mission/webb/who-is-james-webb/",
+          "https://science.nasa.gov/mission/webb/fact-sheet/",
+          "https://science.nasa.gov/mission/webb/innovations/",
+          "https://science.nasa.gov/mission/webb/faqs-full/",
+          "https://science.nasa.gov/mission/webb/webb-mission-timeline/",
+          "http://www.w3.org/2000/svg",
+          "http://www.w3.org/2000/svg",
+          "https://science.nasa.gov/mission/webb/science-overview/",
+          "https://science.nasa.gov/mission/webb/early-universe/",
+          "https://science.nasa.gov/mission/webb/galaxies-over-time/",
+          "https://science.nasa.gov/mission/webb/star-lifecycle/",
+          "https://science.nasa.gov/mission/webb/other-worlds/",
+          "https://science.nasa.gov/mission/webb/science-overview/science-explainers/",
+          "http://www.w3.org/2000/svg",
+          "http://www.w3.org/2000/svg",
+          "https://science.nasa.gov/mission/webb/spacecraftoverview/",
+          "https://science.nasa.gov/mission/webb/launch/",
+          "https://science.nasa.gov/mission/webb/deployment/",
+          "https://science.nasa.gov/mission/webb/orbit/",
+          "https://science.nasa.gov/mission/webb/webbs-mirrors/",
+          "https://science.nasa.gov/mission/webb/webbs-sunshield/",
+          "https://science.nasa.gov/mission/webb/integrated-science-instrument-module-isim/",
+          "https://science.nasa.gov/mission/webb/nircam/",
+          "https://science.nasa.gov/mission/webb/mid-infrared-instrument-miri/",
+          "https://science.nasa.gov/mission/webb/nirspec/",
+          "https://science.nasa.gov/mission/webb/fine-guidance-sensor-near-infrared-imager-and-slitless-spectrograph-fgs-niriss/",
+          "https://science.nasa.gov/mission/webb/optical-telescope-element-ote/",
+          "https://science.nasa.gov/mission/webb/webbs-backplane/",
+          "https://science.nasa.gov/mission/webb/spacecraft-bus/",
+          "https://science.nasa.gov/mission/hubble/observatory/hubble-vs-webb/",
+          "http://www.w3.org/2000/svg",
+          "http://www.w3.org/2000/svg",
+          "https://science.nasa.gov/mission/webb/multimedia/about-webb-images/",
+          "https://science.nasa.gov/mission/webb/multimedia/images/",
+          "https://science.nasa.gov/mission/webb/webb-videos/",
+          "https://science.nasa.gov/mission/webb/for-fun/",
+          "https://science.nasa.gov/mission/webb/webb-podcasts/",
+          "https://science.nasa.gov/mission/webb/sonifications/",
+          "https://science.nasa.gov/mission/webb/what-is-webb-observing/",
+          "https://science.nasa.gov/mission/webb/webb-3d/",
+          "https://science.nasa.gov/mission/webb/webbs-first-images/",
+          "http://www.w3.org/2000/svg",
+          "http://www.w3.org/2000/svg",
+          "https://science.nasa.gov/mission/webb/webb-team/",
+          "https://science.nasa.gov/mission/webb/webb-people-bios/",
+          "http://www.w3.org/2000/svg",
+          "http://www.w3.org/2000/svg",
+          "https://science.nasa.gov/mission/webb/for-the-media/",
+          "https://science.nasa.gov/mission/webb/for-scientists/",
+          "https://science.nasa.gov/mission/webb/for-educators/",
+          "https://science.nasa.gov/mission/webb/for-fun/",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M6GTRN4J7R6FEJ4AJXM567QT.jpg?w=1536&#038;h=1536&#038;fit=clip",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M6GTRN4J7R6FEJ4AJXM567QT.jpg?w=3819&#038;h=2571&#038;fit=clip",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M6GTRN4J7R6FEJ4AJXM567QT.jpg?w=300&#038;h=300&#038;fit=clip",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M6GTRN4J7R6FEJ4AJXM567QT.jpg?w=400&#038;h=400&#038;fit=clip",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M6GTRN4J7R6FEJ4AJXM567QT.jpg?w=600&#038;h=600&#038;fit=clip",
+          "https://assets.science.nasa.gov/content/dam/science/missions/webb/science/2026/11/STScI-01M6GTRN4J7R6FEJ4AJXM567QT.jpg",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M6GTRN4J7R6FEJ4AJXM567QT.jpg?w=2048&#038;h=2048&#038;fit=clip",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M6GTRN4J7R6FEJ4AJXM567QT.jpg?w=3819&#038;h=2571&#038;fit=clip",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M6GTRN4J7R6FEJ4AJXM567QT.jpg?w=300&#038;h=300&#038;fit=clip",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M6GTRN4J7R6FEJ4AJXM567QT.jpg?w=400&#038;h=400&#038;fit=clip",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M6GTRN4J7R6FEJ4AJXM567QT.jpg?w=600&#038;h=600&#038;fit=clip",
+          "https://science.nasa.gov/universe/glossary/#neutron-star",
+          "https://science.nasa.gov/universe/glossary/#black-hole",
+          "https://science.nasa.gov/universe/glossary/#supernova",
+          "https://science.nasa.gov/universe/glossary/#gravitational-waves",
+          "https://science.nasa.gov/universe/glossary/#pulsar",
+          "https://assets.science.nasa.gov/content/dam/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=2048&#038;h=2048&#038;fit=clip",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=2048&#038;h=2048&#038;fit=clip",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=150&#038;h=150&#038;fit=clip",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=300&#038;h=300&#038;fit=clip",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=768&#038;h=2160&#038;fit=clip",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=1024&#038;h=1024&#038;fit=clip",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=1536&#038;h=1536&#038;fit=clip",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=50&#038;h=50&#038;fit=clip",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=100&#038;h=100&#038;fit=clip",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=200&#038;h=200&#038;fit=clip",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=400&#038;h=400&#038;fit=clip",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=600&#038;h=600&#038;fit=clip",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=900&#038;h=900&#038;fit=clip",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=1200&#038;h=1200&#038;fit=clip",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=2000&#038;h=2000&#038;fit=clip",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=1568&#038;h=2160&#038;fit=clip",
+          "https://iopscience.iop.org/article/10.3847/1538-4357/ae00bc",
+          "https://science.nasa.gov/mission/neowise/",
+          "https://www.daniellefrostig.com/research/winter",
+          "https://science.nasa.gov/mission/spherex/",
+          "https://www.ztf.caltech.edu/",
+          "https://swift.gsfc.nasa.gov/",
+          "https://noirlab.edu/public/programs/gemini-observatory/gemini-north/",
+          "https://www.stsci.edu/jwst/science-execution/approved-programs/directors-discretionary-time",
+          "https://science.nasa.gov/mission/roman-space-telescope/planned-observations/",
+          "https://science.nasa.gov/mission/roman-space-telescope/galactic-bulge-time-domain-survey/",
+          "https://science.nasa.gov/webb",
+          "https://science.nasa.gov/webb",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M6GTRN4J7R6FEJ4AJXM567QT.jpg?w=150&#038;h=150&#038;fit=clip",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M6GTRN4J7R6FEJ4AJXM567QT.jpg?w=3819&#038;h=2571&#038;fit=clip",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M6GTRN4J7R6FEJ4AJXM567QT.jpg?w=300&#038;h=300&#038;fit=clip",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M6GTRN4J7R6FEJ4AJXM567QT.jpg?w=400&#038;h=400&#038;fit=clip",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M6GTRN4J7R6FEJ4AJXM567QT.jpg?w=600&#038;h=600&#038;fit=clip",
+          "https://science.nasa.gov/asset/webb/at-2025abao-in-the-andromeda-galaxy/",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=150&#038;h=150&#038;fit=clip",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=150&#038;h=150&#038;fit=clip",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=300&#038;h=300&#038;fit=clip",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=768&#038;h=2160&#038;fit=clip",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=1024&#038;h=1024&#038;fit=clip",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=1536&#038;h=1536&#038;fit=clip",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=2048&#038;h=2048&#038;fit=clip",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=50&#038;h=50&#038;fit=clip",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=100&#038;h=100&#038;fit=clip",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=200&#038;h=200&#038;fit=clip",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=400&#038;h=400&#038;fit=clip",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=600&#038;h=600&#038;fit=clip",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=900&#038;h=900&#038;fit=clip",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=1200&#038;h=1200&#038;fit=clip",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=2000&#038;h=2000&#038;fit=clip",
+          "https://assets.science.nasa.gov/dynamicimage/assets/science/missions/webb/science/2026/11/STScI-01M75P16KDJ20MN2N5YEWFC18H.jpg?w=1568&#038;h=2160&#038;fit=clip",
+          "https://science.nasa.gov/asset/webb/andromeda-star-merger-artists-concept/",
+          "https://science.nasa.gov/photojournal/andromeda/",
+          "https://www.nasa.gov/image-article/nasas-chandra-shares-a-new-view-of-our-galactic-neighbor/",
+          "https://science.nasa.gov/mission/hubble/science/explore-the-night-sky/hubble-messier-catalog/messier-31/",
+          "https://science.nasa.gov/mission/webb/latestnews/",
+          "https://science.nasa.gov/mission/webb/multimedia/images/",
+          "https://science.nasa.gov/mission/webb/science-overview/",
+          "https://science.nasa.gov/mission/webb/",
+          "http://www.w3.org/TR/REC-html40/loose.dtd",
+          "https://x.com/intent/tweet?via=NASA&#038;text=NASA%20Data%20Clinches%20First-of-Its-Kind%20Stellar%20Merger&#038;url=https%3A%2F%2Fscience.nasa.gov%2Fmissions%2Fwebb%2Fnasa-data-clinches-first-of-its-kind-stellar-merger%2F",
+          "http://www.w3.org/2000/svg",
+          "https://www.facebook.com/sharer.php?u=https%3A%2F%2Fscience.nasa.gov%2Fmissions%2Fwebb%2Fnasa-data-clinches-first-of-its-kind-stellar-merger%2F",
+          "http://www.w3.org/2000/svg",
+          "https://www.linkedin.com/shareArticle?mini=true&#038;url=https%3A%2F%2Fscience.nasa.gov%2Fmissions%2Fwebb%2Fnasa-data-clinches-first-of-its-kind-stellar-merger%2F",
+          "http://www.w3.org/2000/svg",
+          "http://www.w3.org/2000/svg",
+          "https://nasa.gov/goddard",
+          "https://science.nasa.gov/mission/webb",
+          "https://science.nasa.gov/astrophysics/",
+          "https://science.nasa.gov/astrophysics/",
+          "https://science.nasa.gov/category/universe/stars/binary-stars/",
+          "https://science.nasa.gov/universe/galaxies/",
+          "https://www.nasa.gov/goddard/",
+          "https://science.nasa.gov/",
+          "https://science.nasa.gov/category/universe/sensing-the-universe-multimessenger-astronomy/",
+          "https://science.nasa.gov/universe/stars/",
+          "https://science.nasa.gov/universe/",
+          "https://science.nasa.gov/mission/webb/",
+          "http://www.w3.org/2000/svg",
+          "https://science.nasa.gov/wp-content/uploads/2024/05/jwst_artist_concept_0.png?w=1041",
+          "https://science.nasa.gov/wp-content/uploads/2024/05/jwst_artist_concept_0.png",
+          "https://science.nasa.gov/wp-content/uploads/2024/05/jwst_artist_concept_0.png?resize=150,150",
+          "https://science.nasa.gov/wp-content/uploads/2024/05/jwst_artist_concept_0.png?resize=300,297",
+          "https://science.nasa.gov/wp-content/uploads/2024/05/jwst_artist_concept_0.png?resize=768,761",
+          "https://science.nasa.gov/wp-content/uploads/2024/05/jwst_artist_concept_0.png?resize=1024,1015",
+          "https://science.nasa.gov/wp-content/uploads/2024/05/jwst_artist_concept_0.png?resize=50,50",
+          "https://science.nasa.gov/wp-content/uploads/2024/05/jwst_artist_concept_0.png?resize=100,100",
+          "https://science.nasa.gov/wp-content/uploads/2024/05/jwst_artist_concept_0.png?resize=400,397",
+          "https://science.nasa.gov/wp-content/uploads/2024/05/jwst_artist_concept_0.png?resize=600,595",
+          "https://science.nasa.gov/wp-content/uploads/2024/05/jwst_artist_concept_0.png?resize=900,892",
+          "https://science.nasa.gov/universe/stars/",
+          "http://www.w3.org/2000/svg",
+          "https://science.nasa.gov/wp-content/uploads/2023/06/may102022-x1pt5flare-171-131-304-jpg.webp?w=1536",
+          "https://science.nasa.gov/wp-content/uploads/2023/06/may102022-x1pt5flare-171-131-304-jpg.webp",
+          "https://science.nasa.gov/wp-content/uploads/2023/06/may102022-x1pt5flare-171-131-304-jpg.webp?resize=300,169",
+          "https://science.nasa.gov/wp-content/uploads/2023/06/may102022-x1pt5flare-171-131-304-jpg.webp?resize=768,432",
+          "https://science.nasa.gov/wp-content/uploads/2023/06/may102022-x1pt5flare-171-131-304-jpg.webp?resize=1024,576",
+          "https://science.nasa.gov/wp-content/uploads/2023/06/may102022-x1pt5flare-171-131-304-jpg.webp?resize=1536,864",
+          "https://science.nasa.gov/wp-content/uploads/2023/06/may102022-x1pt5flare-171-131-304-jpg.webp?resize=400,225",
+          "https://science.nasa.gov/wp-content/uploads/2023/06/may102022-x1pt5flare-171-131-304-jpg.webp?resize=600,338",
+          "https://science.nasa.gov/wp-content/uploads/2023/06/may102022-x1pt5flare-171-131-304-jpg.webp?resize=900,506",
+          "https://science.nasa.gov/wp-content/uploads/2023/06/may102022-x1pt5flare-171-131-304-jpg.webp?resize=1200,675",
+          "https://science.nasa.gov/astrophysics/focus-areas/how-do-stars-form-and-evolve/stories/",
+          "http://www.w3.org/2000/svg",
+          "https://science.nasa.gov/wp-content/uploads/2023/04/hubble-ngc3603-opo1022a-jpg.webp?w=1280",
+          "https://science.nasa.gov/wp-content/uploads/2023/04/hubble-ngc3603-opo1022a-jpg.webp",
+          "https://science.nasa.gov/wp-content/uploads/2023/04/hubble-ngc3603-opo1022a-jpg.webp?resize=300,267",
+          "https://science.nasa.gov/wp-content/uploads/2023/04/hubble-ngc3603-opo1022a-jpg.webp?resize=768,685",
+          "https://science.nasa.gov/wp-content/uploads/2023/04/hubble-ngc3603-opo1022a-jpg.webp?resize=1024,913",
+          "https://science.nasa.gov/wp-content/uploads/2023/04/hubble-ngc3603-opo1022a-jpg.webp?resize=400,357",
+          "https://science.nasa.gov/wp-content/uploads/2023/04/hubble-ngc3603-opo1022a-jpg.webp?resize=600,535",
+          "https://science.nasa.gov/wp-content/uploads/2023/04/hubble-ngc3603-opo1022a-jpg.webp?resize=900,802",
+          "https://science.nasa.gov/wp-content/uploads/2023/04/hubble-ngc3603-opo1022a-jpg.webp?resize=1200,1070",
+          "https://science.nasa.gov/universe/galaxies/",
+          "http://www.w3.org/2000/svg",
+          "https://science.nasa.gov/wp-content/uploads/2023/06/spiral-galaxy-jpg.webp?w=1200",
+          "https://science.nasa.gov/wp-content/uploads/2023/06/spiral-galaxy-jpg.webp",
+          "https://science.nasa.gov/wp-content/uploads/2023/06/spiral-galaxy-jpg.webp?resize=300,235",
+          "https://science.nasa.gov/wp-content/uploads/2023/06/spiral-galaxy-jpg.webp?resize=768,600",
+          "https://science.nasa.gov/wp-content/uploads/2023/06/spiral-galaxy-jpg.webp?resize=1024,800",
+          "https://science.nasa.gov/wp-content/uploads/2023/06/spiral-galaxy-jpg.webp?resize=400,313",
+          "https://science.nasa.gov/wp-content/uploads/2023/06/spiral-galaxy-jpg.webp?resize=600,469",
+          "https://science.nasa.gov/wp-content/uploads/2023/06/spiral-galaxy-jpg.webp?resize=900,704"
+        ]
+      }
+    ],
+    "editorialMode": "daily",
+    "editorialLabel": null,
+    "windowHours": 168,
+    "verification": [
+      {
+        "id": "a9faff50e5d3",
+        "basis": "official_primary_source",
+        "sourceIds": [
+          "a9faff50e5d3"
+        ]
+      }
+    ],
+    "diagnostics": [
+      {
+        "url": "https://www.nasa.gov/feed/",
+        "items": 10,
+        "valid": 10,
+        "invalid": 0,
+        "future": 0,
+        "status": "ok",
+        "cache": "miss"
+      },
+      {
+        "url": "https://www.esa.int/rssfeed/Our_Activities/Space_Science",
+        "status": "unavailable",
+        "code": "HTTP_404"
+      }
+    ],
+    "trend": [
+      {
+        "id": "2e20115a6100",
+        "title": "APOD: 2026 November 19 – The Horsehead and Flame Nebulas",
+        "demand": 2,
+        "recency": 0.979,
+        "matches": [
+          {
+            "kind": "google_trend",
+            "label": "علم الأرصاد الجوية",
+            "weight": 2
+          }
+        ],
+        "score": 2.489377494102098
+      },
+      {
+        "id": "b41c4de3e0f2",
+        "title": "El Niño Rains Paint the Atacama",
+        "demand": 2,
+        "recency": 0.978,
+        "matches": [
+          {
+            "kind": "google_trend",
+            "label": "علم الأرصاد الجوية",
+            "weight": 2
+          }
+        ],
+        "score": 2.488811412622048
+      },
+      {
+        "id": "162c5c6a72fe",
+        "title": "NASA Sets Coverage for Northrop Grumman CRS-25 Launch, Prelaunch",
+        "demand": 2,
+        "recency": 0.891,
+        "matches": [
+          {
+            "kind": "google_trend",
+            "label": "علم الأرصاد الجوية",
+            "weight": 2
+          }
+        ],
+        "score": 2.445509365071729
+      },
+      {
+        "id": "9d57f4dbe2e3",
+        "title": "MAF EAP Holidays – How to manage the BAH HUMBUG that tries to sneak in",
+        "demand": 0,
+        "recency": 0.851,
+        "matches": [],
+        "score": 0.42527204526283163
+      },
+      {
+        "id": "946586051f9f",
+        "title": "NASA Announces Mid-Power Electric Rocket Challenge for US Companies",
+        "demand": 2,
+        "recency": 0.842,
+        "matches": [
+          {
+            "kind": "google_trend",
+            "label": "علم الأرصاد الجوية",
+            "weight": 2
+          }
+        ],
+        "score": 2.420775826237754
+      },
+      {
+        "id": "0cb2e3ffdc8f",
+        "title": "Empire State Building Goes Gold for Voyager",
+        "demand": 2,
+        "recency": 0.837,
+        "matches": [
+          {
+            "kind": "google_trend",
+            "label": "علم الأرصاد الجوية",
+            "weight": 2
+          }
+        ],
+        "score": 2.418628742844318
+      },
+      {
+        "id": "413bc2a06dfb",
+        "title": "What Is the Moon Base?",
+        "demand": 0,
+        "recency": 0.834,
+        "matches": [],
+        "score": 0.4172372465432599
+      },
+      {
+        "id": "4294d968436d",
+        "title": "Thank You for Doing NASA Science!",
+        "demand": 0,
+        "recency": 0.834,
+        "matches": [],
+        "score": 0.41692990487907733
+      },
+      {
+        "id": "a9faff50e5d3",
+        "title": "NASA Data Clinches First-of-Its-Kind Stellar Merger",
+        "demand": 4,
+        "recency": 0.816,
+        "matches": [
+          {
+            "kind": "google_trend",
+            "label": "علم الأرصاد الجوية",
+            "weight": 2
+          },
+          {
+            "kind": "google_trend",
+            "label": "معدل المواليد",
+            "weight": 2
+          }
+        ],
+        "score": 4.4080628473948495
+      },
+      {
+        "id": "0806628fa243",
+        "title": "APOD: 2026 November 18 – A Medium-Sized Solar Flare",
+        "demand": 4,
+        "recency": 0.701,
+        "matches": [
+          {
+            "kind": "google_trend",
+            "label": "علم الأرصاد الجوية",
+            "weight": 2
+          },
+          {
+            "kind": "google_trend",
+            "label": "معدل المواليد",
+            "weight": 2
+          }
+        ],
+        "score": 4.350654297214294
+      }
+    ],
+    "scoring": "Source authority, verified freshness and unused canonical source URL; no invented trend-volume metric.",
+    "trendDiagnostics": {
+      "sources": [
+        {
+          "source": "trends",
+          "status": "ok",
+          "items": 10
+        },
+        {
+          "source": "suggestions",
+          "status": "ok",
+          "items": 2
+        },
+        {
+          "source": "suggestions",
+          "status": "ok",
+          "items": 0
+        },
+        {
+          "source": "suggestions",
+          "status": "ok",
+          "items": 9
+        },
+        {
+          "source": "suggestions",
+          "status": "ok",
+          "items": 10
+        }
+      ],
+      "degraded": false,
+      "decisions": [
+        {
+          "id": "2e20115a6100",
+          "title": "APOD: 2026 November 19 – The Horsehead and Flame Nebulas",
+          "demand": 2,
+          "recency": 0.979,
+          "matches": [
+            {
+              "kind": "google_trend",
+              "label": "علم الأرصاد الجوية",
+              "weight": 2
+            }
+          ],
+          "score": 2.489377494102098
+        },
+        {
+          "id": "b41c4de3e0f2",
+          "title": "El Niño Rains Paint the Atacama",
+          "demand": 2,
+          "recency": 0.978,
+          "matches": [
+            {
+              "kind": "google_trend",
+              "label": "علم الأرصاد الجوية",
+              "weight": 2
+            }
+          ],
+          "score": 2.488811412622048
+        },
+        {
+          "id": "162c5c6a72fe",
+          "title": "NASA Sets Coverage for Northrop Grumman CRS-25 Launch, Prelaunch",
+          "demand": 2,
+          "recency": 0.891,
+          "matches": [
+            {
+              "kind": "google_trend",
+              "label": "علم الأرصاد الجوية",
+              "weight": 2
+            }
+          ],
+          "score": 2.445509365071729
+        },
+        {
+          "id": "9d57f4dbe2e3",
+          "title": "MAF EAP Holidays – How to manage the BAH HUMBUG that tries to sneak in",
+          "demand": 0,
+          "recency": 0.851,
+          "matches": [],
+          "score": 0.42527204526283163
+        },
+        {
+          "id": "946586051f9f",
+          "title": "NASA Announces Mid-Power Electric Rocket Challenge for US Companies",
+          "demand": 2,
+          "recency": 0.842,
+          "matches": [
+            {
+              "kind": "google_trend",
+              "label": "علم الأرصاد الجوية",
+              "weight": 2
+            }
+          ],
+          "score": 2.420775826237754
+        },
+        {
+          "id": "0cb2e3ffdc8f",
+          "title": "Empire State Building Goes Gold for Voyager",
+          "demand": 2,
+          "recency": 0.837,
+          "matches": [
+            {
+              "kind": "google_trend",
+              "label": "علم الأرصاد الجوية",
+              "weight": 2
+            }
+          ],
+          "score": 2.418628742844318
+        },
+        {
+          "id": "413bc2a06dfb",
+          "title": "What Is the Moon Base?",
+          "demand": 0,
+          "recency": 0.834,
+          "matches": [],
+          "score": 0.4172372465432599
+        },
+        {
+          "id": "4294d968436d",
+          "title": "Thank You for Doing NASA Science!",
+          "demand": 0,
+          "recency": 0.834,
+          "matches": [],
+          "score": 0.41692990487907733
+        },
+        {
+          "id": "a9faff50e5d3",
+          "title": "NASA Data Clinches First-of-Its-Kind Stellar Merger",
+          "demand": 4,
+          "recency": 0.816,
+          "matches": [
+            {
+              "kind": "google_trend",
+              "label": "علم الأرصاد الجوية",
+              "weight": 2
+            },
+            {
+              "kind": "google_trend",
+              "label": "معدل المواليد",
+              "weight": 2
+            }
+          ],
+          "score": 4.4080628473948495
+        },
+        {
+          "id": "0806628fa243",
+          "title": "APOD: 2026 November 18 – A Medium-Sized Solar Flare",
+          "demand": 4,
+          "recency": 0.701,
+          "matches": [
+            {
+              "kind": "google_trend",
+              "label": "علم الأرصاد الجوية",
+              "weight": 2
+            },
+            {
+              "kind": "google_trend",
+              "label": "معدل المواليد",
+              "weight": 2
+            }
+          ],
+          "score": 4.350654297214294
+        }
+      ]
+    }
+  },
+  "scriptSha256": "54d5524410f138d15e7c708cdd193454981f6ad9b0913281d8ca2fc1647ab03b",
+  "state": "failed",
+  "lastFailure": {
+    "stage": "align",
+    "code": "ALIGNMENT_INVALID_MEASURED_SPAN",
+    "repeat": 0
+  }
+}

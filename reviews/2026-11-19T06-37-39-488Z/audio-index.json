@@ -1,0 +1,199 @@
+[
+  {
+    "file": "audio/scene-0.wav",
+    "duration": 16.970958,
+    "text": "في مجرة أندروميدا، رصد العلماء نظاماً نجمياً ثنائياً أطلقوا عليه اسم باو. قبل الاندماج، كان النجمان يدوران حول بعضهما بسلام لآلاف السنين، لكن الأمور تغيرت فجأة عندما اقترب النجم الأصغر من سطح النجم العملاق.",
+    "sha256": "87afe5edc545197366bcb67d3a46619c5000dfb36c392c9734f4be6fd1b9903f",
+    "provider": "Gemini",
+    "voice": "Charon",
+    "chunks": [
+      {
+        "scene": 0,
+        "chunk": 0,
+        "schema": 1,
+        "cacheKey": "a04f14958396851056ab001fe0b48516347c7c6f6c9a863daec003278d7f59d1",
+        "sha256": "87afe5edc545197366bcb67d3a46619c5000dfb36c392c9734f4be6fd1b9903f",
+        "text_sha256": "40958e4ec4481b271a3f5f95134398035a04dddd3af9077b1e989e3b2c01848a",
+        "voice": "Charon",
+        "provider": "Gemini",
+        "model": "gemini-2.5-flash-preview-tts",
+        "bytes": 814684,
+        "reused": false
+      }
+    ]
+  },
+  {
+    "file": "audio/scene-1.wav",
+    "duration": 17.090958,
+    "text": "بدأ النجم الأصغر في سحب طبقات النجم العملاق الخارجية، مما أدى لتدفق الغاز في الفضاء. هذه المرحلة تُعرف بتطور الغلاف المشترك، حيث ابتلع النجم العملاق رفيقه الأصغر الذي بدأ يغوص في أعماقه بسرعة.",
+    "sha256": "8e56f6a408208b723d68d1ec02b8a33c427113bea65ebfeeb958259ea4afc274",
+    "provider": "Gemini",
+    "voice": "Charon",
+    "chunks": [
+      {
+        "scene": 1,
+        "chunk": 0,
+        "schema": 1,
+        "cacheKey": "bb356c54e858ab6f4e9f78d46e43b2a7c9cb38242599f4f1c3afe1fd1674df10",
+        "sha256": "8e56f6a408208b723d68d1ec02b8a33c427113bea65ebfeeb958259ea4afc274",
+        "text_sha256": "379a0c7106c2c171e7021cdc5fb1115bbd35bcafd4227389a961c7ffff8ce5ab",
+        "voice": "Charon",
+        "provider": "Gemini",
+        "model": "gemini-2.5-flash-preview-tts",
+        "bytes": 820444,
+        "reused": false
+      }
+    ]
+  },
+  {
+    "file": "audio/scene-2.wav",
+    "duration": 16.12,
+    "text": "خلافاً للتوقعات التي أشارت إلى أن العملية قد تستغرق سنوات طويلة، حدث الاندماج النهائي بعد سبع مدارات فقط، أي حوالي سبع سنوات. زادت سطوع النجم بشكل مفاجئ خلال أسبوع واحد فقط قبل الانفجار.",
+    "sha256": "595ef05cfeb24398a00a3b49fc9567ce391d58ecfd8e7c17ee27f8d707c45e39",
+    "provider": "Gemini",
+    "voice": "Charon",
+    "chunks": [
+      {
+        "scene": 2,
+        "chunk": 0,
+        "schema": 1,
+        "cacheKey": "b7dcf6fe72e2bcb4852e90ba335841e629d14ad56e3a0841f8ff2ac3658517b4",
+        "sha256": "595ef05cfeb24398a00a3b49fc9567ce391d58ecfd8e7c17ee27f8d707c45e39",
+        "text_sha256": "53a666519cf5063adbc342be5af1ea25724e1341b8e8f0b87627142a09662a7d",
+        "voice": "Charon",
+        "provider": "Gemini",
+        "model": "gemini-3.1-flash-tts-preview",
+        "bytes": 773838,
+        "reused": false
+      }
+    ]
+  },
+  {
+    "file": "audio/scene-3.wav",
+    "duration": 18.250958,
+    "text": "قبل الانفجار، كان النجم العملاق باو وحشاً حقيقياً؛ حيث كانت كتلته سبعة أضعاف كتلة الشمس، ونصف قطره 350 ضعفاً، وسطوعه يفوق الشمس بـ 18 ألف مرة. كان يطغى تماماً على رفيقه الصغير في البيانات.",
+    "sha256": "07d9ce7a85d9ac8afd4af8e8856f13d8cf8dd593e3ecde4502a6dba202d5fd63",
+    "provider": "Gemini",
+    "voice": "Charon",
+    "chunks": [
+      {
+        "scene": 3,
+        "chunk": 0,
+        "schema": 1,
+        "cacheKey": "89ee5fe834ed8697c99d8967d65ee43a4079173cfd44d44dcc245b71c6149f30",
+        "sha256": "07d9ce7a85d9ac8afd4af8e8856f13d8cf8dd593e3ecde4502a6dba202d5fd63",
+        "text_sha256": "73ad8e0dd81f763943c91d3576bb07650996ac652673a6cc2c17f9c4bece3e61",
+        "voice": "Charon",
+        "provider": "Gemini",
+        "model": "gemini-2.5-flash-preview-tts",
+        "bytes": 876124,
+        "reused": false
+      }
+    ]
+  },
+  {
+    "file": "audio/scene-4.wav",
+    "duration": 17.090958,
+    "text": "رصد تلسكوب جيمس ويب نظام باو بعد 47 يوماً فقط من ذروة الانفجار. كانت هذه أسرع عملية متابعة لحدث من هذا النوع، مما سمح للعلماء بإعادة بناء ما حدث بدقة مذهلة قبل وبعد الاندماج.",
+    "sha256": "fbea420fe9bff3ab22b84795def7f8426a3542404cf92b0193d60d09f96a83fe",
+    "provider": "Gemini",
+    "voice": "Charon",
+    "chunks": [
+      {
+        "scene": 4,
+        "chunk": 0,
+        "schema": 1,
+        "cacheKey": "6d62b5d0a00d05bdff221052ad65465dac3b8b9aea802596c147922b6d4e6d78",
+        "sha256": "fbea420fe9bff3ab22b84795def7f8426a3542404cf92b0193d60d09f96a83fe",
+        "text_sha256": "c51570e59a1ca8c9ed76c73bbab04f1fc881509df523d7a7c98b35be680f09bb",
+        "voice": "Charon",
+        "provider": "Gemini",
+        "model": "gemini-2.5-flash-preview-tts",
+        "bytes": 820444,
+        "reused": false
+      }
+    ]
+  },
+  {
+    "file": "audio/scene-5.wav",
+    "duration": 16.610958,
+    "text": "أظهرت النماذج العلمية أن النجم الصغير لم ينجُ، بل سُحب إلى قلب النجم العملاق. وصف العلماء هذا اللقاء بأنه كان أشبه بقنبلة تنفجر داخل نجم حي، مما أدى إلى هذا الاندماج العنيف والفريد.",
+    "sha256": "b7f299e4f7e0980c9275a06e73771ae8cc62dc63ac396aaddd72057409a5bea4",
+    "provider": "Gemini",
+    "voice": "Charon",
+    "chunks": [
+      {
+        "scene": 5,
+        "chunk": 0,
+        "schema": 1,
+        "cacheKey": "87082925e36f775084bef3b58f91307f81a47d49c558677c86d136ebeb76f8e1",
+        "sha256": "b7f299e4f7e0980c9275a06e73771ae8cc62dc63ac396aaddd72057409a5bea4",
+        "text_sha256": "5595a25995cb634f25b1c73690c1472142b14b2c0a7e4057d006b33d2fab760a",
+        "voice": "Charon",
+        "provider": "Gemini",
+        "model": "gemini-2.5-flash-preview-tts",
+        "bytes": 797404,
+        "reused": false
+      }
+    ]
+  },
+  {
+    "file": "audio/scene-6.wav",
+    "duration": 18.52,
+    "text": "هذا الاكتشاف يفتح باباً جديداً لفهم تطور النجوم. مع إطلاق تلسكوب نانسي غريس رومان، يتوقع العلماء تدفقاً كبيراً لاكتشافات مشابهة، مما يساعدنا في فهم كيفية عمل الكون وتطور الأنظمة النجمية المعقدة عبر الزمن.",
+    "sha256": "1c2c376aae0caa8b2e9c6a82ac1c2b308be58c0190e2e3c8da6f471b11ff6c5f",
+    "provider": "Gemini",
+    "voice": "Charon",
+    "chunks": [
+      {
+        "scene": 6,
+        "chunk": 0,
+        "schema": 1,
+        "cacheKey": "919174b1063f46bd8e02d257c241d37e67033a20591408b32286017cfdf724be",
+        "sha256": "1c2c376aae0caa8b2e9c6a82ac1c2b308be58c0190e2e3c8da6f471b11ff6c5f",
+        "text_sha256": "12b19b7022dca74553181377eb847fd0e84d8d0dd89b307932e4c8ae5b77383a",
+        "voice": "Charon",
+        "provider": "Gemini",
+        "model": "gemini-3.1-flash-tts-preview",
+        "bytes": 889038,
+        "reused": false
+      }
+    ]
+  },
+  {
+    "file": "audio/scene-7.wav",
+    "duration": 16.330958,
+    "text": "ما شهدناه في أندروميدا هو مجرد بداية لفهم أعمق لأسرار النجوم. هل تتساءلون عن المزيد من عجائب الفضاء؟ لا تنسوا متابعتنا لاستكشاف كل جديد في عالم الفلك والعلوم المذهلة التي تحيط بنا.",
+    "sha256": "4a345aedde89882c6cad88b1024f9e334e696e0c7f79436c3e087b3701272a95",
+    "provider": "Gemini",
+    "voice": "Charon",
+    "chunks": [
+      {
+        "scene": 7,
+        "chunk": 0,
+        "schema": 1,
+        "cacheKey": "583d764920bb34d5d96b03a0203b54ea37a9f35eef902be85173c7fddc4a26a7",
+        "sha256": "fb4c33c18879cfcc25e909722925553cdec138c04ca4e496d6431fce3b49cb75",
+        "text_sha256": "3e2675fb39c65f97055f5e778a49a5f2a926a4d4558a1da1d03fac680a50de71",
+        "voice": "Charon",
+        "provider": "Gemini",
+        "model": "gemini-2.5-flash-preview-tts",
+        "bytes": 461404,
+        "reused": false
+      },
+      {
+        "scene": 7,
+        "chunk": 1,
+        "schema": 1,
+        "cacheKey": "6a52cdd03ea92af28faa6aaf61612f22bb5cde77f7198e3fc0910388ce883969",
+        "sha256": "b5e4fb093c156a8b43e34d0a0171780bc219ab5ae8ac8862b5ad5c007c7fcdf9",
+        "text_sha256": "a5d8f458cf699afece591f2ce75582a80e2aaf4cf18a863ac5f2e4a6d66649a3",
+        "voice": "Charon",
+        "provider": "Gemini",
+        "model": "gemini-3.1-flash-tts-preview",
+        "bytes": 322638,
+        "reused": false
+      }
+    ]
+  }
+]

@@ -16,5 +16,11 @@
     "value": "https://science.nasa.gov/image-article/apod-2026-november-13-ngc-206-and-the-star-clouds-of-andromeda/",
     "status": "review",
     "run": "2026-11-15T22-24-07-574Z"
+  },
+  {
+    "topicKey": "astronomy-stellar-merger-bao-andromeda",
+    "value": "https://science.nasa.gov/missions/webb/nasa-data-clinches-first-of-its-kind-stellar-merger/",
+    "status": "reserved",
+    "run": "2026-11-19T06-37-39-488Z"
   }
 ]

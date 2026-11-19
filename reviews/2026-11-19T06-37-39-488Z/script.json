@@ -1,0 +1,167 @@
+{
+  "topicKey": "astronomy-stellar-merger-bao-andromeda",
+  "title": "أسرار الكون: اندماج النجوم في مجرة أندروميدا",
+  "hook": "ماذا لو اصطدم نجمان في الفضاء؟ هل تتخيل انفجاراً كونياً يغير شكل النجوم للأبد؟ هذا ما حدث بالفعل في مجرة أندروميدا المجاورة لنا، حيث شهدنا اندماجاً نجمياً نادراً ومذهلاً بكل المقاييس العلمية.",
+  "cta": "تابعونا لمعرفة المزيد عن أسرار الفضاء العميقة واكتشافات تلسكوب جيمس ويب التي تغير فهمنا للكون كل يوم. اشترك الآن ولا تفوت أي تحديث علمي جديد ومثير من وكالة ناسا.",
+  "scenes": [
+    {
+      "title": "اكتشاف نظام باو النجمي",
+      "text": "في مجرة أندروميدا، رصد العلماء نظاماً نجمياً ثنائياً أطلقوا عليه اسم باو. قبل الاندماج، كان النجمان يدوران حول بعضهما بسلام لآلاف السنين، لكن الأمور تغيرت فجأة عندما اقترب النجم الأصغر من سطح النجم العملاق.",
+      "summary": "اكتشاف نظام نجمي ثنائي في أندروميدا قبل اندماجهما.",
+      "keyword": "نظام باو",
+      "template": "phenomenon",
+      "labels": [
+        "أندروميدا",
+        "نظام ثنائي",
+        "نجوم"
+      ],
+      "values": [],
+      "claim": "نظام باو كان يتكون من نجمين يدوران حول بعضهما قبل الاندماج.",
+      "sourceId": "a9faff50e5d3",
+      "evidence": "Before their transformation, the two stars spent millennia placidly orbiting one another as a binary pair.",
+      "kind": "fact",
+      "expression": 5,
+      "action": "point"
+    },
+    {
+      "title": "بداية الاندماج العنيف",
+      "text": "بدأ النجم الأصغر في سحب طبقات النجم العملاق الخارجية، مما أدى لتدفق الغاز في الفضاء. هذه المرحلة تُعرف بتطور الغلاف المشترك، حيث ابتلع النجم العملاق رفيقه الأصغر الذي بدأ يغوص في أعماقه بسرعة.",
+      "summary": "النجم العملاق يبتلع رفيقه الأصغر في عملية اندماج.",
+      "keyword": "الغلاف المشترك",
+      "template": "journey",
+      "labels": [
+        "غاز",
+        "اندماج",
+        "تطور نجمي"
+      ],
+      "values": [],
+      "claim": "النجم العملاق ابتلع النجم الأصغر خلال مرحلة تطور الغلاف المشترك.",
+      "sourceId": "a9faff50e5d3",
+      "evidence": "In this system, the primary star engulfed the smaller star and the companion plummeted, spiraling through the envelope as it was robbed of orbital energy by drag.",
+      "kind": "fact",
+      "expression": 8,
+      "action": "fall"
+    },
+    {
+      "title": "سرعة الاندماج غير المتوقعة",
+      "text": "خلافاً للتوقعات التي أشارت إلى أن العملية قد تستغرق سنوات طويلة، حدث الاندماج النهائي بعد سبع مدارات فقط، أي حوالي سبع سنوات. زادت سطوع النجم بشكل مفاجئ خلال أسبوع واحد فقط قبل الانفجار.",
+      "summary": "الاندماج حدث بسرعة مذهلة خلال سبع سنوات فقط.",
+      "keyword": "سرعة الاندماج",
+      "template": "comparison",
+      "labels": [
+        "مدارات",
+        "سطوع",
+        "زمن"
+      ],
+      "values": [
+        7
+      ],
+      "claim": "الاندماج حدث بعد سبع مدارات فقط من تلامس النجمين.",
+      "sourceId": "a9faff50e5d3",
+      "evidence": "But once the smaller star came into contact with the surface of the giant star, their “unification” happened after only seven orbits (about seven years).",
+      "kind": "fact",
+      "expression": 3,
+      "action": "run"
+    },
+    {
+      "title": "قوة النجم العملاق باو",
+      "text": "قبل الانفجار، كان النجم العملاق باو وحشاً حقيقياً؛ حيث كانت كتلته سبعة أضعاف كتلة الشمس، ونصف قطره 350 ضعفاً، وسطوعه يفوق الشمس بـ 18 ألف مرة. كان يطغى تماماً على رفيقه الصغير في البيانات.",
+      "summary": "خصائص النجم العملاق باو قبل الاندماج.",
+      "keyword": "النجم العملاق",
+      "template": "chart",
+      "labels": [
+        "كتلة",
+        "نصف قطر",
+        "سطوع"
+      ],
+      "values": [],
+      "claim": "النجم العملاق كان سبعة أضعاف كتلة الشمس و18 ألف مرة أكثر سطوعاً.",
+      "sourceId": "a9faff50e5d3",
+      "evidence": "It was seven times as massive, 350 times the radius, and 18,000 times brighter — making “Big Bao” an appropriate nickname.",
+      "kind": "fact",
+      "expression": 10,
+      "action": "point"
+    },
+    {
+      "title": "دور تلسكوب جيمس ويب",
+      "text": "رصد تلسكوب جيمس ويب نظام باو بعد 47 يوماً فقط من ذروة الانفجار. كانت هذه أسرع عملية متابعة لحدث من هذا النوع، مما سمح للعلماء بإعادة بناء ما حدث بدقة مذهلة قبل وبعد الاندماج.",
+      "summary": "جيمس ويب يرصد الاندماج بعد 47 يوماً من الانفجار.",
+      "keyword": "جيمس ويب",
+      "template": "steps",
+      "labels": [
+        "رصد",
+        "تلسكوب",
+        "بيانات"
+      ],
+      "values": [
+        47
+      ],
+      "claim": "تلسكوب جيمس ويب رصد باو بعد 47 يوماً من ذروة الانفجار.",
+      "sourceId": "a9faff50e5d3",
+      "evidence": "Webb observed Bao only 47 days after the stars’ eruption peaked, the earliest ever follow-up of an event like this.",
+      "kind": "fact",
+      "expression": 7,
+      "action": "turn"
+    },
+    {
+      "title": "نهاية النجم الصغير",
+      "text": "أظهرت النماذج العلمية أن النجم الصغير لم ينجُ، بل سُحب إلى قلب النجم العملاق. وصف العلماء هذا اللقاء بأنه كان أشبه بقنبلة تنفجر داخل نجم حي، مما أدى إلى هذا الاندماج العنيف والفريد.",
+      "summary": "النجم الصغير سُحب إلى قلب العملاق وانفجر داخله.",
+      "keyword": "انفجار داخلي",
+      "template": "cause",
+      "labels": [
+        "نواة",
+        "طاقة",
+        "انفجار"
+      ],
+      "values": [],
+      "claim": "النجم الصغير سُحب إلى قلب النجم العملاق في انفجار داخلي.",
+      "sourceId": "a9faff50e5d3",
+      "evidence": "Their encounter was “almost like a bomb exploding inside a living star,” De said.",
+      "kind": "fact",
+      "expression": 2,
+      "action": "jump"
+    },
+    {
+      "title": "مستقبل الأبحاث الفضائية",
+      "text": "هذا الاكتشاف يفتح باباً جديداً لفهم تطور النجوم. مع إطلاق تلسكوب نانسي غريس رومان، يتوقع العلماء تدفقاً كبيراً لاكتشافات مشابهة، مما يساعدنا في فهم كيفية عمل الكون وتطور الأنظمة النجمية المعقدة عبر الزمن.",
+      "summary": "اكتشافات جديدة بانتظارنا مع التلسكوبات المستقبلية.",
+      "keyword": "أبحاث المستقبل",
+      "template": "map",
+      "labels": [
+        "تلسكوب رومان",
+        "اكتشافات",
+        "كون"
+      ],
+      "values": [],
+      "claim": "تلسكوب نانسي غريس رومان سيؤدي لتدفق اكتشافات مشابهة.",
+      "sourceId": "a9faff50e5d3",
+      "evidence": "“There’s going to be a large influx of similar discoveries just ahead,” Karambelkar said.",
+      "kind": "fact",
+      "expression": 9,
+      "action": "walk"
+    },
+    {
+      "title": "خاتمة ودعوة للمتابعة",
+      "text": "ما شهدناه في أندروميدا هو مجرد بداية لفهم أعمق لأسرار النجوم. هل تتساءلون عن المزيد من عجائب الفضاء؟ لا تنسوا متابعتنا لاستكشاف كل جديد في عالم الفلك والعلوم المذهلة التي تحيط بنا.",
+      "summary": "دعوة للمتابعة لاستكشاف المزيد من أسرار الفضاء.",
+      "keyword": "خاتمة",
+      "template": "journey",
+      "labels": [
+        "فضاء",
+        "علوم",
+        "نجوم"
+      ],
+      "values": [],
+      "claim": "متابعة القناة توفر فهماً أعمق لأسرار الفضاء.",
+      "sourceId": "a9faff50e5d3",
+      "evidence": "Webb is solving mysteries in our solar system, looking beyond to distant worlds around other stars, and probing the mysterious structures and origins of our universe and our place in it.",
+      "kind": "fact",
+      "expression": 11,
+      "action": "point"
+    }
+  ],
+  "editorialMode": "daily",
+  "editorialLabel": null,
+  "scriptModel": "gemini-3.1-flash-lite-preview"
+}
