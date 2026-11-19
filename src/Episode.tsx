@@ -27,7 +27,7 @@ function Diagram({scene,index}:{scene:Scene;index:number}){
 function Shot({scene,index,count,incomplete,editorialLabel,incompleteMode}:{scene:Scene;index:number;count:number;incomplete?:boolean;editorialLabel?:string|null;incompleteMode?:string}){
  const f=useCurrentFrame(),time=f/30,entrance=interpolate(f,[0,16],[0,1],{extrapolateRight:'clamp'}),beat=Math.floor(f/90);
  const palettes=[['#152c36','#28453e'],['#252239','#535072'],['#183a35','#34655b'],['#493a36','#916453']];const palette=palettes[index%4];
- const active=scene.words.findIndex(w=>time>=w.start&&time<w.end);const start=active<0?0:Math.floor(active/5)*5;const visible=scene.words.slice(start,start+5);
+ const t5=time+0.05;let active=scene.words.findIndex(w=>t5>=w.start&&t5<w.end);if(active<0)active=scene.words.findLastIndex(w=>w.start<=t5);const start=active<0?0:Math.floor(active/5)*5;const visible=scene.words.slice(start,start+5);
  const horror=config.profile==='horror';
  return <AbsoluteFill style={{background:`linear-gradient(155deg,${horror?'#080d11':palette[0]},${horror?'#24322e':palette[1]})`,fontFamily:'ChannelArabic',color:'white',direction:'rtl',overflow:'hidden'}}>
  {scene.background&&<Img src={staticFile(scene.background)} style={{width:'100%',height:'100%',objectFit:'cover',opacity:.58,transform:`scale(${1+time*.002})`}}/>}
