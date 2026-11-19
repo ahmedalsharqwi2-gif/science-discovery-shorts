@@ -1,0 +1,30 @@
+{
+  "incomplete": true,
+  "published": false,
+  "reason": "SCRIPT_WORD_BUDGET",
+  "narration": false,
+  "voice": null,
+  "wordAlignment": false,
+  "storySource": "original template demonstration, not an editorial episode",
+  "qa": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30,
+    "duration": 96,
+    "geometryPassed": true,
+    "logo": {
+      "path": "brand/logo/logo.jpg",
+      "sha256": "21b536514d9e76218d72aae06fe5c59ef61ac822db2f65ceef148b049ee0e227",
+      "bytes": 133439,
+      "original": true,
+      "renderedPixelsChecked": true
+    },
+    "watermark": {
+      "knownTextScan": "no_known_foreign_watermark_detected",
+      "assetPolicy": "Only original vectors, owner-supplied immutable logos and documented generated backgrounds; listening/visual approval remains separate."
+    },
+    "audioRequired": false,
+    "complete": false,
+    "approved": false
+  }
+}
