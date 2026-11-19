@@ -18,7 +18,7 @@ export async function script(topic,config,history,opts={}){
   try{
    const text=response.candidates[0].content.parts.filter(p=>p.text).map(p=>p.text).join('');episode=JSON.parse(text);if(Array.isArray(episode.scenes))for(const s of episode.scenes){if(Array.isArray(s.values)&&s.values.some(v=>typeof v!=='number'||v<0||v>100))s.values=[];}
    assertEvidence(episode,topic.sources,config.profile);
-   if(duplicate(episode.topicKey,history))throw Error('DUPLICATE_TOPIC_IDENTITY');
+   if(duplicate(episode.topicKey,history)){const dupErr=Error('DUPLICATE_TOPIC_IDENTITY');dupErr.topicKey=episode.topicKey;throw dupErr;}
    if(topic.editorialMode==='weekly'&&!episode.title.startsWith('أهم أخبار الأسبوع'))throw Error('WEEKLY_LABEL_REQUIRED');
    return {...episode,editorialMode:topic.editorialMode,editorialLabel:topic.editorialLabel,scriptModel:response._pipeline.model};
   }catch(e){
