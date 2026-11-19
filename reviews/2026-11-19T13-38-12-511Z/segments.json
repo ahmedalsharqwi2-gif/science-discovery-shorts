@@ -1,0 +1,186 @@
+[
+  {
+    "file": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/public/generated/2026-11-19T13-38-12-511Z/scene-0.wav",
+    "duration": 19,
+    "text": "ناسا بتستعد لإطلاق مهمة نورثروب جرومان الخامسة والعشرين، وهي رحلة شحن تجارية مهمة جداً. الهدف الأساسي هو توصيل إمدادات حيوية ومعدات علمية متطورة جداً لرواد الفضاء اللي بيعيشوا وبيشتغلوا حالياً على متن محطة الفضاء الدولية.",
+    "sha256": "abb5bb33caac8379b7a17d306c0ee50dda3c04c1b0b9a0711dfe51c36de395cf",
+    "provider": "Gemini",
+    "voice": "Charon",
+    "chunks": [
+      {
+        "scene": 0,
+        "chunk": 0,
+        "schema": 1,
+        "cacheKey": "7c544d8df368d8a02d16f919d8c5e9e35939cf851b2c93a4c60af7d4a7e2224a",
+        "sha256": "abb5bb33caac8379b7a17d306c0ee50dda3c04c1b0b9a0711dfe51c36de395cf",
+        "text_sha256": "fe6cce1bbf6c91bf8de9b6d325aef19243de53999ec1dbc44b64f9b31b6824e9",
+        "voice": "Charon",
+        "provider": "Gemini",
+        "model": "gemini-3.1-flash-tts-preview",
+        "bytes": 912078,
+        "reused": true
+      }
+    ]
+  },
+  {
+    "file": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/public/generated/2026-11-19T13-38-12-511Z/scene-1.wav",
+    "duration": 17.96,
+    "text": "السفينة الفضائية سايجنوس إكس إل بتشيل وزن ضخم بيوصل لحوالي أحد عشر ألف رطل من البضائع. الحمولة دي مش مجرد أكل، دي تجارب علمية وأجهزة دقيقة هتغير فهمنا لأمراض كتير وتساعد في تطوير تقنيات المستقبل.",
+    "sha256": "5e8f55dbcc2fcc9b18665e8133614c96cb96078790520fc7f7c708900336a020",
+    "provider": "Gemini",
+    "voice": "Charon",
+    "chunks": [
+      {
+        "scene": 1,
+        "chunk": 0,
+        "schema": 1,
+        "cacheKey": "6ec7c2af4e7480bc62232fe84f561a45ffb094559029b6bd6c3e3355b19899a6",
+        "sha256": "5e8f55dbcc2fcc9b18665e8133614c96cb96078790520fc7f7c708900336a020",
+        "text_sha256": "d78fd5d2cf44bc5515b7ab87712ddeca4eb9f101184f7dc1570d18dc32d94b38",
+        "voice": "Charon",
+        "provider": "Gemini",
+        "model": "gemini-3.1-flash-tts-preview",
+        "bytes": 862158,
+        "reused": true
+      }
+    ]
+  },
+  {
+    "file": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/public/generated/2026-11-19T13-38-12-511Z/scene-2.wav",
+    "duration": 18.4,
+    "text": "من أهم الحاجات اللي رايحة المحطة هي تجارب طبية متقدمة. العلماء بيحاولوا يحسنوا طرق توصيل الأدوية لعلاج السرطان والتهاب المفاصل، وكمان بيدرسوا إزاي يمنعوا فقدان الكتلة العضلية لرواد الفضاء في ظروف انعدام الجاذبية القاسية.",
+    "sha256": "9b96bff2d5dfaf3c0c916a7919e8a140c135811ff0154e10d0bdabb6bfbd2264",
+    "provider": "Gemini",
+    "voice": "Charon",
+    "chunks": [
+      {
+        "scene": 2,
+        "chunk": 0,
+        "schema": 1,
+        "cacheKey": "2f8555063ca59d3235c0a9eeb79d09ed21fdada23af0af24fce38ec71ca80e95",
+        "sha256": "9b96bff2d5dfaf3c0c916a7919e8a140c135811ff0154e10d0bdabb6bfbd2264",
+        "text_sha256": "bc560a09961cf4ea4a9d66f7bd16e648709b165b78513f0da51b9490709bce51",
+        "voice": "Charon",
+        "provider": "Gemini",
+        "model": "gemini-3.1-flash-tts-preview",
+        "bytes": 883278,
+        "reused": true
+      }
+    ]
+  },
+  {
+    "file": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/public/generated/2026-11-19T13-38-12-511Z/scene-3.wav",
+    "duration": 19.72,
+    "text": "نورثروب جرومان قررت تسمي السفينة الفضائية باسم جيمس لوفيل، تكريماً لمسيرته الأسطورية. لوفيل شارك في أربع مهمات فضائية تاريخية، منها رحلات جيمناي وأبولو ثمانية، وبالطبع المهمة الشهيرة أبولو ثلاثة عشر اللي دارت حول القمر.",
+    "sha256": "0cc93d469b50283666288a1d8c53f3f81596954134e3b2bcb5cab66180d2c042",
+    "provider": "Gemini",
+    "voice": "Charon",
+    "chunks": [
+      {
+        "scene": 3,
+        "chunk": 0,
+        "schema": 1,
+        "cacheKey": "07df50d440e761023e0a986122cb3ab26cc376ed1d9c23f74abaf637b086a76d",
+        "sha256": "0cc93d469b50283666288a1d8c53f3f81596954134e3b2bcb5cab66180d2c042",
+        "text_sha256": "0077049b0d411d8e3aeb7f4a21ffc18bcf7e9b829c5bcf89d100b2234690f4a0",
+        "voice": "Charon",
+        "provider": "Gemini",
+        "model": "gemini-3.1-flash-tts-preview",
+        "bytes": 946638,
+        "reused": true
+      }
+    ]
+  },
+  {
+    "file": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/public/generated/2026-11-19T13-38-12-511Z/scene-4.wav",
+    "duration": 19.04,
+    "text": "بعد ما توصل السفينة للمحطة، رواد الفضاء جيسيكا واتكينز ولوك ديلاني هيستخدموا الذراع الروبوتية كندا أرم اتنين عشان يمسكوا السفينة. العملية دي بتحتاج دقة متناهية عشان يثبتوها في وحدة يونيتي ويبدأوا تفريغ الشحنة المهمة دي.",
+    "sha256": "3b28d05f72a5bbe36d0695f8aa33386d763db54ba38dff92988cf8a4ba7d96d1",
+    "provider": "Gemini",
+    "voice": "Charon",
+    "chunks": [
+      {
+        "scene": 4,
+        "chunk": 0,
+        "schema": 1,
+        "cacheKey": "21168a222a05e0fd42704bc27551fa1b4c60487c02d11e588f53dbeeb68a06a1",
+        "sha256": "3b28d05f72a5bbe36d0695f8aa33386d763db54ba38dff92988cf8a4ba7d96d1",
+        "text_sha256": "0a44b8d3cfb2ad53644c4b3d3a2d1bea5ba7745e6a38ab4e8d16d99fde663e71",
+        "voice": "Charon",
+        "provider": "Gemini",
+        "model": "gemini-3.1-flash-tts-preview",
+        "bytes": 913998,
+        "reused": true
+      }
+    ]
+  },
+  {
+    "file": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/public/generated/2026-11-19T13-38-12-511Z/scene-5.wav",
+    "duration": 16.16,
+    "text": "مش بس أدوية، السفينة شايلة تقنيات متطورة لتحسين إنتاج الغذاء في الفضاء. ده جزء أساسي من خطط ناسا للرحلات الطويلة في المستقبل، عشان يقدروا يوفروا أكل طازج ومغذي للرواد في مهماتهم البعيدة عن كوكبنا.",
+    "sha256": "c6fb8de91279e27e13b15e573e1ea459fa6f28c10b0d67603abee67332a94c7c",
+    "provider": "Gemini",
+    "voice": "Charon",
+    "chunks": [
+      {
+        "scene": 5,
+        "chunk": 0,
+        "schema": 1,
+        "cacheKey": "7c55afbc2a9b79fd1708ac4a2644ba06bedf9e8c3ad3a4d6917619367943873b",
+        "sha256": "c6fb8de91279e27e13b15e573e1ea459fa6f28c10b0d67603abee67332a94c7c",
+        "text_sha256": "5e8999c045fc93a08dbdc91f88c653da7deaedb0ae3bb043d7fd6dfd67b5073e",
+        "voice": "Charon",
+        "provider": "Gemini",
+        "model": "gemini-3.1-flash-tts-preview",
+        "bytes": 775758,
+        "reused": true
+      }
+    ]
+  },
+  {
+    "file": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/public/generated/2026-11-19T13-38-12-511Z/scene-6.wav",
+    "duration": 15.290958,
+    "text": "السفينة هتفضل في المدار لحد شهر مايو عام ألفين وسبعة وعشرين. وبعد ما تخلص مهمتها، هترجع محملة بالنفايات عشان تحترق بأمان في الغلاف الجوي للأرض، وبكده بتنتهي رحلتها بشكل مفيد ومنظم من غير أي أضرار.",
+    "sha256": "cade921527106eda39f3b2f38ad6895a8cb174ce6934c4c9f60a755510068899",
+    "provider": "Gemini",
+    "voice": "Charon",
+    "chunks": [
+      {
+        "scene": 6,
+        "chunk": 0,
+        "schema": 1,
+        "cacheKey": "cee024915adc0eaf42c8b9e59af495336b02f55efb2345ae373a0f6b60fe501f",
+        "sha256": "cade921527106eda39f3b2f38ad6895a8cb174ce6934c4c9f60a755510068899",
+        "text_sha256": "1ea1d85cb413c8a9c298937acbb31169dc6780e01e6c2ed0c0fcef4860ce94b0",
+        "voice": "Charon",
+        "provider": "Gemini",
+        "model": "gemini-2.5-flash-preview-tts",
+        "bytes": 734044,
+        "reused": true
+      }
+    ]
+  },
+  {
+    "file": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/public/generated/2026-11-19T13-38-12-511Z/scene-7.wav",
+    "duration": 15.32,
+    "text": "تقدروا تتابعوا كل تفاصيل الإطلاق والالتحام من خلال منصات ناسا الرقمية. وممكن كمان تسجلوا في برنامج الضيوف الافتراضي عشان تعيشوا التجربة دي وتشوفوا كواليس المهمة وتشاركوا في الاحتفال بالتقدم العلمي الكبير ده.",
+    "sha256": "3853ccb11de7a309c56db357df1c9ae00dba1911641cbf8a0c46f0e2b1c97455",
+    "provider": "Gemini",
+    "voice": "Charon",
+    "chunks": [
+      {
+        "scene": 7,
+        "chunk": 0,
+        "schema": 1,
+        "cacheKey": "9a11c7622d95761460ab68b971690b29cb3ad54d75b5d86582b92f81db50365e",
+        "sha256": "3853ccb11de7a309c56db357df1c9ae00dba1911641cbf8a0c46f0e2b1c97455",
+        "text_sha256": "6a0c3ce4f7c15a75d3e3cdf2faa32f899e83ece55ec90e686b039290e4d6c30e",
+        "voice": "Charon",
+        "provider": "Gemini",
+        "model": "gemini-3.1-flash-tts-preview",
+        "bytes": 735438,
+        "reused": true
+      }
+    ]
+  }
+]

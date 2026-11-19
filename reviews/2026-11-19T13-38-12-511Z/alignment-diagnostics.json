@@ -1,0 +1,32 @@
+{
+  "method": "stable-ts attention forced alignment; independent unprompted faster-whisper ASR",
+  "estimatedTiming": false,
+  "scenes": [
+    {
+      "scene": 0,
+      "passed": true,
+      "words": 35,
+      "characterSimilarity": 1.0,
+      "wordCoverage": 0.9714285714285714,
+      "sourceWords": 35,
+      "recognizedWords": 36,
+      "missingNumerals": []
+    },
+    {
+      "scene": 1,
+      "passed": true,
+      "words": 35,
+      "characterSimilarity": 0.8896103896103896,
+      "wordCoverage": 0.7714285714285715,
+      "sourceWords": 35,
+      "recognizedWords": 33,
+      "missingNumerals": []
+    }
+  ],
+  "passed": false,
+  "code": "ALIGNMENT_INVALID_MEASURED_SPAN",
+  "stage": "forced_alignment",
+  "scene": 2,
+  "errorType": "AlignmentError",
+  "details": {}
+}

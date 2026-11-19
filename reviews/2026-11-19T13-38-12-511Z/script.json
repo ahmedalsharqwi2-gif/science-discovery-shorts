@@ -1,0 +1,172 @@
+{
+  "topicKey": "nasa-crs-25-resupply-mission",
+  "title": "إزاي بيوصلوا شحنات الأكل والأبحاث لمحطة الفضاء الدولية؟",
+  "hook": "إزاي بيوصلوا شحنات الأكل والأبحاث لمحطة الفضاء الدولية؟ تخيل معانا سفينة شحن عملاقة بتشيل أحد عشر ألف رطل من الإمدادات، وبتنطلق في رحلة مذهلة عشان تدعم رواد الفضاء في مدارهم البعيد فوق كوكب الأرض.",
+  "cta": "تابعوا معانا تغطية إطلاق المهمة على موقع ناسا الرسمي، وشوفوا بنفسكم إزاي العلم بيوصل للفضاء. شاركونا حماسكم في التعليقات، وما تنسوش تتابعوا كل جديد عن رحلات الفضاء القادمة ومهمات الإمداد التجارية المثيرة دي.",
+  "scenes": [
+    {
+      "title": "رحلة الإمداد القادمة",
+      "text": "ناسا بتستعد لإطلاق مهمة نورثروب جرومان الخامسة والعشرين، وهي رحلة شحن تجارية مهمة جداً. الهدف الأساسي هو توصيل إمدادات حيوية ومعدات علمية متطورة جداً لرواد الفضاء اللي بيعيشوا وبيشتغلوا حالياً على متن محطة الفضاء الدولية.",
+      "summary": "ناسا تجهز لإطلاق مهمة شحن تجارية جديدة للمحطة.",
+      "keyword": "إمدادات",
+      "template": "phenomenon",
+      "labels": [
+        "ناسا",
+        "محطة الفضاء",
+        "إمدادات"
+      ],
+      "values": [],
+      "claim": "NASA’s Northrop Grumman Commercial Resupply Services 25 mission will deliver approximately 11,000 pounds of science and supplies to the International Space Station.",
+      "sourceId": "162c5c6a72fe",
+      "evidence": "NASA’s Northrop Grumman Commercial Resupply Services 25 mission will deliver approximately 11,000 pounds of science and supplies to the International Space Station.",
+      "kind": "fact",
+      "expression": 5,
+      "action": "point",
+      "brollQuery": "space station"
+    },
+    {
+      "title": "حمولة السفينة الضخمة",
+      "text": "السفينة الفضائية سايجنوس إكس إل بتشيل وزن ضخم بيوصل لحوالي أحد عشر ألف رطل من البضائع. الحمولة دي مش مجرد أكل، دي تجارب علمية وأجهزة دقيقة هتغير فهمنا لأمراض كتير وتساعد في تطوير تقنيات المستقبل.",
+      "summary": "السفينة تحمل أحد عشر ألف رطل من التجارب والمؤن.",
+      "keyword": "حمولة",
+      "template": "chart",
+      "labels": [
+        "حمولة",
+        "أبحاث",
+        "سايجنوس"
+      ],
+      "values": [],
+      "claim": "Filled with approximately 11,000 pounds of cargo, the Northrop Grumman Cygnus XL spacecraft, aboard a SpaceX Falcon 9 rocket, will launch from Space Launch Complex 40.",
+      "sourceId": "162c5c6a72fe",
+      "evidence": "Filled with approximately 11,000 pounds of cargo, the Northrop Grumman Cygnus XL spacecraft, aboard a SpaceX Falcon 9 rocket, will launch from Space Launch Complex 40",
+      "kind": "fact",
+      "expression": 8,
+      "action": "walk",
+      "brollQuery": "space cargo"
+    },
+    {
+      "title": "تجارب علمية في المدار",
+      "text": "من أهم الحاجات اللي رايحة المحطة هي تجارب طبية متقدمة. العلماء بيحاولوا يحسنوا طرق توصيل الأدوية لعلاج السرطان والتهاب المفاصل، وكمان بيدرسوا إزاي يمنعوا فقدان الكتلة العضلية لرواد الفضاء في ظروف انعدام الجاذبية القاسية.",
+      "summary": "تجارب طبية لعلاج السرطان والعضلات في الفضاء.",
+      "keyword": "أبحاث",
+      "template": "phenomenon",
+      "labels": [
+        "طب",
+        "سرطان",
+        "أبحاث"
+      ],
+      "values": [],
+      "claim": "Highlights of space station research and technology demonstrations being delivered aboard this Cygnus XL spacecraft include experiments to improve drug delivery for cancer and osteoarthritis.",
+      "sourceId": "162c5c6a72fe",
+      "evidence": "Highlights of space station research and technology demonstrations being delivered aboard this Cygnus XL spacecraft include experiments to improve drug delivery for cancer and osteoarthritis",
+      "kind": "fact",
+      "expression": 6,
+      "action": "point",
+      "brollQuery": "science experiment"
+    },
+    {
+      "title": "تكريم رائد فضاء عظيم",
+      "text": "نورثروب جرومان قررت تسمي السفينة الفضائية باسم جيمس لوفيل، تكريماً لمسيرته الأسطورية. لوفيل شارك في أربع مهمات فضائية تاريخية، منها رحلات جيمناي وأبولو ثمانية، وبالطبع المهمة الشهيرة أبولو ثلاثة عشر اللي دارت حول القمر.",
+      "summary": "السفينة تحمل اسم رائد الفضاء جيمس لوفيل.",
+      "keyword": "سفينة",
+      "template": "journey",
+      "labels": [
+        "أبولو",
+        "فضاء",
+        "تاريخ"
+      ],
+      "values": [],
+      "claim": "Northrop Grumman named the spacecraft the S.S. James Jim A. Lovell in honor of the former NASA astronaut.",
+      "sourceId": "162c5c6a72fe",
+      "evidence": "Northrop Grumman named the spacecraft the S.S. James Jim A. Lovell in honor of the former NASA astronaut.",
+      "kind": "fact",
+      "expression": 9,
+      "action": "turn",
+      "brollQuery": "astronaut"
+    },
+    {
+      "title": "عملية الالتحام الدقيقة",
+      "text": "بعد ما توصل السفينة للمحطة، رواد الفضاء جيسيكا واتكينز ولوك ديلاني هيستخدموا الذراع الروبوتية كندا أرم اتنين عشان يمسكوا السفينة. العملية دي بتحتاج دقة متناهية عشان يثبتوها في وحدة يونيتي ويبدأوا تفريغ الشحنة المهمة دي.",
+      "summary": "استخدام الذراع الروبوتية لالتقاط سفينة الشحن.",
+      "keyword": "التحام",
+      "template": "steps",
+      "labels": [
+        "روبوت",
+        "التحام",
+        "محطة"
+      ],
+      "values": [],
+      "claim": "NASA astronauts Jessica Watkins and Luke Delaney, who are living and working aboard the space station, will use the Canadarm2 robotic arm to capture the Cygnus XL.",
+      "sourceId": "162c5c6a72fe",
+      "evidence": "NASA astronauts Jessica Watkins and Luke Delaney, who are living and working aboard the space station, will use the Canadarm2 robotic arm to capture the Cygnus XL",
+      "kind": "fact",
+      "expression": 7,
+      "action": "jump",
+      "brollQuery": "robotic arm"
+    },
+    {
+      "title": "مستقبل الغذاء في الفضاء",
+      "text": "مش بس أدوية، السفينة شايلة تقنيات متطورة لتحسين إنتاج الغذاء في الفضاء. ده جزء أساسي من خطط ناسا للرحلات الطويلة في المستقبل، عشان يقدروا يوفروا أكل طازج ومغذي للرواد في مهماتهم البعيدة عن كوكبنا.",
+      "summary": "تطوير تقنيات إنتاج الغذاء للرحلات الطويلة.",
+      "keyword": "غذاء",
+      "template": "phenomenon",
+      "labels": [
+        "زراعة",
+        "غذاء",
+        "فضاء"
+      ],
+      "values": [],
+      "claim": "advance food production for future long-duration missions.",
+      "sourceId": "162c5c6a72fe",
+      "evidence": "advance food production for future long-duration missions.",
+      "kind": "fact",
+      "expression": 4,
+      "action": "walk",
+      "brollQuery": "space food"
+    },
+    {
+      "title": "نهاية الرحلة في الغلاف الجوي",
+      "text": "السفينة هتفضل في المدار لحد شهر مايو عام ألفين وسبعة وعشرين. وبعد ما تخلص مهمتها، هترجع محملة بالنفايات عشان تحترق بأمان في الغلاف الجوي للأرض، وبكده بتنتهي رحلتها بشكل مفيد ومنظم من غير أي أضرار.",
+      "summary": "السفينة تحترق في الغلاف الجوي بعد انتهاء مهمتها.",
+      "keyword": "غلاف",
+      "template": "journey",
+      "labels": [
+        "مدار",
+        "أرض",
+        "نهاية"
+      ],
+      "values": [],
+      "claim": "The spacecraft is scheduled to remain at the orbiting laboratory until May 2027, then depart with several thousand pounds of disposal items and other unneeded cargo, burning up harmlessly during re-entry.",
+      "sourceId": "162c5c6a72fe",
+      "evidence": "The spacecraft is scheduled to remain at the orbiting laboratory until May 2027, then depart with several thousand pounds of disposal items and other unneeded cargo, burning up harmlessly during re-entry.",
+      "kind": "fact",
+      "expression": 3,
+      "action": "fall",
+      "brollQuery": "atmosphere"
+    },
+    {
+      "title": "شارك في الحدث",
+      "text": "تقدروا تتابعوا كل تفاصيل الإطلاق والالتحام من خلال منصات ناسا الرقمية. وممكن كمان تسجلوا في برنامج الضيوف الافتراضي عشان تعيشوا التجربة دي وتشوفوا كواليس المهمة وتشاركوا في الاحتفال بالتقدم العلمي الكبير ده.",
+      "summary": "دعوة للجمهور لمتابعة الإطلاق عبر منصات ناسا.",
+      "keyword": "تغطية",
+      "template": "steps",
+      "labels": [
+        "ناسا",
+        "متابعة",
+        "إطلاق"
+      ],
+      "values": [],
+      "claim": "Members of the public can register to attend this launch virtually.",
+      "sourceId": "162c5c6a72fe",
+      "evidence": "Members of the public can register to attend this launch virtually.",
+      "kind": "fact",
+      "expression": 10,
+      "action": "point",
+      "brollQuery": "nasa launch"
+    }
+  ],
+  "seriesLabel": "أسرار الكون",
+  "editorialMode": "daily",
+  "editorialLabel": null,
+  "scriptModel": "gemini-3.1-flash-lite"
+}
