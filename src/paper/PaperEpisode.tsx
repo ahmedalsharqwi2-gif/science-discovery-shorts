@@ -1,8 +1,9 @@
 import React from 'react';
-import {AbsoluteFill, Audio, staticFile, useCurrentFrame, interpolate} from 'remotion';
+import {AbsoluteFill, Audio, staticFile, useCurrentFrame, interpolate, Easing} from 'remotion';
 import {Mascot as MascotJs} from './Mascot.jsx';
 const Mascot: any = MascotJs;
 import {samplePath, pointAt} from './pathFollow.js';
+import {camTargetsFor, camAt} from './camera.js';
 
 // Paper-style episode renderer (طب إزاي؟ grammar, user-approved 2026-11-19):
 // grid paper, question title with colored keyword + sketchy underline, ONE
@@ -32,7 +33,7 @@ const col = (c?: string) => (c && T[c]) || c || T.ink;
 
 // Sequences one op group into a frame window: strokes chain with travel
 // gaps, labels follow with leader lines, fills/marks bloom after strokes.
-function layoutOps(ops: {strokes?: Op[]; fills?: Op[]; marks?: Op[]; labels?: Op[]}, startAt: number, windowFrames: number) {
+function layoutOps(ops: {strokes?: Op[]; fills?: Op[]; marks?: Op[]; labels?: Op[]; annotations?: Op[]}, startAt: number, windowFrames: number) {
   const strokes = (ops.strokes || []).map((s: Op) => ({...s, samples: samplePath(s.d)}));
   const n = Math.max(1, strokes.length);
   const strokeDur = Math.max(12, Math.min(38, Math.floor((windowFrames * 0.55) / n)));
@@ -53,7 +54,8 @@ function layoutOps(ops: {strokes?: Op[]; fills?: Op[]; marks?: Op[]; labels?: Op
   const labels = (ops.labels || []).map((l: Op, i: number) => ({...l, start: strokesEnd + 6 + i * 26, dur: 18}));
   const fills = (ops.fills || []).map((f: Op, i: number) => ({...f, start: strokesEnd + (f.delay ?? 0) + i * 3}));
   const marks = (ops.marks || []).map((m: Op, i: number) => ({...m, start: strokesEnd + (m.delay ?? 0) + i * 2}));
-  return {strokes, labels, fills, marks, end: strokesEnd + (labels.length ? labels.length * 26 + 24 : 8)};
+  const annotations = (ops.annotations || []).map((a: Op, i: number) => ({...a, start: strokesEnd + (a.delay ?? 0) + i * 16}));
+  return {strokes, labels, fills, marks, annotations, end: strokesEnd + (labels.length ? labels.length * 26 + 24 : 8)};
 }
 
 const Stroke = ({s, frame}: {s: Op; frame: number}) => (
@@ -63,13 +65,92 @@ const Stroke = ({s, frame}: {s: Op; frame: number}) => (
   </g>
 );
 
-const Fill = ({f, frame}: {f: Op; frame: number}) => (
+const Fill = ({f, frame, fid}: {f: Op; frame: number; fid?: string}) => (
   <g style={fade(frame, f.start, 10)}>
-    {f.shape === 'path'
+    {f.hatch && f.shape === 'path' ? (
+      <>
+        <pattern id={fid || 'hatch'} patternUnits="userSpaceOnUse" width="9" height="9" patternTransform="rotate(-32)">
+          <rect width="9" height="9" fill={col(f.color)} opacity={(f.opacity ?? 1) * 0.35} />
+          <line x1="0" y1="0" x2="0" y2="9" stroke={col(f.color)} strokeWidth="1.6" opacity="0.9" />
+        </pattern>
+        <path d={f.d} fill={`url(#${fid || 'hatch'})`} stroke="none" />
+      </>
+    ) : f.shape === 'path'
       ? <path d={f.d} fill={col(f.color)} opacity={f.opacity ?? 1} stroke="none" />
       : <circle cx={f.cx} cy={f.cy} r={f.r} fill={col(f.color)} opacity={f.opacity ?? 0.85} />}
   </g>
 );
+
+// Annotation ops (user-approved direction 2026-11-20): spotlight circle,
+// arrow, X mark, magnifier bubble, and dark picture-in-picture box. Each
+// draws in with the same hand-drawn grammar as strokes.
+const Annotation = ({a, frame, art}: {a: Op; frame: number; art?: Op}) => {
+  const c = col(a.color || 'red');
+  if (a.type === 'circle') {
+    const len = 2 * Math.PI * (a.r || 60);
+    return (
+      <g>
+        <circle cx={a.x} cy={a.y} r={(a.r || 60)} fill="none" stroke={c} strokeWidth={a.width || 5} strokeLinecap="round" pathLength={len} style={draw(frame, a.start, a.dur || 22, len)} transform={`rotate(-90 ${a.x} ${a.y})`} />
+      </g>
+    );
+  }
+  if (a.type === 'arrow') {
+    const len = Math.hypot(a.x2 - a.x1, a.y2 - a.y1);
+    const ang = Math.atan2(a.y2 - a.y1, a.x2 - a.x1);
+    const h = 22;
+    const head = `M ${a.x2} ${a.y2} L ${a.x2 - h * Math.cos(ang - 0.42)} ${a.y2 - h * Math.sin(ang - 0.42)} M ${a.x2} ${a.y2} L ${a.x2 - h * Math.cos(ang + 0.42)} ${a.y2 - h * Math.sin(ang + 0.42)}`;
+    return (
+      <g>
+        <path d={`M ${a.x1} ${a.y1} L ${a.x2} ${a.y2}`} fill="none" stroke={c} strokeWidth={a.width || 5} strokeLinecap="round" style={draw(frame, a.start, a.dur || 20, len)} />
+        <path d={head} fill="none" stroke={c} strokeWidth={a.width || 5} strokeLinecap="round" style={draw(frame, a.start + (a.dur || 20) - 4, 8, 2 * h)} />
+      </g>
+    );
+  }
+  if (a.type === 'x') {
+    const s = a.size || 34;
+    const d1 = `M ${a.x - s} ${a.y - s} L ${a.x + s} ${a.y + s}`, d2 = `M ${a.x + s} ${a.y - s} L ${a.x - s} ${a.y + s}`;
+    const len = 2 * s * Math.SQRT2;
+    return (
+      <g>
+        <path d={d1} fill="none" stroke={c} strokeWidth={a.width || 7} strokeLinecap="round" style={draw(frame, a.start, 10, len)} />
+        <path d={d2} fill="none" stroke={c} strokeWidth={a.width || 7} strokeLinecap="round" style={draw(frame, a.start + 6, 10, len)} />
+      </g>
+    );
+  }
+  if (a.type === 'magnifier' && art) {
+    const r = a.r || 120, z = a.zoom || 2;
+    const p = interpolate(frame, [a.start, a.start + 14], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+    if (p <= 0) return null;
+    const id = `mag-${Math.round(a.x)}-${Math.round(a.y)}`;
+    return (
+      <g opacity={p}>
+        <clipPath id={id}><circle cx={a.x} cy={a.y} r={r} /></clipPath>
+        <circle cx={a.x} cy={a.y} r={r} fill={T.paper} />
+        <g clipPath={`url(#${id})`}>
+          <g transform={`translate(${a.x} ${a.y}) scale(${z}) translate(${-a.x} ${-a.y})`}>
+            {(art.strokes || []).map((s: Op, i: number) => <path key={'ms' + i} d={s.d} fill="none" stroke={col(s.color)} strokeWidth={(s.width || 4) * 0.9} strokeLinecap="round" />)}
+            {(art.fills || []).map((f: Op, i: number) => (f.shape === 'path'
+              ? <path key={'mf' + i} d={f.d} fill={col(f.color)} opacity={f.opacity ?? 1} stroke="none" />
+              : <circle key={'mf' + i} cx={f.cx} cy={f.cy} r={f.r} fill={col(f.color)} opacity={f.opacity ?? 0.85} />))}
+          </g>
+        </g>
+        <circle cx={a.x} cy={a.y} r={r} fill="none" stroke={T.ink} strokeWidth={5} />
+        <line x1={a.x + r * 0.72} y1={a.y + r * 0.72} x2={a.x + r * 1.25} y2={a.y + r * 1.25} stroke={T.ink} strokeWidth={10} strokeLinecap="round" />
+      </g>
+    );
+  }
+  if (a.type === 'pip') {
+    const w = a.w || 300, h = a.h || 220;
+    return (
+      <g style={fade(frame, a.start, 10)}>
+        <rect x={a.x - w / 2} y={a.y - h / 2} width={w} height={h} rx={18} fill={T.ink} stroke={col(a.color || 'red')} strokeWidth={4} />
+        {a.d ? <path d={a.d} fill="none" stroke={T.paper} strokeWidth={3} strokeLinecap="round" style={draw(frame, a.start + 6, 20, a.len || 300)} /> : null}
+        {a.text ? <text x={a.x} y={a.y + h / 2 - 24} textAnchor="middle" fontFamily={fontFamily} fontWeight={700} fontSize={30} fill={T.paper}>{a.text}</text> : null}
+      </g>
+    );
+  }
+  return null;
+};
 
 const Mark = ({m, frame}: {m: Op; frame: number}) => {
   const p = interpolate(frame, [m.start, m.start + 7], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
@@ -127,6 +208,8 @@ const QuestionTitle = ({frame, title, keyword, seriesLabel, channelName}: {frame
 };
 
 // Paper karaoke captions: 5-word window, 50ms lead, active word red+underlined.
+// Kinetic reveal (user-approved direction 2026-11-20): each word pops in as it
+// is spoken (scale+rise with a light overshoot), unspoken words stay hidden.
 const Captions = ({frame, words}: {frame: number; words: Op[]}) => {
   const t = frame / FPS + 0.05;
   let cur = -1;
@@ -140,7 +223,11 @@ const Captions = ({frame, words}: {frame: number; words: Op[]}) => {
         {win.map((w: Op, i: number) => {
           const idx = start + i;
           const hot = idx === cur;
-          return <span key={idx} style={hot ? {color: T.red, borderBottom: `5px solid ${T.red}`, paddingBottom: 3} : undefined}>{w.text} </span>;
+          const age = t - w.start;
+          if (age < -0.05) return <span key={idx} style={{display: 'inline-block', opacity: 0, marginInlineStart: idx > start ? '0.28em' : 0}}>{w.text}</span>;
+          const pop = interpolate(age, [0, 0.09, 0.16], [0.55, 1.12, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+          const rise = interpolate(age, [0, 0.16], [10, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+          return <span key={idx} style={{display: 'inline-block', marginInlineStart: idx > start ? '0.28em' : 0, transform: `scale(${pop}) translateY(${rise}px)`, opacity: interpolate(age, [0, 0.06], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}), ...(hot ? {color: T.red, borderBottom: `5px solid ${T.red}`, paddingBottom: 3} : {})}}>{w.text}</span>;
         })}
       </div>
     </div>
@@ -193,11 +280,6 @@ const EndCard = ({frame, start, title, plan, callouts}: {frame: number; start: n
   );
 };
 
-const drift = (frame: number, dur: number) => {
-  const p = interpolate(frame, [0, dur], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
-  return `translate(${-14 * p}px, ${-22 * p}px) scale(${1 + 0.035 * p})`;
-};
-
 export const PaperEpisode = (props: any) => {
   const frame = useCurrentFrame();
   const plan: Plan = props.paper.plan;
@@ -223,6 +305,15 @@ export const PaperEpisode = (props: any) => {
     if (laid && laid.labels.length) beats.push({frame: windows[i].start + 8, action: 'point', expression: s.expression ?? 4});
     if (laid) beats.push({frame: laid.end, action: s.action || 'idle', expression: s.expression ?? 0});
   });
+  // camera target per scene: eased move toward the scene's drawing centroid,
+  // zoom clamped so no element ever enters the title or captions zones.
+  const camLayers = [{strokes: base.strokes, fills: base.fills, marks: base.marks, labels: base.labels, annotations: base.annotations}, ...perScene.map((l: Op) => l || {})];
+  const camTargets = camTargetsFor(windows, camLayers);
+  const ease = Easing.inOut(Easing.cubic);
+  const cam = (fr: number) => {
+    const t = camAt(fr, windows, camTargets, ease);
+    return `translate(${540 - t.s * t.x}px, ${(t.a ?? 1060) - t.s * t.y}px) scale(${t.s})`;
+  };
   const callouts: Op[] = [...plan.labels, ...plan.scenes.flatMap((s: Op) => (s.labels || []) as Op[])].slice(0, 3);
   const titleKeyword = (scenes.find((s: Op) => s.keyword && props.title.includes(s.keyword)) || {}).keyword;
   const channelName = props.channelName || 'افترض كده';
@@ -232,17 +323,19 @@ export const PaperEpisode = (props: any) => {
       <Grid />
       {props.audio ? <Audio src={staticFile(props.audio)} /> : null}
       <QuestionTitle frame={frame} title={props.title} keyword={titleKeyword} seriesLabel={props.seriesLabel} channelName={channelName} />
-      <div style={{position: 'absolute', width: '100%', height: '100%', transform: drift(frame, total)}}>
+      <div style={{position: 'absolute', width: '100%', height: '100%', transform: cam(frame)}}>
         <svg width="1080" height="1920" style={{position: 'absolute'}}>
           {base.strokes.map((s: Op, i: number) => <Stroke key={'bs' + i} s={s} frame={frame} />)}
-          {base.fills.map((f: Op, i: number) => <Fill key={'bf' + i} f={f} frame={frame} />)}
+          {base.fills.map((f: Op, i: number) => <Fill key={'bf' + i} f={f} frame={frame} fid={'hb' + i} />)}
           {base.marks.map((m: Op, i: number) => <Mark key={'bm' + i} m={m} frame={frame} />)}
+          {base.annotations.map((a: Op, i: number) => <Annotation key={'ba' + i} a={a} frame={frame} art={plan} />)}
           {base.labels.map((l: Op, i: number) => <Callout key={'bl' + i} l={l} frame={frame} />)}
           {perScene.map((laid: Op, si: number) => laid ? (
             <g key={'sc' + si}>
               {laid.strokes.map((s: Op, i: number) => <Stroke key={'s' + i} s={s} frame={frame} />)}
-              {laid.fills.map((f: Op, i: number) => <Fill key={'f' + i} f={f} frame={frame} />)}
+              {laid.fills.map((f: Op, i: number) => <Fill key={'f' + i} f={f} frame={frame} fid={'hs' + si + '-' + i} />)}
               {laid.marks.map((m: Op, i: number) => <Mark key={'m' + i} m={m} frame={frame} />)}
+              {laid.annotations.map((a: Op, i: number) => <Annotation key={'a' + i} a={a} frame={frame} art={plan} />)}
               {laid.labels.map((l: Op, i: number) => <Callout key={'l' + i} l={l} frame={frame} />)}
             </g>
           ) : null)}

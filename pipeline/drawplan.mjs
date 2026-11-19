@@ -14,18 +14,20 @@ export const CANVAS = {width: 1080, height: 1920};
 export const DRAW_BOX = {x0: 40, y0: 380, x1: 1040, y1: 1500};
 export const PALETTE = ['ink', 'paper', 'red', 'blue', 'cyan', 'gold', 'white', 'starBlue', 'green'];
 
-const CAPS = {strokes: 90, fills: 50, marks: 40, baseLabels: 5, sceneLabels: 3, perSceneOps: 14};
+const CAPS = {strokes: 90, fills: 50, marks: 40, baseLabels: 5, sceneLabels: 3, perSceneOps: 14, annotations: 10, perSceneAnnotations: 2};
 
 const strokeSchema = {type: 'OBJECT', required: ['d'], properties: {d: {type: 'STRING'}, width: {type: 'NUMBER'}, color: {type: 'STRING'}, delay: {type: 'NUMBER'}}};
-const fillSchema = {type: 'OBJECT', required: ['color'], properties: {shape: {type: 'STRING', enum: ['circle', 'path']}, d: {type: 'STRING'}, cx: {type: 'NUMBER'}, cy: {type: 'NUMBER'}, r: {type: 'NUMBER'}, color: {type: 'STRING'}, opacity: {type: 'NUMBER'}, delay: {type: 'NUMBER'}}};
+const fillSchema = {type: 'OBJECT', required: ['color'], properties: {shape: {type: 'STRING', enum: ['circle', 'path']}, d: {type: 'STRING'}, cx: {type: 'NUMBER'}, cy: {type: 'NUMBER'}, r: {type: 'NUMBER'}, color: {type: 'STRING'}, opacity: {type: 'NUMBER'}, delay: {type: 'NUMBER'}, hatch: {type: 'BOOLEAN'}}};
 const markSchema = {type: 'OBJECT', required: ['x', 'y'], properties: {x: {type: 'NUMBER'}, y: {type: 'NUMBER'}, r: {type: 'NUMBER'}, color: {type: 'STRING'}, delay: {type: 'NUMBER'}}};
 const labelSchema = {type: 'OBJECT', required: ['x1', 'y1', 'x2', 'y2', 'text'], properties: {x1: {type: 'NUMBER'}, y1: {type: 'NUMBER'}, x2: {type: 'NUMBER'}, y2: {type: 'NUMBER'}, text: {type: 'STRING'}, align: {type: 'STRING', enum: ['start', 'middle', 'end']}, delay: {type: 'NUMBER'}}};
-const opsSchema = {type: 'OBJECT', properties: {strokes: {type: 'ARRAY', items: strokeSchema}, fills: {type: 'ARRAY', items: fillSchema}, marks: {type: 'ARRAY', items: markSchema}, labels: {type: 'ARRAY', items: labelSchema}}};
+const annotationSchema = {type: 'OBJECT', required: ['type'], properties: {type: {type: 'STRING', enum: ['circle', 'arrow', 'x', 'magnifier', 'pip']}, x: {type: 'NUMBER'}, y: {type: 'NUMBER'}, r: {type: 'NUMBER'}, zoom: {type: 'NUMBER'}, x1: {type: 'NUMBER'}, y1: {type: 'NUMBER'}, x2: {type: 'NUMBER'}, y2: {type: 'NUMBER'}, size: {type: 'NUMBER'}, w: {type: 'NUMBER'}, h: {type: 'NUMBER'}, width: {type: 'NUMBER'}, color: {type: 'STRING'}, text: {type: 'STRING'}, d: {type: 'STRING'}, delay: {type: 'NUMBER'}}};
+const opsSchema = {type: 'OBJECT', properties: {strokes: {type: 'ARRAY', items: strokeSchema}, fills: {type: 'ARRAY', items: fillSchema}, marks: {type: 'ARRAY', items: markSchema}, labels: {type: 'ARRAY', items: labelSchema}, annotations: {type: 'ARRAY', items: annotationSchema}}};
 const planResponseSchema = {type: 'OBJECT', required: ['strokes', 'fills', 'marks', 'labels', 'scenes', 'endStat', 'summaryPoints'], properties: {
   strokes: {type: 'ARRAY', items: strokeSchema},
   fills: {type: 'ARRAY', items: fillSchema},
   marks: {type: 'ARRAY', items: markSchema},
   labels: {type: 'ARRAY', items: labelSchema},
+  annotations: {type: 'ARRAY', items: annotationSchema},
   scenes: {type: 'ARRAY', items: opsSchema},
   endStat: {type: 'STRING'},
   summaryPoints: {type: 'ARRAY', items: {type: 'STRING'}},
@@ -77,18 +79,22 @@ const inBox = (x, y) => x >= DRAW_BOX.x0 && x <= DRAW_BOX.x1 && y >= DRAW_BOX.y0
 export function validatePlan(plan, sceneCount) {
   const problems = [];
   if (!plan || typeof plan !== 'object') return ['plan is not an object'];
-  const ops = ['strokes', 'fills', 'marks', 'labels'];
-  for (const k of ops) if (!Array.isArray(plan[k])) problems.push(k + ' must be an array');
+  const ops = ['strokes', 'fills', 'marks', 'labels', 'annotations'];
+  for (const k of ops.slice(0, 4)) if (!Array.isArray(plan[k])) problems.push(k + ' must be an array');
+  if (plan.annotations === undefined) plan.annotations = [];
+  if (!Array.isArray(plan.annotations)) problems.push('annotations must be an array');
+  for (const sc of Array.isArray(plan.scenes) ? plan.scenes : []) if (sc && sc.annotations === undefined) sc.annotations = [];
   if (problems.length) return problems;
   if (!Array.isArray(plan.scenes)) return ['scenes must be an array'];
   if (plan.scenes.length !== sceneCount) problems.push('scenes has ' + plan.scenes.length + ' entries, must equal episode scene count ' + sceneCount);
 
-  const totals = {strokes: plan.strokes.length, fills: plan.fills.length, marks: plan.marks.length, labels: plan.labels.length};
+  const totals = {strokes: plan.strokes.length, fills: plan.fills.length, marks: plan.marks.length, labels: plan.labels.length, annotations: plan.annotations.length};
   for (const s of plan.scenes) for (const k of ops) if (Array.isArray(s[k])) totals[k] += s[k].length;
   if (totals.strokes > CAPS.strokes) problems.push('total strokes ' + totals.strokes + ' exceeds cap ' + CAPS.strokes + '; simplify the drawing');
   if (totals.fills > CAPS.fills) problems.push('total fills ' + totals.fills + ' exceeds cap ' + CAPS.fills);
   if (totals.marks > CAPS.marks) problems.push('total marks ' + totals.marks + ' exceeds cap ' + CAPS.marks);
   if (plan.labels.length > CAPS.baseLabels) problems.push('base labels ' + plan.labels.length + ' exceeds cap ' + CAPS.baseLabels);
+  if (totals.annotations > CAPS.annotations) problems.push('total annotations ' + totals.annotations + ' exceeds cap ' + CAPS.annotations);
 
   const checkOps = (ops2, where) => {
     for (const [idx, st] of (ops2.strokes || []).entries()) {
@@ -111,6 +117,20 @@ export function validatePlan(plan, sceneCount) {
       else if (!inBox(m.x, m.y)) problems.push(where + ' mark ' + idx + ': (' + m.x + ',' + m.y + ') outside drawing box');
       if (!colorOk(m.color)) problems.push(where + ' mark ' + idx + ': unknown color ' + m.color);
     }
+    for (const [idx, a] of (ops2.annotations || []).entries()) {
+      if (!['circle', 'arrow', 'x', 'magnifier', 'pip'].includes(a.type)) {problems.push(where + ' annotation ' + idx + ': unknown type ' + a.type); continue;}
+      if (!colorOk(a.color)) problems.push(where + ' annotation ' + idx + ': unknown color ' + a.color);
+      if (a.type === 'arrow') {
+        if (![a.x1, a.y1, a.x2, a.y2].every(Number.isFinite)) problems.push(where + ' annotation ' + idx + ': arrow needs numeric x1,y1,x2,y2');
+        else if (!inBox(a.x2, a.y2)) problems.push(where + ' annotation ' + idx + ': arrow head outside drawing box');
+      } else {
+        if (!Number.isFinite(a.x) || !Number.isFinite(a.y)) problems.push(where + ' annotation ' + idx + ': needs numeric x, y');
+        else if (!inBox(a.x, a.y)) problems.push(where + ' annotation ' + idx + ': (' + a.x + ',' + a.y + ') outside drawing box');
+      }
+      if (a.type === 'pip' && a.text !== undefined) { if (typeof a.text !== 'string' || a.text.length > 24) problems.push(where + ' annotation ' + idx + ': pip text 1-24 chars'); else { if (/\d/.test(a.text)) problems.push(where + ' annotation ' + idx + ': pip text no digits'); if (/[A-Za-z]/.test(a.text)) problems.push(where + ' annotation ' + idx + ': pip text Arabic only'); } }
+      if (a.type === 'pip' && a.d !== undefined) { const pp = parsePath(a.d); if (!pp.ok) problems.push(where + ' annotation ' + idx + ': pip icon path: ' + pp.error); }
+      if (a.type === 'magnifier' && a.zoom !== undefined && !(a.zoom >= 1.2 && a.zoom <= 4)) problems.push(where + ' annotation ' + idx + ': magnifier zoom 1.2-4');
+    }
     for (const [idx, l] of (ops2.labels || []).entries()) {
       if (![l.x1, l.y1, l.x2, l.y2].every(Number.isFinite)) {problems.push(where + ' label ' + idx + ': needs numeric x1,y1,x2,y2'); continue;}
       if (!inBox(l.x1, l.y1)) problems.push(where + ' label ' + idx + ': anchor (' + l.x1 + ',' + l.y1 + ') outside drawing box');
@@ -125,6 +145,7 @@ export function validatePlan(plan, sceneCount) {
     if (count < 1) problems.push('scene ' + i + ' adds no visible ops; every scene must add at least one stroke, fill, mark or label so the drawing evolves');
     if (count > CAPS.perSceneOps) problems.push('scene ' + i + ' adds ' + count + ' ops, exceeds per-scene cap ' + CAPS.perSceneOps);
     if (Array.isArray(s.labels) && s.labels.length > CAPS.sceneLabels) problems.push('scene ' + i + ' labels ' + s.labels.length + ' exceeds per-scene cap ' + CAPS.sceneLabels);
+    if (Array.isArray(s.annotations) && s.annotations.length > CAPS.perSceneAnnotations) problems.push('scene ' + i + ' annotations ' + s.annotations.length + ' exceeds per-scene cap ' + CAPS.perSceneAnnotations);
     checkOps(s, 'scene ' + i);
   });
 
@@ -145,6 +166,8 @@ Rules:
 - The base drawing (strokes/fills/marks/labels) is the episode's ONE iconic image, matching the title question. It must read clearly as a sketch on grid paper: 8-25 strokes, simple shapes, no shading.
 - scenes[] must have EXACTLY ${episode.scenes.length} entries; entry i lists only the NEW ops added during scene i (every scene MUST add at least one new visible op: a small detail, a fill, a mark, or at most ${CAPS.sceneLabels} labels). Total across base + scenes: max ${CAPS.strokes} strokes, ${CAPS.fills} fills, ${CAPS.marks} marks.
 - Labels are short Arabic callouts (1-3 words, max 24 chars) in Egyptian white dialect - Arabic only, no Latin letters, numbers as Arabic words. Each has anchor point (x1,y1) ON the part and text position (x2,y2) beside it.
+- You MAY add up to 2 annotations per scene (max 10 total) from: {"type":"circle","x,"y","r"} a red spotlight ring ON a part; {"type":"arrow","x1","y1","x2","y2"} pointing at a part; {"type":"x","x","y","size"} a red X over something forbidden/wrong; {"type":"magnifier","x","y","r","zoom"} a magnifier bubble that enlarges the drawing under it; {"type":"pip","x","y","w","h","text"} a dark picture-in-picture box with a short Arabic caption (optional "d" icon path). Use them where the narration points at, forbids, or zooms into something - they are the episode's emphasis layer.
+- Fills of shape "path" may set "hatch": true for hand-shaded parallel-line hatching instead of flat color (good for cross-sections and shaded parts).
 - Use each scene's template hint: phenomenon -> central object with motion marks; comparison -> two sides; steps -> numbered mini items in a row; journey -> path with stops; map -> simple outline map; chart -> bars with values; cause -> arrow chain.
 - endStat: the episode's single most surprising number as a short Arabic string (write the number as Arabic words - no digits, no Latin letters; max 24 chars), for the giant red end-card stat.
 - summaryPoints: 3 short Arabic takeaways (each max 60 chars), Egyptian white dialect, factual and matching the script.

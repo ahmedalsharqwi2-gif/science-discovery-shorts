@@ -94,3 +94,39 @@ test('digits and Latin letters are rejected in endStat, labels and summaryPoints
   plan.summaryPoints = ['نقطة فيها 3 أشياء', 'نقطة تانية قصيرة', 'نقطة تالتة قصيرة'];
   assert(validatePlan(plan, 2).some(p => p.includes('summaryPoints 0')));
 });
+
+test('annotations: valid ops pass, bad ones are rejected', () => {
+  const plan = goodPlan(3);
+  plan.annotations = [
+    {type: 'circle', x: 540, y: 900, r: 80, color: 'red'},
+    {type: 'arrow', x1: 800, y1: 700, x2: 600, y2: 850},
+    {type: 'x', x: 400, y: 1000, size: 30},
+    {type: 'magnifier', x: 540, y: 900, r: 110, zoom: 2},
+    {type: 'pip', x: 540, y: 700, w: 280, h: 200, text: 'صورة الرنين'},
+  ];
+  assert.deepEqual(validatePlan(plan, 3), []);
+  const bad = goodPlan(3);
+  bad.annotations = [{type: 'laser', x: 540, y: 900}];
+  assert.ok(validatePlan(bad, 3).some(p => /unknown type/.test(p)));
+  const out = goodPlan(3);
+  out.annotations = [{type: 'circle', x: 10, y: 100, r: 50}];
+  assert.ok(validatePlan(out, 3).some(p => /outside drawing box/.test(p)));
+  const latin = goodPlan(3);
+  latin.annotations = [{type: 'pip', x: 540, y: 700, text: 'MRI scan'}];
+  assert.ok(validatePlan(latin, 3).some(p => /Arabic only/.test(p)));
+  const digits = goodPlan(3);
+  digits.annotations = [{type: 'pip', x: 540, y: 700, text: 'صورة ٥ رنين'.replace('٥','5')}];
+  assert.ok(validatePlan(digits, 3).some(p => /no digits/.test(p)));
+  const zoomy = goodPlan(3);
+  zoomy.annotations = [{type: 'magnifier', x: 540, y: 900, zoom: 9}];
+  assert.ok(validatePlan(zoomy, 3).some(p => /zoom/.test(p)));
+});
+
+test('per-scene annotation cap and missing annotations key tolerated', () => {
+  const plan = goodPlan(3);
+  delete plan.annotations;
+  plan.scenes[0].annotations = [{type: 'circle', x: 500, y: 800, r: 60}, {type: 'circle', x: 600, y: 800, r: 60}, {type: 'x', x: 550, y: 900}];
+  assert.ok(validatePlan(plan, 3).some(p => /annotations 3 exceeds per-scene cap/.test(p)));
+  plan.scenes[0].annotations.pop();
+  assert.deepEqual(validatePlan(plan, 3), []);
+});
