@@ -107,9 +107,35 @@ export function camAt(fr, windows, camTargets, easing) {
 // Zone check: every point of every visible layer, under every scene's
 // settled camera (and its push-in peak), must stay between the title and
 // captions zones. Returns a list of violations.
+// Label text box in drawing coords: RTL text is end-anchored at (x2, y2),
+// extends LEFT by width and sits in the 44px band above the anchor point.
+// Width factor 24/char + 8px margin: calibrated against rendered labels
+// (slice review 2026-11-20: adjacent labels overlapped on screen).
+export function labelBoxesOf(laid) {
+  return (laid && laid.labels || []).map(l => {
+    const tw = String(l.text || '').length * 24 + 8;
+    return {text: String(l.text || ''), x0: l.x2 - tw, x1: l.x2, y0: l.y2 - 48, y1: l.y2};
+  });
+}
+
 export function zoneViolations(windows, layers, camTargets) {
   const violations = [];
   camTargets.forEach((t, si) => {
+    // Label-to-label collision gate: every pair of label boxes visible during
+    // this scene (layers accumulate) must not overlap on screen, using the
+    // settled camera at its push-in peak, with drift margin.
+    {
+      const s = t.s * 1.04, anchor = t.a !== undefined ? t.a : ANCHOR_Y;
+      const toScreen = b => ({
+        x0: FRAME_W / 2 + s * (b.x0 - t.x) - DRIFT_X, x1: FRAME_W / 2 + s * (b.x1 - t.x) + DRIFT_X,
+        y0: anchor - s * (t.y - b.y0) - DRIFT_Y, y1: anchor - s * (t.y - b.y1) + DRIFT_Y,
+      });
+      const boxes = layers.slice(0, si + 1).flatMap((laid, li) => labelBoxesOf(laid).map(b => ({...b, li})));
+      for (let i = 0; i < boxes.length; i++) for (let j = i + 1; j < boxes.length; j++) {
+        const A = toScreen(boxes[i]), B = toScreen(boxes[j]);
+        if (A.x0 < B.x1 && B.x0 < A.x1 && A.y0 < B.y1 && B.y0 < A.y1) violations.push(`scene ${si} labels collide: "${boxes[i].text}" (layer ${boxes[i].li}) x "${boxes[j].text}" (layer ${boxes[j].li})`);
+      }
+    }
     for (const mult of [1, 1.04]) {
       const s = t.s * mult;
       const anchor = t.a !== undefined ? t.a : ANCHOR_Y;
