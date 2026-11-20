@@ -66,6 +66,7 @@ jobs:
           GEMINI_API_KEY_3: ${{ secrets.GEMINI_API_KEY_3 }}
           GEMINI_TEXT_API_KEY: ${{ secrets.GEMINI_TEXT_API_KEY }}
           GEMINI_TTS_API_KEY: ${{ secrets.GEMINI_TTS_API_KEY }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
       - uses: actions/cache/save@v4
         if: always() && steps.provider-cache.outputs.cache-primary-key != ''
         with:
