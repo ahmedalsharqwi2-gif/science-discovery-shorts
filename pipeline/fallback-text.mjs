@@ -16,8 +16,11 @@ export class OpenAiCompatTextClient{
   const payload={model:this.model,messages:[{role:'user',content:prompt}],temperature:gc.temperature??0.3};
   if(this.jsonMode&&gc.responseMimeType==='application/json')payload.response_format={type:'json_object'};
   const response=await this.fetcher(this.baseUrl+'/chat/completions',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+this.apiKey},body:JSON.stringify(payload)});
-  if(response.status===429)throw Error('FALLBACK_HTTP_429');
-  if(!response.ok)throw Error('FALLBACK_HTTP_'+response.status);
+  // Keep err.message a stable machine code (run.mjs pattern-matches it into
+  // report codes); the provider's own reason rides along on .snippet and is
+  // logged by FallbackTextChain so the CI log records WHY it rejected.
+  if(!response.ok){let snippet='';try{snippet=(await response.text()).replace(/\s+/g,' ').trim().slice(0,300);}catch{}
+   const err=Error('FALLBACK_HTTP_'+response.status);err.status=response.status;err.snippet=snippet;throw err;}
   const data=await response.json();
   const text=((data.choices||[])[0]&&data.choices[0].message&&data.choices[0].message.content)||'';
   if(!text)throw Error('FALLBACK_EMPTY_RESPONSE');

@@ -47,7 +47,9 @@ export class GeminiClient{
   const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),Math.min(remaining,this.config.retry.timeoutMs));
   try{
    const response=await this.fetcher('https://generativelanguage.googleapis.com/v1beta/models/'+encodeURIComponent(model)+':generateContent',{method:'POST',redirect:'error',signal:controller.signal,headers:{'Content-Type':'application/json','x-goog-api-key':key},body:JSON.stringify(body)});
-   if(!response.ok){const retryAfter=retryAfterMs(response.headers.get('retry-after'),this.clock());this.notBefore=Math.max(this.notBefore,this.clock()+retryAfter);let quotaKind='unknown';if(response.status===429){try{quotaKind=classifyQuota(await response.json());}catch{}}return {ok:false,status:response.status,retryAfter,quotaKind};}
+   if(!response.ok){const retryAfter=retryAfterMs(response.headers.get('retry-after'),this.clock());this.notBefore=Math.max(this.notBefore,this.clock()+retryAfter);let quotaKind='unknown',quotaMessage='';
+    if(response.status===429){try{const errBody=await response.json();quotaKind=classifyQuota(errBody);quotaMessage=String(errBody&&errBody.error&&errBody.error.message||'').replace(/\s+/g,' ').trim().slice(0,300);}catch{}}
+    return {ok:false,status:response.status,retryAfter,quotaKind,quotaMessage};}
    const data=await response.json();return {ok:true,data};
   }catch(e){if(e instanceof GeminiError)throw e;return {ok:false,status:0,timeout:controller.signal.aborted};}finally{clearTimeout(timer);}
  }
@@ -77,21 +79,21 @@ export class GeminiClient{
     let lastErr=null;
     for(let ki=0;ki<pool.length;ki++){const {id:keyId,key}=pool[ki];
     const deadline=this.clock()+this.config.retry.maxElapsedMs;
-    let rotated=false;
+    let rotated=false,lastQuotaMessage='';
     try{
     const resolvedModels=await this.models(kind,key,deadline);const pin=this.pins.get(kind);const models=pin?resolvedModels.filter(m=>m===pin):resolvedModels;if(pin&&!models.length)throw new GeminiError('GEMINI_PINNED_MODEL_UNAVAILABLE',this.events);let count=0,lastStatus=0,lastQuotaKind='unknown';
     for(const model of models){for(let attempt=0;attempt<this.config.retry.maxAttemptsPerModel;attempt++){
-     if(++count>this.config.retry.maxTotalAttempts){const err=new GeminiError(lastStatus?'GEMINI_HTTP_'+lastStatus+'_EXHAUSTED':'GEMINI_ATTEMPTS_EXHAUSTED',this.events);if(lastStatus===429)err.quotaKind=lastQuotaKind;throw err;}
+     if(++count>this.config.retry.maxTotalAttempts){const err=new GeminiError(lastStatus?'GEMINI_HTTP_'+lastStatus+'_EXHAUSTED':'GEMINI_ATTEMPTS_EXHAUSTED',this.events);if(lastStatus===429)err.quotaKind=lastQuotaKind;if(lastQuotaMessage)err.quotaMessage=lastQuotaMessage;throw err;}
      if(kind==='voice'){const pace=VOICE_KEY_MIN_INTERVAL_MS-(this.clock()-(this.keyLastUse.get(keyId)??-Infinity));if(pace>0){if(this.clock()+pace>=deadline)throw new GeminiError('GEMINI_RATE_LIMIT_DEADLINE',this.events);this.event({type:'voice_key_pacing',kind,keyId,waitMs:pace});await this.sleep(pace);}this.keyLastUse.set(keyId,this.clock());}
-     const response=await this.request(model,body,key,deadline);lastStatus=response.status||0;if(response.status===429&&response.quotaKind)lastQuotaKind=response.quotaKind;
-     this.event({type:'attempt',kind,model,attempt:attempt+1,totalAttempt:count,status:response.ok?200:lastStatus});
+     const response=await this.request(model,body,key,deadline);lastStatus=response.status||0;if(response.status===429&&response.quotaKind)lastQuotaKind=response.quotaKind;if(response.quotaMessage)lastQuotaMessage=response.quotaMessage;
+     this.event({type:'attempt',kind,model,attempt:attempt+1,totalAttempt:count,status:response.ok?200:lastStatus,...(response.ok?{}:{quotaKind:response.quotaKind||'unknown',retryAfterMs:response.retryAfter||0,...(response.quotaMessage?{quotaMessage:response.quotaMessage}:{})})});
      if(response.ok&&this.valid(kind,response.data)){if(useCache)await this.saveCache(id,model,response.data);return {...response.data,_pipeline:{model,cacheKey:id,cacheHit:false}};}
      if(response.ok){this.event({type:'invalid_response',kind,model});break;}
      if(response.status===401||response.status===403)throw new GeminiError('GEMINI_AUTHORIZATION_FAILED',this.events);
      if(response.status===400&&(response.text||'').includes('API_KEY_INVALID'))throw new GeminiError('GEMINI_AUTHORIZATION_FAILED',this.events);
      if([400,404,410,422].includes(response.status))break;
      if(response.status&&response.status!==429&&response.status<500)throw new GeminiError('GEMINI_HTTP_'+response.status,this.events);
-     if(response.status===429&&response.retryAfter>120000){const err=new GeminiError('GEMINI_HTTP_429_EXHAUSTED',this.events);err.quotaKind=lastQuotaKind;throw err;}
+     if(response.status===429&&response.retryAfter>120000){const err=new GeminiError('GEMINI_HTTP_429_EXHAUSTED',this.events);err.quotaKind=lastQuotaKind;if(lastQuotaMessage)err.quotaMessage=lastQuotaMessage;throw err;}
      // Quota is per model per project: retrying a capped model adds pressure,
      // and a daily cap never resets mid-run. Move to the next model on this
      // key; the key rotates once all its models are exhausted. Retry-After
@@ -103,9 +105,9 @@ export class GeminiClient{
      if(this.clock()+wait>=deadline)throw new GeminiError(response.retryAfter?'GEMINI_RETRY_AFTER_EXCEEDS_BUDGET':'GEMINI_TOTAL_TIMEOUT',this.events);
      this.event({type:'backoff',kind,model,status:lastStatus,waitMs:wait,retryAfterMs:response.retryAfter||0});await this.sleep(wait);
     }}
-    {const err=new GeminiError(lastStatus?'GEMINI_HTTP_'+lastStatus+'_EXHAUSTED':'GEMINI_NO_VALID_RESPONSE',this.events);if(lastStatus===429)err.quotaKind=lastQuotaKind;throw err;}
+    {const err=new GeminiError(lastStatus?'GEMINI_HTTP_'+lastStatus+'_EXHAUSTED':'GEMINI_NO_VALID_RESPONSE',this.events);if(lastStatus===429)err.quotaKind=lastQuotaKind;if(lastQuotaMessage)err.quotaMessage=lastQuotaMessage;throw err;}
     }catch(e){
-     if(e&&['GEMINI_HTTP_429_EXHAUSTED','GEMINI_RETRY_AFTER_EXCEEDS_BUDGET','GEMINI_TOTAL_TIMEOUT','GEMINI_RATE_LIMIT_DEADLINE','GEMINI_AUTHORIZATION_FAILED','GEMINI_HTTP_400_EXHAUSTED'].includes(e.code)&&ki<pool.length-1){this.event({type:'key_rotation',kind,keyId,reason:e.code});try{await this.onKeyExhausted(keyId,kind,e&&e.quotaKind);}catch{}lastErr=e;rotated=true;}
+     if(e&&['GEMINI_HTTP_429_EXHAUSTED','GEMINI_RETRY_AFTER_EXCEEDS_BUDGET','GEMINI_TOTAL_TIMEOUT','GEMINI_RATE_LIMIT_DEADLINE','GEMINI_AUTHORIZATION_FAILED','GEMINI_HTTP_400_EXHAUSTED'].includes(e.code)&&ki<pool.length-1){this.event({type:'key_rotation',kind,keyId,reason:e.code,...(e.quotaKind?{quotaKind:e.quotaKind}:{})});try{await this.onKeyExhausted(keyId,kind,e&&e.quotaKind);}catch{}lastErr=e;rotated=true;}
      else throw e;
     }
     if(!rotated&&lastErr)throw lastErr;

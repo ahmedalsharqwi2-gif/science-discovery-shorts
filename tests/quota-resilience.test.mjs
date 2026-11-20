@@ -32,6 +32,12 @@ test('distributeWords yields monotonic spans satisfying assertTiming',()=>{
  }
 });
 
+test('fallback rejection keeps a machine-code message and carries the provider body on .snippet',async()=>{
+ const client=new OpenAiCompatTextClient({baseUrl:'https://fallback.example/v1',model:'m',apiKey:'k',fetcher:async()=>new Response('{"error":{"message":"rate limit exceeded, 50 requests per day"}}',{status:429})});
+ const err=await client.generate('text',{contents:[{parts:[{text:'x'}]}]}).then(()=>null,e=>e);
+ assert.equal(err.message,'FALLBACK_HTTP_429');assert.equal(err.status,429);assert(err.snippet.includes('50 requests per day'));
+});
+
 test('FallbackTextChain falls back only for text when the pool is exhausted',async()=>{
  const boom=Object.assign(new Error('boom'),{code:'GEMINI_HTTP_429_EXHAUSTED'});
  const primary={config:{voice:{}},generate:async()=>{throw boom;}};

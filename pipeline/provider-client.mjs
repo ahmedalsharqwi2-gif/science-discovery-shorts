@@ -45,7 +45,7 @@ export class FallbackTextChain{
   try{return await this.primary.generate(kind,body,opts);}
   catch(e){
    const exhausted=e&&(e.code==='GEMINI_HTTP_429_EXHAUSTED'||e.code==='MISSING_GEMINI_BINDING');
-   if(kind==='text'&&this.fallback&&exhausted){const out=await this.fallback.generate(kind,body,opts);out._pipeline={...(out._pipeline||{}),fallback:true};return out;}
+   if(kind==='text'&&this.fallback&&exhausted){if(e.quotaMessage)console.error('gemini pool exhausted:',e.code,e.quotaMessage);try{const out=await this.fallback.generate(kind,body,opts);out._pipeline={...(out._pipeline||{}),fallback:true};return out;}catch(fe){if(fe&&fe.snippet)console.error('fallback provider rejected:',fe.status||'?',fe.snippet);throw fe;}}
    throw e;
   }
  }

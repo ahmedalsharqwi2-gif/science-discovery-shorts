@@ -73,6 +73,14 @@ test('voice calls on the same key are paced at least 20 seconds apart',async t=>
  await f.client.generate('voice',{contents:[{parts:[{text:'one'}]}]});await f.client.generate('voice',{contents:[{parts:[{text:'two'}]}]});
  assert.equal(calls,2);assert(f.waits.includes(20000));assert(f.client.events.some(e=>e.type==='voice_key_pacing'&&e.waitMs===20000));
 });
+test('a 429 records the provider quota message and kind on the attempt event',async t=>{
+ const seen=[];const quotaBody=JSON.stringify({error:{message:'Quota exceeded for metric: generate_requests_per_minute',details:[]}});
+ const f=await fixture(t,async url=>{seen.push(url);return seen.length===1?new Response(quotaBody,{status:429}):textResponse();});
+ await f.client.generate('text',{contents:[]});
+ const failed=f.client.events.find(e=>e.type==='attempt'&&e.status===429);
+ assert.equal(failed.quotaKind,'minute');assert.equal(failed.quotaMessage,'Quota exceeded for metric: generate_requests_per_minute');
+ assert(!JSON.stringify(f.client.events).includes('fixture-not-a-real-credential'));
+});
 test('cooled-down keys are skipped; all cooled down reads as missing binding',async t=>{
  const f=await fixture(t,async()=>textResponse());
  f.options.keysFor=()=>[{id:'a',key:'key-a'}];f.options.cooledDown=()=>true;
