@@ -4,6 +4,7 @@ import {Mascot as MascotJs} from './Mascot.jsx';
 const Mascot: any = MascotJs;
 import {samplePath, pointAt} from './pathFollow.js';
 import {camTargetsFor, camAt} from './camera.js';
+import motionTokens from '../../brand/motion-tokens.json';
 
 // Paper-style episode renderer (طب إزاي؟ grammar, user-approved 2026-11-19):
 // grid paper, question title with colored keyword + sketchy underline, ONE
@@ -12,11 +13,11 @@ import {camTargetsFor, camAt} from './camera.js';
 // The drawing plan comes from pipeline/drawplan.mjs (validated JSON spec).
 
 const FPS = 30;
-const T: Record<string, string> = {
-  paper: '#EDE4D0', ink: '#1A1512', blue: '#2E6E8E', starBlue: '#3B7FB8',
-  red: '#B03A2E', orange: '#E0A458', grid: '#D8CBB2', cyan: '#12bce5',
-  white: '#FFFFFF', yellow: '#ffda34', gold: '#C99700', green: '#4E7E5B', shoeRed: '#E23B2E',
-};
+// Theme palette comes from brand/motion-tokens.json (pro-motion design
+// system). T is module-level because the render process draws one episode
+// (one theme) at a time; PaperEpisode rebinds it from props.paper.theme.
+const themes = (motionTokens as any).themes as Record<string, Record<string, string>>;
+let T: Record<string, string> = {...themes['paper-technical']};
 const fontFamily = 'ChannelArabic, Cairo, sans-serif';
 
 type Op = any;
@@ -141,11 +142,14 @@ const Annotation = ({a, frame, art}: {a: Op; frame: number; art?: Op}) => {
   }
   if (a.type === 'pip') {
     const w = a.w || 300, h = a.h || 220;
+    // Fit the label inside the card: shrink the font when the text is wide
+    // (slice review 2026-11-20: 30px text overflowed a 220px card).
+    const fs = a.text ? Math.min(30, Math.floor((w - 28) / (String(a.text).length * 0.62))) : 30;
     return (
       <g style={fade(frame, a.start, 10)}>
         <rect x={a.x - w / 2} y={a.y - h / 2} width={w} height={h} rx={18} fill={T.ink} stroke={col(a.color || 'red')} strokeWidth={4} />
         {a.d ? <path d={a.d} fill="none" stroke={T.paper} strokeWidth={3} strokeLinecap="round" style={draw(frame, a.start + 6, 20, a.len || 300)} /> : null}
-        {a.text ? <text x={a.x} y={a.y + h / 2 - 24} textAnchor="middle" fontFamily={fontFamily} fontWeight={700} fontSize={30} fill={T.paper}>{a.text}</text> : null}
+        {a.text ? <text x={a.x} y={a.y + h / 2 - 24} textAnchor="middle" fontFamily={fontFamily} fontWeight={700} fontSize={fs} fill={T.paper}>{a.text}</text> : null}
       </g>
     );
   }
@@ -189,7 +193,7 @@ const QuestionTitle = ({frame, title, keyword, seriesLabel, channelName}: {frame
   const accent = T.gold;
   return (
     <div style={{position: 'absolute', top: 110, width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', ...fade(frame, 2, 12)}}>
-      <div style={{position: 'absolute', top: -78, right: 40, fontFamily, fontWeight: 700, fontSize: 26, color: T.ink, opacity: 0.55, direction: 'rtl'}}>{channelName}</div>
+      <div style={{position: 'absolute', top: -78, right: 40, fontFamily, fontWeight: 700, fontSize: 26, color: T.ink, opacity: 0.55, direction: 'rtl'}}>{channelName || ''}</div>
       {seriesLabel ? <div style={{fontFamily, fontWeight: 700, fontSize: 26, color: T.ink, opacity: 0.6, marginBottom: 14, direction: 'rtl'}}>{seriesLabel}</div> : null}
       <div style={{fontFamily, fontWeight: 800, fontSize: 66, color: T.ink, direction: 'rtl', textAlign: 'center', lineHeight: 1.4, padding: '0 70px'}}>
         {i >= 0 ? title.slice(0, i) : title}
@@ -207,6 +211,33 @@ const QuestionTitle = ({frame, title, keyword, seriesLabel, channelName}: {frame
   );
 };
 
+// On-screen citation chip (per-channel spec: history/horror/ai-news show the
+// source at key shots). Rendered only when props.paper.citations is true and
+// the current scene carries a sourceLabel (set by the assets stage).
+const KIND_STYLE = {fact: {label: 'موثق', color: 'green'}, legend: {label: 'حكاية', color: 'gold'}, illustration: {label: 'توضيح', color: 'blue'}};
+const SourceChip = ({label, kind}: {label: string; kind?: string}) => {
+  const k = kind && (KIND_STYLE as any)[kind];
+  const border = k ? col(k.color) : T.grid;
+  return (
+    <div style={{position: 'absolute', bottom: 296, left: 44, fontFamily, fontWeight: 700, fontSize: 24, color: T.ink, background: T.paper, opacity: 0.92, border: `2px solid ${border}`, borderRadius: 14, padding: '8px 20px', direction: 'rtl'}}>
+      {k ? <span style={{color: col(k.color), marginInlineEnd: 10}}>{k.label} ·</span> : null}{label}
+    </div>
+  );
+};
+
+// Top bar (per-channel spec: نفهمها gold standard): channel logo + name on the
+// right, live scene counter on the left. Replaces the floating channel label
+// in QuestionTitle when enabled (props.paper.topBar + paper.logoPath).
+const TopBar = ({frame, channelName, logoPath, sceneIndex, sceneCount, chapterLabel}: {frame: number; channelName: string; logoPath: string; sceneIndex: number; sceneCount: number; chapterLabel?: string}) => (
+  <div style={{position: 'absolute', top: 26, left: 0, right: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 44px', direction: 'rtl', ...fade(frame, 2, 12)}}>
+    <div style={{display: 'flex', alignItems: 'center', gap: 14}}>
+      <img src={staticFile(logoPath)} style={{width: 54, height: 54, borderRadius: 12, objectFit: 'cover', border: `2px solid ${T.grid}`}} />
+      <span style={{fontFamily, fontWeight: 800, fontSize: 28, color: T.ink}}>{channelName}</span>
+    </div>
+    <span style={{fontFamily, fontWeight: 700, fontSize: 26, color: T.ink, opacity: 0.65}}>{chapterLabel ? `${chapterLabel} · ` : ''}{sceneIndex + 1}/{sceneCount}</span>
+  </div>
+);
+
 // Paper karaoke captions: 5-word window, 50ms lead, active word red+underlined.
 // Kinetic reveal (user-approved direction 2026-11-20): each word pops in as it
 // is spoken (scale+rise with a light overshoot), unspoken words stay hidden.
@@ -219,14 +250,14 @@ const Captions = ({frame, words}: {frame: number; words: Op[]}) => {
   const win = words.slice(start, start + 5);
   return (
     <div style={{position: 'absolute', bottom: 170, width: '100%', display: 'flex', justifyContent: 'center', padding: '0 50px'}}>
-      <div style={{fontFamily, fontWeight: 800, fontSize: 54, color: T.ink, borderRadius: 24, padding: '14px 34px', direction: 'rtl', textAlign: 'center', lineHeight: 1.5, background: 'rgba(237,228,208,0.88)', boxShadow: '0 2px 0 rgba(26,21,18,0.25)'}}>
+      <div style={{fontFamily, fontWeight: 800, fontSize: 54, color: T.ink, borderRadius: 24, padding: '20px 38px', direction: 'rtl', textAlign: 'center', lineHeight: 1.5, maxWidth: 940, background: `color-mix(in srgb, ${T.paper} 88%, transparent)`, border: `2px solid ${T.grid}`, boxShadow: '0 2px 0 rgba(26,21,18,0.25)'}}>
         {win.map((w: Op, i: number) => {
           const idx = start + i;
           const hot = idx === cur;
           const age = t - w.start;
           if (age < -0.05) return <span key={idx} style={{display: 'inline-block', opacity: 0, marginInlineStart: idx > start ? '0.28em' : 0}}>{w.text}</span>;
-          const pop = interpolate(age, [0, 0.09, 0.16], [0.55, 1.12, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
-          const rise = interpolate(age, [0, 0.16], [10, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+          const pop = interpolate(age, [0, 0.09, 0.16], [0.55, 1.06, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+          const rise = interpolate(age, [0, 0.16], [4, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
           return <span key={idx} style={{display: 'inline-block', marginInlineStart: idx > start ? '0.28em' : 0, transform: `scale(${pop}) translateY(${rise}px)`, opacity: interpolate(age, [0, 0.06], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}), ...(hot ? {color: T.red, borderBottom: `5px solid ${T.red}`, paddingBottom: 3} : {})}}>{w.text}</span>;
         })}
       </div>
@@ -281,6 +312,7 @@ const EndCard = ({frame, start, title, plan, callouts}: {frame: number; start: n
 };
 
 export const PaperEpisode = (props: any) => {
+  T = {...themes['paper-technical'], ...(themes[props.paper?.theme] || {})};
   const frame = useCurrentFrame();
   const plan: Plan = props.paper.plan;
   const scenes = props.scenes || [];
@@ -318,12 +350,16 @@ export const PaperEpisode = (props: any) => {
   const titleKeyword = (scenes.find((s: Op) => s.keyword && props.title.includes(s.keyword)) || {}).keyword;
   const channelName = props.channelName || 'افترض كده';
 
+  const topBar = props.paper?.topBar === true && props.paper?.logoPath;
+  const sceneIdx = (() => {const i = windows.findIndex(w => frame < w.start + w.frames); return i < 0 ? scenes.length - 1 : i;})();
+
   return (
     <AbsoluteFill style={{backgroundColor: T.paper}}>
       <Grid />
       {props.audio ? <Audio src={staticFile(props.audio)} /> : null}
-      <QuestionTitle frame={frame} title={props.title} keyword={titleKeyword} seriesLabel={props.seriesLabel} channelName={channelName} />
-      <div style={{position: 'absolute', width: '100%', height: '100%', transform: cam(frame)}}>
+      {topBar ? <TopBar frame={frame} channelName={channelName} logoPath={props.paper.logoPath} sceneIndex={sceneIdx} sceneCount={scenes.length} chapterLabel={props.paper.chapterLabel} /> : null}
+      <QuestionTitle frame={frame} title={props.title} keyword={titleKeyword} seriesLabel={props.seriesLabel} channelName={topBar ? '' : channelName} />
+      <div style={{position: 'absolute', width: '100%', height: '100%', transformOrigin: '0 0', transform: cam(frame)}}>
         <svg width="1080" height="1920" style={{position: 'absolute'}}>
           {base.strokes.map((s: Op, i: number) => <Stroke key={'bs' + i} s={s} frame={frame} />)}
           {base.fills.map((f: Op, i: number) => <Fill key={'bf' + i} f={f} frame={frame} fid={'hb' + i} />)}
@@ -347,6 +383,7 @@ export const PaperEpisode = (props: any) => {
         <rect width="1080" height="1920" filter="url(#grain)" />
       </svg>
       {words.length ? <Captions frame={frame} words={words} /> : null}
+      {props.paper?.citations === true && (() => {const sc = scenes[sceneIdx]; return sc?.sourceLabel ? <SourceChip label={sc.sourceLabel} kind={sc.kind} /> : null;})()}
       <EndCard frame={frame} start={endStart} title={props.title} plan={plan} callouts={callouts} />
     </AbsoluteFill>
   );

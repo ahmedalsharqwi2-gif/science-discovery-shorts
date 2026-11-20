@@ -1,0 +1,43 @@
+{
+  "schema": 1,
+  "method": "grayscale frame-diff, 1 fps, 96x54",
+  "minMeanDiff": 0.8,
+  "scenes": [
+    {
+      "scene": 0,
+      "meanDiff": 1.024,
+      "static": false
+    },
+    {
+      "scene": 1,
+      "meanDiff": 2.661,
+      "static": false
+    },
+    {
+      "scene": 2,
+      "meanDiff": 2.186,
+      "static": false
+    },
+    {
+      "scene": 3,
+      "meanDiff": 3.096,
+      "static": false
+    },
+    {
+      "scene": 4,
+      "meanDiff": 2.903,
+      "static": false
+    },
+    {
+      "scene": 5,
+      "meanDiff": 2.878,
+      "static": false
+    },
+    {
+      "scene": 6,
+      "meanDiff": 5.214,
+      "static": false
+    }
+  ],
+  "passed": true
+}

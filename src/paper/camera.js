@@ -13,9 +13,27 @@ export function pointsOf(laid) {
   if (laid) {
     for (const s of laid.strokes || []) {const samples = s.samples || samplePath(s.d); for (let k = 0; k <= 10; k++) pts.push(pointAt(samples, k / 10));}
     for (const f of laid.fills || []) {if (f.shape !== 'path' && typeof f.cx === 'number') {pts.push({x: f.cx, y: f.cy - (f.r || 0)}); pts.push({x: f.cx, y: f.cy + (f.r || 0)});}}
-    for (const l of laid.labels || []) {pts.push({x: l.x1, y: l.y1}); pts.push({x: l.x2, y: l.y2 - 44});}
+    for (const l of laid.labels || []) {
+      pts.push({x: l.x1, y: l.y1}); pts.push({x: l.x2, y: l.y2 - 44});
+      // RTL label text is end-anchored at x2 and extends LEFT by its width.
+      const tw = (String(l.text || '').length) * 22;
+      pts.push({x: l.x2 - tw, y: l.y2 - 44});
+    }
     for (const m of laid.marks || []) {pts.push({x: m.x, y: m.y - (m.r || 8) * 2}); pts.push({x: m.x, y: m.y + (m.r || 8) * 2});}
-    for (const a of laid.annotations || []) {if (typeof a.x === 'number') {const rr = a.r || a.size || 60; pts.push({x: a.x, y: a.y - rr}); pts.push({x: a.x, y: a.y + rr});}}
+    for (const a of laid.annotations || []) {
+      if (a.type === 'pip') {
+        const w = a.w || 300, h = a.h || 220;
+        pts.push({x: a.x - w / 2, y: a.y - h / 2}); pts.push({x: a.x + w / 2, y: a.y + h / 2});
+      } else if (a.type === 'arrow') {
+        pts.push({x: a.x1, y: a.y1}); pts.push({x: a.x2, y: a.y2});
+      } else if (a.type === 'magnifier') {
+        const r = a.r || 120;
+        pts.push({x: a.x - r, y: a.y - r}); pts.push({x: a.x + r * 1.35, y: a.y + r * 1.35});
+      } else if (typeof a.x === 'number') {
+        const rr = a.r || a.size || 60;
+        pts.push({x: a.x - rr, y: a.y - rr}); pts.push({x: a.x + rr, y: a.y + rr});
+      }
+    }
   }
   return pts;
 }
@@ -39,18 +57,32 @@ export function safeZoomPts(pts, cy, want) {
 // AND the vertical anchor solved so every visible element stays between the
 // title and captions zones at all times (including the 4% push-in peak).
 // Falls back to a static frame (s=1) when the layout is too tall to zoom.
+// Slow secondary drift (pro-motion spec: no fully static shot). Applied to
+// the camera centre only; zone checks and the camera solver reserve DRIFT_Y.
+export const DRIFT_X = 4, DRIFT_Y = 5;
+// Horizontal safe margins: no drawing element may cross the left/right frame
+// edge (pro-motion slice review 2026-11-20: pip card + labels clipped).
+export const EDGE_X = 26, FRAME_W = 1080;
+
 export function camTargetsFor(windows, layers) {
   return windows.map((w, i) => {
     const c = centroidOf(layers[i]);
     const cy = Math.max(c.y, 620);
     const pts = layers.slice(0, i + 1).flatMap(pointsOf);
     const minY = Math.min(...pts.map(p => p.y), cy), maxY = Math.max(...pts.map(p => p.y), cy);
+    const minX = Math.min(...pts.map(p => p.x), c.x), maxX = Math.max(...pts.map(p => p.x), c.x);
     const want = i === 0 ? 1.04 : 1.1;
     for (let s = want; s >= 1.0; s -= 0.02) {
       const sz = s * 1.045;
-      const aLo = TITLE_FLOOR + sz * (cy - minY);
-      const aHi = CAPTION_CEIL - sz * (maxY - cy);
-      if (aLo <= aHi) return {x: c.x, y: cy, s, a: Math.min(Math.max(ANCHOR_Y, aLo), aHi)};
+      const aLo = TITLE_FLOOR + DRIFT_Y + sz * (cy - minY);
+      const aHi = CAPTION_CEIL - DRIFT_Y - sz * (maxY - cy);
+      if (aLo > aHi) continue;
+      // Clamp camera x so every element stays inside the side edges at this
+      // scale (including push-in peak and drift). Screen x = 540 + sz*(px - tx).
+      const half = (FRAME_W / 2 - EDGE_X - DRIFT_X) / sz;
+      const xLo = maxX - half, xHi = minX + half;
+      const tx = xLo <= xHi ? Math.min(Math.max(c.x, xLo), xHi) : c.x;
+      return {x: tx, y: cy, s, a: Math.min(Math.max(ANCHOR_Y, aLo), aHi)};
     }
     return {x: c.x, y: cy, s: 1, a: cy};
   });
@@ -69,23 +101,52 @@ export function camAt(fr, windows, camTargets, easing) {
   const s = (from.s + (to.s - from.s) * p) * (1 + push);
   const x = from.x + (to.x - from.x) * p, y = from.y + (to.y - from.y) * p;
   const a = (from.a !== undefined ? from.a : ANCHOR_Y) + ((to.a !== undefined ? to.a : ANCHOR_Y) - (from.a !== undefined ? from.a : ANCHOR_Y)) * p;
-  return {x, y, s, a};
+  return {x: x + Math.sin(fr / 45) * DRIFT_X, y: y + Math.cos(fr / 60) * DRIFT_Y, s, a};
 }
 
 // Zone check: every point of every visible layer, under every scene's
 // settled camera (and its push-in peak), must stay between the title and
 // captions zones. Returns a list of violations.
+// Label text box in drawing coords: RTL text is end-anchored at (x2, y2),
+// extends LEFT by width and sits in the 44px band above the anchor point.
+// Width factor 24/char + 8px margin: calibrated against rendered labels
+// (slice review 2026-11-20: adjacent labels overlapped on screen).
+export function labelBoxesOf(laid) {
+  return (laid && laid.labels || []).map(l => {
+    const tw = String(l.text || '').length * 24 + 8;
+    return {text: String(l.text || ''), x0: l.x2 - tw, x1: l.x2, y0: l.y2 - 48, y1: l.y2};
+  });
+}
+
 export function zoneViolations(windows, layers, camTargets) {
   const violations = [];
   camTargets.forEach((t, si) => {
+    // Label-to-label collision gate: every pair of label boxes visible during
+    // this scene (layers accumulate) must not overlap on screen, using the
+    // settled camera at its push-in peak, with drift margin.
+    {
+      const s = t.s * 1.04, anchor = t.a !== undefined ? t.a : ANCHOR_Y;
+      const toScreen = b => ({
+        x0: FRAME_W / 2 + s * (b.x0 - t.x) - DRIFT_X, x1: FRAME_W / 2 + s * (b.x1 - t.x) + DRIFT_X,
+        y0: anchor - s * (t.y - b.y0) - DRIFT_Y, y1: anchor - s * (t.y - b.y1) + DRIFT_Y,
+      });
+      const boxes = layers.slice(0, si + 1).flatMap((laid, li) => labelBoxesOf(laid).map(b => ({...b, li})));
+      for (let i = 0; i < boxes.length; i++) for (let j = i + 1; j < boxes.length; j++) {
+        const A = toScreen(boxes[i]), B = toScreen(boxes[j]);
+        if (A.x0 < B.x1 && B.x0 < A.x1 && A.y0 < B.y1 && B.y0 < A.y1) violations.push(`scene ${si} labels collide: "${boxes[i].text}" (layer ${boxes[i].li}) x "${boxes[j].text}" (layer ${boxes[j].li})`);
+      }
+    }
     for (const mult of [1, 1.04]) {
       const s = t.s * mult;
       const anchor = t.a !== undefined ? t.a : ANCHOR_Y;
       layers.slice(0, si + 1).forEach((laid, li) => {
         for (const p of pointsOf(laid)) {
           const sy = anchor - s * (t.y - p.y);
-          if (sy < TITLE_FLOOR) violations.push(`scene ${si} camera puts layer ${li} point at y=${Math.round(sy)} < ${TITLE_FLOOR}`);
-          if (sy > CAPTION_CEIL) violations.push(`scene ${si} camera puts layer ${li} point at y=${Math.round(sy)} > ${CAPTION_CEIL}`);
+          if (sy - DRIFT_Y < TITLE_FLOOR) violations.push(`scene ${si} camera puts layer ${li} point at y=${Math.round(sy)} - drift < ${TITLE_FLOOR}`);
+          if (sy + DRIFT_Y > CAPTION_CEIL) violations.push(`scene ${si} camera puts layer ${li} point at y=${Math.round(sy)} + drift > ${CAPTION_CEIL}`);
+          const sx = FRAME_W / 2 + s * (p.x - t.x);
+          if (sx - DRIFT_X < EDGE_X) violations.push(`scene ${si} camera puts layer ${li} point at x=${Math.round(sx)} - drift < left edge ${EDGE_X}`);
+          if (sx + DRIFT_X > FRAME_W - EDGE_X) violations.push(`scene ${si} camera puts layer ${li} point at x=${Math.round(sx)} + drift > right edge ${FRAME_W - EDGE_X}`);
         }
       });
     }
