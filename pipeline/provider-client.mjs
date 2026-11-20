@@ -18,7 +18,17 @@ function poolFrom(env,kind){
  if(kind==='voice'){push(env.GEMINI_TTS_API_KEY);push(env.GEMINI_API_KEY);push(env.GEMINI_TTS_API_KEY_2);push(env.GEMINI_API_KEY_2);push(env.GEMINI_TTS_API_KEY_3);push(env.GEMINI_API_KEY_3);}
  else if(kind==='image'){push(env.GEMINI_IMAGE_API_KEY);push(env.GEMINI_API_KEY);push(env.GEMINI_TEXT_API_KEY);push(env.GEMINI_IMAGE_API_KEY_2);push(env.GEMINI_API_KEY_2);push(env.GEMINI_IMAGE_API_KEY_3);push(env.GEMINI_API_KEY_3);}
  else{push(env.GEMINI_TEXT_API_KEY);push(env.GEMINI_API_KEY);push(env.GEMINI_TEXT_API_KEY_2);push(env.GEMINI_API_KEY_2);push(env.GEMINI_TEXT_API_KEY_3);push(env.GEMINI_API_KEY_3);}
- return list;
+ return spreadPoolOrder(list,(process.env.GITHUB_RUN_ID||'')+':'+(process.env.GITHUB_RUN_ATTEMPT||''));
+}
+
+// Concurrent runs across the channels share each Google Cloud project, and
+// quota caps are per project. Starting every run on slot 1 concentrates
+// minute-level bursts on one project; rotate the pool deterministically per
+// CI run (randomly outside CI) so bursts spread across projects.
+export function spreadPoolOrder(list,seed){
+ if(list.length<2)return list.slice();
+ const offset=(seed&&seed!==':'?createHash('sha256').update(String(seed)).digest()[0]:Math.floor(Math.random()*256))%list.length;
+ return list.slice(offset).concat(list.slice(0,offset));
 }
 
 // Free-tier text fallback chain: used only when the whole Gemini pool is

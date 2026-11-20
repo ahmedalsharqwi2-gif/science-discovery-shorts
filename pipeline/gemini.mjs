@@ -27,9 +27,13 @@ export class RateLimiter{
  }
 }
 export function cacheIdentity(kind,body,settings){return hash(stable({version:2,kind,body,settings}));}
+// Free-tier TTS caps at 3 requests per minute per Google Cloud project, and
+// runs from several channels share each project. Spacing voice calls on one
+// key at least 20s apart keeps a single run under the per-minute ceiling.
+const VOICE_KEY_MIN_INTERVAL_MS=20000;
 export class GeminiClient{
  constructor({config,keyFor,keysFor,cooledDown,onKeyExhausted,fetcher=fetch,sleep=pause,clock=Date.now,random=Math.random,cacheDir='.cache/gemini',onEvent=()=>{}}){
-  this.config=config;this.keyFor=keyFor;this.keysFor=keysFor||(keyFor?(kind)=>{const k=keyFor(kind);return k?[{id:'primary',key:k}]:[];}:()=>[]);this.cooledDown=cooledDown||(()=>false);this.pins=new Map();this.onKeyExhausted=onKeyExhausted||(()=>{});this.fetcher=fetcher;this.sleep=sleep;this.clock=clock;this.random=random;this.cacheDir=cacheDir;this.onEvent=onEvent;this.events=[];this.inflight=new Map();this.queue=Promise.resolve();this.resolved=new Map();this.limiter=new RateLimiter(config.rateLimit,clock,sleep);this.notBefore=0;
+  this.config=config;this.keyFor=keyFor;this.keyLastUse=new Map();this.keysFor=keysFor||(keyFor?(kind)=>{const k=keyFor(kind);return k?[{id:'primary',key:k}]:[];}:()=>[]);this.cooledDown=cooledDown||(()=>false);this.pins=new Map();this.onKeyExhausted=onKeyExhausted||(()=>{});this.fetcher=fetcher;this.sleep=sleep;this.clock=clock;this.random=random;this.cacheDir=cacheDir;this.onEvent=onEvent;this.events=[];this.inflight=new Map();this.queue=Promise.resolve();this.resolved=new Map();this.limiter=new RateLimiter(config.rateLimit,clock,sleep);this.notBefore=0;
   const r=config.retry;if(!r||r.maxAttemptsPerModel<1||r.maxTotalAttempts<1||r.timeoutMs<1||r.maxElapsedMs<1)throw Error('INVALID_GEMINI_RETRY_CONFIG');
  }
  event(e){const safe={...e,at:this.clock()};this.events.push(safe);this.onEvent(safe);}
@@ -78,6 +82,7 @@ export class GeminiClient{
     const resolvedModels=await this.models(kind,key,deadline);const pin=this.pins.get(kind);const models=pin?resolvedModels.filter(m=>m===pin):resolvedModels;if(pin&&!models.length)throw new GeminiError('GEMINI_PINNED_MODEL_UNAVAILABLE',this.events);let count=0,lastStatus=0,lastQuotaKind='unknown';
     for(const model of models){for(let attempt=0;attempt<this.config.retry.maxAttemptsPerModel;attempt++){
      if(++count>this.config.retry.maxTotalAttempts){const err=new GeminiError(lastStatus?'GEMINI_HTTP_'+lastStatus+'_EXHAUSTED':'GEMINI_ATTEMPTS_EXHAUSTED',this.events);if(lastStatus===429)err.quotaKind=lastQuotaKind;throw err;}
+     if(kind==='voice'){const pace=VOICE_KEY_MIN_INTERVAL_MS-(this.clock()-(this.keyLastUse.get(keyId)??-Infinity));if(pace>0){if(this.clock()+pace>=deadline)throw new GeminiError('GEMINI_RATE_LIMIT_DEADLINE',this.events);this.event({type:'voice_key_pacing',kind,keyId,waitMs:pace});await this.sleep(pace);}this.keyLastUse.set(keyId,this.clock());}
      const response=await this.request(model,body,key,deadline);lastStatus=response.status||0;if(response.status===429&&response.quotaKind)lastQuotaKind=response.quotaKind;
      this.event({type:'attempt',kind,model,attempt:attempt+1,totalAttempt:count,status:response.ok?200:lastStatus});
      if(response.ok&&this.valid(kind,response.data)){if(useCache)await this.saveCache(id,model,response.data);return {...response.data,_pipeline:{model,cacheKey:id,cacheHit:false}};}
@@ -86,10 +91,15 @@ export class GeminiClient{
      if(response.status===400&&(response.text||'').includes('API_KEY_INVALID'))throw new GeminiError('GEMINI_AUTHORIZATION_FAILED',this.events);
      if([400,404,410,422].includes(response.status))break;
      if(response.status&&response.status!==429&&response.status<500)throw new GeminiError('GEMINI_HTTP_'+response.status,this.events);
+     if(response.status===429&&response.retryAfter>120000){const err=new GeminiError('GEMINI_HTTP_429_EXHAUSTED',this.events);err.quotaKind=lastQuotaKind;throw err;}
+     // Quota is per model per project: retrying a capped model adds pressure,
+     // and a daily cap never resets mid-run. Move to the next model on this
+     // key; the key rotates once all its models are exhausted. Retry-After
+     // still applies to whatever runs next via notBefore.
+     if(response.status===429)break;
      if(attempt===this.config.retry.maxAttemptsPerModel-1)break;
      const exponential=Math.min(this.config.retry.maxDelayMs,this.config.retry.baseDelayMs*2**attempt),jitter=exponential*this.config.retry.jitter*this.random();
      const wait=Math.max(response.retryAfter||0,exponential+jitter);
-     if(response.status===429&&(response.retryAfter>120000||this.clock()+wait>=deadline)){const err=new GeminiError('GEMINI_HTTP_429_EXHAUSTED',this.events);err.quotaKind=lastQuotaKind;throw err;}
      if(this.clock()+wait>=deadline)throw new GeminiError(response.retryAfter?'GEMINI_RETRY_AFTER_EXCEEDS_BUDGET':'GEMINI_TOTAL_TIMEOUT',this.events);
      this.event({type:'backoff',kind,model,status:lastStatus,waitMs:wait,retryAfterMs:response.retryAfter||0});await this.sleep(wait);
     }}

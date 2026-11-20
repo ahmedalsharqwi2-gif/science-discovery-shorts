@@ -1,8 +1,18 @@
 import {test} from 'node:test';import assert from 'node:assert/strict';
 import {classifyQuota} from '../pipeline/gemini.mjs';
 import {distributeWords,assertTiming} from '../pipeline/policy.mjs';
-import {FallbackTextChain} from '../pipeline/provider-client.mjs';
+import {FallbackTextChain,spreadPoolOrder} from '../pipeline/provider-client.mjs';
 import {OpenAiCompatTextClient} from '../pipeline/fallback-text.mjs';
+
+test('spreadPoolOrder rotates the key pool deterministically per run seed',()=>{
+ const pool=[{id:'a'},{id:'b'},{id:'c'}];
+ const first=spreadPoolOrder(pool,'44700732990:1');
+ assert.deepEqual(first,spreadPoolOrder(pool,'44700732990:1'));
+ assert.deepEqual([...first].sort((x,y)=>x.id.localeCompare(y.id)),pool);
+ assert.deepEqual(spreadPoolOrder([{id:'a'}],'1:1'),[{id:'a'}]);
+ const starters=new Set(['1:1','2:1','3:1','4:1','5:1','6:1'].map(s=>spreadPoolOrder(pool,s)[0].id));
+ assert(starters.size>1);
+});
 
 test('classifyQuota distinguishes per-minute from per-day quota',()=>{
  assert.equal(classifyQuota({error:{message:'Quota exceeded for metric: generate_requests_per_minute',details:[]}}),'minute');

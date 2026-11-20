@@ -3,7 +3,7 @@ import {GeminiClient,RateLimiter,retryAfterMs} from '../pipeline/gemini.mjs';imp
 const textResponse=()=>new Response(JSON.stringify({candidates:[{content:{parts:[{text:'{"ok":true}'}]}}]}),{status:200});
 const audioResponse=()=>new Response(JSON.stringify({candidates:[{content:{parts:[{inlineData:{mimeType:'audio/L16;rate=24000',data:Buffer.alloc(128,1).toString('base64')}}]}}]}),{status:200});
 const settings={voiceName:'Charon',style:'Egyptian Arabic',sampleRate:24000,chunking:{maxChars:420,maxSentences:2}};
-function configuration(extra={}){return {rateLimit:{requestsPerMinute:60,minIntervalMs:0},retry:{maxAttemptsPerModel:3,maxTotalAttempts:6,timeoutMs:1000,maxElapsedMs:20000,baseDelayMs:100,maxDelayMs:1000,jitter:.5},models:{text:{ordered:['fixture-text-a','fixture-text-b']},voice:{ordered:['fixture-voice-a']},image:{ordered:['fixture-image-a']}},...extra};}
+function configuration(extra={}){return {rateLimit:{requestsPerMinute:60,minIntervalMs:0},retry:{maxAttemptsPerModel:3,maxTotalAttempts:6,timeoutMs:1000,maxElapsedMs:120000,baseDelayMs:100,maxDelayMs:1000,jitter:.5},models:{text:{ordered:['fixture-text-a','fixture-text-b']},voice:{ordered:['fixture-voice-a']},image:{ordered:['fixture-image-a']}},...extra};}
 async function fixture(t,fetcher,config=configuration()){
  const root=await mkdtemp(path.join(os.tmpdir(),'gemini-tests-'));t.after(()=>rm(root,{recursive:true,force:true}));let now=0;const waits=[];const options={config,keyFor:()=> 'fixture-not-a-real-credential',fetcher,clock:()=>now,sleep:async ms=>{waits.push(ms);now+=ms;},random:()=>.5,cacheDir:path.join(root,'responses')};return {root,waits,options,client:new GeminiClient(options),now:()=>now};
 }
@@ -61,6 +61,17 @@ test('quota exhaustion rotates to the next key and cools the exhausted one',asyn
  const client=new GeminiClient(f.options);
  await client.generate('text',{contents:[{parts:[{text:'fixture'}]}]});
  assert(seen.includes('key-a')&&seen.includes('key-b'));assert.deepEqual(rotated,['a']);
+});
+test('a 429 moves to the next model on the same key without a backoff sleep',async t=>{
+ const seen=[];
+ const f=await fixture(t,async url=>{seen.push(decodeURIComponent(String(url).match(/models\/([^:]+)/)[1]));return seen.length===1?new Response('',{status:429}):textResponse();});
+ await f.client.generate('text',{contents:[]});
+ assert.deepEqual(seen,['fixture-text-a','fixture-text-b']);assert.equal(f.waits.length,0);assert(!f.client.events.some(e=>e.type==='key_rotation'));
+});
+test('voice calls on the same key are paced at least 20 seconds apart',async t=>{
+ let calls=0;const f=await fixture(t,async()=>{calls++;return audioResponse();});
+ await f.client.generate('voice',{contents:[{parts:[{text:'one'}]}]});await f.client.generate('voice',{contents:[{parts:[{text:'two'}]}]});
+ assert.equal(calls,2);assert(f.waits.includes(20000));assert(f.client.events.some(e=>e.type==='voice_key_pacing'&&e.waitMs===20000));
 });
 test('cooled-down keys are skipped; all cooled down reads as missing binding',async t=>{
  const f=await fixture(t,async()=>textResponse());
