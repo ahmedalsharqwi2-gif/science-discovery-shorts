@@ -1,0 +1,63 @@
+{
+  "id": "2026-11-20T00-03-14-984Z",
+  "attemptId": "2026-11-19T23-51-04-098Z",
+  "mode": "review",
+  "published": false,
+  "status": "failed",
+  "resumed": false,
+  "stages": [
+    {
+      "name": "preflight",
+      "status": "pass",
+      "seconds": 0.152
+    },
+    {
+      "name": "roll",
+      "status": "rolled_fresh_topic",
+      "roll": 1,
+      "fromStage": "topics",
+      "code": "GEMINI_HTTP_429_EXHAUSTED"
+    },
+    {
+      "name": "preflight",
+      "status": "pass",
+      "seconds": 0.033
+    },
+    {
+      "name": "roll",
+      "status": "rolled_fresh_topic",
+      "roll": 2,
+      "fromStage": "topics",
+      "code": "GEMINI_HTTP_429_EXHAUSTED"
+    },
+    {
+      "name": "preflight",
+      "status": "pass",
+      "seconds": 0.031
+    }
+  ],
+  "limitations": [
+    "Incomplete visual previews never pass narrated-film acceptance. Human pronunciation and art-direction approval are separate."
+  ],
+  "rolled": [
+    {
+      "id": "2026-11-19T23-51-04-098Z",
+      "stage": "topics",
+      "code": "GEMINI_HTTP_429_EXHAUSTED",
+      "roll": 1
+    },
+    {
+      "id": "2026-11-20T00-00-14-899Z",
+      "stage": "topics",
+      "code": "GEMINI_HTTP_429_EXHAUSTED",
+      "roll": 2
+    }
+  ],
+  "failedStage": "topics",
+  "errorCode": "GEMINI_HTTP_429_EXHAUSTED",
+  "partial": {
+    "status": "rendered",
+    "path": "/home/runner/work/science-discovery-shorts/science-discovery-shorts/out/2026-11-20T00-03-14-984Z/incomplete/visual-preview-incomplete.mp4",
+    "incomplete": true
+  }
+}
