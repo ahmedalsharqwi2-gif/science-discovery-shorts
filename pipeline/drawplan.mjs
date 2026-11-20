@@ -180,6 +180,18 @@ ${sceneList}`;
 }
 
 // Plans the drawing spec for one episode. Throws DRAWPLAN_VALIDATION_EXHAUSTED
+// Gemini sometimes emits coordinates as numeric strings ("350") despite the
+// numeric response schema. Coerce finite numeric strings to numbers BEFORE
+// validation; anything still non-numeric fails validation exactly as before.
+// Stricter-only: no check is loosened and no value is invented.
+const NUMERIC_OP_FIELDS = ['x', 'y', 'r', 'zoom', 'x1', 'y1', 'x2', 'y2', 'size', 'w', 'h', 'width', 'cx', 'cy', 'delay'];
+export function coerceNumericStrings(plan) {
+  const coerce = (obj) => { if (!obj || typeof obj !== 'object') return; for (const k of NUMERIC_OP_FIELDS) { const v = obj[k]; if (typeof v === 'string' && v.trim() !== '' && Number.isFinite(Number(v))) obj[k] = Number(v); } };
+  const walk = (ops) => { if (!ops || typeof ops !== 'object') return; for (const key of ['strokes', 'fills', 'marks', 'annotations', 'labels']) (Array.isArray(ops[key]) ? ops[key] : []).forEach(coerce); };
+  walk(plan);
+  (Array.isArray(plan && plan.scenes) ? plan.scenes : []).forEach(walk);
+}
+
 // (or a specific DRAWPLAN_* code) after 3 failed attempts.
 export async function drawplan(episode, config, opts = {}) {
   const client = opts.client || await provider();
@@ -191,6 +203,7 @@ export async function drawplan(episode, config, opts = {}) {
     try {
       const text = response.candidates[0].content.parts.filter(p => p.text).map(p => p.text).join('');
       plan = JSON.parse(text);
+      coerceNumericStrings(plan);
       const problems = validatePlan(plan, episode.scenes.length);
       if (problems.length) throw Error('DRAWPLAN_SCHEMA_INVALID: ' + problems.join(' | '));
       return {plan, drawModel: response._pipeline.model};
