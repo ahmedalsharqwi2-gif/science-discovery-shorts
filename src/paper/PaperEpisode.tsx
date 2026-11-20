@@ -142,11 +142,14 @@ const Annotation = ({a, frame, art}: {a: Op; frame: number; art?: Op}) => {
   }
   if (a.type === 'pip') {
     const w = a.w || 300, h = a.h || 220;
+    // Fit the label inside the card: shrink the font when the text is wide
+    // (slice review 2026-11-20: 30px text overflowed a 220px card).
+    const fs = a.text ? Math.min(30, Math.floor((w - 28) / (String(a.text).length * 0.62))) : 30;
     return (
       <g style={fade(frame, a.start, 10)}>
         <rect x={a.x - w / 2} y={a.y - h / 2} width={w} height={h} rx={18} fill={T.ink} stroke={col(a.color || 'red')} strokeWidth={4} />
         {a.d ? <path d={a.d} fill="none" stroke={T.paper} strokeWidth={3} strokeLinecap="round" style={draw(frame, a.start + 6, 20, a.len || 300)} /> : null}
-        {a.text ? <text x={a.x} y={a.y + h / 2 - 24} textAnchor="middle" fontFamily={fontFamily} fontWeight={700} fontSize={30} fill={T.paper}>{a.text}</text> : null}
+        {a.text ? <text x={a.x} y={a.y + h / 2 - 24} textAnchor="middle" fontFamily={fontFamily} fontWeight={700} fontSize={fs} fill={T.paper}>{a.text}</text> : null}
       </g>
     );
   }
@@ -220,14 +223,14 @@ const Captions = ({frame, words}: {frame: number; words: Op[]}) => {
   const win = words.slice(start, start + 5);
   return (
     <div style={{position: 'absolute', bottom: 170, width: '100%', display: 'flex', justifyContent: 'center', padding: '0 50px'}}>
-      <div style={{fontFamily, fontWeight: 800, fontSize: 54, color: T.ink, borderRadius: 24, padding: '14px 34px', direction: 'rtl', textAlign: 'center', lineHeight: 1.5, background: 'rgba(237,228,208,0.88)', boxShadow: '0 2px 0 rgba(26,21,18,0.25)'}}>
+      <div style={{fontFamily, fontWeight: 800, fontSize: 54, color: T.ink, borderRadius: 24, padding: '20px 38px', direction: 'rtl', textAlign: 'center', lineHeight: 1.5, maxWidth: 940, background: 'rgba(237,228,208,0.88)', boxShadow: '0 2px 0 rgba(26,21,18,0.25)'}}>
         {win.map((w: Op, i: number) => {
           const idx = start + i;
           const hot = idx === cur;
           const age = t - w.start;
           if (age < -0.05) return <span key={idx} style={{display: 'inline-block', opacity: 0, marginInlineStart: idx > start ? '0.28em' : 0}}>{w.text}</span>;
-          const pop = interpolate(age, [0, 0.09, 0.16], [0.55, 1.12, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
-          const rise = interpolate(age, [0, 0.16], [10, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+          const pop = interpolate(age, [0, 0.09, 0.16], [0.55, 1.06, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
+          const rise = interpolate(age, [0, 0.16], [4, 0], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'});
           return <span key={idx} style={{display: 'inline-block', marginInlineStart: idx > start ? '0.28em' : 0, transform: `scale(${pop}) translateY(${rise}px)`, opacity: interpolate(age, [0, 0.06], [0, 1], {extrapolateLeft: 'clamp', extrapolateRight: 'clamp'}), ...(hot ? {color: T.red, borderBottom: `5px solid ${T.red}`, paddingBottom: 3} : {})}}>{w.text}</span>;
         })}
       </div>
@@ -325,7 +328,7 @@ export const PaperEpisode = (props: any) => {
       <Grid />
       {props.audio ? <Audio src={staticFile(props.audio)} /> : null}
       <QuestionTitle frame={frame} title={props.title} keyword={titleKeyword} seriesLabel={props.seriesLabel} channelName={channelName} />
-      <div style={{position: 'absolute', width: '100%', height: '100%', transform: cam(frame)}}>
+      <div style={{position: 'absolute', width: '100%', height: '100%', transformOrigin: '0 0', transform: cam(frame)}}>
         <svg width="1080" height="1920" style={{position: 'absolute'}}>
           {base.strokes.map((s: Op, i: number) => <Stroke key={'bs' + i} s={s} frame={frame} />)}
           {base.fills.map((f: Op, i: number) => <Fill key={'bf' + i} f={f} frame={frame} fid={'hb' + i} />)}

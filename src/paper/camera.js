@@ -13,9 +13,27 @@ export function pointsOf(laid) {
   if (laid) {
     for (const s of laid.strokes || []) {const samples = s.samples || samplePath(s.d); for (let k = 0; k <= 10; k++) pts.push(pointAt(samples, k / 10));}
     for (const f of laid.fills || []) {if (f.shape !== 'path' && typeof f.cx === 'number') {pts.push({x: f.cx, y: f.cy - (f.r || 0)}); pts.push({x: f.cx, y: f.cy + (f.r || 0)});}}
-    for (const l of laid.labels || []) {pts.push({x: l.x1, y: l.y1}); pts.push({x: l.x2, y: l.y2 - 44});}
+    for (const l of laid.labels || []) {
+      pts.push({x: l.x1, y: l.y1}); pts.push({x: l.x2, y: l.y2 - 44});
+      // RTL label text is end-anchored at x2 and extends LEFT by its width.
+      const tw = (String(l.text || '').length) * 22;
+      pts.push({x: l.x2 - tw, y: l.y2 - 44});
+    }
     for (const m of laid.marks || []) {pts.push({x: m.x, y: m.y - (m.r || 8) * 2}); pts.push({x: m.x, y: m.y + (m.r || 8) * 2});}
-    for (const a of laid.annotations || []) {if (typeof a.x === 'number') {const rr = a.r || a.size || 60; pts.push({x: a.x, y: a.y - rr}); pts.push({x: a.x, y: a.y + rr});}}
+    for (const a of laid.annotations || []) {
+      if (a.type === 'pip') {
+        const w = a.w || 300, h = a.h || 220;
+        pts.push({x: a.x - w / 2, y: a.y - h / 2}); pts.push({x: a.x + w / 2, y: a.y + h / 2});
+      } else if (a.type === 'arrow') {
+        pts.push({x: a.x1, y: a.y1}); pts.push({x: a.x2, y: a.y2});
+      } else if (a.type === 'magnifier') {
+        const r = a.r || 120;
+        pts.push({x: a.x - r, y: a.y - r}); pts.push({x: a.x + r * 1.35, y: a.y + r * 1.35});
+      } else if (typeof a.x === 'number') {
+        const rr = a.r || a.size || 60;
+        pts.push({x: a.x - rr, y: a.y - rr}); pts.push({x: a.x + rr, y: a.y + rr});
+      }
+    }
   }
   return pts;
 }
@@ -42,6 +60,9 @@ export function safeZoomPts(pts, cy, want) {
 // Slow secondary drift (pro-motion spec: no fully static shot). Applied to
 // the camera centre only; zone checks and the camera solver reserve DRIFT_Y.
 export const DRIFT_X = 4, DRIFT_Y = 5;
+// Horizontal safe margins: no drawing element may cross the left/right frame
+// edge (pro-motion slice review 2026-11-20: pip card + labels clipped).
+export const EDGE_X = 26, FRAME_W = 1080;
 
 export function camTargetsFor(windows, layers) {
   return windows.map((w, i) => {
@@ -49,12 +70,19 @@ export function camTargetsFor(windows, layers) {
     const cy = Math.max(c.y, 620);
     const pts = layers.slice(0, i + 1).flatMap(pointsOf);
     const minY = Math.min(...pts.map(p => p.y), cy), maxY = Math.max(...pts.map(p => p.y), cy);
+    const minX = Math.min(...pts.map(p => p.x), c.x), maxX = Math.max(...pts.map(p => p.x), c.x);
     const want = i === 0 ? 1.04 : 1.1;
     for (let s = want; s >= 1.0; s -= 0.02) {
       const sz = s * 1.045;
       const aLo = TITLE_FLOOR + DRIFT_Y + sz * (cy - minY);
       const aHi = CAPTION_CEIL - DRIFT_Y - sz * (maxY - cy);
-      if (aLo <= aHi) return {x: c.x, y: cy, s, a: Math.min(Math.max(ANCHOR_Y, aLo), aHi)};
+      if (aLo > aHi) continue;
+      // Clamp camera x so every element stays inside the side edges at this
+      // scale (including push-in peak and drift). Screen x = 540 + sz*(px - tx).
+      const half = (FRAME_W / 2 - EDGE_X - DRIFT_X) / sz;
+      const xLo = maxX - half, xHi = minX + half;
+      const tx = xLo <= xHi ? Math.min(Math.max(c.x, xLo), xHi) : c.x;
+      return {x: tx, y: cy, s, a: Math.min(Math.max(ANCHOR_Y, aLo), aHi)};
     }
     return {x: c.x, y: cy, s: 1, a: cy};
   });
@@ -90,6 +118,9 @@ export function zoneViolations(windows, layers, camTargets) {
           const sy = anchor - s * (t.y - p.y);
           if (sy - DRIFT_Y < TITLE_FLOOR) violations.push(`scene ${si} camera puts layer ${li} point at y=${Math.round(sy)} - drift < ${TITLE_FLOOR}`);
           if (sy + DRIFT_Y > CAPTION_CEIL) violations.push(`scene ${si} camera puts layer ${li} point at y=${Math.round(sy)} + drift > ${CAPTION_CEIL}`);
+          const sx = FRAME_W / 2 + s * (p.x - t.x);
+          if (sx - DRIFT_X < EDGE_X) violations.push(`scene ${si} camera puts layer ${li} point at x=${Math.round(sx)} - drift < left edge ${EDGE_X}`);
+          if (sx + DRIFT_X > FRAME_W - EDGE_X) violations.push(`scene ${si} camera puts layer ${li} point at x=${Math.round(sx)} + drift > right edge ${FRAME_W - EDGE_X}`);
         }
       });
     }

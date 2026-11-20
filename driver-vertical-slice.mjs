@@ -61,13 +61,13 @@ const plan = {
   ],
   labels: [
     {x1: 540, y1: 570, x2: 720, y2: 500, text: 'ميكروفون أعماق'},
-    {x1: 540, y1: 1320, x2: 320, y2: 1400, text: 'قاع المحيط'},
+    {x1: 540, y1: 1320, x2: 400, y2: 1400, text: 'قاع المحيط'},
   ],
   annotations: [
     {type: 'circle', x: 540, y: 570, r: 90, delay: 30, color: 'gold'},
     {type: 'magnifier', x: 440, y: 1120, zoom: 2.2, r: 110, delay: 30},
     {type: 'arrow', x1: 850, y1: 900, x2: 700, y2: 1070, delay: 25, color: 'gold'},
-    {type: 'pip', x: 120, y: 420, w: 220, h: 150, delay: 35, text: 'التسجيل الأصلي'},
+    {type: 'pip', x: 230, y: 430, w: 260, h: 150, delay: 35, text: 'التسجيل الأصلي'},
   ],
   scenes: [
     {strokes: [{d: 'M 720 540 C 800 570, 800 590, 720 640', width: 3, color: 'cyan'}, {d: 'M 400 540 C 340 560, 340 580, 400 600', width: 3, color: 'cyan'}, {d: 'M 200 760 C 400 730, 640 780, 880 740', width: 2, color: 'starBlue'}, {d: 'M 200 820 C 420 790, 660 840, 880 800', width: 2, color: 'cyan'}], fills: [], marks: [{x: 250, y: 745, r: 5, color: 'cyan', delay: 40}, {x: 830, y: 785, r: 5, color: 'gold', delay: 80}, {x: 500, y: 770, r: 4, color: 'starBlue', delay: 130}], labels: [], annotations: []},
