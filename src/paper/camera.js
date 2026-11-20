@@ -128,8 +128,95 @@ export function endCardProblems(plan) {
   return fs < 64 ? [`end card headline "${stat}" needs fontSize ${fs} (< 64 floor); shorten it`] : [];
 }
 
+// Stroke/ring samples in drawing coords (for the label-clearance gate and
+// auto-layout). Annotation circles become ring samples; arrows, pips, marks
+// and fills are excluded by design (labels may anchor near marks, and fills
+// like the hatch region are intended label backgrounds).
+export function strokeSamplesOf(laid) {
+  const pts = [];
+  if (!laid) return pts;
+  for (const st of laid.strokes || []) {
+    const samples = st.samples || samplePath(st.d);
+    const r = (st.width || 4) / 2 + 10; // half stroke + clearance
+    for (let k = 0; k <= 20; k++) {const p = pointAt(samples, k / 20); pts.push({x: p.x, y: p.y, r});}
+  }
+  for (const a of laid.annotations || []) {
+    if (a.type === 'circle') {
+      const rr = a.r || 110, r = 4 / 2 + 10;
+      for (let k = 0; k < 24; k++) {const th = k / 24 * Math.PI * 2; pts.push({x: a.x + Math.cos(th) * rr, y: a.y + Math.sin(th) * rr, r});}
+    }
+  }
+  return pts;
+}
+
+// Label boxes include the backing-pill padding (slice review 2026-11-20 3:07:
+// labels get halo pills; text-on-stroke counts as overlap).
+export function labelStrokeViolations(layers) {
+  const boxes = layers.flatMap((laid, li) => labelBoxesOf(laid).map(b => ({...b, li, x0: b.x0 - 14, x1: b.x1 + 14, y0: b.y0 - 12, y1: b.y1 + 12})));
+  const out = [], seen = new Set();
+  layers.forEach((laid, li) => {
+    for (const p of strokeSamplesOf(laid)) {
+      for (const b of boxes) {
+        if (p.x > b.x0 - p.r && p.x < b.x1 + p.r && p.y > b.y0 - p.r && p.y < b.y1 + p.r) {
+          const key = b.text + '|' + li;
+          if (!seen.has(key)) {seen.add(key); out.push(`label "${b.text}" (layer ${b.li}) sits on a stroke/ring of layer ${li} near (${Math.round(p.x)},${Math.round(p.y)})`);}
+        }
+      }
+    }
+  });
+  return out;
+}
+
+// Deterministic label auto-layout: grid-search a collision-free home for
+// each label (label-label with min gap, label-stroke clearance, canvas edges,
+// leader length cap), preferring spots near the anchor point. Similarity
+// cameras preserve overlap, so all checks run in drawing coords.
+export function autoLayoutLabels(plan, opts = {}) {
+  const layers = [{strokes: plan.strokes, fills: plan.fills, marks: plan.marks, labels: plan.labels, annotations: plan.annotations}, ...(plan.scenes || [])];
+  const placed = []; // accepted boxes
+  const moved = [];
+  const allLabels = [];
+  layers.forEach((laid, li) => (laid.labels || []).forEach(l => allLabels.push({l, li})));
+  // Most-constrained-first: the widest labels get first pick of free space.
+  allLabels.sort((a, b) => String(b.l.text || '').length - String(a.l.text || '').length);
+  const strokePts = layers.flatMap(l => strokeSamplesOf(l));
+  const hitStrokes = b => strokePts.some(p => p.x > b.x0 - p.r && p.x < b.x1 + p.r && p.y > b.y0 - p.r && p.y < b.y1 + p.r);
+  const hitLabels = b => placed.some(A => A.x0 - 8 < b.x1 && b.x0 - 8 < A.x1 && A.y0 - 8 < b.y1 && b.y0 - 8 < A.y1);
+  for (const {l} of allLabels) {
+    const text = String(l.text || '');
+    const tw = text.length * 24 + 8;
+    // Gate-identical box (labelBoxesOf + pill/stroke inflation).
+    const boxAt = (x2, y2) => ({x0: x2 - tw - 14, x1: x2 + 14, y0: y2 - 68, y1: y2 + 16});
+    // Camera-safe band: scene cameras shift x around the centroid, so labels
+    // must sit well inside the frame in drawing coords.
+    const ok = b => b.x0 >= 120 && b.x1 <= 960 && b.y0 >= TITLE_FLOOR + 10 && b.y1 <= CAPTION_CEIL - 10 && !hitStrokes(b) && !hitLabels(b);
+    let chosen = null;
+    const cur = boxAt(l.x2, l.y2);
+    if (ok(cur)) chosen = {x2: l.x2, y2: l.y2, cost: 0};
+    else {
+      let best = null;
+      for (let y2 = TITLE_FLOOR + 70; y2 <= CAPTION_CEIL - 30 && !chosen; y2 += 16) {
+        for (let x2 = 120 + tw + 14; x2 <= 960 - 14; x2 += 16) {
+          const lead = Math.abs(x2 - l.x1) + Math.abs(y2 - l.y1);
+          if (lead > 920) continue;
+          const b = boxAt(x2, y2);
+          if (!ok(b)) continue;
+          const cost = lead + Math.abs(x2 - l.x2) * 0.5 + Math.abs(y2 - l.y2) * 0.5;
+          if (!best || cost < best.cost) best = {x2, y2, cost};
+        }
+      }
+      chosen = best;
+    }
+    if (!chosen) {moved.push(`NO_HOME: ${text}`); continue;}
+    if (chosen.x2 !== l.x2 || chosen.y2 !== l.y2) {moved.push(`${text}: (${l.x2},${l.y2}) -> (${chosen.x2},${chosen.y2})`); l.x2 = chosen.x2; l.y2 = chosen.y2;}
+    placed.push(boxAt(l.x2, l.y2));
+  }
+  return moved;
+}
+
 export function zoneViolations(windows, layers, camTargets) {
   const violations = [];
+  violations.push(...labelStrokeViolations(layers));
   camTargets.forEach((t, si) => {
     // Label-to-label collision gate: every pair of label boxes visible during
     // this scene (layers accumulate) must not overlap on screen, using the
@@ -153,8 +240,8 @@ export function zoneViolations(windows, layers, camTargets) {
       layers.slice(0, si + 1).forEach((laid, li) => {
         for (const p of pointsOf(laid)) {
           const sy = anchor - s * (t.y - p.y);
-          if (sy - DRIFT_Y < TITLE_FLOOR) violations.push(`scene ${si} camera puts layer ${li} point at y=${Math.round(sy)} - drift < ${TITLE_FLOOR}`);
-          if (sy + DRIFT_Y > CAPTION_CEIL) violations.push(`scene ${si} camera puts layer ${li} point at y=${Math.round(sy)} + drift > ${CAPTION_CEIL}`);
+          if (sy - DRIFT_Y < TITLE_FLOOR) violations.push(`scene ${si} camera puts layer ${li} point at y=${Math.round(sy)} - drift < ${TITLE_FLOOR} (draw ${Math.round(p.x)},${Math.round(p.y)})`);
+          if (sy + DRIFT_Y > CAPTION_CEIL) violations.push(`scene ${si} camera puts layer ${li} point at y=${Math.round(sy)} + drift > ${CAPTION_CEIL} (draw ${Math.round(p.x)},${Math.round(p.y)})`);
           const sx = FRAME_W / 2 + s * (p.x - t.x);
           if (sx - DRIFT_X < EDGE_X) violations.push(`scene ${si} camera puts layer ${li} point at x=${Math.round(sx)} - drift < left edge ${EDGE_X}`);
           if (sx + DRIFT_X > FRAME_W - EDGE_X) violations.push(`scene ${si} camera puts layer ${li} point at x=${Math.round(sx)} + drift > right edge ${FRAME_W - EDGE_X}`);

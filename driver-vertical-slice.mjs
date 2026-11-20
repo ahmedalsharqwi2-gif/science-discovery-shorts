@@ -4,7 +4,7 @@
 import {writeFile} from 'node:fs/promises';
 import {renderEpisode} from './pipeline/render.mjs';
 import {validatePlan} from './pipeline/drawplan.mjs';
-import {camTargetsFor, zoneViolations, endCardProblems} from './src/paper/camera.js';
+import {camTargetsFor, zoneViolations, endCardProblems, autoLayoutLabels} from './src/paper/camera.js';
 import {buildStoryboard, validateStoryboard} from './director/storyboard.mjs';
 import {check as motionCheck} from './pipeline/motion-qa.mjs';
 
@@ -81,6 +81,9 @@ const plan = {
   endStat: 'خمسة آلاف كيلومتر',
   summaryPoints: ['الصوت اتحفظ في تسجيل رسمي', 'التخمينات الأولى كانت كائن ضخم', 'المطابقة قالت جليد ينشق'],
 };
+const labelMoves = autoLayoutLabels(plan);
+if (labelMoves.length) console.log('labels auto-laid-out:', labelMoves.join(' | '));
+if (labelMoves.some(m => m.startsWith('NO_HOME'))) { console.error('LABEL LAYOUT FAILED'); process.exit(1); }
 const problems = validatePlan(plan, scenes.length).concat(endCardProblems(plan));
 if (problems.length) { console.error('PLAN INVALID:', problems); process.exit(1); }
 props.paper.plan = plan;

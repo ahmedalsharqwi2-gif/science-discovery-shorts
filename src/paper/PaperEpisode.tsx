@@ -169,14 +169,20 @@ const Mark = ({m, frame}: {m: Op; frame: number}) => {
   );
 };
 
-const Callout = ({l, frame}: {l: Op; frame: number}) => (
+const Callout = ({l, frame}: {l: Op; frame: number}) => {
+  // Halo pill behind every label (slice review 2026-11-20 3:07: text must
+  // never sit on drawings). Leader line ends at the pill edge.
+  const tw = String(l.text || '').length * 22;
+  return (
   <g style={fade(frame, l.start, 8)}>
-    <path d={`M ${l.x1} ${l.y1} L ${l.x2} ${l.y2}`} stroke={T.ink} strokeWidth={2.5} fill="none"
+    <path d={`M ${l.x1} ${l.y1} L ${l.x2 - 6} ${l.y2 - 34}`} stroke={T.ink} strokeWidth={2.5} fill="none"
       style={draw(frame, l.start, l.dur || 18, Math.hypot(l.x2 - l.x1, l.y2 - l.y1))} />
     <circle cx={l.x1} cy={l.y1} r={6} fill={T.red} />
-    <text x={l.x2} y={l.y2 - 14} textAnchor="end" fontFamily={fontFamily} fontWeight={700} fontSize={38} fill={T.ink}>{l.text}</text>
-  </g>
-);
+    <rect x={l.x2 - tw - 28} y={l.y2 - 64} width={tw + 28} height={58} rx={16}
+      fill={`color-mix(in srgb, ${T.paper} 88%, transparent)`} stroke={T.grid} strokeWidth={2} />
+    <text x={l.x2 - 14} y={l.y2 - 26} textAnchor="end" fontFamily={fontFamily} fontWeight={700} fontSize={38} fill={T.ink}>{l.text}</text>
+  </g>);
+};
 
 const Grid = () => (
   <AbsoluteFill style={{backgroundColor: T.paper}}>
