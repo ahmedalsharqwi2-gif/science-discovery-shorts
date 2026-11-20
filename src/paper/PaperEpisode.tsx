@@ -250,7 +250,7 @@ const Captions = ({frame, words}: {frame: number; words: Op[]}) => {
   const win = words.slice(start, start + 5);
   return (
     <div style={{position: 'absolute', bottom: 170, width: '100%', display: 'flex', justifyContent: 'center', padding: '0 50px'}}>
-      <div style={{fontFamily, fontWeight: 800, fontSize: 54, color: T.ink, borderRadius: 24, padding: '20px 38px', direction: 'rtl', textAlign: 'center', lineHeight: 1.5, maxWidth: 940, background: 'rgba(237,228,208,0.88)', boxShadow: '0 2px 0 rgba(26,21,18,0.25)'}}>
+      <div style={{fontFamily, fontWeight: 800, fontSize: 54, color: T.ink, borderRadius: 24, padding: '20px 38px', direction: 'rtl', textAlign: 'center', lineHeight: 1.5, maxWidth: 940, background: `color-mix(in srgb, ${T.paper} 88%, transparent)`, border: `2px solid ${T.grid}`, boxShadow: '0 2px 0 rgba(26,21,18,0.25)'}}>
         {win.map((w: Op, i: number) => {
           const idx = start + i;
           const hot = idx === cur;
