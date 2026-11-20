@@ -1,8 +1,14 @@
 import {test} from 'node:test';import assert from 'node:assert/strict';
 import {classifyQuota} from '../pipeline/gemini.mjs';
 import {distributeWords,assertTiming} from '../pipeline/policy.mjs';
-import {FallbackTextChain,spreadPoolOrder} from '../pipeline/provider-client.mjs';
+import {FallbackTextChain,spreadPoolOrder,summarizeAttempts} from '../pipeline/provider-client.mjs';
 import {OpenAiCompatTextClient} from '../pipeline/fallback-text.mjs';
+
+test('summarizeAttempts counts attempts per kind and model',()=>{
+ const counts=summarizeAttempts([{type:'attempt',kind:'text',model:'a'},{type:'attempt',kind:'text',model:'a'},{type:'attempt',kind:'voice',model:'b'},{type:'key_rotation',kind:'text'}]);
+ assert.deepEqual(counts,{'text:a':2,'voice:b':1});
+ assert.deepEqual(summarizeAttempts(undefined),{});
+});
 
 test('spreadPoolOrder rotates the key pool deterministically per run seed',()=>{
  const pool=[{id:'a'},{id:'b'},{id:'c'}];

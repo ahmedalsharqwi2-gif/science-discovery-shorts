@@ -55,4 +55,5 @@ export async function provider(){if(!singleton){const config=JSON.parse(await re
  try{const res=await json(RESOLUTION_PATH);for(const [kind,row] of Object.entries(res.resolutions||{}))if(row&&Array.isArray(row.models)&&row.models.length&&Date.now()-row.at<12*60*60*1000)singleton.resolved.set(kind,row.models);}catch(e){if(e.code!=='ENOENT')throw e;}
  try{const fb=await json('config/fallback-text.json');if(fb.enabled&&fb.apiKeyEnv&&process.env[fb.apiKeyEnv])singleton=new FallbackTextChain(singleton,new OpenAiCompatTextClient({baseUrl:fb.baseUrl,model:fb.model,apiKey:process.env[fb.apiKeyEnv],jsonMode:fb.jsonMode!==false}));}catch(e){if(e.code!=='ENOENT')throw e;}
  }return singleton;}
-export function providerDiagnostics(){return singleton?{events:singleton.events,resolvedModels:Object.fromEntries(singleton.resolved)}:{events:[],resolvedModels:{}};}
+export function summarizeAttempts(events){const counts={};for(const e of events||[]){if(e.type==='attempt'){const k=e.kind+':'+e.model;counts[k]=(counts[k]||0)+1;}}return counts;}
+export function providerDiagnostics(){return singleton?{events:singleton.events,resolvedModels:Object.fromEntries(singleton.resolved),modelAttempts:summarizeAttempts(singleton.events)}:{events:[],resolvedModels:{},modelAttempts:{}};}

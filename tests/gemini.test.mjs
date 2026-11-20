@@ -78,7 +78,7 @@ test('a 429 records the provider quota message and kind on the attempt event',as
  const f=await fixture(t,async url=>{seen.push(url);return seen.length===1?new Response(quotaBody,{status:429}):textResponse();});
  await f.client.generate('text',{contents:[]});
  const failed=f.client.events.find(e=>e.type==='attempt'&&e.status===429);
- assert.equal(failed.quotaKind,'minute');assert.equal(failed.quotaMessage,'Quota exceeded for metric: generate_requests_per_minute');
+ assert.equal(failed.quotaKind,'minute');assert.equal(failed.quotaMessage,'Quota exceeded for metric: generate_requests_per_minute');assert.equal(failed.keyId,'primary');
  assert(!JSON.stringify(f.client.events).includes('fixture-not-a-real-credential'));
 });
 test('cooled-down keys are skipped; all cooled down reads as missing binding',async t=>{

@@ -6,9 +6,9 @@
   },
   "retry": {
     "maxAttemptsPerModel": 3,
-    "maxTotalAttempts": 6,
+    "maxTotalAttempts": 16,
     "timeoutMs": 90000,
-    "maxElapsedMs": 240000,
+    "maxElapsedMs": 480000,
     "baseDelayMs": 3000,
     "maxDelayMs": 45000,
     "jitter": 0.35
