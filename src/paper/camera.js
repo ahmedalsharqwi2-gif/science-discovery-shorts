@@ -114,8 +114,18 @@ export function camAt(fr, windows, camTargets, easing) {
 export function labelBoxesOf(laid) {
   return (laid && laid.labels || []).map(l => {
     const tw = String(l.text || '').length * 24 + 8;
-    return {text: String(l.text || ''), x0: l.x2 - tw, x1: l.x2, y0: l.y2 - 48, y1: l.y2};
+    return {text: String(l.text || ''), x0: l.x2 - tw, x1: l.x2, y0: l.y2 - 56, y1: l.y2 + 4};
   });
+}
+
+// End card: the endStat headline must fit one line at the readability floor.
+// Matches the EndCard auto-shrink in PaperEpisode (0.60em per Arabic glyph,
+// 880px usable width, 110px cap). Flag when the required size drops under 64.
+export function endCardProblems(plan) {
+  const stat = String(plan && plan.endStat || '');
+  if (!stat) return [];
+  const fs = Math.min(110, Math.floor(880 / (stat.length * 0.6)));
+  return fs < 64 ? [`end card headline "${stat}" needs fontSize ${fs} (< 64 floor); shorten it`] : [];
 }
 
 export function zoneViolations(windows, layers, camTargets) {
@@ -126,9 +136,10 @@ export function zoneViolations(windows, layers, camTargets) {
     // settled camera at its push-in peak, with drift margin.
     {
       const s = t.s * 1.04, anchor = t.a !== undefined ? t.a : ANCHOR_Y;
+      const M = 8; // min-gap enforcement: boxes inflated so <16px gaps flag
       const toScreen = b => ({
-        x0: FRAME_W / 2 + s * (b.x0 - t.x) - DRIFT_X, x1: FRAME_W / 2 + s * (b.x1 - t.x) + DRIFT_X,
-        y0: anchor - s * (t.y - b.y0) - DRIFT_Y, y1: anchor - s * (t.y - b.y1) + DRIFT_Y,
+        x0: FRAME_W / 2 + s * (b.x0 - M - t.x) - DRIFT_X, x1: FRAME_W / 2 + s * (b.x1 + M - t.x) + DRIFT_X,
+        y0: anchor - s * (t.y - b.y0 - M) - DRIFT_Y, y1: anchor - s * (t.y - b.y1 + M) + DRIFT_Y,
       });
       const boxes = layers.slice(0, si + 1).flatMap((laid, li) => labelBoxesOf(laid).map(b => ({...b, li})));
       for (let i = 0; i < boxes.length; i++) for (let j = i + 1; j < boxes.length; j++) {

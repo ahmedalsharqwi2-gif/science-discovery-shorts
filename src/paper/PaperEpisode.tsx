@@ -297,7 +297,7 @@ const EndCard = ({frame, start, title, plan, callouts}: {frame: number; start: n
         ))}
       </div>
       <div style={{position: 'absolute', top: 920, width: '100%', textAlign: 'center', ...pop(3)}}>
-        <span style={{fontFamily, fontWeight: 800, fontSize: 110, color: T.red}}>{plan.endStat}</span>
+        <span style={{fontFamily, fontWeight: 800, fontSize: Math.min(110, Math.floor(880 / (String(plan.endStat||'').length * 0.6))), color: T.red}}>{plan.endStat}</span>
       </div>
       <div style={{position: 'absolute', top: 1120, width: '100%', padding: '0 90px', direction: 'rtl'}}>
         {(plan.summaryPoints || []).map((pt: string, i: number) => (
