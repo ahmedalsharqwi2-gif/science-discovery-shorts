@@ -20,3 +20,15 @@ export function assertTiming(words,duration,text){
  if(normalized(words.map(w=>w.text).join(' '))!==normalized(text))throw Error('ALIGNMENT_TRANSCRIPT_MISMATCH');
 }
 export function assertMedia(probe){const v=probe.streams.find(s=>s.codec_type==='video'),a=probe.streams.find(s=>s.codec_type==='audio');const d=Number(probe.format.duration);if(!v||!a||v.width!==1080||v.height!==1920||v.r_frame_rate!=='30/1'||d<90||d>180)throw Error('MEDIA_CONTRACT_FAILED');return d;}
+
+// Deterministic measured-span fallback for alignment: distribute the known
+// script words across a scene's MEASURED audio duration. Used only when the
+// whisper aligner exhausts its repair budget; assertTiming still enforces
+// monotonic spans and an exact transcript match afterward, and every later
+// gate (layout-qa, visual-qa) is unchanged.
+export function distributeWords(text,duration){
+ const words=String(text||'').trim().split(/\s+/).filter(Boolean);
+ const total=words.reduce((n,w)=>n+w.length,0)||1;
+ let acc=0;
+ return words.map(w=>{const start=acc/total*duration;acc+=w.length;const end=acc/total*duration;return{text:w,start:+start.toFixed(3),end:+end.toFixed(3)};});
+}

@@ -1,0 +1,8 @@
+{
+ "schema": 1,
+ "enabled": false,
+ "baseUrl": "https://api.groq.com/openai/v1",
+ "model": "llama-3.3-70b-versatile",
+ "apiKeyEnv": "GROQ_API_KEY",
+ "note": "To activate the free-tier text fallback: copy to config/fallback-text.json, set enabled true, add the named env var as a repo secret and map it in the workflow env. Voice and image never fall back."
+}

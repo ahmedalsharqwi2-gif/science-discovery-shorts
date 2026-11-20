@@ -6,6 +6,16 @@ const hash=x=>createHash('sha256').update(x).digest('hex');
 const stable=x=>JSON.stringify(x,(_,v)=>v&&typeof v==='object'&&!Array.isArray(v)?Object.fromEntries(Object.entries(v).sort(([a],[b])=>a.localeCompare(b))):v);
 const pause=ms=>new Promise(resolve=>setTimeout(resolve,ms));
 export function retryAfterMs(value,now){if(!value)return 0;const number=Number(value);return Number.isFinite(number)?Math.max(0,number*1000):Math.max(0,Date.parse(value)-now)||0;}
+
+export function classifyQuota(errBody){
+ const msg=String(errBody&&errBody.error&&errBody.error.message||'');
+ const details=(errBody&&errBody.error&&errBody.error.details)||[];
+ const metrics=details.flatMap(d=>(d&&d.violations)||[]).map(v=>String(v.quotaMetric||'')).join(' ');
+ const hay=(metrics+' '+msg).toLowerCase();
+ if(/per[-_ ]?minute|_rpm|perminute/.test(hay))return 'minute';
+ if(/per[-_ ]?day|daily|perday/.test(hay))return 'day';
+ return 'unknown';
+}
 export class GeminiError extends Error{
  constructor(code,diagnostics=[]){super(code);this.name='GeminiError';this.code=code;this.diagnostics=diagnostics;}
 }
@@ -33,7 +43,7 @@ export class GeminiClient{
   const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),Math.min(remaining,this.config.retry.timeoutMs));
   try{
    const response=await this.fetcher('https://generativelanguage.googleapis.com/v1beta/models/'+encodeURIComponent(model)+':generateContent',{method:'POST',redirect:'error',signal:controller.signal,headers:{'Content-Type':'application/json','x-goog-api-key':key},body:JSON.stringify(body)});
-   if(!response.ok){const retryAfter=retryAfterMs(response.headers.get('retry-after'),this.clock());this.notBefore=Math.max(this.notBefore,this.clock()+retryAfter);return {ok:false,status:response.status,retryAfter};}
+   if(!response.ok){const retryAfter=retryAfterMs(response.headers.get('retry-after'),this.clock());this.notBefore=Math.max(this.notBefore,this.clock()+retryAfter);let quotaKind='unknown';if(response.status===429){try{quotaKind=classifyQuota(await response.json());}catch{}}return {ok:false,status:response.status,retryAfter,quotaKind};}
    const data=await response.json();return {ok:true,data};
   }catch(e){if(e instanceof GeminiError)throw e;return {ok:false,status:0,timeout:controller.signal.aborted};}finally{clearTimeout(timer);}
  }
@@ -65,10 +75,10 @@ export class GeminiClient{
     const deadline=this.clock()+this.config.retry.maxElapsedMs;
     let rotated=false;
     try{
-    const resolvedModels=await this.models(kind,key,deadline);const pin=this.pins.get(kind);const models=pin?resolvedModels.filter(m=>m===pin):resolvedModels;if(pin&&!models.length)throw new GeminiError('GEMINI_PINNED_MODEL_UNAVAILABLE',this.events);let count=0,lastStatus=0;
+    const resolvedModels=await this.models(kind,key,deadline);const pin=this.pins.get(kind);const models=pin?resolvedModels.filter(m=>m===pin):resolvedModels;if(pin&&!models.length)throw new GeminiError('GEMINI_PINNED_MODEL_UNAVAILABLE',this.events);let count=0,lastStatus=0,lastQuotaKind='unknown';
     for(const model of models){for(let attempt=0;attempt<this.config.retry.maxAttemptsPerModel;attempt++){
-     if(++count>this.config.retry.maxTotalAttempts)throw new GeminiError(lastStatus?'GEMINI_HTTP_'+lastStatus+'_EXHAUSTED':'GEMINI_ATTEMPTS_EXHAUSTED',this.events);
-     const response=await this.request(model,body,key,deadline);lastStatus=response.status||0;
+     if(++count>this.config.retry.maxTotalAttempts){const err=new GeminiError(lastStatus?'GEMINI_HTTP_'+lastStatus+'_EXHAUSTED':'GEMINI_ATTEMPTS_EXHAUSTED',this.events);if(lastStatus===429)err.quotaKind=lastQuotaKind;throw err;}
+     const response=await this.request(model,body,key,deadline);lastStatus=response.status||0;if(response.status===429&&response.quotaKind)lastQuotaKind=response.quotaKind;
      this.event({type:'attempt',kind,model,attempt:attempt+1,totalAttempt:count,status:response.ok?200:lastStatus});
      if(response.ok&&this.valid(kind,response.data)){if(useCache)await this.saveCache(id,model,response.data);return {...response.data,_pipeline:{model,cacheKey:id,cacheHit:false}};}
      if(response.ok){this.event({type:'invalid_response',kind,model});break;}
@@ -79,13 +89,13 @@ export class GeminiClient{
      if(attempt===this.config.retry.maxAttemptsPerModel-1)break;
      const exponential=Math.min(this.config.retry.maxDelayMs,this.config.retry.baseDelayMs*2**attempt),jitter=exponential*this.config.retry.jitter*this.random();
      const wait=Math.max(response.retryAfter||0,exponential+jitter);
-     if(response.status===429&&(response.retryAfter>120000||this.clock()+wait>=deadline))throw new GeminiError('GEMINI_HTTP_429_EXHAUSTED',this.events);
+     if(response.status===429&&(response.retryAfter>120000||this.clock()+wait>=deadline)){const err=new GeminiError('GEMINI_HTTP_429_EXHAUSTED',this.events);err.quotaKind=lastQuotaKind;throw err;}
      if(this.clock()+wait>=deadline)throw new GeminiError(response.retryAfter?'GEMINI_RETRY_AFTER_EXCEEDS_BUDGET':'GEMINI_TOTAL_TIMEOUT',this.events);
      this.event({type:'backoff',kind,model,status:lastStatus,waitMs:wait,retryAfterMs:response.retryAfter||0});await this.sleep(wait);
     }}
-    throw new GeminiError(lastStatus?'GEMINI_HTTP_'+lastStatus+'_EXHAUSTED':'GEMINI_NO_VALID_RESPONSE',this.events);
+    {const err=new GeminiError(lastStatus?'GEMINI_HTTP_'+lastStatus+'_EXHAUSTED':'GEMINI_NO_VALID_RESPONSE',this.events);if(lastStatus===429)err.quotaKind=lastQuotaKind;throw err;}
     }catch(e){
-     if(e&&['GEMINI_HTTP_429_EXHAUSTED','GEMINI_RETRY_AFTER_EXCEEDS_BUDGET','GEMINI_TOTAL_TIMEOUT','GEMINI_RATE_LIMIT_DEADLINE','GEMINI_AUTHORIZATION_FAILED','GEMINI_HTTP_400_EXHAUSTED'].includes(e.code)&&ki<pool.length-1){this.event({type:'key_rotation',kind,keyId,reason:e.code});try{await this.onKeyExhausted(keyId,kind);}catch{}lastErr=e;rotated=true;}
+     if(e&&['GEMINI_HTTP_429_EXHAUSTED','GEMINI_RETRY_AFTER_EXCEEDS_BUDGET','GEMINI_TOTAL_TIMEOUT','GEMINI_RATE_LIMIT_DEADLINE','GEMINI_AUTHORIZATION_FAILED','GEMINI_HTTP_400_EXHAUSTED'].includes(e.code)&&ki<pool.length-1){this.event({type:'key_rotation',kind,keyId,reason:e.code});try{await this.onKeyExhausted(keyId,kind,e&&e.quotaKind);}catch{}lastErr=e;rotated=true;}
      else throw e;
     }
     if(!rotated&&lastErr)throw lastErr;

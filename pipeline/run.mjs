@@ -1,5 +1,5 @@
 import path from 'node:path';import {fileURLToPath,pathToFileURL} from 'node:url';import {readFile,writeFile,mkdir,open,rm,copyFile} from 'node:fs/promises';
-import {assertReviewMode,assertTiming,assertMedia,dueInCairo,digest,episodeSchema,sourceSchema} from './policy.mjs';
+import {assertReviewMode,assertTiming,assertMedia,dueInCairo,digest,distributeWords,episodeSchema,sourceSchema} from './policy.mjs';
 import {json,save,run,probe} from './io.mjs';import {selectTopic,script,voice,backgrounds} from './providers.mjs';
 import {drawplan} from './drawplan.mjs';
 import {preflight} from './preflight.mjs';import {providerDiagnostics} from './provider-client.mjs';import {renderEpisode,visualQA,partialReview} from './render.mjs';import {layoutQA} from './layout-qa.mjs';
@@ -38,7 +38,7 @@ export async function review({mode='review',scheduled=false,topicReservationPath
   for(const source of topic.sources)if(!ledger.some(r=>r.run===id&&r.value===source.url))ledger.push({topicKey:episode.topicKey,value:source.url,status:'reserved',run:id});await save(path.resolve('state/topics.json'),ledger);
   const pub=path.resolve('public/generated',id);await mkdir(pub,{recursive:true});
   let segments=await stage('voice',()=>voice(episode,pub,{progressPath:out+'/voice-progress.json'}));await save(out+'/segments.json',segments);
-  let alignedOk=false,alignErr=null;
+  let alignedOk=false,alignErr=null,timingFallback=false;
   for(let repair=0;repair<2&&!alignedOk;repair++){
    if(repair>0){segments=await stage('voice-repair-'+repair,()=>voice(episode,pub,{progressPath:out+'/voice-progress.json',cacheDir:'.cache/voice-repair-'+repair}));await save(out+'/segments.json',segments);}
    // Retain real successful Charon parts even when alignment later fails.
@@ -47,6 +47,17 @@ export async function review({mode='review',scheduled=false,topicReservationPath
    await save(out+'/audio-index.json',audioIndex);
    try{await stage(repair?'align-repair-'+repair:'align',async()=>{try{await run(process.env.PYTHON||'python',['pipeline/align.py',out+'/segments.json',out+'/alignment.json'],{timeout:1800000,maxBuffer:2000000});}catch{const diagnostic=await optionalJSON(out+'/alignment-diagnostics.json',null);throw Error(diagnostic?.code||'ALIGNMENT_PROCESS_FAILED');}const aligned=await json(out+'/alignment.json');segments.forEach((s,i)=>assertTiming(aligned[i],s.duration,s.text));episode.scenes.forEach((s,i)=>{s.words=aligned[i];s.duration=segments[i].duration;});});alignedOk=true;}
    catch(e){alignErr=e;report.limitations.push('align '+(repair?'repair failed':'failed')+' ('+String(e&&e.message||e)+')'+(repair?'; repair budget exhausted':'; re-narrating once with fresh synthesis'));}
+  }
+  if(!alignedOk){
+   // Deterministic fallback after the align repair ladder: distribute the
+   // hash-locked script words across each scene's MEASURED audio duration.
+   // assertTiming still validates monotonic spans and transcript match;
+   // layout-qa and visual-qa are unchanged. Honest in qa.json transcript.
+   const distributed=segments.map(s=>distributeWords(s.text,s.duration));
+   segments.forEach((s,i)=>assertTiming(distributed[i],s.duration,s.text));
+   episode.scenes.forEach((s,i)=>{s.words=distributed[i];s.duration=segments[i].duration;});
+   timingFallback=true;
+   report.limitations.push('align deterministic fallback: whisper alignment failed twice; words distributed across measured scene durations; all gates unchanged');
   }
   if(!alignedOk)throw alignErr;
   await stage('assets',async()=>{for(const s of episode.scenes){const source=topic.sources.find(v=>v.id===s.sourceId);s.sourceUrl=source.url;s.sourceLabel=new URL(source.url).hostname;}const assets=await backgrounds(episode,config,pub);await save(out+'/assets.json',assets);await writeFile(out+'/ATTRIBUTIONS.md','# Asset rights\n\nOriginal vector motion and FFmpeg synthesized bed; immutable owner logo at config/logo.json with SHA256. Fonts and provider terms: docs/LICENSES.md. Individual generated image models and cache keys are recorded in assets.json. Research sources are in sources.json and are not blanket image licenses.\n');});
@@ -57,7 +68,7 @@ export async function review({mode='review',scheduled=false,topicReservationPath
   const qa=await stage('qa',async()=>{
    const p=await probe(out+'/review.mp4');assertMedia(p);const v=await visualQA(out,'review.mp4',{paper:Boolean(paperPlan)});const levels=await run('ffmpeg',['-hide_banner','-i',out+'/review.mp4','-af','loudnorm=I=-14:TP=-1.5:LRA=9:print_format=json','-f','null','-'],{timeout:120000});const qaLoud=levels.stderr.slice(levels.stderr.lastIndexOf('{'));const m=JSON.parse(qaLoud.slice(0,qaLoud.lastIndexOf('}')+1));
    if(Math.abs(Number(m.input_i)+14)>1.2||Number(m.input_tp)>-1)throw Error('AUDIO_LOUDNESS_FAILED');if(Number(p.format.duration)+.001<duration)throw Error('NARRATION_TAIL_CLIPPED');
-   const checks={schema:1,passed:true,complete:true,published:false,video_sha256:digest(await readFile(out+'/review.mp4')),logo_sha256:v.logo.sha256,width:1080,height:1920,fps:30,duration:Number(p.format.duration),integratedLUFS:Number(m.input_i),truePeak:Number(m.input_tp),transcript:'original script, strict measured word timing',layout:'all caption cues and representative scene frames passed',watermark:v.watermark,manualArtReview:'pending'};await save(out+'/qa.json',checks);return checks;
+   const checks={schema:1,passed:true,complete:true,published:false,video_sha256:digest(await readFile(out+'/review.mp4')),logo_sha256:v.logo.sha256,width:1080,height:1920,fps:30,duration:Number(p.format.duration),integratedLUFS:Number(m.input_i),truePeak:Number(m.input_tp),transcript:timingFallback?'original script, distributed measured word timing (whisper align fallback)':'original script, strict measured word timing',layout:'all caption cues and representative scene frames passed',watermark:v.watermark,manualArtReview:'pending'};await save(out+'/qa.json',checks);return checks;
   });
   await stage('package',()=>save(out+'/metadata.json',{title:episode.title,topicKey:episode.topicKey,voice:'Charon',provider:'Gemini',sources:topic.sources.map(({text,...s})=>s),editorialMode:topic.editorialMode,video_sha256:qa.video_sha256,reviewOnly:true,approved:false}));
   ledger.filter(r=>r.run===id).forEach(r=>{r.status='review';});await save(path.resolve('state/topics.json'),ledger);await rm(path.resolve('state/active-review.json'),{force:true});report.status='review_ready';await checkpoint();return {out,status:report.status,id,video:out+'/review.mp4',qa:out+'/qa.json',topicKey:episode.topicKey};
