@@ -81,6 +81,17 @@ test('a 429 records the provider quota message and kind on the attempt event',as
  assert.equal(failed.quotaKind,'minute');assert.equal(failed.quotaMessage,'Quota exceeded for metric: generate_requests_per_minute');assert.equal(failed.keyId,'primary');
  assert(!JSON.stringify(f.client.events).includes('fixture-not-a-real-credential'));
 });
+test('a key pass that saw any 429 ends as 429_EXHAUSTED even when the last model 404s, so the text fallback still triggers',async t=>{
+ const f=await fixture(t,async url=>String(url).includes('fixture-text-a')?new Response('',{status:429}):new Response('',{status:404}));
+ await assert.rejects(f.client.generate('text',{contents:[]}),/GEMINI_HTTP_429_EXHAUSTED/);
+});
+test('a model that 404s is pruned for that key for the rest of the run',async t=>{
+ const seen=[];const f=await fixture(t,async url=>{const m=decodeURIComponent(String(url).match(/models\/([^:]+)/)[1]);seen.push(m);return m==='fixture-text-a'?new Response('',{status:404}):textResponse();});
+ await f.client.generate('text',{contents:[{parts:[{text:'one'}]}]});
+ await f.client.generate('text',{contents:[{parts:[{text:'two'}]}]});
+ assert.deepEqual(seen,['fixture-text-a','fixture-text-b','fixture-text-b']);
+ assert(f.client.events.some(e=>e.type==='model_pruned'&&e.model==='fixture-text-a'&&e.keyId==='primary'));
+});
 test('cooled-down keys are skipped; all cooled down reads as missing binding',async t=>{
  const f=await fixture(t,async()=>textResponse());
  f.options.keysFor=()=>[{id:'a',key:'key-a'}];f.options.cooledDown=()=>true;
