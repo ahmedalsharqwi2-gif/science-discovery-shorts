@@ -193,7 +193,7 @@ const QuestionTitle = ({frame, title, keyword, seriesLabel, channelName}: {frame
   const accent = T.gold;
   return (
     <div style={{position: 'absolute', top: 110, width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', ...fade(frame, 2, 12)}}>
-      <div style={{position: 'absolute', top: -78, right: 40, fontFamily, fontWeight: 700, fontSize: 26, color: T.ink, opacity: 0.55, direction: 'rtl'}}>{channelName}</div>
+      <div style={{position: 'absolute', top: -78, right: 40, fontFamily, fontWeight: 700, fontSize: 26, color: T.ink, opacity: 0.55, direction: 'rtl'}}>{channelName || ''}</div>
       {seriesLabel ? <div style={{fontFamily, fontWeight: 700, fontSize: 26, color: T.ink, opacity: 0.6, marginBottom: 14, direction: 'rtl'}}>{seriesLabel}</div> : null}
       <div style={{fontFamily, fontWeight: 800, fontSize: 66, color: T.ink, direction: 'rtl', textAlign: 'center', lineHeight: 1.4, padding: '0 70px'}}>
         {i >= 0 ? title.slice(0, i) : title}
@@ -210,6 +210,33 @@ const QuestionTitle = ({frame, title, keyword, seriesLabel, channelName}: {frame
     </div>
   );
 };
+
+// On-screen citation chip (per-channel spec: history/horror/ai-news show the
+// source at key shots). Rendered only when props.paper.citations is true and
+// the current scene carries a sourceLabel (set by the assets stage).
+const KIND_STYLE = {fact: {label: 'موثق', color: 'green'}, legend: {label: 'حكاية', color: 'gold'}, illustration: {label: 'توضيح', color: 'blue'}};
+const SourceChip = ({label, kind}: {label: string; kind?: string}) => {
+  const k = kind && (KIND_STYLE as any)[kind];
+  const border = k ? col(k.color) : T.grid;
+  return (
+    <div style={{position: 'absolute', bottom: 296, left: 44, fontFamily, fontWeight: 700, fontSize: 24, color: T.ink, background: T.paper, opacity: 0.92, border: `2px solid ${border}`, borderRadius: 14, padding: '8px 20px', direction: 'rtl'}}>
+      {k ? <span style={{color: col(k.color), marginInlineEnd: 10}}>{k.label} ·</span> : null}{label}
+    </div>
+  );
+};
+
+// Top bar (per-channel spec: نفهمها gold standard): channel logo + name on the
+// right, live scene counter on the left. Replaces the floating channel label
+// in QuestionTitle when enabled (props.paper.topBar + paper.logoPath).
+const TopBar = ({frame, channelName, logoPath, sceneIndex, sceneCount, chapterLabel}: {frame: number; channelName: string; logoPath: string; sceneIndex: number; sceneCount: number; chapterLabel?: string}) => (
+  <div style={{position: 'absolute', top: 26, left: 0, right: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 44px', direction: 'rtl', ...fade(frame, 2, 12)}}>
+    <div style={{display: 'flex', alignItems: 'center', gap: 14}}>
+      <img src={staticFile(logoPath)} style={{width: 54, height: 54, borderRadius: 12, objectFit: 'cover', border: `2px solid ${T.grid}`}} />
+      <span style={{fontFamily, fontWeight: 800, fontSize: 28, color: T.ink}}>{channelName}</span>
+    </div>
+    <span style={{fontFamily, fontWeight: 700, fontSize: 26, color: T.ink, opacity: 0.65}}>{chapterLabel ? `${chapterLabel} · ` : ''}{sceneIndex + 1}/{sceneCount}</span>
+  </div>
+);
 
 // Paper karaoke captions: 5-word window, 50ms lead, active word red+underlined.
 // Kinetic reveal (user-approved direction 2026-11-20): each word pops in as it
@@ -323,11 +350,15 @@ export const PaperEpisode = (props: any) => {
   const titleKeyword = (scenes.find((s: Op) => s.keyword && props.title.includes(s.keyword)) || {}).keyword;
   const channelName = props.channelName || 'افترض كده';
 
+  const topBar = props.paper?.topBar === true && props.paper?.logoPath;
+  const sceneIdx = (() => {const i = windows.findIndex(w => frame < w.start + w.frames); return i < 0 ? scenes.length - 1 : i;})();
+
   return (
     <AbsoluteFill style={{backgroundColor: T.paper}}>
       <Grid />
       {props.audio ? <Audio src={staticFile(props.audio)} /> : null}
-      <QuestionTitle frame={frame} title={props.title} keyword={titleKeyword} seriesLabel={props.seriesLabel} channelName={channelName} />
+      {topBar ? <TopBar frame={frame} channelName={channelName} logoPath={props.paper.logoPath} sceneIndex={sceneIdx} sceneCount={scenes.length} chapterLabel={props.paper.chapterLabel} /> : null}
+      <QuestionTitle frame={frame} title={props.title} keyword={titleKeyword} seriesLabel={props.seriesLabel} channelName={topBar ? '' : channelName} />
       <div style={{position: 'absolute', width: '100%', height: '100%', transformOrigin: '0 0', transform: cam(frame)}}>
         <svg width="1080" height="1920" style={{position: 'absolute'}}>
           {base.strokes.map((s: Op, i: number) => <Stroke key={'bs' + i} s={s} frame={frame} />)}
@@ -352,6 +383,7 @@ export const PaperEpisode = (props: any) => {
         <rect width="1080" height="1920" filter="url(#grain)" />
       </svg>
       {words.length ? <Captions frame={frame} words={words} /> : null}
+      {props.paper?.citations === true && (() => {const sc = scenes[sceneIdx]; return sc?.sourceLabel ? <SourceChip label={sc.sourceLabel} kind={sc.kind} /> : null;})()}
       <EndCard frame={frame} start={endStart} title={props.title} plan={plan} callouts={callouts} />
     </AbsoluteFill>
   );
