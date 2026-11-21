@@ -1,9 +1,19 @@
 {
- "schema": 1,
+ "schema": 2,
  "enabled": true,
- "baseUrl": "https://openrouter.ai/api/v1",
- "model": "google/gemma-4-31b-it:free",
- "jsonMode": false,
- "apiKeyEnv": "OPENROUTER_API_KEY",
- "note": "Emergency text fallback when the Gemini pool is exhausted. Free OpenRouter model; key lives in the OPENROUTER_API_KEY repo secret, never in git. Voice and image never fall back. jsonMode false: the prompt already demands JSON only and downstream validation enforces it."
+ "providers": [
+  {
+   "baseUrl": "https://api.groq.com/openai/v1",
+   "model": "openai/gpt-oss-120b",
+   "jsonMode": false,
+   "apiKeyEnv": "GROQ_API_KEY"
+  },
+  {
+   "baseUrl": "https://openrouter.ai/api/v1",
+   "model": "google/gemma-4-31b-it:free",
+   "jsonMode": false,
+   "apiKeyEnv": "OPENROUTER_API_KEY"
+  }
+ ],
+ "note": "Emergency text fallback when the Gemini pool is exhausted, tried in order: Groq first, OpenRouter second. Keys live in repo secrets, never in git; a provider whose secret is missing on a repo is skipped and the chain falls through. Voice and image never fall back. jsonMode false: the prompt already demands JSON only and downstream validation enforces it. Groq model is openai/gpt-oss-120b: llama-3.3-70b-versatile was retired 2026-08-16 and gpt-oss-120b is Groq's recommended 70B-class production replacement."
 }
